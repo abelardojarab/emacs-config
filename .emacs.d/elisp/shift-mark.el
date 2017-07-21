@@ -1,6 +1,6 @@
 ;;; shift-mark.el ---                                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  lab
+;; Copyright (C) 2016, 2017  lab
 
 ;; Author: lab <lab@lab-vm>
 ;; Keywords:
@@ -59,11 +59,15 @@ command 'cmd'. If no region is marked, we mark one first."
 
 (defun shift-mark-forward-page ()
   (interactive)
-  (shift-mark 'forward-page))
+  (if (region-active-p)
+      (shift-mark 'forward-page)
+    (scroll-down)))
 
 (defun shift-mark-backward-page ()
   (interactive)
-  (shift-mark 'backward-page))
+  (if (region-active-p)
+      (shift-mark 'backward-page)
+    (scroll-up)))
 
 (defun shift-mark-previous-line ()
   (interactive)

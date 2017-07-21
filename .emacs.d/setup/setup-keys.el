@@ -66,26 +66,26 @@
 ;; Treat 'y' or <CR> as yes, 'n' as no.
 (fset 'yes-or-no-p 'y-or-n-p)
 (define-key query-replace-map [return] 'act)
-(define-key query-replace-map [?\C-m] 'act)
+(define-key query-replace-map [?\C-m]  'act)
 
 ;; Commands to make my programming environment nice
-(global-set-key (kbd "RET") 'newline-and-indent)
-(global-set-key "\C-l" 'goto-line)
-(global-set-key (kbd "") 'other-window)
-(global-set-key [C-tab] 'comment-or-uncomment-region)
-(global-set-key [kp-prior] 'scroll-down)
-(global-set-key [prior] 'scroll-down)
-(global-set-key [kp-next] 'scroll-up)
-(global-set-key [next] 'scroll-up)
-(global-set-key [home] 'beginning-of-line)
-(global-set-key [end] 'end-of-line)
-(global-set-key [delete] 'delete-char)
-(global-set-key [kp-delete] 'delete-char)
+(global-set-key (kbd "RET")   'newline-and-indent)
+(global-set-key "\C-l"        'goto-line)
+(global-set-key (kbd "")      'other-window)
+(global-set-key [C-tab]       'comment-or-uncomment-region)
+(global-set-key [kp-prior]    'scroll-down)
+(global-set-key [prior]       'scroll-down)
+(global-set-key [kp-next]     'scroll-up)
+(global-set-key [next]        'scroll-up)
+(global-set-key [home]        'beginning-of-line)
+(global-set-key [end]         'end-of-line)
+(global-set-key [delete]      'delete-char)
+(global-set-key [kp-delete]   'delete-char)
 (global-set-key [(control s)] 'save-buffer)
 (global-set-key [(control o)] 'counsel-find-file)
-(global-set-key [(meta s)] 'write-file)
+(global-set-key [(meta    s)] 'write-file)
 (global-set-key [(control q)] 'save-buffers-kill-emacs)
-(global-set-key [(meta q)] 'kill-this-buffer)
+(global-set-key [(meta    q)] 'kill-this-buffer)
 (global-set-key [(control r)] 'replace-string)
 (global-set-key [(control a)] 'mark-whole-buffer)
 
@@ -98,10 +98,10 @@
 (global-set-key (kbd "<C-f2>") 'bm-toggle)
 
 ;; Highlight symbol at point
-(global-set-key [f3] 'highlight-symbol-at-point)
+(global-set-key [f3]           'highlight-symbol-at-point)
 (global-set-key [(control f3)] 'highlight-symbol-next)
-(global-set-key [(shift f3)] 'highlight-symbol-prev)
-(global-set-key [(meta f3)] 'highlight-symbol-query-replace)
+(global-set-key [(shift   f3)] 'highlight-symbol-prev)
+(global-set-key [(meta    f3)] 'highlight-symbol-query-replace)
 (global-set-key [(control shift mouse-1)]
                 (lambda (event)
                   (interactive "e")
@@ -120,28 +120,28 @@
   (interactive)
   (flyspell-goto-next-error)
   (ispell-word))
-(global-set-key (kbd "<f6>") 'flyspell-check-next-highlighted-word)
-(global-set-key (kbd "C-<f6>") 'helm-flyspell-correct)
+(global-set-key (kbd "<f6>")    'flyspell-check-next-highlighted-word)
+(global-set-key (kbd "C-<f6>")  'helm-flyspell-correct)
 
 ;; Flycheck
-(global-set-key (kbd "<f7>") 'flycheck-next-error)
-(global-set-key (kbd "C-<f7>") 'helm-flycheck)
+(global-set-key (kbd "<f7>")    'flycheck-next-error)
+(global-set-key (kbd "C-<f7>")  'helm-flycheck)
 
 ;; Code folding
-(global-set-key (kbd "<f8>") 'hs-toggle-hiding-all)
-(global-set-key (kbd "C-<f8>") 'fold-dwim-toggle)
+(global-set-key (kbd "<f8>")    'hs-toggle-hiding-all)
+(global-set-key (kbd "C-<f8>")  'fold-dwim-toggle)
 
 ;; Refresh file
-(global-set-key (kbd "<f9>") 'refresh-file)
+(global-set-key (kbd "<f9>")    'refresh-file)
 
 ;; Menu bar
-(global-set-key (kbd "<f10>") 'menu-bar-open)
+(global-set-key (kbd "<f10>")   'menu-bar-open)
 
 ;; Toggle frame maximized
-(global-set-key (kbd "<f11>") 'toggle-frame-maximized)
+(global-set-key (kbd "<f11>")   'toggle-frame-maximized)
 
 ;; List buffers
-(global-set-key (kbd "<f12>") 'ivy-switch-buffer)
+(global-set-key (kbd "<f12>")   'ivy-switch-buffer)
 (global-set-key (kbd "C-<f12>") 'neotree-toggle)
 
 ;; Native file opening
@@ -178,36 +178,36 @@
 (global-set-key "\C-c\C-b" 'beautify-buffer)
 
 ;; Escape key in minibuffer
-(define-key minibuffer-local-map [escape] 'abort-recursive-edit)
-(define-key minibuffer-local-ns-map [escape] 'abort-recursive-edit)
+(define-key minibuffer-local-map            [escape] 'abort-recursive-edit)
+(define-key minibuffer-local-ns-map         [escape] 'abort-recursive-edit)
 (define-key minibuffer-local-completion-map [escape] 'abort-recursive-edit)
 (define-key minibuffer-local-must-match-map [escape] 'abort-recursive-edit)
-(define-key minibuffer-local-isearch-map [escape] 'abort-recursive-edit)
+(define-key minibuffer-local-isearch-map    [escape] 'abort-recursive-edit)
 
 ;; Tabbar
-(global-set-key [C-prior] 'tabbar-backward-tab)
-(global-set-key [C-next] 'tabbar-forward-tab)
-(global-set-key [C-home] 'tabbar-backward-group)
-(global-set-key [C-end] 'tabbar-forward-group)
+(global-set-key [C-prior]            'tabbar-backward-tab)
+(global-set-key [C-next]             'tabbar-forward-tab)
+(global-set-key [C-home]             'tabbar-backward-group)
+(global-set-key [C-end]              'tabbar-forward-group)
 
 ;; Tabbar, now using ctl-x-map
-(global-set-key (kbd "C-x <prior>") 'tabbar-backward-tab)
-(global-set-key (kbd "C-x <next>") 'tabbar-forward-tab)
-(global-set-key (kbd "C-x <home>") 'tabbar-backward-group)
-(global-set-key (kbd "C-x <end>") 'tabbar-forward-group)
+(global-set-key (kbd "C-x <prior>")  'tabbar-backward-tab)
+(global-set-key (kbd "C-x <next>")   'tabbar-forward-tab)
+(global-set-key (kbd "C-x <home>")   'tabbar-backward-group)
+(global-set-key (kbd "C-x <end>")    'tabbar-forward-group)
 
 ;; Jump between windows
-(global-set-key (kbd "C-x <up>") 'windmove-up)
-(global-set-key (kbd "C-x <down>") 'windmove-down)
-(global-set-key (kbd "C-x <left>") 'windmove-left)
-(global-set-key (kbd "C-x <right>") 'windmove-right)
+(global-set-key (kbd "C-x <up>")     'windmove-up)
+(global-set-key (kbd "C-x <down>")   'windmove-down)
+(global-set-key (kbd "C-x <left>")   'windmove-left)
+(global-set-key (kbd "C-x <right>")  'windmove-right)
 
 ;; Extra Ctrl-x mappings
 (define-key ctl-x-map (kbd "SPC") (lambda () (interactive) (push-mark nil nil 1)))
-(define-key ctl-x-map (kbd ">") 'increase-left-margin)
-(define-key ctl-x-map (kbd "<") 'decrease-left-margin)
-(define-key ctl-x-map (kbd "F") 'toggle-frame-fullscreen)
-(define-key ctl-x-map (kbd "T") 'toggle-truncate-lines)
+(define-key ctl-x-map (kbd ">")      'increase-left-margin)
+(define-key ctl-x-map (kbd "<")      'decrease-left-margin)
+(define-key ctl-x-map (kbd "F")      'toggle-frame-fullscreen)
+(define-key ctl-x-map (kbd "T")      'toggle-truncate-lines)
 
 ;; Extra Ctrl-x mappings for navigation
 (define-key ctl-x-map (kbd "<up>")    'windmove-up)
@@ -220,10 +220,10 @@
 (define-key ctl-x-map (kbd "<end>")   'tabbar-forward-group)
 
 ;; Cua mode helpers
-(define-key ctl-x-map (kbd "C-s") 'save-buffer)
-(define-key ctl-x-map (kbd "C-a") 'mark-whole-buffer)
-(define-key ctl-x-map (kbd "C-v") 'clipboard-yank)
-(define-key ctl-x-map (kbd "C-z") 'undo)
+(define-key ctl-x-map (kbd "C-s")     'save-buffer)
+(define-key ctl-x-map (kbd "C-a")     'mark-whole-buffer)
+(define-key ctl-x-map (kbd "C-v")     'clipboard-yank)
+(define-key ctl-x-map (kbd "C-z")     'undo)
 
 ;; Overwrite other modes
 (defvar my/keys-minor-mode-map (make-keymap) "my/keys-minor-mode keymap.")
@@ -241,12 +241,12 @@
 (define-key my/keys-minor-mode-map (kbd "<f5>")             'recompile)
 (define-key my/keys-minor-mode-map [(control p)]            'scroll-down)
 (define-key my/keys-minor-mode-map [(control n)]            'scroll-up)
-(define-key my/keys-minor-mode-map [(control p)]            'counsel-find-file)
+(define-key my/keys-minor-mode-map [(control o)]            'counsel-find-file)
 (define-key my/keys-minor-mode-map [(control b)]            'ivy-switch-buffer)
 
 ;; key bindings for shift select
 (define-key my/keys-minor-mode-map [S-prior] 'shift-mark-backward-page)
-(define-key my/keys-minor-mode-map [S-next] 'shift-mark-forward-page)
+(define-key my/keys-minor-mode-map [S-next]  'shift-mark-forward-page)
 
 ;; Define custom key mode
 (define-minor-mode my/keys-minor-mode
