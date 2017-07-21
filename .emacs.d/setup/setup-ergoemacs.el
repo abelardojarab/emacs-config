@@ -1,6 +1,6 @@
 ;;; setup-ergoemacs.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -25,17 +25,20 @@
 ;;; Code:
 
 ;; Ergoemacs
-(use-package ergoemacs-mode
+(use-package ergoemacs-mode-fixed
   :ensure nil
   :commands ergoemacs-mode
   :if (and (display-graphic-p)
            (executable-find "gzip"))
   :load-path (lambda () (expand-file-name "ergoemacs-mode/" user-emacs-directory))
+  :commands (ergoemacs-mode ergoemacs-mode-after-init-emacs)
   :init (progn
           (setq ergoemacs-theme nil
                 ergoemacs-keyboard-layout "us"
-                ergoemacs-ignore-prev-global nil))
-  :config (ergoemacs-mode))
+                ergoemacs-ignore-prev-global nil)
+
+          (ergoemacs-mode)
+          (ergoemacs-mode-after-init-emacs)))
 
 (provide 'setup-ergoemacs)
 ;;; setup-ergoemacs.el ends here
