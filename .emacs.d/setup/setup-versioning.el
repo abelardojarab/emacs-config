@@ -87,7 +87,7 @@
              my/git-visit-diffs-prev
              my/git-visit-diffs-next)
   :bind (:map ctl-x-map
-              ("v" . magit-status)
+              ("m" . magit-status)
               :map magit-mode-map
               (("C-c C-a" . magit-just-amend)
                ("c" . magit-maybe-commit)

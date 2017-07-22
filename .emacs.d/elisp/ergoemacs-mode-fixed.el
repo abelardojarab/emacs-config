@@ -1292,19 +1292,167 @@ also perform `outline-next-visible-heading'"
   (ergoemacs-timing ergoemacs-themes
     (load "ergoemacs-themes")))
 
-;; (when ergoemacs-use-aliases
-;;   (ergoemacs-timing ergoemacs-load-aliases
-;;     (ergoemacs-load-aliases)))
+;; Fixed components
+(ergoemacs-component standard-fixed ()
+  "Standard Fixed Shortcuts"
+  :variable-reg nil ;; No variable keys
+  (global-set-key [tool-bar kill-buffer] 'ergoemacs-close-current-buffer)
+  (global-set-key (kbd "C-n") 'ergoemacs-new-empty-buffer)
 
-;; (ergoemacs-timing ergoemacs-mode-intialize-hook
-;;   (run-hooks 'ergoemacs-mode-intialize-hook))
+  (global-set-key (kbd "C-x C-f") nil) ;; Remove Emacs Method
+  (global-set-key (kbd "C-o") ("C-o" :emacs))
+  (global-set-key (kbd "C-S-o") 'ergoemacs-open-in-desktop)
 
-;; (setq ergoemacs--load-time (float-time (time-subtract (current-time) ergoemacs--load-time)))
-;; (puthash 'ergoemacs-load-time (vector 1 ergoemacs--load-time ergoemacs--load-time ergoemacs--load-time (or load-file-name buffer-file-name))
-;;          ergoemacs-timing-hash)
+  (global-set-key (kbd "C-S-t") 'ergoemacs-open-last-closed)
+  (global-set-key (kbd "C-w") 'ergoemacs-close-current-buffer)
 
-;; (run-with-idle-timer 0.05 nil #'ergoemacs-mode-after-init-emacs)
-;; (add-hook 'emacs-startup-hook #'ergoemacs-mode-after-init-emacs)
+  (global-set-key (kbd "C-s") nil) ;; Search Forward
+  (global-set-key (kbd "C-f") ("C-s" :emacs))
+
+  (global-set-key (kbd "C-x C-s") nil) ;; Save File
+  (global-set-key (kbd "C-s") ("C-x C-s" :emacs))
+
+  (global-set-key (kbd "C-x C-w") nil) ;; Write File
+  (global-set-key (kbd "C-S-s") ("C-x C-w" :emacs))
+
+  (global-set-key (kbd "C-p") 'ergoemacs-print-buffer-confirm)
+
+  (global-set-key (kbd "C-x h") nil) ;; Mark whole buffer
+  (global-set-key (kbd "C-a") ("C-x h" :emacs))
+
+  (global-set-key (kbd "C-z") 'undo)
+
+  ;; Take out undo-tree's redo bindings
+  (define-key undo-tree-map (kbd "C-?") nil)
+  (define-key undo-tree-map (kbd "M-_") nil)
+
+  (global-set-key (kbd "C-S-z") '(redo undo-tree-redo ergoemacs-redo))
+  (global-set-key (kbd "M-S-z") '(redo undo-tree-redo ergoemacs-redo))
+  (global-set-key (kbd "<S-delete>") 'ergoemacs-cut-line-or-region)
+  (global-set-key (kbd "C-c <ergoemacs-timeout>") 'ergoemacs-copy-line-or-region)
+  (global-set-key (kbd "<C-insert>") 'ergoemacs-copy-line-or-region)
+  (global-set-key (kbd "C-S-v") 'ergoemacs-paste-cycle)
+
+  (global-set-key (kbd "<S-insert>") 'ergoemacs-paste)
+  (global-set-key (kbd "C-v") 'ergoemacs-paste)
+
+  ;; Navigation
+  (global-set-key (kbd "C-S-n") 'make-frame-command)
+
+  ;; Text editing
+
+  ;; the Del key for forward  delete. Needed if C-d is set to nil.
+  (global-set-key (kbd "<delete>") 'delete-char )
+
+  (global-set-key (kbd "<M-delete>") 'kill-word)
+  (global-set-key (kbd "<C-delete>") 'kill-word)
+
+  (global-set-key (kbd "<home>") 'move-beginning-of-line)
+  (global-set-key (kbd "<end>") 'move-end-of-line)
+
+  (global-set-key (kbd "<C-home>") 'beginning-of-buffer)
+  (global-set-key (kbd "<C-end>") 'end-of-buffer)
+
+  (global-set-key (kbd "<C-left>") 'backward-word)
+  (global-set-key (kbd "<C-right>") 'forward-word)
+
+  (global-set-key (kbd "<M-up>") 'ergoemacs-backward-block)
+  (global-set-key (kbd "<M-down>") 'ergoemacs-forward-block)
+
+  ;; C-H is search and replace.
+
+  ;; C-1 to C-9 should be switch tab...  Same as in Google chrome.
+  ;; C-T should be new tab.
+
+  ;; Refresh should be <f5>; erogemacs uses <f5>.
+  ;; C-r also should be refresh
+  (global-set-key (kbd "<f5>") 'revert-buffer)
+  ;; (global-set-key (kbd "C-r") 'revert-buffer)
+
+  ;; Text Formatting
+  ;; Upper/Lower case toggle.
+
+  ;; Ergoemacs fixed keys...
+  (global-set-key (kbd "<M-f4>") 'ergoemacs-delete-frame) ;; Alt+f4 should work.
+
+  ;; Alt+→
+  ;; Allow shift selection
+  (global-set-key (kbd "<S-down-mouse-1>") 'mouse-save-then-kill)
+  (global-set-key (kbd "<S-mouse-1>") 'ignore)
+  (global-set-key (kbd "C-+") 'text-scale-increase)
+  (global-set-key (kbd "C--") 'text-scale-decrease)
+  (global-set-key (kbd "C-.") 'keyboard-quit)
+  (global-set-key (kbd "C-/") 'ielm-repl)
+  (global-set-key (kbd "C-0") 'ergoemacs-text-scale-normal-size)
+  (global-set-key (kbd "C-<next>") 'ergoemacs-next-user-buffer)
+  (global-set-key (kbd "C-<pause>") 'kill-compilation) ; stop compilation/find/grep
+  (global-set-key (kbd "C-<prior>") 'ergoemacs-previous-user-buffer)
+  (global-set-key (kbd "C-=") 'text-scale-increase)
+  (global-set-key (kbd "C-?") 'info)
+  (global-set-key (kbd "C-S-<next>") 'ergoemacs-next-emacs-buffer)
+  (global-set-key (kbd "C-S-<prior>") 'ergoemacs-previous-emacs-buffer)
+  (global-set-key (kbd "C-S-f") 'occur)
+
+  (global-set-key (kbd "C-S-o") 'ergoemacs-open-in-external-app)
+  (global-set-key (kbd "C-S-s") 'write-file)
+  (global-set-key (kbd "C-S-t") 'ergoemacs-open-last-closed)
+
+  (global-set-key (kbd "C-S-w") 'delete-frame)
+
+  (global-set-key (kbd "C-`") 'other-frame)
+  (global-set-key (kbd "C-a") 'mark-whole-buffer)
+  (global-set-key (kbd "C-f") 'isearch-forward)
+  (global-set-key (kbd "C-l") 'goto-line)
+  (global-set-key (kbd "C-n") 'ergoemacs-new-empty-buffer)
+  (global-set-key (kbd "C-o") 'counsel-find-file)
+  (global-set-key (kbd "C-p") 'ergoemacs-print-buffer-confirm)
+
+  (global-set-key (kbd "C-x k") nil)
+  (global-set-key (kbd "C-w") 'ergoemacs-close-current-buffer)
+  (global-set-key (kbd "C-x <ergoemacs-timeout>") 'ergoemacs-cut-line-or-region)
+  (global-set-key (kbd "C-x C-b") 'ibuffer)
+  (global-set-key (kbd "C-y") '(redo undo-tree-redo ergoemacs-redo) "↷ redo")
+
+  (global-set-key (kbd "M-S-<next>") 'forward-page)
+  (global-set-key (kbd "M-S-<prior>") 'backward-page)
+
+  ;; Mode specific changes
+  (define-key org-mode-map (kbd "<C-return>") 'ergoemacs-org-insert-heading-respect-content)
+  (define-key org-mode-map (kbd "<M-down>") 'ergoemacs-org-metadown)
+  (define-key org-mode-map (kbd "<M-up>") 'ergoemacs-org-metaup)
+  (define-key org-mode-map (kbd "<M-left>") 'ergoemacs-org-metaleft)
+  (define-key org-mode-map (kbd "<M-right>") 'ergoemacs-org-metaright)
+  (define-key org-mode-map (kbd "M-v") 'ergoemacs-org-yank)
+  (define-key org-mode-map (kbd "C-v") 'ergoemacs-org-yank)
+
+  (define-key browse-kill-ring-mode-map (kbd "C-f") 'browse-kill-ring-search-forward)
+  (define-key browse-kill-ring-mode-map (kbd "<deletechar>") 'browse-kill-ring-delete)
+
+  (define-key log-edit-mode-map [remap save-buffer] 'log-edit-done)
+
+  (define-key eshell-mode-map (kbd "<home>") 'eshell-bol)
+  (define-key comint-mode-map (kbd "<home>") 'comint-bol)
+
+  (define-key helm-map [remap mark-whole-buffer] 'helm-mark-all)
+  (define-key helm-map (kbd "C-w") 'helm-keyboard-quit)
+  (define-key helm-map (kbd "C-z") nil)
+
+  ;; Compatibility with Icicle (allows the use of
+  ;; `icicle-read-string-completing' directly)
+  (when icicle-mode
+    (global-set-key [remap ergoemacs-apropos-user-options] 'apropos-user-options))
+
+  (when icicle-ido-like-mode
+    (global-set-key [remap ergoemacs-apropos-user-options] 'apropos-user-options))
+
+  (define-key isearch-mode-map (kbd "C-S-f") 'isearch-occur)
+  (define-key isearch-mode-map (kbd "C-M-f") 'isearch-occur)
+  (define-key isearch-mode-map (kbd "<S-insert>") 'ergoemacs-paste)
+  (define-key isearch-mode-map (kbd "C-S-v") 'ergoemacs-paste-cycle)
+  (define-key isearch-mode-map (kbd "C-c") 'isearch-yank-word-or-char)
+  (define-key isearch-mode-map (kbd "M-c") 'isearch-yank-word-or-char)
+  (define-key isearch-mode-map (kbd "M-v") 'ergoemacs-paste)
+  (define-key isearch-mode-map (kbd "C-v") 'ergoemacs-paste))
 
 (provide 'ergoemacs-mode)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

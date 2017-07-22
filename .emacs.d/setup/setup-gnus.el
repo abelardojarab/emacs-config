@@ -157,7 +157,7 @@
   :commands (gnus compose-mail switch-to-gnus activate-gnus)
   :bind (("M-G" . switch-to-gnus)
          :map ctl-x-map
-         ("m"   . compose-mail))
+         ("M"   . compose-mail))
   :config (progn
 
             ;; Start gnus if not available

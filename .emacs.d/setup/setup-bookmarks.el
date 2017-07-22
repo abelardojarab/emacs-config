@@ -42,10 +42,7 @@
          ("<left-fringe> <mouse-4>" . bm-previous-mouse)
          ("<left-margin> <mouse-4>" . bm-previous-mouse)
          ("<left-fringe> <mouse-1>" . bm-toggle-mouse)
-         ("<left-margin> <mouse-1>" . bm-toggle-mouse)
-
-         :map ctl-x-map
-         ("M" . bm-toggle))
+         ("<left-margin> <mouse-1>" . bm-toggle-mouse))
   :init (progn
 
           ;; bm-repository
