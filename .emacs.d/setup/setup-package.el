@@ -70,6 +70,7 @@
 (use-package yaxception          :defer t :load-path (lambda () (expand-file-name "yaxception/" user-emacs-directory)))
 (use-package dropdown-list       :defer t :load-path (lambda () (expand-file-name "dropdown-list/" user-emacs-directory)))
 (use-package math-symbol-lists   :defer t :load-path (lambda () (expand-file-name "math-symbol-lists/" user-emacs-directory)))
+(use-package memoize             :defer t :load-path (lambda () (expand-file-name "memoize/" user-emacs-directory)))
 
 (provide 'setup-package)
 ;;; setup-package.el ends here

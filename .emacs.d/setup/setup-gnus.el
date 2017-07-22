@@ -230,9 +230,16 @@
             (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
             (add-hook 'gnus-group-mode-hook 'hl-line-mode)
             (add-hook 'gnus-summary-mode-hook 'hl-line-mode)
-            (add-hook 'gnus-summary-mode-hook (lambda ()
-                                                (toggle-truncate-lines t)
-                                                (setq-local truncate-lines t)))
+
+            ;; Truncate lines
+            (mapc (lambda (mode)
+                    (add-hook mode (lambda ()
+                                     (visual-line-mode -1)
+                                     (toggle-truncate-lines t)
+                                     (setq truncate-lines t))))
+                  '(gnus-summary-mode-hook
+                    gnus-group-mode-hook
+                    gnus-topic-mode-hook))
 
             ;; Sort email
             (add-hook 'gnus-summary-exit-hook 'gnus-summary-bubble-group)
@@ -479,6 +486,14 @@
 (use-package std11
   :defer t
   :load-path (lambda () (expand-file-name "flim/" user-emacs-directory)))
+
+;; All the icons, gnus plugin
+(use-package all-the-icons-gnus
+  :if (display-graphic-p)
+  :after (dired all-the-icons gnus)
+  :load-path (lambda () (expand-file-name "all-the-icons-gnus/" user-emacs-directory))
+  :commands all-the-icons-gnus-setup
+  :init (add-hook 'gnus-group-mode-hook 'all-the-icons-gnus-setup))
 
 (provide 'setup-gnus)
 ;;; setup-gnus.el ends here
