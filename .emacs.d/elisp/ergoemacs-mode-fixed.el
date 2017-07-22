@@ -1367,7 +1367,8 @@ also perform `outline-next-visible-heading'"
   ;; Refresh should be <f5>; erogemacs uses <f5>.
   ;; C-r also should be refresh
   (global-set-key (kbd "<f5>") 'revert-buffer)
-  ;; (global-set-key (kbd "C-r") 'revert-buffer)
+
+  (global-set-key (kbd "C-r") 'replace-string)
 
   ;; Text Formatting
   ;; Upper/Lower case toggle.
