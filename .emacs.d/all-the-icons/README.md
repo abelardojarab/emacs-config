@@ -14,8 +14,7 @@
   <a href="https://melpa.org/#/all-the-icons"><img src="https://melpa.org/packages/all-the-icons-badge.svg"></a>
   <a href="https://stable.melpa.org/#/all-the-icons"><img src="https://stable.melpa.org/packages/all-the-icons-badge.svg"></a>
   <a href="https://github.com/domtronn/all-the-icons.el/releases"><img src="https://img.shields.io/github/tag/domtronn/all-the-icons.el.svg"></a>
-  <a href="https://github.com/domtronn/all-the-icons.el/issues"><img src="https://img.shields.io/issuestats/i/github/domtronn/all-the-icons.el.svg"></a>
-  <a href="https://github.com/domtronn/all-the-icons.el/pulls"><img src="https://img.shields.io/issuestats/p/github/domtronn/all-the-icons.el.svg"></a>
+  <a href="https://travis-ci.org/domtronn/all-the-icons.el"><img src="https://travis-ci.org/domtronn/all-the-icons.el.svg?branch=master"></a>
   <a href="https://github.com/domtronn/all-the-icons.el/blob/master/LICENSE"><img src="https://img.shields.io/github/license/mashape/apistatus.svg"></a>
 </p>
 
@@ -179,5 +178,16 @@ Lastly, there is a
 [Wiki Page](https://github.com/domtronn/all-the-icons.el/wiki) which
 should give you some ideas of ways to use this library to spruce up
 other Emacs packages.
+
+### Slow Rendering
+
+If you experience a slow down in performace when rendering multiple
+icons simultaneously, you can try setting the following variable
+
+```el
+(setq inhibit-compacting-font-caches t)
+```
+
+Some people have found that this [fixes the problem](https://github.com/domtronn/all-the-icons.el/issues/28)
 
 [▲ back to top](#readme)
