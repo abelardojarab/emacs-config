@@ -26,7 +26,7 @@
 
 ;; Revert buffer
 (use-package files
-  :bind ("C-c r" . revert-buffer))
+  :commands revert-buffer)
 
 ;; Emacs startup profiler
 (use-package esup

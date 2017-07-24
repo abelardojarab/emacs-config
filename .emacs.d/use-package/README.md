@@ -1,5 +1,7 @@
 # `use-package`
 
+[![Build Status](https://travis-ci.org/jwiegley/use-package.svg?branch=master)](https://travis-ci.org/jwiegley/use-package)
+
 The `use-package` macro allows you to isolate package configuration in your
 `.emacs` file in a way that is both performance-oriented and, well, tidy.  I
 created it because I have over 80 packages that I use in Emacs, and things
@@ -235,7 +237,9 @@ buffer, so that you can debug the situation in an otherwise functional Emacs.
 ## Conditional loading
 
 You can use the `:if` keyword to predicate the loading and initialization of
-modules.  For example, I only want `edit-server` running for my main,
+modules.
+
+For example, I only want `edit-server` running for my main,
 graphical Emacs, not for other Emacsen I may start at the command line:
 
 ``` elisp
@@ -245,13 +249,22 @@ graphical Emacs, not for other Emacsen I may start at the command line:
   (add-hook 'after-init-hook 'server-start t)
   (add-hook 'after-init-hook 'edit-server-start t))
 ```
+In another example, we can load things conditional on the operating system:
+
+```
+(use-package exec-path-from-shell
+  :if (memq window-system '(mac ns))
+  :ensure t
+  :config
+  (exec-path-from-shell-initialize))
+```
 
 The `:disabled` keyword can turn off a module you're having difficulties with,
 or stop loading something you're not using at the present time:
 
 ``` elisp
 (use-package ess-site
-  :disabled t
+  :disabled
   :commands R)
 ```
 
@@ -337,15 +350,17 @@ looking up the same information again on each startup:
   :commands R)
 ```
 
-## Diminishing minor modes
+## Diminishing and delighting minor modes
 
-`use-package` also provides built-in support for the diminish utility -- if
-you have that installed.  Its purpose is to remove strings from your mode-line
-that provide no useful information.  It is invoked with the `:diminish`
-keyword, which is passed either a minor mode symbol, a cons of the symbol and
-its replacement string, or just a replacement string, in which case the minor
-mode symbol is guessed to be the package name with "-mode" appended at the
-end:
+`use-package` also provides built-in support for the diminish and
+delight utilities -- if you have them installed. Their purpose is to
+remove or change minor mode strings in your mode-line.
+
+[diminish](https://github.com/myrjola/diminish.el) is invoked with
+the `:diminish` keyword, which is passed either a minor mode symbol, a
+cons of the symbol and its replacement string, or just a replacement
+string, in which case the minor mode symbol is guessed to be the
+package name with "-mode" appended at the end:
 
 ``` elisp
 (use-package abbrev
@@ -353,6 +368,37 @@ end:
   :config
   (if (file-exists-p abbrev-file-name)
       (quietly-read-abbrev-file)))
+```
+
+[delight](https://elpa.gnu.org/packages/delight.html) is invoked with
+the `:delight` keyword, which is passed a minor mode symbol, a
+replacement string or
+quoted
+[mode-line data](https://www.gnu.org/software/emacs/manual/html_node/elisp/Mode-Line-Data.html) (in
+which case the minor mode symbol is guessed to be the package name
+with "-mode" appended at the end), both of these, or several lists of
+both. If no arguments are provided, the default mode name is hidden
+completely.
+
+``` elisp
+;; Don't show anything for rainbow-mode.
+(use-package rainbow-mode
+  :delight)
+
+;; Don't show anything for auto-revert-mode, which doesn't match
+;; its package name.
+(use-package autorevert
+  :delight auto-revert-mode)
+
+;; Remove the mode name for projectile-mode, but show the project name.
+(use-package projectile
+  :delight '(:eval (concat " " (projectile-project-name))))
+
+;; Completely hide visual-line-mode and change auto-fill-mode to " AF".
+(use-package emacs
+  :delight
+  (auto-fill-function " AF")
+  (visual-line-mode))
 ```
 
 ## For `package.el` users
