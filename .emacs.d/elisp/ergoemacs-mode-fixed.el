@@ -1385,9 +1385,9 @@ also perform `outline-next-visible-heading'"
   (global-set-key (kbd "C-.") 'keyboard-quit)
   (global-set-key (kbd "C-/") 'ielm-repl)
   (global-set-key (kbd "C-0") 'ergoemacs-text-scale-normal-size)
-  (global-set-key (kbd "C-<next>") 'ergoemacs-next-user-buffer)
+  (global-set-key (kbd "C-<next>") 'tabbar-forward)
   (global-set-key (kbd "C-<pause>") 'kill-compilation) ; stop compilation/find/grep
-  (global-set-key (kbd "C-<prior>") 'ergoemacs-previous-user-buffer)
+  (global-set-key (kbd "C-<prior>") 'tabbar-backward)
   (global-set-key (kbd "C-=") 'text-scale-increase)
   (global-set-key (kbd "C-?") 'info)
   (global-set-key (kbd "C-S-<next>") 'ergoemacs-next-emacs-buffer)
