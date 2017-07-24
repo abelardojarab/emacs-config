@@ -26,7 +26,7 @@
 
 ;; Org mode
 (use-package org
-  :defer nil
+  :defer t
   :mode (("\\.org$" . org-mode))
   :load-path (lambda () (expand-file-name "org-mode/lisp" user-emacs-directory))
   :bind (("C-c C" . org-capture)
@@ -380,12 +380,12 @@
                     (save-match-data
                       (nth 3 (org-footnote-get-definition (buffer-substring (+ 1 (car fn)) (- (cdr fn) 1)))))))))
             (advice-add 'org-eldoc-documentation-function
-                        :before-until #'my/org-eldoc-get-footnote)))
+                        :before-until #'my/org-eldoc-get-footnote)
 
-;; Beamer/ODT/Markdown exporters
-(use-package ox-beamer :defer 5)
-(use-package ox-odt    :defer 5)
-(use-package ox-md     :defer 5)
+            ;; Beamer/ODT/Markdown exporters
+            (use-package ox-beamer)
+            (use-package ox-odt)
+            (use-package ox-md)))
 
 (provide 'setup-org)
 ;;; setup-org.el ends here
