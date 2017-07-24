@@ -73,11 +73,11 @@ Exit the save between databases if there is user input."
                   (semantic-safe "Auto-DB Save: %S"
                     ;; FIXME: Use `while-no-input'?
                     (save-mark-and-excursion ;; <-- added line
-		     (semantic-exit-on-input 'semanticdb-idle-save
-		       (mapc (lambda (db)
-			       (semantic-throw-on-input 'semanticdb-idle-save)
-			       (semanticdb-save-db db t))
-			     semanticdb-database-list))))
+                      (semantic-exit-on-input 'semanticdb-idle-save
+                        (mapc (lambda (db)
+                                (semantic-throw-on-input 'semanticdb-idle-save)
+                                (semanticdb-save-db db t))
+                              semanticdb-database-list))))
                 (if (fboundp 'save-excursion)
                     (save-excursion ;; <-- added line
                       (semantic-exit-on-input 'semanticdb-idle-save
@@ -182,16 +182,15 @@ On success, return the added project."
                     org-mode-hook))
 
             ;; Enable which-function-mode for selected major modes
-            (setq which-func-unknown ""
+            (setq which-func-unknown "⊥"
                   which-func-maxout 1024
                   which-func-modes '(latex-mode
                                      markdown-mode
                                      c-mode
                                      emacs-lisp-mode
                                      org-mode
-                                     c++-mode))
-
-            (setq which-func-format
+                                     c++-mode)
+                  which-func-format
                   `(" "
                     (:propertize which-func-current local-map
                                  (keymap

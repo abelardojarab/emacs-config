@@ -24,6 +24,12 @@
 
 ;;; Code:
 
+;; Configure a reasonable fill column, indicate it in the buffer and enable
+;; automatic filling
+(setq-default fill-column 80)
+(add-hook 'text-mode-hook #'auto-fill-mode)
+(diminish 'auto-fill-function " Ⓕ")
+
 (setq after-find-file-from-revert-buffer t)
 
 ;; Help to determine who modifies buffer
@@ -55,12 +61,6 @@
 
 ;; Fix pipe delay
 (setq w32-pipe-read-delay 0)
-
-;; Auto revert files if they are modified in an external editor
-(if (equal system-type 'windows-nt)
-    ;; auto-revert-remote-files freezes win64 emacs
-    (global-auto-revert-mode nil)
-  (global-auto-revert-mode t))
 
 ;; Garantee utf8 as input-method
 (set-input-method nil)

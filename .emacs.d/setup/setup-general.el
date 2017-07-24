@@ -24,9 +24,25 @@
 
 ;;; Code:
 
+
+
 ;; Revert buffer
 (use-package files
   :commands revert-buffer)
+
+;; Auto-revert buffers of changed files
+(use-package autorevert
+  :if (not (equal system-type 'windows-nt))
+  :init (global-auto-revert-mode)
+  :commands global-auto-revert-mode
+  :config (setq auto-revert-verbose nil
+                ;; Revert Dired buffers, too
+                global-auto-revert-non-file-buffers t)
+
+  (when (eq system-type 'darwin)
+    ;; File notifications aren't supported on OS X
+    (validate-setq auto-revert-use-notify nil))
+  :diminish (auto-revert-mode . " Ⓐ"))
 
 ;; Emacs startup profiler
 (use-package esup
@@ -70,6 +86,13 @@
   :init (mapc (lambda (mode)
                 (add-hook mode 'subword-mode))
               my/subword-modes))
+
+;; Choose wrap prefix automatically
+(use-package adaptive-wrap
+  :defer t
+  :load-path (lambda () (expand-file-name "adaptive-wrap/" user-emacs-directory))
+  :commands adaptive-wrap-prefix-mode
+  :init (add-hook 'visual-line-mode-hook #'adaptive-wrap-prefix-mode))
 
 ;; Uniquify-buffers
 (use-package uniquify

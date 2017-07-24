@@ -36,8 +36,31 @@
   :load-path (lambda () (expand-file-name "which-key/" user-emacs-directory))
   :diminish which-key-mode
   :config (progn
-            (unless (or (equal system-type 'windows-nt)
-                        (not (display-graphic-p)))
+            (when (if (not (equal system-type 'windows-nt))
+                      (display-graphic-p))
+              (setq which-key-key-replacement-alist
+                    '(("<\\([[:alnum:]-]+\\)>" . "\\1")
+                      ("TAB"                   . "↹")
+                      ("RET"                   . "⏎")
+                      ("SPC"                   . "␣")
+                      ("up"                    . "↑")
+                      ("right"                 . "→")
+                      ("down"                  . "↓")
+                      ("left"                  . "←")
+                      ("DEL"                   . "⇤")
+                      ("deletechar"            . "⌫")
+                      ("RET"                   . "⏎"))
+                    which-key-description-replacement-alist
+                    '(("Prefix Command" . "prefix")
+                      ;; Lambdas
+                      ("\\`\\?\\?\\'"   . "λ")
+                      ;; Prettify hydra entry points
+                      ("/body\\'"       . "|=")
+                      ;; Drop/shorten package prefixes
+                      ("\\`lunaryorn-"  . "")
+                      ("projectile-"    . "proj-")
+                      ("magit-"         . "ma-")))
+
               (add-to-list 'which-key-key-replacement-alist '("TAB" . "↹"))
               (add-to-list 'which-key-key-replacement-alist '("RET" . "⏎"))
               (add-to-list 'which-key-key-replacement-alist '("DEL" . "⇤"))
@@ -52,9 +75,11 @@
 
             ;; Side window setup
             ;; (setq which-key-popup-type 'side-window)
-            (setq which-key-popup-type 'minibuffer)
-            (setq which-key-side-window-location 'right)
-            (setq which-key-side-window-max-width 0.33)
+            (setq which-key-popup-type 'minibuffer
+                  which-key-side-window-location 'right
+                  which-key-sort-order 'which-key-prefix-then-key-order
+                  which-key-side-window-max-width 0.33)
+
             (which-key-mode)))
 
 ;; Get an instant cheat sheet for your current major mode

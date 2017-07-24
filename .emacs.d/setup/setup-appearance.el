@@ -79,13 +79,20 @@ non-nil."
             (toggle-truncate-lines t)
             (setq truncate-lines t)))
 
-;; Visual fill column
+;; Turn on whenever visual line mode is on
+;; to get centered text
 (use-package visual-fill-column
   :defer t
   :commands visual-fill-column-mode
   :load-path (lambda () (expand-file-name "visual-fill-column/" user-emacs-directory))
-  :config (setq-default visual-fill-column-center-text t
-                        visual-fill-column-fringes-outside-margins nil))
+  :config (progn
+            (setq-default visual-fill-column-center-text t
+                          visual-fill-column-fringes-outside-margins nil)
+
+            ;; Split windows vertically despite large margins, because Emacs otherwise
+            ;; refuses to vertically split windows with large margins
+            (validate-setq split-window-preferred-function
+                           #'visual-fill-column-split-window-sensibly)))
 
 ;; Just like the previous package, this one is also subtle.
 ;; It highlights characters that exceed a particular column margin. Very useful while coding.
@@ -120,16 +127,6 @@ non-nil."
 (use-package hlinum
   :load-path (lambda () (expand-file-name "hlinum-mode/" user-emacs-directory))
   :config (hlinum-activate))
-
-;; Put a nice title to the window, including filename
-(add-hook 'window-configuration-change-hook
-          (lambda ()
-            (setq frame-title-format
-                  (concat
-                   invocation-name "@" system-name ": "
-                   (replace-regexp-in-string
-                    (concat "/home/" user-login-name) "~"
-                    (or buffer-file-name "%b"))))))
 
 ;; Adaptive scrollbar
 (use-package lawlist-scroll-mode

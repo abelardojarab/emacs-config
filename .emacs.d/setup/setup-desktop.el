@@ -140,6 +140,7 @@
   :config (progn
             (add-hook 'dashboard-mode-hook
                       (lambda ()
+                        (visual-fill-column-mode 1)
                         (visual-line-mode -1)
                         (toggle-truncate-lines t)
                         (setq truncate-lines t)))

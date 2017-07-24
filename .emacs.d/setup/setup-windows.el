@@ -24,11 +24,49 @@
 
 ;;; Code:
 
+;; Put a nice title to the window, including filename
+(add-hook 'window-configuration-change-hook
+          (lambda ()
+            (setq frame-title-format
+                  (concat
+                   invocation-name "@" system-name ": "
+                   (replace-regexp-in-string
+                    (concat "/home/" user-login-name) "~"
+                    (or buffer-file-name "%b"))))))
+
+;; Resize by pixels
+(setq frame-resize-pixelwise t
+      ;; Size new windows proportionally wrt other windows
+      window-combination-resize t)
+
 ;; default to maximised windows
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;; prompt when trying to switch out of a dedicated window
 (setq switch-to-buffer-in-dedicated-window 'prompt)
+
+;; Configure `display-buffer' behaviour for some special buffers.
+(setq display-buffer-alist
+      `(
+        ;; Put REPLs and error lists into the bottom side window
+        (,(rx bos
+              (or "*Help"                         ;; Help buffers
+                  "*Warnings*"                    ;; Emacs warnings
+                  "*Compile-Log*"                 ;; Emacs byte compiler log
+                  "*compilation"                  ;; Compilation buffers
+                  "*Flycheck errors*"             ;; Flycheck error list
+                  "*shell"                        ;; Shell window
+                  (and (1+ nonl) " output*")      ;; AUCTeX command output
+                  ))
+         (display-buffer-reuse-window
+          display-buffer-in-side-window)
+         (side            . bottom)
+         (reusable-frames . visible)
+         (window-height   . 0.33))
+        ;; Let `display-buffer' reuse visible frames for all buffers.  This must
+        ;; be the last entry in `display-buffer-alist', because it overrides any
+        ;; later entry with more specific actions.
+        ("." nil (reusable-frames . visible))))
 
 ;; creating new frames
 (defun clone-frame-1 (direction)

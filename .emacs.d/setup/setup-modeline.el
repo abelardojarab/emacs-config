@@ -47,13 +47,13 @@
   :load-path (lambda () (expand-file-name "spaceline/" user-emacs-directory))
   :config (progn
             ;; Configure the mode-line
-            (setq-default
-             powerline-default-separator 'bar
-             spaceline-display-default-perspective t
-             spaceline-highlight-face-func 'spaceline-highlight-face-modified
-             spaceline-flycheck-bullet "• %s"
-             spaceline-separator-dir-left '(left . left)
-             spaceline-separator-dir-right '(right . right))))
+            (setq-default powerline-default-separator 'utf-8
+                          powerline-height (truncate (* 1.0 (frame-char-height)))
+                          spaceline-display-default-perspective t
+                          spaceline-highlight-face-func 'spaceline-highlight-face-modified
+                          spaceline-flycheck-bullet "• %s"
+                          spaceline-separator-dir-left '(left . left)
+                          spaceline-separator-dir-right '(right . right))))
 
 ;; Spaceline configuration
 (use-package spaceline-config
