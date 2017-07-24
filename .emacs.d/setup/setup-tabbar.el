@@ -24,72 +24,6 @@
 
 ;;; Code:
 
-;; Tabbar mode
-(use-package tabbar
-  :defer 1
-  :load-path (lambda () (expand-file-name "tabbar/" user-emacs-directory))
-  :commands tabbar-mode
-  :bind (
-         ("C-c <right>" . tabbar-forward)
-         ("C-c <left>"  . tabbar-backward)
-         ("C-c <up>"    . tabbar-backward-group)
-         ("C-c <down>"  . tabbar-forward-group))
-  :config (progn
-            (setq tabbar-auto-scroll-flag t
-                  tabbar-use-images t
-                  tabbar-cycle-scope (quote tabs)
-                  table-time-before-update 0.1)
-
-            ;; Reduce tabbar width to enable as many buffers as possible
-            ;; https://gist.github.com/3demax/1264635
-            (defun tabbar-buffer-tab-label (tab)
-              "Return a label for TAB.
-That is, a string used to represent it on the tab bar."
-              (let ((label  (if tabbar--buffer-show-groups
-                                (format "[%s]  " (tabbar-tab-tabset tab))
-                              (format "%s  " (tabbar-tab-value tab)))))
-                ;; Unless the tab bar auto scrolls to keep the selected tab
-                ;; visible, shorten the tab label to keep as many tabs as possible
-                ;; in the visible area of the tab bar.
-                (if tabbar-auto-scroll-flag
-                    label
-                  (tabbar-shorten
-                   label (max 1 (/ (window-width)
-                                   (length (tabbar-view
-                                            (tabbar-current-tabset)))))))))
-
-            ;; Tweaking the tabbar
-            (defadvice tabbar-buffer-tab-label (after fixup_tab_label_space_and_flag activate)
-              (setq ad-return-value
-                    (if (and (buffer-modified-p (tabbar-tab-value tab))
-                             (buffer-file-name (tabbar-tab-value tab)))
-                        (concat "+" (concat ad-return-value ""))
-                      (concat "" (concat ad-return-value "")))))
-
-            ;; called each time the modification state of the buffer changed
-            (defun my/modification-state-change ()
-              (tabbar-set-template tabbar-current-tabset nil)
-              (tabbar-display-update))
-
-            ;; first-change-hook is called BEFORE the change is made
-            (defun my/on-buffer-modification ()
-              (set-buffer-modified-p t)
-              (my/modification-state-change))
-            (add-hook 'after-save-hook 'my/modification-state-change)
-            (add-hook 'first-change-hook 'my/on-buffer-modification)
-
-            ;; Assure switching tabs uses switch-to-buffer
-            (defun switch-tabbar (num)
-              (let* ((tabs (tabbar-tabs
-                            (tabbar-current-tabset)))
-                     (tab (nth
-                           (if (> num 0) (- num 1) (+ (length tabs) num))
-                           tabs)))
-                (if tab (switch-to-buffer (car tab)))))
-
-            ;; Enable tabbar
-            (tabbar-mode t)))
-
 ;; Tabbar ruler pre-requisites
 (use-package mode-icons
   :if (display-graphic-p)
@@ -100,9 +34,10 @@ That is, a string used to represent it on the tab bar."
 (use-package tabbar-ruler
   :if (display-graphic-p)
   :after (powerline tabbar mode-icons projectile)
-  :defer nil
+  :defer t
   :load-path (lambda () (expand-file-name "tabbar-ruler/" user-emacs-directory))
   :init (setq tabbar-ruler-global-tabbar 't)
+  :commands tabbar-install-faces
   :config (progn
 
             ;; https://github.com/mattfidler/tabbar-ruler.el/issues/10
@@ -173,6 +108,77 @@ That is, a string used to represent it on the tab bar."
 
             ;; Enable tabbar
             (tabbar-mode t)))
+
+;; Tabbar mode
+(use-package tabbar
+  :defer 1
+  :load-path (lambda () (expand-file-name "tabbar/" user-emacs-directory))
+  :commands tabbar-mode
+  :bind (
+         ("C-c <right>" . tabbar-forward)
+         ("C-c <left>"  . tabbar-backward)
+         ("C-c <up>"    . tabbar-backward-group)
+         ("C-c <down>"  . tabbar-forward-group))
+  :config (progn
+            (setq tabbar-auto-scroll-flag t
+                  tabbar-use-images t
+                  tabbar-cycle-scope (quote tabs)
+                  table-time-before-update 0.1)
+
+            ;; Reduce tabbar width to enable as many buffers as possible
+            ;; https://gist.github.com/3demax/1264635
+            (defun tabbar-buffer-tab-label (tab)
+              "Return a label for TAB.
+That is, a string used to represent it on the tab bar."
+              (let ((label  (if tabbar--buffer-show-groups
+                                (format "[%s]  " (tabbar-tab-tabset tab))
+                              (format "%s  " (tabbar-tab-value tab)))))
+                ;; Unless the tab bar auto scrolls to keep the selected tab
+                ;; visible, shorten the tab label to keep as many tabs as possible
+                ;; in the visible area of the tab bar.
+                (if tabbar-auto-scroll-flag
+                    label
+                  (tabbar-shorten
+                   label (max 1 (/ (window-width)
+                                   (length (tabbar-view
+                                            (tabbar-current-tabset)))))))))
+
+            ;; Tweaking the tabbar
+            (defadvice tabbar-buffer-tab-label (after fixup_tab_label_space_and_flag activate)
+              (setq ad-return-value
+                    (if (and (buffer-modified-p (tabbar-tab-value tab))
+                             (buffer-file-name (tabbar-tab-value tab)))
+                        (concat "+" (concat ad-return-value ""))
+                      (concat "" (concat ad-return-value "")))))
+
+            ;; called each time the modification state of the buffer changed
+            (defun my/modification-state-change ()
+              (tabbar-set-template tabbar-current-tabset nil)
+              (tabbar-display-update))
+
+            ;; first-change-hook is called BEFORE the change is made
+            (defun my/on-buffer-modification ()
+              (set-buffer-modified-p t)
+              (my/modification-state-change))
+            (add-hook 'after-save-hook 'my/modification-state-change)
+            (add-hook 'first-change-hook 'my/on-buffer-modification)
+
+            ;; Assure switching tabs uses switch-to-buffer
+            (defun switch-tabbar (num)
+              (let* ((tabs (tabbar-tabs
+                            (tabbar-current-tabset)))
+                     (tab (nth
+                           (if (> num 0) (- num 1) (+ (length tabs) num))
+                           tabs)))
+                (if tab (switch-to-buffer (car tab)))))
+
+            ;; Enable tabbar
+            (tabbar-mode t)
+
+            ;; Call tabbar-ruler
+            (if (display-graphic-p)
+                (tabbar-install-faces))
+            ))
 
 (provide 'setup-tabbar)
 ;;; setup-tabbar.el ends here
