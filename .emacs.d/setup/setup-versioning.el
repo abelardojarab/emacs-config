@@ -426,22 +426,25 @@
              diff-hl-mark-hunk
              diff-hl-diff-goto-hunk
              diff-hl-revert-hunk
-             diff-hl-flydiff-mode)
+             diff-hl-flydiff-mode
+             diff-hl-magit-post-refresh
+             diff-hl-dired-mode)
   :load-path (lambda () (expand-file-name "diff-hl/" user-emacs-directory))
-  :init (global-diff-hl-mode 1)
+  :init (progn
+          ;; Integrate with Magit
+          (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
+
+          ;; Highlight changed files in the fringe of dired
+          (add-hook 'dired-mode-hook #'diff-hl-dired-mode))
   :config (progn
+            (use-package diff-hl-dired)
+
             (setq diff-hl-draw-borders t)
             (defadvice svn-sttus-update-modeline (after svn-update-diff-hl activate)
               (diff-hl-update))
 
             ;; highlight in unsaved buffers as well
-            (diff-hl-flydiff-mode 1)
-
-            ;; Integrate with Magit
-            (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
-
-            ;; Highlight changed files in the fringe of dired
-            (add-hook 'dired-mode-hook #'diff-hl-dired-mode)))
+            (diff-hl-flydiff-mode 1)))
 
 ;; git modeline and git utilities
 (use-package git-emacs

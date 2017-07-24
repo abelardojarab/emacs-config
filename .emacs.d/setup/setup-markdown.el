@@ -81,12 +81,12 @@
                         (flyspell-mode t)))
 
             ;; http://stackoverflow.com/questions/14275122/editing-markdown-pipe-tables-in-emacs
-            (defun cleanup-org-tables ()
+            (defun my/cleanup-org-tables ()
               (save-excursion
                 (goto-char (point-min))
                 (while (search-forward "-+-" nil t) (replace-match "-|-"))))
             (add-hook 'markdown-mode-hook
-                      (lambda () (add-hook 'after-save-hook 'cleanup-org-tables  nil t)))
+                      (lambda () (add-hook 'after-save-hook 'my/cleanup-org-tables nil t)))
 
             ;; Github markdown style
             (setq markdown-css-paths `(,(expand-file-name "styles/github-pandoc.css" user-emacs-directory)))

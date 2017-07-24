@@ -267,6 +267,7 @@
   '("*Compile-Log*"
     "^ "
     "TAGS"
+    "tmp status"
     "Grepint: git-grep"
     "*Messages*"
     "*Completions*"
