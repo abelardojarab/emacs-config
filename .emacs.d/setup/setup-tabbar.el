@@ -28,6 +28,7 @@
 (use-package tabbar
   :defer 1
   :load-path (lambda () (expand-file-name "tabbar/" user-emacs-directory))
+  :commands tabbar-mode
   :bind (
          ("C-c <right>" . tabbar-forward)
          ("C-c <left>"  . tabbar-backward)
@@ -99,6 +100,7 @@ That is, a string used to represent it on the tab bar."
 (use-package tabbar-ruler
   :if (display-graphic-p)
   :after (powerline tabbar mode-icons projectile)
+  :defer nil
   :load-path (lambda () (expand-file-name "tabbar-ruler/" user-emacs-directory))
   :init (setq tabbar-ruler-global-tabbar 't)
   :config (progn
