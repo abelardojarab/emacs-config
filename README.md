@@ -1,6 +1,6 @@
 # Emacs configuration files from Abelardo Jara-Berrocal #
 
-## Supported Emacs versions: ##
+## Supported emacs versions: ##
 
 -   Emacs 24.4-24.x
 -   Emacs 25.x
@@ -14,11 +14,13 @@
 
 ## Fixes with respect to Spacemacs and Prelude ##
 
--   *Fixed htmlize* library so it is possible to export code or text
+-   **Fixed htmlize** library so it does not fail to export code or text
     segments as formatted HTML
--   *Fixed and enabled ECB* - works with Emacs 25 and above
--   *Fixed and enabled ergoemacs-mode*, such that it does not
+-   **Fixed and enabled ECB** - fix ECB to work with Emacs 25 and above
+-   **Fixed and enabled ergoemacs-mode**, such that it does not
     invoke (package-initialize) in case there is no Internet connection
+-   **Fixed usage orgtbl-mode** under markdown-mode so Org tables can be used in
+    markdown documents.
 -   *adviced* (load-theme ') function such that fringe,
     modeline (powerline) and tabbar colorsets are refreshed after a theme change
     (improvement over prelude and spacemacs)
@@ -39,8 +41,8 @@
 
 # Keybindings: #
 
-![](https://raw.githubusercontent.com/abelardojarab/emacs-config/master/.emacs.d/ergoemacs-extras/saved/standard.png)
+![Enhanced ergoemacs keybindings](https://raw.githubusercontent.com/abelardojarab/emacs-config/master/.emacs.d/ergoemacs-extras/saved/standard.png)
 
 # Screenshot #
 
-![](https://raw.githubusercontent.com/abelardojarab/emacs-config/master/README.png)
+![ECB-based emacs layout](https://raw.githubusercontent.com/abelardojarab/emacs-config/master/README.png)
