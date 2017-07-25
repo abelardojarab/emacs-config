@@ -39,7 +39,7 @@
 
 # Keybindings: #
 
-![](https://raw.githubusercontent.com/abelardojarab/emacs-config/master/.emacs.d/ergoemacs-extras/bindings/lvl1.png)
+![](https://raw.githubusercontent.com/abelardojarab/emacs-config/master/.emacs.d/ergoemacs-extras/saved/standard.png)
 
 # Screenshot #
 

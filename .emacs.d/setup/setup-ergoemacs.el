@@ -32,7 +32,7 @@
   :load-path (lambda () (expand-file-name "ergoemacs-mode/" user-emacs-directory))
   :commands (ergoemacs-mode ergoemacs-mode-after-init-emacs)
   :init (progn
-          (setq ergoemacs-theme              "lvl1"
+          (setq ergoemacs-theme              "standard"
                 ergoemacs-keyboard-layout    "us"
                 ergoemacs-ignore-prev-global nil)
 
