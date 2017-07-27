@@ -58,7 +58,7 @@
 (defun indent-hint-init(&optional l)
   (mapc
    (lambda(x) (or (local-variable-p x)
-                  (make-local-variable x)))
+             (make-local-variable x)))
    '(indent-hint-counter
      indent-hint-lazy
      indent-hint-with-white-line
@@ -96,7 +96,7 @@
                        (delq x indent-hint-list))
                  (unintern x)))))))
 
-;; * indent-hint
+;; *xpm
 (defun make-indent-hint-xpm (width height color &optional lor)
   (let* ((w width)
          (h height)
@@ -120,11 +120,11 @@ static char * dot_vline_xpm[] = {
 s1 ",\n" s2 "};"
 ))))
 
-(defvar indent-hint-line-height (or (car (window-line-height)) 20))
-(defvar indent-hint-img (make-indent-hint-xpm 9 indent-hint-line-height "#4D4D4D"))
-(defvar indent-hint-img-lgc (make-indent-hint-xpm 9 indent-hint-line-height "#5d478b"))
-(defvar indent-hint-img-mtd (make-indent-hint-xpm 9 indent-hint-line-height "khaki"))
-(defvar indent-hint-img-dat (make-indent-hint-xpm 9 indent-hint-line-height "#008b45"))
+(defvar ih-line-height (or (car (window-line-height)) 20))
+(defvar ih-img (ih-make-xpm 9 ih-line-height "#4D4D4D"))
+(defvar ih-img-lgc (ih-make-xpm 9 ih-line-height "#5d478b"))
+(defvar ih-img-mtd (ih-make-xpm 9 ih-line-height "khaki"))
+(defvar ih-img-dat (ih-make-xpm 9 ih-line-height "#008b45"))
 
 (defun kill-indent-hint (m &optional n)
   (let ((n (or n (1+ m))))
@@ -164,11 +164,11 @@ s1 ",\n" s2 "};"
      (cons (cons pt (current-column))
            (mapcar
             (lambda(x) (remove-if
-                        nil
-                        `(,x
-                          ,(overlay-get x 'indent-hint-id)
-                          ,(if (overlay-get x indent-hint-bg) 'bg)
-                          ,(if (eq (overlay-get x 'face) 'hl-line) 'hl-line))))
+                   nil
+                   `(,x
+                     ,(overlay-get x 'indent-hint-id)
+                     ,(if (overlay-get x indent-hint-bg) 'bg)
+                     ,(if (eq (overlay-get x 'face) 'hl-line) 'hl-line))))
             (overlays-at pt))))))
 
 (defun draw-indent-hint-func (ov img color)
@@ -186,7 +186,7 @@ s1 ",\n" s2 "};"
                  "|")))
 
 (defun draw-indent-hint (beg end id &optional img color)
-  (let ((img (or img indent-hint-img))
+  (let ((img (or img ih-img))
         (color (or color "#4D4D4D"))
         (ov (indent-hint-make-overlay beg end)))
     (overlay-put ov 'indent-hint-id t)
@@ -290,6 +290,13 @@ s1 ",\n" s2 "};"
                                 c
                                 (cadr x)))))
 
+(defun indent-hint (&optional regexp column img color)
+  (interactive)
+  (let ((x (or regexp "^")))
+    (font-lock-add-keywords
+     nil `((,x
+            (0 (draw-indent-hint-line ,column ,img ,color)))))))
+
 ;; Define custom indent hint mode
 (define-minor-mode indent-hint-mode
   "A minor mode to show indent hints."
@@ -297,13 +304,14 @@ s1 ",\n" s2 "};"
   :lighter "ih"
   :group 'indent-hint-font-lock
   (if indent-hint-mode
+      (let* ((c '(indent-hint-current-column)))
       (progn
-        (setq indent-hint-list nil)
+        (setq-local indent-hint-list nil)
         (indent-hint-init indent-hint-list)
         (dolist (x indent-hint-regexp-list)
-          (indent-hint-add-fontlock (car x) (cadr x))))
+          (indent-hint (car x) c (cadr x)))))
     (progn
-      (remove-hook 'post-command-hook 'indent-hint-bgo-mv)
+      (remove-hook 'post-command-hook 'indenst-hint-bgo-mv)
       (dolist (x indent-hint-regexp-list)
         (indent-hint-remove-fontlock (car x) (cadr x)))
       (dolist (ov indent-hint-list)
@@ -327,10 +335,10 @@ s1 ",\n" s2 "};"
   (interactive)
   (indent-hint-function
    '(("^[ \t]*\\((\\)")
-     ("\\((lambda\\|(defun\\|(defmacro\\)" indent-hint-img-mtd)
-     ("\\((let\\*?\\|(if\\|(cond\\|(case\\|(when\\|(progn\\|(for.*\\(map.*\\|(save-excursion\\)" indent-hint-img-lgc)
-     ("\\((setq\\|(defvar\\)" indent-hint-img-dat)
-     ("[,`#']+\\((\\)" indent-hint-img-dat))))
+     ("\\((lambda\\|(defun\\|(defmacro\\)" ih-img-mtd)
+     ("\\((let\\*?\\|(if\\|(cond\\|(case\\|(when\\|(progn\\|(for.*\\(map.*\\|(save-excursion\\)" ih-img-lgc)
+     ("\\((setq\\|(defvar\\)" ih-img-dat)
+     ("[,`#']+\\((\\)" ih-img-dat))))
 
 (defun indent-hint-fixed (&optional img)
   (interactive)
@@ -342,9 +350,9 @@ s1 ",\n" s2 "};"
   (interactive)
   (indent-hint-function
    '(("^[ \t]*\\([^ \t}(]\\)")
-     ("\\(function\\|var\\)" indent-hint-img-mtd)
-     ("\\(if\\|for\\|else\\|switch\\)" indent-hint-img-lgc)
-     ("^[ \t]*\\((\\)" indent-hint-img-dat))))
+     ("\\(function\\|var\\)" ih-img-mtd)
+     ("\\(if\\|for\\|else\\|switch\\)" ih-img-lgc)
+     ("^[ \t]*\\((\\)" ih-img-dat))))
 
 (provide 'indent-hint-mod)
 ;;; indent-hint-mod.el ends here

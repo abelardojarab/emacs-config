@@ -91,8 +91,8 @@ non-nil."
 
             ;; Split windows vertically despite large margins, because Emacs otherwise
             ;; refuses to vertically split windows with large margins
-            (validate-setq split-window-preferred-function
-                           #'visual-fill-column-split-window-sensibly)))
+            (setq split-window-preferred-function
+                  #'visual-fill-column-split-window-sensibly)))
 
 ;; Just like the previous package, this one is also subtle.
 ;; It highlights characters that exceed a particular column margin. Very useful while coding.

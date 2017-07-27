@@ -41,7 +41,7 @@
 
   (when (eq system-type 'darwin)
     ;; File notifications aren't supported on OS X
-    (validate-setq auto-revert-use-notify nil))
+    (setq auto-revert-use-notify nil))
   :diminish (auto-revert-mode . " Ⓐ"))
 
 ;; Emacs startup profiler
