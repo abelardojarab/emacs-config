@@ -24,18 +24,19 @@
 
 ;;; Code:
 
-(setq scroll-margin 7
-      scroll-step 1
-      scroll-conservatively 10000
-      scroll-preserve-screen-position 1
-      scroll-up-aggressively 0.01
-      scroll-down-aggressively 0.01)
-
 ;; Enable smooth scrolling package
 ;; Be careful it can ruin shift-select-mode
 (use-package smooth-scrolling
   :load-path (lambda () (expand-file-name "smooth-scrolling/" user-emacs-directory))
-  :config (smooth-scrolling-mode 1))
+  :config (progn
+            (setq scroll-margin 7
+                  scroll-step 1
+                  scroll-conservatively 10000
+                  scroll-preserve-screen-position 'always
+                  scroll-up-aggressively 0.01
+                  scroll-down-aggressively 0.01)
+
+            (smooth-scrolling-mode 1)))
 
 (provide 'setup-scroll)
 ;;; setup-scroll.el ends here

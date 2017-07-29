@@ -27,9 +27,12 @@
 (setq package-user-dir "~/.emacs.d/site-lisp/package-install")
 (require 'package)
 (setq package-enable-at-startup nil)
-(add-to-list 'package-archives '("melpa"     . "http://melpa.org/packages/"))
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives '("gnu"       . "http://elpa.gnu.org/packages/"))
+
+;; use https for both melpa and gelpa
+(eval-and-compile
+  (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                           ("melpa" . "https://melpa.org/packages/")
+                           ("org" . "http://orgmode.org/elpa/"))))
 
 ;; Use Package
 (eval-when-compile

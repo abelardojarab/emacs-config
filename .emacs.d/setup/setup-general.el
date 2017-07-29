@@ -143,5 +143,11 @@
   :defer t
   :load-path (lambda () (expand-file-name "request/" user-emacs-directory)))
 
+;; alert is a Growl-workalike for Emacs which uses a common notifications
+(use-package alert
+  :load-path (lambda () (expand-file-name "alert/" user-emacs-directory))
+  :config (when (eq system-type 'gnu/linux)
+            (setq alert-default-style 'notifications)))
+
 (provide 'setup-general)
 ;;; setup-general.el ends here
