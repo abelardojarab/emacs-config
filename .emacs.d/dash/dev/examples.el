@@ -565,6 +565,15 @@ new list."
     (-intersection '(1 2 3) '(4 5 6)) => '()
     (-intersection '(1 2 3 4) '(3 4 5 6)) => '(3 4))
 
+  (defexamples -powerset
+    (-powerset '()) => '(nil)
+    (-powerset '(x y z)) => '((x y z) (x y) (x z) (x) (y z) (y) (z) nil))
+
+  (defexamples -permutations
+    (-permutations '()) => '(nil)
+    (-permutations '(1 2)) => '((1 2) (2 1))
+    (-permutations '(a b c)) => '((a b c) (a c b) (b a c) (b c a) (c a b) (c b a)))
+
   (defexamples -distinct
     (-distinct '()) => '()
     (-distinct '(1 2 2 4)) => '(1 2 4)))
@@ -620,6 +629,10 @@ new list."
   (defexamples -zip-fill
     (-zip-fill 0 '(1 2 3 4 5) '(6 7 8 9)) => '((1 . 6) (2 . 7) (3 . 8) (4 . 9) (5 . 0)))
 
+  (defexamples -unzip
+    (-unzip (-zip '(1 2 3) '(a b c) '("e" "f" "g"))) => '((1 2 3) (a b c) ("e" "f" "g"))
+    (-unzip '((1 2) (3 4) (5 6) (7 8) (9 10))) => '((1 3 5 7 9) (2 4 6 8 10)))
+
   (defexamples -cycle
     (-take 5 (-cycle '(1 2 3))) => '(1 2 3 1 2)
     (-take 7 (-cycle '(1 "and" 3))) => '(1 "and" 3 1 "and" 3 1)
@@ -643,6 +656,8 @@ new list."
     (-table-flat 'list '(1 2 3) '(a b c)) => '((1 a) (2 a) (3 a) (1 b) (2 b) (3 b) (1 c) (2 c) (3 c))
     (-table-flat '* '(1 2 3) '(1 2 3)) => '(1 2 3 2 4 6 3 6 9)
     (apply '-table-flat 'list (-repeat 3 '(1 2))) => '((1 1 1) (2 1 1) (1 2 1) (2 2 1) (1 1 2) (2 1 2) (1 2 2) (2 2 2))
+    (-table-flat '+ '(2)) => '(2)
+    (-table-flat '- '(2 4)) => '(-2 -4)
 
     ;; flatten law tests
     (-flatten-n 1 (-table 'list '(1 2 3) '(a b c))) => '((1 a) (2 a) (3 a) (1 b) (2 b) (3 b) (1 c) (2 c) (3 c))
@@ -666,11 +681,13 @@ new list."
 
   (defexamples -first-item
     (-first-item '(1 2 3)) => 1
-    (-first-item nil) => nil)
+    (-first-item nil) => nil
+    (let ((list (list 1 2 3))) (setf (-first-item list) 5) list) => '(5 2 3))
 
   (defexamples -last-item
     (-last-item '(1 2 3)) => 3
-    (-last-item nil) => nil)
+    (-last-item nil) => nil
+    (let ((list (list 1 2 3))) (setf (-last-item list) 5) list) => '(1 2 5))
 
   (defexamples -butlast
     (-butlast '(1 2 3)) => '(1 2)
@@ -784,7 +801,33 @@ new list."
   (defexamples -->
     (--> "def" (concat "abc" it "ghi")) => "abcdefghi"
     (--> "def" (concat "abc" it "ghi") (upcase it)) => "ABCDEFGHI"
-    (--> "def" (concat "abc" it "ghi") upcase) => "ABCDEFGHI")
+    (--> "def" (concat "abc" it "ghi") upcase) => "ABCDEFGHI"
+    (--> "def" upcase) => "DEF"
+    (--> 3 (car (list it))) => 3
+
+    (--> '(1 2 3 4) (--map (1+ it) it)) => '(2 3 4 5)
+    (--map (--> it (1+ it)) '(1 2 3 4)) => '(2 3 4 5)
+
+    (--filter (--> it (equal 0 (mod it 2))) '(1 2 3 4)) => '(2 4)
+    (--> '(1 2 3 4) (--filter (equal 0 (mod it 2)) it)) => '(2 4)
+
+    (--annotate (--> it (< 1 it)) '(0 1 2 3)) => '((nil . 0)
+                                                   (nil . 1)
+                                                   (t . 2)
+                                                   (t . 3))
+
+    (--> '(0 1 2 3) (--annotate (< 1 it) it)) => '((nil . 0)
+                                                   (nil . 1)
+                                                   (t . 2)
+                                                   (t . 3)))
+
+  (defexamples -as->
+    (-as-> 3 my-var (1+ my-var) (list my-var) (mapcar (lambda (ele) (* 2 ele)) my-var)) => '(8)
+    (-as-> 3 my-var 1+) => 4
+    (-as-> 3 my-var) => 3
+    (-as-> "def" string (concat "abc" string "ghi")) => "abcdefghi"
+    (-as-> "def" string (concat "abc" string "ghi") upcase) => "ABCDEFGHI"
+    (-as-> "def" string (concat "abc" string "ghi") (upcase string)) => "ABCDEFGHI")
 
   (defexamples -some->
     (-some-> '(2 3 5)) => '(2 3 5)
@@ -1092,6 +1135,7 @@ new list."
     (defexamples -cut
       (funcall (-cut list 1 <> 3 <> 5) 2 4) => '(1 2 3 4 5)
       (-map (-cut funcall <> 5) '(1+ 1- (lambda (x) (/ 1.0 x)))) => '(6 4 0.2)
+      (-map (-cut <> 1 2 3) (list 'list 'vector 'string)) => '((1 2 3) [1 2 3] "")
       (-filter (-cut < <> 5) '(1 3 5 7 9)) => '(1 3))
 
     (defexamples -not
@@ -1131,10 +1175,10 @@ new list."
     (defexamples -prodfn
       (funcall (-prodfn '1+ '1- 'int-to-string) '(1 2 3)) => '(2 1 "3")
       (-map (-prodfn '1+ '1-) '((1 2) (3 4) (5 6) (7 8))) => '((2 1) (4 3) (6 5) (8 7))
-      (apply '+ (funcall (-prodfn 'length 'string-to-int) '((1 2 3) "15"))) => 18
+      (apply '+ (funcall (-prodfn 'length 'string-to-number) '((1 2 3) "15"))) => 18
       (let ((f '1+)
             (g '1-)
-            (ff 'string-to-int)
+            (ff 'string-to-number)
             (gg 'length)
             (input '(1 2))
             (input2 "foo")

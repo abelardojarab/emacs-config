@@ -19,11 +19,11 @@ If you want the function combinators, then also:
 
 Add this to the big comment block at the top:
 
-    ;; Package-Requires: ((dash "2.12.1"))
+    ;; Package-Requires: ((dash "2.13.0"))
 
 To get function combinators:
 
-    ;; Package-Requires: ((dash "2.12.1") (dash-functional "1.2.0") (emacs "24"))
+    ;; Package-Requires: ((dash "2.13.0") (dash-functional "1.2.0") (emacs "24"))
 
 ## Upcoming breaking change!
 
@@ -37,7 +37,7 @@ To get function combinators:
 Font lock of dash functions in emacs lisp buffers is now optional.
 Include this in your emacs settings to get syntax highlighting:
 
-    (eval-after-load "dash" '(dash-enable-font-lock))
+    (eval-after-load 'dash '(dash-enable-font-lock))
 
 ## Functions
 
@@ -98,7 +98,23 @@ Change `readme-template.md` or `examples-to-docs.el` instead.
 
 ## Changelist
 
-- Added lexical binding pragma to dash.el
+### From 2.12 to 2.13
+
+- `-let` now supports `&alist` in destructuring.
+- Various performance improvements.
+- `-zip` will change in future so it always returns lists. Added
+  `-zip-pair` for users who explicitly want the old behavior.
+- Added lexical binding pragma to dash.el, fixes
+  [#130](https://github.com/magnars/dash.el/issues/130) in Emacs 24+.
+- Added `-select-column` and `-select-columns`.
+- Fixed an issue with `-map-last` and `--remove-last` where they
+  modified their inputs
+  ([#158](https://github.com/magnars/dash.el/issues/158)).
+- Added `-each-indexed` and `--each-indexed`.
+- Added `-take-last` and `-drop-last`.
+- Added `-doto` macro.
+- `-cut <>` is now treated as a function, consistent with SRFI 26
+  ([#185](https://github.com/magnars/dash.el/issues/185))
 
 ### From 2.11 to 2.12
 
@@ -232,9 +248,13 @@ Change `readme-template.md` or `examples-to-docs.el` instead.
 
 Thanks!
 
+New contributors are welcome. To ensure that dash.el can be
+distributed with ELPA or Emacs, we would request that all contributors
+assign copyright to the Free Software Foundation.
+
 ## License
 
-Copyright (C) 2012-2014 Magnar Sveen
+Copyright (C) 2012-2016 Free Software Foundation, Inc.
 
 Authors: Magnar Sveen <magnars@gmail.com>
 Keywords: lists
