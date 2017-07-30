@@ -107,7 +107,7 @@
   :group 'my/customs
   :type 'list)
 
-(defcustom my/ecb-layout-theme "bodil"
+(defcustom my/ecb-layout-theme "left-speedbar-right"
   "Preferred ECB layout name"
   :group 'my/customs
   :type 'string)

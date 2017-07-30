@@ -27,6 +27,8 @@
 ;; Move text
 (use-package move-text
   :defer t
+  :bind (([(meta shift up)]   . move-text-up)
+         ([(meta shift down)] . move-text-down))
   :commands (move-text-up move-text-down))
 
 ;; This is a fairly simple package that provides information about the active region.

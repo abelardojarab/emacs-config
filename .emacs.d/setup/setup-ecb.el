@@ -183,15 +183,15 @@ little more place. "
    |              |                               |             |
    |              |                               |             |
    |              |                               |             |
-   |  History     |                               |             |
+   |              |                               |  History    |
+   |              |                               |             |
+   |              |                               |             |
+   |  Methods     |                               |             |
+   |              |             Edit              |-------------|
    |              |                               |             |
    |              |                               |             |
    |              |                               |             |
-   |--------------|             Edit              |   Sources   |
-   |              |                               |             |
-   |              |                               |             |
-   |  Analyze     |                               |             |
-   |              |                               |             |
+   |              |                               | Speedbar    |
    |              |                               |             |
    |              |                               |             |
    --------------------------------------------------------------
@@ -207,7 +207,7 @@ little more place. "
               (select-window (next-window (next-window)))
               (ecb-set-history-buffer)
               (ecb-split-ver 0.4)
-          (ecb-set-sources-buffer)
+              (ecb-set-speedbar-buffer)
               (select-window (previous-window (selected-window) 0)))
 
             (ecb-layout-define "bodil" left
@@ -256,45 +256,57 @@ more place."
                              (ecb-rebuild-methods-buffer)
                              (ecb-window-sync)))))
 
-            ;; Speedbar
-            (use-package sr-speedbar
-              :config (progn
-                        (setq speedbar-hide-button-brackets-flag t
-                              speedbar-show-unknown-files t
-                              speedbar-smart-directory-expand-flag t
-                              speedbar-directory-button-trim-method 'trim
-                              speedbar-use-images t
-                              speedbar-indentation-width 2
-                              speedbar-use-imenu-flag t
-                              speedbar-file-unshown-regexp "flycheck-.*"
-                              speedbar-update-flag t
-                              sr-speedbar-width 40
-                              sr-speedbar-width-x 40
-                              sr-speedbar-auto-refresh t
-                              sr-speedbar-skip-other-window-p t
-                              sr-speedbar-right-side nil)
-
-                        ;; More familiar keymap settings.
-                        (add-hook 'speedbar-reconfigure-keymaps-hook
-                                  '(lambda ()
-                                     (define-key speedbar-mode-map [S-up] 'speedbar-up-directory)
-                                     (define-key speedbar-mode-map [right] 'speedbar-flush-expand-line)
-                                     (define-key speedbar-mode-map [left] 'speedbar-contract-line)))
-
-                        ;; Highlight the current line
-                        (add-hook 'speedbar-mode-hook '(lambda () (hl-line-mode 1)))
-
-                        ;; Add Javascript
-                        (speedbar-add-supported-extension ".js")
-                        (add-to-list 'speedbar-fetch-etags-parse-list
-                                     '("\\.js" . speedbar-parse-c-or-c++tag))
-                        (speedbar-add-supported-extension ".il")
-                        (speedbar-add-supported-extension ".ils")))
-
             ;; Finally activate ecb on HD-monitors or above
             (if (and (> (car (screen-size)) 1900)
                      (> (cadr (screen-size)) 1000))
                 (ecb-activate))))
+
+
+;; Speedbar
+(use-package sr-speedbar
+  :if (display-graphic-p)
+  :config (progn
+            (setq speedbar-hide-button-brackets-flag t
+                  speedbar-show-unknown-files t
+                  speedbar-smart-directory-expand-flag t
+                  speedbar-directory-button-trim-method 'trim
+                  speedbar-use-images t
+                  speedbar-indentation-width 2
+                  speedbar-use-imenu-flag t
+                  speedbar-file-unshown-regexp "flycheck-.*"
+                  speedbar-update-flag t
+                  sr-speedbar-width 40
+                  sr-speedbar-width-x 40
+                  sr-speedbar-auto-refresh t
+                  sr-speedbar-skip-other-window-p t
+                  sr-speedbar-right-side nil)
+
+            ;; More familiar keymap settings.
+            (add-hook 'speedbar-reconfigure-keymaps-hook
+                      '(lambda ()
+                         (define-key speedbar-mode-map [S-up]  'speedbar-up-directory)
+                         (define-key speedbar-mode-map [right] 'speedbar-flush-expand-line)
+                         (define-key speedbar-mode-map [left]  'speedbar-contract-line)))
+
+            ;; Highlight the current line
+            (add-hook 'speedbar-mode-hook '(lambda () (hl-line-mode 1)))
+
+            ;; Add Javascript
+            (speedbar-add-supported-extension ".js")
+            (add-to-list 'speedbar-fetch-etags-parse-list
+                         '("\\.js" . speedbar-parse-c-or-c++tag))
+            (speedbar-add-supported-extension ".il")
+            (speedbar-add-supported-extension ".ils")))
+
+(use-package projectile-speedbar
+  :if (display-graphic-p)
+  :after (sr-speedbar projectile)
+  :config (progn
+            (defadvice helm-projectile-find-file (after locate-file activate)
+              (if (sr-speedbar-exist-p)
+                  (projectile-speedbar-open-current-buffer-in-tree)))
+            (defadvice speedbar-item-load (after speedbar-highlight-file activate)
+              (projectile-speedbar-open-current-buffer-in-tree))))
 
 (provide 'setup-ecb)
 ;;; setup-ecb.el ends here
