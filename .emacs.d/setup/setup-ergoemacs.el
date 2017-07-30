@@ -31,13 +31,13 @@
            (executable-find "gzip"))
   :load-path (lambda () (expand-file-name "ergoemacs-mode/" user-emacs-directory))
   :commands (ergoemacs-mode ergoemacs-mode-after-init-emacs)
-  :init (progn
-          (setq ergoemacs-theme              "standard"
-                ergoemacs-keyboard-layout    "us"
-                ergoemacs-ignore-prev-global nil)
+  :config (progn
+            (setq ergoemacs-theme              "standard"
+                  ergoemacs-keyboard-layout    "us"
+                  ergoemacs-ignore-prev-global nil)
 
-          (ergoemacs-mode)
-          (ergoemacs-mode-after-init-emacs)))
+            (ergoemacs-mode)
+            (ergoemacs-mode-after-init-emacs)))
 
 (provide 'setup-ergoemacs)
 ;;; setup-ergoemacs.el ends here
