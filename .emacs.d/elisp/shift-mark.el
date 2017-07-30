@@ -22,8 +22,6 @@
 
 ;;
 
-;;; Code:
-
 (defun shift-mark (cmd)
   "Expands marked region to the point (position of cursor) after executing
 command 'cmd'. If no region is marked, we mark one first."

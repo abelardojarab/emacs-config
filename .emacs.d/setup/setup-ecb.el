@@ -24,6 +24,56 @@
 
 ;;; Code:
 
+;; Speedbar
+(use-package sr-speedbar
+  :defer t
+  :if (display-graphic-p)
+  :config (progn
+            (setq speedbar-hide-button-brackets-flag t
+                  speedbar-show-unknown-files t
+                  speedbar-smart-directory-expand-flag t
+                  speedbar-directory-button-trim-method 'trim
+                  speedbar-use-images t
+                  speedbar-indentation-width 2
+                  speedbar-use-imenu-flag t
+                  speedbar-file-unshown-regexp "flycheck-.*"
+                  speedbar-update-flag t
+                  sr-speedbar-width 40
+                  sr-speedbar-width-x 40
+                  sr-speedbar-auto-refresh t
+                  sr-speedbar-skip-other-window-p t
+                  sr-speedbar-right-side nil)
+
+            ;; More familiar keymap settings.
+            (add-hook 'speedbar-reconfigure-keymaps-hook
+                      '(lambda ()
+                         (define-key speedbar-mode-map [S-up]  'speedbar-up-directory)
+                         (define-key speedbar-mode-map [right] 'speedbar-flush-expand-line)
+                         (define-key speedbar-mode-map [left]  'speedbar-contract-line)))
+
+            ;; Highlight the current line
+            (add-hook 'speedbar-mode-hook '(lambda () (hl-line-mode 1)))
+
+            ;; Add Javascript
+            (speedbar-add-supported-extension ".js")
+            (add-to-list 'speedbar-fetch-etags-parse-list
+                         '("\\.js" . speedbar-parse-c-or-c++tag))
+            (speedbar-add-supported-extension ".il")
+            (speedbar-add-supported-extension ".ils")))
+
+;; projectile and speedbar integration
+(use-package projectile-speedbar
+  :defer t
+  :if (display-graphic-p)
+  :after (sr-speedbar projectile)
+  :commands projectile-speedbar-open-current-buffer-in-tree
+  :init (progn
+            (defadvice helm-projectile-find-file (after locate-file activate)
+              (if (sr-speedbar-exist-p)
+                  (projectile-speedbar-open-current-buffer-in-tree)))
+            (defadvice speedbar-item-load (after speedbar-highlight-file activate)
+              (projectile-speedbar-open-current-buffer-in-tree))))
+
 ;; Code Browser
 (use-package ecb
   :load-path (lambda () (expand-file-name "ecb/" user-emacs-directory))
@@ -260,53 +310,6 @@ more place."
             (if (and (> (car (screen-size)) 1900)
                      (> (cadr (screen-size)) 1000))
                 (ecb-activate))))
-
-
-;; Speedbar
-(use-package sr-speedbar
-  :if (display-graphic-p)
-  :config (progn
-            (setq speedbar-hide-button-brackets-flag t
-                  speedbar-show-unknown-files t
-                  speedbar-smart-directory-expand-flag t
-                  speedbar-directory-button-trim-method 'trim
-                  speedbar-use-images t
-                  speedbar-indentation-width 2
-                  speedbar-use-imenu-flag t
-                  speedbar-file-unshown-regexp "flycheck-.*"
-                  speedbar-update-flag t
-                  sr-speedbar-width 40
-                  sr-speedbar-width-x 40
-                  sr-speedbar-auto-refresh t
-                  sr-speedbar-skip-other-window-p t
-                  sr-speedbar-right-side nil)
-
-            ;; More familiar keymap settings.
-            (add-hook 'speedbar-reconfigure-keymaps-hook
-                      '(lambda ()
-                         (define-key speedbar-mode-map [S-up]  'speedbar-up-directory)
-                         (define-key speedbar-mode-map [right] 'speedbar-flush-expand-line)
-                         (define-key speedbar-mode-map [left]  'speedbar-contract-line)))
-
-            ;; Highlight the current line
-            (add-hook 'speedbar-mode-hook '(lambda () (hl-line-mode 1)))
-
-            ;; Add Javascript
-            (speedbar-add-supported-extension ".js")
-            (add-to-list 'speedbar-fetch-etags-parse-list
-                         '("\\.js" . speedbar-parse-c-or-c++tag))
-            (speedbar-add-supported-extension ".il")
-            (speedbar-add-supported-extension ".ils")))
-
-(use-package projectile-speedbar
-  :if (display-graphic-p)
-  :after (sr-speedbar projectile)
-  :config (progn
-            (defadvice helm-projectile-find-file (after locate-file activate)
-              (if (sr-speedbar-exist-p)
-                  (projectile-speedbar-open-current-buffer-in-tree)))
-            (defadvice speedbar-item-load (after speedbar-highlight-file activate)
-              (projectile-speedbar-open-current-buffer-in-tree))))
 
 (provide 'setup-ecb)
 ;;; setup-ecb.el ends here

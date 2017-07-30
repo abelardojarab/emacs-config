@@ -39,7 +39,7 @@
   (defun font-lock-flush ()
     (when font-lock-mode
       (with-no-warnings
-	(font-lock-fontify-buffer)))))
+    (font-lock-fontify-buffer)))))
 
 ;; Missing function
 (when (not (fboundp 'special-form-p))
@@ -70,6 +70,25 @@ Defaults to `error'."
       (put name 'error-conditions
            (delete-dups (copy-sequence (cons name conditions))))
       (when message (put name 'error-message message)))))
+
+;; Missing functions
+(defun goto-eol ()
+  (end-of-line))
+
+(defun goto-bol ()
+  (beginning-of-line))
+
+(defun line-beginning-position (&optional n)
+  (save-excursion
+    (if (not (or (null n) (eql n 1)))
+        (forward-line n))
+    (goto-bol) (point)))
+
+(defun line-end-position (&optional n)
+  (save-excursion
+    (if (not (or (null nil) (eql n 1)))
+        (forward-line (1- n)))
+    (goto-eol) (point)))
 
 ;; Missing variable
 (defvar scheme-imenu-generic-expression "")
