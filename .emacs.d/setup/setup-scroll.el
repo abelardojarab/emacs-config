@@ -34,7 +34,8 @@
                   scroll-conservatively 10000
                   scroll-preserve-screen-position 'always
                   scroll-up-aggressively 0.01
-                  scroll-down-aggressively 0.01)
+                  scroll-down-aggressively 0.01
+                  auto-window-vscroll nil)
 
             (smooth-scrolling-mode 1)))
 

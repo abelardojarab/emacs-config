@@ -35,9 +35,6 @@
 ;; Do not copy region use mouse dragging
 (setq mouse-drag-copy-region nil)
 
-;; Moving cursor down at bottom scrolls only a single line, not half page
-(setq scroll-step 1)
-
 ;; Mouse wheel scroll support
 (mouse-wheel-mode t)
 

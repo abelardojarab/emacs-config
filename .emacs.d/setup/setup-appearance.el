@@ -104,9 +104,8 @@ non-nil."
   :load-path (lambda () (expand-file-name "column-enforce-mode/" user-emacs-directory))
   :config (add-hook 'prog-mode-hook 'column-enforce-mode))
 
-;; Line numbers
-(use-package linum
-  :defer 2
+;; Faster line numbers
+(use-package linum-ex
   :commands linum-mode
   :config (progn
             (add-hook 'prog-mode-hook
@@ -125,8 +124,10 @@ non-nil."
 
 ;; Highlight line number
 (use-package hlinum
+  :after linum-ex
   :load-path (lambda () (expand-file-name "hlinum-mode/" user-emacs-directory))
-  :config (hlinum-activate))
+  :commands hlinum-activate
+  :init (hlinum-activate))
 
 ;; Adaptive scrollbar
 (use-package lawlist-scroll-mode
