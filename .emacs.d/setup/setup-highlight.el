@@ -47,6 +47,13 @@
   :config (progn
             (global-hl-line-mode t)
 
+            ;; https://stackoverflow.com/questions/20275596/how-to-use-hl-line-mode-to-highlight-just-one-1-line-when-visual-line-mode-is
+            (defun visual-line-line-range ()
+              (save-excursion (cons
+                               (progn (vertical-motion 0) (point))
+                               (progn (vertical-motion 1) (point)))))
+            (setq hl-line-range-function 'visual-line-line-range)
+
             (defun my/hl-line-mode-off ()
               (interactive)
               (make-local-variable 'global-hl-line-mode)
