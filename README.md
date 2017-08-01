@@ -9,7 +9,7 @@
 ## Packages included ##
 
 -   **Package auto-loading and deferral:** use-package
--   **Development:** company, flycheck, yasnippet, auctex, cmake-ide
+-   **Development:** company, flycheck, yasnippet, auctex, cmake-ide, ecb
 -   **Network utilities:** wunderlust, sx, mu4e, elfeed
 
 ## Fixes with respect to Spacemacs and Prelude ##
@@ -24,6 +24,8 @@
 -   *adviced* (load-theme ') function such that fringe,
     modeline (powerline) and tabbar colorsets are refreshed after a theme change
     (improvement over prelude and spacemacs)
+-   Utilizes ![linum.ex](https://www.emacswiki.org/emacs/linum-ex.el) for
+    delayed update of line numbers (improves scrolling effect)
 
 ## New features ##
 
