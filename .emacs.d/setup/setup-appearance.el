@@ -107,15 +107,14 @@ non-nil."
 ;; Faster line numbers
 (use-package linum-ex
   :commands linum-mode
+  :init (add-hook 'prog-mode-hook
+            (lambda ()
+              ;; turn off `linum-mode' when there are more than 5000 lines
+              (if (and (> (buffer-size)
+                          (* 5000 80)))
+                  (linum-mode -1)
+                (linum-mode 1))))
   :config (progn
-            (add-hook 'prog-mode-hook
-                      (lambda ()
-                        ;; turn off `linum-mode' when there are more than 5000 lines
-                        (if (and (> (buffer-size)
-                                    (* 5000 80)))
-                            (linum-mode -1)
-                          (linum-mode 1))))
-
             (defadvice linum-update-window (around linum-dynamic activate)
               (let* ((w (length (number-to-string
                                  (count-lines (point-min) (point-max)))))
