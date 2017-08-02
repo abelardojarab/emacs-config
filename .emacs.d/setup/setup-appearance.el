@@ -125,8 +125,7 @@ non-nil."
 (use-package hlinum
   :after linum-ex
   :load-path (lambda () (expand-file-name "hlinum-mode/" user-emacs-directory))
-  :commands hlinum-activate
-  :init (hlinum-activate))
+  :commands hlinum-activate)
 
 ;; Adaptive scrollbar
 (use-package lawlist-scroll-mode

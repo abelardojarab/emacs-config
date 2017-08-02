@@ -115,8 +115,7 @@ create the new one."
 (use-package volatile-highlights
   :load-path (lambda () (expand-file-name "volatile-highlights/" user-emacs-directory))
   :diminish volatile-highlights-mode
-  :config (progn
-            (volatile-highlights-mode t)))
+  :config (volatile-highlights-mode t))
 
 (provide 'setup-highlight)
 ;;; setup-highlight.el ends here
