@@ -198,7 +198,6 @@ and you have to scroll or press C-l to update the numbers."
             linum--last-cmd nil
             linum--last-scroll nil))))
 
-
 (defun linum-update-window (win)
   "Update line numbers for the portion visible in window WIN."
   (goto-char (window-start win))

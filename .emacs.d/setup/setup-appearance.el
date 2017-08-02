@@ -106,6 +106,7 @@ non-nil."
 
 ;; Faster line numbers
 (use-package linum-ex
+  :demand t
   :commands linum-mode
   :init (add-hook 'prog-mode-hook
             (lambda ()
