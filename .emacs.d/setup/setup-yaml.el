@@ -28,11 +28,7 @@
 (use-package yaml-mode
   :load-path (lambda () (expand-file-name "yaml-mode/" user-emacs-directory))
   :commands yaml-mode
-  :mode "\\.ya?ml\'"
-  :config (progn
-            (add-hook 'yaml-mode-hook
-                      '(lambda ()
-                         (define-key yaml-mode-map "\C-m" 'newline-and-indent)))))
+  :mode "\\.ya?ml\'")
 
 (provide 'setup-yaml)
 ;;; setup-yaml.el ends here

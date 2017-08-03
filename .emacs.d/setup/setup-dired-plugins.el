@@ -82,14 +82,14 @@
                   (replace-regexp-in-string "-strip" "-auto-orient -strip" image-dired-cmd-create-temp-image-options))))
 
 (use-package helm-dired-history
+  :defer t
   :after (dired savehist helm)
   :bind (:map dired-mode-map
               ("," . helm-dired-history-view))
   :load-path (lambda () (expand-file-name "helm-dired-history/" user-emacs-directory))
   :config (progn
             (savehist-mode 1)
-            (add-to-list 'savehist-additional-variables 'helm-dired-history-variable)
-            (define-key dired-mode-map "," 'helm-dired-history-view)))
+            (add-to-list 'savehist-additional-variables 'helm-dired-history-variable)))
 
 ;; Preview files in dired
 (use-package peep-dired

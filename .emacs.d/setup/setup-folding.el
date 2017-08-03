@@ -25,6 +25,8 @@
 ;;; Code:
 
 (use-package folding
+  :bind (:map folding-mode-prefix-map
+              ("<SPC>" . folding-context-next-action))
   :config (progn
             (defun my/folding-check-folded ()
               "Function to determine if this file is in folded form."
@@ -41,7 +43,6 @@
                        (re-search-forward folding-re2 nil t)))))
             (setq folding-check-folded-file-function 'my/folding-check-folded)
             (folding-mode-add-find-file-hook)
-            (define-key folding-mode-prefix-map (kbd "<SPC>") 'folding-context-next-action)
 
             ;; add keywords to current buffer directly, overwrite the original function in folding.el
             (defun folding-font-lock-support ()

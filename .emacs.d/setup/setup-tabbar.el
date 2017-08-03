@@ -26,18 +26,17 @@
 
 ;; Tabbar mode
 (use-package tabbar
-  :defer 1
+  :demand t
   :load-path (lambda () (expand-file-name "tabbar/" user-emacs-directory))
   :commands tabbar-mode
-  :bind (
-         ("C-c <right>" . tabbar-forward)
+  :bind (("C-c <right>" . tabbar-forward)
          ("C-c <left>"  . tabbar-backward)
          ("C-c <up>"    . tabbar-backward-group)
          ("C-c <down>"  . tabbar-forward-group))
   :config (progn
-            (setq tabbar-auto-scroll-flag t
-                  tabbar-use-images t
-                  tabbar-cycle-scope (quote tabs)
+            (setq tabbar-auto-scroll-flag  t
+                  tabbar-use-images        t
+                  tabbar-cycle-scope       (quote  tabs)
                   table-time-before-update 0.1)
 
             ;; Reduce tabbar width to enable as many buffers as possible

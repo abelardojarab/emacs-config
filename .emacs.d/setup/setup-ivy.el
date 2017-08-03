@@ -37,7 +37,7 @@
   :load-path (lambda () (expand-file-name "swiper/" user-emacs-directory))
   :bind (("C-c C-r" . ivy-resume)
          :map ctl-x-map
-         ("s" . swiper))
+         ("s"       . swiper))
   :config (progn
             (set-variable 'ivy-on-del-error-function '(lambda()))
             (setq ivy-display-style 'fancy
@@ -79,8 +79,9 @@
          :map ctl-x-map
          ("x"                       . counsel-M-x)
          :map ivy-minibuffer-map
-         ("M-y"                     . ivy-next-line))
-  :config (define-key read-expression-map (kbd "C-r") #'counsel-expression-history))
+         ("M-y"                     . ivy-next-line)
+         :map read-expression-map
+         ("C-r"                     . counsel-expression-history)))
 
 (use-package swiper-helm
   :defer t
