@@ -49,9 +49,6 @@
             (setq tab-always-indent 'complete)
             (add-to-list 'completion-styles 'initials t)
 
-            ;; Use Company for completion
-            (bind-key [remap completion-at-point] #'company-complete-common company-mode-map)
-
             ;; Enable company in Org mode
             (defun add-pcomplete-to-capf ()
               (add-hook 'completion-at-point-functions 'pcomplete-completions-at-point nil t))

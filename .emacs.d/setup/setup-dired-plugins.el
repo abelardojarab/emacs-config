@@ -30,14 +30,14 @@
   :after dired
   :load-path (lambda () (expand-file-name "direx/" user-emacs-directory))
   :bind (:map dired-mode-map
-              ("b" . direx:jump-to-directory))
-  :config (progn
-            (setq direx:closed-icon "+ ")
-            (setq direx:leaf-icon "| ")
-            (setq direx:open-icon "> ")
-            (define-key direx:direx-mode-map (kbd "b") 'dired-jump)
-            (define-key direx:direx-mode-map [mouse-1] 'direx:mouse-2)
-            (define-key direx:direx-mode-map [mouse-3] 'direx:mouse-1)))
+              ("b"       . direx:jump-to-directory)
+              :map direx:direx-mode-map
+              ("b"       . dired-jump)
+              ([mouse-1] . direx:mouse-2)
+              ([mouse-3] . direx:mouse-1))
+  :config (setq direx:closed-icon "+ "
+                direx:leaf-icon   "| "
+                direx:open-icon   "> "))
 
 (use-package direx-project
   :after direx
@@ -59,8 +59,8 @@
               ("K" . dired-k))
   :commands (dired-k dired-k-no-revert)
   :init (progn
-            (add-hook 'dired-initial-position-hook 'dired-k)
-            (add-hook 'dired-after-readin-hook #'dired-k-no-revert)))
+          (add-hook 'dired-initial-position-hook 'dired-k)
+          (add-hook 'dired-after-readin-hook 'dired-k-no-revert)))
 
 ;; Display file icons in dired
 (use-package dired-icon

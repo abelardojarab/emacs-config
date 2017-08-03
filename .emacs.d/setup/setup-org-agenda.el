@@ -30,7 +30,12 @@
   :commands org-agenda
   :bind (("C-c A" . org-agenda)
          :map org-mode-map
-         ("C-c i" . my/org-add-line-item-task))
+         ("C-c i" . my/org-add-line-item-task)
+         :map org-agenda-mode-map
+         ("Y"     . org-agenda-todo-yesterday)
+         ("x"     . my/org-agenda-done)
+         ("X"     . my/org-agenda-mark-done-and-add-followup)
+         ("N"     . my/org-agenda-new))
   :config (progn
 
             ;; Org log
@@ -251,9 +256,6 @@ DEF-FLAG   is t when a double ++ or -- indicates shift relative to
                         (list delta "d" rel))
                     (list (* n (if (= dir ?-) -1 1)) what rel)))))
 
-            ;; Some other keyboard shortcuts:
-            (define-key org-agenda-mode-map "Y" 'org-agenda-todo-yesterday)
-
             ;; Org agenda custom commands
             (defvar my/org-agenda-contexts
               '((tags-todo "+@work/!-SOMEDAY")
@@ -344,9 +346,6 @@ the same tree node, and the headline of the tree node in the Org-mode file."
               (interactive "P")
               (org-agenda-todo "DONE"))
 
-            ;; Override the key definition for org-exit
-            (define-key org-agenda-mode-map "x" 'my/org-agenda-done)
-
             ;; Make it easy to mark a task as done and create follow-up task
             (defun my/org-agenda-mark-done-and-add-followup ()
               "Mark the current TODO as done and add another task after it.
@@ -357,9 +356,6 @@ this with to-do items than with projects or headings."
               (org-agenda-switch-to)
               (org-capture 0 "t"))
 
-            ;; Override the key definition
-            (define-key org-agenda-mode-map "X" 'my/org-agenda-mark-done-and-add-followup)
-
             ;; Capture something based on the agenda
             (defun my/org-agenda-new ()
               "Create a new note or task at the current agenda item.
@@ -368,9 +364,6 @@ this with to-do items than with projects or headings."
               (interactive)
               (org-agenda-switch-to)
               (org-capture 0))
-
-            ;; New key assignment
-            (define-key org-agenda-mode-map "N" 'my/org-agenda-new)
 
             ;; Sorting by date and priority
             (setq org-agenda-sorting-strategy

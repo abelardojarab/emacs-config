@@ -1,6 +1,6 @@
 ;;; setup-nettools.el ---                            -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@ubuntu03>
 ;; Keywords:
@@ -108,32 +108,31 @@
            (internet-up-p))
   :commands (elfeed elfeed-update)
   :load-path (lambda () (expand-file-name "elfeed/" user-emacs-directory))
+  :bind (:map elfeed-search-mode-map
+              ("a"        . elfeed-search-update--force)
+              ("A"        . elfeed-update)
+              ("d"        . elfeed-unjam)
+              ("o"        . elfeed-search-browse-url)
+              ("j"        . next-line)
+              ("k"        . previous-line)
+              ("g"        . beginning-of-buffer)
+              ("G"        . end-of-buffer)
+              ("v"        . set-mark-command)
+              ("<escape>" . keyboard-quit)
+              :map elfeed-show-mode-map
+              ("j"        . elfeed-show-next)
+              ("k"        . elfeed-show-prev)
+              ("o"        . elfeed-show-visit)
+              ("<escape>" . keyboard-quit)
+              ("SPC"      . scroll-up)
+              ("S-SPC"    . scroll-down)
+              ("TAB"      . shr-next-link)
+              ("S-TAB"    . shr-previous-link))
   :config (progn
-            (setq elfeed-use-curl t
-                  elfeed-db-directory "~/.emacs.cache/elfeed"
-                  elfeed-search-filter "@4-days-old +unread "
+            (setq elfeed-use-curl               t
+                  elfeed-db-directory           "~/.emacs.cache/elfeed"
+                  elfeed-search-filter          "@4-days-old +unread"
                   elfeed-search-title-max-width 100)
-
-            (bind-keys :map elfeed-search-mode-map
-                       ("a"   .  elfeed-search-update--force)
-                       ("A"   .  elfeed-update)
-                       ("d"   .  elfeed-unjam)
-                       ("o"   .  elfeed-search-browse-url)
-                       ("j"   .  next-line)
-                       ("k"   .  previous-line)
-                       ("g"   .  beginning-of-buffer)
-                       ("G"   .  end-of-buffer)
-                       ("v"   .  set-mark-command)
-                       ("<escape>" .  keyboard-quit))
-            (bind-keys :map elfeed-show-mode-map
-                       ("j"     . elfeed-show-next)
-                       ("k"     . elfeed-show-prev)
-                       ("o"     . elfeed-show-visit)
-                       ("<escape>" .  keyboard-quit)
-                       ("SPC"   . scroll-up)
-                       ("S-SPC" . scroll-down)
-                       ("TAB"   . shr-next-link)
-                       ("S-TAB" . shr-previous-link))
 
             ;; URLs in no particular order
             (setq elfeed-feeds

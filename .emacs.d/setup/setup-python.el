@@ -32,6 +32,8 @@
   :commands python-mode
   :interpreter ("python" . python-mode)
   :load-path (lambda () (expand-file-name "python-mode/" user-emacs-directory))
+  :bind (:map python-mode-map
+              ("TAB" . py-indent-line))
   :init (progn
           ;; Check for python module
           (defun check-python-module (&optional module)
@@ -40,9 +42,6 @@
                                     (concat "import "
                                             (if module module "jedi")))))))
   :config (progn
-
-            (add-hook 'python-mode-hook
-                      (define-key python-mode-map (kbd "TAB") 'py-indent-line))
 
             ;; Python hook
             (add-hook 'python-mode-hook

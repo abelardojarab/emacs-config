@@ -476,6 +476,9 @@
 
 ;; Reftex
 (use-package reftex-cite
+  :bind (:map org-mode-map
+         ("C-c )" . reftex-citation)
+         ("C-c (" . org-mode-reftex-search))
   :config (progn
 
             ;; Make RefTeX faster
@@ -513,9 +516,7 @@
                         (?F . "\\fullcite[]{%l}")
                         (?x . "[]{%l}")
                         (?X . "{%l}")
-                        ))))
-              (define-key org-mode-map (kbd "C-c )") 'reftex-citation)
-              (define-key org-mode-map (kbd "C-c (") 'org-mode-reftex-search))
+                        )))))
             (add-hook 'org-mode-hook 'org-mode-reftex-setup)
 
             ;; Add cite link

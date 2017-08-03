@@ -173,20 +173,20 @@
           (if (not (file-exists-p my/mu4e-maildir))
               (make-directory my/mu4e-maildir) t))
   :config (progn
-            (setq mu4e-headers-skip-duplicates t
-                  mu4e-use-fancy-chars t
-                  mu4e-view-show-images t
-                  mu4e-hide-index-messages t
-                  mu4e-auto-retrieve-keys t
-                  mu4e-compose-dont-reply-to-self t
-                  mu4e-compose-in-new-frame t
-                  mu4e-split-view 'horizontal
-                  mu4e-headers-visible-columns 122
-                  mu4e-headers-visible-lines 16
-                  mu4e-context-policy 'pick-first
-                  mu4e-compose-context-policy 'ask
+            (setq mu4e-headers-skip-duplicates      t
+                  mu4e-use-fancy-chars              t
+                  mu4e-view-show-images             t
+                  mu4e-hide-index-messages          t
+                  mu4e-auto-retrieve-keys           t
+                  mu4e-compose-dont-reply-to-self   t
+                  mu4e-compose-in-new-frame         t
+                  mu4e-split-view                   'horizontal
+                  mu4e-headers-visible-columns      122
+                  mu4e-headers-visible-lines        16
+                  mu4e-context-policy               'pick-first
+                  mu4e-compose-context-policy       'ask
                   mu4e-change-filenames-when-moving t
-                  mu4e-confirm-quit nil)
+                  mu4e-confirm-quit                 nil)
 
             (setq mu4e-use-fancy-chars t
                   mu4e-headers-draft-mark          '("D"  . "⚒  ") ;; draft
@@ -248,118 +248,125 @@
                   mu4e-update-interval nil) ;; update interval in seconds
 
             (use-package mu4e-contrib
+              :demand t
               :config (setq mu4e-html2text-command 'mu4e-shr2text))
 
-            ;; Use <TAB> to preview messages and q to close previews.
-            (use-package mu4e-headers)
-            (use-package mu4e-view)
-            (defun my/preview-message ()
-              (interactive)
-              (mu4e-headers-view-message)
-              (sleep-for 0.1) ;; this is a HACK
-              (select-window (previous-window)))
+            (use-package mu4e-headers
+              :demand t
+              ;; Use <TAB> to preview messages and q to close previews.
+              :bind (:map mu4e-headers-mode-map
+                          ("<tab>"  . my/preview-message)
+                          ("q"      . my/close-message-view))
+              :config (progn
+                        (defun my/preview-message ()
+                          (interactive)
+                          (mu4e-headers-view-message)
+                          (sleep-for 0.1) ;; this is a HACK
+                          (select-window (previous-window)))
 
-            ;; based on (mu4e-select-other-view)
-            (defun my/close-message-view ()
-              (interactive)
-              (let* ((other-buf mu4e~view-buffer)
-                     (other-win (and other-buf (get-buffer-window other-buf))))
-                (if (window-live-p other-win)
-                    (progn
-                      (select-window other-win)
-                      (sleep-for 0.1)
-                      (mu4e~view-quit-buffer))
-                  (mu4e~headers-quit-buffer))))
-            (bind-key "<tab>" #'my/preview-message mu4e-headers-mode-map)
-            (bind-key "q" #'my/close-message-view mu4e-headers-mode-map)
-            (setq mu4e-headers-fields '((:human-date . 12)
-                                        (:flags . 6)
-                                        (:mailing-list . 22)
-                                        (:from . 32)
-                                        (:subject)))
+                        ;; based on (mu4e-select-other-view)
+                        (defun my/close-message-view ()
+                          (interactive)
+                          (let* ((other-buf mu4e~view-buffer)
+                                 (other-win (and other-buf (get-buffer-window other-buf))))
+                            (if (window-live-p other-win)
+                                (progn
+                                  (select-window other-win)
+                                  (sleep-for 0.1)
+                                  (mu4e~view-quit-buffer))
+                              (mu4e~headers-quit-buffer))))
+                        (setq mu4e-headers-fields '((:human-date   . 12)
+                                                    (:flags        . 6)
+                                                    (:mailing-list . 22)
+                                                    (:from         . 32)
+                                                    (:subject)))))
 
-            ;; View emails with width restriction (80 so that HTML crap doesn’t break too easily either)
-            (defun my/mu4e-view-mode-hook ()
-              (set-fill-column 80)
-              (visual-line-mode)
-              (visual-fill-column-mode))
-            (add-hook 'mu4e-view-mode-hook #'my/mu4e-view-mode-hook)
-            (add-to-list 'mu4e-view-actions
-                         '("browser" . mu4e-action-view-in-browser) t)
-            (bind-key "<home>" #'beginning-of-visual-line mu4e-view-mode-map)
-            (bind-key "<end>" #'end-of-visual-line mu4e-view-mode-map)
+            (use-package mu4e-view
+              :demand t
+              :bind (:map mu4e-view-mode-map
+                          ("<home>" . beginning-of-visual-line)
+                          ("<end>"  . end-of-visual-line)
+                          ("N"      . my/add-mu4e-name-replacement))
+              :config (progn
+                        ;; View emails with width restriction (80 so that HTML crap doesn’t break too easily either)
+                        (defun my/mu4e-view-mode-hook ()
+                          (set-fill-column 80)
+                          (visual-line-mode)
+                          (visual-fill-column-mode))
+                        (add-hook 'mu4e-view-mode-hook #'my/mu4e-view-mode-hook)
+                        (add-to-list 'mu4e-view-actions
+                                     '("browser" . mu4e-action-view-in-browser) t)
 
-            ;; My uni likes “Lastname, Firstname (Year)” which is weird, so we fix it.
-            ;; Some people like to capitalize their LASTNAME and then write the first name
-            ;; Some people like to send incomplete data, so we maintain a local replacement list
-            (defcustom my/mu4e-name-replacements nil
-              "replacement names from e-mail addresses"
-              :type '(alist :key-type string :value-type string)
-              :group 'my)
+                        ;; My uni likes “Lastname, Firstname (Year)” which is weird, so we fix it.
+                        ;; Some people like to capitalize their LASTNAME and then write the first name
+                        ;; Some people like to send incomplete data, so we maintain a local replacement list
+                        (defcustom my/mu4e-name-replacements nil
+                          "replacement names from e-mail addresses"
+                          :type '(alist :key-type string :value-type string)
+                          :group 'my)
 
-            (defun my/canonicalise-contact-name (name)
-              (let* ((case-fold-search nil)
-                     (name (or name ""))
-                     (email (replace-regexp-in-string "^.* <?\\([^ ]+@[^ ]+\.[^ >]+\\)>?" "\\1" name))
-                     ;; look up email address and use entry if found
-                     (candidate (cdr (assoc email my/mu4e-name-replacements))))
-                (if candidate candidate
-                  (progn
-                    (setq name (replace-regexp-in-string "^\\(.*\\) [^ ]+@[^ ]+\.[^ ]" "\\1" name)) ;; drop email address
-                    (setq name (replace-regexp-in-string "^\"\\(.*\\)\"" "\\1" name)) ;; strip quotes
-                    (setq name (replace-regexp-in-string "^\\(\\<[[:upper:]]+\\>\\) \\(.*\\)" "\\2 \\1" name)) ;; deal with YELL’d last names
-                    (setq name (replace-regexp-in-string "^\\(.*\\), \\([^ ]+\\).*" "\\2 \\1" name)))))) ;; Foo, Bar becomes Bar Foo
+                        (defun my/canonicalise-contact-name (name)
+                          (let* ((case-fold-search nil)
+                                 (name (or name ""))
+                                 (email (replace-regexp-in-string "^.* <?\\([^ ]+@[^ ]+\.[^ >]+\\)>?" "\\1" name))
+                                 ;; look up email address and use entry if found
+                                 (candidate (cdr (assoc email my/mu4e-name-replacements))))
+                            (if candidate candidate
+                              (progn
+                                (setq name (replace-regexp-in-string "^\\(.*\\) [^ ]+@[^ ]+\.[^ ]" "\\1" name)) ;; drop email address
+                                (setq name (replace-regexp-in-string "^\"\\(.*\\)\"" "\\1" name)) ;; strip quotes
+                                (setq name (replace-regexp-in-string "^\\(\\<[[:upper:]]+\\>\\) \\(.*\\)" "\\2 \\1" name)) ;; deal with YELL’d last names
+                                (setq name (replace-regexp-in-string "^\\(.*\\), \\([^ ]+\\).*" "\\2 \\1" name)))))) ;; Foo, Bar becomes Bar Foo
 
-            (defun my/mu4e-contact-rewrite-function (contact)
-              (let* ((name (or (plist-get contact :name) ""))
-                     (mail (plist-get contact :mail))
-                     (case-fold-search nil))
-                (plist-put contact :name (my/canonicalise-contact-name name))
-                contact))
-            (setq mu4e-contact-rewrite-function #'my/mu4e-contact-rewrite-function)
+                        (defun my/mu4e-contact-rewrite-function (contact)
+                          (let* ((name (or (plist-get contact :name) ""))
+                                 (mail (plist-get contact :mail))
+                                 (case-fold-search nil))
+                            (plist-put contact :name (my/canonicalise-contact-name name))
+                            contact))
+                        (setq mu4e-contact-rewrite-function #'my/mu4e-contact-rewrite-function)
 
-            ;; Useful in email templates
-            (defun my/yas-get-names-from-fields (fields)
-              (let (names
-                    ret
-                    name
-                    point-end-of-line
-                    (search-regexp (mapconcat (lambda (arg)
-                                                (concat "^" arg ": "))
-                                              fields "\\|"))
-                    (case-fold-search nil))
-                (save-excursion
-                  (goto-char (point-min))
-                  (while (re-search-forward search-regexp nil t)
-                    (save-excursion
-                      (setq point-end-of-line (re-search-forward "$")))
-                    (setq name (buffer-substring-no-properties (point) point-end-of-line))
-                    (setq name (split-string name "[^ ]+@[^ ]+," t " ")) ;; split on email@address,
-                    (setq names (append names name)))
-                  (dolist (name names)
-                    (setq name (my/canonicalise-contact-name name))
-                    (if (string-match "\\([^ ,]+\\)" name)
-                        (progn
-                          (setq name (capitalize (replace-regexp-in-string "~" " " (match-string 1 name))))
-                          (if ret
-                              (setq ret (concat ret ", " name))
-                            (setq ret name)))))
-                  (if ret ret "there"))))
+                        ;; Useful in email templates
+                        (defun my/yas-get-names-from-fields (fields)
+                          (let (names
+                                ret
+                                name
+                                point-end-of-line
+                                (search-regexp (mapconcat (lambda (arg)
+                                                            (concat "^" arg ": "))
+                                                          fields "\\|"))
+                                (case-fold-search nil))
+                            (save-excursion
+                              (goto-char (point-min))
+                              (while (re-search-forward search-regexp nil t)
+                                (save-excursion
+                                  (setq point-end-of-line (re-search-forward "$")))
+                                (setq name (buffer-substring-no-properties (point) point-end-of-line))
+                                (setq name (split-string name "[^ ]+@[^ ]+," t " ")) ;; split on email@address,
+                                (setq names (append names name)))
+                              (dolist (name names)
+                                (setq name (my/canonicalise-contact-name name))
+                                (if (string-match "\\([^ ,]+\\)" name)
+                                    (progn
+                                      (setq name (capitalize (replace-regexp-in-string "~" " " (match-string 1 name))))
+                                      (if ret
+                                          (setq ret (concat ret ", " name))
+                                        (setq ret name)))))
+                              (if ret ret "there"))))
 
-            (defun my/yas-get-names-from-to-fields ()
-              (interactive)
-              (my/yas-get-names-from-fields '("To")))
+                        (defun my/yas-get-names-from-to-fields ()
+                          (interactive)
+                          (my/yas-get-names-from-fields '("To")))
 
-            ;; We also add a convenient function to add new replacements.
-            (defun my/add-mu4e-name-replacement ()
-              (interactive)
-              (let* ((email (helm-read-string "Email: " (get-text-property (point) 'email)))
-                     (name  (helm-read-string "Name: "
-                                              (my/canonicalise-contact-name
-                                               (get-text-property (point) 'long)))))
-                (add-to-list 'my/mu4e-name-replacements (cons email name) t)
-                (customize-save-variable 'my/mu4e-name-replacements my/mu4e-name-replacements)))
-            (bind-key "N" #'my/add-mu4e-name-replacement mu4e-view-mode-map)
+                        ;; We also add a convenient function to add new replacements.
+                        (defun my/add-mu4e-name-replacement ()
+                          (interactive)
+                          (let* ((email (helm-read-string "Email: " (get-text-property (point) 'email)))
+                                 (name  (helm-read-string "Name: "
+                                                          (my/canonicalise-contact-name
+                                                           (get-text-property (point) 'long)))))
+                            (add-to-list 'my/mu4e-name-replacements (cons email name) t)
+                            (customize-save-variable 'my/mu4e-name-replacements my/mu4e-name-replacements)))))
 
             ;; Ignore some email addresses when auto completing:
             (setq mu4e-compose-complete-ignore-address-regexp (rx  (or (seq "no" (zero-or-one "-") "reply")
@@ -370,22 +377,22 @@
             ;; Assure we use mu4e
             (setq mail-user-agent 'mu4e-user-agent)
             (setq read-mail-command 'mu4e-user-agent)
-            (setq gnus-dired-mail-mode 'mu4e-user-agent)))
+            (setq gnus-dired-mail-mode 'mu4e-user-agent)
 
-;; Link to mu4e messages and threads.
-(use-package org-mu4e
-  :if (executable-find "mu")
-  :after mu4e
-  :load-path (lambda () (expand-file-name "mu/mu4e/" user-emacs-directory))
-  :config (setq org-mu4e-link-query-in-headers-mode t))
+            ;; Link to mu4e messages and threads.
+            (use-package org-mu4e
+              :if (executable-find "mu")
+              :demand t
+              :load-path (lambda () (expand-file-name "mu/mu4e/" user-emacs-directory))
+              :config (setq org-mu4e-link-query-in-headers-mode t))
 
-;; Search mu with helm-mu.
-(use-package helm-mu
-  :if (executable-find "mu")
-  :after mu4e
-  :bind (:mu4e-main-mode-map
-         ("S" . helm-mu))
-  :load-path (lambda () (expand-file-name "helm-mu/" user-emacs-directory)))
+            ;; Search mu with helm-mu.
+            (use-package helm-mu
+              :if (executable-find "mu")
+              :demand t
+              :bind (:map mu4e-main-mode-map
+                          ("S" . helm-mu))
+              :load-path (lambda () (expand-file-name "helm-mu/" user-emacs-directory)))))
 
 (provide 'setup-email)
 ;;; setup-email.el ends here

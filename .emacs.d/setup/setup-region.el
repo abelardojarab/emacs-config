@@ -42,27 +42,26 @@
 (use-package region-bindings-mode
   :load-path (lambda () (expand-file-name "region-bindings-mode/" user-emacs-directory))
   :diminish region-bindings-mode
-  :config (progn
-            (region-bindings-mode-enable)
+  :bind (:map region-bindings-mode-map
+              ;; shift select bindings
+              ("<prior>" . shift-mark-backward-page)
+              ("<next>"  . shift-mark-forward-page)
+              ("<left>"  . shift-mark-backward-char)
+              ("<right>" . shift-mark-forward-char)
 
-            ;; shift select bindings
-            (define-key region-bindings-mode-map (kbd "<prior>") 'shift-mark-backward-page)
-            (define-key region-bindings-mode-map (kbd "<next>")  'shift-mark-forward-page)
-            (define-key region-bindings-mode-map (kbd "<left>")  'shift-mark-backward-char)
-            (define-key region-bindings-mode-map (kbd "<right>") 'shift-mark-forward-char)
+              ;; movement bindings
+              ([(meta shift up)]   . move-text-up)
+              ([(meta shift down)] . move-text-down)
+              ("<"                 . decrease-left-margin)
+              (">"                 . increase-right-margin)
 
-            ;; movement bindings
-            (define-key region-bindings-mode-map (kbd "M-<up>")   'move-text-up)
-            (define-key region-bindings-mode-map (kbd "M-<down>") 'move-text-down)
-            (define-key region-bindings-mode-map (kbd "<")        'decrease-left-margin)
-            (define-key region-bindings-mode-map (kbd ">")        'increase-right-margin)
+              ("C-x C-c" . clipboard-kill-ring-save)
+              ("C-x C-x" . clipboard-kill-region)
+              ("C-x C-k" . kill-line)
 
-            (define-key region-bindings-mode-map (kbd "C-x C-c")  'clipboard-kill-ring-save)
-            (define-key region-bindings-mode-map (kbd "C-x C-x")  'clipboard-kill-region)
-            (define-key region-bindings-mode-map (kbd "C-x C-k")  'kill-line)
-
-            (define-key region-bindings-mode-map (kbd "c")        'kill-ring-save)
-            (define-key region-bindings-mode-map (kbd "x")        'kill-region)))
+              ("c" . kill-ring-save)
+              ("x" . kill-region))
+  :config (region-bindings-mode-enable))
 
 (provide 'setup-region)
 ;;; setup-region.el ends here

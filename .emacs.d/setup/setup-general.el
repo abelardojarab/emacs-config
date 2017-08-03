@@ -108,7 +108,7 @@
 (use-package unfill
   :defer t
   :commands (unfill-region unfill-paragraph toggle-fill-unfill)
-  :init (bind-key [remap fill-paragraph] #'toggle-fill-unfill))
+  :bind ([remap fill-paragraph] . toggle-fill-unfill))
 
 ;; Browse kill ring
 (use-package browse-kill-ring

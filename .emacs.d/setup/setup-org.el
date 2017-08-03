@@ -97,7 +97,6 @@
               (add-to-list 'ispell-skip-region-alist '("#\\+BEGIN_QUOTE" . "#\\+END_QUOTE")))
             (add-hook 'org-mode-hook #'my/org-ispell)
 
-
             ;; Bind org-table-* command when the point is in an org table (source).
             (bind-keys
              :map org-mode-map

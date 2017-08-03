@@ -30,9 +30,9 @@
             ;; General configuration
             (setq ispell-highlight-face 'flyspell-incorrect
                   ispell-silently-savep t ;; Don't ask when saving the private dict
-		  ;; Increase the height of the choices window to take our header line
-		  ;; into account.
-		  ispell-choices-win-default-height 5)
+          ;; Increase the height of the choices window to take our header line
+          ;; into account.
+          ispell-choices-win-default-height 5)
             (add-to-list 'ispell-skip-region-alist '("[^\000-\377]+"))
 
             ;; find aspell and hunspell automatically
@@ -139,9 +139,15 @@ Don't read buffer-local settings or word lists."
 (use-package flyspell
   :diminish flyspell-mode
   :if (not (equal 'system-type 'windows-nt))
+  :bind (:map flyspell-mode-map
+              ;; Disable flyspell keybindings
+              ("C-;" . nil)
+              ("C-." . nil))
   :config (progn
+            ;; Ignore message flags
             (setq flyspell-issue-message-flag nil
                   flyspell-issue-welcome-flag nil)
+
             (dolist (hook my/flyspell-modes)
               (add-hook hook (lambda () (flyspell-mode 1))))
             (dolist (hook my/flyspell-modes-disabled)
@@ -155,14 +161,7 @@ Don't read buffer-local settings or word lists."
             (when (eq system-type 'darwin)
               (progn
                 (define-key flyspell-mouse-map [down-mouse-3] #'flyspell-correct-word)
-                (define-key flyspell-mouse-map [mouse-3] #'undefined)))
-
-            ;; 2. ignore message flags
-            (setq flyspell-issue-message-flag nil)
-
-            ;; Disable flyspell keybindings
-            (define-key flyspell-mode-map (kbd "C-;") nil)
-            (define-key flyspell-mode-map (kbd "C-.") nil)))
+                (define-key flyspell-mouse-map [mouse-3] #'undefined)))))
 
 ;; flyspell popup correction
 (use-package flyspell-correct-popup
