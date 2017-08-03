@@ -26,39 +26,38 @@
 
 ;; ido makes competing buffers and finding files easier
 (use-package ido
+  :bind (:map ido-completion-map
+              ;; This tab override shouldn't be necessary given ido's default
+              ;; configuration, but minibuffer-complete otherwise dominates the
+              ;; tab binding because of my custom tab-completion-everywhere
+              ;; configuration.
+              ([tab] . ido-complete)
+              ([up]  . previous-history-element)
+              :map ido-file-dir-completion-map
+              ("C-v" . ido-yank))
   :config (progn
             (ido-mode 'both)
             (ido-everywhere 1)
-            (setq ido-max-dir-file-cache 0
-                  ido-show-dot-for-dired t
-                  ido-default-file-method 'samewindow
-                  ido-default-buffer-method 'selected-window
-                  ido-save-directory-list-file "~/.emacs.cache/ido.last"
-                  ido-ignore-buffers ;; ignore these guys
-                  '("\\` " "^\*Mess" "^\*Back" ".*Completion" "^\*Ido" "^\*trace"
-                    "^\*compilation" "^\*GTAGS" "^session\.*" "^\*")
-                  ido-work-directory-list '("~/" "~/Desktop" "~/Documents" "~/workspace")
-                  ido-case-fold t
-                  ido-enable-last-directory-history t
+            (setq ido-max-dir-file-cache                 0
+                  ido-show-dot-for-dired                 t
+                  ido-default-file-method                'samewindow
+                  ido-default-buffer-method              'selected-window
+                  ido-save-directory-list-file           "~/.emacs.cache/ido.last"
+                  ido-ignore-buffers                     '("\\` " "^\*Mess" "^\*Back" ".*Completion" "^\*Ido" "^\*trace" "^\*compilation" "^\*GTAGS" "^session\.*" "^\*")
+                  ido-work-directory-list                '("~/" "~/Desktop" "~/Documents" "~/workspace")
+                  ido-case-fold                          t
+                  ido-enable-last-directory-history      t
                   ido-auto-merge-work-directories-length -1
-                  ido-max-work-directory-list 15
-                  ido-max-work-file-list 10
-                  ido-use-filename-at-point nil
-                  ido-use-url-at-point nil
-                  ido-enable-flex-matching t
-                  ido-enable-prefix t
-                  ido-max-prospects 8
-                  ido-confirm-unique-completion t
-                  ido-auto-merge-delay-time 0.7
+                  ido-max-work-directory-list            15
+                  ido-max-work-file-list                 10
+                  ido-use-filename-at-point              nil
+                  ido-use-url-at-point                   nil
+                  ido-enable-flex-matching               t
+                  ido-enable-prefix                      t
+                  ido-max-prospects                      8
+                  ido-confirm-unique-completion          t
+                  ido-auto-merge-delay-time              0.7
                   ido-auto-merge-work-directories-length -1)
-
-            ;; This tab override shouldn't be necessary given ido's default
-            ;; configuration, but minibuffer-complete otherwise dominates the
-            ;; tab binding because of my custom tab-completion-everywhere
-            ;; configuration.
-            (add-hook 'ido-setup-hook
-                      (lambda () (define-key ido-completion-map [tab] 'ido-complete)
-                        (define-key ido-completion-map [up] 'previous-history-element)))
 
             ;; Paste file name with ctrl-v
             (defun ido-yank ()
@@ -74,15 +73,13 @@
                       (exit-minibuffer))
                   (yank))))
 
-            (define-key ido-file-dir-completion-map (kbd "C-v") 'ido-yank)
-
             ;; when using ido, the confirmation is rather annoying...
             (setq confirm-nonexistent-file-or-buffer nil)))
 
 ;; Ido everywhere
 (use-package ido-ubiquitous
   :load-path (lambda () (expand-file-name "ido-ubiquitous/" user-emacs-directory))
-  :config (ido-ubiquitous-mode +1))
+  :config (ido-ubiquitous-mode 1))
 
 ;; Use ibuffer
 (use-package ibuffer
@@ -156,21 +153,21 @@
   :commands ibuffer-vc-generate-filter-groups-by-vc-root
   :load-path (lambda () (expand-file-name "ibuffer-vc/" user-emacs-directory))
   :config (progn
-          (defun my/ibuffer-apply-filter-groups ()
-            "Combine my saved ibuffer filter groups with those generated
+            (defun my/ibuffer-apply-filter-groups ()
+              "Combine my saved ibuffer filter groups with those generated
      by `ibuffer-vc-generate-filter-groups-by-vc-root'"
-            (interactive)
-            (setq ibuffer-filter-groups
-                  (append (ibuffer-vc-generate-filter-groups-by-vc-root)
-                          ibuffer-saved-filter-groups))
-            (message "ibuffer-vc: groups set")
-            (let ((ibuf (get-buffer "*Ibuffer*")))
-              (when ibuf
-                (with-current-buffer ibuf
-                  (pop-to-buffer ibuf)
-                  (ibuffer-update nil t)))))
+              (interactive)
+              (setq ibuffer-filter-groups
+                    (append (ibuffer-vc-generate-filter-groups-by-vc-root)
+                            ibuffer-saved-filter-groups))
+              (message "ibuffer-vc: groups set")
+              (let ((ibuf (get-buffer "*Ibuffer*")))
+                (when ibuf
+                  (with-current-buffer ibuf
+                    (pop-to-buffer ibuf)
+                    (ibuffer-update nil t)))))
 
-          (add-hook 'ibuffer-hook 'my/ibuffer-apply-filter-groups)))
+            (add-hook 'ibuffer-hook 'my/ibuffer-apply-filter-groups)))
 
 (provide 'setup-ido)
 ;;; setup-ido.el ends here

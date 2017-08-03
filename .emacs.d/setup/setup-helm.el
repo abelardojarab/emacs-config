@@ -27,20 +27,27 @@
 ;; Helm
 (use-package helm-config
   :load-path (lambda () (expand-file-name "helm/" user-emacs-directory))
-  :bind (("C-`" . helm-semantic-or-imenu)
+  :bind (("C-`"   . helm-semantic-or-imenu)
          :map isearch-mode-map
-         ("C-." . helm-occur-from-isearch)
+         ("C-."   . helm-occur-from-isearch)
          :map minibuffer-local-isearch-map
-         ("C-." . helm-occur-from-isearch)
+         ("C-."   . helm-occur-from-isearch)
          :map ctl-x-map
-         ("C-r" . helm-recentf)
-         ("C-b" . helm-buffers-list)
-         ("p" . helm-show-kill-ring)
-         ("n" . helm-mini)
-         ("h" . helm-apropos)
-         ("u" . helm-resume)
-         ("f" . helm-for-files)
-         ("<tab>" . helm-find-files))
+         ("C-r"   . helm-recentf)
+         ("C-b"   . helm-buffers-list)
+         ("p"     . helm-show-kill-ring)
+         ("n"     . helm-mini)
+         ("h"     . helm-apropos)
+         ("u"     . helm-resume)
+         ("f"     . helm-for-files)
+         ("<tab>" . helm-find-files)
+         :map helm-map
+         ;; rebind tab to run persistent action
+         ("<tab>" . helm-execute-persistent-action)
+         ;; make TAB works in terminal
+         ("C-i"   . helm-execute-persistent-action)
+         ;; list actions using C-z
+         ("C-z"   . helm-select-action))
   :config (progn
             (defadvice helm-buffers-sort-transformer (around ignore activate)
               (setq ad-return-value (ad-get-arg 0)))
@@ -86,18 +93,14 @@
                   (setq-local cursor-type nil))))
             (add-hook 'helm-minibuffer-set-up-hook 'helm-hide-minibuffer-maybe)
 
-            (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ;; rebind tab to run persistent action
-            (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ;; make TAB works in terminal
-            (define-key helm-map (kbd "C-z") 'helm-select-action) ;; list actions using C-z
-
             ;; Helm fonts listing
             (setq font-helm-source
                   `((name . "Fonts")
                     (candidates . ,(font-family-list))
                     (action . (lambda (candidate) (progn
-                                               (setq main-programming-font candidate)
-                                               (set-face-attribute 'default nil :family candidate)
-                                               (fontify-frame (selected-frame)))))))
+                                                    (setq main-programming-font candidate)
+                                                    (set-face-attribute 'default nil :family candidate)
+                                                    (fontify-frame (selected-frame)))))))
 
             (defun helm-fonts ()
               (interactive)

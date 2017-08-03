@@ -135,13 +135,11 @@ code sections."
   :bind (:map c-mode-map
               ("C-c c" . moo-complete)
               :map c++-mode-map
-              ("C-c c" . moo-complete))
-  :init (progn
-          (add-hook 'c++-mode-hook 'function-args-mode)
-          (add-hook 'c-mode-hook 'function-args-mode))
-  :config (progn
-            (fa-config-default)
-            (define-key function-args-mode-map (kbd "M-o") nil)))
+              ("C-c c" . moo-complete)
+              :map functions-args-mode-map
+              ("M-o"   . nil))
+  :init (add-hook 'c-mode-common-hook 'function-args-mode)
+  :config (fa-config-default))
 
 ;; C/C++ refactoring tool based on Semantic parser framework
 (use-package srefactor

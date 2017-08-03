@@ -29,17 +29,24 @@
   :defer t
   :mode (("\\.org$" . org-mode))
   :load-path (lambda () (expand-file-name "org-mode/lisp" user-emacs-directory))
-  :bind (("C-c C" . org-capture)
-         ("C-c L" . org-store-link)
-         ("C-c I" . org-insert-link-global)
-         ("C-c O" . org-open-at-point-global)
+  :bind (("C-c C"        . org-capture)
+         ("C-c L"        . org-store-link)
+         ("C-c I"        . org-insert-link-global)
+         ("C-c O"        . org-open-at-point-global)
          :map org-mode-map
-         ("C-TAB" . org-cycle)
-         ("C-c c" . org-html-copy)
-         ("C-c k" . org-cut-subtree)
-         ("C-c t" . org-show-todo-tree)
-         ("C-c r" . org-refile)
-         ("C-c v" . org-reveal))
+         ("C-t"          . org-time-stamp)
+         ("<return>"     . org-return)
+         ([enter]        . org-return)
+         ([kp-enter]     . org-meta-return)
+         ([C-M-return]   . org-insert-todo-heading)
+         ([S-return]     . org-insert-subheading)
+         ("RET"          . org-retun)
+         ("C-TAB"        . org-cycle)
+         ("C-c c"        . org-html-copy)
+         ("C-c k"        . org-cut-subtree)
+         ("C-c t"        . org-show-todo-tree)
+         ("C-c r"        . org-refile)
+         ("C-c v"        . org-reveal))
   :commands (org-mode org-capture org-store-link org-insert-link-global org-open-at-point-global)
   :init (progn
           (setq load-path (cons (expand-file-name "org-mode/contrib/lisp" user-emacs-directory) load-path))
@@ -105,36 +112,36 @@
              ("C-c {"   . org-table-toggle-formula-debugger))
 
             ;; Miscellanenous settings
-            (setq org-startup-folded t
-                  org-startup-indented t
-                  org-cycle-separator-lines 1
-                  org-cycle-include-plain-lists 'integrate
-                  org-startup-with-inline-images nil
-                  org-startup-truncated t
-                  org-use-speed-commands t
-                  org-completion-use-ido t
-                  org-hide-leading-stars t
+            (setq org-startup-folded              t
+                  org-startup-indented            t
+                  org-cycle-separator-lines       1
+                  org-cycle-include-plain-lists   'integrate
+                  org-startup-with-inline-images  nil
+                  org-startup-truncated           t
+                  org-use-speed-commands          t
+                  org-completion-use-ido          t
+                  org-hide-leading-stars          t
                   org-highlight-latex-and-related '(latex)
-                  org-ellipsis " ••• "
+                  org-ellipsis                    " ••• "
 
                   ;; this causes problem in other modes
-                  org-indent-mode nil
+                  org-indent-mode                 nil
 
                   ;; Enable sub and super script only when enclosed by {}
                   ;; Also improves readability when exponent/subscript is composed of multiple words
-                  org-use-sub-superscripts nil
+                  org-use-sub-superscripts        nil
 
                   ;; Hide the /italics/ and *bold* markers
-                  org-hide-emphasis-markers t
+                  org-hide-emphasis-markers      t
 
                   ;; org-entities displays \alpha etc. as Unicode characters.
-                  org-pretty-entities t
+                  org-pretty-entities            t
 
                   ;; Allow a) b) c) lists
-                  org-list-allow-alphabetical t
+                  org-list-allow-alphabetical    t
 
                   ;; Right-align tags to an indent from the right margin
-                  org-tags-column 120
+                  org-tags-column                120
 
                   ;; Insert blank line before new heading
                   org-blank-before-new-entry
@@ -210,23 +217,12 @@
                                  (not (use-region-p)))
                             (cua-set-mark)))))))
 
-            ;; Fix on the keys
-            (add-hook 'org-mode-hook
-                      (lambda ()
-                        (define-key org-mode-map [(control t)] 'org-time-stamp)
-                        (define-key org-mode-map [kp-enter] 'org-meta-return)
-                        (define-key org-mode-map [enter] 'org-return)
-                        (define-key org-mode-map (kbd "<return>") 'org-return)
-                        (define-key org-mode-map (kbd "RET") 'org-return)
-                        (define-key org-mode-map [C-M-return] 'org-insert-todo-heading)
-                        (define-key org-mode-map [S-return] 'org-insert-subheading)))
-
             ;; Make org do not open other frames
-            (setq org-link-frame-setup (quote ((vm . vm-visit-folder-other-frame)
+            (setq org-link-frame-setup (quote ((vm      . vm-visit-folder-other-frame)
                                                (vm-imap . vm-visit-imap-folder-other-frame)
-                                               (gnus . org-gnus-no-new-news)
-                                               (file . find-file)
-                                               (wl . wl-other-frame))))
+                                               (gnus    . org-gnus-no-new-news)
+                                               (file    . find-file)
+                                               (wl      . wl-other-frame))))
 
             ;; Repair export blocks to match new format
             ;; #+BEGIN_EXPORT backend

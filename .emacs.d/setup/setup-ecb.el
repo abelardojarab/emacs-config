@@ -28,28 +28,25 @@
 (use-package sr-speedbar
   :defer t
   :if (display-graphic-p)
+  :bind (:map speedbar-mode-map
+              ([S-up]  . speedbar-up-directory)
+              ([right] . speedbar-flush-expand-line)
+              ([left]  . speedbar-contract-line))
   :config (progn
-            (setq speedbar-hide-button-brackets-flag t
-                  speedbar-show-unknown-files t
-                  speedbar-smart-directory-expand-flag t
+            (setq speedbar-hide-button-brackets-flag    t
+                  speedbar-show-unknown-files           t
+                  speedbar-smart-directory-expand-flag  t
                   speedbar-directory-button-trim-method 'trim
-                  speedbar-use-images t
-                  speedbar-indentation-width 2
-                  speedbar-use-imenu-flag t
-                  speedbar-file-unshown-regexp "flycheck-.*"
-                  speedbar-update-flag t
-                  sr-speedbar-width 40
-                  sr-speedbar-width-x 40
-                  sr-speedbar-auto-refresh t
-                  sr-speedbar-skip-other-window-p t
-                  sr-speedbar-right-side nil)
-
-            ;; More familiar keymap settings.
-            (add-hook 'speedbar-reconfigure-keymaps-hook
-                      '(lambda ()
-                         (define-key speedbar-mode-map [S-up]  'speedbar-up-directory)
-                         (define-key speedbar-mode-map [right] 'speedbar-flush-expand-line)
-                         (define-key speedbar-mode-map [left]  'speedbar-contract-line)))
+                  speedbar-use-images                   t
+                  speedbar-indentation-width            2
+                  speedbar-use-imenu-flag               t
+                  speedbar-file-unshown-regexp          "flycheck-.*"
+                  speedbar-update-flag                  t
+                  sr-speedbar-width                     40
+                  sr-speedbar-width-x                   40
+                  sr-speedbar-auto-refresh              t
+                  sr-speedbar-skip-other-window-p       t
+                  sr-speedbar-right-side                nil)
 
             ;; Highlight the current line
             (add-hook 'speedbar-mode-hook '(lambda () (hl-line-mode 1)))
@@ -68,11 +65,11 @@
   :after (sr-speedbar projectile)
   :commands projectile-speedbar-open-current-buffer-in-tree
   :init (progn
-            (defadvice helm-projectile-find-file (after locate-file activate)
-              (if (sr-speedbar-exist-p)
-                  (projectile-speedbar-open-current-buffer-in-tree)))
-            (defadvice speedbar-item-load (after speedbar-highlight-file activate)
-              (projectile-speedbar-open-current-buffer-in-tree))))
+          (defadvice helm-projectile-find-file (after locate-file activate)
+            (if (sr-speedbar-exist-p)
+                (projectile-speedbar-open-current-buffer-in-tree)))
+          (defadvice speedbar-item-load (after speedbar-highlight-file activate)
+            (projectile-speedbar-open-current-buffer-in-tree))))
 
 ;; Code Browser
 (use-package ecb

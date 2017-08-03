@@ -70,7 +70,6 @@
 
 ;; Commands to make my programming environment nice
 (global-set-key (kbd "RET")   'newline-and-indent)
-(global-set-key "\C-l"        'goto-line)
 (global-set-key (kbd "")      'other-window)
 (global-set-key [C-tab]       'comment-or-uncomment-region)
 (global-set-key [kp-prior]    'scroll-down)
@@ -81,6 +80,7 @@
 (global-set-key [end]         'end-of-line)
 (global-set-key [delete]      'delete-char)
 (global-set-key [kp-delete]   'delete-char)
+(global-set-key [(control l)] 'goto-line)
 (global-set-key [(control s)] 'save-buffer)
 (global-set-key [(control o)] 'counsel-find-file)
 (global-set-key [(meta    s)] 'write-file)

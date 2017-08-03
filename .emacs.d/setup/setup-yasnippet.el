@@ -36,9 +36,12 @@
               ([backtab]     . helm-c-yas-complete)
               ("C-c r"       . yas-prev-field)
               ("C-c t"       . yas-next-field-or-maybe-expand)
+              ;; Simplify navigation of yasnippet fields
+              ("M-<right>"   . yas-next-field-or-maybe-expand)
+              ("M-<left>"    . yas-prev-field)
               :map yas-keymap
-              ([tab]         . nil)
-              ([?\t]         . nil)
+              ([tab]         . yas-next-field-or-maybe-expand)
+              ([?\t]         . yas-next-field-or-maybe-expand)
               ([(shift tab)] . helm-c-yas-complete)
               ([backtab]     . helm-c-yas-complete)
               ("C-c r"       . yas-prev-field)
@@ -66,10 +69,6 @@
                                  (and yas-snippet-dirs
                                       (null (yas--get-snippet-tables))))))
 
-            ;; Simplify navigation of yasnippet fields
-            (define-key yas-minor-mode-map (kbd "M-<right>") 'yas-next-field-or-maybe-expand)
-            (define-key yas-minor-mode-map (kbd "M-<left>")  'yas-prev-field)
-
             ;; Select a snippet with popup library
             (setq yas-prompt-functions '(yas-dropdown-prompt
                                          yas-ido-prompt
@@ -90,8 +89,7 @@
                       (lambda ()
                         (make-variable-buffer-local 'yas-trigger-key)
                         (setq yas-trigger-key [tab])
-                        (add-to-list 'org-tab-first-hook 'yas--org-very-safe-expand)
-                        (define-key yas-keymap [tab] 'yas-next-field)))
+                        (add-to-list 'org-tab-first-hook 'yas--org-very-safe-expand)))
 
             ;; Auto-complete enhancement
             (when (featurep 'auto-complete)
