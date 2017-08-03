@@ -25,29 +25,20 @@
 ;;; Code:
 
 (use-package gdb-mi
+  :defer t
+  :bind (:map gud-minor-mode-map
+              ;; Same function keys as Eclipse, F5 to F8 (run slow to fast)
+              ([(f5)] . gud-step)
+              ([(f6)] . gud-next)
+              ([(f7)] . gud-finish)
+              ([(f8)] . gud-cont))
+  :commands (gdb-few-windows gdb-many-windows)
   :config (progn
 
             ;; gdb should use multi-windowed like all the other debuggers out there.
             (setq gdb-many-windows t
-                  gdb-show-main t
-                  gdb-max-frames 120)
-
-            ;; This module sets up the same function keys as Eclipse, F5 to F8 (run slow to fast):
-            ;;
-            ;; -------------- -------------------------------------------------------
-            ;; Key            Definition
-            ;; -------------- -------------------------------------------------------
-            ;; F5             Step into (s)
-            ;; F6             Next (n)
-            ;; F7             Run to the end of the function
-            ;; F8             Run
-            ;;
-            ;; Functions:
-            ;;
-            ;; - M-x `gdb-few-windows': split the current frame into 3 windows stacked up
-            ;;   on top of each other: gdb command line, source code, program IO.
-            ;;   This function completes the native `gdb-many-windows' which displays 6
-            ;;   windows (stack, breakpoints, local variables or registers).
+                  gdb-show-main    t
+                  gdb-max-frames   120)
 
             ;; Highlight the current line in the source window.
             (defconst gdb-highlight-face 'highlight
@@ -89,6 +80,10 @@
                     (forward-line (1- (ad-get-arg 1)))
                     (recenter)))))
 
+            ;; Split the current frame into 3 windows stacked up
+            ;; on top of each other: gdb command line, source code, program IO.
+            ;; This function completes the native `gdb-many-windows' which displays 6
+            ;; windows (stack, breakpoints, local variables or registers).
             (defun gdb-few-windows ()
               "Slit the current frame into 3 windows: gdb command line,
 source code, and program IO."
@@ -112,13 +107,7 @@ source code, and program IO."
                 (setq gdb-source-window (selected-window))
                 ;; Give focus to the comint window.
                 (set-window-dedicated-p win0 t)
-                (select-window win0)))
-
-            ;; Keys
-            (define-key gud-minor-mode-map [(f5)] #'gud-step)
-            (define-key gud-minor-mode-map [(f6)] #'gud-next)
-            (define-key gud-minor-mode-map [(f7)] #'gud-finish)
-            (define-key gud-minor-mode-map [(f8)] #'gud-cont)))
+                (select-window win0)))))
 
 (provide 'setup-gdb)
 ;;; setup-gdb.el ends here
