@@ -26,7 +26,7 @@
 
 ;; ido makes competing buffers and finding files easier
 (use-package ido
-  :bind (:map ido-completion-map
+  :bind (:map minibuffer-local-completion-map
               ;; This tab override shouldn't be necessary given ido's default
               ;; configuration, but minibuffer-complete otherwise dominates the
               ;; tab binding because of my custom tab-completion-everywhere
