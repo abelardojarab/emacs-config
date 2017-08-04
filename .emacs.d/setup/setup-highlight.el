@@ -88,8 +88,8 @@ create the new one."
               (setq highlight-symbol-timer
                     (run-with-timer value nil 'highlight-symbol-temp-highlight)))
 
-            (setq highlight-symbol-idle-delay .1)
-            (setq highlight-symbol-on-navigation-p t)))
+            (setq highlight-symbol-idle-delay       0.1
+                  highlight-symbol-on-navigation-p  t)))
 
 ;; Highlight blocks
 (use-package highlight-blocks
