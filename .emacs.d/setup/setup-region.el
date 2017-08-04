@@ -42,6 +42,7 @@
 (use-package region-bindings-mode
   :load-path (lambda () (expand-file-name "region-bindings-mode/" user-emacs-directory))
   :diminish region-bindings-mode
+  :commands (region-bindings-mode region-bindings-mode-enable)
   :bind (:map region-bindings-mode-map
               ;; shift select bindings
               ("<prior>" . shift-mark-backward-page)
@@ -61,7 +62,7 @@
 
               ("c" . kill-ring-save)
               ("x" . kill-region))
-  :config (region-bindings-mode-enable))
+  :init (region-bindings-mode-enable))
 
 (provide 'setup-region)
 ;;; setup-region.el ends here

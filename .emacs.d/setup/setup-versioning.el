@@ -25,12 +25,17 @@
 ;;; Code:
 
 ;; Follow symbolic links
-(setq vc-follow-symlinks t)
+(use-package vc
+  :defer t
+  :config (setq vc-follow-symlinks t))
 
 ;; Designsync versioning control
 (use-package vc-sync
-  :config (progn
-            (defun dired-sync-symlink-filter ()
+  :disabled t
+  :after vc
+  :init (add-hook 'dired-after-readin-hook 'dired-sync-symlink-filter)
+  :commands dired-sync-symlink-filter
+  :config (defun dired-sync-symlink-filter ()
               (save-excursion
                 ;; Goto the beginning of the buffer
                 (goto-char (point-min))
@@ -39,23 +44,27 @@
                   ;; Create an overlay that masks out everything between the -> and the end of line
                   (let ((o (make-overlay (match-beginning 1) (progn (end-of-line) (point)))))
                     (overlay-put o 'invisible t)
-                    (overlay-put o 'evaporate t)))))
-            (add-hook 'dired-after-readin-hook 'dired-sync-symlink-filter)))
+                    (overlay-put o 'evaporate t))))))
 
 ;; psvn
 (use-package psvn
+  :after vc
   :defer t
-  :config (progn
-            (setq svn-status-hide-unmodified t)
-            (setq svn-status-hide-unknown t)
-            (setq svn-status-svn-file-coding-system 'utf-8)))
+  :config (setq svn-status-hide-unmodified        t
+                svn-status-hide-unknown           t
+                svn-status-svn-file-coding-system 'utf-8))
 
 ;; git-modes
 (use-package git-modes
+  :demand t
+  :if (executable-find "git")
+  :after vc
   :load-path (lambda () (expand-file-name "git-modes/" user-emacs-directory)))
 
 ;; magit
 (use-package magit
+  :after vc
+  :defer t
   :commands (magit-init
              magit-status
              magit-diff

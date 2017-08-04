@@ -5,17 +5,11 @@
 ;; GNU General Public License, version 3 or later.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Added by package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
-(package-initialize)
-
 (setq debug-on-quit t)
 (setq debug-on-error t)
 (defvar debian-aspell-only-dictionary-alist nil)
 
-(defconst debian-emacs-flavor 'emacs24
+(defconst debian-emacs-flavor 'emacs25
   "A symbol representing the particular debian flavor of emacs running.
  Something like 'emacs20, 'xemacs20, etc.")
 
@@ -38,7 +32,6 @@
 
 ;; CEDET
 (setq byte-compile-warnings nil)
-(setq vc-follow-symlinks t)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

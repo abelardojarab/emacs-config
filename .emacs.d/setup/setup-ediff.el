@@ -26,6 +26,7 @@
 
 ;; ediff
 (use-package ediff
+  :defer t
   :commands my/ediff-dwim
   :init (progn
           (defun my/setup-ediff ()

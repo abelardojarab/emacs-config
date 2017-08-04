@@ -26,7 +26,12 @@
 
 (setq package-user-dir "~/.emacs.d/site-lisp/package-install")
 (require 'package)
+
+;; Disable package initialize after us.
 (setq package-enable-at-startup nil)
+
+;; Ask package.el to not add (package-initialize) to .emacs.
+(setq package--init-file-ensured t)
 
 ;; use https for both melpa and gelpa
 (eval-and-compile

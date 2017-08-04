@@ -38,6 +38,8 @@
   :init (progn
           (transient-mark-mode t)
           (setq shift-select-mode t))
+  :bind (([S-prior] . shift-mark-backward-page)
+         ([S-next]  . shift-mark-forward-page))
   :config (progn
             (defun shift-mark-forward-page ()
               (interactive)
@@ -45,11 +47,7 @@
 
             (defun shift-mark-backward-page ()
               (interactive)
-              (shift-mark 'my/page-up)))
-
-  ;; key bindings for shift select
-  (global-set-key [S-prior] 'shift-mark-backward-page)
-  (global-set-key [S-next]  'shift-mark-forward-page))
+              (shift-mark 'my/page-up))))
 
 ;; popup-based buffer switcher
 (use-package popup-switcher
