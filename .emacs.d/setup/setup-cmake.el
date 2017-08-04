@@ -37,8 +37,8 @@
   :if (executable-find "rdm")
   :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory))
   :bind (:map c++-mode-map
-              ("C-c I" . rtags-print-symbol-info)
-              ("C-c S" . rtags-find-symbol-at-point))
+              ("C-c C-i" . rtags-print-symbol-info)
+              ("C-c C-s" . rtags-find-symbol-at-point))
   :init (add-hook 'c-mode-common-hook 'rtags-start-process-unless-running)
   :config (progn
             (use-package rtags-helm)

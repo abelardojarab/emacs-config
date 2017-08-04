@@ -219,8 +219,8 @@
              origami-show-only-node
              origami-recursively-toggle-node
              origami-mode)
-  :bind (("C-c *"   . origami-toggle-all-nodes)
-         ("C-c +"   . origami-open-all-nodes))
+  :bind (("C-c C-*"   . origami-toggle-all-nodes)
+         ("C-c C-+"   . origami-open-all-nodes))
   :load-path (lambda () (expand-file-name "origami/" user-emacs-directory))
   :config (global-origami-mode))
 

@@ -1,6 +1,6 @@
 ;;; setup-doxygen.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -28,9 +28,9 @@
   :defer t
   :commands (doxymacs-mode doxymacs-insert-file-comment)
   :bind (:map c-mode-map
-              ("C-c c" . doxymacs-insert-function-comment)
+              ("C-c C-d" . doxymacs-insert-function-comment)
               :map c++-mode-map
-              ("C-c c" . doxymacs-insert-function-comment))
+              ("C-c C-d" . doxymacs-insert-function-comment))
   :if (executable-find "doxymacs_parser")
   :diminish doxymacs-mode
   :load-path (lambda () (expand-file-name "doxymacs/lisp" user-emacs-directory))

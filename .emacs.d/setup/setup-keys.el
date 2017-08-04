@@ -62,87 +62,6 @@
               ("/" . psw-switch-function))
   :load-path (lambda () (expand-file-name "popup-switcher/" user-emacs-directory)))
 
-;; Treat 'y' or <CR> as yes, 'n' as no.
-(fset 'yes-or-no-p 'y-or-n-p)
-(define-key query-replace-map [return] 'act)
-(define-key query-replace-map [?\C-m]  'act)
-
-;; Commands to make my programming environment nice
-(global-set-key (kbd "RET")   'newline-and-indent)
-(global-set-key (kbd "")      'other-window)
-(global-set-key [C-tab]       'comment-or-uncomment-region)
-(global-set-key [kp-prior]    'scroll-down)
-(global-set-key [prior]       'scroll-down)
-(global-set-key [kp-next]     'scroll-up)
-(global-set-key [next]        'scroll-up)
-(global-set-key [home]        'beginning-of-line)
-(global-set-key [end]         'end-of-line)
-(global-set-key [delete]      'delete-char)
-(global-set-key [kp-delete]   'delete-char)
-(global-set-key [(control l)] 'goto-line)
-(global-set-key [(control s)] 'save-buffer)
-(global-set-key [(control o)] 'counsel-find-file)
-(global-set-key [(meta    s)] 'write-file)
-(global-set-key [(control q)] 'save-buffers-kill-emacs)
-(global-set-key [(meta    q)] 'kill-this-buffer)
-(global-set-key [(control r)] 'replace-string)
-(global-set-key [(control a)] 'mark-whole-buffer)
-
-;; Buffer navigation
-(global-set-key [(control n)] 'scroll-down)
-(global-set-key [(control p)] 'scroll-up)
-
-;; Bookmarks
-(global-set-key (kbd "<f2>")   'bm-next)
-(global-set-key (kbd "<C-f2>") 'bm-toggle)
-
-;; Highlight symbol at point
-(global-set-key [f3]           'highlight-symbol-at-point)
-(global-set-key [(control f3)] 'highlight-symbol-next)
-(global-set-key [(shift   f3)] 'highlight-symbol-prev)
-(global-set-key [(meta    f3)] 'highlight-symbol-query-replace)
-(global-set-key [(control shift mouse-1)]
-                (lambda (event)
-                  (interactive "e")
-                  (goto-char (posn-point (event-start event)))
-                  (highlight-symbol-at-point)))
-
-;; Helm semantic (switch function)
-(global-set-key (kbd "<f4>") 'helm-semantic-or-imenu)
-
-;; Smex
-(global-set-key (kbd "<f5>") 'recompile)
-
-;; Flyspell
-(defun flyspell-check-next-highlighted-word ()
-  "Custom function to spell check next highlighted word"
-  (interactive)
-  (flyspell-goto-next-error)
-  (ispell-word))
-(global-set-key (kbd "<f6>")    'flyspell-check-next-highlighted-word)
-(global-set-key (kbd "C-<f6>")  'helm-flyspell-correct)
-
-;; Flycheck
-(global-set-key (kbd "<f7>")    'flycheck-next-error)
-(global-set-key (kbd "C-<f7>")  'helm-flycheck)
-
-;; Code folding
-(global-set-key (kbd "<f8>")    'hs-toggle-hiding-all)
-(global-set-key (kbd "C-<f8>")  'fold-dwim-toggle)
-
-;; Refresh file
-(global-set-key (kbd "<f9>")    'refresh-file)
-
-;; Menu bar
-(global-set-key (kbd "<f10>")   'menu-bar-open)
-
-;; Toggle frame maximized
-(global-set-key (kbd "<f11>")   'toggle-frame-maximized)
-
-;; List buffers
-(global-set-key (kbd "<f12>")   'ivy-switch-buffer)
-(global-set-key (kbd "C-<f12>") 'neotree-toggle)
-
 ;; Native file opening
 (cond
  ;; Windows
@@ -153,7 +72,6 @@
  ;; Linux
  ((and (equal system-type 'gnu/linux)
        (executable-find "kdialog"))
-  (global-set-key "\C-x\C-f" 'kde-open-file)
   (define-key menu-bar-file-menu [open-file] '("Open File..." . kde-open-file))) ;; if
 
  ;; Mac
@@ -164,17 +82,83 @@
  (t
   nil)) ;; cond
 
-;; C-v
-(global-set-key (kbd "C-v") 'yank)
-(global-set-key (kbd "C-c v") 'counsel-yank-pop)
-(define-key ctl-x-map (kbd "P") '(lambda () (interactive) (popup-menu 'yank-menu)))
+;; Treat 'y' or <CR> as yes, 'n' as no.
+(fset 'yes-or-no-p 'y-or-n-p)
+(define-key query-replace-map [return] 'act)
+(define-key query-replace-map [?\C-m]  'act)
+
+;; Commands to make my programming environment nice
+(global-set-key (kbd "RET")      'newline-and-indent)
+(global-set-key (kbd "")         'other-window)
+(global-set-key [C-tab]          'comment-or-uncomment-region)
+(global-set-key [kp-prior]       'scroll-down)
+(global-set-key [prior]          'scroll-down)
+(global-set-key [kp-next]        'scroll-up)
+(global-set-key [next]           'scroll-up)
+(global-set-key [home]           'beginning-of-line)
+(global-set-key [end]            'end-of-line)
+(global-set-key [delete]         'delete-char)
+(global-set-key [kp-delete]      'delete-char)
+(global-set-key [(control l)]    'goto-line)
+(global-set-key [(control s)]    'save-buffer)
+(global-set-key [(control o)]    'counsel-find-file)
+(global-set-key [(meta    s)]    'write-file)
+(global-set-key [(control q)]    'save-buffers-kill-emacs)
+(global-set-key [(meta    q)]    'kill-this-buffer)
+(global-set-key [(control r)]    'replace-string)
+(global-set-key [(control a)]    'mark-whole-buffer)
+(global-set-key [(control v)]    'yank)
+(global-set-key (kbd "C-c C-v")  'counsel-yank-pop)
+(global-set-key (kbd "C-c C-b")  'beautify-buffer)
 
 ;; Unindent (do what I mean version)
-(global-set-key (kbd "C-<") 'unindent-dwim)
-(global-set-key (kbd "C->") (lambda () (interactive) (unindent-dwim -1)))
+(global-set-key (kbd "C-c C-<")  'unindent-dwim)
+(global-set-key (kbd "C-c C->")  (lambda () (interactive) (unindent-dwim -1)))
 
-;; Beautify buffer
-(global-set-key "\C-c\C-b" 'beautify-buffer)
+;; Buffer navigation
+(global-set-key [(control n)]    'scroll-down)
+(global-set-key [(control p)]    'scroll-up)
+
+;; Bookmarks
+(global-set-key (kbd "<f2>")     'bm-next)
+(global-set-key (kbd "<C-f2>")   'bm-toggle)
+
+;; Highlight symbol at point
+(global-set-key [f3]             'highlight-symbol-at-point)
+(global-set-key [(control f3)]   'highlight-symbol-next)
+(global-set-key [(shift   f3)]   'highlight-symbol-prev)
+(global-set-key [(meta    f3)]   'highlight-symbol-query-replace)
+
+;; Helm semantic (switch function)
+(global-set-key (kbd "<f4>")     'helm-semantic-or-imenu)
+
+;; Smex
+(global-set-key (kbd "<f5>")     'recompile)
+
+;; Flyspell
+(global-set-key (kbd "<f6>")     'flyspell-check-next-highlighted-word)
+(global-set-key (kbd "C-<f6>")   'helm-flyspell-correct)
+
+;; Flycheck
+(global-set-key (kbd "<f7>")     'flycheck-next-error)
+(global-set-key (kbd "C-<f7>")   'helm-flycheck)
+
+;; Code folding
+(global-set-key (kbd "<f8>")     'hs-toggle-hiding-all)
+(global-set-key (kbd "C-<f8>")   'fold-dwim-toggle)
+
+;; Refresh file
+(global-set-key (kbd "<f9>")     'refresh-file)
+
+;; Menu bar
+(global-set-key (kbd "<f10>")    'menu-bar-open)
+
+;; Toggle frame maximized
+(global-set-key (kbd "<f11>")    'toggle-frame-maximized)
+
+;; List buffers
+(global-set-key (kbd "<f12>")    'ivy-switch-buffer)
+(global-set-key (kbd "C-<f12>")  'neotree-toggle)
 
 ;; Escape key in minibuffer
 (define-key minibuffer-local-map            [escape] 'abort-recursive-edit)
@@ -184,29 +168,29 @@
 (define-key minibuffer-local-isearch-map    [escape] 'abort-recursive-edit)
 
 ;; Tabbar
-(global-set-key [C-prior]            'tabbar-backward-tab)
-(global-set-key [C-next]             'tabbar-forward-tab)
-(global-set-key [C-home]             'tabbar-backward-group)
-(global-set-key [C-end]              'tabbar-forward-group)
+(global-set-key [C-prior]             'tabbar-backward-tab)
+(global-set-key [C-next]              'tabbar-forward-tab)
+(global-set-key [C-home]              'tabbar-backward-group)
+(global-set-key [C-end]               'tabbar-forward-group)
 
 ;; Tabbar, now using ctl-x-map
-(global-set-key (kbd "C-x <prior>")  'tabbar-backward-tab)
-(global-set-key (kbd "C-x <next>")   'tabbar-forward-tab)
-(global-set-key (kbd "C-x <home>")   'tabbar-backward-group)
-(global-set-key (kbd "C-x <end>")    'tabbar-forward-group)
+(global-set-key (kbd "C-x <prior>")   'tabbar-backward-tab)
+(global-set-key (kbd "C-x <next>")    'tabbar-forward-tab)
+(global-set-key (kbd "C-x <home>")    'tabbar-backward-group)
+(global-set-key (kbd "C-x <end>")     'tabbar-forward-group)
 
 ;; Jump between windows
-(global-set-key (kbd "C-x <up>")     'windmove-up)
-(global-set-key (kbd "C-x <down>")   'windmove-down)
-(global-set-key (kbd "C-x <left>")   'windmove-left)
-(global-set-key (kbd "C-x <right>")  'windmove-right)
+(global-set-key (kbd "C-x <up>")      'windmove-up)
+(global-set-key (kbd "C-x <down>")    'windmove-down)
+(global-set-key (kbd "C-x <left>")    'windmove-left)
+(global-set-key (kbd "C-x <right>")   'windmove-right)
 
 ;; Extra Ctrl-x mappings
-(define-key ctl-x-map (kbd "SPC") (lambda () (interactive) (push-mark nil nil 1)))
-(define-key ctl-x-map (kbd ">")      'increase-left-margin)
-(define-key ctl-x-map (kbd "<")      'decrease-left-margin)
-(define-key ctl-x-map (kbd "F")      'toggle-frame-fullscreen)
-(define-key ctl-x-map (kbd "T")      'toggle-truncate-lines)
+(define-key ctl-x-map (kbd "SPC")     (lambda () (interactive) (push-mark nil nil 1)))
+(define-key ctl-x-map (kbd ">")       'increase-left-margin)
+(define-key ctl-x-map (kbd "<")       'decrease-left-margin)
+(define-key ctl-x-map (kbd "F")       'toggle-frame-fullscreen)
+(define-key ctl-x-map (kbd "T")       'toggle-truncate-lines)
 
 ;; Extra Ctrl-x mappings for navigation
 (define-key ctl-x-map (kbd "<up>")    'windmove-up)

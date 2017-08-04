@@ -26,9 +26,9 @@
 
 (use-package cc-mode
   :bind (:map c-mode-map
-              ("C-c o" . ff-find-other-file)
+              ("C-c C-o" . ff-find-other-file)
               :map c++-mode-map
-              ("C-c o" . ff-find-other-file))
+              ("C-c C-o" . ff-find-other-file))
   :config (progn
             ;; Put c++-mode as default for *.h files (improves parsing)
             (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
@@ -123,7 +123,7 @@ code sections."
   :defer t
   :commands cpp-auto-include
   :bind (:map c++-mode-map
-              ("C-c i" . cpp-auto-include))
+              ("C-c C-a" . cpp-auto-include))
   :load-path (lambda () (expand-file-name "cpp-auto-include/" user-emacs-directory)))
 
 ;; Show inline arguments hint for the C/C++ function at point
@@ -133,9 +133,9 @@ code sections."
   :commands (moo-complete moo-jump-local function-args-mode)
   :load-path (lambda () (expand-file-name "function-args/" user-emacs-directory))
   :bind (:map c-mode-map
-              ("C-c c" . moo-complete)
+              ("C-c C-m" . moo-complete)
               :map c++-mode-map
-              ("C-c c" . moo-complete)
+              ("C-c C-m" . moo-complete)
               :map functions-args-mode-map
               ("M-o"   . nil))
   :init (add-hook 'c-mode-common-hook 'function-args-mode)
@@ -147,9 +147,9 @@ code sections."
   :commands srefactor-refactor-at-point
   :load-path (lambda () (expand-file-name "semantic-refactor/" user-emacs-directory))
   :bind (:map c-mode-map
-              ("C-c s" . srefactor-refactor-at-point)
+              ("C-c C-r" . srefactor-refactor-at-point)
               :map c++-mode-map
-              ("C-c s" . srefactor-refactor-at-point)))
+              ("C-c C-r" . srefactor-refactor-at-point)))
 
 ;; Devhelp support
 (use-package devhelp

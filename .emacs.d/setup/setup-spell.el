@@ -143,19 +143,26 @@ Don't read buffer-local settings or word lists."
               ;; Disable flyspell keybindings
               ("C-;" . nil)
               ("C-." . nil))
+  :commands (flyspell-mode flyspell-check-next-highlighted-word)
+  :init (progn
+          (dolist (hook my/flyspell-modes)
+            (add-hook hook (lambda () (flyspell-mode 1))))
+          (dolist (hook my/flyspell-modes-disabled)
+            (add-hook hook (lambda () (flyspell-mode -1)))))
   :config (progn
             ;; Ignore message flags
             (setq flyspell-issue-message-flag nil
                   flyspell-issue-welcome-flag nil)
 
-            (dolist (hook my/flyspell-modes)
-              (add-hook hook (lambda () (flyspell-mode 1))))
-            (dolist (hook my/flyspell-modes-disabled)
-              (add-hook hook (lambda () (flyspell-mode -1))))
-
             (defun flyspell-ajust-cursor-point (save cursor-location old-max)
               (when (not (looking-at "\\b"))
                 (forward-word)))
+
+            (defun flyspell-check-next-highlighted-word ()
+              "Custom function to spell check next highlighted word"
+              (interactive)
+              (flyspell-goto-next-error)
+              (ispell-word))
 
             ;; Fix for right click on Mac OS X
             (when (eq system-type 'darwin)
