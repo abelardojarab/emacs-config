@@ -51,7 +51,7 @@
   :config (progn
 
             ;; https://github.com/nilcons/emacs-use-package-fast/blob/master/errge-dot-emacs.el
-            (add-hook 'kill-emacs-hook #'(lambda () (delete-directory server-socket-dir t)))
+            (add-hook 'kill-emacs-hook #'(lambda () (ignore-errors (delete-directory server-socket-dir t))))
 
             ;; http://stackoverflow.com/questions/885793/emacs-error-when-calling-server-start
             (defun server-ensure-safe-dir (dir) "Noop" t)
