@@ -25,13 +25,13 @@
 ;;; Code:
 
 (use-package dired-x
-  :bind (("C-x C-j" . dired-jump)
+  :bind (("C-x C-j"  . dired-jump)
          :map dired-mode-map
-         (("u" . dired-up-directory)
-          ("Y" . my/dired-rsync)
-          ("RET" . dired-find-alternate-file)
-          ("C-c d" . dired-filter-by-directory)
-          ("C-c f" . dired-filter-by-file)))
+         (("u"       . dired-up-directory)
+          ("RET"     . dired-find-alternate-file)
+          ("C-c C-r" . my/dired-rsync)
+          ("C-c C-d" . dired-filter-by-directory)
+          ("C-c C-f" . dired-filter-by-file)))
   :config (progn
             (defun my/dired-mode-hook ()
               (setq-local truncate-lines t))

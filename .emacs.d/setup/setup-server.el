@@ -41,11 +41,7 @@
           (setq server-use-tcp nil)
           (setq server-port 9999)
           (setq server-auth-dir "~/.emacs.cache/server")
-          (setq server-socket-dir (format
-                                   "~/.emacs.cache/server/emacs-%d-%s-%d"
-                                   (user-uid)
-                                   (format-time-string "%Y%m%d-%H%M%S")
-                                   (emacs-pid)))
+          (setq server-socket-dir "~/.emacs.cache/server")
           (if (not (file-exists-p server-auth-dir))
               (make-directory server-auth-dir t)))
   :config (progn

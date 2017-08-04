@@ -25,7 +25,7 @@
 ;;; Code:
 
 (use-package js2-mode
-  :defer 1 ;; do not defer, as other modes depend on it
+  :demand t
   :load-path (lambda () (expand-file-name "js2-mode/" user-emacs-directory))
   :init (progn
           ;; Setup node.js path
@@ -146,9 +146,9 @@
 (use-package json-snatcher
   :after js2-mode
   :bind (:map js2-mode-map
-              ("C-c C-g" . jsons-print-path)
+              ("C-c C-j" . jsons-print-path)
               :map js2-minor-mode-map
-              ("C-c C-g" . jsons-print-path))
+              ("C-c C-j" . jsons-print-path))
   :load-path (lambda () (expand-file-name "json-snatcher/" user-emacs-directory)))
 
 ;; Bring node.js to Emacs
