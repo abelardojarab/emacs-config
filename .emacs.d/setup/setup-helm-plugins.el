@@ -67,9 +67,8 @@
   :defer t
   :after helm
   :commands (helm-describe-modes)
-  :load-path (lambda () (expand-file-name "helm-describe-modes/" user-emacs-directory))
-  :config (progn
-            (global-set-key [remap describe-mode] #'helm-describe-modes)))
+  :bind ([remap describe-mode] . helm-describe-modes)
+  :load-path (lambda () (expand-file-name "helm-describe-modes/" user-emacs-directory)))
 
 ;; helm desc-binds
 (use-package helm-descbinds

@@ -26,6 +26,9 @@
 
 ;; Server configuration
 (use-package server
+  :demand t
+  :bind (:map ctl-x-map
+              ("C-c" . my/exit))
   :init (progn
 
           ;; Monkey patch the server to force it to use ipv4. This is a bug fix that will
@@ -38,10 +41,17 @@
           (setq server-use-tcp nil)
           (setq server-port 9999)
           (setq server-auth-dir "~/.emacs.cache/server")
-          (setq server-socket-dir "~/.emacs.cache/server")
+          (setq server-socket-dir (format
+                                   "~/.emacs.cache/server/emacs-%d-%s-%d"
+                                   (user-uid)
+                                   (format-time-string "%Y%m%d-%H%M%S")
+                                   (emacs-pid)))
           (if (not (file-exists-p server-auth-dir))
               (make-directory server-auth-dir t)))
   :config (progn
+
+            ;; https://github.com/nilcons/emacs-use-package-fast/blob/master/errge-dot-emacs.el
+            (add-hook 'kill-emacs-hook #'(lambda () (delete-directory server-socket-dir t)))
 
             ;; http://stackoverflow.com/questions/885793/emacs-error-when-calling-server-start
             (defun server-ensure-safe-dir (dir) "Noop" t)
@@ -68,7 +78,6 @@
               (if (display-graphic-p)
                   (iconify-frame)
                 (make-frame-invisible nil t)))
-            (global-set-key (kbd "C-x C-c") 'my/exit)
 
             (defvar my/really-kill-emacs nil)
             (defadvice kill-emacs (around my/really-exit activate)

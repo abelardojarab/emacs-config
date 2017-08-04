@@ -1299,7 +1299,7 @@ also perform `outline-next-visible-heading'"
   (global-set-key [tool-bar kill-buffer] 'ergoemacs-close-current-buffer)
   (global-set-key (kbd "C-n") 'ergoemacs-new-empty-buffer)
 
-  (global-set-key (kbd "C-x C-f") nil) ;; Remove Emacs Method
+  (global-set-key (kbd "C-x C-f") 'ido-find-file) ;; Remove Emacs Method
   (global-set-key (kbd "C-o") ("C-o" :emacs))
   (global-set-key (kbd "C-S-o") 'ergoemacs-open-in-desktop)
 
@@ -1320,14 +1320,14 @@ also perform `outline-next-visible-heading'"
   (global-set-key (kbd "C-x h") nil) ;; Mark whole buffer
   (global-set-key (kbd "C-a") ("C-x h" :emacs))
 
-  (global-set-key (kbd "C-z") 'undo)
+  (global-set-key (kbd "C-z") 'undo-tree-undo)
 
   ;; Take out undo-tree's redo bindings
   (define-key undo-tree-map (kbd "C-?") nil)
   (define-key undo-tree-map (kbd "M-_") nil)
 
-  (global-set-key (kbd "C-S-z") '(redo undo-tree-redo ergoemacs-redo))
-  (global-set-key (kbd "M-S-z") '(redo undo-tree-redo ergoemacs-redo))
+  (global-set-key (kbd "C-S-z") '(undo-tree-redo redo ergoemacs-redo))
+  (global-set-key (kbd "M-S-z") '(undo-tree-redo redo ergoemacs-redo))
   (global-set-key (kbd "<S-delete>") 'ergoemacs-cut-line-or-region)
   (global-set-key (kbd "C-c <ergoemacs-timeout>") 'ergoemacs-copy-line-or-region)
   (global-set-key (kbd "<C-insert>") 'ergoemacs-copy-line-or-region)
@@ -1342,7 +1342,7 @@ also perform `outline-next-visible-heading'"
   ;; Text editing
 
   ;; the Del key for forward  delete. Needed if C-d is set to nil.
-  (global-set-key (kbd "<delete>") 'delete-char )
+  (global-set-key (kbd "<delete>") 'delete-char)
 
   (global-set-key (kbd "<M-delete>") 'kill-word)
   (global-set-key (kbd "<C-delete>") 'kill-word)
@@ -1412,7 +1412,7 @@ also perform `outline-next-visible-heading'"
   (global-set-key (kbd "C-w") 'ergoemacs-close-current-buffer)
   (global-set-key (kbd "C-x <ergoemacs-timeout>") 'ergoemacs-cut-line-or-region)
   (global-set-key (kbd "C-x C-b") 'ibuffer)
-  (global-set-key (kbd "C-y") '(redo undo-tree-redo ergoemacs-redo) "↷ redo")
+  (global-set-key (kbd "C-y") '(undo-tree-redo redo ergoemacs-redo) "↷ redo")
 
   (global-set-key (kbd "M-S-<next>") 'forward-page)
   (global-set-key (kbd "M-S-<prior>") 'backward-page)

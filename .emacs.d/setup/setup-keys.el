@@ -35,6 +35,7 @@
 
 ;; Shift mark package
 (use-package shift-mark
+  :demand t
   :init (progn
           (transient-mark-mode t)
           (setq shift-select-mode t))
