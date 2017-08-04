@@ -132,16 +132,6 @@
 (use-package json-reformat
   :load-path (lambda () (expand-file-name "json-reformat/" user-emacs-directory)))
 
-;; json-mode
-(use-package json-mode
-  :mode "\\.json$"
-  :commands json-mode
-  :after js2-mode
-  :load-path (lambda () (expand-file-name "json-mode/" user-emacs-directory))
-  :config (progn
-            (add-hook 'json-mode-hook 'js2-minor-mode)
-            (setq js-indent-level 4)))
-
 ;; json-snatcher
 (use-package json-snatcher
   :after js2-mode
@@ -150,6 +140,16 @@
               :map js2-minor-mode-map
               ("C-c C-j" . jsons-print-path))
   :load-path (lambda () (expand-file-name "json-snatcher/" user-emacs-directory)))
+
+;; json-mode
+(use-package json-mode
+  :mode "\\.json$"
+  :commands json-mode
+  :after (json-snatcher js2-mode)
+  :load-path (lambda () (expand-file-name "json-mode/" user-emacs-directory))
+  :config (progn
+            (add-hook 'json-mode-hook 'js2-minor-mode)
+            (setq js-indent-level 4)))
 
 ;; Bring node.js to Emacs
 (use-package nodejs-repl
