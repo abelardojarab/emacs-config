@@ -137,7 +137,7 @@ code sections."
               :map c++-mode-map
               ("C-c C-m" . moo-complete)
               :map functions-args-mode-map
-              ("M-o"   . nil))
+              ("M-o"     . nil))
   :init (add-hook 'c-mode-common-hook 'function-args-mode)
   :config (fa-config-default))
 
@@ -178,7 +178,7 @@ code sections."
             (setq irony-user-dir "~/.emacs.cache/irony-user-dir/")
 
             ;; Irony json projects
-            (require 'irony-cdb-json)
+            (use-package irony-cdb-json)
 
             ;; Hooks
             (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)))
