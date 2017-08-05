@@ -140,6 +140,9 @@ The same result can also be be achieved by \\[universal-argument] \\[unhighlight
   :config (progn
             (global-hl-line-mode t)
 
+            ;; Highlight the line only in the active window
+            (setq hl-line-sticky-flag nil)
+
             ;; https://stackoverflow.com/questions/20275596/how-to-use-hl-line-mode-to-highlight-just-one-1-line-when-visual-line-mode-is
             (defun visual-line-line-range ()
               (save-excursion (cons
