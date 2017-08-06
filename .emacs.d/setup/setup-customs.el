@@ -267,7 +267,8 @@
   '("*Compile-Log*"
     "^ "
     "TAGS"
-    "tmp status"
+    "*diff-hl*"
+    "*tmp status*"
     "Grepint: git-grep"
     "*Messages*"
     "*Completions*"
@@ -283,7 +284,7 @@
 
 (defcustom my/backend-assoc
   '(('Git . 'magit-status)
-    ('Hg . 'hg-status)
+    ('Hg  . 'hg-status)
     ('Svn . 'svn-status))
   "Mapping between backend and function"
   :group 'my/customs
@@ -292,10 +293,10 @@
 ;; TODO: how do we check if we can check for the existing snippets?
 ;; TODO: make it smarter, it would be good to accept also a function, in this way it can be made more generic
 (defcustom my/auto-header-conses
-  '(("setup.py" . "setup")
-    ("\.sh$" . "bash")
-    ("\.h$"  . "once")
-    ("\.hpp$" . "once"))
+  '(("setup .py"   . "setup")
+    ("\     .sh$"  . "bash")
+    ("\     .h$"   . "once")
+    ("\     .hpp$" . "once"))
   "Snippets to expand per file extension"
   :group 'my/customs
   :type 'list)

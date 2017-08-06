@@ -33,9 +33,13 @@
           ("C-c C-d" . dired-filter-by-directory)
           ("C-c C-f" . dired-filter-by-file)))
   :config (progn
+            ;; extra hooks
             (defun my/dired-mode-hook ()
-              (setq-local truncate-lines t))
-            (add-hook 'dired-mode-hook 'projectile-mode)
+              (setq-local truncate-lines t)
+              (dired-omit-mode 1)
+              (hl-line-mode 1)
+              (projectile-mode 1))
+            (add-hook 'dired-mode-hook #'my/dired-mode-hook)
 
             ;; https://fuco1.github.io/2017-05-01-Support-for-imenu-in-dired.html
             (defun my/dired-imenu-prev-index-position (&optional arg)
@@ -70,7 +74,6 @@
                           'my/dired-extract-index-name)
               (setq-local imenu-create-index-function
                           'my/dired-imenu-create-index))
-
             (add-hook 'dired-mode-hook 'my/dired-imenu-init)
 
             ;; Emacs 24.4 defaults to an ls -1 view, not ls -l, but I want
@@ -130,12 +133,7 @@
                 ;; run the async shell command
                 (async-shell-command my/rsync-command "*rsync*")
                 ;; finally, switch to that window
-                (other-window 1)))
-
-            ;; extra hooks
-            (add-hook 'dired-mode-hook (lambda () (dired-omit-mode)))
-            (add-hook 'dired-mode-hook #'hl-line-mode)
-            (add-hook 'dired-mode-hook #'my/dired-mode-hook)))
+                (other-window 1)))))
 
 ;; async support for dired
 (use-package dired-async
