@@ -135,7 +135,7 @@
 ;; Shell mode
 (use-package sh-script
   :commands sh-mode
-  :mode (("\\.sh\\" . sh-mode))
+  :mode (("\\.sh$" . sh-mode))
   :config (progn
             ;; create keymap
             (setq sh-mode-map (make-sparse-keymap))
