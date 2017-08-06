@@ -1,0 +1,34 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: debian:sid
+    working_directory: /home/circleci/yafolding.el
+    steps:
+      - run:
+          name: git, python, curl
+          command: |
+            apt-get update
+            apt-get --yes install python git curl
+
+      - run:
+          name: emacs25-nox
+          command: |
+            apt-get update
+            apt-get --yes install emacs25-nox
+
+      - run:
+          name: Cask
+          command: |
+            curl -fsSL https://raw.githubusercontent.com/cask/cask/master/go | python
+
+      - checkout
+
+      # See also: https://github.com/docker/docker/issues/8631
+      - run:
+          name: Test
+          command: |
+            PATH="/root/.cask/bin:$PATH"
+            export TERM=xterm
+            cask install
+            cask exec ecukes --no-win

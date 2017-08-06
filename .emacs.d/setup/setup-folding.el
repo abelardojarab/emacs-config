@@ -145,14 +145,25 @@
 (use-package hideshow-org
   :after hideshow
   :init (progn
-          (setq hs-org/trigger-keys-block (list (kbd "C-c C-+")))
-          (setq hs-org/trigger-keys-all (list (kbd "C-c C-*"))))
-  :commands hs-org/minor-mode*c*
+          (setq hs-org/trigger-keys-block (list (kbd "C-c +")))
+          (setq hs-org/trigger-keys-all (list (kbd "C-c &"))))
+  :commands hs-org/minor-mode
   :load-path (lambda () (expand-file-name "hideshow-org/" user-emacs-directory)))
+
+;;; Yet Another Folding - folding code blocks based on indentation
+(use-package yafolding
+  :demand t
+  :after hideshow
+  :load-path (lambda () (expand-file-name "yafolding/" user-emacs-directory))
+  :commands yafolding-toggle-element
+  :config (progn
+            (setq yafolding-ellipsis-content " ... ")
+            (set-face-attribute 'yafolding-ellipsis-face nil :inherit 'my/fold-face)))
 
 ;; Enable fold dwim (do what i mean)
 (use-package fold-dwim
-  :bind ("C-c +" . my/fold-dwim)
+  :after (hideshow-org yafolding)
+  :bind ("C-c C-f" . my/fold-dwim)
   :config (progn
             (defun folding-marker-p (&optional pos)
               (eq (get-char-property (or pos (point)) 'face) 'fringe))
@@ -198,8 +209,8 @@ If prefix argument is used, `set-selective-display' to the current column."
                                   'face 'font-lock-function-name-face)
                                  (current-column)))
                     (progn
-                      (toggle-fold)
-                      (setq my/fold-dwim--last-fn #'toggle-fold)
+                      (yafolding-toggle-element)
+                      (setq my/fold-dwim--last-fn #'yafolding-toggle-element)
                       (message "Folded at current indent level using %s."
                                (propertize
                                 (symbol-name my/fold-dwim--last-fn)
@@ -208,9 +219,11 @@ If prefix argument is used, `set-selective-display' to the current column."
 ;; Visual hideshow mode
 (use-package hideshowvis
   :if (display-graphic-p)
+  :demand t
   :after (hideshow hideshow-org fold-dwim)
-  :commands (hideshowvis-enable
-             hs-minor-mode-settings)
+  :commands (hideshowvis-minor-mode
+             hideshowvis-enable
+             hideshowvis-settings)
   :init (progn
           ;; enable `hs-minor-mode' and 'hideshowvis-minor-mode
           (dolist (hook my/hideshow-modes)
@@ -220,23 +233,24 @@ If prefix argument is used, `set-selective-display' to the current column."
                                (hs-org/minor-mode)
                                (hideshowvis-enable))))))
   :config (progn
+            ;; Add the following to your .emacs and uncomment it in order to get a right arrow symbol
+            (define-fringe-bitmap 'hs-marker [0 32 48 56 60 56 48 32])
 
-            (defun hs-minor-mode-settings ()
-              "settings of `hs-minor-mode'."
-              (defvar hs-headline-max-len 20 "*Maximum length of `hs-headline' to display.")
-              (setq hs-isearch-open t)
+            ;; + bitmap
+            (define-fringe-bitmap 'hs-expand-bitmap [0   ; 0 0 0 0 0 0 0 0
+                                                     24  ; 0 0 0 ▮ ▮ 0 0 0
+                                                     24  ; 0 0 0 ▮ ▮ 0 0 0
+                                                     126 ; 0 ▮ ▮ ▮ ▮ ▮ ▮ 0
+                                                     126 ; 0 ▮ ▮ ▮ ▮ ▮ ▮ 0
+                                                     24  ; 0 0 0 ▮ ▮ 0 0 0
+                                                     24  ; 0 0 0 ▮ ▮ 0 0 0
+                                                     0]) ; 0 0 0 0 0 0 0 0
 
-              (defun hs-display-headline ()
-                (let* ((len (length hs-headline))
-                       (headline hs-headline)
-                       (postfix ""))
-                  (when (>= len hs-headline-max-len)
-                    (setq postfix "...")
-                    (setq headline (substring hs-headline 0 hs-headline-max-len)))
-                  (if hs-headline (concat headline postfix " ") "")))
-
-              (setq-default mode-line-format
-                            (append '((:eval (hs-display-headline))) mode-line-format))
+              (defface my/hs-fringe-face
+                '((t (:foreground "#888"
+                                  :box (:line-width 2 :color "grey75" :style released-button))))
+                "Face used to highlight the fringe on folded regions"
+                :group 'hideshow)
 
               ;; Redefine display functions
               (defun display-code-line-counts (ov)
@@ -255,9 +269,9 @@ If prefix argument is used, `set-selective-display' to the current column."
                                                  (count-lines (overlay-start ov)
                                                               (overlay-end ov)))))
                     (overlay-put ov 'help-echo "Hidden text... ")
-                    (put-text-property 0 marker-length 'display (list 'left-fringe 'hs-marker 'fringe-face) marker-string)
+                    (put-text-property 0 marker-length 'display (list 'left-fringe 'hs-expand-bitmap 'my/hs-fringe-face) marker-string)
                     (overlay-put ov 'before-string marker-string)
-                    (put-text-property 1 (length display-string) 'face 'outline-4 display-string)
+                    (put-text-property 1 (length display-string) 'face 'my/fold-face display-string)
                     (overlay-put ov 'display display-string))))
               (setq hs-set-up-overlay 'display-code-line-counts)
 
@@ -290,40 +304,13 @@ If prefix argument is used, `set-selective-display' to the current column."
                                                                             (+ (overlay-start ov) 40)))))
                                                        (count-lines (overlay-start ov)
                                                                     (overlay-end ov)))))
-                          (put-text-property 0 marker-length 'display (list 'left-fringe 'hs-marker 'fringe-face) marker-string)
+                          (put-text-property 0 marker-length 'display (list 'left-fringe 'hs-marker 'my/hs-fringe-face) marker-string)
                           (overlay-put ov 'before-string marker-string)
-                          (put-text-property 1 (length display-string) 'face 'outline-4 display-string)
+                          (put-text-property 1 (length display-string) 'face 'my/fold-face display-string)
                           (overlay-put ov 'display display-string)
                           (overlay-put ov 'priority 9999)
                           (overlay-put ov 'fringe-folding-p t))))
-                    (setq list (cdr (cdr list))))))
-
-              ;; Add the following to your .emacs and uncomment it in order to get a right arrow symbol
-              (define-fringe-bitmap 'hs-marker [0 32 48 56 60 56 48 32])
-
-              ;; + bitmap
-              (define-fringe-bitmap 'hs-expand-bitmap [0   ; 0 0 0 0 0 0 0 0
-                                                       24  ; 0 0 0 ▮ ▮ 0 0 0
-                                                       24  ; 0 0 0 ▮ ▮ 0 0 0
-                                                       126 ; 0 ▮ ▮ ▮ ▮ ▮ ▮ 0
-                                                       126 ; 0 ▮ ▮ ▮ ▮ ▮ ▮ 0
-                                                       24  ; 0 0 0 ▮ ▮ 0 0 0
-                                                       24  ; 0 0 0 ▮ ▮ 0 0 0
-                                                       0]) ; 0 0 0 0 0 0 0 0
-
-              (hs-minor-mode-settings))))
-
-;; Origami mode
-(use-package origami
-  :commands (origami-toggle-node
-             origami-toggle-all-nodes
-             origami-show-only-node
-             origami-recursively-toggle-node
-             origami-mode)
-  :bind (("C-c C-*"   . origami-toggle-all-nodes)
-         ("C-c C-+"   . origami-open-all-nodes))
-  :load-path (lambda () (expand-file-name "origami/" user-emacs-directory))
-  :config (global-origami-mode))
+                    (setq list (cdr (cdr list))))))))
 
 ;; vim-like fold
 (use-package vimish-fold
