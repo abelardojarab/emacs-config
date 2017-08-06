@@ -25,11 +25,11 @@
 ;;; Code:
 
 (use-package ielm
-  :bind (("C-'" . ielm-repl)
-         ("C-0" . ielm-repl)
+  :bind (("C-'"  . ielm-repl)
+         ("C-0"  . ielm-repl)
          :map ctl-x-map
          (("C-t" . ielm-repl)
-          ("z" . ielm-repl))
+          ("z"   . ielm-repl))
          :map ielm-map
          (("C-t" . quit-window)))
   :config (progn
@@ -53,13 +53,13 @@
 
 (use-package eshell
   :commands (eshell eshell-vertical eshell-horizontal)
-  :bind (("C-t" . eshell)
-         ("C-c C-t" . eshell)
+  :bind (("C-t"      . eshell)
+         ("C-c C-t"  . eshell)
          :map ctl-x-map
-         ("t" . eshell)
+         ("t"        . eshell)
          :map eshell-mode-map
          (("C-c C-t" . quit-window)
-          ("C-t" . quit-window)))
+          ("C-t"     . quit-window)))
   :after helm
   :init  (progn
            ;; Fix lack of eshell-mode-map
@@ -132,11 +132,11 @@
   :after eshell
   :config (setq eshell-prompt-function 'epe-theme-lambda))
 
-;; Shell-mode
+;; Shell mode
 (use-package sh-script
+  :commands sh-mode
+  :mode (("\\.sh\\" . sh-mode))
   :config (progn
-            (add-to-list 'auto-mode-alist '("\\.sh\\'" . sh-mode))
-
             ;; create keymap
             (setq sh-mode-map (make-sparse-keymap))
 
@@ -156,7 +156,7 @@
 
 ;; CShell mode
 (use-package csh-mode
-  :after sh-mode
+  :after sh-script
   :config (progn
             (dolist (elt interpreter-mode-alist)
               (when (member (car elt) (list "csh" "tcsh"))
@@ -218,7 +218,6 @@
              emamux:interrupt-runner
              emamux:copy-kill-ring
              emamux:yank-from-list-buffers))
-
 
 (use-package multi-term
   :commands (multi-term
