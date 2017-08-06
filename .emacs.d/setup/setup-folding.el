@@ -143,6 +143,7 @@
 
 ;; org-style folding/unfolding in hideshow
 (use-package hideshow-org
+  :defer t
   :after hideshow
   :init (progn
           (setq hs-org/trigger-keys-block (list (kbd "C-c +")))
@@ -152,16 +153,22 @@
 
 ;; Yet Another Folding - folding code blocks based on indentation
 (use-package yafolding
-  :demand t
+  :defer t
   :after hideshow
   :load-path (lambda () (expand-file-name "yafolding/" user-emacs-directory))
-  :commands yafolding-toggle-element
+  :commands (yafolding-toggle-element
+             yafolding-toggle-all
+             yafolding-show-element
+             yafolding-show-all
+             yafolding-hide-element
+             yafolding-hide-all)
   :config (progn
             (setq yafolding-ellipsis-content " ... ")
             (set-face-attribute 'yafolding-ellipsis-face nil :inherit 'my/fold-face)))
 
 ;; Enable fold dwim (do what i mean)
 (use-package fold-dwim
+  :defer t
   :after (hideshow-org yafolding)
   :bind ("C-c C-f" . my/fold-dwim)
   :config (progn
@@ -187,7 +194,7 @@
               "Store the symbol of the last function called using `my/fold-dwim'.")
 
             (defun my/fold-dwim (&optional beg end)
-              "If region is selected use `fold-this', else use `toggle-fold'.
+              "If region is selected use `fold-this', else use `yafolding-toggle-element'.
 If prefix argument is used, `set-selective-display' to the current column."
               (interactive "r")
               (let ((message-log-max nil))
@@ -219,11 +226,10 @@ If prefix argument is used, `set-selective-display' to the current column."
 ;; Visual hideshow mode
 (use-package hideshowvis
   :if (display-graphic-p)
-  :demand t
+  :defer t
   :after (hideshow hideshow-org fold-dwim)
   :commands (hideshowvis-minor-mode
-             hideshowvis-enable
-             hideshowvis-settings)
+             hideshowvis-enable)
   :init (progn
           ;; enable `hs-minor-mode' and 'hideshowvis-minor-mode
           (dolist (hook my/hideshow-modes)
@@ -246,74 +252,75 @@ If prefix argument is used, `set-selective-display' to the current column."
                                                      24  ; 0 0 0 ▮ ▮ 0 0 0
                                                      0]) ; 0 0 0 0 0 0 0 0
 
-              (defface my/hs-fringe-face
-                '((t (:foreground "#888"
-                                  :box (:line-width 2 :color "grey75" :style released-button))))
-                "Face used to highlight the fringe on folded regions"
-                :group 'hideshow)
+            (defface my/hs-fringe-face
+              '((t (:foreground "#888"
+                                :box (:line-width 2 :color "grey75" :style released-button))))
+              "Face used to highlight the fringe on folded regions"
+              :group 'hideshow)
 
-              ;; Redefine display functions
-              (defun display-code-line-counts (ov)
-                (when (eq 'code (overlay-get ov 'hs))
-                  (let* ((marker-string "*fringe-dummy*")
-                         (marker-length (length marker-string))
-                         (display-string (format " ... %s <%d> ... "
+            ;; Redefine display functions
+            (defun display-code-line-counts (ov)
+              (when (eq 'code (overlay-get ov 'hs))
+                (let* ((marker-string "*fringe-dummy*")
+                       (marker-length (length marker-string))
+                       (display-string (format " ... %s <%d> ... "
+                                               (replace-regexp-in-string
+                                                "\n" ""
+                                                (replace-regexp-in-string
+                                                 "^[ \t]*" ""
                                                  (replace-regexp-in-string
-                                                  "\n" ""
-                                                  (replace-regexp-in-string
-                                                   "^[ \t]*" ""
-                                                   (replace-regexp-in-string
-                                                    "[ \t]*$" ""
-                                                    (buffer-substring (overlay-start ov)
-                                                                      (+ (overlay-start ov) 40)))))
-                                                 (count-lines (overlay-start ov)
-                                                              (overlay-end ov)))))
-                    (overlay-put ov 'help-echo "Hidden text... ")
-                    (put-text-property 0 marker-length 'display (list 'left-fringe 'hs-expand-bitmap 'my/hs-fringe-face) marker-string)
-                    (overlay-put ov 'before-string marker-string)
-                    (put-text-property 1 (length display-string) 'face 'my/fold-face display-string)
-                    (overlay-put ov 'display display-string))))
-              (setq hs-set-up-overlay 'display-code-line-counts)
+                                                  "[ \t]*$" ""
+                                                  (buffer-substring (overlay-start ov)
+                                                                    (+ (overlay-start ov) 40)))))
+                                               (count-lines (overlay-start ov)
+                                                            (overlay-end ov)))))
+                  (overlay-put ov 'help-echo "Hidden text... ")
+                  (put-text-property 0 marker-length 'display (list 'left-fringe 'hs-expand-bitmap 'my/hs-fringe-face) marker-string)
+                  (overlay-put ov 'before-string marker-string)
+                  (put-text-property 1 (length display-string) 'face 'my/fold-face display-string)
+                  (overlay-put ov 'display display-string))))
+            (setq hs-set-up-overlay 'display-code-line-counts)
 
-              (defadvice folding-subst-regions (around toggle-fringe (list find replace) activate)
-                ad-do-it
-                (save-excursion
-                  (while list
-                    (let* ((begin (car list))
-                           (end (cadr list))
-                           bol eol
-                           (marker-string "*fringe-dummy*")
-                           (marker-length (length marker-string)))
-                      (dolist (ov (overlays-in begin end))
-                        (when (overlay-get ov 'fringe-folding-p)
-                          (delete-overlay ov)))
-                      (when (and (eq find ?\n) (eq replace ?\r))
-                        ;; \\n -> \\r add fringe
-                        (goto-char begin)
-                        (search-forward "\r")
-                        (forward-char -1)
-                        (let* ((ov (make-overlay (point) end))
-                               (display-string (format " ... %s <%d> ... "
+            (defadvice folding-subst-regions (around toggle-fringe (list find replace) activate)
+              ad-do-it
+              (save-excursion
+                (while list
+                  (let* ((begin (car list))
+                         (end (cadr list))
+                         bol eol
+                         (marker-string "*fringe-dummy*")
+                         (marker-length (length marker-string)))
+                    (dolist (ov (overlays-in begin end))
+                      (when (overlay-get ov 'fringe-folding-p)
+                        (delete-overlay ov)))
+                    (when (and (eq find ?\n) (eq replace ?\r))
+                      ;; \\n -> \\r add fringe
+                      (goto-char begin)
+                      (search-forward "\r")
+                      (forward-char -1)
+                      (let* ((ov (make-overlay (point) end))
+                             (display-string (format " ... %s <%d> ... "
+                                                     (replace-regexp-in-string
+                                                      "\n" ""
+                                                      (replace-regexp-in-string
+                                                       "^[ \t]*" ""
                                                        (replace-regexp-in-string
-                                                        "\n" ""
-                                                        (replace-regexp-in-string
-                                                         "^[ \t]*" ""
-                                                         (replace-regexp-in-string
-                                                          "[ \t]*$" ""
-                                                          (buffer-substring (overlay-start ov)
-                                                                            (+ (overlay-start ov) 40)))))
-                                                       (count-lines (overlay-start ov)
-                                                                    (overlay-end ov)))))
-                          (put-text-property 0 marker-length 'display (list 'left-fringe 'hs-marker 'my/hs-fringe-face) marker-string)
-                          (overlay-put ov 'before-string marker-string)
-                          (put-text-property 1 (length display-string) 'face 'my/fold-face display-string)
-                          (overlay-put ov 'display display-string)
-                          (overlay-put ov 'priority 9999)
-                          (overlay-put ov 'fringe-folding-p t))))
-                    (setq list (cdr (cdr list))))))))
+                                                        "[ \t]*$" ""
+                                                        (buffer-substring (overlay-start ov)
+                                                                          (+ (overlay-start ov) 40)))))
+                                                     (count-lines (overlay-start ov)
+                                                                  (overlay-end ov)))))
+                        (put-text-property 0 marker-length 'display (list 'left-fringe 'hs-marker 'my/hs-fringe-face) marker-string)
+                        (overlay-put ov 'before-string marker-string)
+                        (put-text-property 1 (length display-string) 'face 'my/fold-face display-string)
+                        (overlay-put ov 'display display-string)
+                        (overlay-put ov 'priority 9999)
+                        (overlay-put ov 'fringe-folding-p t))))
+                  (setq list (cdr (cdr list))))))))
 
 ;; vim-like fold
 (use-package vimish-fold
+  :defer t
   :commands (vimish-fold-mode vimish-fold-global-mode)
   :bind (:map vimish-fold-folded-keymap
               ("<tab>" . vimish-fold-unfold)

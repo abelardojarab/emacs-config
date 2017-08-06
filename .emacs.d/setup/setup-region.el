@@ -45,10 +45,10 @@
   :commands (region-bindings-mode region-bindings-mode-enable)
   :bind (:map region-bindings-mode-map
               ;; shift select bindings
-              ("<prior>" . shift-mark-backward-page)
-              ("<next>"  . shift-mark-forward-page)
-              ("<left>"  . shift-mark-backward-char)
-              ("<right>" . shift-mark-forward-char)
+              ("<prior>"           . shift-mark-backward-page)
+              ("<next>"            . shift-mark-forward-page)
+              ("<left>"            . shift-mark-backward-char)
+              ("<right>"           . shift-mark-forward-char)
 
               ;; movement bindings
               ([(meta shift up)]   . move-text-up)
@@ -56,13 +56,23 @@
               ("<"                 . decrease-left-margin)
               (">"                 . increase-right-margin)
 
-              ("C-x C-c" . clipboard-kill-ring-save)
-              ("C-x C-x" . clipboard-kill-region)
-              ("C-x C-k" . kill-line)
+              ;; cua bindings
+              ("C-x C-c"           . clipboard-kill-ring-save)
+              ("C-x C-x"           . clipboard-kill-region)
+              ("C-x C-k"           . kill-line)
 
-              ("c" . kill-ring-save)
-              ("x" . kill-region))
-  :init (region-bindings-mode-enable))
+              ;; convenience bindings
+              ("c"                 . kill-ring-save)
+              ("x"                 . kill-region)
+              ("<C-SPC>"           . my/disable-rbm-deactivate-mark))
+  :init (region-bindings-mode-enable)
+  :config (progn
+            (defun my/disable-rbm-deactivate-mark ()
+              "Disable `region-bindings-mode' and deactivate mark."
+              (interactive)
+              (region-bindings-mode -1)
+              (deactivate-mark)
+              (message "Mark deactivated"))))
 
 (provide 'setup-region)
 ;;; setup-region.el ends here
