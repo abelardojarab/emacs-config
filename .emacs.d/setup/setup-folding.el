@@ -150,7 +150,7 @@
   :commands hs-org/minor-mode
   :load-path (lambda () (expand-file-name "hideshow-org/" user-emacs-directory)))
 
-;;; Yet Another Folding - folding code blocks based on indentation
+;; Yet Another Folding - folding code blocks based on indentation
 (use-package yafolding
   :demand t
   :after hideshow
