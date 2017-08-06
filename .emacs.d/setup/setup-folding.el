@@ -50,8 +50,109 @@
               (ignore-errors
                 (font-lock-add-keywords nil (folding-font-lock-keywords major-mode))))))
 
+;; fold this - folds selected region
+(use-package fold-this
+  :defer t
+  :after region-bindings-mode
+  :load-path (lambda () (expand-file-name "fold-this/" user-emacs-directory))
+  :init (setq fold-this-persistent-folds-file "~/.emacs.cache/folds-saved")
+  :bind (:map fold-this-keymap
+              ;; left-click on ellipsis to unfold
+              ("<mouse-1>" . fold-this-unfold-at-point)
+              :map region-bindings-mode-map
+              ("&"         . fold-this))
+  :commands (fold-this fold-this-unfold-at-point)
+  :config (progn
+            (setq fold-this-persistent-folds t)
+
+            (defface my/fold-face
+              '((t (:foreground "deep sky blue" :slant italic)))
+              "Face used for fold ellipsis.")
+
+            (defvar my/fold-this--last-overlay nil
+              "Store the last overlay created by `fold-this'.")
+
+            ;; Patch the original `fold-this' command to save the overlay to the var
+            ;; `my/fold-this--last-overlay' and tweak the 'display property of the
+            ;; overlay
+            (defun fold-this (beg end)
+              (interactive "r")
+              (let ((o (make-overlay beg end nil t nil)))
+                (overlay-put o 'type 'fold-this)
+                (overlay-put o 'invisible t)
+                (overlay-put o 'keymap fold-this-keymap)
+                (overlay-put o 'face 'my/fold-face)
+                (overlay-put o 'modification-hooks '(fold-this--unfold-overlay))
+                (overlay-put o 'display (propertize " « » " 'face 'my/fold-face))
+                (overlay-put o 'evaporate t)
+                (setq my/fold-this--last-overlay o))
+              (deactivate-mark))))
+
+;; hideshow (hs-minor-mode)
+(use-package hideshow
+  :defer t
+  :diminish hs-minor-mode
+  :commands (hs-toggle-hiding
+             toggle-fold
+             toggle-fold-all
+             toggle-hide-all)
+  :config (progn
+
+            ;; default 'code, options: 'comment, t, nil
+            (setq hs-isearch-open 'code)
+
+            (defvar hs-special-modes-alist
+              (mapcar 'purecopy
+                      '((c-mode "{" "}" "/[*/]" nil nil)
+                        (c++-mode "{" "}" "/[*/]" nil nil)
+                        (bibtex-mode ("@\\S(*\\(\\s(\\)" 1))
+                        (java-mode "{" "}" "/[*/]" nil nil)
+                        (js-mode "{" "}" "/[*/]" nil)
+                        (javascript-mode  "{" "}" "/[*/]" nil))")"))
+
+            ;; Support to toggle/untoggle all
+            (defvar hs-hide-all nil "Current state of hideshow for toggling all.")
+            (make-local-variable 'hs-hide-all)
+
+            (defun toggle-hide-all ()
+              "Toggle hideshow all."
+              (interactive)
+              (setq hs-hide-all (not hs-hide-all))
+              (if hs-hide-all
+                  (hs-hide-all)
+                (hs-show-all)))
+
+            (defvar fold-all-fun nil "Function to fold all.")
+            (make-variable-buffer-local 'fold-all-fun)
+            (defvar fold-fun nil "Function to fold.")
+            (make-variable-buffer-local 'fold-fun)
+
+            (defun toggle-fold-all ()
+              "Toggle fold all."
+              (interactive)
+              (if fold-all-fun
+                  (call-interactively fold-all-fun)
+                (toggle-hide-all)))
+
+            (defun toggle-fold ()
+              "Toggle fold."
+              (interactive)
+              (if fold-fun
+                  (call-interactively fold-fun)
+                (hs-toggle-hiding)))))
+
+;; org-style folding/unfolding in hideshow
+(use-package hideshow-org
+  :after hideshow
+  :init (progn
+          (setq hs-org/trigger-keys-block (list (kbd "C-c -")))
+          (setq hs-org/trigger-keys-all (list (kbd "C-c C-+"))))
+  :commands hs-org/minor-mode*
+  :load-path (lambda () (expand-file-name "hideshow-org/" user-emacs-directory)))
+
 ;; Enable fold dwim (do what i mean)
 (use-package fold-dwim
+  :bind ("C-c +" . my/fold-dwim)
   :config (progn
             (defun folding-marker-p (&optional pos)
               (eq (get-char-property (or pos (point)) 'face) 'fringe))
@@ -68,36 +169,57 @@
                     (let ((hs-hide-comments-when-hiding-all nil))
                       ad-do-it)
                     (folding-mode))
-                ad-do-it))))
+                ad-do-it))
 
-;; hideshow (hs-minor-mode)
-(use-package hideshow
-  :defer t
-  :commands hs-toggle-hiding)
+            ;; DWIM
+            (defvar my/fold-dwim--last-fn nil
+              "Store the symbol of the last function called using `my/fold-dwim'.")
+
+            (defun my/fold-dwim (&optional beg end)
+              "If region is selected use `fold-this', else use `toggle-fold'.
+If prefix argument is used, `set-selective-display' to the current column."
+              (interactive "r")
+              (let ((message-log-max nil))
+                (if (region-active-p)
+                    (progn
+                      (fold-this beg end)
+                      (setq my/fold-dwim--last-fn #'fold-this)
+                      (message "Folded the selected region using %s."
+                               (propertize
+                                (symbol-name my/fold-dwim--last-fn)
+                                'face 'font-lock-function-name-face)))
+                  (if current-prefix-arg
+                      (progn
+                        (set-selective-display (current-column))
+                        (setq my/fold-dwim--last-fn #'set-selective-display)
+                        (message "Folded using %s at column %d."
+                                 (propertize
+                                  (symbol-name my/fold-dwim--last-fn)
+                                  'face 'font-lock-function-name-face)
+                                 (current-column)))
+                    (progn
+                      (toggle-fold)
+                      (setq my/fold-dwim--last-fn #'toggle-fold)
+                      (message "Folded at current indent level using %s."
+                               (propertize
+                                (symbol-name my/fold-dwim--last-fn)
+                                'face 'font-lock-function-name-face)))))))))
 
 ;; Visual hideshow mode
 (use-package hideshowvis
   :if (display-graphic-p)
-  :after hideshow
-  :commands (hideshowvis-enable toggle-fold toggle-fold-all hs-toggle-hiding-all)
-  :diminish hs-minor-mode
+  :after (hideshow hideshow-org fold-dwim)
+  :commands (hideshowvis-enable
+             hs-minor-mode-settings)
   :init (progn
           ;; enable `hs-minor-mode' and 'hideshowvis-minor-mode
           (dolist (hook my/hideshow-modes)
             (add-hook hook (lambda ()
                              (progn
                                (hs-minor-mode 1)
+                               (hs-org/minor-mode)
                                (hideshowvis-enable))))))
   :config (progn
-
-            (defvar hs-special-modes-alist
-              (mapcar 'purecopy
-                      '((c-mode "{" "}" "/[*/]" nil nil)
-                        (c++-mode "{" "}" "/[*/]" nil nil)
-                        (bibtex-mode ("@\\S(*\\(\\s(\\)" 1))
-                        (java-mode "{" "}" "/[*/]" nil nil)
-                        (js-mode "{" "}" "/[*/]" nil)
-                        (javascript-mode  "{" "}" "/[*/]" nil))")"))
 
             (defun hs-minor-mode-settings ()
               "settings of `hs-minor-mode'."
@@ -179,38 +301,17 @@
               ;; Add the following to your .emacs and uncomment it in order to get a right arrow symbol
               (define-fringe-bitmap 'hs-marker [0 32 48 56 60 56 48 32])
 
-              ;; Support to toggle/untoggle all
-              (defvar hs-hide-all nil "Current state of hideshow for toggling all.")
-              (make-local-variable 'hs-hide-all)
+              ;; + bitmap
+              (define-fringe-bitmap 'hs-expand-bitmap [0   ; 0 0 0 0 0 0 0 0
+                                                       24  ; 0 0 0 ▮ ▮ 0 0 0
+                                                       24  ; 0 0 0 ▮ ▮ 0 0 0
+                                                       126 ; 0 ▮ ▮ ▮ ▮ ▮ ▮ 0
+                                                       126 ; 0 ▮ ▮ ▮ ▮ ▮ ▮ 0
+                                                       24  ; 0 0 0 ▮ ▮ 0 0 0
+                                                       24  ; 0 0 0 ▮ ▮ 0 0 0
+                                                       0]) ; 0 0 0 0 0 0 0 0
 
-              (defun hs-toggle-hiding-all ()
-                "Toggle hideshow all."
-                (interactive)
-                (setq hs-hide-all (not hs-hide-all))
-                (if hs-hide-all
-                    (hs-hide-all)
-                  (hs-show-all)))
-
-              (defvar fold-all-fun nil "Function to fold all.")
-              (make-variable-buffer-local 'fold-all-fun)
-              (defvar fold-fun nil "Function to fold.")
-              (make-variable-buffer-local 'fold-fun)
-
-              (defun toggle-fold-all ()
-                "Toggle fold all."
-                (interactive)
-                (if fold-all-fun
-                    (call-interactively fold-all-fun)
-                  (hs-toggle-hiding-all)))
-
-              (defun toggle-fold ()
-                "Toggle fold."
-                (interactive)
-                (if fold-fun
-                    (call-interactively fold-fun)
-                  (hs-toggle-hiding))))
-
-            (hs-minor-mode-settings)))
+              (hs-minor-mode-settings))))
 
 ;; Origami mode
 (use-package origami

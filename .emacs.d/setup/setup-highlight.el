@@ -31,7 +31,7 @@
               ;; Unbind the "C-x w" bindings because "M-s h" bindings provide the same thing.
               ("C-x w" . nil)
               :map search-map
-              ("C-h" . my/unhighlight-all-in-buffer))
+              ("C-h"   . my/unhighlight-all-in-buffer))
   :commands (global-hi-lock-mode
              my/hi-lock-face-symbol-at-point-or-sel)
   :init (global-hi-lock-mode 1)
