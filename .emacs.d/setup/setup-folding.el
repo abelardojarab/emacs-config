@@ -145,8 +145,8 @@
 (use-package hideshow-org
   :after hideshow
   :init (progn
-          (setq hs-org/trigger-keys-block (list (kbd "C-c -")))
-          (setq hs-org/trigger-keys-all (list (kbd "C-c C-+"))))
+          (setq hs-org/trigger-keys-block (list (kbd "C-c C-+")))
+          (setq hs-org/trigger-keys-all (list (kbd "C-c C-*"))))
   :commands hs-org/minor-mode*
   :load-path (lambda () (expand-file-name "hideshow-org/" user-emacs-directory)))
 
