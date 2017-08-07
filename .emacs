@@ -23,6 +23,7 @@
 (add-to-list 'load-path (expand-file-name "setup/" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "use-package/" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "helm/" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "projectile/" user-emacs-directory))
 
 ;; Setup package
 (require 'setup-package)
