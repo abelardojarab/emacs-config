@@ -25,7 +25,7 @@
 ;;; Code:
 
 (use-package projectile
-  :defer 1
+  :demand t
   :diminish projectile-mode
   :defines (projectile-ignored-projects
             projectile-enable-caching)
@@ -50,7 +50,7 @@
                   projectile-globally-ignored-files (quote ("TAGS" "*.log" "*DS_Store" "node-modules")))))
 
 (use-package helm-projectile
-  :defer 1
+  :demand t
   :after (projectile helm-config)
   :load-path (lambda () (expand-file-name "helm-projectile/" user-emacs-directory))
   :config (progn

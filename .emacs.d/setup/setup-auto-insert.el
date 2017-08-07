@@ -26,8 +26,10 @@
 
 ;; Autoinsert skeletons and templates
 (use-package autoinsert
+  :after yasnippet
+  :commands auto-insert-mode
+  :init (auto-insert-mode t)
   :config (progn
-            (auto-insert-mode t)
 
             ;; This turns off the prompt that auto-insert-mode asks before
             ;; it actually inserts text/code for you
@@ -54,22 +56,24 @@
 
             (defadvice auto-insert (around yasnippet-expand-after-auto-insert activate)
               "Expand auto-inserted content as yasnippet template,
-  so that wE could use yasnippet in autoinsert mode "
+  so that we could use yasnippet in autoinsert mode "
               (let ((is-new-File (and (not buffer-read-only)
                                       (or (eq this-command 'auto-insert)
                                           (and auto-insert (bobp) (eobp))))))
                 ad-do-it
                 (let ((old-point-max (point-max)))
-                  (when is-new-File
+                  (when (and is-new-File yas-minor-mode)
                     (goto-char old-point-max)
                     (yas-expand-snippet (buffer-substring-no-properties (point-min) (point-max)))
                     (delete-region (point-min) old-point-max)))))))
 
-;; Automated auto-insert of Yasnippet templates on new files
+;; Automated auto-insert of yasnippet templates on new files
 (use-package yatemplate
+  :after (auto-insert-mode yasnippet)
   :defer 2 ;; WORKAROUND https://github.com/mineo/yatemplate/issues/3
   :load-path (lambda () (expand-file-name "yatemplate/" user-emacs-directory))
-  :config (yatemplate-fill-alist))
+  :init (yatemplate-fill-alist)
+  :commands yatemplate-fill-alist)
 
 (provide 'setup-auto-insert)
 ;;; setup-auto-insert.el ends here

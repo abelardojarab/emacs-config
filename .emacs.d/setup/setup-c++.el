@@ -135,9 +135,7 @@ code sections."
   :bind (:map c-mode-map
               ("C-c C-m" . moo-complete)
               :map c++-mode-map
-              ("C-c C-m" . moo-complete)
-              :map functions-args-mode-map
-              ("M-o"     . nil))
+              ("C-c C-m" . moo-complete))
   :init (add-hook 'c-mode-common-hook 'function-args-mode)
   :config (fa-config-default))
 

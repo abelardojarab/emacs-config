@@ -129,25 +129,27 @@
             (if (file-exists-p "~/.authinfo")
                 (add-to-list 'auth-sources "~/.authinfo"))))
 
-;; Provide utilities to interact with 'pass'
+;; Provide utilities to interact with 'pass' ("the standard Unix password keychain manager")
 (use-package password-store
   :demand t
-  :if (executable-find "pass")
-  :after pass
+  :if (and (equal system-type 'gnu/linux)
+           (executable-find "pass"))
   :load-path (lambda () (expand-file-name "password-store/" user-emacs-directory)))
 
-;; major-mode to manage 'pass' ("the standard Unix password keychain manager")
+;; major-mode to manage 'pass'
 (use-package pass
   :demand t
   :after password-store
-  :if (executable-find "pass")
+  :if (and (equal system-type 'gnu/linux)
+           (executable-find "pass"))
   :load-path (lambda () (expand-file-name "pass/" user-emacs-directory)))
 
-;; 'pass' provides interface to auth-source,
-;; which means that you no longer need to store passwords in the .authinfo file.
+;; 'pass' interface to auth-source,
+;; no longer need to store passwords in the .authinfo file
 (use-package auth-password-store
   :demand t
-  :if (executable-find "pass")
+  :if (and (equal system-type 'gnu/linux)
+           (executable-find "pass"))
   :after pass
   :load-path (lambda () (expand-file-name "auth-password-store/" user-emacs-directory))
   :config (auth-pass-enable))
