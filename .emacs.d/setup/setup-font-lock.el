@@ -26,59 +26,62 @@
 
 
 ;; Syntax coloring
-(global-font-lock-mode t)
-(setq font-lock-maximum-decoration nil)
-(setq font-lock-maximum-size (* 512 512))
-(setq font-lock-multiline t)
-(defun global-font-lock-mode-check-buffers () nil)
+(use-package font-lock
+  :demand t
+  :config (progn
+	    (global-font-lock-mode t)
+	    (setq font-lock-maximum-decoration nil
+		  font-lock-maximum-size (* 512 512)
+		  font-lock-multiline t)
+	    (defun global-font-lock-mode-check-buffers () nil)
 
-;; Do not fontify large files
-(defun my/find-file-check-make-large-file-read-only-hook ()
-  "If a file is over a given size, make the buffer read only."
-  (when (> (buffer-size) (* 512 512))
-    (setq buffer-read-only t)
-    (buffer-disable-undo)
-    (fundamental-mode)))
-(add-hook 'find-file-hook 'my/find-file-check-make-large-file-read-only-hook)
+	    ;; Do not fontify large files
+	    (defun my/find-file-check-make-large-file-read-only-hook ()
+	      "If a file is over a given size, make the buffer read only."
+	      (when (> (buffer-size) (* 512 512))
+		(setq buffer-read-only t)
+		(buffer-disable-undo)
+		(fundamental-mode)))
+	    (add-hook 'find-file-hook 'my/find-file-check-make-large-file-read-only-hook)
 
-;; In programming modes, make sure things like FIXME and TODO are highlighted so they stand out:
-(defun my/add-watchwords ()
-  "Highlight FIXME, TODO, and NOCOMMIT in code TODO"
-  (font-lock-add-keywords
-   nil '(("\\<\\(FIXME:?\\|TODO:?\\|NOCOMMIT:?\\)\\>"
-          1 '((:foreground "#d7a3ad") (:weight bold)) t))))
-(add-hook 'prog-mode-hook #'my/add-watchwords)
+	    ;; In programming modes, make sure things like FIXME and TODO are highlighted so they stand out:
+	    (defun my/add-watchwords ()
+	      "Highlight FIXME, TODO, and NOCOMMIT in code TODO"
+	      (font-lock-add-keywords
+	       nil '(("\\<\\(FIXME:?\\|TODO:?\\|NOCOMMIT:?\\)\\>"
+		      1 '((:foreground "#d7a3ad") (:weight bold)) t))))
+	    (add-hook 'prog-mode-hook #'my/add-watchwords)
 
-;; Displaying image tooltips in Emacs
-;; http://kitchingroup.cheme.cmu.edu/blog/2016/03/21/Displaying-image-overlays-on-image-filenames-in-Emacs/
-(defvar image-tooltip-re (concat  "\\(?3:'\\|\"\\)\\(?1:.*\\."
-                                  (regexp-opt '("png" "PNG" "JPG" "jpeg"
-                                                "jpg" "JPEG" "eps" "EPS"
-                                                "pdf" "PDF" "ps" "PS"))
-                                  "\\)\\(?:\\3\\)")
-  "Regexp to match image filenames in quotes")
+	    ;; Displaying image tooltips in Emacs
+	    ;; http://kitchingroup.cheme.cmu.edu/blog/2016/03/21/Displaying-image-overlays-on-image-filenames-in-Emacs/
+	    (defvar image-tooltip-re (concat  "\\(?3:'\\|\"\\)\\(?1:.*\\."
+					      (regexp-opt '("png" "PNG" "JPG" "jpeg"
+							    "jpg" "JPEG" "eps" "EPS"
+							    "pdf" "PDF" "ps" "PS"))
+					      "\\)\\(?:\\3\\)")
+	      "Regexp to match image filenames in quotes")
 
-;; Tooltip creation
-(defun image-tooltip (window object position)
-  (save-excursion
-    (goto-char position)
-    (let (beg end imgfile img s)
-      (while (not (looking-at image-tooltip-re))
-        (forward-char -1))
-      (setq imgfile (match-string-no-properties 1))
-      (when (file-exists-p imgfile)
-        (setq img (create-image (expand-file-name imgfile)
-                                'imagemagick nil :width 200))
-        (propertize "Look in the minibuffer"
-                    'display img)))))
+	    ;; Tooltip creation
+	    (defun image-tooltip (window object position)
+	      (save-excursion
+		(goto-char position)
+		(let (beg end imgfile img s)
+		  (while (not (looking-at image-tooltip-re))
+		    (forward-char -1))
+		  (setq imgfile (match-string-no-properties 1))
+		  (when (file-exists-p imgfile)
+		    (setq img (create-image (expand-file-name imgfile)
+					    'imagemagick nil :width 200))
+		    (propertize "Look in the minibuffer"
+				'display img)))))
 
-;; Enable tooltip in graphical mode
-(if (display-graphic-p)
-    (font-lock-add-keywords
-     nil
-     `((,image-tooltip-re
-        0 '(face font-lock-keyword-face
-                 help-echo image-tooltip)))))
+	    ;; Enable tooltip in graphical mode
+	    (if (display-graphic-p)
+		(font-lock-add-keywords
+		 nil
+		 `((,image-tooltip-re
+		    0 '(face font-lock-keyword-face
+			     help-echo image-tooltip)))))))
 
 ;; Colorize color strings
 (use-package rainbow-mode
