@@ -98,12 +98,6 @@
                         (make-local-variable 'company-backends)
                         (setq company-backends (copy-tree company-backends))
 
-                        ;; company-semantic configuration
-                        (if (executable-find "gcc")
-                            (setf (car company-backends)
-                                  (append '(company-semantic)
-                                          (car company-backends))))
-
                         ;; company-gtags configuration
                         (if (executable-find "global")
                             (setf (car company-backends)
