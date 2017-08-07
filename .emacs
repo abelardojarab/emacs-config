@@ -294,6 +294,9 @@
 ;; Setup dired plugins
 (require 'setup-dired-plugins)
 
+;; Setup keychain
+(require 'setup-keychain)
+
 ;; Setup gnus
 (require 'setup-gnus)
 
