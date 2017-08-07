@@ -26,6 +26,7 @@
 
 ;; Show-paren-mode: subtle blinking of matching paren (defaults are ugly)
 (use-package paren
+  :demand t
   :config (progn
             ;; Show paren-mode when off-screen
             (defadvice show-paren-function
@@ -39,16 +40,6 @@
                                          (char-equal (char-syntax cb) ?\) )
                                          (blink-matching-open))))
                 (when matching-text (message matching-text))))
-
-            ;; Opening bracket to be highlighted when the point is on the closing bracket
-            (defadvice show-paren-function
-                (around show-paren-closing-before
-                        activate compile)
-              (if (eq (syntax-class (syntax-after (point))) 5)
-                  (save-excursion
-                    (forward-char)
-                    ad-do-it)
-                ad-do-it))
 
             ;; Enable mode
             (show-paren-mode 1)))
@@ -64,8 +55,7 @@
             ;; disable pairing of ' in minibuffer
             (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)
 
-            ;; use smartparens to automatically indent correctly when opening
-            ;; a new block
+            ;; use smartparens to automatically indent correctly when opening new block
             (dolist (mode '(c-mode c++-mode java-mode))
               (sp-local-pair mode "{" nil :post-handlers '((apm-c-mode-common-open-block "RET"))))))
 
