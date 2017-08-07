@@ -79,6 +79,9 @@
 ;; Setup search
 (require 'setup-search)
 
+;; Setup keychain
+(require 'setup-keychain)
+
 ;; Setup tramp
 (require 'setup-tramp)
 
@@ -294,9 +297,6 @@
 
 ;; Setup dired plugins
 (require 'setup-dired-plugins)
-
-;; Setup keychain
-(require 'setup-keychain)
 
 ;; Setup gnus
 (require 'setup-gnus)
