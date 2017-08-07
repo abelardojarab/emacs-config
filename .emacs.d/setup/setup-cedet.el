@@ -174,13 +174,9 @@ On success, return the added project."
 
 ;; Show function in mode-line
 (use-package which-func
+  :defer t
+  :commands which-function-mode
   :config (progn
-            (which-function-mode 1)
-            (mapc (lambda (mode)
-                    (add-hook mode (lambda () (which-function-mode t))))
-                  '(prog-mode-hook
-                    org-mode-hook))
-
             ;; Enable which-function-mode for selected major modes
             (setq which-func-unknown "⊥"
                   which-func-maxout 1024
