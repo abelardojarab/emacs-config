@@ -24,17 +24,13 @@
 
 ;;; Code:
 
-;; Allow font-lock-mode to do background parsing
-;; (setq jit-lock-stealth-time 1
-;;       jit-lock-chunk-size 1000
-;;       jit-lock-defer-time 0.05)
 
 ;; Syntax coloring
 (global-font-lock-mode t)
-;; (setq font-lock-maximum-decoration t)
-;; (setq font-lock-maximum-size (* 512 512))
-;; (setq font-lock-multiline t)
-;; (defun global-font-lock-mode-check-buffers () nil)
+(setq font-lock-maximum-decoration nil)
+(setq font-lock-maximum-size (* 512 512))
+(setq font-lock-multiline t)
+(defun global-font-lock-mode-check-buffers () nil)
 
 ;; Do not fontify large files
 (defun my/find-file-check-make-large-file-read-only-hook ()
