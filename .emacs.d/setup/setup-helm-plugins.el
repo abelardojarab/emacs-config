@@ -343,5 +343,14 @@
   :after (helm git-modes request)
   :load-path (lambda () (expand-file-name "helm-hunks/" user-emacs-directory)))
 
+;; helm pass
+(use-package helm-pass
+  :defer t
+  :if (and (equal system-type 'gnu/linux)
+           (executable-find "pass"))
+  :commands (helm-pass)
+  :after (helm pass)
+  :load-path (lambda () (expand-file-name "helm-pass/" user-emacs-directory)))
+
 (provide 'setup-helm-plugins)
 ;;; setup-helm-plugins.el ends here
