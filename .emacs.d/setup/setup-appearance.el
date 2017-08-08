@@ -85,14 +85,8 @@ non-nil."
   :defer t
   :commands visual-fill-column-mode
   :load-path (lambda () (expand-file-name "visual-fill-column/" user-emacs-directory))
-  :config (progn
-            (setq-default visual-fill-column-center-text t
-                          visual-fill-column-fringes-outside-margins nil)
-
-            ;; Split windows vertically despite large margins, because Emacs otherwise
-            ;; refuses to vertically split windows with large margins
-            (setq split-window-preferred-function
-                  #'visual-fill-column-split-window-sensibly)))
+  :config (setq-default visual-fill-column-center-text t
+			visual-fill-column-fringes-outside-margins nil))
 
 ;; Just like the previous package, this one is also subtle.
 ;; It highlights characters that exceed a particular column margin. Very useful while coding.
