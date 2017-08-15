@@ -63,6 +63,7 @@
           "dracula"
           "eziam"
           "grandshell"
+          "exotica"
           "monochrome"
           "spacemacs"
           "apropospriate"))
@@ -84,6 +85,9 @@
     ("zenburn-bg+1"  . "#2F2F2F")
     ("zenburn-bg+2"  . "#3F3F3F")
     ("zenburn-bg+3"  . "#4F4F4F")))
+
+;; Font-core library
+(use-package font-core)
 
 ;; Tomorrow theme
 (add-to-list 'load-path (expand-file-name "themes/sanityinc-tomorrow-theme/" user-emacs-directory))
