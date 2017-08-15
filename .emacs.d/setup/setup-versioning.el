@@ -46,6 +46,22 @@
                     (overlay-put o 'invisible t)
                     (overlay-put o 'evaporate t))))))
 
+;; Display commit number that is associated with current line of code
+(use-package vc-msg
+  :defer t
+  :after (vc popup)
+  :commands vc-msg-show
+  :load-path (lambda () (expand-file-name "vc-msg/" user-emacs-directory))
+  :config (progn
+            (defun vc-msg-hook-setup (vcs-type commit-info)
+              ;; copy commit id to clipboard
+              (message (format "%s\n%s\n%s\n%s"
+                               (plist-get commit-info :id)
+                               (plist-get commit-info :author)
+                               (plist-get commit-info :author-time)
+                               (plist-get commit-info :author-summary))))
+            (add-hook 'vc-msg-hook 'vc-msg-hook-setup)))
+
 ;; psvn
 (use-package psvn
   :after vc
