@@ -74,5 +74,12 @@
               (deactivate-mark)
               (message "Mark deactivated"))))
 
+;; Fence edit, edit code blocks with proper fontification
+(use-package fence-edit
+  :defer t
+  :diminish fence-edit-mode
+  :load-path (lambda () (expand-file-name "fence-edit/" user-emacs-directory))
+  :commands fence-edit-code-at-point)
+
 (provide 'setup-region)
 ;;; setup-region.el ends here
