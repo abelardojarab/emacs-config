@@ -32,7 +32,7 @@
             (setq bookmark-save-flag 1)
             (setq-default bookmark-default-file "~/.emacs.cache/bookmarks")))
 
-;; Bookmarks
+;; Visible bookmarks
 (use-package bm
   :load-path (lambda () (expand-file-name "bm/" user-emacs-directory))
   :commands (bm-repository-load bm-buffer-restore bm-buffer-save bm-buffer-save-all bm-repository-save bm-toggle)
