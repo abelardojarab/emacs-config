@@ -53,13 +53,15 @@
 
 (use-package eshell
   :commands (eshell eshell-vertical eshell-horizontal)
-  :bind (("C-t"      . eshell)
-         ("C-c C-t"  . eshell)
+  :bind (("C-t"                     . eshell)
+         ("C-c C-t"                 . eshell)
          :map ctl-x-map
-         ("t"        . eshell)
+         ("t"                       . eshell)
          :map eshell-mode-map
-         (("C-c C-t" . quit-window)
-          ("C-t"     . quit-window)))
+         (("C-t"                    . quit-window)
+          ("C-c C-t"                . quit-window)
+          ([remap eshell-pcomplete] . helm-esh-pcomplete)
+          ("M-p"                    . helm-eshell-history)))
   :after helm
   :init  (progn
            ;; Fix lack of eshell-mode-map
@@ -79,17 +81,7 @@
                  eshell-aliases-file (concat user-emacs-directory ".eshell-aliases")
                  eshell-last-dir-ring-size 512))
   :config (progn
-            (add-hook 'eshell-mode-hook '(lambda ()
-                                           (define-key eshell-mode-map
-                                             [remap eshell-pcomplete]
-                                             'helm-esh-pcomplete)
-                                           (define-key eshell-mode-map
-                                             (kbd "M-p")
-                                             'helm-eshell-history)
-                                           (define-key eshell-mode-map
-                                             "\C-t"
-                                             'quit-window)
-                                           (eshell/export "NODE_NO_READLINE=1")))
+            (add-hook 'eshell-mode-hook '(lambda () (eshell/export "NODE_NO_READLINE=1")))
 
             ;; Vertical split eshell
             (defun eshell-vertical ()

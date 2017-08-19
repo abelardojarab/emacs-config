@@ -24,6 +24,30 @@
 
 ;;; Code:
 (use-package etags
+  :defer t
+  :commands (etags-create-or-update
+             etags-tags-completion-table
+             tags-completion-table)
+  :init (progn
+          ;; Descend into GTAGSLIBPATH if definition is not found
+          (setenv "GTAGSTHROUGH" "true")
+
+          ;; Use exhuberant ctags format
+          (setenv "GTAGSLABEL" "exuberant-ctags")
+
+          ;; Assure .gtags directory exists
+          (if (not (file-exists-p "~/.gtags"))
+              (make-directory "~/.gtags") t)
+          (setenv "GTAGSLIBPATH" "~/.gtags")
+
+          (if (file-exists-p "~/.gtags/TAGS")
+              (ignore-errors
+                (visit-tags-table "~/.gtags/TAGS"))
+            (with-temp-buffer (write-file "~/.gtags/TAGS")))
+
+          (setq tags-file-name "~/.gtags/TAGS"
+                tags-table-list (list tags-file-name)
+                (setq tags-add-tables t)))
   :config (progn
             (unless (fboundp 'push-tag-mark)
               (defun push-tag-mark ()
@@ -36,25 +60,6 @@
             (setq large-file-warning-threshold nil) ;; disable warnings
             (setq tags-revert-without-query t)
             (setq tags-always-build-completion-table t)
-
-            ;; Descend into GTAGSLIBPATH if definition is not found
-            (setenv "GTAGSTHROUGH" "true")
-
-            ;; Use exhuberant ctags format
-            (setenv "GTAGSLABEL" "exuberant-ctags")
-
-            ;; Assure .gtags directory exists
-            (if (not (file-exists-p "~/.gtags"))
-                (make-directory "~/.gtags") t)
-            (setenv "GTAGSLIBPATH" "~/.gtags")
-
-            (if (file-exists-p "~/.gtags/TAGS")
-                (ignore-errors
-                  (visit-tags-table "~/.gtags/TAGS"))
-              (with-temp-buffer (write-file "~/.gtags/TAGS")))
-            (setq tags-file-name "~/.gtags/TAGS")
-            (setq tags-table-list (list tags-file-name))
-            (setq tags-add-tables t)
 
             ;; etags creation
             (defun etags-create-or-update (dir-name)
@@ -142,6 +147,8 @@ tags table and its (recursively) included tags tables."
 ;; semantic-ia-fast-jump but this function is not defined in etags.el
 ;; of GNU emacs
 (use-package etags-select
+  :defer t
+  :after etags
   :commands (etags-select-find-tag ido-find-tag)
   :load-path (lambda () (expand-file-name "etags-select/" user-emacs-directory))
   :config (progn
@@ -158,6 +165,8 @@ tags table and its (recursively) included tags tables."
 
 ;; Etags table
 (use-package etags-table
+  :defer t
+  :commands update-etags-table
   :after projectile
   :config (progn
             (setq etags-table-alist
@@ -179,7 +188,11 @@ tags table and its (recursively) included tags tables."
 
 ;; Ctags
 (use-package ctags
+  :defer t
   :if (executable-find "ctags")
+  :commands (ctags-create-or-update
+             ctags-create-or-update-tags-table
+             ctags-search)
   :after projectile
   :config (progn
             ;; Helper functions for etags/ctags
@@ -193,6 +206,7 @@ tags table and its (recursively) included tags tables."
 
 ;; Gtags
 (use-package ggtags
+  :demand t
   :if (executable-find "global")
   :after eldoc
   :commands (ggtags-mode
