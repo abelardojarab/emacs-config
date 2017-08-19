@@ -45,9 +45,9 @@
                 (visit-tags-table "~/.gtags/TAGS"))
             (with-temp-buffer (write-file "~/.gtags/TAGS")))
 
-          (setq tags-file-name "~/.gtags/TAGS"
-                tags-table-list (list tags-file-name)
-                (setq tags-add-tables t)))
+          (setq tags-file-name "~/.gtags/TAGS")
+          (setq tags-table-list (list tags-file-name))
+          (setq tags-add-tables t))
   :config (progn
             (unless (fboundp 'push-tag-mark)
               (defun push-tag-mark ()
