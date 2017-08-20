@@ -67,54 +67,6 @@
               (setq-default tab-stop-list '(8 16 24 32 40 48 56 64 72 80 88 96 108)))
             (add-hook 'c-mode-common-hook 'my/c-mode-init)
 
-            ;; C++ 11 fontification
-            (add-to-list 'c++-font-lock-extra-types "auto")
-            (add-hook 'c++-mode-hook
-                      '(lambda ()
-                         (font-lock-add-keywords
-                          nil '(;; complete some fundamental keywords
-                                ("\\<\\(void\\|unsigned\\|signed\\|char\\|short\\|bool\\|int\\|long\\|float\\|double\\)\\>" . font-lock-keyword-face)
-                                ;; add the new C++11 keywords
-                                ("\\<\\(alignof\\|alignas\\|constexpr\\|decltype\\|noexcept\\|nullptr\\|static_assert\\|thread_local\\|override\\|final\\)\\>" . font-lock-keyword-face)
-                                ("\\<\\(char[0-9]+_t\\)\\>" . font-lock-keyword-face)
-                                ;; PREPROCESSOR_CONSTANT
-                                ("\\<[A-Z]+[A-Z_]+\\>" . font-lock-constant-face)
-                                ;; hexadecimal numbers
-                                ("\\<0[xX][0-9A-Fa-f]+\\>" . font-lock-constant-face)
-                                ;; integer/float/scientific numbers
-                                ("\\<[\\-+]*[0-9]*\\.?[0-9]+\\([ulUL]+\\|[eE][\\-+]?[0-9]+\\)?\\>" . font-lock-constant-face)
-                                ;; user-types (customize!)
-                                ("\\<[A-Za-z_]+[A-Za-z_0-9]*_\\(t\\|type\\|ptr\\)\\>" . font-lock-type-face)
-                                ("\\<\\(xstring\\|xchar\\)\\>" . font-lock-type-face)))) t)
-
-            ;; show #if 0 / #endif etc regions in comment face - taken from
-            ;; http://stackoverflow.com/questions/4549015/in-c-c-mode-in-emacs-change-face-of-code-in-if-0-endif-block-to-comment-fa
-            (defun c-mode-font-lock-if0 (limit)
-              "Fontify #if 0 / #endif as comments for c modes etc.
-Bound search to LIMIT as a buffer position to find appropriate
-code sections."
-              (save-restriction
-                (widen)
-                (save-excursion
-                  (goto-char (point-min))
-                  (let ((depth 0) str start start-depth)
-                    (while (re-search-forward "^\\s-*#\\s-*\\(if\\|else\\|endif\\)" limit 'move)
-                      (setq str (match-string 1))
-                      (if (string= str "if")
-                          (progn
-                            (setq depth (1+ depth))
-                            (when (and (null start) (looking-at "\\s-+0"))
-                              (setq start (match-end 0)
-                                    start-depth depth)))
-                        (when (and start (= depth start-depth))
-                          (c-put-font-lock-face start (match-beginning 0) 'font-lock-comment-face)
-                          (setq start nil))
-                        (when (string= str "endif")
-                          (setq depth (1- depth)))))
-                    (when (and start (> depth 0))
-                      (c-put-font-lock-face start (point) 'font-lock-comment-face)))))
-              nil)
-
             ;; ensure fill-paragraph takes doxygen @ markers as start of new
             ;; paragraphs properly
             (setq paragraph-start "^[ ]*\\(//+\\|\\**\\)[ ]*\\([ ]*$\\|@param\\)\\|^\f")))
@@ -191,12 +143,11 @@ code sections."
 (use-package basic-c-compile
   :commands (basic-c-compile-file basic-c-compile-run-c basic-c-compile-makefile)
   :load-path (lambda () (expand-file-name "basic-c-compile/" user-emacs-directory))
-  :config (progn
-            (setq basic-c-compiler "g++"
-                  basic-c-compile-all-files nil
-                  basic-c-compile-compiler-flags "-Wall -Werror -std=c++11"
-                  basic-c-compile-outfile-extension nil
-                  basic-c-compile-make-clean "find . -type f -executable -delete")))
+  :config (setq basic-c-compiler "g++"
+		basic-c-compile-all-files nil
+		basic-c-compile-compiler-flags "-Wall -Werror -std=c++11"
+		basic-c-compile-outfile-extension nil
+		basic-c-compile-make-clean "find . -type f -executable -delete"))
 
 (provide 'setup-c++)
 ;;; setup-c++.el ends here

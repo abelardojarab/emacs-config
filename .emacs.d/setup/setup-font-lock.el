@@ -34,8 +34,8 @@
                   font-lock-maximum-size       (* 512 512)
 		  font-lock-support-mode       'jit-lock-mode)
 	    (setq jit-lock-defer-time          0.5
-		  jit-lock-defer-contextually  t
-		  jit-lock-chunk-size	       10000
+		  jit-lock-defer-contextually  nil
+		  jit-lock-chunk-size	       8000
 		  jit-lock-stealth-load	       10
 		  jit-lock-stealth-time	       0.02
 		  jit-lock-stealth-nice	       0.01
