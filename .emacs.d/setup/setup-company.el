@@ -58,11 +58,11 @@
             (setq company-backends
                   '((company-capf           ;; `completion-at-point-functions'
                      company-yasnippet
-                     company-abbrev
-                     company-files          ;; files & directory
-                     company-keywords)
+                     company-keywords
+                     company-files)
                     (company-dabbrev
-                     company-dabbrev-code)))
+                     company-dabbrev-code
+		     company-abbrev)))
 
             ;; Add yasnippet support for all company backends
             ;; https://github.com/syl20bnr/spacemacs/pull/179
@@ -102,12 +102,6 @@
                         (if (executable-find "global")
                             (setf (car company-backends)
                                   (append '(company-gtags)
-                                          (car company-backends))))
-
-                        ;; company-c-headers configuration
-                        (if (executable-find "clang")
-                            (setf (car company-backends)
-                                  (append '(company-c-headers)
                                           (car company-backends))))
 
                         ;; irony and rtags configuration
@@ -196,6 +190,7 @@
 
 ;; Company C-headers
 (use-package company-c-headers
+  :disabled t
   :after company
   :if (executable-find "clang")
   :load-path (lambda () (expand-file-name "company-c-headers/" user-emacs-directory))
@@ -217,6 +212,7 @@
 
 ;; Irony C/C++ headers
 (use-package company-irony-c-headers
+  :disabled t
   :after (company irony company-irony)
   :if (executable-find "clang++")
   :load-path (lambda () (expand-file-name "company-irony-c-headers/" user-emacs-directory))

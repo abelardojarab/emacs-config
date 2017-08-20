@@ -35,6 +35,7 @@
                   scroll-preserve-screen-position 'always
                   scroll-up-aggressively 0.01
                   scroll-down-aggressively 0.01
+                  fast-but-imprecise-scrolling t
                   auto-window-vscroll nil)
 
             (smooth-scrolling-mode 1)))

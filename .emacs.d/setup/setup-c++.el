@@ -25,6 +25,7 @@
 ;;; Code:
 
 (use-package cc-mode
+  :load-path (lambda () (expand-file-name "cc-mode/" user-emacs-directory))
   :bind (:map c-mode-map
               ("C-c C-o" . ff-find-other-file)
               :map c++-mode-map

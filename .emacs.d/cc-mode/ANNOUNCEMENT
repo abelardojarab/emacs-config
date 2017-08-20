@@ -1,0 +1,21 @@
+Release Announcement
+CC Mode Version 5.33
+Alan Mackenzie
+
+This message announces the availability of a new version of CC Mode,
+an Emacs and XEmacs mode for editing C (ANSI and K&R), C++,
+Objective-C, Java, CORBA's IDL, Pike and AWK code.
+
+A list of user visible changes is detailed in the NEWS file and in the
+URL listed below.  More information, including links to download the
+source, are available on the CC Mode web page:
+
+    <http://cc-mode.sourceforge.net/>
+
+Send email correspondence to
+
+    bug-cc-mode@gnu.org
+
+For a list of changes please see
+
+    <http://cc-mode.sourceforge.net/changes-533.php>
