@@ -145,9 +145,25 @@
 
 ;; alert is a Growl-workalike for Emacs which uses a common notifications
 (use-package alert
+  :demand t
   :load-path (lambda () (expand-file-name "alert/" user-emacs-directory))
   :config (when (eq system-type 'gnu/linux)
             (setq alert-default-style 'notifications)))
+
+;; intelligent code search for Emacs lisp.
+(use-package elisp-refs
+  :defer t
+  :after (list-utils loop)
+  :load-path (lambda () (expand-file-name "elisp-refs/" user-emacs-directory)))
+
+;; Improved help system
+(use-package helpful
+  :demand t
+  :after elisp-refs
+  :load-path (lambda () (expand-file-name "helpful/" user-emacs-directory))
+  :bind (("C-h f" . helpful-function)
+         ("C-h x" . helpful-command)
+         ("C-h z" . helpful-macro)))
 
 (provide 'setup-general)
 ;;; setup-general.el ends here

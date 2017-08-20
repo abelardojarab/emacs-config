@@ -71,6 +71,9 @@
 ;; Inhibit startup window, very annoying
 (setq inhibit-startup-message t)
 
+;; Do not ask if I really want to load large files
+(setq large-file-warning-threshold nil)
+
 ;; Features
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-page 'disabled nil)
