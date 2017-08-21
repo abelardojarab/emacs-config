@@ -36,14 +36,6 @@
             ;; Make gnutls a bit safer
             (setq gnutls-min-prime-bits 4096)))
 
-;; Keychain access
-(use-package keychain-environment
-  :if (equal system-type 'gnu/linux)
-  :load-path (lambda () (expand-file-name "keychain-environment/" user-emacs-directory))
-  :commands keychain-refresh-environment
-  :defer 60
-  :init (keychain-refresh-environment))
-
 ;; Keeping Secrets in Emacs with GnuPG & EasyPG
 (use-package epg
   :config (progn
@@ -76,6 +68,15 @@
             ;; https://github.com/stsquad/my-emacs-stuff/blob/master/my-gpg.el
             ;; Disable External Pin Entry
             (setenv "GPG_AGENT_INFO" nil)))
+
+;; Keychain access
+(use-package keychain-environment
+  :after epg
+  :demand t
+  :if (equal system-type 'gnu/linux)
+  :load-path (lambda () (expand-file-name "keychain-environment/" user-emacs-directory))
+  :commands keychain-refresh-environment
+  :init (keychain-refresh-environment))
 
 ;; Enable encryption/decryption of .gpg files
 (use-package epa-file
