@@ -36,16 +36,6 @@
               ([up]  . previous-history-element)
               :map ido-file-dir-completion-map
               ("C-v" . ido-yank))
-  :init (progn
-          ;; `defvar's to prevent compile warnings
-          (defvar ido-use-merged-list        nil)
-          (defvar ido-directory-too-big      nil)
-          (defvar ido-cur-item               nil)
-          (defvar ido-cur-list               nil)
-          (defvar ido-default-item           nil)
-          (defvar predicate                  nil)
-          (defvar inherit-input-method       nil)
-          (defvar ido-context-switch-command nil))
   :config (progn
             (ido-mode 'both)
             (ido-everywhere 1)
