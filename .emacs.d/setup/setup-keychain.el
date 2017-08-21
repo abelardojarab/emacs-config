@@ -36,8 +36,18 @@
             ;; Make gnutls a bit safer
             (setq gnutls-min-prime-bits 4096)))
 
+;; Keychain access
+(use-package keychain-environment
+  :demand t
+  :if (equal system-type 'gnu/linux)
+  :load-path (lambda () (expand-file-name "keychain-environment/" user-emacs-directory))
+  :commands keychain-refresh-environment
+  :init (keychain-refresh-environment))
+
 ;; Keeping Secrets in Emacs with GnuPG & EasyPG
 (use-package epg
+  :demand t
+  :after keychain-environment
   :config (progn
             ;; https://www.masteringemacs.org/article/keeping-secrets-in-emacs-gnupg-auth-sources
             (if (executable-find "gpg2")
@@ -54,8 +64,8 @@
               "Tweak DISPLAY and GPG_TTY environment variables as appropriate to `FRAME'."
               (when (not frame)
                 (setq frame (selected-frame)))
-              (when (fboundp 'keychain-refresh-environment)
-                (keychain-refresh-environment))
+              (my/squash-gpg)
+              (keychain-refresh-environment)
               (if (display-graphic-p frame)
                   (setenv "DISPLAY" (terminal-name frame))
                 (setenv "GPG_TTY" (terminal-name frame))
@@ -63,23 +73,11 @@
 
             (when (getenv "DISPLAY")
               (add-hook 'after-make-frame-functions 'my/fixup-gpg-agent)
-              (add-hook 'focus-in-hook 'my/fixup-gpg-agent))
-
-            ;; https://github.com/stsquad/my-emacs-stuff/blob/master/my-gpg.el
-            ;; Disable External Pin Entry
-            (setenv "GPG_AGENT_INFO" nil)))
-
-;; Keychain access
-(use-package keychain-environment
-  :after epg
-  :demand t
-  :if (equal system-type 'gnu/linux)
-  :load-path (lambda () (expand-file-name "keychain-environment/" user-emacs-directory))
-  :commands keychain-refresh-environment
-  :init (keychain-refresh-environment))
+              (add-hook 'focus-in-hook 'my/fixup-gpg-agent))))
 
 ;; Enable encryption/decryption of .gpg files
 (use-package epa-file
+  :defer t
   :commands epa-file-enable
   :config  (progn
              ;; 'silent to use symmetric encryption
@@ -87,16 +85,15 @@
              ;; t to always ask for a user
              ;; (setq epa-file-select-keys t)
 
-             (setq epa-file-name-regexp "\\.\\(gpg\\|asc\\)$"
-                   epa-armor t)
-             (epa-file-name-regexp-update)
-             (epa-file-enable)))
+             (setq epa-file-name-regexp "\\.\\(gpg\\|asc\\)$")
+             (epa-file-name-regexp-update)))
 
 ;; EasyPG Emacs assistant
 (use-package epa
-  :defer t
+  :demand t
   :config (progn
-            (setq epa-popup-info-window nil)
+            (setq epa-popup-info-window nil
+                  epa-armor             t)
 
             ;; https://github.com/jwiegley/dot-emacs/blob/master/dot-gnus.el
             (defun epa--key-widget-value-create (widget)
