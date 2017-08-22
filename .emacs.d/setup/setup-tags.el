@@ -239,6 +239,44 @@ tags table and its (recursively) included tags tables."
                           (setq-local eldoc-documentation-function #'ggtags-eldoc-function)
                           (setq-local imenu-create-index-function #'ggtags-build-imenu-index))))
 
+	    (defun ggtags-find-project ()
+	      ;; See https://github.com/leoliu/ggtags/issues/42
+	      ;;
+	      ;; It is unsafe to cache `ggtags-project-root' in non-file buffers
+	      ;; whose `default-directory' can often change.
+	      (unless (equal ggtags-last-default-directory default-directory)
+		(kill-local-variable 'ggtags-project-root))
+	      (let ((project (gethash ggtags-project-root ggtags-projects)))
+		(if (ggtags-project-p project)
+		    (if (ggtags-project-expired-p project)
+			(progn
+			  (remhash ggtags-project-root ggtags-projects)
+			  (ggtags-find-project))
+		      project)
+		  (setq ggtags-last-default-directory default-directory)
+		  (setq ggtags-project-root
+			(or (ignore-errors
+			      (file-name-as-directory
+			       (concat (file-remote-p (projectile-project-root))
+				       ;; Resolves symbolic links
+				       (ggtags-process-string "global" "-pr"))))
+			    ;; 'global -pr' resolves symlinks before checking the
+			    ;; GTAGS file which could cause issues such as
+			    ;; https://github.com/leoliu/ggtags/issues/22, so
+			    ;; let's help it out.
+			    ;;
+			    ;; Note: `locate-dominating-file' doesn't accept
+			    ;; function for NAME before 24.3.
+			    (let ((dir (locate-dominating-file (projectile-project-root) "GTAGS")))
+			      ;; `file-truename' may strip the trailing '/' on
+			      ;; remote hosts, see http://debbugs.gnu.org/16851
+			      (and dir (file-regular-p (expand-file-name "GTAGS" dir))
+				   (file-name-as-directory (file-truename dir))))))
+		  (when ggtags-project-root
+		    (if (gethash ggtags-project-root ggtags-projects)
+			(ggtags-find-project)
+		      (ggtags-make-project ggtags-project-root))))))
+
             (defun gtags-create-or-update ()
               "Create or update the GNU-Global tag file"
               (interactive
