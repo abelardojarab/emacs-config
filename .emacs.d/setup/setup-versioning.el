@@ -512,65 +512,31 @@
   :load-path (lambda () (expand-file-name "git-messenger/" user-emacs-directory)))
 
 ;; Show git state for individual lines on the margin
-(use-package git-gutter+
+(use-package git-gutter
   :if (executable-find "git")
-  :diminish git-gutter+-mode
+  :diminish git-gutter-mode
   :after magit
-  :load-path (lambda () (expand-file-name "git-gutter-plus/" user-emacs-directory))
-  :config (progn
-            ;; auto-save-buffer calls write-file which doesn't naturally call the git-gutter refresh fn
-            (defadvice write-file (after write-file-git-gutter-mode activate) (git-gutter+-refresh))
-            (defadvice refresh-file (after write-file-git-gutter-mode activate) (git-gutter+-refresh))
-
-            ;; http://stackoverflow.com/questions/23344540/emacs-update-git-gutter-annotations-when-staging-or-unstaging-changes-in-magit
-            (defvar my/magit-after-stage-hooks nil
-              "Hooks to be run after staging one item in magit.")
-
-            (defvar my/magit-after-unstage-hooks nil
-              "Hooks to be run after unstaging one item in magit.")
-
-            (defadvice magit-stage-item (after run-my-after-stage-hooks activate)
-              "Run `my/magit-after-stage-hooks` after staging an item in magit."
-              (when (called-interactively-p 'interactive)
-                (run-hooks 'my/magit-after-stage-hooks)))
-
-            (defadvice magit-unstage-item (after run-my-after-unstage-hooks activate)
-              "Run `my/magit-after-unstage-hooks` after unstaging an item in magit."
-              (when (called-interactively-p 'interactive)
-                (run-hooks 'my/magit-after-unstage-hooks)))
-
-            (defun my/refresh-visible-git-gutter-buffers ()
-              "Refresh git-gutter-mode on all visible git-gutter-mode buffers."
-              (interactive)
-              (dolist (buff (buffer-list))
-                (with-current-buffer buff
-                  (when (and git-gutter+-mode (get-buffer-window buff))
-                    (git-gutter+-mode t)
-                    (git-gutter+-refresh)))))
-
-            (add-hook 'my/magit-after-unstage-hooks
-                      'my/refresh-visible-git-gutter-buffers)
-            (add-hook 'my/magit-after-stage-hooks
-                      'my/refresh-visible-git-gutter-buffers)
-            (add-hook 'magit-post-refresh-hook
-                      'my/refresh-visible-git-gutter-buffers)
-
-            (global-git-gutter+-mode t)))
+  :load-path (lambda () (expand-file-name "git-gutter/" user-emacs-directory))
+  :commands global-git-gutter-mode)
 
 ;; Use fringe instead of margin for git-gutter-plus
-(use-package git-gutter-fringe+
-  :if (display-graphic-p)
-  :after git-gutter+
-  :load-path (lambda () (expand-file-name "git-gutter-fringe-plus/" user-emacs-directory))
+(use-package git-gutter-fringe
+  :if (and (executable-find "git")
+           (display-graphic-p))
+  :after git-gutter
+  :load-path (lambda () (expand-file-name "git-gutter-fringe/" user-emacs-directory))
+  :demand t
   :config (progn
-            (set-face-foreground 'git-gutter-fr+-modified "LightSeaGreen")
-            (set-face-foreground 'git-gutter-fr+-added    "SeaGreen")
-            (set-face-foreground 'git-gutter-fr+-deleted  "red")
 
             ;; Please adjust fringe width if your own sign is too big.
-            (setq-default left-fringe-width 20)
+            (setq-default left-fringe-width  20)
+            (setq-default right-fringe-width 20)
+            (setq git-gutter-fr:side 'left-fringe)
+            (set-face-foreground 'git-gutter-fr:modified "yellow")
+            (set-face-foreground 'git-gutter-fr:added    "blue")
+            (set-face-foreground 'git-gutter-fr:deleted  "white")
 
-            (fringe-helper-define 'git-gutter-fr+-added nil
+            (fringe-helper-define 'git-gutter-fr:added nil
               ".XXXXXX."
               "XXxxxxXX"
               "XX....XX"
@@ -580,7 +546,7 @@
               "XX....XX"
               "XX....XX")
 
-            (fringe-helper-define 'git-gutter-fr+-deleted nil
+            (fringe-helper-define 'git-gutter-fr:deleted nil
               "XXXXXX.."
               "XXXXXXX."
               "XX...xXX"
@@ -590,7 +556,7 @@
               "XXXXXXX."
               "XXXXXX..")
 
-            (fringe-helper-define 'git-gutter-fr+-modified nil
+            (fringe-helper-define 'git-gutter-fr:modified nil
               "XXXXXXXX"
               "XXXXXXXX"
               "Xx.XX.xX"
@@ -602,8 +568,11 @@
 
             ;; Fringe fix in Windows
             (unless (string-equal system-type "windows-nt")
-              (defadvice git-gutter+-process-diff (before git-gutter+-process-diff-advice activate)
-                (ad-set-arg 0 (file-truename (ad-get-arg 0)))))))
+              (defadvice git-gutter-process-diff (before git-gutter-process-diff-advice activate)
+                (ad-set-arg 0 (file-truename (ad-get-arg 0)))))
+
+            ;; Start git gutter mode
+            (global-git-gutter-mode t)))
 
 ;; highlight regions according to age
 (use-package smeargle

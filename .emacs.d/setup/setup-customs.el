@@ -237,7 +237,9 @@
   :type 'list)
 
 (defcustom my/hideshow-modes
-  '(prog-mode-hook nxml-mode-hook)
+  '(prog-mode-hook
+    c-mode-common-hook
+    nxml-mode-hook)
   "Modes where hideshow mode is enabled"
   :group 'my/customs
   :type 'list)
