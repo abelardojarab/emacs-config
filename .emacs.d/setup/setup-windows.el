@@ -24,6 +24,20 @@
 
 ;;; Code:
 
+;; Removes *Help* from buffer after the mode has been set.
+;; https://unix.stackexchange.com/questions/19874/prevent-unwanted-buffers-from-opening
+(defun remove-help-buffer ()
+  (if (get-buffer "*Help*")
+      (kill-buffer "*Help*")))
+(add-hook 'after-change-major-mode-hook 'remove-help-buffer)
+
+;; Removes *Completions* from buffer after you've opened a file.
+(add-hook 'minibuffer-exit-hook
+	  '(lambda ()
+	     (let ((buffer "*Completions*"))
+	       (and (get-buffer buffer)
+		    (kill-buffer buffer)))))
+
 ;; Put a nice title to the window, including filename
 (add-hook 'window-configuration-change-hook
           (lambda ()
@@ -50,7 +64,7 @@
       `(
         ;; Put REPLs and error lists into the bottom side window
         (,(rx bos
-              (or "*Help"                         ;; Help buffers
+              (or "*Help*"                        ;; Help buffers
                   "*Warnings*"                    ;; Emacs warnings
                   "*Compile-Log*"                 ;; Emacs byte compiler log
                   "*compilation"                  ;; Compilation buffers
