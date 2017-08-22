@@ -71,10 +71,11 @@
 			" "))
 		      major-mode))))
 
-	    (add-hook 'rtags-mode-hook (lambda ()
-					 (setq-local
-					  eldoc-documentation-function
-					  #'rtags-eldoc-function)))))
+	    ;; (add-hook 'rtags-mode-hook (lambda ()
+	    ;; 				 (setq-local
+	    ;; 				  eldoc-documentation-function
+	    ;; 				  #'rtags-eldoc-function)))
+	    ))
 
 ;; cmake syntax highlighting
 (use-package cmake-mode
