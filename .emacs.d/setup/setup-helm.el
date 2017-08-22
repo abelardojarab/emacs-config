@@ -49,6 +49,7 @@
          ;; list actions using C-z
          ("C-z"   . helm-select-action))
   :config (progn
+
             (defadvice helm-buffers-sort-transformer (around ignore activate)
               (setq ad-return-value (ad-get-arg 0)))
 
