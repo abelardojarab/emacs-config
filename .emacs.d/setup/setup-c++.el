@@ -134,6 +134,13 @@
             ;; Hooks
             (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)))
 
+;; This implements eldoc support in irony-mode
+(use-package irony-eldoc
+  :demand t
+  :if (executable-find "irony-server")
+  :load-path (lambda () (expand-file-name "irony-eldoc/" user-emacs-directory))
+  :config (add-hook 'irony-mode-hook #'irony-eldoc))
+
 ;; Automatically insert prototype functions from .h
 ;; when opening the corresponding .cpp file
 (use-package member-functions
