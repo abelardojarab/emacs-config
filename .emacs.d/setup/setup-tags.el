@@ -166,7 +166,7 @@ tags table and its (recursively) included tags tables."
 ;; Etags table
 (use-package etags-table
   :defer t
-  :commands update-etags-table
+  :commands etags-create-or-update-table-tags-table
   :after projectile
   :config (progn
             (setq etags-table-alist
@@ -179,7 +179,7 @@ tags table and its (recursively) included tags tables."
 
             ;; Below function comes useful when you change the project-root
             ;; symbol to a different value (when switching projects)
-            (defun update-etags-table ()
+            (defun etags-create-or-update-tags-table ()
               "Update `etags-table-alist' based on the current project directory."
               (interactive)
               (add-to-list 'etags-table-alist
@@ -198,11 +198,16 @@ tags table and its (recursively) included tags tables."
             ;; Helper functions for etags/ctags
             (defun ctags-create-or-update (dir-name)
               "Create tags file."
-              (interactive "Directory: ")
-              (shell-command
-               (format "ctags -e -f %s -R %s"
-                       (concat (projectile-project-root) "TAGS")
-                       (projectile-project-root))))))
+              (interactive
+	      (let ((olddir default-directory)
+		    (default-directory
+		      (read-directory-name
+		       "ctags: top of source tree:" (projectile-project-root))))
+		(shell-command
+		 (format "ctags -e -f %s -R %s > /dev/null"
+			 (concat default-directory "TAGS")
+			 default-directory))
+		(message "Created tagfile"))))))
 
 ;; Gtags
 (use-package ggtags
@@ -212,7 +217,8 @@ tags table and its (recursively) included tags tables."
   :commands (ggtags-mode
              ggtags-find-tag-dwim
              ggtags-eldoc-function
-             ggtags-show-definition)
+             ggtags-show-definition
+	     gtags-create-or-update)
   ;; Taken from https://tuhdo.github.io/c-ide.html
   :bind (:map ggtags-mode-map
               ("M-,"     . pop-tag-mark)
@@ -245,7 +251,7 @@ tags table and its (recursively) included tags tables."
                    (let ((olddir default-directory)
                          (default-directory
                            (read-directory-name
-                            "gtags: top of source tree:" default-directory)))
+                            "gtags: top of source tree:" (projectile-project-root))))
                      (shell-command "gtags -i -q 2> /dev/null")
                      (message "Created tagfile"))))))))
 
