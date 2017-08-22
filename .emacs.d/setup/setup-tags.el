@@ -149,7 +149,8 @@ tags table and its (recursively) included tags tables."
 (use-package etags-select
   :defer t
   :after etags
-  :commands (etags-select-find-tag ido-find-tag)
+  :commands (etags-select-find-tag
+	     ido-find-tag)
   :load-path (lambda () (expand-file-name "etags-select/" user-emacs-directory))
   :config (progn
             ;; Use ido to list tags, but then select via etags-select (best of both worlds!)
