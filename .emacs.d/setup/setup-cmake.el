@@ -93,11 +93,6 @@
   :init (add-hook 'c-mode-common-hook 'my/cmake-enable-ide)
   :config (progn
 
-	    (defun cmake-ide--mode-hook()
-	      "Function to add to a major mode hook"
-	      ;; (add-hook 'find-file-hook #'cmake-ide-maybe-run-cmake nil 'local)
-	      (cmake-ide-maybe-start-rdm))
-
             ;; Asure cmake_build directory exists
             (if (not (file-exists-p "~/cmake_builds"))
                 (make-directory "~/cmake_builds"))

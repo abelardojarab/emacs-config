@@ -166,11 +166,19 @@ That is, a string used to represent it on the tab bar."
                   (lambda ()
                     (remove-if
                      (lambda (buffer)
-                       (and (not (eq (current-buffer) buffer)) ;; Always include the current buffer.
-                            ;; remove buffer name in this list.
-                            (loop for name in (mapcar (lambda (this-buffer) (buffer-name this-buffer))
-                                                      (my/hated-buffers))
-                                  thereis (string-match-p name (buffer-name buffer)))))
+		       (or
+			;; Explicitely removed buffers
+			(and (not (eq (current-buffer) buffer))
+			     (or (cl-search "TAGS"       (buffer-name buffer))
+				 (cl-search "diff-hl"    (buffer-name buffer))
+				 (cl-search "tmp-status" (buffer-name buffer))))
+
+			;; Always include the current buffer.
+			(and (not (eq (current-buffer) buffer))
+			     ;; remove buffer name in this list.
+			     (loop for name in (mapcar (lambda (x) (buffer-name x))
+						       (my/hated-buffers))
+				   thereis (cl-search name (buffer-name buffer))))))
                      (buffer-list))))
 
             ;; Enable tabbar
