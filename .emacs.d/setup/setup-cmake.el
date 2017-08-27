@@ -47,41 +47,41 @@
                   rtags-use-helm t)
             (rtags-enable-standard-keybindings)
 
-	    ;; Integrate rtags with eldoc
-	    ;; https://github.com/Andersbakken/rtags/issues/987
-	    (defun fontify-string (str mode)
-	      "Return STR fontified according to MODE."
-	      (with-temp-buffer
-		(insert str)
-		(delay-mode-hooks (funcall mode))
-		(font-lock-default-function mode)
-		(font-lock-default-fontify-region
-		 (point-min) (point-max) nil)
-		(buffer-string)))
+            ;; Integrating rtags with eldoc
+            ;; https://github.com/Andersbakken/rtags/issues/987
+            (defun fontify-string (str mode)
+              "Return STR fontified according to MODE."
+              (with-temp-buffer
+                (insert str)
+                (delay-mode-hooks (funcall mode))
+                (font-lock-default-function mode)
+                (font-lock-default-fontify-region
+                 (point-min) (point-max) nil)
+                (buffer-string)))
 
-	    (defun rtags-eldoc-function ()
-	      (let ((summary (rtags-get-summary-text)))
-		(and summary
-		     (fontify-string
-		      (replace-regexp-in-string
-		       "{[^}]*$" ""
-		       (mapconcat
-			(lambda (str) (if (= 0 (length str)) "//" (string-trim str)))
-			(split-string summary "\r?\n")
-			" "))
-		      major-mode))))
+            (defun rtags-eldoc-function ()
+              (let ((summary (rtags-get-summary-text)))
+                (and summary
+                     (fontify-string
+                      (replace-regexp-in-string
+                       "{[^}]*$" ""
+                       (mapconcat
+                        (lambda (str) (if (= 0 (length str)) "//" (string-trim str)))
+                        (split-string summary "\r?\n")
+                        " "))
+                      major-mode))))
 
-	    ;; (add-hook 'rtags-mode-hook (lambda ()
-	    ;; 				 (setq-local
-	    ;; 				  eldoc-documentation-function
-	    ;; 				  #'rtags-eldoc-function)))
-	    ))
+            ;; (add-hook 'rtags-mode-hook (lambda ()
+            ;;               (setq-local
+            ;;                eldoc-documentation-function
+            ;;                #'rtags-eldoc-function)))
+            ))
 
 ;; cmake syntax highlighting
 (use-package cmake-mode
   :commands cmake-mode
   :mode (("/CMakeLists\\.txt\\'" . cmake-mode)
-         ("\\.cmake\\'" . cmake-mode))
+         ("\\.cmake\\'"          . cmake-mode))
   :load-path (lambda () (expand-file-name "cmake-mode/" user-emacs-directory)))
 
 ;; cmake-based IDE
