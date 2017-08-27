@@ -54,7 +54,7 @@
   :group 'my/customs
   :type 'string)
 
-(defcustom my/user-domain "abelardojarab.dyndns.org"
+(defcustom my/user-domain "jaraberrocal.readmyblog.org"
   "Preferred user domain"
   :group 'my/customs
   :type 'string)
