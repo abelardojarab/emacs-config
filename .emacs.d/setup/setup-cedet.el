@@ -34,10 +34,14 @@
             ;; Enable support for parsing additional languages
             (use-package semantic/wisent)
 
-            (add-to-list 'semantic-default-submodes 'global-semanticdb-minor-mode)
-            (add-to-list 'semantic-default-submodes 'global-semantic-idle-scheduler-mode)
-            (add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode)
-            (add-to-list 'semantic-default-submodes 'global-semantic-decoration-mode)
+            ;; Enabled features
+            (setq semantic-default-submodes '(global-semantic-idle-scheduler-mode
+                                              global-semanticdb-minor-mode
+                                              global-semantic-idle-summary-mode
+                                              global-semantic-mru-bookmark-mode
+                                              global-semantic-load-enable-code-helpers
+                                              global-semantic-load-enable-excessive-code-helpers
+                                              global-semantic-idle-completions-mode))
 
             ;; Assure .emacs.cache/semanticdb directory exists
             (if (not (file-exists-p "~/.emacs.cache/semanticdb"))
@@ -47,11 +51,11 @@
             (set-default 'semantic-case-fold t)
 
             ;; Faster parsing
-	    (setq semantic-idle-work-parse-neighboring-files-flag nil
-		  semantic-idle-work-update-headers-flag	  nil
-		  semantic-idle-scheduler-idle-time               432000
-		  semantic-idle-scheduler-work-idle-time	  1800 ;; default is 60
-		  semantic-idle-scheduler-max-buffer-size	  1)
+            (setq semantic-idle-work-parse-neighboring-files-flag nil
+                  semantic-idle-work-update-headers-flag      nil
+                  semantic-idle-scheduler-idle-time               432000
+                  semantic-idle-scheduler-work-idle-time      1800 ;; default is 60
+                  semantic-idle-scheduler-max-buffer-size     1)
 
             ;; Disable Semantics for large files
             (add-hook 'semantic--before-fetch-tags-hook
@@ -63,6 +67,9 @@
             ;; Enable decoration mode
             (global-semantic-decoration-mode t)
 
+            ;; for semantic-ia-fast-jump
+            (use-package semantic/analyze/refs)
+
             ;; Fixing a bug in semantic, see #22287
             (defun semanticdb-save-all-db-idle ()
               "Save all semantic tag databases from idle time.
@@ -73,11 +80,11 @@ Exit the save between databases if there is user input."
                   (semantic-safe "Auto-DB Save: %S"
                     ;; FIXME: Use `while-no-input'?
                     (save-mark-and-excursion ;; <-- added line
-		     (semantic-exit-on-input 'semanticdb-idle-save
-		       (mapc (lambda (db)
-			       (semantic-throw-on-input 'semanticdb-idle-save)
-			       (semanticdb-save-db db t))
-			     semanticdb-database-list))))
+                     (semantic-exit-on-input 'semanticdb-idle-save
+                       (mapc (lambda (db)
+                               (semantic-throw-on-input 'semanticdb-idle-save)
+                               (semanticdb-save-db db t))
+                             semanticdb-database-list))))
                 (if (fboundp 'save-excursion)
                     (save-excursion ;; <-- added line
                       (semantic-exit-on-input 'semanticdb-idle-save
@@ -88,18 +95,18 @@ Exit the save between databases if there is user input."
 
             ;; Disable semanticdb, slows down Emacs
             (global-semanticdb-minor-mode nil)
-	    (setq semanticdb-search-system-databases t)
-	    (add-hook 'c-mode-common-hook
-		      (lambda ()
-			(setq semanticdb-project-system-databases
-			      (list (semanticdb-create-database
-				     semanticdb-new-database-class
-				     "/usr/include")))))
+            (setq semanticdb-search-system-databases t)
+            (add-hook 'c-mode-common-hook
+                      (lambda ()
+                        (setq semanticdb-project-system-databases
+                              (list (semanticdb-create-database
+                                     semanticdb-new-database-class
+                                     "/usr/include")))))
 
-	    ;; Set project roots to start from /
-	    (setq semanticdb-project-roots
-		  (list
-		   (expand-file-name "/")))
+            ;; Set project roots to start from /
+            (setq semanticdb-project-roots
+                  (list
+                   (expand-file-name "/")))
 
             ;; This prevents Emacs to become uresponsive
             (defun semanticdb-kill-hook ()
