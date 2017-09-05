@@ -74,24 +74,24 @@
 ;; Code Browser
 (use-package ecb
   :load-path (lambda () (expand-file-name "ecb/" user-emacs-directory))
-  :commands (ecb-activate) ;; enabling this line places ecb in autoload state
+  ;; :commands (ecb-activate) ;; enabling this line places ecb in autoload state
   :init (setq stack-trace-on-error t)
   :config (progn
 
-	    ;; Fix error with symboldef sync
-	    (defmacro ecb-with-readonly-buffer (buffer &rest body)
-	      "Make buffer BUFFER current but do not display it. Evaluate BODY in buffer
+        ;; Fix error with symboldef sync
+        (defmacro ecb-with-readonly-buffer (buffer &rest body)
+          "Make buffer BUFFER current but do not display it. Evaluate BODY in buffer
 BUFFER \(not read-only an evaluation-time of BODY) and make afterwards BUFFER
 read-only. Note: All this is done with `save-excursion' so after BODY that
 buffer is current which was it before calling this macro."
-	      `(ignore-errors (if (buffer-live-p ,buffer)
-				  (with-current-buffer ,buffer
-				    (unwind-protect
-					(progn
-					  (setq buffer-read-only nil)
-					  ,@body)
-				      (setq buffer-read-only t)))
-				(ecb-error "Try to set a not existing buffer."))))
+          `(ignore-errors (if (buffer-live-p ,buffer)
+                  (with-current-buffer ,buffer
+                    (unwind-protect
+                    (progn
+                      (setq buffer-read-only nil)
+                      ,@body)
+                      (setq buffer-read-only t)))
+                (ecb-error "Try to set a not existing buffer."))))
 
             ;; ECB setup
             (if (ecb--semantic-active-p)

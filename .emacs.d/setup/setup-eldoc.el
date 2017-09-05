@@ -48,6 +48,8 @@
 
 (use-package eldoc-overlay-mode
   :if (display-graphic-p)
+  :defer t
+  :commands eldoc-overlay-mode
   :diminish eldoc-overlay-mode
   :load-path (lambda () (expand-file-name "eldoc-overlay-mode/" user-emacs-directory)))
 
