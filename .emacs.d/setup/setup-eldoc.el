@@ -25,21 +25,31 @@
 ;;; Code:
 
 (use-package eldoc
-  :diminish (eldoc-mode)
+  :diminish eldoc-mode
   :init (progn
           (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
           (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
           (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
           (add-hook 'c-mode-common-hook 'turn-on-eldoc-mode)
-	  (setq eldoc-idle-delay 0)
+      (setq eldoc-idle-delay 0)
 
-	  ;; http://emacsredux.com/blog/2016/03/02/pimp-my-minibuffer/
-	  (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
+      ;; http://emacsredux.com/blog/2016/03/02/pimp-my-minibuffer/
+      (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
 
-	  ;; Use gtags to show documentation
-	  (if (executable-find "global")
-	      (add-hook 'c-mode-common-hook
-			(lambda () (setq-local eldoc-documentation-function #'ggtags-eldoc-function))))))
+      ;; Use gtags to show documentation
+      (if (executable-find "global")
+          (add-hook 'c-mode-common-hook
+            (lambda () (setq-local eldoc-documentation-function #'ggtags-eldoc-function))))))
+
+(use-package inline-docs
+  :if (display-graphic-p)
+  :load-path (lambda () (expand-file-name "inline-docs/" user-emacs-directory))
+  :demand t)
+
+(use-package eldoc-overlay-mode
+  :if (display-graphic-p)
+  :diminish eldoc-overlay-mode
+  :load-path (lambda () (expand-file-name "eldoc-overlay-mode/" user-emacs-directory)))
 
 (provide 'setup-eldoc)
 ;;; setup-eldoc.el ends here
