@@ -102,7 +102,7 @@
   :group 'my/customs)
 
 (defcustom my/emacs-theme
-  'apropospriate-dark
+  'monokai
   "Preferred Emacs theme"
   :group 'my/customs
   :type 'list)
@@ -133,9 +133,9 @@
   :type 'string)
 
 (defcustom my/newline-force-close-alist
-  '((html-mode . " <br>")
-    (latex-mode . " \\newline")
-    (org-mode . " \\newline")
+  '((html-mode   . " <br>")
+    (latex-mode  . " \\newline")
+    (org-mode    . " \\newline")
     (python-mode . ":"))
   "Closing char for different modes"
   :group 'my/customs
@@ -198,6 +198,7 @@
 
 (defcustom my/flycheck-modes
   '(prog-mode-hook
+    c-mode-common-hook
     ess-mode-hook)
   "Modes where flycheck mode is enabled"
   :group 'my/customs
