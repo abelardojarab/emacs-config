@@ -77,7 +77,7 @@
               (when (and (bound-and-true-p helm-alive-p)
                          spaceline--helm-current-source
                          (eq 1 (cdr (assq 'follow spaceline--helm-current-source))))
-                (propertize "" 'face 'success)))
+                (propertize "➟" 'face 'success)))
 
             ;; Build a segment for the active region
             (spaceline-define-segment my/selection-info
@@ -109,7 +109,7 @@
                  all-the-icons-buffer-size) :face default-face :skip-alternate t)
 
                (all-the-icons-projectile :face default-face)
-               ((all-the-icons-vc-status) "" :separator "")
+               ((all-the-icons-vc-status) " " :separator "")
 
                ((remote-host
                  all-the-icons-buffer-path
@@ -137,7 +137,7 @@
              'helm
              '((helm-buffer-id :face spaceline-read-only)
                (helm-number)
-               (my/helm-follow :fallback "")
+               (my/helm-follow :fallback "➟")
                helm-prefix-argument)
              '((helm-help)
                (global :face spaceline-read-only)))

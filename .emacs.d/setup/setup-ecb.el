@@ -28,6 +28,7 @@
 (use-package sr-speedbar
   :defer t
   :if (display-graphic-p)
+  :commands (sr-speedbar-exist-p)
   :bind (:map speedbar-mode-map
               ([S-up]  . speedbar-up-directory)
               ([right] . speedbar-flush-expand-line)

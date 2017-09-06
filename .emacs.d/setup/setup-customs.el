@@ -81,7 +81,7 @@
   :group 'my/customs
   :type 'string)
 
-(defcustom my/main-programming-font "Roboto Mono for Powerline"
+(defcustom my/main-programming-font "Fira Mono"
   "Preferred programming font"
   :type 'string
   :group 'my/customs)
@@ -91,7 +91,7 @@
   :type 'string
   :group 'my/customs)
 
-(defcustom my/main-writing-font "Meslo"
+(defcustom my/main-writing-font "Cousine"
   "Preferred writing font"
   :type 'string
   :group 'my/customs)
@@ -213,8 +213,16 @@
   :group 'my/customs
   :type 'list)
 
+(defcustom my/linum-modes
+  '(prog-mode-hook
+    c-mode-common-hook)
+  "Modes where linum mode is enabled"
+  :group 'my/customs
+  :type 'list)
+
 (defcustom my/abbrev-modes
   '(prog-mode-hook
+    c-mode-common-hook
     markdown-mode-hook
     org-mode-hook
     text-mode-hook)

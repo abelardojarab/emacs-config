@@ -79,14 +79,13 @@ non-nil."
             (toggle-truncate-lines t)
             (setq truncate-lines t)))
 
-;; Turn on whenever visual line mode is on
-;; to get centered text
+;; Get centered text when visual-line-mode is on
 (use-package visual-fill-column
   :defer t
   :commands visual-fill-column-mode
   :load-path (lambda () (expand-file-name "visual-fill-column/" user-emacs-directory))
   :config (setq-default visual-fill-column-center-text t
-			visual-fill-column-fringes-outside-margins nil))
+            visual-fill-column-fringes-outside-margins nil))
 
 ;; Just like the previous package, this one is also subtle.
 ;; It highlights characters that exceed a particular column margin. Very useful while coding.
@@ -102,13 +101,13 @@ non-nil."
 (use-package linum-ex
   :demand t
   :commands linum-mode
-  :init (add-hook 'prog-mode-hook
-            (lambda ()
-              ;; turn off `linum-mode' when there are more than 5000 lines
-              (if (and (> (buffer-size)
-                          (* 5000 80)))
-                  (linum-mode -1)
-                (linum-mode 1))))
+  :init  (dolist (hook my/linum-modes)
+           (add-hook hook (lambda ()
+                            ;; turn off `linum-mode' when there are more than 5000 lines
+                            (if (and (> (buffer-size)
+                                        (* 5000 80)))
+                                (linum-mode -1)
+                              (linum-mode 1)))))
   :config (progn
             (defadvice linum-update-window (around linum-dynamic activate)
               (let* ((w (length (number-to-string
