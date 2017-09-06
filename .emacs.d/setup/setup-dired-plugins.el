@@ -45,6 +45,8 @@
 
 ;; Enable copying and pasting files
 (use-package dired-ranger
+  :defer t
+  :after dired
   :load-path (lambda () (expand-file-name "dired-hacks/" user-emacs-directory))
   :bind (:map dired-mode-map
               ("W" . dired-ranger-copy)
@@ -53,6 +55,7 @@
 
 ;; Highlight dired buffer with K-shell coloring
 (use-package dired-k
+  :defer t
   :after dired
   :load-path (lambda () (expand-file-name "dired-k/" user-emacs-directory))
   :bind (:map dired-mode-map
@@ -64,8 +67,8 @@
 
 ;; Display file icons in dired
 (use-package dired-icon
+  :defer t
   :after dired
-  :disabled t
   :load-path (lambda () (expand-file-name "dired-icon/" user-emacs-directory))
   :if (display-graphic-p)
   :commands (dired-icon-mode)
@@ -101,10 +104,10 @@
 
 ;; All the icons, dired plugin
 (use-package all-the-icons-dired
+  :defer t
   :if (display-graphic-p)
-  :disabled t
-  :diminish all-the-icons-dired-mode
   :after (dired all-the-icons)
+  :diminish all-the-icons-dired-mode
   :load-path (lambda () (expand-file-name "all-the-icons-dired/" user-emacs-directory))
   :commands all-the-icons-dired-mode
   :config (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))

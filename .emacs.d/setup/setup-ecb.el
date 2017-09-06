@@ -28,7 +28,9 @@
 (use-package sr-speedbar
   :defer t
   :if (display-graphic-p)
-  :commands (sr-speedbar-exist-p)
+  :defines (sr-speedbar-exist-p)
+  :commands (sr-speedbar-open
+             sr-speedbar-toggle)
   :bind (:map speedbar-mode-map
               ([S-up]  . speedbar-up-directory)
               ([right] . speedbar-flush-expand-line)
@@ -64,6 +66,7 @@
   :defer t
   :if (display-graphic-p)
   :after (sr-speedbar projectile)
+  :load-path (lambda () (expand-file-name "projectile-speedbar/" user-emacs-directory))
   :commands projectile-speedbar-open-current-buffer-in-tree
   :init (progn
           (defadvice helm-projectile-find-file (after locate-file activate)
@@ -295,7 +298,7 @@ layout contains no persistent compilation window and the other windows get a lit
 more place."
               (ecb-set-methods-buffer)
               (ecb-split-ver 0.5)
-              (ecb-set-history-buffer)
+              (ecb-set-speedbar-buffer)
               (select-window (next-window)))
 
             ;; disable global semantic idle scheduler.

@@ -107,42 +107,6 @@
   :defer t
   :commands (devhelp-word-at-point devhelp-toggle-automatic-assistant))
 
-;; Irony server
-(use-package irony
-  :defer t
-  :commands (irony-mode irony-install-server)
-  :if (executable-find "irony-server")
-  :diminish irony-mode
-  :load-path (lambda () (expand-file-name "irony-mode/" user-emacs-directory))
-  :after (ggtags eldoc function-args company)
-  :init (add-hook 'c-mode-common-hook 'irony-mode)
-  :config (progn
-            (if (file-exists-p "/usr/local/bin/irony-server")
-                (setq irony-server-install-prefix "/usr/local/"))
-            (if (file-exists-p "~/.emacs.cache/irony-server/bin/irony-server")
-                (setq irony-server-install-prefix "~/.emacs.cache/irony-server/"))
-
-            (push "-std=c++11" irony-additional-clang-options)
-
-            (if (not (file-exists-p "~/.emacs.cache/irony-user-dir"))
-                (make-directory "~/.emacs.cache/irony-user-dir") t)
-            (setq irony-user-dir "~/.emacs.cache/irony-user-dir/")
-
-            ;; Irony json projects
-            (use-package irony-cdb-json)
-
-            ;; Hooks
-            (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)))
-
-;; This implements eldoc support in irony-mode
-(use-package irony-eldoc
-  :demand t
-  :after (irony eldoc)
-  :if (executable-find "irony-server")
-  :commands irony-eldoc
-  :load-path (lambda () (expand-file-name "irony-eldoc/" user-emacs-directory))
-  :config (add-hook 'irony-mode-hook #'irony-eldoc))
-
 ;; Automatically insert prototype functions from .h
 (use-package member-functions
   :config (setq mf--source-file-extension "cpp"))

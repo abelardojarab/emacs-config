@@ -46,8 +46,8 @@
               ([backtab]     . helm-c-yas-complete)
               ("C-c r"       . yas-prev-field)
               ("C-c t"       . yas-next-field-or-maybe-expand))
-  :commands (yas-initialize
-             yas-global-mode
+  :defines (yas-initialize)
+  :commands (yas-global-mode
              yas-minor-mode
              yas-snippet-dirs)
   :init (progn

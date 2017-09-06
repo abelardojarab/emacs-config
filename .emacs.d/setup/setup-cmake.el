@@ -24,6 +24,42 @@
 
 ;;; Code:
 
+;; This implements eldoc support in irony-mode
+(use-package irony-eldoc
+  :defer t
+  :after eldoc
+  :if (executable-find "irony-server")
+  :defines irony-eldoc
+  :load-path (lambda () (expand-file-name "irony-eldoc/" user-emacs-directory)))
+
+;; Irony server
+(use-package irony
+  :defer t
+  :commands (irony-mode irony-install-server)
+  :if (executable-find "irony-server")
+  :diminish irony-mode
+  :load-path (lambda () (expand-file-name "irony-mode/" user-emacs-directory))
+  :after (ggtags eldoc function-args company)
+  :init (add-hook 'c-mode-common-hook 'irony-mode)
+  :config (progn
+            (if (file-exists-p "/usr/local/bin/irony-server")
+                (setq irony-server-install-prefix "/usr/local/"))
+            (if (file-exists-p "~/.emacs.cache/irony-server/bin/irony-server")
+                (setq irony-server-install-prefix "~/.emacs.cache/irony-server/"))
+
+            (push "-std=c++11" irony-additional-clang-options)
+
+            (if (not (file-exists-p "~/.emacs.cache/irony-user-dir"))
+                (make-directory "~/.emacs.cache/irony-user-dir") t)
+            (setq irony-user-dir "~/.emacs.cache/irony-user-dir/")
+
+            ;; Irony json projects
+            (use-package irony-cdb-json)
+
+            ;; Hooks
+            (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+            (add-hook 'irony-mode-hook 'irony-eldoc)))
+
 ;; rtags
 ;; sudo apt-get install libclang-dev / brew install llvm --with-clang
 ;; git clone --recursive https://github.com/Andersbakken/rtags.git &
@@ -87,7 +123,9 @@
 ;; cmake-based IDE
 (use-package cmake-ide
   :defer t
-  :commands (my/cmake-enable-ide cmake-ide--locate-cmakelists cmake-ide-compile cmake-ide-run-cmake)
+  :after (rtags irony-mode cmake-mode)
+  :commands (my/cmake-enable-ide cmake-ide-compile cmake-ide-run-cmake)
+  :defines cmake-ide--locate-cmakelists
   :if (executable-find "cmake")
   :load-path (lambda () (expand-file-name "cmake-ide/" user-emacs-directory))
   :init (add-hook 'c-mode-common-hook 'my/cmake-enable-ide)

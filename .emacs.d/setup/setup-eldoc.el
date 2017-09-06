@@ -42,12 +42,11 @@
             (lambda () (setq-local eldoc-documentation-function #'ggtags-eldoc-function))))))
 
 (use-package inline-docs
-  :if (display-graphic-p)
+  :defer t
   :load-path (lambda () (expand-file-name "inline-docs/" user-emacs-directory))
-  :demand t)
+  :defines inline-docs-overlay)
 
 (use-package eldoc-overlay-mode
-  :if (display-graphic-p)
   :defer t
   :commands eldoc-overlay-mode
   :diminish eldoc-overlay-mode
