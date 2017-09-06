@@ -86,7 +86,7 @@
 
 ;; Flycheck irony
 (use-package flycheck-irony
-  :after flycheck
+  :after (flycheck irony)
   :if (or (file-exists-p "~/.emacs.cache/irony-server/bin/irony-server")
           (executable-find "irony-server"))
   :load-path (lambda () (expand-file-name "flycheck-irony/" user-emacs-directory))
@@ -114,11 +114,12 @@
 
 ;; Another tooltip using pos-tip
 (use-package flycheck-pos-tip
+  :defer t
   :if (display-graphic-p)
   :after flycheck
   :commands flycheck-pos-tip-mode
   :load-path (lambda () (expand-file-name "flycheck-pos-tip/" user-emacs-directory))
-  :config (add-hook 'flycheck-mode-hook (lambda () (flycheck-pos-tip-mode t))))
+  :init (add-hook 'flycheck-mode-hook (lambda () (flycheck-pos-tip-mode t))))
 
 (provide 'setup-flycheck)
 ;;; setup-flycheck.el ends here

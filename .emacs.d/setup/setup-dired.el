@@ -137,8 +137,10 @@
 
 ;; async support for dired
 (use-package dired-async
+  :defer t
+  :commands dired-async-mode
   :load-path (lambda () (expand-file-name "async/" user-emacs-directory))
-  :config (dired-async-mode 1))
+  :init (add-hook 'dired-mode-hook (lambda () (dired-async-mode 1))))
 
 (provide 'setup-dired)
 ;;; setup-dired.el ends here
