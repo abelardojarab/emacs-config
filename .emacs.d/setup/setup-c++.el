@@ -137,12 +137,13 @@
 ;; This implements eldoc support in irony-mode
 (use-package irony-eldoc
   :demand t
+  :after irony
   :if (executable-find "irony-server")
+  :commands irony-eldoc
   :load-path (lambda () (expand-file-name "irony-eldoc/" user-emacs-directory))
   :config (add-hook 'irony-mode-hook #'irony-eldoc))
 
 ;; Automatically insert prototype functions from .h
-;; when opening the corresponding .cpp file
 (use-package member-functions
   :config (setq mf--source-file-extension "cpp"))
 
@@ -151,10 +152,10 @@
   :commands (basic-c-compile-file basic-c-compile-run-c basic-c-compile-makefile)
   :load-path (lambda () (expand-file-name "basic-c-compile/" user-emacs-directory))
   :config (setq basic-c-compiler "g++"
-		basic-c-compile-all-files nil
-		basic-c-compile-compiler-flags "-Wall -Werror -std=c++11"
-		basic-c-compile-outfile-extension nil
-		basic-c-compile-make-clean "find . -type f -executable -delete"))
+        basic-c-compile-all-files nil
+        basic-c-compile-compiler-flags "-Wall -Werror -std=c++11"
+        basic-c-compile-outfile-extension nil
+        basic-c-compile-make-clean "find . -type f -executable -delete"))
 
 (provide 'setup-c++)
 ;;; setup-c++.el ends here
