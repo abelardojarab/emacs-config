@@ -31,7 +31,8 @@
             projectile-enable-caching)
   :commands (projectile-global-mode
              projectile-compile-project
-             projectile-find-file)
+             projectile-find-file
+             projectile-project-root)
   :load-path (lambda () (expand-file-name "projectile/" user-emacs-directory))
   :init (projectile-global-mode)
   :bind (("C-x C-m" . projectile-compile-project)
@@ -48,29 +49,6 @@
                   projectile-sort-order 'recently-active
                   projectile-indexing-method 'alien
                   projectile-globally-ignored-files (quote ("TAGS" "*.log" "*DS_Store" "node-modules")))))
-
-(use-package helm-projectile
-  :demand t
-  :after (projectile helm-config)
-  :load-path (lambda () (expand-file-name "helm-projectile/" user-emacs-directory))
-  :config (progn
-            (defun helm-projectile-on ()
-              "Turn on helm-projectile key bindings."
-              (interactive)
-              (helm-projectile-toggle 1))
-
-            (defun helm-projectile-off ()
-              "Turn off helm-projectile key bindings."
-              (interactive)
-              (helm-projectile-toggle -1))
-
-            (defun my/projectile-setup ()
-              (helm-projectile-on)
-              (setq projectile-switch-project-action 'helm-projectile)
-              (setq projectile-completion-system 'helm))
-            (my/projectile-setup)
-            (add-hook 'projectile-find-file-hook 'my/projectile-setup)
-            (add-hook 'projectile-mode-hook 'my/projectile-setup)))
 
 (provide 'setup-projectile)
 ;;; setup-projectile.el ends here

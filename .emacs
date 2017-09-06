@@ -208,6 +208,9 @@
 ;; Setup versioning
 (require 'setup-versioning)
 
+;; Setup projectile
+(require 'setup-projectile)
+
 ;; Setup eldoc
 (require 'setup-eldoc)
 
@@ -288,9 +291,6 @@
 
 ;; Setup helm plugins
 (require 'setup-helm-plugins)
-
-;; Setup projectile
-(require 'setup-projectile)
 
 ;; Setup dired
 (require 'setup-dired)

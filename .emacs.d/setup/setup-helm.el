@@ -99,13 +99,37 @@
                   `((name . "Fonts")
                     (candidates . ,(font-family-list))
                     (action . (lambda (candidate) (progn
-                                                    (setq main-programming-font candidate)
-                                                    (set-face-attribute 'default nil :family candidate)
-                                                    (fontify-frame (selected-frame)))))))
+					       (setq main-programming-font candidate)
+					       (set-face-attribute 'default nil :family candidate)
+					       (fontify-frame (selected-frame)))))))
 
             (defun helm-fonts ()
               (interactive)
               (helm :sources '(font-helm-source)))))
+
+;; Integrate helm with projectile
+(use-package helm-projectile
+  :demand t
+  :after (projectile helm-config)
+  :load-path (lambda () (expand-file-name "helm-projectile/" user-emacs-directory))
+  :config (progn
+            (defun helm-projectile-on ()
+              "Turn on helm-projectile key bindings."
+              (interactive)
+              (helm-projectile-toggle 1))
+
+            (defun helm-projectile-off ()
+              "Turn off helm-projectile key bindings."
+              (interactive)
+              (helm-projectile-toggle -1))
+
+            (defun my/projectile-setup ()
+              (helm-projectile-on)
+              (setq projectile-switch-project-action 'helm-projectile)
+              (setq projectile-completion-system 'helm))
+            (my/projectile-setup)
+            (add-hook 'projectile-find-file-hook 'my/projectile-setup)
+            (add-hook 'projectile-mode-hook 'my/projectile-setup)))
 
 ;; Indent semantic entries
 (use-package helm-imenu

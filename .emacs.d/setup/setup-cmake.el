@@ -29,7 +29,7 @@
   :defer t
   :after eldoc
   :if (executable-find "irony-server")
-  :defines irony-eldoc
+  :commands irony-eldoc
   :load-path (lambda () (expand-file-name "irony-eldoc/" user-emacs-directory)))
 
 ;; Irony server
@@ -58,7 +58,14 @@
 
             ;; Hooks
             (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-            (add-hook 'irony-mode-hook 'irony-eldoc)))
+
+	    ;; Enable integration of eldoc and irony
+	    (add-hook 'c-mode-common-hook (lambda ()
+					    (unless (and (executable-find "global")
+							 (projectile-project-p)
+							 (file-exists-p (concat (projectile-project-root)
+										"GTAGS")))
+					      (irony-eldoc))))))
 
 ;; rtags
 ;; sudo apt-get install libclang-dev / brew install llvm --with-clang
@@ -107,11 +114,16 @@
                         " "))
                       major-mode))))
 
-            ;; (add-hook 'rtags-mode-hook (lambda ()
-            ;;               (setq-local
-            ;;                eldoc-documentation-function
-            ;;                #'rtags-eldoc-function)))
-            ))
+
+	    ;; Enable integration of rtags and eldoc
+            (add-hook 'c-mode-common-hook (lambda ()
+					    (unless (and (executable-find "global")
+							 (projectile-project-p)
+							 (file-exists-p (concat (projectile-project-root)
+										"GTAGS")))
+					      (setq-local
+					       eldoc-documentation-function
+					       #'rtags-eldoc-function))))))
 
 ;; cmake syntax highlighting
 (use-package cmake-mode
