@@ -137,7 +137,7 @@
 ;; This implements eldoc support in irony-mode
 (use-package irony-eldoc
   :demand t
-  :after irony
+  :after (irony eldoc)
   :if (executable-find "irony-server")
   :commands irony-eldoc
   :load-path (lambda () (expand-file-name "irony-eldoc/" user-emacs-directory))
