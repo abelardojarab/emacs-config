@@ -24,12 +24,19 @@
 
 ;;; Code:
 
-;; Configure a reasonable fill column, indicate it in the buffer and enable
-;; automatic filling
+;; Automatic filling setup
 (setq-default fill-column 80)
-(add-hook 'text-mode-hook #'auto-fill-mode)
+(add-hook 'text-mode-hook 'auto-fill-mode)
 (diminish 'auto-fill-function " Ⓕ")
 
+;; aggresive fill on paragraphs
+(use-package aggressive-fill-paragraph
+  :defer t
+  :commands aggressive-fill-paragraph-mode
+  :load-path (lambda () (expand-file-name "aggressive-fill-paragraph-mode/" user-emacs-directory))
+  :init (add-hook 'text-mode-hook 'aggressive-fill-paragraph-mode))
+
+;; Autorevert buffer
 (setq after-find-file-from-revert-buffer t)
 
 ;; Help to determine who modifies buffer
@@ -127,6 +134,8 @@
 
 ;; sudo edit
 (use-package sudo-edit
+  :defer t
+  :commands (sudo-edit sudo-edit-current-file)
   :load-path (lambda () (expand-file-name "sudo-edit/" user-emacs-directory)))
 
 (provide 'setup-file)
