@@ -24,14 +24,6 @@
 
 ;;; Code:
 
-;; This implements eldoc support in irony-mode
-(use-package irony-eldoc
-  :defer t
-  :after eldoc
-  :if (executable-find "irony-server")
-  :commands irony-eldoc
-  :load-path (lambda () (expand-file-name "irony-eldoc/" user-emacs-directory)))
-
 ;; Irony server
 (use-package irony
   :defer t
@@ -57,15 +49,7 @@
             (use-package irony-cdb-json)
 
             ;; Hooks
-            (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-
-            ;; Enable integration of eldoc and irony
-            (add-hook 'irony-mode-hook (lambda ()
-					 (unless (and (executable-find "global")
-						      (projectile-project-p)
-						      (file-exists-p (concat (projectile-project-root)
-									     "GTAGS")))
-					   (irony-eldoc))))))
+            (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)))
 
 ;; rtags
 ;; sudo apt-get install libclang-dev / brew install llvm --with-clang

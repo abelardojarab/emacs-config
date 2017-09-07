@@ -30,11 +30,9 @@
   :load-path (lambda () (expand-file-name "flycheck/" user-emacs-directory))
   :commands (flycheck-add-next-checker
              flycheck-mode)
-  :init (progn
-          ;; Enable flycheck for set of modes
-          (mapc (lambda (mode)
-                  (add-hook mode (lambda () (flycheck-mode t))))
-                my/flycheck-modes))
+  :init (mapc (lambda (mode)
+		(add-hook mode (lambda () (flycheck-mode t))))
+	      my/flycheck-modes)
   :config (progn
             (add-to-list 'display-buffer-alist
                          `(,(rx bos "*Flycheck errors*" eos)
@@ -86,25 +84,25 @@
 
 ;; Flycheck irony
 (use-package flycheck-irony
+  :defer t
   :after (flycheck irony)
   :if (or (file-exists-p "~/.emacs.cache/irony-server/bin/irony-server")
           (executable-find "irony-server"))
   :load-path (lambda () (expand-file-name "flycheck-irony/" user-emacs-directory))
-  :config (progn
-            (add-hook 'flycheck-mode-hook #'flycheck-irony-setup)
-            (flycheck-add-next-checker 'irony '(warning . c/c++-cppcheck))))
+  :commands flycheck-irony-setup
+  :init (add-hook 'flycheck-mode-hook #'flycheck-irony-setup)
+  :config (flycheck-add-next-checker 'irony '(warning . c/c++-cppcheck)))
 
 ;; Flycheck rtags
 (use-package flycheck-rtags
+  :defer t
   :after (flycheck rtags)
   :if (executable-find "rdm")
   :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory))
-  :config (progn
-            (defun my/flycheck-rtags-setup ()
-              (flycheck-select-checker 'rtags))
-
-            ;; c-mode-common-hook is also called by c++-mode
-            (add-hook 'c-mode-common-hook #'my/flycheck-rtags-setup)))
+  :commands my/flycheck-rtags-setup
+  :init (add-hook 'c-mode-common-hook #'my/flycheck-rtags-setup)
+  :config (defun my/flycheck-rtags-setup ()
+	    (flycheck-select-checker 'rtags)))
 
 ;; Tooltips
 (use-package flycheck-tip

@@ -236,8 +236,11 @@ tags table and its (recursively) included tags tables."
                       (lambda ()
                         (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
                           (ggtags-mode 1)
-                          (setq-local eldoc-documentation-function #'ggtags-eldoc-function)
-                          (setq-local imenu-create-index-function #'ggtags-build-imenu-index))))
+			  (when (and (projectile-project-p)
+				     (file-exists-p (concat (projectile-project-root)
+						      "GTAGS")))
+				     (setq-local eldoc-documentation-function #'ggtags-eldoc-function)
+				     (setq-local imenu-create-index-function #'ggtags-build-imenu-index)))))
 
 	    (defun ggtags-find-project ()
 	      ;; See https://github.com/leoliu/ggtags/issues/42

@@ -120,16 +120,15 @@
 
 			  ;; Fallback to cmake/clang backends
 			  (when (cmake-ide--locate-cmakelists)
-			    ;; Prefer irony-server
-			    (if (executable-find "irony-server")
-				(setf (car company-backends)
-				      (append '(company-irony)
-					      (car company-backends)))
-			      ;; Fallback to rtags
-			      (when (executable-find "rdm")
-				(setq-local eldoc-documentation-function #'rtags-eldoc-function)
+			    ;; Prefer rtags
+			    (if (executable-find "rdm")
 				(setf (car company-backends)
 				      (append '(company-rtags)
+					      (car company-backends)))
+			      ;; Fallback to irony
+			      (when (executable-find "irony-server")
+				(setf (car company-backends)
+				      (append '(company-irony)
 					      (car company-backends)))))))))
 
 	    ;; Company preferences
