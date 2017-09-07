@@ -85,10 +85,17 @@
   :init (add-hook 'c-mode-common-hook 'rtags-start-process-unless-running)
   :config (progn
             (use-package rtags-helm)
-            (setq rtags-autostart-diagnostics t
-                  rtags-completions-enabled   t
-                  rtags-use-helm              t)
+            (setq rtags-autostart-diagnostics      t
+                  rtags-completions-enabled        t
+		  rtags-display-summary-as-tooltip t
+		  rtags-tooltips-enabled           t
+                  rtags-use-helm                   t
+		  rtags-display-result-backend     'helm)
             (rtags-enable-standard-keybindings)
+	    (rtags-set-periodic-reparse-timeout 2)
+
+	    ;; Kill rdm on Emacs exit
+	    (add-hook 'kill-emacs-hook 'rtags-quit-rdm)
 
             ;; Integrating rtags with eldoc
             ;; https://github.com/Andersbakken/rtags/issues/987
@@ -113,7 +120,6 @@
                         (split-string summary "\r?\n")
                         " "))
                       major-mode))))
-
 
             ;; Enable integration of rtags and eldoc
             (add-hook 'c-mode-common-hook (lambda ()

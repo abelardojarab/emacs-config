@@ -77,8 +77,14 @@
             ;; when using ido, the confirmation is rather annoying...
             (setq confirm-nonexistent-file-or-buffer nil)))
 
+;; Make compiler happy
+(use-package ido-hacks
+  :demand t
+  :config (ido-hacks-mode 1))
+
 ;; Ido everywhere
 (use-package ido-ubiquitous
+  :demand t
   :load-path (lambda () (expand-file-name "ido-ubiquitous/" user-emacs-directory))
   :config (ido-ubiquitous-mode 1))
 
