@@ -39,11 +39,11 @@
 	  ;; Use gtags to show documentation
 	  (add-hook 'c-mode-common-hook
 		    (lambda ()
-		      (if (and (executable-find "global")
-			       (projectile-project-p)
-			       (file-exists-p (concat (projectile-project-root)
-						      "GTAGS")))
-			  (setq-local eldoc-documentation-function #'ggtags-eldoc-function))))))
+		      (when (and (executable-find "global")
+				 (projectile-project-p)
+				 (file-exists-p (concat (projectile-project-root)
+							"GTAGS")))
+			(setq-local eldoc-documentation-function #'ggtags-eldoc-function))))))
 
 (use-package inline-docs
   :defer t

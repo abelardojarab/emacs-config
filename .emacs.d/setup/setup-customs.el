@@ -278,6 +278,7 @@
   '("*Compile-Log*"
     "^ "
     "TAGS"
+    "rc"
     "*diff-hl*"
     "*tmp status*"
     "Grepint: git-grep"
@@ -288,7 +289,13 @@
     "*GNU Emacs*"
     "*compilation*"
     "*cmake*"
-    "*etags tmp*")
+    "*etags tmp*"
+    "stdint.h"
+    "stdbool.h"
+    "stdio.h"
+    "stdlib.h"
+    "confname.h"
+    "unistd.h")
   "List of buffers to be ignored on tabbar and when switching buffers"
   :group 'my/customs
   :type 'list)

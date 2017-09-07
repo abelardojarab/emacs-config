@@ -26,16 +26,16 @@
   :diminish company-mode
   :load-path (lambda () (expand-file-name "company-mode/" user-emacs-directory))
   :commands global-company-mode
-  :bind (("C-;"             . company-complete-common)
+  :bind (("C-;"                       . company-complete-common)
          :map company-mode-map
-         ([remap completion-at-point] . company-complete-common)
+         ([remap completion-at-point] . company-complete-common-or-cycle)
          ([remap complete-symbol]     . company-complete-common)
          :map company-active-map
          ("C-n"                       . company-select-next)
          ("C-p"                       . company-select-previous)
          ("C-d"                       . company-show-doc-buffer)
-         ("TAB"                       . company-complete-common-or-cycle)
-         ("<tab>"                     . company-complete-common-or-cycle)
+         ("TAB"                       . company-complete-selection)
+         ("<tab>"                     . company-complete-selection)
          ("RET"                       . company-complete-selection))
   :init (progn
           ;; set default lighter as nothing so in general it is not displayed
@@ -109,119 +109,105 @@
                         (make-local-variable 'company-backends)
                         (setq company-backends (copy-tree company-backends))
 
-                        ;; company-gtags configuration
+                        ;; Prefer gtags
                         (if (and (executable-find "global")
 				 (projectile-project-p)
 				 (file-exists-p (concat (projectile-project-root)
 							"GTAGS")))
                             (setf (car company-backends)
                                   (append '(company-gtags)
-                                          (car company-backends))))
+                                          (car company-backends)))
 
-                        ;; irony and rtags configuration
-                        (if (cmake-ide--locate-cmakelists)
-                              (if (executable-find "rdm")
-                                  (setf (car company-backends)
-                                        (append '(company-rtags)
-                                                (car company-backends)))
+			  ;; Fallback to cmake/clang backends
+			  (when (cmake-ide--locate-cmakelists)
+			    ;; Prefer irony-server
+			    (if (executable-find "irony-server")
+				(setf (car company-backends)
+				      (append '(company-irony)
+					      (car company-backends)))
+			      ;; Fallback to rtags
+			      (when (executable-find "rdm")
+				(setq-local eldoc-documentation-function #'rtags-eldoc-function)
+				(setf (car company-backends)
+				      (append '(company-rtags)
+					      (car company-backends)))))))))
 
-				;; Fallback to irony-server
-				(if (executable-find "irony-server")
-				    (setf (car company-backends)
-					  (append '(company-irony)
-						  (car company-backends))))))))
+	    ;; Company preferences
+	    (setq company-begin-commands            '(self-insert-command
+						      org-self-insert-command
+						      c-electric-lt-gt
+						      c-electric-colon
+						      completion-separator-self-insert-command)
+		  company-transformers              '(company-sort-by-occurrence
+						      company-sort-by-backend-importance)
+		  company-idle-delay                0
+		  company-echo-delay                0
+		  company-selection-wrap-around     t
+		  company-minimum-prefix-length     2
+		  company-show-numbers              t
+		  company-tooltip-align-annotations t
+		  company-tooltip-limit             10
+		  company-dabbrev-downcase          nil
+		  company-dabbrev-ignore-case       t
+		  company-semantic-insert-arguments t
+		  company-gtags-insert-arguments    t)
 
-            (setq company-begin-commands '(self-insert-command
-                                           org-self-insert-command
-                                           c-electric-lt-gt
-                                           c-electric-colon
-                                           completion-separator-self-insert-command)
-                  company-transformers   '(company-sort-by-occurrence
-					   company-sort-by-backend-importance)
-                  company-idle-delay                0
-                  company-echo-delay                0
-                  company-selection-wrap-around     t
-                  company-minimum-prefix-length     2
-                  company-show-numbers              t
-                  company-tooltip-align-annotations t
-                  company-tooltip-limit             10
-                  company-dabbrev-downcase          nil
-                  company-dabbrev-ignore-case       t
-                  company-semantic-insert-arguments t
-                  company-gtags-insert-arguments    t)
+	    ;; Enable company in minibufer
+	    (defun company-elisp-minibuffer (command &optional arg &rest ignored)
+	      "`company-mode' completion back-end for Emacs Lisp in the minibuffer."
+	      (interactive (list 'interactive))
+	      (case command
+		('prefix (and (minibufferp)
+			      (case company-minibuffer-mode
+				('execute-extended-command (company-grab-symbol))
+				(t (company-capf `prefix)))))
+		('candidates
+		 (case company-minibuffer-mode
+		   ('execute-extended-command (all-completions arg obarray 'commandp))
+		   (t nil)))))
 
-            ;; Enable company in minibufer
-            ;; https://gist.github.com/Bad-ptr/7787596
-            (defun company-elisp-minibuffer (command &optional arg &rest ignored)
-              "`company-mode' completion back-end for Emacs Lisp in the minibuffer."
-              (interactive (list 'interactive))
-              (case command
-                ('prefix (and (minibufferp)
-                              (case company-minibuffer-mode
-                                ('execute-extended-command (company-grab-symbol))
-                                (t (company-capf `prefix)))))
-                ('candidates
-                 (case company-minibuffer-mode
-                   ('execute-extended-command (all-completions arg obarray 'commandp))
-                   (t nil)))))
+	    (defun minibuffer-company ()
+	      (unless company-mode
+		(when (and global-company-mode (or (eq this-command #'execute-extended-command)
+						   (eq this-command #'eval-expression)))
 
-            (defun minibuffer-company ()
-              (unless company-mode
-                (when (and global-company-mode (or (eq this-command #'execute-extended-command)
-                                                   (eq this-command #'eval-expression)))
+		  (setq-local company-minibuffer-mode this-command)
+		  (setq-local completion-at-point-functions
+			      (list (if (fboundp 'elisp-completion-at-point)
+					#'elisp-completion-at-point
+				      #'lisp-completion-at-point) t))
 
-                  (setq-local company-minibuffer-mode this-command)
-                  (setq-local completion-at-point-functions
-                              (list (if (fboundp 'elisp-completion-at-point)
-                                        #'elisp-completion-at-point
-                                      #'lisp-completion-at-point) t))
+		  (setq-local company-show-numbers nil)
+		  (setq-local company-backends '((company-elisp-minibuffer company-capf)))
+		  (setq-local company-tooltip-limit 8)
+		  (setq-local company-col-offset 1)
+		  (setq-local company-row-offset 1)
+		  (setq-local company-frontends '(company-pseudo-tooltip-unless-just-one-frontend
+						  company-preview-if-just-one-frontend))
 
-                  (setq-local company-show-numbers nil)
-                  (setq-local company-backends '((company-elisp-minibuffer company-capf)))
-                  (setq-local company-tooltip-limit 8)
-                  (setq-local company-col-offset 1)
-                  (setq-local company-row-offset 1)
-                  (setq-local company-frontends '(company-pseudo-tooltip-unless-just-one-frontend
-                                                  company-preview-if-just-one-frontend))
+		  (company-mode 1)
+		  (when (eq this-command #'execute-extended-command)
+		    (company-complete)))))
 
-                  (company-mode 1)
-                  (when (eq this-command #'execute-extended-command)
-                    (company-complete)))))
-
-            (add-hook 'minibuffer-setup-hook #'minibuffer-company)))
+	    (add-hook 'minibuffer-setup-hook #'minibuffer-company)))
 
 ;; Documentation popups for Company
 (use-package company-quickhelp
+  :demand t
   :after company
   :load-path (lambda () (expand-file-name "company-quickhelp/" user-emacs-directory))
   :if (display-graphic-p)
   :config (progn
-            (setq company-quickhelp-delay 0.2)
-            (add-hook 'global-company-mode-hook #'company-quickhelp-mode)
+	    (setq company-quickhelp-delay 0.2)
+	    (add-hook 'global-company-mode-hook #'company-quickhelp-mode)
 
-            ;; Update front-end tooltip
-            (setq company-frontends (delq 'company-echo-metadata-frontend company-frontends))))
-
-;; Company C-headers
-(use-package company-c-headers
-  :disabled t
-  :after company
-  :if (executable-find "clang")
-  :load-path (lambda () (expand-file-name "company-c-headers/" user-emacs-directory))
-  :config (progn
-            (defun my/ede-object-system-include-path ()
-              "Return the system include path for the current buffer."
-              (when (and ede-object
-                         (strinp (ede-system-include-path)))
-                (ede-system-include-path ede-object)))
-
-            (setq company-c-headers-path-system
-                  #'my/ede-object-system-include-path)))
+	    ;; Update front-end tooltip
+	    (setq company-frontends (delq 'company-echo-metadata-frontend company-frontends))))
 
 ;; Company bibtex integration
 (use-package company-bibtex
   :if (or (executable-find "bibtex")
-          (executable-find "biber"))
+	  (executable-find "biber"))
   :load-path (lambda () (expand-file-name "company-bibtex/" user-emacs-directory))
   :after company
   :config (setq company-bibtex-bibliography (list "~/workspace/Documents/Bibliography/biblio.bib")))
@@ -236,28 +222,28 @@
   :load-path (lambda () (expand-file-name "company-auctex/" user-emacs-directory))
   :after (company auctex company-math)
   :config (progn
-            (defun company-auctex-labels (command &optional arg &rest ignored)
-              "company-auctex-labels backend"
-              (interactive (list 'interactive))
-              (case command
-                (interactive (company-begin-backend 'company-auctex-labels))
-                (prefix (company-auctex-prefix "\\\\.*ref{\\([^}]*\\)\\="))
-                (candidates (company-auctex-label-candidates arg))))
+	    (defun company-auctex-labels (command &optional arg &rest ignored)
+	      "company-auctex-labels backend"
+	      (interactive (list 'interactive))
+	      (case command
+		(interactive (company-begin-backend 'company-auctex-labels))
+		(prefix (company-auctex-prefix "\\\\.*ref{\\([^}]*\\)\\="))
+		(candidates (company-auctex-label-candidates arg))))
 
-            ;; local configuration for TeX modes
-            (defun my/latex-mode-setup ()
-              (setq-local company-backends
-                          (append '(company-auctex-macros
-                                    company-auctex-environments
-                                    company-math-symbols-unicode
-                                    company-math-symbols-latex
-                                    company-auctex-labels
-                                    company-auctex-bibs
-                                    company-bibtex)
-                                  company-backends)))
+	    ;; local configuration for TeX modes
+	    (defun my/latex-mode-setup ()
+	      (setq-local company-backends
+			  (append '(company-auctex-macros
+				    company-auctex-environments
+				    company-math-symbols-unicode
+				    company-math-symbols-latex
+				    company-auctex-labels
+				    company-auctex-bibs
+				    company-bibtex)
+				  company-backends)))
 
-            (add-hook 'TeX-mode-hook 'my/latex-mode-setup)
-            (add-hook 'LaTeX-mode-hook #'company-auctex-init)))
+	    (add-hook 'TeX-mode-hook 'my/latex-mode-setup)
+	    (add-hook 'LaTeX-mode-hook #'company-auctex-init)))
 
 (provide 'setup-company)
 ;;; setup-company.el ends here

@@ -76,7 +76,8 @@
   :defer t
   :commands (rtags-print-symbol-info
              rtags-find-symbol-at-point
-             rtags-start-process-unless-running)
+             rtags-start-process-unless-running
+	     rtags-eldoc-function)
   :if (executable-find "rdm")
   :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory))
   :bind (:map c++-mode-map
@@ -84,7 +85,8 @@
               ("C-c C-s" . rtags-find-symbol-at-point))
   :init (add-hook 'c-mode-common-hook 'rtags-start-process-unless-running)
   :config (progn
-            (use-package rtags-helm)
+            (use-package helm-rtags
+	      :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory)))
             (setq rtags-autostart-diagnostics      t
                   rtags-completions-enabled        t
 		  rtags-display-summary-as-tooltip t
@@ -123,13 +125,11 @@
 
             ;; Enable integration of rtags and eldoc
             (add-hook 'c-mode-common-hook (lambda ()
-                                            (unless (and (executable-find "global")
-                                                         (projectile-project-p)
-                                                         (file-exists-p (concat (projectile-project-root)
-                                                                                "GTAGS")))
-                                              (setq-local
-                                               eldoc-documentation-function
-                                               #'rtags-eldoc-function))))))
+					    (when (and (executable-find "rdm")
+						       (projectile-project-p)
+						       (not (file-exists-p (concat (projectile-project-root)
+										   "GTAGS"))))
+					      (setq-local eldoc-documentation-function #'rtags-eldoc-function))))))
 
 ;; cmake syntax highlighting
 (use-package cmake-mode
