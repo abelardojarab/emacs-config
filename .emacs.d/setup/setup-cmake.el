@@ -59,13 +59,13 @@
             ;; Hooks
             (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
 
-	    ;; Enable integration of eldoc and irony
-	    (add-hook 'c-mode-common-hook (lambda ()
-					    (unless (and (executable-find "global")
-							 (projectile-project-p)
-							 (file-exists-p (concat (projectile-project-root)
-										"GTAGS")))
-					      (irony-eldoc))))))
+            ;; Enable integration of eldoc and irony
+            (add-hook 'c-mode-common-hook (lambda ()
+                                            (unless (and (executable-find "global")
+                                                         (projectile-project-p)
+                                                         (file-exists-p (concat (projectile-project-root)
+                                                                                "GTAGS")))
+                                              (irony-eldoc))))))
 
 ;; rtags
 ;; sudo apt-get install libclang-dev / brew install llvm --with-clang
@@ -86,8 +86,8 @@
   :config (progn
             (use-package rtags-helm)
             (setq rtags-autostart-diagnostics t
-                  rtags-completions-enabled t
-                  rtags-use-helm t)
+                  rtags-completions-enabled   t
+                  rtags-use-helm              t)
             (rtags-enable-standard-keybindings)
 
             ;; Integrating rtags with eldoc
@@ -115,15 +115,15 @@
                       major-mode))))
 
 
-	    ;; Enable integration of rtags and eldoc
+            ;; Enable integration of rtags and eldoc
             (add-hook 'c-mode-common-hook (lambda ()
-					    (unless (and (executable-find "global")
-							 (projectile-project-p)
-							 (file-exists-p (concat (projectile-project-root)
-										"GTAGS")))
-					      (setq-local
-					       eldoc-documentation-function
-					       #'rtags-eldoc-function))))))
+                                            (unless (and (executable-find "global")
+                                                         (projectile-project-p)
+                                                         (file-exists-p (concat (projectile-project-root)
+                                                                                "GTAGS")))
+                                              (setq-local
+                                               eldoc-documentation-function
+                                               #'rtags-eldoc-function))))))
 
 ;; cmake syntax highlighting
 (use-package cmake-mode
