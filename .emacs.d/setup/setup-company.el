@@ -59,7 +59,7 @@
                   '((company-capf           ;; `completion-at-point-functions'
                      company-yasnippet
                      company-keywords
-                     company-files)
+		     company-semantic)
                     (company-dabbrev
                      company-dabbrev-code
 		     company-abbrev)))
@@ -90,6 +90,17 @@
                                                                         company-abbrev
                                                                         company-files)))))
 
+	    ;; Company integration with irony
+	    (use-package company-irony
+	      :if (executable-find "irony-server")
+	      :load-path (lambda () (expand-file-name "company-irony/" user-emacs-directory)))
+
+	    ;; Company integration with rtags
+	    (use-package company-rtags
+	      :if (executable-find "rdm")
+	      :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory))
+	      :config (setq rtags-completions-enabled t))
+
             ;; C-mode setup
             (add-hook 'c-mode-common-hook
                       (lambda ()
@@ -99,32 +110,35 @@
                         (setq company-backends (copy-tree company-backends))
 
                         ;; company-gtags configuration
-                        (if (executable-find "global")
+                        (if (and (executable-find "global")
+				 (projectile-project-p)
+				 (file-exists-p (concat (projectile-project-root)
+							"GTAGS")))
                             (setf (car company-backends)
                                   (append '(company-gtags)
                                           (car company-backends))))
 
                         ;; irony and rtags configuration
                         (if (cmake-ide--locate-cmakelists)
-                            (progn
                               (if (executable-find "rdm")
                                   (setf (car company-backends)
                                         (append '(company-rtags)
-                                                (car company-backends))))
+                                                (car company-backends)))
 
-                              (if (executable-find "irony-server")
-                                  (setf (car company-backends)
-                                        (append '(company-irony)
-                                                (car company-backends))))))))
+				;; Fallback to irony-server
+				(if (executable-find "irony-server")
+				    (setf (car company-backends)
+					  (append '(company-irony)
+						  (car company-backends))))))))
 
             (setq company-begin-commands '(self-insert-command
                                            org-self-insert-command
                                            c-electric-lt-gt
                                            c-electric-colon
                                            completion-separator-self-insert-command)
-                  company-transformers '(company-sort-by-occurrence
-                                         company-sort-by-backend-importance)
-                  company-idle-delay 0
+                  company-transformers   '(company-sort-by-occurrence
+					   company-sort-by-backend-importance)
+                  company-idle-delay                0
                   company-echo-delay                0
                   company-selection-wrap-around     t
                   company-minimum-prefix-length     2
@@ -203,31 +217,6 @@
 
             (setq company-c-headers-path-system
                   #'my/ede-object-system-include-path)))
-
-;; Company integration with irony
-(use-package company-irony
-  :after (company irony)
-  :if (executable-find "irony-server")
-  :load-path (lambda () (expand-file-name "company-irony/" user-emacs-directory)))
-
-;; Irony C/C++ headers
-(use-package company-irony-c-headers
-  :disabled t
-  :after (company irony company-irony)
-  :if (executable-find "clang++")
-  :load-path (lambda () (expand-file-name "company-irony-c-headers/" user-emacs-directory))
-  :config (progn
-            (setq company-irony-c-headers--compiler-executable (executable-find "clang++"))
-
-            ;; group with company-irony but beforehand so we get first pick
-            (add-to-list 'company-backends '(company-irony-c-headers company-irony))))
-
-;; Company integration with rtags
-(use-package company-rtags
-  :if (executable-find "rdm")
-  :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory))
-  :after (company rtags)
-  :config (setq rtags-completions-enabled t))
 
 ;; Company bibtex integration
 (use-package company-bibtex

@@ -60,12 +60,12 @@
             (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
 
             ;; Enable integration of eldoc and irony
-            (add-hook 'c-mode-common-hook (lambda ()
-                                            (unless (and (executable-find "global")
-                                                         (projectile-project-p)
-                                                         (file-exists-p (concat (projectile-project-root)
-                                                                                "GTAGS")))
-                                              (irony-eldoc))))))
+            (add-hook 'irony-mode-hook (lambda ()
+					 (unless (and (executable-find "global")
+						      (projectile-project-p)
+						      (file-exists-p (concat (projectile-project-root)
+									     "GTAGS")))
+					   (irony-eldoc))))))
 
 ;; rtags
 ;; sudo apt-get install libclang-dev / brew install llvm --with-clang
