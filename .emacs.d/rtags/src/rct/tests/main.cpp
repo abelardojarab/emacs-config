@@ -92,7 +92,7 @@ class CustomOutputter : public CppUnit::CompilerOutputter
 };
 
 
-int main(int argc, char* argv[])
+int main()
 {
     CppUnit::TestRunner runner;
 

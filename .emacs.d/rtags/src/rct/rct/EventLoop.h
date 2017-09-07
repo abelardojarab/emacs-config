@@ -1,6 +1,7 @@
 #ifndef EVENTLOOP_H // -*- mode:c++ -*-
 #define EVENTLOOP_H
 
+#include <functional>
 #include <map>
 #include <memory>
 #include <mutex>
@@ -20,7 +21,11 @@
 #  include <sys/event.h>
 #  include <sys/time.h>
 #elif defined(HAVE_SELECT)
-#  include <sys/select.h>
+#  ifdef _WIN32
+#    include <Winsock2.h>
+#  else
+#    include <sys/select.h>
+#  endif
 #endif
 
 class Event
@@ -143,16 +148,28 @@ public:
     void unregisterSocket(int fd);
     unsigned int processSocket(int fd, int timeout = -1);
 
-    // See Timer.h for the flags
+    /**
+     * @param timeout timeout in ms
+     * @param flags see Timer.h
+     */
     int registerTimer(std::function<void(int)>&& func, int timeout, unsigned int flags = 0);
     void unregisterTimer(int id);
 
-    // Changes to the inactivity timeout while the loop is running may
-    // not be honoured.
-    int inactivityTimeout() const { return mInactivityTimeout; }
+    /**
+     *  Changes to the inactivity timeout while the loop is running may
+     *  not be honoured.
+     *  @param timeout unit: ms
+     */
     void setInactivityTimeout(int timeout) { mInactivityTimeout = timeout; }
+    int inactivityTimeout() const { return mInactivityTimeout; }
 
     enum { Success = 0x100, GeneralError = 0x200, Timeout = 0x400 };
+
+    /**
+     *  Run the EventLoop until there are no more pending events or a timeout
+     *  occurs.
+     *  @param timeout Unit: milliseconds. -1 for no timeout.
+     */
     unsigned int exec(int timeout = -1);
     void quit();
 

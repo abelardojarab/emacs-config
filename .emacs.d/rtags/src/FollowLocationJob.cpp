@@ -53,23 +53,14 @@ int FollowLocationJob::execute()
     if (queryFlags() & QueryMessage::TargetUsrs) {
         const Set<String> usrs = project()->findTargetUsrs(location);
         for (const String &usr : usrs) {
-            for (const Symbol &s : project()->findByUsr(usr, location.fileId(), Project::ArgDependsOn, location)) {
+            for (const Symbol &s : project()->findByUsr(usr, location.fileId(), Project::All)) {
                 write(s.toString());
             }
         }
         return 0;
     }
 
-    auto targets = project()->findTargets(symbol).toList();
-    targets.sort([](const Symbol &l, const Symbol &r) {
-            const int lrank = RTags::targetRank(l.kind);
-            const int rrank = RTags::targetRank(r.kind);
-            if (lrank != rrank)
-                return lrank > rrank;
-            if (l.isDefinition() != r.isDefinition())
-                return l.isDefinition();
-            return l.location < r.location;
-        });
+    auto targets = RTags::sortTargets(project()->findTargets(symbol));
 
     int rank = -1;
     Set<Location> seen;
@@ -91,12 +82,24 @@ int FollowLocationJob::execute()
         }
 
         if (queryFlags() & QueryMessage::DeclarationOnly ? target.isDefinition() : !target.isDefinition()) {
-            const auto other = project()->findTarget(target);
-            if (!other.isNull() && other.usr == target.usr) {
-                writeTarget(other);
-                if (queryFlags() & QueryMessage::AllTargets)
+            const auto others = RTags::sortTargets(project()->findTargets(target));
+            bool found = false;
+            for (auto other : others) {
+                if (!other.isNull() && other.usr == target.usr) {
+                    found = true;
+                    writeTarget(other);
+                    if (!(queryFlags() & QueryMessage::AllTargets)) {
+                        break;
+                    }
+                }
+            }
+
+            if (found) {
+                if (queryFlags() & QueryMessage::AllTargets) {
                     continue;
-                break;
+                } else {
+                    break;
+                }
             }
         }
         writeTarget(target);

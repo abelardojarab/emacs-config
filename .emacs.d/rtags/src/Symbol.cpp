@@ -41,7 +41,7 @@ String Symbol::toString(const std::shared_ptr<Project> &project,
                         const Set<String> &pieceFilters) const
 {
     auto filterPiece = [&pieceFilters](const char *name) { return pieceFilters.isEmpty() || pieceFilters.contains(name); };
-    auto properties = [this, &filterPiece]()
+    auto properties = [this, &filterPiece]() -> String
     {
         List<String> ret;
         if (isDefinition() && filterPiece("definition"))
@@ -81,11 +81,12 @@ String Symbol::toString(const std::shared_ptr<Project> &project,
 
     List<String> bases;
     List<String> args;
+
     if (project) {
         if (filterPiece("baseclasses")) {
             for (const auto &base : baseClasses) {
                 bool found = false;
-                for (const auto &sym : project->findByUsr(base, location.fileId(), Project::ArgDependsOn, location)) {
+                for (const auto &sym : project->findByUsr(base, location.fileId(), Project::ArgDependsOn)) {
                     bases << sym.symbolName;
                     found = true;
                     break;
@@ -406,7 +407,7 @@ Value Symbol::toValue(const std::shared_ptr<Project> &project,
             if (f & IncludeBaseClasses && filterPiece("baseclasses")) {
                 List<Value> b;
                 for (const auto &base : symbol.baseClasses) {
-                    for (const Symbol &s : project->findByUsr(base, symbol.location.fileId(), Project::ArgDependsOn, symbol.location)) {
+                    for (const Symbol &s : project->findByUsr(base, symbol.location.fileId(), Project::ArgDependsOn)) {
                         b.append(toValue(s, NullFlags));
                         break;
                     }

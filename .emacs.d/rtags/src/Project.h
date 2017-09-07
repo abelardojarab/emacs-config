@@ -43,10 +43,13 @@ class Match;
 class RestoreThread;
 struct DependencyNode
 {
-    DependencyNode(uint32_t f)
-        : fileId(f)
+    enum Flag {
+        Flag_None = 0x0,
+        Flag_IncludeError = 0x1
+    };
+    DependencyNode(uint32_t f, Flags<Flag> l = NullFlags)
+        : fileId(f), flags(l)
     {}
-
     void include(DependencyNode *dependee)
     {
         assert(!includes.contains(dependee->fileId) || includes.value(dependee->fileId) == dependee);
@@ -57,7 +60,12 @@ struct DependencyNode
 
     Dependencies dependents, includes;
     uint32_t fileId;
+
+    Flags<Flag> flags;
 };
+
+RCT_FLAGS(DependencyNode::Flag);
+
 class Project : public std::enable_shared_from_this<Project>
 {
 public:
@@ -134,6 +142,7 @@ public:
     enum SymbolMatchType {
         Exact,
         Wildcard,
+        Regexp,
         StartsWith
     };
     void findSymbols(const String &symbolName,
@@ -161,7 +170,7 @@ public:
     Set<String> findTargetUsrs(Location loc);
     Set<Symbol> findSubclasses(const Symbol &symbol);
 
-    Set<Symbol> findByUsr(const String &usr, uint32_t fileId = 0, DependencyMode mode = All, Location filtered = Location());
+    Set<Symbol> findByUsr(const String &usr, uint32_t fileId, DependencyMode mode);
 
     Path sourceFilePath(uint32_t fileId, const char *path = "") const;
 
@@ -240,7 +249,6 @@ public:
     void includeCompletions(Flags<QueryMessage::Flag> flags, const std::shared_ptr<Connection> &conn, Source &&source) const;
     size_t bytesWritten() const { return mBytesWritten; }
     void destroy() { mSaveDirty = false; }
-    void poll();
     enum VisitResult {
         Stop,
         Continue,
@@ -264,6 +272,7 @@ public:
     static void forEachSource(const IndexParseData &data, std::function<VisitResult(const Source &source)> cb);
     void forEachSource(std::function<VisitResult(const Source &source)> cb) const { forEachSource(mIndexParseData, cb); }
     void forEachSource(std::function<VisitResult(Source &source)> cb) { forEachSource(mIndexParseData, cb); }
+    void validateAll();
 private:
     void reloadCompileCommands();
     void onFileAddedOrModified(const Path &path);
@@ -274,7 +283,7 @@ private:
     };
     bool validate(uint32_t fileId, ValidateMode mode, String *error = 0) const;
     void removeDependencies(uint32_t fileId);
-    void updateDependencies(const std::shared_ptr<IndexDataMessage> &msg);
+    void updateDependencies(uint32_t fileId, const std::shared_ptr<IndexDataMessage> &msg);
     void loadFailed(uint32_t fileId);
     void updateFixIts(const Set<uint32_t> &visited, FixIts &fixIts);
     Diagnostics updateDiagnostics(const Diagnostics &diagnostics);
@@ -286,11 +295,13 @@ private:
 
     struct FileMapScope {
         FileMapScope(const std::shared_ptr<Project> &proj, int m)
-            : project(proj), openedFiles(0), totalOpened(0), max(m)
+            : project(proj), openedFiles(0), totalOpened(0), max(m), loadFailed(false)
         {}
         ~FileMapScope()
         {
             warning() << "Query opened" << totalOpened << "files for project" << project->path();
+            if (loadFailed)
+                project->validateAll();
         }
 
         struct LRUKey {
@@ -373,7 +384,7 @@ private:
                 } else {
                     error() << "Failed to open" << path << Location::path(fileId) << err;
                 }
-                project->loadFailed(fileId);
+                loadFailed = true;
                 fileMap.reset();
             }
             return fileMap;
@@ -386,6 +397,7 @@ private:
         std::shared_ptr<Project> project;
         int openedFiles, totalOpened;
         const int max;
+        bool loadFailed;
 
         EmbeddedLinkedList<std::shared_ptr<LRUEntry> > entryList;
         Map<LRUKey, std::shared_ptr<LRUEntry> > entryMap;

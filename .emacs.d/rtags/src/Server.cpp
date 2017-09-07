@@ -14,6 +14,7 @@
    along with RTags.  If not, see <http://www.gnu.org/licenses/>. */
 
 #include "Server.h"
+#include <rct/ThreadPool.h>
 #include "TokensJob.h"
 
 #include <arpa/inet.h>
@@ -79,10 +80,15 @@
 
 // Absolute paths to search (under) for (clang) system include files
 // Iterate until we find a dir at <abspath>/clang/<version>/include.
+// As of clang 4.0.0 we don't need (and can't have) these includes on Mac.
+#if CINDEX_VERSION_ENCODE(CINDEX_VERSION_MAJOR, CINDEX_VERSION_MINOR) >= CINDEX_VERSION_ENCODE(0, 37) && defined(OS_Darwin)
+static const List<Path> sSystemIncludePaths;
+#else
 static const List<Path> sSystemIncludePaths = {
     CLANG_LIBDIR_STR, // standard llvm build, debian/ubuntu
     "/usr/lib"        // fedora, arch
 };
+#endif
 
 Server *Server::sInstance = 0;
 Server::Server()
@@ -154,11 +160,12 @@ bool Server::init(const Options &options)
             mOptions.defines << Source::Define(String::format<128>("%s(...)", gccBuiltIntVectorFunctionDefines[i]));
         }
 #endif
-    } else {
+    }
 #ifdef CLANG_INCLUDE
-        mOptions.includePaths.append(Source::Include(Source::Include::Type_System, CLANG_INCLUDE_STR));
+    mOptions.includePaths.append(Source::Include(Source::Include::Type_System, CLANG_INCLUDE_STR));
 #endif
 
+    if (!(mOptions.options & NoLibClangIncludePath)) {
         // Iterate until we find an existing directory
         for (Path systemInclude : sSystemIncludePaths) {
             systemInclude = systemInclude.ensureTrailingSlash();
@@ -210,8 +217,8 @@ bool Server::init(const Options &options)
     assert(mOptions.pollTimer >= 0);
     if (mOptions.pollTimer) {
         mPollTimer = EventLoop::eventLoop()->registerTimer([this](int) {
-                if (std::shared_ptr<Project> proj = mCurrentProject.lock()) {
-                    proj->poll();
+                for (auto proj : mProjects) {
+                    proj.second->validateAll();
                 }
             }, mOptions.pollTimer * 1000);
     }
@@ -387,11 +394,11 @@ void Server::onNewMessage(const std::shared_ptr<Message> &message, const std::sh
     case VisitFileResponseMessage::MessageId:
         error() << "Unexpected message" << static_cast<int>(message->messageId());
         // assert(0);
-        connection->finish(1);
+        connection->finish(RTags::UnexpectedMessageError);
         break;
     default:
         error("Unknown message: %d", message->messageId());
-        connection->finish(1);
+        connection->finish(RTags::UnknownMessageError);
         break;
     }
     if ((mOptions.options & (NoFileManagerWatch|NoFileManager)) == NoFileManagerWatch) {
@@ -697,6 +704,9 @@ void Server::handleQueryMessage(const std::shared_ptr<QueryMessage> &message, co
 #endif
         startClangThread(message, conn);
         break;
+    case QueryMessage::Validate:
+        validate(message, conn);
+        break;
     case QueryMessage::DumpFileMaps:
         dumpFileMaps(message, conn);
         break;
@@ -772,14 +782,14 @@ void Server::followLocation(const std::shared_ptr<QueryMessage> &query, const st
     const Location loc = query->location();
     if (loc.isNull()) {
         conn->write("Not indexed");
-        conn->finish(1);
+        conn->finish(RTags::NotIndexed);
         return;
     }
     std::shared_ptr<Project> project = projectForQuery(query);
     if (!project) {
         error("No project");
         conn->write("Not indexed");
-        conn->finish(1);
+        conn->finish(RTags::NotIndexed);
         return;
     }
 
@@ -788,7 +798,7 @@ void Server::followLocation(const std::shared_ptr<QueryMessage> &query, const st
     {
         FollowLocationJob job(loc, query, project);
         if (!job.run(conn)) {
-            conn->finish(0);
+            conn->finish();
             return;
         }
     }
@@ -811,7 +821,7 @@ void Server::followLocation(const std::shared_ptr<QueryMessage> &query, const st
                     if (path.startsWith(projectPath)) {
                         FollowLocationJob job(loc, query, proj.second);
                         if (job.run(conn)) {
-                            conn->finish(0);
+                            conn->finish();
                             return;
                         }
                     }
@@ -821,8 +831,10 @@ void Server::followLocation(const std::shared_ptr<QueryMessage> &query, const st
     }
     if (!project->dependencies().contains(loc.fileId())) {
         conn->write("Not indexed");
+        conn->finish(RTags::NotIndexed);
+    } else {
+        conn->finish(RTags::GeneralFailure);
     }
-    conn->finish(1);
 }
 
 void Server::isIndexing(const std::shared_ptr<QueryMessage> &, const std::shared_ptr<Connection> &conn)
@@ -894,7 +906,7 @@ void Server::startClangThread(const std::shared_ptr<QueryMessage> &query, const 
 
     if (!project->dependencies().contains(fileId)) {
         conn->write("Not indexed");
-        conn->finish(1);
+        conn->finish(RTags::NotIndexed);
         return;
     }
 
@@ -1064,15 +1076,20 @@ void Server::symbolInfo(const std::shared_ptr<QueryMessage> &query, const std::s
         fileId = Location::fileId(path);
         if (!fileId) {
             conn->write("Not indexed");
-            conn->finish(1);
+            conn->finish(RTags::NotIndexed);
             return;
         }
     }
 
     std::shared_ptr<Project> project = projectForQuery(query);
+    if (!project) {
+        List<Match> matches;
+        matches << path;
+        project = projectForMatches(matches);
+    }
     if (!project || !project->dependencies().contains(fileId)) {
         conn->write("Not indexed");
-        conn->finish(1);
+        conn->finish(RTags::NotIndexed);
         return;
     }
 
@@ -1146,7 +1163,7 @@ void Server::referencesForLocation(const std::shared_ptr<QueryMessage> &query, c
     const Location loc = query->location();
     if (loc.isNull()) {
         conn->write("Not indexed");
-        conn->finish();
+        conn->finish(RTags::NotIndexed);
         return;
     }
     std::shared_ptr<Project> project = projectForQuery(query);
@@ -1154,7 +1171,7 @@ void Server::referencesForLocation(const std::shared_ptr<QueryMessage> &query, c
     if (!project) {
         error("No project");
         conn->write("Not indexed");
-        conn->finish();
+        conn->finish(RTags::NotIndexed);
         return;
     }
 
@@ -1162,7 +1179,7 @@ void Server::referencesForLocation(const std::shared_ptr<QueryMessage> &query, c
 
     if (!project->dependencies().contains(loc.fileId())) {
         conn->write("Not indexed");
-        conn->finish(1);
+        conn->finish(RTags::NotIndexed);
         return;
     }
 
@@ -1268,7 +1285,7 @@ void Server::reloadFileManager(const std::shared_ptr<QueryMessage> &query, const
     if (project) {
         if (mOptions.options & NoFileManager) {
             conn->write<512>("Not watching files");
-            conn->finish(1);
+            conn->finish(RTags::GeneralFailure);
         } else {
             conn->write<512>("Reloading files for %s", project->path().constData());
             conn->finish();
@@ -1284,7 +1301,7 @@ void Server::hasFileManager(const std::shared_ptr<QueryMessage> &query, const st
 {
     const Path path = query->query();
     std::shared_ptr<Project> project = projectForQuery(query);
-    if (project && project->fileManager() ? project->fileManager()->contains(path) : project->match(query->match())) {
+    if (project && (project->fileManager() ? project->fileManager()->contains(path) : project->match(query->match()))) {
         if (!(query->flags() & QueryMessage::SilentQuery))
             warning("=> 1");
         conn->write("1");
@@ -1391,7 +1408,7 @@ bool Server::shouldIndex(const Source &source, const Path &srcRoot) const
     const Path sourceFile = source.sourceFile();
 
     if (Filter::filter(sourceFile, mOptions.excludeFilters) == Filter::Filtered) {
-        warning() << "Shouldn't index" << source.sourceFile() << "because of exclude filter";
+        error() << "Shouldn't index" << source.sourceFile() << "because of exclude filter";
         return false;
     }
 
@@ -1428,7 +1445,7 @@ void Server::setCurrentProject(const std::shared_ptr<Project> &project)
                 error() << "error opening" << (mOptions.dataDir + ".currentProject") << "for write";
             }
             if (!(mOptions.options & NoFileManager))
-                project->fileManager()->load(FileManager::Synchronous);
+                project->fileManager()->load(FileManager::Asynchronous);
             // project->diagnoseAll();
         } else {
             Path::rm(mOptions.dataDir + ".currentProject");
@@ -1496,7 +1513,12 @@ void Server::removeProject(const std::shared_ptr<QueryMessage> &query, const std
 
 void Server::project(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn)
 {
-    if (query->flags() & QueryMessage::CurrentProjectOnly) {
+    std::shared_ptr<Project> project = projectForQuery(query);
+    if (project) {
+        setCurrentProject(project);
+    }
+
+    if (project || query->flags() & QueryMessage::CurrentProjectOnly) {
         if (std::shared_ptr<Project> current = currentProject()) {
             conn->write(current->path());
         }
@@ -1566,13 +1588,23 @@ void Server::jobCount(const std::shared_ptr<QueryMessage> &query, const std::sha
         if (header)
             q.remove(0, 1);
         size_t &jobs = header ? mOptions.headerErrorJobCount : mOptions.jobCount;
+        int jobCount;
         bool ok;
-        const int jobCount = q.toLongLong(&ok);
+        if (q == "default") {
+            ok = true;
+            jobCount = header ? mOptions.jobCount : std::max(2, ThreadPool::idealThreadCount());
+        } else {
+            jobCount = q.toLongLong(&ok);
+        }
         if (!ok || jobCount < 0 || jobCount > 100) {
             conn->write<128>("Invalid job count %s (%d)", query->query().constData(), jobCount);
         } else {
-            jobs = jobCount;
-            mOptions.headerErrorJobCount = std::min(mOptions.headerErrorJobCount, mOptions.jobCount);
+            if (mOptions.headerErrorJobCount == mOptions.jobCount) {
+                mOptions.headerErrorJobCount = mOptions.jobCount = jobCount;
+            } else {
+                jobs = jobCount;
+                mOptions.headerErrorJobCount = std::min(mOptions.headerErrorJobCount, mOptions.jobCount);
+            }
             conn->write<128>("Changed jobs to %zu/%zu", mOptions.jobCount, mOptions.headerErrorJobCount);
         }
     }
@@ -1598,19 +1630,24 @@ void Server::sources(const std::shared_ptr<QueryMessage> &query, const std::shar
     const Path path = query->query();
     const bool flagsOnly = query->flags() & QueryMessage::CompilationFlagsOnly;
     const bool splitLine = query->flags() & QueryMessage::CompilationFlagsSplitLine;
-    auto format = [flagsOnly, splitLine](const Source &source) {
+    const bool pwd = query->flags() & QueryMessage::CompilationFlagsPwd;
+    auto format = [flagsOnly, splitLine, pwd](const Source &source) {
+        String ret;
+        if (pwd)
+            ret += "pwd: " + source.directory + "\n";
         if (flagsOnly) {
             const Flags<Source::CommandLineFlag> flags = (Source::Default
                                                           |Source::ExcludeDefaultArguments
                                                           |Source::IncludeCompiler
                                                           |Source::IncludeSourceFile
                                                           |Source::ExcludeDefaultIncludePaths);
-            return String::join(source.toCommandLine(flags), splitLine ? '\n' : ' ');
+            ret += String::join(source.toCommandLine(flags), splitLine ? '\n' : ' ');
         } else if (splitLine) {
-            return String::join(source.toString().split(' '), '\n');
+            ret += String::join(source.toString().split(' '), '\n');
         } else {
-            return source.toString();
+            ret += source.toString();
         }
+        return ret;
     };
     if (path.isFile()) {
         std::shared_ptr<Project> project = projectForQuery(query);
@@ -1690,7 +1727,7 @@ void Server::dumpCompileCommands(const std::shared_ptr<QueryMessage> &query, con
         project = currentProject();
     if (!project) {
         conn->write("No current project");
-        conn->finish(1);
+        conn->finish(RTags::GeneralFailure);
         return;
     }
 
@@ -1732,7 +1769,7 @@ void Server::suspend(const std::shared_ptr<QueryMessage> &query, const std::shar
     List<Match> matches;
     if (!query->currentFile().isEmpty())
         matches.push_back(query->currentFile());
-    if (mode == FileOn || mode == FileOff || mode == FileOn)
+    if (mode == FileOn || mode == FileOff || mode == FileToggle)
         matches.push_back(p);
     std::shared_ptr<Project> project;
     if (matches.isEmpty()) {
@@ -1806,14 +1843,33 @@ void Server::setBuffers(const std::shared_ptr<QueryMessage> &query, const std::s
         }
     } else {
         Deserializer deserializer(encoded);
+        int mode;
+        deserializer >> mode;
         List<Path> paths;
         deserializer >> paths;
-        mActiveBuffers.clear();
-        for (const Path &path : paths) {
-            mActiveBuffers << Location::insertFile(path);
+        const size_t oldCount = mActiveBuffers.size();
+        if (mode == 0 || mode == 1) {
+            if (mode == 0)
+                mActiveBuffers.clear();
+            for (const Path &path : paths) {
+                if (uint32_t fileId = Location::insertFile(path))
+                    mActiveBuffers.insert(fileId);
+            }
+        } else {
+            assert(mode == -1);
+            for (const Path &path : paths) {
+                mActiveBuffers.remove(Location::insertFile(path));
+            }
         }
-        conn->write<32>("Added %zu buffers", mActiveBuffers.size());
+        if (oldCount < mActiveBuffers.size()) {
+            conn->write<32>("Added %zu buffers", mActiveBuffers.size() - oldCount);
+        } else if (oldCount > mActiveBuffers.size()) {
+            conn->write<32>("Removed %zu buffers", oldCount - mActiveBuffers.size());
+        } else {
+            conn->write<32>("We still have %zu buffers", oldCount);
+        }
     }
+    mJobScheduler->sort();
     conn->finish();
 }
 
@@ -1822,20 +1878,20 @@ void Server::classHierarchy(const std::shared_ptr<QueryMessage> &query, const st
     const Location loc = query->location();
     if (loc.isNull()) {
         conn->write("Not indexed");
-        conn->finish(1);
+        conn->finish(RTags::NotIndexed);
         return;
     }
     std::shared_ptr<Project> project = projectForQuery(query);
     if (!project) {
         error("No project");
         conn->write("Not indexed");
-        conn->finish(1);
+        conn->finish(RTags::NotIndexed);
         return;
     }
 
     if (!project->dependencies().contains(loc.fileId())) {
         conn->write("Not indexed");
-        conn->finish(1);
+        conn->finish(RTags::NotIndexed);
         return;
     }
 
@@ -1896,6 +1952,22 @@ void Server::tokens(const std::shared_ptr<QueryMessage> &query, const std::share
 
     TokensJob job(query, fileId, from, to, project);
     conn->finish(job.run(conn));
+}
+
+void Server::validate(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn)
+{
+    std::shared_ptr<Project> project = projectForQuery(query);
+    if (!project)
+        project = mCurrentProject.lock();
+    if (!project) {
+        error("No project");
+        conn->write("No current project");
+        conn->finish(RTags::GeneralFailure);
+        return;
+    }
+
+    project->validateAll();
+    conn->finish();
 }
 
 void Server::handleVisitFileMessage(const std::shared_ptr<VisitFileMessage> &message, const std::shared_ptr<Connection> &conn)

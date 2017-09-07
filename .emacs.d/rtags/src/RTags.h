@@ -16,6 +16,18 @@
 #ifndef RTags_h
 #define RTags_h
 
+#if defined(__clang__)
+#if (__clang_major__ * 10000 + __clang_minor__ * 100 + __clang_patchlevel__) >= 30400
+#define HAS_JSON_H
+#endif
+#elif defined(__GNUC__)
+#if (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__) >= 40900
+#define HAS_JSON_H
+#endif
+#else // other compiler, assume json.h is supported
+#define HAS_JSON_H
+#endif
+
 #include <assert.h>
 #include <ctype.h>
 #include <typeinfo>
@@ -96,6 +108,18 @@ String versionString();
 const LogLevel DiagnosticsLevel(-2);
 const LogLevel Statistics(-3);
 
+enum ExitCode {
+    Success = 0,
+    GeneralFailure = 32,
+    NetworkFailure = 33,
+    TimeoutFailure = 34,
+    NotIndexed = 35,
+    ConnectionFailure = 36,
+    ProtocolFailure = 37,
+    ArgumentParseError = 38,
+    UnexpectedMessageError = 39,
+    UnknownMessageError = 40
+};
 enum UnitType {
     CompileC,
     CompileCPlusPlus
@@ -610,7 +634,8 @@ enum ProjectRootMode {
 Path findProjectRoot(const Path &path, ProjectRootMode mode, SourceCache *cache = 0);
 enum FindAncestorFlag {
     Shallow = 0x1,
-    Wildcard = 0x2
+    Wildcard = 0x2,
+    Authoritative = 0x4
 };
 RCT_FLAGS(FindAncestorFlag);
 Path findAncestor(Path path, const String &fn, Flags<FindAncestorFlag> flags, SourceCache *cache = 0);
@@ -637,7 +662,7 @@ inline int targetRank(CXCursorKind kind)
 {
     switch (kind) {
     case CXCursor_Constructor: // this one should be more than class/struct decl
-        return 5;
+        return 3;
     case CXCursor_ClassDecl:
     case CXCursor_StructDecl:
     case CXCursor_ClassTemplate:
@@ -651,7 +676,7 @@ inline int targetRank(CXCursorKind kind)
         // functiondecl and cxx method must be more than cxx
         // CXCursor_FunctionTemplate. Since constructors for templatized
         // objects seem to come out as function templates
-        return 3;
+        return 4;
     case CXCursor_MacroDefinition:
         return 5;
     default:
@@ -671,6 +696,37 @@ inline Symbol bestTarget(const Set<Symbol> &targets)
     }
     return ret;
 }
+
+inline void sortTargets(List<Symbol> &targets)
+{
+    targets.sort([](const Symbol &l, const Symbol &r) {
+            const int lrank = RTags::targetRank(l.kind);
+            const int rrank = RTags::targetRank(r.kind);
+            if (lrank != rrank)
+                return lrank > rrank;
+            if (l.isDefinition() != r.isDefinition())
+                return l.isDefinition();
+            return l.location < r.location;
+        });
+}
+
+inline List<Symbol> sortTargets(Set<Symbol> &&set)
+{
+    List<Symbol> targets;
+    targets.resize(set.size());
+    size_t i=0;
+    for (auto &sym : set) {
+        targets[i++] = std::move(sym);
+    }
+    sortTargets(targets);
+    return targets;
+}
+
+inline List<Symbol> sortTargets(const Set<Symbol> &set)
+{
+    return sortTargets(Set<Symbol>(set));
+}
+
 inline String xmlEscape(const String& xml)
 {
     if (xml.isEmpty())

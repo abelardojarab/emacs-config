@@ -86,7 +86,8 @@ public:
         AllowWErrorAndWFatalErrors = (1ull << 29),
         NoRealPath = (1ull << 30),
         Separate32BitAnd64Bit = (1ull << 31),
-        SourceIgnoreIncludePathDifferencesInUsr = (1ull << 32)
+        SourceIgnoreIncludePathDifferencesInUsr = (1ull << 32),
+        NoLibClangIncludePath = (1ull << 33)
     };
     struct Options {
         Options()
@@ -194,6 +195,7 @@ private:
     void classHierarchy(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
     void debugLocations(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
     void tokens(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
+    void validate(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
 
     std::shared_ptr<Project> projectForQuery(const std::shared_ptr<QueryMessage> &queryMessage);
     std::shared_ptr<Project> projectForMatches(const List<Match> &matches);

@@ -153,6 +153,7 @@ enum OptionType {
     LargeByValueCopy,
     AllowMultipleSources,
     NoStartupProject,
+    NoLibClangIncludePath,
     NoNoUnknownWarningsOption,
     IgnoreCompiler,
     CompilerWrappers,
@@ -273,6 +274,7 @@ int main(int argc, char** argv)
         { Help, "help", 'h', CommandLineParser::NoValue, "Display this page." },
         { Version, "version", 0, CommandLineParser::NoValue, "Display version." },
         { IncludePath, "include-path", 'I', CommandLineParser::Required, "Add additional include path to clang." },
+        { NoLibClangIncludePath, "no-libclang-include-path", 0, CommandLineParser::NoValue, "Don't use the include path from libclang." },
         { Isystem, "isystem", 's', CommandLineParser::Required, "Add additional system include path to clang." },
         { Define, "define", 'D', CommandLineParser::Required, "Add additional define directive to clang." },
         { DefaultArgument, "default-argument", 0, CommandLineParser::Required, "Add additional argument to clang." },
@@ -292,7 +294,7 @@ int main(int argc, char** argv)
         { Silent, "silent", 'S', CommandLineParser::NoValue, "No logging to stdout/stderr." },
         { ExcludeFilter, "exclude-filter", 'X', CommandLineParser::Required, "Files to exclude from rdm, default \"" DEFAULT_EXCLUDEFILTER "\"." },
         { SocketFile, "socket-file", 'n', CommandLineParser::Required, "Use this file for the server socket (default ~/.rdm)." },
-        { DataDir, "data-dir", 'd', CommandLineParser::Required, "Use this directory to store persistent data (default ~/.rtags)." },
+        { DataDir, "data-dir", 'd', CommandLineParser::Required, "Use this directory to store persistent data (default $XDG_CACHE_HOME/rtags otherwise ~/.cache/rtags)." },
         { IgnorePrintfFixits, "ignore-printf-fixits", 'F', CommandLineParser::NoValue, "Disregard any clang fixit that looks like it's trying to fix format for printf and friends." },
         { ErrorLimit, "error-limit", 'f', CommandLineParser::Required, "Set error limit to argument (-ferror-limit={arg} (default " STR(DEFAULT_ERROR_LIMIT) ")." },
         { BlockArgument, "block-argument", 'G', CommandLineParser::Required, "Block this argument from being passed to clang. E.g. rdm --block-argument -fno-inline" },
@@ -321,7 +323,7 @@ int main(int argc, char** argv)
         { CompletionLogs, "completion-logs", 0, CommandLineParser::NoValue, "Log more info about completions." },
         { MaxIncludeCompletionDepth, "max-include-completion-depth", 0, CommandLineParser::Required, "Max recursion depth for header completion (default " STR(DEFAULT_MAX_INCLUDE_COMPLETION_DEPTH) ")." },
         { AllowWpedantic, "allow-Wpedantic", 'P', CommandLineParser::NoValue, "Don't strip out -Wpedantic. This can cause problems in certain projects." },
-        { AllowWErrorAndWFatalErrors, "allow-Werror", 0, CommandLineParser::NoValue, "Don't strip out -Werror and -Wfatal-error. By default these are stripped out. " },
+        { AllowWErrorAndWFatalErrors, "allow-Werror", 0, CommandLineParser::NoValue, "Don't strip out -Werror and -Wfatal-errors. By default these are stripped out. " },
         { EnableCompilerManager, "enable-compiler-manager", 'R', CommandLineParser::NoValue, "Query compilers for their actual include paths instead of letting clang use its own." },
         { EnableNDEBUG, "enable-NDEBUG", 'g', CommandLineParser::NoValue, "Don't remove -DNDEBUG from compile lines." },
         { Progress, "progress", 'p', CommandLineParser::NoValue, "Report compilation progress in diagnostics output." },
@@ -491,6 +493,9 @@ int main(int argc, char** argv)
         case NoStartupProject: {
             serverOpts.options |= Server::NoStartupCurrentProject;
             break; }
+        case NoLibClangIncludePath: {
+            serverOpts.options |= Server::NoLibClangIncludePath;
+            break; }
         case NoNoUnknownWarningsOption: {
             serverOpts.options |= Server::NoNoUnknownWarningsOption;
             break; }
@@ -531,7 +536,7 @@ int main(int argc, char** argv)
             break; }
         case RpNiceValue: {
             bool ok;
-            serverOpts.rpNiceValue = String(value).toLong(&ok);
+            serverOpts.rpNiceValue = value.toLong(&ok);
             if (!ok) {
                 return { String::format<1024>("Can't parse argument to -a %s.", value.constData()), CommandLineParser::Parse_Error };
             }
@@ -828,7 +833,6 @@ int main(int argc, char** argv)
         crashDumpFile = fopen(crashDumpTempFilePath, "w");
         if (!crashDumpFile) {
             fprintf(stderr, "Couldn't open temp file %s for write (%d)\n", crashDumpTempFilePath, errno);
-            return 1;
         }
     }
 #endif
@@ -850,5 +854,3 @@ int main(int argc, char** argv)
     cleanupLogging();
     return ret;
 }
-
-

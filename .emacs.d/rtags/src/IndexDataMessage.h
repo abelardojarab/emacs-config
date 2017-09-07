@@ -81,9 +81,6 @@ public:
     Flags<IndexerJob::Flag> indexerJobFlags() const { return mIndexerJobFlags; }
     void setIndexerJobFlags(Flags<IndexerJob::Flag> flags) { mIndexerJobFlags = flags; }
 
-    uint32_t fileId() const { return mFileId; }
-    void setFileId(uint32_t id) { mFileId = id; }
-
     const String &message() const { return mMessage; }
     void setMessage(const String &msg) { mMessage = msg; }
 
@@ -93,20 +90,17 @@ public:
     enum FileFlag {
         NoFileFlag = 0x0,
         Visited = 0x1,
-        HeaderError = 0x2
+        HeaderError = 0x2,
+        IncludeError = 0x4
     };
     Hash<uint32_t, Flags<FileFlag> > &files() { return mFiles; }
     const Hash<uint32_t, Flags<FileFlag> > &files() const { return mFiles; }
 
     size_t bytesWritten() const { return mBytesWritten; }
     void setBytesWritten(size_t bytes) { mBytesWritten = bytes; }
-
-    SourceList sources() const { return mSources; }
-    void setSources(const SourceList &srcs) { mSources = srcs; }
 private:
     Path mProject;
     uint64_t mParseTime, mId;
-    uint32_t mFileId;
     Flags<IndexerJob::Flag> mIndexerJobFlags; // indexerjobflags
     String mMessage; // used as output for dump when flags & Dump
     FixIts mFixIts;
@@ -115,7 +109,6 @@ private:
     Hash<uint32_t, Flags<FileFlag> > mFiles;
     Flags<Flag> mFlags;
     size_t mBytesWritten;
-    SourceList mSources;
 };
 
 RCT_FLAGS(IndexDataMessage::Flag);
@@ -123,26 +116,14 @@ RCT_FLAGS(IndexDataMessage::FileFlag);
 
 inline void IndexDataMessage::encode(Serializer &serializer) const
 {
-    serializer << mProject << mParseTime << mFileId << mId << mIndexerJobFlags << mMessage
-               << mFixIts << mIncludes << mDiagnostics << mFiles << mFlags << mBytesWritten
-               << static_cast<uint32_t>(mSources.size());
-    for (const Source &source : mSources) {
-        source.encode(serializer, Source::IgnoreSandbox);
-    }
+    serializer << mProject << mParseTime << mId << mIndexerJobFlags << mMessage
+               << mFixIts << mIncludes << mDiagnostics << mFiles << mFlags << mBytesWritten;
 }
 
 inline void IndexDataMessage::decode(Deserializer &deserializer)
 {
-    deserializer >> mProject >> mParseTime >> mFileId >> mId >> mIndexerJobFlags >> mMessage
+    deserializer >> mProject >> mParseTime >> mId >> mIndexerJobFlags >> mMessage
                  >> mFixIts >> mIncludes >> mDiagnostics >> mFiles >> mFlags >> mBytesWritten;
-
-    uint32_t size;
-    deserializer >> size;
-    mSources.resize(size);
-    for (Source &source : mSources) {
-        source.decode(deserializer, Source::IgnoreSandbox);
-    }
-
 }
 
 #endif

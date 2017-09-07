@@ -111,7 +111,9 @@ enum LogFlag {
     Append = 0x01,
     DontRotate = 0x02,
     LogStderr = 0x04,
+#ifndef _WIN32
     LogSyslog = 0x08,
+#endif
     LogTimeStamp = 0x10,
     LogFlush = 0x20
 };
@@ -146,6 +148,12 @@ public:
 #endif
     Log operator<<(unsigned long long number) { return addStringStream(number); }
     Log operator<<(long long number) { return addStringStream(number); }
+#ifdef _WIN32
+    /// at least on mingw64, this is required for the DWORD data type.
+    /// which is strange actually, because DWORD is an unsigned 32-bit integer
+    /// just like uint32_t.
+    Log operator<<(unsigned long number) { return addStringStream(number); }
+#endif
     Log operator<<(uint32_t number) { return addStringStream(number); }
     Log operator<<(int32_t number) { return addStringStream(number); }
     Log operator<<(uint16_t number) { return addStringStream(number); }

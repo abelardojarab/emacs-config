@@ -1,7 +1,7 @@
 #+OPTIONS: ^:nil
-[[https://travis-ci.org/Andersbakken/rtags][https://travis-ci.org/Andersbakken/rtags.svg?branch=master]]
-[[http://www.gnu.org/licenses/gpl-3.0.txt][https://img.shields.io/badge/license-GPL%203-brightgreen.svg]]
-[[http://melpa.org/#/rtags][file:http://melpa.org/packages/rtags-badge.svg]]
+
+#+html: <div align="center"><a href="https://travis-ci.org/Andersbakken/rtags"><img alt="MELPA" src="https://travis-ci.org/Andersbakken/rtags.svg?branch=master"/></a> <a href="https://www.gnu.org/licenses/gpl-3.0.txt"><img alt="MELPA" src="https://img.shields.io/badge/license-GPL%203-brightgreen.svg"/></a></div>
+#+html: <table align="center" style="width:100%"><tr><th>rtags</th><th>ac-rtags</th><th>company-rtags</th><th>flycheck-rtags</th><th>helm-rtags</th><th>ivy-rtags</th></tr><tr><td align="center"><a href="https://melpa.org/#/rtags"><img alt="MELPA" src="https://melpa.org/packages/rtags-badge.svg"/></a></td><td align="center"><a href="https://melpa.org/#/ac-rtags"><img alt="MELPA" src="https://melpa.org/packages/ac-rtags-badge.svg"/></a></td><td align="center"><a href="https://melpa.org/#/company-rtags"><img alt="MELPA" src="https://melpa.org/packages/company-rtags-badge.svg"/></a></td><td align="center"><a href="https://melpa.org/#/flycheck-rtags"><img alt="MELPA" src="https://melpa.org/packages/flycheck-rtags-badge.svg"/></a></td><td align="center"><a href="https://melpa.org/#/helm-rtags"><img alt="MELPA" src="https://melpa.org/packages/helm-rtags-badge.svg"/></a></td><td align="center"><a href="https://melpa.org/#/ivy-rtags"><img alt="MELPA" src="https://melpa.org/packages/ivy-rtags-badge.svg"/></a></td></tr></table>
 
 * Introduction
 RTags is a client/server application that indexes C/C++ code and keeps a
@@ -50,13 +50,19 @@ Index the RTags project, and wait until =rdm= is silent
 Open source file in =emacs=
 
 #+BEGIN_SRC sh
-emacs +72:34 src/rdm.cpp
+emacs +73:34 src/rdm.cpp
 #+END_SRC
 
 Load =rtags.el=
 
 #+BEGIN_EXAMPLE
 M-: (load-file "rtags.el") RET
+#+END_EXAMPLE
+
+Insure =rc= can be found
+
+#+BEGIN_EXAMPLE
+M-x set-variable RET rtags-path RET "../bin" RET
 #+END_EXAMPLE
 
 Call =rtags-find-symbol-at-point=
@@ -185,11 +191,11 @@ sudo port install clang-3.5
 
   You can also download the sources from here:
 
-  http://andersbakken.github.io/rtags-releases/rtags.tar.bz2
+  https://andersbakken.github.io/rtags-releases/rtags-2.14.tar.bz2
 
   or
 
-  http://andersbakken.github.io/rtags-releases/rtags.tar.gz
+  https://andersbakken.github.io/rtags-releases/rtags-2.14.tar.gz
 
 - Building RTags
 
@@ -207,6 +213,31 @@ sudo port install clang-3.5
 
   *TIP:* You can run =ccmake= (CMake with an ncurses UI) instead of =cmake= to
   interactively configure the RTags build.
+
+  Note that if you're trying to test RTags by indexing RTags' own
+  source code you shouldn't build it in /tmp/ since RTags will refuse
+  to index files in /tmp/
+
+- Elpa
+
+  You can install the elisp part of RTags using package.el if you add
+  melpa to your sources list.
+
+  Once you have emacs installed from melpa you can use the elisp to
+  build the c++ parts of RTags. You still need to have a working
+  compiler, libclang and cmake installed.
+
+  To use:
+  #+BEGIN_SRC elisp
+  M-x rtags-install <ret>
+  #+END_SRC
+
+  You may have to set additional arguments to cmake for this
+  work. E.g.
+
+  #+BEGIN_SRC elisp
+    M-: (rtags-install nil "-DLIBCLANG_LLVM_CONFIG_EXECUTABLE=/usr/local//Cellar/llvm/4.0.0/bin/llvm-config") <ret>
+  #+END_SRC
 
 * Finding clang
 ** Use Your System's version
@@ -529,6 +560,9 @@ also be socket acivated.
    [Service]
    Type=simple
    ExecStart=$RDM -v --inactivity-timeout 300 --log-flush
+   ExecStartPost=/bin/sh -c "echo +19 > /proc/$MAINPID/autogroup"
+   Nice=19
+   CPUSchedulingPolicy=idle
    #+END_EXAMPLE
 
  3. Replace =$RDM= with the path to your copy of =rdm=, and add any command
@@ -545,6 +579,63 @@ also be socket acivated.
     #+END_SRC
 
     =Systemd= will create the =rdm= socket automatically.
+
+If you prefer using SystemV something like this could be used:
+
+#+BEGIN_EXAMPLE
+
+#!/bin/bash
+#
+# chkconfig: 35 90 12
+# description: Foo server
+#
+
+# Get function from functions library
+. /etc/init.d/functions
+
+# Start the service FOO
+start() {
+        initlog -c "echo -n Starting FOO server: "
+        /path/to/FOO &
+        ### Create the lock file ###
+        touch /var/lock/subsys/FOO
+        success $"FOO server startup"
+        echo
+}
+
+# Restart the service FOO
+stop() {
+        initlog -c "echo -n Stopping FOO server: "
+        killproc FOO
+        ### Now, delete the lock file ###
+        rm -f /var/lock/subsys/FOO
+        echo
+}
+
+### main logic ###
+case "$1" in
+  start)
+        start
+        ;;
+  stop)
+        stop
+        ;;
+  status)
+        status FOO
+        ;;
+  restart|reload|condrestart)
+        stop
+        start
+        ;;
+  *)
+        echo $"Usage: $0 {start|stop|restart|reload|status}"
+        exit 1
+esac
+
+exit 0
+
+#+END_EXAMPLE
+
 * Usage
 
 Now that your files are indexed you can start using RTags. Normally you
@@ -570,7 +661,7 @@ Vim: https://github.com/lyuts/vim-rtags and https://github.com/shaneharper/vim-r
 
 Sublime Text: https://github.com/rampage644/sublime-rtags
 
-Atom: https://github.com/artagnon/atomic-rtags and https://github.com/rajendrant/atom-rtags
+Atom: https://github.com/artagnon/atomic-rtags, https://github.com/rajendrant/atom-rtags and https://github.com/sphaerophoria/atom-rtags-plus
 
 =rc= has a vast number of commands and options and we intend to write a man
 page at some point. Most users will have limited interest in ever calling them
@@ -590,8 +681,9 @@ c++mode.
 E.g.
 
 #+BEGIN_SRC emacs-lisp
-(add-hook 'c-mode-common-hook 'rtags-start-process-unless-running)
-(add-hook 'c++-mode-common-hook 'rtags-start-process-unless-running)
+(add-hook 'c-mode-hook 'rtags-start-process-unless-running)
+(add-hook 'c++-mode-hook 'rtags-start-process-unless-running)
+(add-hook 'objc-mode-hook 'rtags-start-process-unless-running)
 #+END_SRC
 
 #+begin_src emacs-lisp
@@ -958,16 +1050,29 @@ To turn off the automatic Flycheck syntax checking, set the variable
   (flycheck-select-checker 'rtags)
   (setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
   (setq-local flycheck-check-syntax-automatically nil))
-;; c-mode-common-hook is also called by c++-mode
-(add-hook 'c-mode-common-hook #'my-flycheck-rtags-setup)
+(add-hook 'c-mode-hook #'my-flycheck-rtags-setup)
+(add-hook 'c++-mode-hook #'my-flycheck-rtags-setup)
+(add-hook 'objc-mode-hook #'my-flycheck-rtags-setup)
 #+END_SRC
 
-* Helm support
-  To integrate rtags with helm you need to do the following:
+* Helm integration
+You can use Helm to view the result, to do so, set
+=rtags-display-result-backend= to =helm=. You don't need to load =helm-rtags=,
+we do it. If you have installed *RTags* through MELPA you need to install
+=helm-rtags=.
 
 #+BEGIN_SRC emacs-lisp
-(require 'rtags-helm)
-(setq rtags-use-helm t)
+(setq rtags-display-result-backend 'helm)
+#+END_SRC
+
+* Ivy integration
+You can use Ivy to view the result, to do so, set
+=rtags-display-result-backend= to =ivy=. You don't need to load =ivy-rtags=,
+we do it. If you have installed *RTags* through MELPA you need to install
+=ivy-rtags=.
+
+#+BEGIN_SRC emacs-lisp
+(setq rtags-display-result-backend 'ivy)
 #+END_SRC
 
 * Videos
@@ -1021,6 +1126,67 @@ https://github.com/mattn/vim-rtags
 Note to those maintainers. If you need RTags to behave differently or add
 features to make these other integration's easier (like produce output in
 other formats etc), just drop us a note.
+* Coding style
+  We are always excited to accept bug fixes, improvements and features
+  through code contributions. Feel free to send a pull request for
+  anything you think could be improved upon.
+
+  We'd like contributions to adhere to our coding style.
+
+  The coding style can kinda be deduced from this:
+  #+begin_src sh
+    if (foo) {
+        while (!done) {
+            switch (value) {
+            case 1:
+                break;
+            case 2: {
+                int variable = 12;
+                break; }
+            case 3:
+                break;
+            }
+        }
+        for (auto foo : vars) {
+
+        }
+    }
+
+    void test(const std::string &bar);
+
+    class Foo
+    {
+    private:
+        int mPrivateMember;
+    };
+
+    struct Bar
+    {
+        int publicMember;
+    };
+
+    class A
+    {
+    public:
+        A(int val);
+    private:
+        int mValue;
+    };
+
+    A::A(int val)
+        : mValue(val)
+    {
+    }
+
+    conn->setErrorHandler([](const SocketClient::SharedPtr &, Message::MessageError &&error) {
+            if (error.type == Message::Message_VersionError) {
+                ::error("Wrong version marker. You're probably using mismatched versions of rc and rdm");
+            } else {
+                logDirect(LogLevel::Error, error.text);
+            }
+        });
+
+#+end_src
 
 * Disclaimer
 RTags is still under development and is not the most stable piece of software

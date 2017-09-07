@@ -1,15 +1,19 @@
 #include "MessageQueue.h"
 
+#ifdef _WIN32
+// todo: implement on windows
+#else
+
 #include <assert.h>
 #include <errno.h>
 #include <pthread.h>
 #include <signal.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
+
 #include <sys/types.h>
 #include <unistd.h>
 #include <mutex>
-
 #include "EventLoop.h"
 #include "Log.h"
 #include "Path.h"
@@ -172,3 +176,5 @@ bool MessageQueue::send(const char* data, size_t size)
     }
     return true;
 }
+
+#endif

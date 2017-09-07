@@ -6,13 +6,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
-#include <sys/mman.h>
+#ifndef _WIN32
+#  include <sys/mman.h>
+#endif
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
 
 #include <rct/String.h>
 
+/**
+ * A path is a special string that represents a file system path. This may be a
+ * directory or a file. A path can be absolute or relative.
+ *
+ * Note: On windows, all paths use forward slashes (/) as path separator, just
+ * like on unix.
+ * Paths that are created with backslashes are automatically converted.
+ */
 class Path : public String
 {
 public:
@@ -21,13 +31,25 @@ public:
     {}
     Path(const String &other)
         : String(other)
-    {}
+    {
+#ifdef _WIN32
+        replaceBackslashes();
+#endif
+    }
     Path(const char *path)
         : String(path)
-    {}
+    {
+#ifdef _WIN32
+        replaceBackslashes();
+#endif
+    }
     Path(const char *path, size_t len)
         : String(path, len)
-    {}
+    {
+#ifdef _WIN32
+        replaceBackslashes();
+#endif
+    }
     Path() {}
     Path &operator=(const Path &other)
     {
@@ -37,12 +59,18 @@ public:
     Path &operator=(const String &other)
     {
         String::operator=(other);
+#ifdef _WIN32
+        replaceBackslashes();
+#endif
         return *this;
     }
 
     Path &operator=(const char *path)
     {
         String::operator=(path);
+#ifdef _WIN32
+        replaceBackslashes();
+#endif
         return *this;
     }
 
@@ -67,7 +95,7 @@ public:
     inline bool isFile() const { return type() == File; }
     inline bool isExecutable() const { return !access(constData(), X_OK); }
     inline bool isSocket() const { return type() == Socket; }
-    inline bool isAbsolute() const { return (!isEmpty() && at(0) == '/'); }
+    bool isAbsolute() const;
     static const char *typeName(Type type);
     bool isSymLink() const;
     Path followLink(bool *ok = 0) const;
@@ -79,12 +107,23 @@ public:
         Single,
         Recursive
     };
+
+    /**
+     * Create the directory that is represented by this path.
+     *
+     * @param permissions ignored on windows.
+     * @return true if the directory was created or already existed
+     */
     static bool mkdir(const Path &path,
                       MkDirMode mode = Single,
                       mode_t permissions = S_IRUSR|S_IWUSR|S_IXUSR|S_IRGRP|S_IXGRP|S_IROTH|S_IXOTH);
     bool mkdir(MkDirMode mode = Single,
                mode_t permissions = S_IRUSR|S_IWUSR|S_IXUSR|S_IRGRP|S_IXGRP|S_IROTH|S_IXOTH) const;
     static bool rm(const Path &file);
+
+    /**
+     * Recursively delete a directory
+     */
     static bool rmdir(const Path& dir);
     static Path home();
 
@@ -103,7 +142,10 @@ public:
     static bool isSystem(const char *path);
     bool isHeader() const;
     static bool isHeader(const char *extension);
+
+    /// Only works if the path is absolute
     Path parentDir() const;
+
     Type type() const;
     mode_t mode() const;
     enum ResolveMode {
@@ -122,18 +164,7 @@ public:
     bool setLastModified(time_t lastModified) const;
     uint64_t lastModifiedMs() const;
 
-    struct stat stat(bool *ok = 0) const
-    {
-        struct stat st;
-        if (::stat(constData(), &st) == -1) {
-            memset(&st, 0, sizeof(st));
-            if (ok)
-                *ok = false;
-        } else if (ok) {
-            *ok = true;
-        }
-        return st;
-    }
+    struct stat stat(bool *ok = 0) const;
 
     int64_t fileSize() const;
     static Path resolved(const String &path, ResolveMode mode = RealPath, const Path &cwd = Path(), bool *ok = 0);
@@ -169,6 +200,14 @@ public:
     List<Path> files(unsigned int filter = All, size_t max = String::npos, bool recurse = false) const;
 
     static bool sRealPathEnabled;
+    
+    /// ';' on windows, ':' on unix
+    static const char ENV_PATH_SEPARATOR;
+
+    /**
+     * For windows. Replace backslashes (\) in the path by forward slashes (/).
+     */
+    void replaceBackslashes();
 };
 
 namespace std

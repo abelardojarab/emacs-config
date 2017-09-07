@@ -5,7 +5,6 @@
 #include <errno.h>
 #include <getopt.h>
 #include <stdio.h>
-#include <sys/select.h>
 #include <regex>
 
 #include <rct/List.h>
@@ -68,8 +67,19 @@ inline bool addTo(Container &container, const Value &value)
 bool readFile(const Path& path, String &data, mode_t *perm = 0 );
 bool readFile(FILE *f, String &data, mode_t *perm = 0);
 bool writeFile(const Path& path, const String& data, int perm = -1);
+
+/**
+ * Finds the absolute path (including the file name) of the currently running
+ * executable.
+ * After calling this function, get the result by calling executablePath().
+ */
 void findExecutablePath(const char *argv0);
+
+/**
+ * Get the path previously calculated by findExecutablePath().
+ */
 Path executablePath();
+
 String backtrace(int maxFrames = -1);
 bool gettime(timeval* time);
 uint64_t monoMs();
@@ -258,4 +268,18 @@ String strerror(int error = errno);
         VAR = BLOCK;                            \
     } while (VAR == -1 && errno == EINTR)
 
+
+#ifndef RCT_FALL_THROUGH
+# if defined(__clang__)
+#  define RCT_FALL_THROUGH /* fall through */ struct RCT_FALL_THROUGH_STRUCT
+# elif defined(__GNUC__)
+#  if __GXX_ABI_VERSION >= 1011
+#   define RCT_FALL_THROUGH /* fall through */ __attribute__ ((fallthrough))
+#  else
+#   define RCT_FALL_THROUGH /* fall through */
+#  endif
+# else
+#  define RCT_FALL_THROUGH /* fall through */ struct RCT_FALL_THROUGH_STRUCT
+# endif
+#endif
 #endif

@@ -1,3 +1,8 @@
+#ifdef _WIN32
+#  error "This file can not be built on Windows. Build Process_Windows.cpp instead"
+#else
+
+
 #include "Process.h"
 
 #include <assert.h>
@@ -247,8 +252,9 @@ void ProcessThread::installProcessHandler()
 }
 
 Process::Process()
-    : mPid(-1), mReturn(ReturnUnset), mStdInIndex(0), mStdOutIndex(0), mStdErrIndex(0),
-      mWantStdInClosed(false), mMode(Sync)
+    : mMode(Sync), mReturn(ReturnUnset),
+      mStdInIndex(0), mStdOutIndex(0), mStdErrIndex(0),
+      mWantStdInClosed(false), mPid(-1)
 {
     std::call_once(sProcessHandler, ProcessThread::installProcessHandler);
 
@@ -315,6 +321,7 @@ void Process::setCwd(const Path &cwd)
 
 Path Process::findCommand(const String &command, const char *path)
 {
+    /// @todo use Path::isAbsolute() and check if the file actually exists
     if (command.isEmpty() || command.at(0) == '/')
         return command;
 
@@ -851,3 +858,28 @@ void Process::setChRoot(const Path &path)
     assert(mReturn == ReturnUnset);
     mChRoot = path;
 }
+
+int Process::returnCode() const
+{
+     std::lock_guard<std::mutex> lock(mMutex);
+     return mReturn;
+}
+
+bool Process::isFinished() const
+{
+    std::lock_guard<std::mutex> lock(mMutex);
+    return  mReturn != ReturnUnset;
+}
+
+String Process::errorString() const
+{
+    std::lock_guard<std::mutex> lock(mMutex);
+    return mErrorString;
+}
+
+pid_t Process::pid() const
+{
+    return mPid;
+}
+
+#endif // not _WIN32

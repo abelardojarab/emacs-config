@@ -56,6 +56,7 @@ void Connection::checkData()
         onDataAvailable(mSocketClient, std::forward<Buffer>(mSocketClient->takeBuffer()));
 }
 
+#ifndef _WIN32
 bool Connection::connectUnix(const Path &socketFile, int timeout)
 {
     assert(!mSocketClient);
@@ -80,6 +81,7 @@ bool Connection::connectUnix(const Path &socketFile, int timeout)
     }
     return true;
 }
+#endif
 
 bool Connection::connectTcp(const String &host, uint16_t port, int timeout)
 {
@@ -124,10 +126,10 @@ void Connection::onDataAvailable(const SocketClient::SharedPtr &client, Buffer&&
             if (available < static_cast<int>(sizeof(uint32_t)))
                 break;
             union {
-                unsigned char buf[sizeof(uint32_t)];
+                unsigned char b[sizeof(uint32_t)];
                 int pending;
             };
-            const int read = mBuffers.read(buf, 4);
+            const int read = mBuffers.read(b, 4);
             assert(read == 4);
             mPendingRead = pending;
             assert(mPendingRead > 0);
@@ -158,7 +160,6 @@ void Connection::onDataAvailable(const SocketClient::SharedPtr &client, Buffer&&
         }
         if (!message)
             client->close();
-    // mClient->dataAvailable().disconnect(this, &Connection::dataAvailable);
     }
 }
 

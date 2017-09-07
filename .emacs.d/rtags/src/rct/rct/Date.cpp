@@ -1,7 +1,10 @@
 #include "Date.h"
 
 #include <mutex>
-#include <iostream>
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 static std::once_flag tzFlag;
 
@@ -19,8 +22,23 @@ Date::Date(time_t time, Mode mode)
 static struct tm* modetime(const time_t& clock, struct tm* result, Date::Mode mode)
 {
     if (mode == Date::UTC)
+    {
+#ifdef _WIN32
+        tm *res = gmtime(&clock);
+        *result = *res;
+        return result;
+#else
         return gmtime_r(&clock, result);
+#endif
+    }
+
+#ifdef _WIN32
+    tm *res = localtime(&clock);
+    *result = *res;
+    return result;
+#else
     return localtime_r(&clock, result);
+#endif
 }
 
 void Date::setTime(time_t time, Mode mode)
@@ -33,7 +51,21 @@ void Date::setTime(time_t time, Mode mode)
     } else {
         struct tm ltime;
         if (modetime(time, &ltime, mode)) {
+#ifdef _WIN32
+            long tz = 0;
+
+            // The following does NOT work because of linker errors:
+            // _get_timezone(&tz);
+            // user GetTimeZoneInformation() instead:
+            TIME_ZONE_INFORMATION inf;
+            GetTimeZoneInformation(&inf);
+            tz = inf.Bias;
+
+            mTime = time + tz;
+
+#else
             mTime = time + ltime.tm_gmtoff;
+#endif
         }
     }
 }
@@ -84,6 +116,10 @@ time_t Date::time(Mode mode) const
 {
     if (mode == UTC)
         return mTime;
+#ifdef _WIN32
+    return mktime(localtime(&mTime));
+#else
     struct tm local;
     return mktime(localtime_r(&mTime, &local));
+#endif
 }

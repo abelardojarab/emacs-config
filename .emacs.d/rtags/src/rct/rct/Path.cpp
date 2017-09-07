@@ -2,18 +2,33 @@
 #include "StackBuffer.h"
 
 #include <dirent.h>
+#ifdef _WIN32
+#  include <direct.h>
+#  include <Windows.h>
+#  include <Shellapi.h>
+#  include "WindowsUnicodeConversion.h"
+#else
+#  include <wordexp.h>
+#endif
 #include <limits.h>
 #include <stdio.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <utime.h>
-#include <wordexp.h>
+#include <algorithm>
 
 #include "Log.h"
 #include "Rct.h"
 #include "rct/rct-config.h"
 
 bool Path::sRealPathEnabled = true;
+
+#ifdef _WIN32
+const char Path::ENV_PATH_SEPARATOR = ';';
+#else
+const char Path::ENV_PATH_SEPARATOR = ':';
+#endif
+
 // this doesn't check if *this actually is a real file
 Path Path::parentDir() const
 {
@@ -47,21 +62,64 @@ Path::Type Path::type() const
     case S_IFDIR: return Directory;
     case S_IFIFO: return NamedPipe;
     case S_IFREG: return File;
+#ifndef _WIN32   // no socket files on windows
     case S_IFSOCK: return Socket;
+#endif
     default:
         break;
     }
     return Invalid;
 }
 
+bool Path::isAbsolute() const
+{
+#ifdef _WIN32
+
+    // https://msdn.microsoft.com/en-us/library/aa365247(VS.85).aspx#fully_qualified_vs._relative_paths
+    // absolute paths start with either:
+    // - a drive letter, such as c:/
+    // - a single backslash (is replaced by single forward slash by this class)
+    // - double backslashes
+
+    if(size() >= 3)
+    {
+        const char &first  = (*this)[0];
+        const char &second = (*this)[1];
+        const char &third  = (*this)[2];
+
+        // check for regular windows path that starts with a driver letter,
+        // e.g. C:/windows
+
+        if(((first >= 'a' && first <= 'z') ||
+            (first >= 'A' && first <= 'Z')) &&
+           second == ':' && third == '/')
+        {
+            return true;
+        }
+    }
+
+    if(size() >= 2 && (*this)[0] == '\\' && (*this)[1] == '\\')
+    {
+        // network or unc path
+        return true;
+    }
+#endif
+
+    return (!isEmpty() && at(0) == '/');
+}
+
 bool Path::isSymLink() const
 {
+#ifdef _WIN32
+    return false;   // no symlinks on windows
+#else
     bool ok;
     struct stat st = stat(&ok);
     if (!ok)
         return Invalid;
 
     return (st.st_mode & S_IFMT) == S_IFLNK;
+#endif
 }
 
 mode_t Path::mode() const
@@ -95,7 +153,7 @@ time_t Path::lastAccess() const
 
 bool Path::setLastModified(time_t lastModified) const
 {
-    const struct utimbuf buf = { lastAccess(), lastModified };
+    struct utimbuf buf = { lastAccess(), lastModified };
     return !utime(constData(), &buf);
 }
 
@@ -181,6 +239,7 @@ bool Path::resolve(ResolveMode mode, const Path &cwd, bool *changed)
 {
     if (changed)
         *changed = false;
+#ifndef _WIN32
     if (isEmpty())
         return false;
     if (startsWith('~')) {
@@ -189,11 +248,15 @@ bool Path::resolve(ResolveMode mode, const Path &cwd, bool *changed)
         operator=(exp_result.we_wordv[0]);
         wordfree(&exp_result);
     }
+#endif
     if (*this == ".")
         clear();
     if (mode == MakeAbsolute || !sRealPathEnabled) {
         if (isAbsolute())
             return true;
+
+        // we only add the relative file name to the cwd/pwd and check if the
+        // result exists.
         Path copy = (cwd.isEmpty() ? Path::pwd() : cwd.ensureTrailingSlash()) + *this;
         if (copy.exists()) {
             if (changed)
@@ -206,7 +269,10 @@ bool Path::resolve(ResolveMode mode, const Path &cwd, bool *changed)
         return false;
     }
 
+    // we only get here if mode == RealPath
+
     if (!cwd.isEmpty() && !isAbsolute()) {
+        //resolve relative path as a path relative to cwd
         Path copy = cwd + '/' + *this;
         if (copy.resolve(RealPath, Path(), changed)) {
             operator=(copy);
@@ -216,8 +282,13 @@ bool Path::resolve(ResolveMode mode, const Path &cwd, bool *changed)
 
     {
         char buffer[PATH_MAX + 2];
+#ifdef _WIN32
+        if (_fullpath(buffer, constData(), PATH_MAX)) {
+#else
         if (realpath(constData(), buffer)) {
+#endif
             if (isDir()) {
+                // dirs usually don't have a trailing '/', so we add one
                 const int len = strlen(buffer);
                 assert(buffer[len] != '/');
                 buffer[len] = '/';
@@ -225,7 +296,7 @@ bool Path::resolve(ResolveMode mode, const Path &cwd, bool *changed)
             }
             if (changed && strcmp(buffer, constData()))
                 *changed = true;
-            String::operator=(buffer);
+            *this = buffer;
             return true;
         }
     }
@@ -345,12 +416,25 @@ bool Path::mksubdir(const String &path) const
 bool Path::mkdir(const Path &path, MkDirMode mkdirMode, mode_t permissions)
 {
     errno = 0;
+#ifdef _WIN32
+    (void) permissions;   // unused on windows
+    if (!::_wmkdir(Utf8To16(path.c_str())) || errno == EEXIST)
+#else
     if (!::mkdir(path.constData(), permissions) || errno == EEXIST || errno == EISDIR)
+#endif
+    {
+        // mkdir call succeeded or it failed because the dir already exists
         return true;
+    }
     if (mkdirMode == Single)
         return false;
     if (path.size() > PATH_MAX)
         return false;
+
+    // directory creation failed so far
+    // because mkdirMode == Recursive, we go along the path and create
+    // directories, continuing while dir creation is successful or it failed
+    // only because directories already exist.
 
     char buf[PATH_MAX + 2];
     strcpy(buf, path.constData());
@@ -363,7 +447,12 @@ bool Path::mkdir(const Path &path, MkDirMode mkdirMode, mode_t permissions)
     for (size_t i = 1; i < len; ++i) {
         if (buf[i] == '/') {
             buf[i] = 0;
+#ifdef _WIN32
+            Utf8To16 tmp2(buf);
+            const int r = ::_wmkdir(tmp2);
+#else
             const int r = ::mkdir(buf, permissions);
+#endif
             if (r && errno != EEXIST && errno != EISDIR)
                 return false;
             buf[i] = '/';
@@ -384,6 +473,25 @@ bool Path::rm(const Path &file)
 
 bool Path::rmdir(const Path &dir)
 {
+#ifdef _WIN32
+    // SHFileOperation needs an absolute path.
+    Path absDir = Path::resolved(dir, MakeAbsolute);
+    std::wstring pathU16 = Utf8To16(dir.c_str());
+
+    // double zero terminate the string. There *should* already be one zero
+    // in c_str(), but better to be safe.
+    pathU16.append(2, 0);
+
+    // Deletion through SHFileOperation is recursive.
+    SHFILEOPSTRUCTW op;
+    memset(&op, 0, sizeof(SHFILEOPSTRUCTW));
+    op.wFunc = FO_DELETE;
+    op.pFrom = pathU16.c_str();
+    op.fFlags = FOF_NO_UI;
+    bool ret = (SHFileOperationW(&op) == 0);
+    return ret;
+
+#else
     DIR *d = opendir(dir.constData());
     size_t path_len = dir.size();
     union {
@@ -392,9 +500,7 @@ bool Path::rmdir(const Path &dir)
     };
 
     if (d) {
-        dirent *p;
-
-        while (!readdir_r(d, &dbuf, &p) && p) {
+        while (dirent *p = readdir(d)) {
             /* Skip the names "." and ".." as we don't want to recurse on them. */
             if (!strcmp(p->d_name, ".") || !strcmp(p->d_name, "..")) {
                 continue;
@@ -418,6 +524,7 @@ bool Path::rmdir(const Path &dir)
         closedir(d);
     }
     return ::rmdir(dir.constData()) == 0;
+#endif
 }
 
 static void visitorWrapper(Path path, const std::function<Path::VisitResult(const Path &path)> &callback, Set<Path> &seen)
@@ -425,28 +532,43 @@ static void visitorWrapper(Path path, const std::function<Path::VisitResult(cons
     if (!seen.insert(path.resolved())) {
         return;
     }
+
+#ifdef _WIN32
+    _WDIR *d = _wopendir(Utf8To16(path.c_str()));
+    if(!d)
+        return;
+#else
     DIR *d = opendir(path.constData());
     if (!d)
         return;
+#endif
 
     union {
         char buf[PATH_MAX + sizeof(dirent) + 1];
         dirent dbuf;
     };
 
-    dirent *p;
+
     if (!path.endsWith('/'))
         path.append('/');
     const size_t s = path.size();
     path.reserve(s + 128);
     List<String> recurseDirs;
-    while (!readdir_r(d, &dbuf, &p) && p) {
-        if (!strcmp(p->d_name, ".") || !strcmp(p->d_name, ".."))
+#ifdef _WIN32
+    _wdirent *p;
+    while ((p = _wreaddir(d))) {
+        Utf16To8 u8Data(p->d_name);
+        const char *d_name = u8Data;
+#else
+    while (dirent *p = readdir(d)) {
+        const char *d_name = p->d_name;
+#endif
+        if (!strcmp(d_name, ".") || !strcmp(d_name, ".."))
             continue;
         bool isDir = false;
         path.truncate(s);
-        path.append(p->d_name);
-#if defined(_DIRENT_HAVE_D_TYPE) && defined(_BSD_SOURCE)
+        path.append(d_name);
+#if !defined(_WIN32) && defined(_DIRENT_HAVE_D_TYPE) && defined(_BSD_SOURCE)
         if (p->d_type == DT_DIR) {
             isDir = true;
             path.append('/');
@@ -462,13 +584,17 @@ static void visitorWrapper(Path path, const std::function<Path::VisitResult(cons
             break;
         case Path::Recurse:
             if (isDir)
-                recurseDirs.append(p->d_name);
+                recurseDirs.append(d_name);
             break;
         case Path::Continue:
             break;
         }
     }
+#ifdef _WIN32
+    _wclosedir(d);
+#else
     closedir(d);
+#endif
     const size_t count = recurseDirs.size();
     for (size_t i=0; i<count; ++i) {
         path.truncate(s);
@@ -487,6 +613,7 @@ void Path::visit(const std::function<VisitResult(const Path &path)> &callback) c
 
 Path Path::followLink(bool *ok) const
 {
+#ifndef _WIN32  //no symlinks on windows
     if (isSymLink()) {
         char buf[PATH_MAX];
         const int w = readlink(constData(), buf, sizeof(buf) - 1);
@@ -497,6 +624,10 @@ Path Path::followLink(bool *ok) const
             return buf;
         }
     }
+#endif
+
+    // could not follow the link (maybe because it's not a link)
+
     if (ok)
         *ok = false;
 
@@ -630,6 +761,22 @@ const char *Path::typeName(Type type)
     return "";
 }
 
+struct stat Path::stat(bool *f_ok) const
+{
+    struct stat st;
+#ifdef _WIN32
+    if (::wstat(Utf8To16(c_str()), &st) == -1) {
+#else
+    if (::stat(constData(), &st) == -1) {
+#endif
+        memset(&st, 0, sizeof(st));
+        if (f_ok) *f_ok = false;
+    } else if (f_ok) {
+        *f_ok = true;
+    }
+    return st;
+}
+
 String Path::name() const
 {
     if (endsWith('/')) {
@@ -640,5 +787,21 @@ String Path::name() const
         return String();
     } else {
         return fileName();
+    }
+}
+
+void Path::replaceBackslashes()
+{
+    std::size_t start = 0;
+
+    // don't replace \\ at the beginning (network path)
+    if(size() >= 2 && (*this)[0] == '\\' && (*this)[1] == '\\')
+    {
+        start = 2;
+    }
+
+    for(std::size_t i=start; i<size(); i++)
+    {
+        if((*this)[i] == '\\') (*this)[i] = '/';
     }
 }

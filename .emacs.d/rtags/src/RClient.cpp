@@ -104,12 +104,15 @@ std::initializer_list<CommandLineParser::Option<RClient::OptionType> > opts = {
     { RClient::DumpCompileCommands, "dump-compile-commands", 0, CommandLineParser::NoValue, "Dump compilation database for project." },
     { RClient::SetBuffers, "set-buffers", 0, CommandLineParser::Optional, "Set active buffers (list of filenames for active buffers in editor)." },
     { RClient::ListBuffers, "list-buffers", 0, CommandLineParser::NoValue, "List active buffers." },
+    { RClient::AddBuffers, "add-buffers", 0, CommandLineParser::Required, "Add additional buffers." },
+    { RClient::RemoveBuffers, "remove-buffers", 0, CommandLineParser::Required, "Remove buffers." },
     { RClient::ListCursorKinds, "list-cursor-kinds", 0, CommandLineParser::NoValue, "List spelling for known cursor kinds." },
     { RClient::ClassHierarchy, "class-hierarchy", 0, CommandLineParser::Required, "Dump class hierarcy for struct/class at location." },
     { RClient::DebugLocations, "debug-locations", 0, CommandLineParser::Optional, "Manipulate debug locations." },
 #ifdef RTAGS_HAS_LUA
     { RClient::VisitAST, "visit-ast", 0, CommandLineParser::Required, "Visit AST of a source file." },
 #endif
+    { RClient::Validate, "validate", 0, CommandLineParser::NoValue, "Validate database files for current project." },
     { RClient::Tokens, "tokens", 0, CommandLineParser::Required, "Dump tokens for file. --tokens file.cpp:123-321 for range." },
     { RClient::None, String(), 0, CommandLineParser::NoValue, "" },
     { RClient::None, String(), 0, CommandLineParser::NoValue, "Command flags:" },
@@ -130,7 +133,7 @@ std::initializer_list<CommandLineParser::Option<RClient::OptionType> > opts = {
     { RClient::Elisp, "elisp", 'Y', CommandLineParser::NoValue, "Output elisp: (list \"one\" \"two\" ...)." },
     { RClient::JSON, "json", 0, CommandLineParser::NoValue, "Output json." },
     { RClient::Diagnostics, "diagnostics", 'm', CommandLineParser::NoValue, "Receive async formatted diagnostics from rdm." },
-    { RClient::MatchRegex, "match-regexp", 'Z', CommandLineParser::NoValue, "Treat various text patterns as regexps (-P, -i, -V)." },
+    { RClient::MatchRegex, "match-regexp", 'Z', CommandLineParser::NoValue, "Treat various text patterns as regexps (-P, -i, -V, -F)." },
     { RClient::MatchCaseInsensitive, "match-icase", 'I', CommandLineParser::NoValue, "Match case insensitively" },
     { RClient::AbsolutePath, "absolute-path", 'K', CommandLineParser::NoValue, "Print files with absolute path." },
     { RClient::SocketFile, "socket-file", 'n', CommandLineParser::Required, "Use this socket file (default ~/.rdm)." },
@@ -153,6 +156,7 @@ std::initializer_list<CommandLineParser::Option<RClient::OptionType> > opts = {
     { RClient::BuildIndex, "build-index", 0, CommandLineParser::Required, "For sources with multiple builds, use the arg'th." },
     { RClient::CompilationFlagsOnly, "compilation-flags-only", 0, CommandLineParser::NoValue, "For --source, only print compilation flags." },
     { RClient::CompilationFlagsSplitLine, "compilation-flags-split-line", 0, CommandLineParser::NoValue, "For --source, print one compilation flag per line." },
+    { RClient::CompilationFlagsPwd, "compilation-flags-pwd", 0, CommandLineParser::NoValue, "For --source, print pwd for compile command on the first line." },
     { RClient::DumpIncludeHeaders, "dump-include-headers", 0, CommandLineParser::NoValue, "For --dump-file, also dump dependencies." },
     { RClient::SilentQuery, "silent-query", 0, CommandLineParser::NoValue, "Don't log this request in rdm." },
     { RClient::SynchronousCompletions, "synchronous-completions", 0, CommandLineParser::NoValue, "Wait for completion results and print them to stdout." },
@@ -164,7 +168,6 @@ std::initializer_list<CommandLineParser::Option<RClient::OptionType> > opts = {
     { RClient::WildcardSymbolNames, "wildcard-symbol-names", 'a', CommandLineParser::NoValue, "Expand * like wildcards in --list-symbols and --find-symbols." },
     { RClient::NoColor, "no-color", 'z', CommandLineParser::NoValue, "Don't colorize context." },
     { RClient::Wait, "wait", 0, CommandLineParser::NoValue, "Wait for reindexing to finish." },
-    { RClient::Autotest, "autotest", 0, CommandLineParser::NoValue, "Turn on behaviors appropriate for running autotests." },
     { RClient::CodeCompleteIncludeMacros, "code-complete-include-macros", 0, CommandLineParser::NoValue, "Include macros in code completion results." },
     { RClient::CodeCompleteIncludes, "code-complete-includes", 0, CommandLineParser::NoValue, "Give includes in completion results." },
     { RClient::CodeCompleteNoWait, "code-complete-no-wait", 0, CommandLineParser::NoValue, "Don't wait for synchronous completion if the translation unit has to be created." },
@@ -184,7 +187,7 @@ class RCCommand
 public:
     RCCommand() {}
     virtual ~RCCommand() {}
-    virtual bool exec(RClient *rc, const std::shared_ptr<Connection> &connection) = 0;
+    virtual RTags::ExitCode exec(RClient *rc, const std::shared_ptr<Connection> &connection) = 0;
     virtual String description() const = 0;
 };
 
@@ -199,8 +202,14 @@ public:
     String query;
     Flags<QueryMessage::Flag> extraQueryFlags;
 
-    virtual bool exec(RClient *rc, const std::shared_ptr<Connection> &connection) override
+    virtual RTags::ExitCode exec(RClient *rc, const std::shared_ptr<Connection> &connection) override
     {
+#ifndef HAS_JSON_H
+        if (type == QueryMessage::CodeCompleteAt && rc->queryFlags() & QueryMessage::JSON) {
+            fprintf(stdout, "{\"error\": \"JSON output for completions is not supported with this compiler\"}\n");
+            return RTags::ArgumentParseError;
+        }
+#endif
         QueryMessage msg(type);
         msg.setCommandLine(rc->commandLine());
         msg.setQuery(std::move(query));
@@ -217,7 +226,7 @@ public:
 #ifdef RTAGS_HAS_LUA
         msg.setVisitASTScripts(rc->visitASTScripts());
 #endif
-        return connection->send(msg);
+        return connection->send(msg) ? RTags::Success : RTags::NetworkFailure;
     }
 
     virtual String description() const override
@@ -233,10 +242,10 @@ public:
         : RCCommand(), mExitCode(exit)
     {}
 
-    virtual bool exec(RClient *, const std::shared_ptr<Connection> &connection) override
+    virtual RTags::ExitCode exec(RClient *, const std::shared_ptr<Connection> &connection) override
     {
         const QuitMessage msg(mExitCode);
-        return connection->send(msg);
+        return connection->send(msg) ? RTags::Success : RTags::NetworkFailure;
     }
     virtual String description() const override
     {
@@ -255,7 +264,7 @@ public:
         : RCCommand(), mLevel(level)
     {
     }
-    virtual bool exec(RClient *rc, const std::shared_ptr<Connection> &connection) override
+    virtual RTags::ExitCode exec(RClient *rc, const std::shared_ptr<Connection> &connection) override
     {
         unsigned int flags = RTagsLogOutput::None;
         if (rc->queryFlags() & QueryMessage::Elisp) {
@@ -271,7 +280,7 @@ public:
         const LogLevel level = mLevel == Default ? rc->logLevel() : mLevel;
         LogOutputMessage msg(level, flags);
         msg.setCommandLine(rc->commandLine());
-        return connection->send(msg);
+        return connection->send(msg) ? RTags::Success : RTags::NetworkFailure;
     }
     virtual String description() const override
     {
@@ -295,7 +304,7 @@ public:
     String args;
     Path cwd;
     Path compileCommands;
-    virtual bool exec(RClient *rc, const std::shared_ptr<Connection> &connection) override
+    virtual RTags::ExitCode exec(RClient *rc, const std::shared_ptr<Connection> &connection) override
     {
         IndexMessage msg;
         msg.setCommandLine(rc->commandLine());
@@ -307,7 +316,7 @@ public:
         if (!rc->projectRoot().isEmpty())
             msg.setProjectRoot(rc->projectRoot());
 
-        return connection->send(msg);
+        return connection->send(msg) ? RTags::Success : RTags::NetworkFailure;
     }
     virtual String description() const override
     {
@@ -319,7 +328,7 @@ RClient::RClient()
     : mMax(-1), mTimeout(-1), mMinOffset(-1), mMaxOffset(-1),
       mConnectTimeout(DEFAULT_CONNECT_TIMEOUT), mBuildIndex(0),
       mLogLevel(LogLevel::Error), mTcpPort(0), mGuessFlags(false),
-      mTerminalWidth(-1)
+      mTerminalWidth(-1), mExitCode(RTags::ArgumentParseError)
 {
     struct winsize w;
     ioctl(0, TIOCGWINSZ, &w);
@@ -361,7 +370,7 @@ void RClient::addCompile(Path &&path)
     mCommands.append(std::make_shared<CompileCommand>(std::move(path)));
 }
 
-int RClient::exec()
+void RClient::exec()
 {
     RTags::initMessages();
     OnDestruction onDestruction([]() { Message::cleanup(); });
@@ -378,7 +387,8 @@ int RClient::exec()
         if (!connection->connectTcp(mTcpHost, mTcpPort, mConnectTimeout)) {
             if (mLogLevel >= LogLevel::Error)
                 fprintf(stdout, "Can't seem to connect to server (%s:%d)\n", mTcpHost.constData(), mTcpPort);
-            return 1;
+            mExitCode = RTags::ConnectionFailure;
+            return;
         }
         connection->connected().connect(std::bind(&EventLoop::quit, loop.get()));
         loop->exec(mConnectTimeout);
@@ -390,32 +400,31 @@ int RClient::exec()
                     fprintf(stdout, "Can't seem to connect to server (%s)\n", mSocketFile.constData());
                 }
             }
-            return 1;
+            mExitCode = RTags::ConnectionFailure;
+            return;
         }
     } else if (!connection->connectUnix(mSocketFile, mConnectTimeout)) {
         if (mLogLevel >= LogLevel::Error)
             fprintf(stdout, "Can't seem to connect to server (%s)\n", mSocketFile.constData());
-        return 1;
+        mExitCode = RTags::ConnectionFailure;
+        return;
     }
 
-    int ret = 0;
-    bool hasZeroExit = false;
     for (int i=0; i<commandCount; ++i) {
         const std::shared_ptr<RCCommand> &cmd = mCommands.at(i);
         debug() << "running command " << cmd->description();
-        if (!cmd->exec(this, connection) || loop->exec(timeout()) != EventLoop::Success) {
-            ret = 1;
+        mExitCode = cmd->exec(this, connection);
+        if (mExitCode != RTags::Success) {
+            break;
+        } else if (loop->exec(timeout()) != EventLoop::Success) {
+            mExitCode = RTags::TimeoutFailure;
             break;
         }
-        if (connection->finishStatus() == 0)
-            hasZeroExit = true;
+        mExitCode = connection->finishStatus();
     }
     if (connection->client())
         connection->client()->close();
     mCommands.clear();
-    if (!ret && !(mFlags & Flag_Autotest) && !hasZeroExit)
-        ret = connection->finishStatus();
-    return ret;
 }
 
 CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
@@ -443,7 +452,7 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
                                                  String &&value,
                                                  size_t &idx,
                                                  const List<String> &args)> cb;
-    cb = [this, &logFlags, &projectCommands, &logFile](RClient::OptionType type, String &&value, size_t &idx, const List<String> &arguments) -> CommandLineParser::ParseStatus {
+    cb = [this, &projectCommands, &logFile](RClient::OptionType type, String &&value, size_t &idx, const List<String> &arguments) -> CommandLineParser::ParseStatus {
         switch (type) {
         case None:
         case NumOptions: {
@@ -456,9 +465,11 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             break; }
         case Help: {
             CommandLineParser::help(stdout, "rc", opts);
+            mExitCode = RTags::Success;
             return { String(), CommandLineParser::Parse_Ok } ; }
         case Man: {
             CommandLineParser::man(opts);
+            mExitCode = RTags::Success;
             return { String(), CommandLineParser::Parse_Ok }; }
         case SocketFile: {
             mSocketFile = std::move(value);
@@ -499,14 +510,11 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
         case CodeCompletionEnabled: {
             mQueryFlags |= QueryMessage::CodeCompletionEnabled;
             break; }
-        case Autotest: {
-            mFlags |= Flag_Autotest;
-            break; }
         case CompilationFlagsOnly: {
             mQueryFlags |= QueryMessage::CompilationFlagsOnly;
             break; }
-        case NoColor: {
-            mQueryFlags |= QueryMessage::NoColor;
+        case CompilationFlagsPwd: {
+            mQueryFlags |= QueryMessage::CompilationFlagsPwd;
             break; }
         case CompilationFlagsSplitLine: {
             mQueryFlags |= QueryMessage::CompilationFlagsSplitLine;
@@ -589,6 +597,9 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
         case FilterSystemHeaders: {
             mQueryFlags |= QueryMessage::FilterSystemIncludes;
             break; }
+        case NoColor: {
+            mQueryFlags |= QueryMessage::NoColor;
+            break; }
         case NoContext: {
             mQueryFlags |= QueryMessage::NoContext;
             break; }
@@ -623,13 +634,18 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
                          CommandLineParser::Parse_Error };
             }
             break; }
+        case Validate: {
+            addQuery(QueryMessage::Validate);
+            break; }
         case Version: {
             fprintf(stdout, "%s\n", RTags::versionString().constData());
+            mExitCode = RTags::Success;
             return { String(), CommandLineParser::Parse_Ok }; }
         case VerifyVersion: {
             const int version = strtoul(value.constData(), 0, 10);
             if (version != NumOptions) {
                 fprintf(stdout, "Protocol version mismatch\n");
+                mExitCode = RTags::ProtocolFailure;
                 return { String(), CommandLineParser::Parse_Error };
             }
             break; }
@@ -741,7 +757,7 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             break; }
         case SymbolInfo: {
             std::cmatch match;
-            std::regex rx("^(.*):([0-9]+):([0-9]+):?-:?([0-9]+):([0-9]+):?(@[A-Za-z,]+)?");
+            std::regex rx("^(.*):([0-9]+):([0-9]+):?-:?([0-9]+):([0-9]+):?(@[A-Za-z,]+)?", std::regex_constants::basic);
             Path path;
             List<String> kinds;
             uint32_t line = 0, col = 0, line2 = 0, col2 = 0;
@@ -757,7 +773,7 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
                     return { String::format<1024>("Can't parse range %s", value.constData()), CommandLineParser::Parse_Error };
                 }
             } else {
-                std::regex rx2("^(.*):([0-9]+):([0-9]+):?(@[A-Za-z,]+)?");
+                std::regex rx2("^(.*):([0-9]+):([0-9]+):?(@[A-Za-z,]+)?", std::regex_constants::basic);
                 if (std::regex_match(value.constData(), match, rx2)) {
                     path.assign(value.constData(), match.length(1));
                     line = atoi(value.constData() + match.position(2));
@@ -835,10 +851,12 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
         case FindProjectRoot: {
             const Path p = Path::resolved(value); // this won't work correctly with --no-realpath unless --no-realpath is passed first
             printf("findProjectRoot [%s] => [%s]\n", p.constData(), RTags::findProjectRoot(p, RTags::SourceRoot).constData());
+            mExitCode = RTags::Success;
             return { String(), CommandLineParser::Parse_Ok }; }
         case FindProjectBuildRoot: {
             const Path p = Path::resolved(value); // this won't work correctly with --no-realpath unless --no-realpath is passed first
             printf("findProjectRoot [%s] => [%s]\n", p.constData(), RTags::findProjectRoot(p, RTags::BuildRoot).constData());
+            mExitCode = RTags::Success;
             return { String(), CommandLineParser::Parse_Ok }; }
         case RTagsConfig: {
             const Path p = Path::resolved(value); // this won't work correctly with --no-realpath unless --no-realpath is passed first
@@ -847,6 +865,7 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             for (const auto &it : config) {
                 printf("%s: \"%s\"\n", it.first.constData(), it.second.constData());
             }
+            mExitCode = RTags::Success;
             return { String(), CommandLineParser::Parse_Ok }; }
         case CurrentProject: {
             addQuery(QueryMessage::Project, String(), QueryMessage::CurrentProjectOnly);
@@ -948,8 +967,11 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             print(CXCursor_FirstAttr, CXCursor_LastAttr);
             Log(LogLevel::Error, LogOutput::StdOut | LogOutput::TrailingNewLine) << "Preprocessing:";
             print(CXCursor_FirstPreprocessing, CXCursor_LastPreprocessing);
+            mExitCode = RTags::Success;
             return { String(), CommandLineParser::Parse_Ok }; }
-        case SetBuffers: {
+        case SetBuffers:
+        case AddBuffers:
+        case RemoveBuffers: {
             String arg;
             if (!value.isEmpty()) {
                 arg = std::move(value);
@@ -984,6 +1006,12 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
                     }
                 }
                 Serializer serializer(encoded);
+                switch (type) {
+                case AddBuffers: serializer << 1; break;
+                case SetBuffers: serializer << 0; break;
+                case RemoveBuffers: serializer << -1; break;
+                default: assert(0); break;
+                }
                 serializer << paths;
             }
             addQuery(QueryMessage::SetBuffers, std::move(encoded));
@@ -1001,7 +1029,7 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             if (!path.exists()) {
                 return { String::format<1024>("%s does not seem to exist", path.constData()), CommandLineParser::Parse_Error };
             } else if (path.isDir()) {
-                path += "compile_commands.json";
+                path = path.ensureTrailingSlash() + "compile_commands.json";
             } else if (!path.endsWith("/compile_commands.json")) {
                 return { "The file has to be called compile_commands.json", CommandLineParser::Parse_Error };
             }
@@ -1035,7 +1063,7 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             }
 
             p.resolve(Path::MakeAbsolute);
-            mProjectRoot = p;
+            mProjectRoot = p.ensureTrailingSlash();
             break; }
         case Suspend: {
             Path p;

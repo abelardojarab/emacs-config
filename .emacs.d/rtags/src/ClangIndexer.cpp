@@ -175,6 +175,7 @@ bool ClangIndexer::exec(const String &data)
             error("Bad fileId");
             return false;
         }
+        break;
     default:
         for (size_t i=1; i<mSources.size(); ++i) {
             if (!mSources.at(i).fileId || mSources.at(i).fileId != mSources.front().fileId) {
@@ -204,7 +205,6 @@ bool ClangIndexer::exec(const String &data)
     mIndexDataMessage.setProject(mProject);
     mIndexDataMessage.setIndexerJobFlags(indexerJobFlags);
     mIndexDataMessage.setParseTime(parseTime);
-    mIndexDataMessage.setFileId(mSources.front().fileId);
     mIndexDataMessage.setId(id);
 
     assert(mConnection->isConnected());
@@ -336,7 +336,7 @@ Location ClangIndexer::createLocation(const Path &sourceFile, unsigned int line,
     }
 
     ++mFileIdsQueried;
-    VisitFileMessage msg(resolved, mProject, mIndexDataMessage.fileId());
+    VisitFileMessage msg(resolved, mProject, mSources.front().fileId);
 
     mVisitFileResponseMessageFileId = UINT_MAX;
     mVisitFileResponseMessageVisit = false;
@@ -473,6 +473,7 @@ String ClangIndexer::addNamePermutations(const CXCursor &cursor, Location locati
                 // namespaces can include all namespaces in their symbolname
                 if (originalKind == CXCursor_Namespace)
                     break;
+                RCT_FALL_THROUGH;
             default:
                 cutoff = pos;
                 break;
@@ -769,12 +770,34 @@ CXChildVisitResult ClangIndexer::indexVisitor(CXCursor cursor)
             Location oldLoc;
             std::swap(mLastCallExprSymbol, old);
             const CXCursor ref = clang_getCursorReferenced(cursor);
-            if (clang_getCursorKind(ref) == CXCursor_Constructor
-                && (clang_getCursorKind(mLastCursor) == CXCursor_TypeRef || clang_getCursorKind(mLastCursor) == CXCursor_TemplateRef)
-                && clang_getCursorKind(mParents.back()) != CXCursor_VarDecl) {
-                loc = createLocation(mLastCursor);
-                handleReference(mLastCursor, kind, loc, ref);
-            } else {
+            bool handled = false;
+            const CXCursorKind refKind = clang_getCursorKind(ref);
+            if (refKind  == CXCursor_Constructor
+                && (clang_getCursorKind(mLastCursor) == CXCursor_TypeRef || clang_getCursorKind(mLastCursor) == CXCursor_TemplateRef)) {
+                handled = true;
+                for (int pos = mParents.size() - 1; pos >= 0; --pos) {
+                    const CXCursor &parent = mParents[pos];
+                    const CXCursorKind k = clang_getCursorKind(parent);
+                    if (k == CXCursor_VarDecl) {
+                        handled = false;
+                        break;
+                    } else if (k == CXCursor_CallExpr) {
+                        if (!clang_isInvalid(clang_getCursorKind(clang_getCursorReferenced(parent)))) {
+                            handled = false;
+                            break;
+                        }
+                    } else if (k != CXCursor_UnexposedExpr) {
+                        break;
+                    }
+                }
+                if (handled) {
+                    loc = createLocation(mLastCursor);
+                    handleReference(mLastCursor, kind, loc, ref);
+                }
+            } else if (refKind == CXCursor_FieldDecl) {
+                handled = true;
+            }
+            if (!handled) {
                 handleReference(cursor, kind, loc, ref);
             }
             List<Symbol::Argument> destArguments;
@@ -1229,6 +1252,8 @@ void ClangIndexer::handleInclude(const CXCursor &cursor, CXCursorKind kind, Loca
             return;
         }
     }
+
+    mIndexDataMessage.files()[location.fileId()] |= IndexDataMessage::IncludeError;
     error() << "handleInclude failed" << includedFile << cursor;
 }
 
@@ -1937,17 +1962,32 @@ bool ClangIndexer::writeFiles(const Path &root, String &error)
         String unitRoot = root;
         unitRoot << unit->first;
         Path::mkdir(unitRoot, Path::Recursive);
+        const Path path = Location::path(unit->first);
         if (unit->first != fileId) {
             FILE *f = fopen((unitRoot + "/info").constData(), "w");
             if (!f)
                 return false;
             bytesWritten += fprintf(f, "%s\nIndexed by %s at %llu\n",
-                                    Location::path(unit->first).constData(),
+                                    path.constData(),
                                     p.constData(), static_cast<unsigned long long>(mIndexDataMessage.parseTime()));
             fclose(f);
         }
 
-        // ::error() << "Writing file" << Location::path(unit->first) << unitRoot << unit->second->symbols.size()
+        auto uit = mUnsavedFiles.find(path);
+        if (uit == mUnsavedFiles.end()) {
+            Path::rm(unitRoot + "/unsaved");
+        } else {
+            FILE *f = fopen((unitRoot + "/unsaved").constData(), "w");
+            if (!f)
+                return false;
+            bool ok = fwrite(uit->second.constData(), uit->second.size(), 1, f);
+            fclose(f);
+            if (!ok)
+                return false;
+            bytesWritten += uit->second.size();
+        }
+
+        //::error() << "Writing file" << Location::path(unit->first) << unitRoot << unit->second->symbols.size()
         //           << unit->second->targets.size()
         //           << unit->second->usrs.size()
         //           << unit->second->symbolNames.size();
@@ -2042,10 +2082,6 @@ bool ClangIndexer::writeFiles(const Path &root, String &error)
         bytesWritten += fprintf(f, "%s\n%s\n", p.constData(), args.constData());
     }
     bytesWritten += fprintf(f, "Indexed at %llu\n", static_cast<unsigned long long>(mIndexDataMessage.parseTime()));
-
-    if (!templateSpecializationTargets.isEmpty()) {
-
-    }
 
     fclose(f);
     mIndexDataMessage.setBytesWritten(bytesWritten);

@@ -2,16 +2,18 @@
 
 #include <stdio.h>
 #ifdef OS_Darwin
-#include "CommonCrypto/CommonDigest.h"
-#define SHA256_Update        CC_SHA256_Update
-#define SHA256_Init          CC_SHA256_Init
-#define SHA256_Final         CC_SHA256_Final
-#define SHA256_CTX           CC_SHA256_CTX
-#define SHA256_DIGEST_LENGTH CC_SHA256_DIGEST_LENGTH
+#  include "CommonCrypto/CommonDigest.h"
+#  define SHA256_Update        CC_SHA256_Update
+#  define SHA256_Init          CC_SHA256_Init
+#  define SHA256_Final         CC_SHA256_Final
+#  define SHA256_CTX           CC_SHA256_CTX
+#  define SHA256_DIGEST_LENGTH CC_SHA256_DIGEST_LENGTH
 #else
-#include <openssl/sha.h>
+#  include <openssl/sha.h>
 #endif
+
 #include "rct/Path.h"
+#include "rct/MemoryMappedFile.h"
 
 class SHA256Private
 {
@@ -101,23 +103,7 @@ String SHA256::hash(const char* data, unsigned int size, MapType type)
 
 String SHA256::hashFile(const Path& file, MapType type)
 {
-    const int fd = ::open(file.nullTerminated(), 0);
-    if (fd < 0)
-        return String();
-
-    struct stat st;
-    if (fstat(fd, &st)) {
-        ::close(fd);
-        return String();
-    }
-    void *mapped = ::mmap(NULL, st.st_size, PROT_READ|PROT_WRITE, MAP_PRIVATE, fd, 0);
-    if (mapped == MAP_FAILED)
-        return String();
-
-    const String ret = SHA256::hash(const_cast<const char *>(static_cast<char*>(mapped)), st.st_size, type);
-
-    ::munmap(mapped, st.st_size);
-    ::close(fd);
-
-    return ret;
+    MemoryMappedFile mmf(file);
+    if(!mmf.isOpen()) return String();
+    return hash(static_cast<const char*>(mmf.filePtr()), mmf.size(), type);
 }

@@ -1,10 +1,9 @@
 cmake_minimum_required(VERSION 2.8)
+
+find_package(PkgConfig)
+
 if (NOT RCT_NO_LIBRARY)
     project(rct)
-endif ()
-
-if (POLICY CMP0022)
-  cmake_policy(SET CMP0022 OLD)
 endif ()
 
 if (POLICY CMP0042)
@@ -20,6 +19,7 @@ include(CheckSymbolExists)
 include(CheckCXXSymbolExists)
 include(CheckCXXSourceCompiles)
 include(CheckCXXSourceRuns)
+include(GNUInstallDirs)
 
 include(${CMAKE_CURRENT_LIST_DIR}/compiler.cmake)
 set(CMAKE_MODULE_PATH ${CMAKE_OLD_MODULE_PATH})
@@ -61,6 +61,13 @@ if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
   endif ()
 endif ()
 
+if (CMAKE_SYSTEM_NAME MATCHES "Windows")
+  add_definitions(-D_WIN32_WINNT=_WIN32_WINNT_VISTA)
+  set(HAVE_CHANGENOTIFICATION 1)
+  set(HAVE_SELECT 1)
+  list (APPEND RCT_LIBRARIES Ws2_32)
+endif ()
+
 check_cxx_source_compiles("
   #include <sys/types.h>
   #include <sys/stat.h>
@@ -76,6 +83,10 @@ endif ()
 set(RCT_DEFINITIONS "")
 set(RCT_INCLUDE_DIRS "")
 find_package(ZLIB)
+if (NOT ZLIB_FOUND AND PKGCONFIG_FOUND)
+    pkg_search_module(ZLIB zlib)
+endif()
+
 if (ZLIB_FOUND)
     set(RCT_DEFINITIONS ${RCT_DEFINITIONS} -DRCT_HAVE_ZLIB)
     list(APPEND RCT_INCLUDE_DIRS ${ZLIB_INCLUDE_DIRS})
@@ -83,10 +94,19 @@ else ()
     message("ZLIB Can't be found. Rct configured without zlib support")
 endif ()
 find_package(OpenSSL)
+if (NOT OPENSSL_FOUND AND PKGCONFIG_FOUND)
+    pkg_search_module(OPENSSL openssl)
+endif()
+
 if (OPENSSL_FOUND)
     set(RCT_DEFINITIONS ${RCT_DEFINITIONS} -DRCT_HAVE_OPENSSL)
     list(APPEND RCT_SOURCES ${CMAKE_CURRENT_LIST_DIR}/rct/AES256CBC.cpp ${CMAKE_CURRENT_LIST_DIR}/rct/SHA256.cpp)
-    list(APPEND RCT_INCLUDE_DIRS ${OPENSSL_INCLUDE_DIR})
+    if (${OPENSSL_INCLUDE_DIR})
+        list(APPEND RCT_INCLUDE_DIRS ${OPENSSL_INCLUDE_DIR})
+    endif ()
+    if (${OPENSSL_INCLUDE_DIRS})
+        list(APPEND RCT_INCLUDE_DIRS ${OPENSSL_INCLUDE_DIRS})
+    endif ()
 else ()
     message("OPENSSL Can't be found. Rct configured without openssl support")
 endif ()
@@ -108,7 +128,6 @@ set(RCT_SOURCES
   ${CMAKE_CURRENT_LIST_DIR}/rct/MessageQueue.cpp
   ${CMAKE_CURRENT_LIST_DIR}/rct/Path.cpp
   ${CMAKE_CURRENT_LIST_DIR}/rct/Plugin.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/rct/Process.cpp
   ${CMAKE_CURRENT_LIST_DIR}/rct/Rct.cpp
   ${CMAKE_CURRENT_LIST_DIR}/rct/ReadWriteLock.cpp
   ${CMAKE_CURRENT_LIST_DIR}/rct/Semaphore.cpp
@@ -120,6 +139,7 @@ set(RCT_SOURCES
   ${CMAKE_CURRENT_LIST_DIR}/rct/ThreadPool.cpp
   ${CMAKE_CURRENT_LIST_DIR}/rct/Timer.cpp
   ${CMAKE_CURRENT_LIST_DIR}/rct/Value.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/rct/MemoryMappedFile.cpp
   ${CMAKE_CURRENT_LIST_DIR}/cJSON/cJSON.c)
 
 if (HAVE_INOTIFY EQUAL 1)
@@ -130,6 +150,14 @@ elseif (HAVE_KQUEUE EQUAL 1)
   list(APPEND RCT_SOURCES ${CMAKE_CURRENT_LIST_DIR}/rct/FileSystemWatcher_kqueue.cpp)
 elseif (HAVE_CHANGENOTIFICATION EQUAL 1)
   list(APPEND RCT_SOURCES ${CMAKE_CURRENT_LIST_DIR}/rct/FileSystemWatcher_win32.cpp)
+endif ()
+
+if (CMAKE_SYSTEM_NAME MATCHES "Windows")
+    list(APPEND RCT_SOURCES
+        ${CMAKE_CURRENT_LIST_DIR}/rct/Process_Windows.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/rct/WindowsUnicodeConversion.cpp)
+else ()
+     list(APPEND RCT_SOURCES ${CMAKE_CURRENT_LIST_DIR}/rct/Process.cpp)
 endif ()
 
 
@@ -208,7 +236,7 @@ endif ()
 
 if (NOT RCT_NO_INSTALL)
   install(CODE "message(\"Installing rct...\")")
-  install(TARGETS rct DESTINATION lib COMPONENT rct EXPORT rct)
+  install(TARGETS rct EXPORT rct LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 endif ()
 
 set(CMAKE_REQUIRED_FLAGS "-std=c++11")
@@ -222,6 +250,7 @@ if (ASAN)
 endif ()
 
 check_cxx_source_compiles("
+  #include <functional>
   #include <memory>
   #include <mutex>
   #include <tuple>
@@ -254,6 +283,16 @@ check_cxx_source_runs("
       a.emplace(1, 1);
       return 0;
   }" HAVE_UNORDERDED_MAP_WORKING_MOVE_CONSTRUCTOR)
+
+check_cxx_source_runs("
+  #include <string>
+
+  int main(int, char **)
+  {
+      std::string str = \"foobar testing\";
+      std::string::iterator it = str.erase(str.begin(), str.end());
+      return 0;
+  }" HAVE_STRING_ITERATOR_ERASE)
 
 unset(CMAKE_REQUIRED_FLAGS)
 unset(CMAKE_REQUIRED_LIBRARIES)

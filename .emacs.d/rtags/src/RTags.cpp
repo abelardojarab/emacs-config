@@ -106,13 +106,10 @@ Path findAncestor(Path path, const String &fn, Flags<FindAncestorFlag> flags, So
         }
     }
     Path ret;
+    char buf[PATH_MAX + sizeof(dirent) + 1];
     int slash = path.size();
     const int len = fn.size() + 1;
     struct stat st;
-    char buf[PATH_MAX + sizeof(dirent) + 1];
-    dirent *direntBuf = 0, *entry = 0;
-    if (flags & Wildcard)
-        direntBuf = reinterpret_cast<struct dirent *>(malloc(sizeof(buf)));
 
     memcpy(buf, path.constData(), path.size() + 1);
     while ((slash = path.lastIndexOf('/', slash - 1)) > 0) { // We don't want to search in /
@@ -130,7 +127,7 @@ Path findAncestor(Path path, const String &fn, Flags<FindAncestorFlag> flags, So
             DIR *dir = opendir(buf);
             bool found = false;
             if (dir) {
-                while (!readdir_r(dir, direntBuf, &entry) && entry) {
+                while (dirent *entry = readdir(dir)) {
                     const int l = strlen(entry->d_name) + 1;
                     switch (l - 1) {
                     case 1:
@@ -158,8 +155,6 @@ Path findAncestor(Path path, const String &fn, Flags<FindAncestorFlag> flags, So
                 break;
         }
     }
-    if (flags & Wildcard)
-        free(direntBuf);
 
     ret = ret.ensureTrailingSlash();
     if (cacheResult) {
@@ -243,7 +238,12 @@ static inline Path checkEntries(const Entry *entries, const Path &path, const Pa
                 p = findAncestor(path, name.constData(), entries[i].flags & ~Wildcard, cache);
             }
         }
-        if (!p.isEmpty() && p != home && (best.isEmpty() || p.size() < best.size())) {
+        if (p.isEmpty() || p == home)
+            continue;
+        if (entries[i].flags & Authoritative) {
+            best = p;
+            break;
+        } else if (best.isEmpty() || p.size() < best.size()) {
             best = p;
         }
     }
@@ -269,11 +269,17 @@ Path findProjectRoot(const Path &path, ProjectRootMode mode, SourceCache *cache)
     static const Path home = Path::home();
     if (mode == SourceRoot) {
         const Entry before[] = {
+            { ".projectile", Authoritative },
             { ".git", Flags<FindAncestorFlag>() },
+            { ".hg", Flags<FindAncestorFlag>() },
             { ".svn", Flags<FindAncestorFlag>() },
+            { ".fslckout", Flags<FindAncestorFlag>() },
+            { "_FOSSIL_", Flags<FindAncestorFlag>() },
+            { "_darcs_", Flags<FindAncestorFlag>() },
             { ".bzr", Flags<FindAncestorFlag>() },
             { ".tup", Flags<FindAncestorFlag>() },
             { "GTAGS", Flags<FindAncestorFlag>() },
+            { "TAGS", Flags<FindAncestorFlag>() },
             { "configure", Flags<FindAncestorFlag>() },
             { "CMakeLists.txt", Flags<FindAncestorFlag>() },
             { "*.pro", Wildcard },

@@ -39,7 +39,7 @@ endif ()
 # Set RPATH when installing to a custom (non-system) directory
 list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
 if ("${isSystemDir}" STREQUAL "-1")
-    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_RPATH}:${CMAKE_INSTALL_PREFIX}/lib")
+    list(APPEND CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/lib)
 endif ()
 
 include(${CMAKE_SOURCE_DIR}/cmake/EnsureLibraries.cmake)
@@ -60,6 +60,32 @@ if (NOT DEFINED LIBCLANG_LIBRARIES OR NOT DEFINED LIBCLANG_CXXFLAGS OR NOT DEFIN
     find_package(LibClang REQUIRED)
 endif ()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${LIBCLANG_CXXFLAGS}")
+
+if (NOT RTAGS_BUILD_CLANG)
+    set(LIBCLANG_COMPILE_TEST "
+#include <clang-c/Index.h>
+
+int main()
+{
+    CXIndex index = clang_createIndex(0, true);
+    CXTranslationUnit unit = clang_parseTranslationUnit(index, 0, 0, 0, 0, 0, 0);
+    clang_disposeTranslationUnit(unit);
+    clang_disposeIndex(index);
+    return 0;
+}
+")
+    include(CheckCXXSourceCompiles)
+    set(CMAKE_OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
+    set(CMAKE_OLD_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES})
+    set(CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS} ${CMAKE_CXX_FLAGS} ${LIBCLANG_CXXFLAGS})
+    set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${LIBCLANG_LIBRARIES})
+    check_cxx_source_compiles("${LIBCLANG_COMPILE_TEST}" LIBCLANG_COMPILES)
+    if (NOT LIBCLANG_COMPILES)
+        message(FATAL_ERROR "We can't seem to compile a small clang test app. Maybe you need to install the libclang dev package?")
+    endif ()
+    set(CMAKE_REQUIRED_FLAGS ${CMAKE_OLD_REQUIRED_FLAGS})
+    set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_OLD_REQUIRED_LIBRARIES})
+endif ()
 
 if (EXISTS ${CLANG_COMPILATION_INCLUDE})
     add_definitions(-DHAVE_CXCOMPILATIONDATABASE)
@@ -235,8 +261,9 @@ endif ()
 
 set(RTAGS_ELISP_FILES
     rtags.el
-    rtags-ac.el
-    rtags-helm.el
+    ac-rtags.el
+    helm-rtags.el
+    ivy-rtags.el
     company-rtags.el
     flycheck-rtags.el)
 

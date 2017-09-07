@@ -21,6 +21,14 @@
 #include "RTagsLogOutput.h"
 #include "Server.h"
 
+#include <sstream>
+#include <fstream>
+#include "StringTokenizer.h"
+#ifdef HAS_JSON_H
+#include "rct/json/json.hpp"
+using namespace nlohmann;
+#endif
+
 static uint64_t start = 0;
 #define LOG()                                                           \
     if (Server::instance()->options().options & Server::CompletionLogs) \
@@ -182,7 +190,7 @@ void CompletionThread::process(Request *request)
     SourceFile *&cache = mCacheMap[request->source.fileId];
 
     if (cache && cache->source != request->source) {
-        LOG() << "cached sourcefile doesn't matched source, discarding" << request->source.sourceFile();
+        LOG() << "cached sourcefile doesn't match source, discarding" << request->source.sourceFile();
         delete cache;
         cache = 0;
     }
@@ -200,7 +208,6 @@ void CompletionThread::process(Request *request)
         mCacheList.moveToEnd(cache);
     }
     mMutex.unlock();
-    const bool sendDebug = testLog(LogLevel::Debug);
 
     assert(!cache->translationUnit || cache->source == request->source);
     if (!cache->translationUnit) {
@@ -272,6 +279,10 @@ void CompletionThread::process(Request *request)
         }
     }
 
+    LOG() << "line: " << request->location.line() << "column: "
+          << request->location.column() << ", prefix: "
+          << request->prefix;
+
     if (reparse) {
         sw.restart();
         assert(cache->translationUnit);
@@ -293,15 +304,15 @@ void CompletionThread::process(Request *request)
         completionFlags |= CXCodeComplete_IncludeMacros;
 
     CXCodeCompleteResults *results = clang_codeCompleteAt(cache->translationUnit->unit, sourceFile.constData(),
-                                                          request->location.line(), request->location.column(),
+                                                          request->location.line(), request->location.column() - request->prefix.length(),
                                                           &unsaved, unsaved.Length ? 1 : 0, completionFlags);
     completeTime = cache->codeCompleteTime = sw.restart();
     LOG() << "Generated completions for" << request->location << (results ? "successfully" : "unsuccessfully") << "in" << completeTime << "ms";
 
     ++cache->completions;
     if (results) {
-        List<Completions::Candidate> nodes;
-        nodes.reserve(results->NumResults);
+        List<CompletionCandidate *> candidates;
+        candidates.reserve(results->NumResults);
 
         int nodeCount = 0;
 #ifdef RTAGS_COMPLETION_TOKENS_ENABLED
@@ -333,90 +344,63 @@ void CompletionThread::process(Request *request)
 
             const int priority = clang_getCompletionPriority(string);
 
-            if (static_cast<size_t>(nodeCount) == nodes.size())
-                nodes.emplace_back();
+            CompletionCandidate *candidate = new CompletionCandidate;
+            candidate->kind = RTags::eatString(clang_getCursorKindSpelling(kind));
+            candidate->priority = priority;
+            candidate->parent = RTags::eatString(clang_getCompletionParent(string, 0));
+            candidate->brief_comment = RTags::eatString(clang_getCompletionBriefComment(string));
 
-            Completions::Candidate &node = nodes.back();
-            node.cursorKind = kind;
-            node.priority = priority;
-            node.signature.reserve(256);
-            const int chunkCount = clang_getNumCompletionChunks(string);
+            candidates.push_back(candidate);
+
             bool ok = true;
-            node.chunks.reserve(chunkCount);
+            const int chunkCount = clang_getNumCompletionChunks(string);
             for (int j=0; j<chunkCount; ++j) {
                 const CXCompletionChunkKind chunkKind = clang_getCompletionChunkKind(string, j);
                 String text = RTags::eatString(clang_getCompletionChunkText(string, j));
                 if (chunkKind == CXCompletionChunk_TypedText) {
-                    node.completion = text;
-                    if (node.completion.isEmpty() || (!request->prefix.isEmpty() && !text.startsWith(request->prefix))) {
+                    candidate->name = text;
+                    if (candidate->name.isEmpty()) {
                         ok = false;
                         break;
                     }
-                    node.signature.append(node.completion);
+                    candidate->signature += candidate->name;
                 } else {
-                    node.signature.append(text);
+                    candidate->signature += text;
                     if (chunkKind == CXCompletionChunk_ResultType)
-                        node.signature.append(' ');
+                        candidate->signature += ' ';
                 }
-                node.chunks.emplace_back(std::move(text), chunkKind);
             }
+
             if (ok) {
                 const unsigned int annotations = clang_getCompletionNumAnnotations(string);
                 for (unsigned j=0; j<annotations; ++j) {
                     const CXStringScope annotation = clang_getCompletionAnnotation(string, j);
                     const char *cstr = clang_getCString(annotation);
-                    if (const int len = strlen(cstr)) {
-                        if (!node.annotation.isEmpty())
-                            node.annotation.append(' ');
-                        node.annotation.append(cstr, len);
+                    if (strlen(cstr)) {
+                        if (!candidate->annotation.isEmpty())
+                            candidate->annotation += ' ';
+                        candidate->annotation + cstr;
                     }
                 }
-                node.parent = RTags::eatString(clang_getCompletionParent(string, 0));
-                node.briefComment = RTags::eatString(clang_getCompletionBriefComment(string));
-
-                int ws = node.completion.size() - 1;
-                while (ws >= 0 && isspace(node.completion.at(ws)))
-                    --ws;
-                if (ws >= 0) {
-                    node.completion.truncate(ws + 1);
-                    node.signature.replace("\n", "");
-#ifdef RTAGS_COMPLETION_TOKENS_ENABLED
-                    node.distance = tokens.isEmpty() ? -1 : tokens.value(Token(node.completion.constData(), node.completion.size()), -1);
-#endif
-                    if (sendDebug)
-                        debug() << node.signature << node.priority << kind
-#ifdef RTAGS_COMPLETION_TOKENS_ENABLED
-                                << node.distance
-#endif
-                                << clang_getCompletionAvailability(string);
-
-                    ++nodeCount;
-                    continue;
-                }
             }
-            node.completion.clear();
-            node.signature.clear();
         }
-        if (nodeCount) {
-            // Sort pointers instead of shuffling candidates around
-            List<const Completions::Candidate*> nodesPtr;
-            nodesPtr.reserve(nodeCount);
-            for (const auto &n : nodes)
-                nodesPtr.push_back(&n);
 
-            std::sort(nodesPtr.begin(), nodesPtr.end(), compareCompletionCandidates);
-            printCompletions(nodesPtr, request);
+        List<std::unique_ptr<MatchResult> > matches = StringTokenizer::find_and_sort_matches(candidates, request->prefix);
+
+        if (!matches.isEmpty()) {
+            printCompletions(matches, request);
             processTime = sw.elapsed();
-            LOG() << "Sent" << nodeCount << "completions for" << request->location;
+            LOG() << "Sent" << matches.size() << "completions for" << request->location;
             warning("Processed %s, parse %d/%d, complete %d, process %d => %d completions (unsaved %zu)",
                     request->location.toString().constData(),
                     parseTime, reparseTime, completeTime, processTime, nodeCount, request->unsaved.size());
 
         } else {
             LOG() << "No completions available for" << request->location;
-            printCompletions(List<const Completions::Candidate*>(), request);
-            error() << "No completion results available" << request->location << results->NumResults;
+            printCompletions(List<std::unique_ptr<MatchResult> >(), request);
+            error() << "No completion results available" << request->location;
         }
+
         clang_disposeCodeCompleteResults(results);
     }
 }
@@ -473,7 +457,7 @@ struct Output
     Flags<CompletionThread::Flag> flags;
 };
 
-void CompletionThread::printCompletions(const List<const Completions::Candidate *> &completions, Request *request)
+void CompletionThread::printCompletions(const List<std::unique_ptr<MatchResult> > &results, Request *request)
 {
     static List<String> cursorKindNames;
     // error() << request->flags << testLog(RTags::DiagnosticsLevel) << completions.size() << request->conn;
@@ -481,7 +465,10 @@ void CompletionThread::printCompletions(const List<const Completions::Candidate 
     bool xml = false;
     bool elisp = false;
     bool raw = false;
-    bool json = false;
+#ifdef HAS_JSON_H
+    bool send_json = false;
+    json j = {{"completions", json::array()}};
+#endif
     if (request->conn) {
         auto output = std::make_shared<Output>();
         output->connection = request->conn;
@@ -491,14 +478,16 @@ void CompletionThread::printCompletions(const List<const Completions::Candidate 
             elisp = true;
         } else if (request->flags & XML) {
             xml = true;
+#ifdef HAS_JSON_H
         } else if (request->flags & JSON) {
-            json = true;
+            send_json = true;
+#endif
         } else {
             raw = true;
         }
         request->conn.reset();
     } else {
-        log([&xml, &elisp, &outputs, &raw, &json](const std::shared_ptr<LogOutput> &output) {
+        log([&](const std::shared_ptr<LogOutput> &output) {
                 // error() << "Got a dude" << output->testLog(RTags::DiagnosticsLevel);
                 if (output->testLog(RTags::DiagnosticsLevel)) {
                     auto out = std::make_shared<Output>();
@@ -509,9 +498,11 @@ void CompletionThread::printCompletions(const List<const Completions::Candidate 
                     } else if (output->flags() & RTagsLogOutput::XML) {
                         out->flags |= CompletionThread::XML;
                         xml = true;
+#ifdef HAS_JSON_H
                     } else if (output->flags() & RTagsLogOutput::JSON) {
                         out->flags |= CompletionThread::JSON;
-                        json = true;
+                        send_json = true;
+#endif
                     } else {
                         raw = true;
                     }
@@ -521,7 +512,10 @@ void CompletionThread::printCompletions(const List<const Completions::Candidate 
     }
 
     if (!outputs.isEmpty()) {
-        String rawOut, xmlOut, jsonOut, elispOut;
+        String rawOut, xmlOut, elispOut;
+#ifdef HAS_JSON_H
+        String jsonOut;
+#endif
         if (raw)
             rawOut.reserve(16384);
         if (xml) {
@@ -534,63 +528,70 @@ void CompletionThread::printCompletions(const List<const Completions::Candidate 
             elispOut << String::format<256>("(list 'completions (list \"%s\" (list",
                                             RTags::elispEscape(request->location.toString(Location::AbsolutePath)).constData());
         }
-        for (const auto *val : completions) {
-            if (val->cursorKind >= cursorKindNames.size())
-                cursorKindNames.resize(val->cursorKind + 1);
-            String &kind = cursorKindNames[val->cursorKind];
-            if (kind.isEmpty())
-                kind = RTags::eatString(clang_getCursorKindSpelling(val->cursorKind));
-            if (xml || raw) {
-                const String str = String::format<128>(" %s %s %s %s %s %s\n",
-                                                       val->completion.constData(),
-                                                       val->signature.constData(),
-                                                       kind.constData(),
-                                                       val->annotation.constData(),
-                                                       val->parent.constData(),
-                                                       val->briefComment.constData());
+        for (const std::unique_ptr<MatchResult> &result : results) {
+            CompletionCandidate *c = result->candidate;
+            const String str = String::format<128>(" %s %s %s %s %s %s\n",
+                                                   c->name.c_str(),
+                                                   c->signature.c_str(),
+                                                   c->kind.c_str(),
+                                                   c->annotation.c_str(),
+                                                   c->parent.c_str(),
+                                                   c->brief_comment.c_str());
+
+
+            if (xml || raw)
                 if (raw)
                     rawOut += str;
-                if (xml)
-                    xmlOut += str;
+            if (xml)
+                xmlOut += str;
+#ifdef HAS_JSON_H
+            if (send_json) {
+                j["completions"] += {
+                    {"completion", c->name},
+                    {"signature", c->signature},
+                    {"kind", c->kind},
+                    {"parent", c->parent},
+                    {"brief_comment", c->brief_comment},
+                    {"annotation", c->annotation},
+                    {"priority", c->priority}
+                };
             }
+#endif
             if (elisp) {
-                // elispOut += String::format<128>(" (list \"%s\" \"%s\" \"%s\" \"%s\" \"%s\" \"%s\")",
                 elispOut += String::format<128>(" (list \"%s\" \"%s\" \"%s\" \"%s\")",
-                                                RTags::elispEscape(val->completion).constData(),
-                                                RTags::elispEscape(val->signature).constData(),
-                                                kind.constData(),
-                                                RTags::elispEscape(val->briefComment).constData());
+                                                RTags::elispEscape(c->name).constData(),
+                                                RTags::elispEscape(c->signature).constData(),
+                                                c->kind.c_str(),
+                                                RTags::elispEscape(c->brief_comment).constData());
                 //,
                 // RTags::elispEscape(val->annotation).constData(),
                 // val->parent.constData(),
                 // val->briefComment.constData());
-            }
-            if (json) {
-                if (jsonOut.isEmpty()) {
-                    jsonOut.reserve(16384);
-                    jsonOut += "{\"completions\":[";
-                } else {
-                    jsonOut += ',';
-                }
-
-                jsonOut += val->toValue(Completions::Candidate::IncludeChunks).toJSON();
             }
         }
         if (elisp)
             elispOut += ")))";
         if (xml)
             xmlOut += "]]></completions>\n";
-        if (json)
-            jsonOut += "]}";
+#ifdef HAS_JSON_H
+        if (send_json)
+            jsonOut = j.dump(4);
+#endif
 
-        EventLoop::mainEventLoop()->callLater([outputs, xmlOut, elispOut, rawOut, jsonOut]() {
+        EventLoop::mainEventLoop()->callLater([outputs, xmlOut, elispOut, rawOut
+#ifdef HAS_JSON_H
+                                               , jsonOut
+#endif
+                                                  ]() {
                 for (auto &it : outputs) {
                     if (it->flags & Elisp) {
                         it->send(elispOut);
                     } else if (it->flags & XML) {
                         it->send(xmlOut);
+#ifdef HAS_JSON_H
                     } else if (it->flags & JSON) {
                         it->send(jsonOut);
+#endif
                     } else {
                         it->send(rawOut);
                     }
