@@ -47,7 +47,7 @@
           "creamsody"
           "ample"
           "monokai"
-          "atom-dark"
+          "atom-one-dark"
           "zenburn"
           "material"
           "leuven"
