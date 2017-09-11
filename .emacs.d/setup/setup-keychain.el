@@ -39,7 +39,6 @@
 ;; Keychain access
 (use-package keychain-environment
   :demand t
-  :if (equal system-type 'gnu/linux)
   :load-path (lambda () (expand-file-name "keychain-environment/" user-emacs-directory))
   :commands keychain-refresh-environment
   :init (keychain-refresh-environment))
@@ -47,6 +46,7 @@
 ;; Keeping Secrets in Emacs with GnuPG & EasyPG
 (use-package epg
   :demand t
+  :load-path (lambda () (expand-file-name "keychain-environment/" user-emacs-directory))
   :after keychain-environment
   :config (progn
             ;; https://www.masteringemacs.org/article/keeping-secrets-in-emacs-gnupg-auth-sources
