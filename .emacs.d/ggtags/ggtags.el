@@ -2020,9 +2020,10 @@ When finished invoke CALLBACK in BUFFER with process exit status."
                             (interrupt-process (current-buffer)))))))
          (sentinel (lambda (proc _msg)
                      (when (memq (process-status proc) '(exit signal))
-                       (with-current-buffer (process-buffer proc)
+                       (ignore-errors
+	 		 (with-current-buffer (process-buffer proc)
                          (set-process-buffer proc nil)
-                         (funcall callback (process-exit-status proc)))))))
+                         (funcall callback (process-exit-status proc))))))))
     (set-process-query-on-exit-flag proc nil)
     (and cutoff (set-process-filter proc filter))
     (set-process-sentinel proc sentinel)

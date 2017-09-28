@@ -295,7 +295,12 @@
     "stdio.h"
     "stdlib.h"
     "confname.h"
-    "unistd.h")
+    "unistd.h"
+    "pthread.h"
+    "fcntl.h"
+    "cdefs.h"
+    "c++config.h"
+    "/usr/include/")
   "List of buffers to be ignored on tabbar and when switching buffers"
   :group 'my/customs
   :type 'list)
@@ -398,7 +403,7 @@
 
 ;; User-specific configuration file
 (setq-default custom-file "~/.emacs.cache/custom.el")
-(ignore-errors 
+(ignore-errors
 	(if (file-exists-p custom-file)
       	(load custom-file)
   		;; http://stackoverflow.com/questions/14071991/how-to-create-an-empty-file-by-elisp

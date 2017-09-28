@@ -238,9 +238,46 @@ tags table and its (recursively) included tags tables."
                           (ggtags-mode 1)
 			  (when (and (projectile-project-p)
 				     (file-exists-p (concat (projectile-project-root)
-						      "GTAGS")))
-				     (setq-local eldoc-documentation-function #'ggtags-eldoc-function)
-				     (setq-local imenu-create-index-function #'ggtags-build-imenu-index)))))
+							    "GTAGS")))
+			    (setq-local eldoc-documentation-function #'ggtags-eldoc-function)
+			    (setq-local imenu-create-index-function #'ggtags-build-imenu-index)))))
+
+	    (defun ggtags-global-output (buffer cmds callback &optional cutoff)
+	      "Asynchronously pipe the output of running CMDS to BUFFER.
+When finished invoke CALLBACK in BUFFER with process exit status."
+	      (or buffer (error "Output buffer required"))
+	      (when (get-buffer-process (get-buffer buffer))
+		;; Notice running multiple processes in the same buffer so that we
+		;; can fix the caller. See for example `ggtags-eldoc-function'.
+		(message "Warning: detected %S already running in %S; interrupting..."
+			 (get-buffer-process buffer) buffer)
+		(interrupt-process (get-buffer-process buffer)))
+	      (let* ((program (car cmds))
+		     (args (cdr cmds))
+		     (cutoff (and cutoff (+ cutoff (if (get-buffer buffer)
+						       (with-current-buffer buffer
+							 (line-number-at-pos (point-max)))
+						     0))))
+		     (proc (apply #'start-file-process program buffer program args))
+		     (filter (lambda (proc string)
+			       (and (buffer-live-p (process-buffer proc))
+				    (with-current-buffer (process-buffer proc)
+				      (goto-char (process-mark proc))
+				      (insert string)
+				      (when (and (> (line-number-at-pos (point-max)) cutoff)
+						 (process-live-p proc))
+					(interrupt-process (current-buffer)))))))
+		     ;; (sentinel (lambda (proc _msg)
+		     ;; 		 (when (memq (process-status proc) '(exit signal))
+		     ;; 		   (ignore-errors
+		     ;; 		     (with-current-buffer (process-buffer proc)
+		     ;; 		       (set-process-buffer proc nil)
+		     ;; 		       (funcall callback (process-exit-status proc)))))))
+		     (sentinel nil))
+		(set-process-query-on-exit-flag proc nil)
+		(and cutoff (set-process-filter proc filter))
+		(set-process-sentinel proc sentinel)
+		proc))
 
 	    (defun ggtags-find-project ()
 	      ;; See https://github.com/leoliu/ggtags/issues/42
