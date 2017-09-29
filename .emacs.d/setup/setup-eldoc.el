@@ -31,7 +31,8 @@
           (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
           (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
           (add-hook 'c-mode-common-hook 'turn-on-eldoc-mode)
-	  (setq eldoc-idle-delay 0)
+	  (setq eldoc-idle-delay    0.8
+		eldoc-argument-case 'eldoc-argument-list)
 
 	  ;; http://emacsredux.com/blog/2016/03/02/pimp-my-minibuffer/
 	  (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)

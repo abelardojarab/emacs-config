@@ -169,8 +169,7 @@ That is, a string used to represent it on the tab bar."
 		       (or
 			;; Explicitely removed buffers
 			(and (not (eq (current-buffer) buffer))
-			     (or (cl-search "TAGS"       (buffer-name buffer))
-				 (cl-search "diff-hl"    (buffer-name buffer))
+			     (or (cl-search "diff-hl"    (buffer-name buffer))
 				 (cl-search "tmp-status" (buffer-name buffer))))
 
 			;; Always include the current buffer.

@@ -277,7 +277,6 @@
 (defcustom my/ignored-buffers
   '("*Compile-Log*"
     "^ "
-    "TAGS"
     "rc"
     "*diff-hl*"
     "*tmp status*"
