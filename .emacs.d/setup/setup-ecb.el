@@ -271,7 +271,7 @@ little more place. "
               (select-window (next-window (next-window)))
               (ecb-set-history-buffer)
               (ecb-split-ver 0.4)
-              (ecb-set-speedbar-buffer)
+              (ecb-set-analyse-buffer)
               (select-window (previous-window (selected-window) 0)))
 
             (ecb-layout-define "bodil" left
@@ -297,8 +297,8 @@ If you have not set a compilation-window in `ecb-compile-window-height' then the
 layout contains no persistent compilation window and the other windows get a little
 more place."
               (ecb-set-methods-buffer)
-              (ecb-split-ver 0.5)
-              (ecb-set-speedbar-buffer)
+              (ecb-split-ver 0.7)
+              (ecb-set-analyse-buffer)
               (select-window (next-window)))
 
             ;; disable global semantic idle scheduler.
