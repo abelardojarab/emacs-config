@@ -36,15 +36,15 @@
   :init (add-hook 'dired-after-readin-hook 'dired-sync-symlink-filter)
   :commands dired-sync-symlink-filter
   :config (defun dired-sync-symlink-filter ()
-              (save-excursion
-                ;; Goto the beginning of the buffer
-                (goto-char (point-min))
-                ;; For each matching symbolic link with sync_cache or sync/mirrors in the path name...
-                (while (re-search-forward "\\(-> .*/sync\\(_cache\\|/mirrors\\)/.*$\\)" nil t)
-                  ;; Create an overlay that masks out everything between the -> and the end of line
-                  (let ((o (make-overlay (match-beginning 1) (progn (end-of-line) (point)))))
-                    (overlay-put o 'invisible t)
-                    (overlay-put o 'evaporate t))))))
+	    (save-excursion
+	      ;; Goto the beginning of the buffer
+	      (goto-char (point-min))
+	      ;; For each matching symbolic link with sync_cache or sync/mirrors in the path name...
+	      (while (re-search-forward "\\(-> .*/sync\\(_cache\\|/mirrors\\)/.*$\\)" nil t)
+		;; Create an overlay that masks out everything between the -> and the end of line
+		(let ((o (make-overlay (match-beginning 1) (progn (end-of-line) (point)))))
+		  (overlay-put o 'invisible t)
+		  (overlay-put o 'evaporate t))))))
 
 ;; Display commit number that is associated with current line of code
 (use-package vc-msg
@@ -61,6 +61,24 @@
                                (plist-get commit-info :author-time)
                                (plist-get commit-info :author-summary))))
             (add-hook 'vc-msg-hook 'vc-msg-hook-setup)))
+
+;; Annotate lines with author history
+(use-package vc-annotate
+  :config (defun vc-annotate-get-time-set-line-props ()
+	    (let ((bol (point))
+		  (date (vc-call-backend vc-annotate-backend 'annotate-time))
+		  (inhibit-read-only t))
+	      (assert (>= (point) bol))
+	      (put-text-property bol (point) 'invisible 'vc-annotate-annotation)
+	      (when (string-equal "Git" vc-annotate-backend)
+		(save-excursion
+		  (goto-char bol)
+		  (search-forward "(")
+		  (let ((p1 (point)))
+		    (re-search-forward " [0-9]")
+		    (remove-text-properties p1 (1- (point)) '(invisible nil))
+		    )))
+	      date)))
 
 ;; psvn
 (use-package psvn
