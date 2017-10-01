@@ -25,20 +25,16 @@
 ;;; Code:
 (use-package etags
   :defer t
+  ;; do not enable etags if global is present
+  :if (not (executable-find "global"))
   :commands (etags-create-or-update
              etags-tags-completion-table
              tags-completion-table)
   :init (progn
-          ;; Descend into GTAGSLIBPATH if definition is not found
-          (setenv "GTAGSTHROUGH" "true")
-
-          ;; Use exhuberant ctags format
-          (setenv "GTAGSLABEL" "exuberant-ctags")
 
           ;; Assure .gtags directory exists
           (if (not (file-exists-p "~/.gtags"))
               (make-directory "~/.gtags") t)
-          (setenv "GTAGSLIBPATH" "~/.gtags")
 
           (if (file-exists-p "~/.gtags/TAGS")
               (ignore-errors
@@ -149,8 +145,10 @@ tags table and its (recursively) included tags tables."
 (use-package etags-select
   :defer t
   :after etags
+  ;; do not enable etags if global is present
+  :if (not (executable-find "global"))
   :commands (etags-select-find-tag
-	     ido-find-tag)
+             ido-find-tag)
   :load-path (lambda () (expand-file-name "etags-select/" user-emacs-directory))
   :config (progn
             ;; Use ido to list tags, but then select via etags-select (best of both worlds!)
@@ -167,15 +165,16 @@ tags table and its (recursively) included tags tables."
 ;; Etags table
 (use-package etags-table
   :defer t
+  :after (projectile etags)
+  :if (not (executable-find "global"))
   :commands etags-create-or-update-table-tags-table
-  :after projectile
   :config (progn
             (setq etags-table-alist
                   (list
                    ;; For jumping to standard headers:
                    '(".*\\.\\([ch]\\|cpp\\)" "~/.gtags/TAGS")))
 
-            ;; Max depth to search up for a tags file.  nil means don't search.
+            ;; Max depth to search up for a tags file. nil means don't search.
             (setq etags-table-search-up-depth 2)
 
             ;; Below function comes useful when you change the project-root
@@ -190,7 +189,9 @@ tags table and its (recursively) included tags tables."
 ;; Ctags
 (use-package ctags
   :defer t
-  :if (executable-find "ctags")
+  ;; do not enable etags if global is present
+  :if (and (executable-find "ctags")
+	   (not (executable-find "global")))
   :commands (ctags-create-or-update
              ctags-create-or-update-tags-table
              ctags-search)
@@ -200,26 +201,26 @@ tags table and its (recursively) included tags tables."
             (defun ctags-create-or-update (dir-name)
               "Create tags file."
               (interactive
-	      (let ((olddir default-directory)
-		    (default-directory
-		      (read-directory-name
-		       "ctags: top of source tree:" (projectile-project-root))))
-		(shell-command
-		 (format "ctags -e -f %s -R %s > /dev/null"
-			 (concat default-directory "TAGS")
-			 default-directory))
-		(message "Created tagfile"))))))
+               (let ((olddir default-directory)
+                     (default-directory
+                       (read-directory-name
+                        "ctags: top of source tree:" (projectile-project-root))))
+                 (shell-command
+                  (format "ctags -e -f %s -R %s > /dev/null"
+                          (concat default-directory "TAGS")
+                          default-directory))
+                 (message "Created tagfile"))))))
 
 ;; Gtags
 (use-package ggtags
-  :demand t
+  :defer t
   :if (executable-find "global")
-  :after eldoc
+  :after (eldoc projectile)
   :commands (ggtags-mode
              ggtags-find-tag-dwim
              ggtags-eldoc-function
              ggtags-show-definition
-	     gtags-create-or-update)
+             ggtags-create-or-update)
   ;; Taken from https://tuhdo.github.io/c-ide.html
   :bind (:map ggtags-mode-map
               ("M-,"     . pop-tag-mark)
@@ -231,92 +232,110 @@ tags table and its (recursively) included tags tables."
               ("C-c g u" . ggtags-update-tags))
   :diminish ggtags-mode
   :load-path (lambda () (expand-file-name "ggtags/" user-emacs-directory))
+  :init (add-hook 'c-mode-common-hook
+                  (lambda ()
+                    (when (and (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+                               (projectile-project-p)
+                               (file-exists-p (concat (projectile-project-root)
+                                                        "GTAGS")))
+                        (ggtags-mode 1))))
   :config (progn
+            ;; Assure .gtags directory exists
+            (if (not (file-exists-p "~/.gtags"))
+                (make-directory "~/.gtags") t)
+
+            ;; Descend into GTAGSLIBPATH if definition is not found
+            (setenv "GTAGSTHROUGH" "true")
+            (setenv "GTAGSLIBPATH" "~/.gtags")
+
+            ;; Use exhuberant ctags format
+            (setenv "GTAGSLABEL" "exuberant-ctags")
+
+	    ;; Eldoc integration
             (add-hook 'c-mode-common-hook
                       (lambda ()
-                        (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
-                          (ggtags-mode 1)
-			  (when (and (projectile-project-p)
-				     (file-exists-p (concat (projectile-project-root)
-							    "GTAGS")))
-			    (setq-local eldoc-documentation-function #'ggtags-eldoc-function)
-			    (setq-local imenu-create-index-function #'ggtags-build-imenu-index)))))
+                        (when (and (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+                                   (projectile-project-p)
+                                   (file-exists-p (concat (projectile-project-root)
+                                                          "GTAGS")))
+                            (setq-local eldoc-documentation-function #'ggtags-eldoc-function)
+                            (setq-local imenu-create-index-function #'ggtags-build-imenu-index))))
 
-	    (defun ggtags-global-output (buffer cmds callback &optional cutoff)
-	      "Asynchronously pipe the output of running CMDS to BUFFER.
+            (defun ggtags-global-output (buffer cmds callback &optional cutoff)
+              "Asynchronously pipe the output of running CMDS to BUFFER.
 When finished invoke CALLBACK in BUFFER with process exit status."
-	      (or buffer (error "Output buffer required"))
-	      (when (get-buffer-process (get-buffer buffer))
-		;; Notice running multiple processes in the same buffer so that we
-		;; can fix the caller. See for example `ggtags-eldoc-function'.
-		(message "Warning: detected %S already running in %S; interrupting..."
-			 (get-buffer-process buffer) buffer)
-		(interrupt-process (get-buffer-process buffer)))
-	      (let* ((program (car cmds))
-		     (args (cdr cmds))
-		     (cutoff (and cutoff (+ cutoff (if (get-buffer buffer)
-						       (with-current-buffer buffer
-							 (line-number-at-pos (point-max)))
-						     0))))
-		     (proc (apply #'start-file-process program buffer program args))
-		     (filter (lambda (proc string)
-			       (and (buffer-live-p (process-buffer proc))
-				    (with-current-buffer (process-buffer proc)
-				      (goto-char (process-mark proc))
-				      (insert string)
-				      (when (and (> (line-number-at-pos (point-max)) cutoff)
-						 (process-live-p proc))
-					(interrupt-process (current-buffer)))))))
-		     (sentinel (lambda (proc _msg)
-		     		 (when (memq (process-status proc) '(exit signal))
-		     		   (ignore-errors
-		     		     (with-current-buffer (process-buffer proc)
-		     		       (set-process-buffer proc nil)
-		     		       (funcall callback (process-exit-status proc))))))))
-		(set-process-query-on-exit-flag proc nil)
-		(and cutoff (set-process-filter proc filter))
-		(set-process-sentinel proc sentinel)
-		proc))
+              (or buffer (error "Output buffer required"))
+              (when (get-buffer-process (get-buffer buffer))
+                ;; Notice running multiple processes in the same buffer so that we
+                ;; can fix the caller. See for example `ggtags-eldoc-function'.
+                (message "Warning: detected %S already running in %S; interrupting..."
+                         (get-buffer-process buffer) buffer)
+                (interrupt-process (get-buffer-process buffer)))
+              (let* ((program (car cmds))
+                     (args (cdr cmds))
+                     (cutoff (and cutoff (+ cutoff (if (get-buffer buffer)
+                                                       (with-current-buffer buffer
+                                                         (line-number-at-pos (point-max)))
+                                                     0))))
+                     (proc (apply #'start-file-process program buffer program args))
+                     (filter (lambda (proc string)
+                               (and (buffer-live-p (process-buffer proc))
+                                    (with-current-buffer (process-buffer proc)
+                                      (goto-char (process-mark proc))
+                                      (insert string)
+                                      (when (and (> (line-number-at-pos (point-max)) cutoff)
+                                                 (process-live-p proc))
+                                        (interrupt-process (current-buffer)))))))
+                     (sentinel (lambda (proc _msg)
+                                 (when (memq (process-status proc) '(exit signal))
+                                   (ignore-errors
+                                     (with-current-buffer (process-buffer proc)
+                                       (set-process-buffer proc nil)
+                                       (funcall callback (process-exit-status proc))))))))
+                (set-process-query-on-exit-flag proc nil)
+                (and cutoff (set-process-filter proc filter))
+                (set-process-sentinel proc sentinel)
+                proc))
 
-	    (defun ggtags-find-project ()
-	      ;; See https://github.com/leoliu/ggtags/issues/42
-	      ;;
-	      ;; It is unsafe to cache `ggtags-project-root' in non-file buffers
-	      ;; whose `default-directory' can often change.
-	      (unless (equal ggtags-last-default-directory default-directory)
-		(kill-local-variable 'ggtags-project-root))
-	      (let ((project (gethash ggtags-project-root ggtags-projects)))
-		(if (ggtags-project-p project)
-		    (if (ggtags-project-expired-p project)
-			(progn
-			  (remhash ggtags-project-root ggtags-projects)
-			  (ggtags-find-project))
-		      project)
-		  (setq ggtags-last-default-directory default-directory)
-		  (setq ggtags-project-root
-			(or (ignore-errors
-			      (file-name-as-directory
-			       (concat (file-remote-p (projectile-project-root))
-				       ;; Resolves symbolic links
-				       (ggtags-process-string "global" "-pr"))))
-			    ;; 'global -pr' resolves symlinks before checking the
-			    ;; GTAGS file which could cause issues such as
-			    ;; https://github.com/leoliu/ggtags/issues/22, so
-			    ;; let's help it out.
-			    ;;
-			    ;; Note: `locate-dominating-file' doesn't accept
-			    ;; function for NAME before 24.3.
-			    (let ((dir (locate-dominating-file (projectile-project-root) "GTAGS")))
-			      ;; `file-truename' may strip the trailing '/' on
-			      ;; remote hosts, see http://debbugs.gnu.org/16851
-			      (and dir (file-regular-p (expand-file-name "GTAGS" dir))
-				   (file-name-as-directory (file-truename dir))))))
-		  (when ggtags-project-root
-		    (if (gethash ggtags-project-root ggtags-projects)
-			(ggtags-find-project)
-		      (ggtags-make-project ggtags-project-root))))))
+            (defun ggtags-find-project ()
+              ;; See https://github.com/leoliu/ggtags/issues/42
+              ;;
+              ;; It is unsafe to cache `ggtags-project-root' in non-file buffers
+              ;; whose `default-directory' can often change.
+              (unless (equal ggtags-last-default-directory default-directory)
+                (kill-local-variable 'ggtags-project-root))
+              (let ((project (gethash ggtags-project-root ggtags-projects)))
+                (if (ggtags-project-p project)
+                    (if (ggtags-project-expired-p project)
+                        (progn
+                          (remhash ggtags-project-root ggtags-projects)
+                          (ggtags-find-project))
+                      project)
+                  (setq ggtags-last-default-directory default-directory)
+                  (setq ggtags-project-root
+                        (or (ignore-errors
+                              (file-name-as-directory
+                               (concat (file-remote-p (projectile-project-root))
+                                       ;; Resolves symbolic links
+                                       (ggtags-process-string "global" "-pr"))))
+                            ;; 'global -pr' resolves symlinks before checking the
+                            ;; GTAGS file which could cause issues such as
+                            ;; https://github.com/leoliu/ggtags/issues/22, so
+                            ;; let's help it out.
+                            ;;
+                            ;; Note: `locate-dominating-file' doesn't accept
+                            ;; function for NAME before 24.3.
+                            (let ((dir (locate-dominating-file (projectile-project-root) "GTAGS")))
+                              ;; `file-truename' may strip the trailing '/' on
+                              ;; remote hosts, see http://debbugs.gnu.org/16851
+                              (and dir (file-regular-p (expand-file-name "GTAGS" dir))
+                                   (file-name-as-directory (file-truename dir))))))
+                  (when ggtags-project-root
+                    (if (gethash ggtags-project-root ggtags-projects)
+                        (ggtags-find-project)
+                      (ggtags-make-project ggtags-project-root))))))
 
-            (defun gtags-create-or-update ()
+            (defun ggtags-create-or-update ()
               "Create or update the GNU-Global tag file"
               (interactive
                (if (zerop (call-process "global" nil nil nil "-p"))
