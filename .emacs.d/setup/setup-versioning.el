@@ -64,6 +64,9 @@
 
 ;; Annotate lines with author history
 (use-package vc-annotate
+  :defer t
+  :after vc
+  :commands vc-annotate
   :config (defun vc-annotate-get-time-set-line-props ()
 	    (let ((bol (point))
 		  (date (vc-call-backend vc-annotate-backend 'annotate-time))
