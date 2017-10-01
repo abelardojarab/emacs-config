@@ -3,8 +3,8 @@
 ;; Copyright (C) 2017  Dominic Charlesworth <dgc336@gmail.com>
 
 ;; Author: Dominic Charlesworth <dgc336@gmail.com>
-;; Package-Version: 1.0.3
-;; Package-Requires: ((emacs "24.4") (all-the-icons "2.4.1") (spaceline "2.0.0"))
+;; Package-Version: 1.4.0
+;; Package-Requires: ((emacs "24.4") (all-the-icons "2.6.0") (spaceline "2.0.0") (memoize "1.0.1"))
 ;; URL: https://github.com/domtronn/spaceline-all-the-icons.el
 ;; Keywords: convenience, lisp, tools
 
@@ -40,6 +40,7 @@
 ;; - `process'           The currently running process
 ;; - `position'          The Line/Column current position
 ;; - `region-info'       Count of lines and words currently in region
+;; - `narrowed'          Whether or not the current buffer is narrowed
 ;; - `fullscreen'        An indicator of whether or not window is fullscreen
 ;; - `text-scale'        The amount of global text scale
 ;; - `vc-icon'           The current Version Control Icon
@@ -55,7 +56,9 @@
 
 ;; - `bookmark' [`bookmark']                           Whether or not the current buffer has been modified
 ;; - `window-number' [`winum' or `window-numbering']   The current window number
+;; - `eyebrowse' [`eyebrowse']                         The Eyebrowse workspace
 ;; - `projectile' [`projectile']                       The current project you're working in
+;; - `multiple-cursors' [`multiple-cursors']           Show the number of active multiple cursors in use
 ;; - `git-status' [`git-gutter']                       Number of added/removed lines in current buffer
 ;; - `flycheck-status' [`flycheck']                    A summary of Errors/Warnings/Info in buffer
 ;; - `flycheck-status-info' [`flycheck']               A summary dedicated to Info statuses in buffer
@@ -65,6 +68,7 @@
 ;; - `sunrise' [`yahoo-weather']                       Display an icon to show todays sunrise time
 ;; - `sunset' [`yahoo-weather']                        Display an icon to show todays sunset time
 ;; - `battery-status' [`fancy-battery']                Display a colour coded battery with time remaining
+;; - `nyan-mode' [`nyan-mode']                         Display Nyan Cat as a progress meter through the buffer
 
 ;;; Code:
 
@@ -91,11 +95,32 @@
   :group 'spaceline
   :group 'spaceline-all-the-icons)
 
+(defcustom spaceline-all-the-icons-primary-separator "|"
+  "Separator character used for joining primary segments together."
+  :group 'spaceline-all-the-icons
+  :type 'string)
+
+(defcustom spaceline-all-the-icons-secondary-separator "·"
+  "Separator character used for joining secondary segments together."
+  :group 'spaceline-all-the-icons
+  :type 'string)
+
+;;; Global helper functions
 (defun spaceline-all-the-icons--height (&optional height)
   "Scale `powerline-text-scale-factor' by HEIGHT."
   (if (bound-and-true-p powerline-text-scale-factor)
       (* (or height 1) (or powerline-text-scale-factor 1))
       (or height 1)))
+
+(defun spaceline-all-the-icons--face-background (face)
+  "Get the background of FACE or `default' face."
+  (or (face-background face)
+      (face-background 'default)))
+
+(defun spaceline-all-the-icons--face-foreground (face)
+  "Get the foreground of FACE or `default' face."
+  (or (face-foreground face)
+      (face-foreground 'default)))
 
 ;;; Full Modeline Definition
 (defconst spaceline-all-the-icons-theme '("%e" (:eval (spaceline-ml-all-the-icons)))
@@ -116,6 +141,7 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
        all-the-icons-bookmark
        all-the-icons-dedicated
        all-the-icons-window-number
+       all-the-icons-eyebrowse-workspace
        all-the-icons-buffer-size) :face highlight-face :skip-alternate t)
 
      all-the-icons-separator-left-active-1
@@ -132,9 +158,11 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
        all-the-icons-position
        all-the-icons-region-info
        all-the-icons-fullscreen
-       all-the-icons-text-scale)
+       all-the-icons-text-scale
+       all-the-icons-narrowed
+       all-the-icons-multiple-cursors)
       :face highlight-face
-      :separator (spaceline-all-the-icons--separator "|" " "))
+      :separator (spaceline-all-the-icons--separator spaceline-all-the-icons-primary-separator " "))
 
      all-the-icons-separator-left-active-3
      all-the-icons-separator-left-inactive
@@ -147,10 +175,23 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
          all-the-icons-flycheck-status-info) :separator " ")
        all-the-icons-package-updates)
       :face other-face
-      :separator (spaceline-all-the-icons--separator "·" " "))
+      :separator (spaceline-all-the-icons--separator spaceline-all-the-icons-secondary-separator " "))
 
-     all-the-icons-separator-left-active-4
+     ((all-the-icons-separator-left-active-4)
+      :tight t
+      :when (not (or (and (bound-and-true-p nyan-mode)
+                          spaceline-all-the-icons-nyan-cat-p)
+                     spaceline-all-the-icons-minor-modes-p)))
 
+     ((all-the-icons-separator-left-extra-1
+       all-the-icons-nyan-cat
+       all-the-icons-separator-left-extra-2)
+      :tight t
+      :face powerline-active1
+      :when (or (and (bound-and-true-p nyan-mode)
+                     spaceline-all-the-icons-nyan-cat-p)
+                spaceline-all-the-icons-minor-modes-p))
+     
      ((all-the-icons-separator-minor-mode-left
        all-the-icons-minor-modes
        all-the-icons-separator-minor-mode-right)
@@ -164,13 +205,13 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
 
    `(((,@additional-segments) :when active :face powerline-active2)
      ((,@additional-segments) :when (not active) :face powerline-inactive2)
-     
+
      ((all-the-icons-weather
        all-the-icons-temperature
        all-the-icons-sunrise
        all-the-icons-sunset)
       :face powerline-active2
-      :separator (spaceline-all-the-icons--separator "·" " "))
+      :separator (spaceline-all-the-icons--separator spaceline-all-the-icons-secondary-separator " "))
 
      ((all-the-icons-player-volume
        all-the-icons-player-controls
@@ -186,9 +227,11 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
      all-the-icons-separator-right-active-2
      all-the-icons-separator-right-inactive
 
-     ((all-the-icons-battery-status
+     ((all-the-icons-org-clock-current-task
+       all-the-icons-battery-status
        all-the-icons-time)
-      :separator (spaceline-all-the-icons--separator "|" " ") :face default-face)))
+      :separator (spaceline-all-the-icons--separator spaceline-all-the-icons-primary-separator " ")
+      :face default-face)))
 
   (setq-default mode-line-format spaceline-all-the-icons-theme))
 
@@ -196,7 +239,7 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
  "all-the-icons-paradox"
  '(((all-the-icons-paradox-line-count
      all-the-icons-paradox-filter)
-    :separator (spaceline-all-the-icons--separator "|" " ")
+    :separator (spaceline-all-the-icons--separator spaceline-all-the-icons-primary-separator " ")
     :face highlight-face)
 
    all-the-icons-separator-paradox-1
@@ -253,6 +296,11 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
   "Set up advice required to make `spaceline-all-the-icons' work in `neotree-mode'."
   (setq neo-mode-line-type 'custom)
   (setq neo-mode-line-custom-format '("%e" (:eval (spaceline-ml-all-the-icons-neotree)))))
+
+(defun spaceline-all-the-icons--setup-git-ahead ()
+  "Set up advice required to count the number of git commits ahead of upstream."
+  (spaceline-all-the-icons--git-ahead-update)
+  (advice-add 'select-window :after 'spaceline-all-the-icons--git-ahead-update))
 
 ;; Debugging functions
 (defun spaceline-all-the-icons--turn-off (segment) "Turn spaceline SEGMENT off." (funcall (intern (format "spaceline-toggle-all-the-icons-%s-off" segment))))

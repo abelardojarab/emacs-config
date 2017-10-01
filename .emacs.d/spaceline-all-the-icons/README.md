@@ -72,6 +72,7 @@ setup/config will enable the segments.
 ```el
 (spaceline-all-the-icons--setup-anzu)            ;; Enable anzu searching
 (spaceline-all-the-icons--setup-package-updates) ;; Enable package update indicator
+(spaceline-all-the-icons--setup-git-ahead)       ;; Enable # of commits ahead of upstream in git
 (spaceline-all-the-icons--setup-paradox)         ;; Enable Paradox mode line
 (spaceline-all-the-icons--setup-neotree)         ;; Enable Neotree mode line
 ```
@@ -118,6 +119,7 @@ calling the following in your `:config`
 | `dedicated` | Indicates whether the current file is dedicated |
 | `fullscreen` | Indicates whether the frame is Fullscreen  |
 | `buffer-position` | Indicates the position through the buffer as a percentage  |
+| `narrowed` | Indicates whether the current buffer has been narrowed  |
 
 ### Icon Sets
 
@@ -138,6 +140,8 @@ These segments can have one of the following icon sets
 | `bookmark` | `bookmark`, `heart`, `star` |
 | `dedicated` | `pin`, `sticky-note` |
 | `window-numbering` | `circle`, `solid`, `string`, `square` |
+| `eyebrowse-workspace` | `circle`, `solid`, `string`, `square` |
+| `multiple-cursors` | `caret`, `pointer` |
 | `git-stats` | `diff-icons`, `arrows` |
 | `flycheck-slim` | `solid`, `outline`, `dots` |
 | `sun-time` | `rise/set`, `sun/moon`, `arrows` |
@@ -145,8 +149,13 @@ These segments can have one of the following icon sets
 ### Separators
 
 You can customize the divider separators using
-`spaceline-all-the-icons-separators-type`, the available types are:
+`spaceline-all-the-icons-separator-type`, the available types are:
 `'slant`, `'arrow`, `'cup`, `'wave`, `'none`
+
+You also have two types of separators between individual segments,
+these are `spaceline-all-the-icons-primary-separator` &
+`spaceline-all-the-icons-secondary-separator`. Their defualt values
+are `|` & `·` respectively.
 
 ### Debugging
 
@@ -161,10 +170,10 @@ To debug this, try running
 
 ```el
 M-x spaceline-all-the-icons--debug-segments
-C-u M-x spaceline-all-th-icons--debug-segments
+C-u M-x spaceline-all-the-icons--debug-segments
 ```
 
-This will return a list of segments which are throwing errors and will
+This will _(should)_ return a list of segments which are throwing errors and will
 help me to debug any issues you're having!
 
 Calling it with a `C-u` prefix will _(should)_ disable the segments

@@ -44,6 +44,9 @@
                                (all-the-icons-alltheicon "arrow-left")
                                (all-the-icons-alltheicon "arrow-right")) arrow)))
 
+(defvar spaceline-all-the-icons-separator-scale 1.6
+  "Scaling factor to adjust the separator height.")
+
 (defcustom spaceline-all-the-icons-separators-invert-direction nil
   "Whether or not to invert the separator direction."
   :group 'spaceline-all-the-icons
@@ -81,18 +84,22 @@ separator."
                   (equal direction "left"))      ;; need to invert the faces for left direction
          (setq sf (prog1 ef (setq ef sf))))
 
-       (unless (eq separator 'none)
+       (unless (or (eq separator 'none)
+                   (string= (spaceline-all-the-icons--face-background sf) (spaceline-all-the-icons--face-background ef)))
         (propertize (all-the-icons-alltheicon (format "%s-%s" separator direction) :v-adjust 0.0)
-                    'face `(:height ,(spaceline-all-the-icons--height 1.6)
+                    'face `(:height ,(spaceline-all-the-icons--height spaceline-all-the-icons-separator-scale)
                             :family ,(all-the-icons-alltheicon-family)
-                            :foreground ,(face-background sf)
-                            :background ,(face-background ef)))))
+                            :foreground ,(spaceline-all-the-icons--face-background sf)
+                            :background ,(spaceline-all-the-icons--face-background ef)))))
      :skip-alternate t :tight t :when (if ,invert (not active) active)))
 
 (define-spaceline-all-the-icons--separator left-active-1 "right" spaceline-highlight-face-func 'powerline-active1)
 (define-spaceline-all-the-icons--separator left-active-2 "right" 'powerline-active1 spaceline-highlight-face-func)
 (define-spaceline-all-the-icons--separator left-active-3 "right" spaceline-highlight-face-func 'mode-line)
 (define-spaceline-all-the-icons--separator left-active-4 "right" 'mode-line 'powerline-active2)
+
+(define-spaceline-all-the-icons--separator left-extra-1 "right" 'mode-line 'powerline-active1)
+(define-spaceline-all-the-icons--separator left-extra-2 "right" 'powerline-active1 'powerline-active2)
 
 (define-spaceline-all-the-icons--separator right-active-1 "left" 'mode-line 'powerline-active2)
 (define-spaceline-all-the-icons--separator right-active-2 "left" 'powerline-active1 'mode-line)
