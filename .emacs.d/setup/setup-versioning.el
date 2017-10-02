@@ -317,12 +317,12 @@
               (setq pretty-magit-alist nil)
               (setq pretty-magit-prompt nil)
               (pretty-magit "Feature" ? (:foreground "slate gray" :height 1.1))
-              (pretty-magit "Add"     ? (:foreground "#375E97" :height 1.1))
+              (pretty-magit "Add"     ?☑ (:foreground "#375E97" :height 1.1))
               (pretty-magit "Fix"     ? (:foreground "#FB6542" :height 1.1))
-              (pretty-magit "Clean"   ? (:foreground "#FFBB00" :height 1.1))
+              (pretty-magit "Clean"   ?✄ (:foreground "#FFBB00" :height 1.1))
               (pretty-magit "Docs"    ? (:foreground "#3F681C" :height 1.1))
               (pretty-magit "master"  ?  (:box nil :height 1.1) t)
-              (pretty-magit "origin"  ?✪ (:box nil :height 1.1) t)
+              (pretty-magit "origin"  ? (:box nil :height 1.1) t)
 
               (defun my/add-magit-faces ()
                 "Add face properties and compose symbols for buffer from pretty-magit."

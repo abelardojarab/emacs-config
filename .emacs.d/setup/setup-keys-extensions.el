@@ -33,6 +33,8 @@
 
 ;; visual feedback when pressing keys
 (use-package which-key
+  :defer t
+  :commands which-key-mode
   :load-path (lambda () (expand-file-name "which-key/" user-emacs-directory))
   :diminish which-key-mode
   :config (progn
