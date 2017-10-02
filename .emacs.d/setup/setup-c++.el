@@ -52,12 +52,14 @@
               (interactive)
               (c-set-style "Linux")
               (c-set-offset 'substatement-open 0)
+	      (c-set-offset 'innamespace 0)
               (c-toggle-electric-state -1)
-              (setq comment-multi-line t)
-              (setq-default c-default-style "bsd")
-              (setq-default indent-tabs-mode t)
 
+              (setq-default c-default-style "Linux")
+              (setq-default indent-tabs-mode t)
               (setq-default tab-width 8)
+              (setq comment-multi-line t)
+
               (make-local-variable 'c-basic-offset)
               (setq c-basic-offset tab-width)
               (make-local-variable 'c-indent-level)
