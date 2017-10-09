@@ -82,20 +82,20 @@
   :init (setq stack-trace-on-error t)
   :config (progn
 
-        ;; Fix error with symboldef sync
-        (defmacro ecb-with-readonly-buffer (buffer &rest body)
-          "Make buffer BUFFER current but do not display it. Evaluate BODY in buffer
+            ;; Fix error with symboldef sync
+            (defmacro ecb-with-readonly-buffer (buffer &rest body)
+              "Make buffer BUFFER current but do not display it. Evaluate BODY in buffer
 BUFFER \(not read-only an evaluation-time of BODY) and make afterwards BUFFER
 read-only. Note: All this is done with `save-excursion' so after BODY that
 buffer is current which was it before calling this macro."
-          `(ignore-errors (if (buffer-live-p ,buffer)
-                  (with-current-buffer ,buffer
-                    (unwind-protect
-                    (progn
-                      (setq buffer-read-only nil)
-                      ,@body)
-                      (setq buffer-read-only t)))
-                (ecb-error "Try to set a not existing buffer."))))
+              `(ignore-errors (if (buffer-live-p ,buffer)
+                                  (with-current-buffer ,buffer
+                                    (unwind-protect
+                                        (progn
+                                          (setq buffer-read-only nil)
+                                          ,@body)
+                                      (setq buffer-read-only t)))
+                                (ecb-error "Try to set a not existing buffer."))))
 
             ;; ECB setup
             (if (ecb--semantic-active-p)
@@ -321,8 +321,9 @@ more place."
                              (ecb-window-sync)))))
 
             ;; Finally activate ecb on HD-monitors or above
-            (if (and (> (car (screen-size)) 1900)
-                     (> (cadr (screen-size)) 1000))
+            (if (or (and (> (car (screen-size)) 1900)
+                         (> (cadr (screen-size)) 1000))
+                    (not (display-graphic-p)))
                 (ecb-activate))))
 
 (provide 'setup-ecb)
