@@ -223,8 +223,8 @@
 
 ;; helm themes
 (use-package helm-themes
-  :after helm
   :defer t
+  :after helm
   :commands (helm-themes)
   :load-path (lambda () (expand-file-name "helm-themes/" user-emacs-directory)))
 
@@ -311,24 +311,29 @@
               :map company-mode-map
               ("C-:" . helm-company))
   :after (helm company)
-  :load-path (lambda () (expand-file-name "helm-company/" user-emacs-directory))
-  :commands (helm-company))
+  :commands (helm-company)
+  :load-path (lambda () (expand-file-name "helm-company/" user-emacs-directory)))
 
 ;; helm pages
 ;; Text is divided into pages delimited by the formfeed character (ASCII code 12, also denoted as ‘control-L’)
 (use-package helm-pages
+  :defer t
   :after helm
+  :commands helm-pages
   :load-path (lambda () (expand-file-name "helm-pages/" user-emacs-directory)))
 
 ;; helm integration with magit
 ;; https://github.com/tarao/dotfiles/blob/master/.emacs.d/init/helm-magit.el
 (use-package helm-magit
+  :defer t
+  :commands (helm-magit:checkout helm-magit:diff)
   :if (executable-find "git")
   :after (helm magit))
 
 ;; helm gitignore generation
 (use-package helm-gitignore
   :defer t
+  :after (helm magit)
   :commands helm-gitignore
   :after (helm git-modes request)
   :load-path (lambda () (expand-file-name "helm-gitignore/" user-emacs-directory)))
