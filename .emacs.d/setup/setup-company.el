@@ -56,12 +56,12 @@
 
             ;; Default company backends
             (setq company-backends
-                  '((company-capf           ;; `completion-at-point-functions'
+                  '((company-semantic
+		     ;;company-capf
                      company-yasnippet
                      company-keywords
-		     company-semantic)
+		     company-dabbrev-code)
                     (company-dabbrev
-                     company-dabbrev-code
 		     company-abbrev)))
 
             ;; Add yasnippet support for all company backends
