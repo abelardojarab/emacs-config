@@ -298,6 +298,8 @@
     "pthread.h"
     "fcntl.h"
     "cdefs.h"
+    "shared_ptr.h"
+    "new"
     "c++config.h"
     "/usr/include/")
   "List of buffers to be ignored on tabbar and when switching buffers"
