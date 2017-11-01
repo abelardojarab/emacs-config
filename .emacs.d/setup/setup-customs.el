@@ -289,6 +289,8 @@
     "*compilation*"
     "*cmake*"
     "*etags tmp*"
+    "TAGS"
+    ;; C header files
     "stdint.h"
     "stdbool.h"
     "stdio.h"
@@ -298,10 +300,11 @@
     "pthread.h"
     "fcntl.h"
     "cdefs.h"
-    "shared_ptr.h"
+    ;; C++ header files
     "new"
-    "c++config.h"
-    "/usr/include/")
+    "shared_ptr.h"
+    "std_mutex"
+    "c++config.h")
   "List of buffers to be ignored on tabbar and when switching buffers"
   :group 'my/customs
   :type 'list)
