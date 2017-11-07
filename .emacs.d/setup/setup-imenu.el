@@ -24,31 +24,11 @@
 
 ;;; Code:
 
-;; iMenu
+;; imenu
 (use-package imenu-anywhere
-  :load-path (lambda () (expand-file-name "imenu-anywhere/" user-emacs-directory))
-  :config (progn
-            (set-default 'imenu-auto-rescan t)
-            (mapc (lambda (mode)
-                    (add-hook mode 'imenu-add-menubar-index))
-                  my/imenu-anywhere-modes)
-            (setq imenu-create-index-function
-                  (lambda ()
-                    (let ((end))
-                      (beginning-of-buffer)
-                      (re-search-forward "^%%")
-                      (forward-line 1)
-                      (setq end (save-excursion (re-search-forward "^%%") (point)))
-                      (loop while (re-search-forward "^\\([a-z].*?\\)\\s-*\n?\\s-*:" end t)
-                            collect (cons (match-string 1) (point))))))
+  :load-path (lambda () (expand-file-name "imenu-anywhere/" user-emacs-directory)))
 
-            ;; Find definitions in current buffer using gtags
-            (if (executable-find "global")
-        (add-hook 'c-mode-common-hook (lambda ()
-                        (make-local-variable 'imenu-create-index-function)
-                        (setq imenu-create-index-function #'ggtags-build-imenu-index))))))
-
-;; iMenu list
+;; imenu list
 (use-package imenu-list
   :load-path (lambda () (expand-file-name "imenu-list/" user-emacs-directory))
   :config (progn
@@ -57,10 +37,9 @@
             (setq imenu-list-auto-resize t)
             (setq imenu-list-position 'right)))
 
-;; iMenus
+;; imenus
 (use-package imenus
   :load-path (lambda () (expand-file-name "imenus/" user-emacs-directory)))
-
 
 (provide 'setup-imenu)
 ;;; setup-imenu.el ends here
