@@ -25,97 +25,12 @@
 ;;; Code:
 
 ;; highlight phrases or regular expressions
-;; https://github.com/kaushalmodi/.emacs.d/blob/master/setup-files/setup-highlight.el
 (use-package hi-lock
   :bind (:map hi-lock-map
               ;; Unbind the "C-x w" bindings because "M-s h" bindings provide the same thing.
-              ("C-x w" . nil)
-              :map search-map
-              ("C-h"   . my/unhighlight-all-in-buffer))
-  :commands (global-hi-lock-mode
-             my/hi-lock-face-symbol-at-point-or-sel)
-  :init (global-hi-lock-mode 1)
-  :config (progn
-
-            ;; Patch the `hi-lock-face-buffer' aka `highlight-regexp' to pick the
-            ;; selected region to derive a regexp if a region is active.
-            (defun hi-lock-face-buffer (regexp &optional face)
-              "Set face of each match of REGEXP to FACE.
-Interactively, prompt for REGEXP using `read-regexp', then FACE.
-Use the global history list for FACE.
-Use Font lock mode, if enabled, to highlight REGEXP.  Otherwise,
-use overlays for highlighting.  If overlays are used, the
-highlighting will not update as you type."
-              (interactive
-               (list
-                (hi-lock-regexp-okay
-                 (read-regexp "Regexp to highlight"
-                              (if (use-region-p)
-                                  ;; Use `rx' to generate regexp for selected text.
-                                  ;; Example: regexp to find "a.b" text would be
-                                  ;; "a\.b"
-                                  (let ((str (buffer-substring-no-properties
-                                              (region-beginning) (region-end))))
-                                    (eval `(rx ,str)))
-                                'regexp-history-last)))
-                (hi-lock-read-face-name)))
-              (or (facep face) (setq face 'hi-yellow))
-              (unless hi-lock-mode (hi-lock-mode 1))
-              (hi-lock-set-pattern regexp face))
-
-            ;; Don't scan the file beyond 1000 characters to look for the hi-lock patterns.
-            (setq hi-lock-file-patterns-range 1000)
-
-            ;; Don't ask before highlighting any hi-lock: pattern found in a file
-            ;; Below, (lambda (pattern) t) simply always returns `t' regardless of
-            ;; what the `pattern' input is.
-            (setq hi-lock-file-patterns-policy (lambda (pattern) t))
-
-            ;; Mark the `hi-lock-file-patterns' variable as safe so that it can be
-            ;; set in `.dir-locals.el' files.
-            (put 'hi-lock-file-patterns 'safe-local-variable 'identity)
-
-            ;; Automatically cycle through the highlighting faces listed in
-            ;; `hi-lock-face-defaults' instead of bothering the user to pick a face
-            ;; manually each time.
-            (setq hi-lock-auto-select-face t)
-
-            (defun my/hi-lock-face-symbol-at-point-or-sel ()
-              "If a region is selected, highlight each instance of that.
-Else highlight each instance of the symbol at point.
-Uses the next face from `hi-lock-face-defaults' without prompting,
-unless you use a prefix argument. Uses `find-tag-default-as-symbol-regexp' to
-retrieve the symbol at point.
-This uses Font lock mode if it is enabled; otherwise it uses overlays,
-in which case the highlighting will not update as you type."
-              (interactive)
-              (let* ((regexp (hi-lock-regexp-okay
-                              (cond ((use-region-p)
-                                     (buffer-substring-no-properties
-                                      (region-beginning) (region-end)))
-                                    (t
-                                     (find-tag-default-as-symbol-regexp)))))
-                     (hi-lock-auto-select-face t)
-                     (face (hi-lock-read-face-name)))
-                (or (facep face) (setq face 'hi-yellow))
-                (unless hi-lock-mode (hi-lock-mode 1))
-                (hi-lock-set-pattern regexp face)))
-
-            ;; Enable `hi-lock-mode' in `text-mode' too
-            ;; The hi-lock fontification will not be visible (the `font-lock-keywords'
-            ;; variable will not be updated unless `font-lock-fontified' is already `t'.
-            ;; This was derived by studying the definition of `hi-lock-font-lock-hook'
-            ;; function.
-            (defun my/hi-lock-enable-in-text-mode ()
-              (setq-local font-lock-fontified t))
-            (add-hook 'text-mode-hook #'my/hi-lock-enable-in-text-mode)
-
-            (defun my/unhighlight-all-in-buffer ()
-              "Remove all highlights made by `hi-lock' from the current buffer.
-The same result can also be be achieved by \\[universal-argument] \\[unhighlight-regexp]."
-              (interactive)
-              ;; `unhighlight-regexp' is aliased to `hi-lock-unface-buffer'
-              (hi-lock-unface-buffer t))))
+              ("C-x w" . nil))
+  :commands global-hi-lock-mode
+  :init (global-hi-lock-mode 1))
 
 ;; higlight changes in documents
 (use-package hilit-chg

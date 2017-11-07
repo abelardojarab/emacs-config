@@ -357,4 +357,6 @@
     (mapc 'load (directory-files user-settings-dir nil "^[^#].*el$")))
 
   ;; Setup desktop
-  (require 'setup-desktop))
+  (require 'setup-desktop)
+
+  ) ;; let

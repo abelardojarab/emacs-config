@@ -27,16 +27,17 @@
 ;; Ergoemacs
 (use-package ergoemacs-mode-fixed
   :ensure nil
+
   :if (and (display-graphic-p)
            (executable-find "gzip"))
   :load-path (lambda () (expand-file-name "ergoemacs-mode/" user-emacs-directory))
   :commands (ergoemacs-mode ergoemacs-mode-after-init-emacs)
-  :init (ergoemacs-mode-after-init-emacs)
+  ;; :init (ergoemacs-mode-after-init-emacs)
   :config (progn
             (setq ergoemacs-theme              "standard"
                   ergoemacs-keyboard-layout    "us"
                   ergoemacs-ignore-prev-global nil)
-
+            (ergoemacs-mode-after-init-emacs)
             (ergoemacs-mode)))
 
 (provide 'setup-ergoemacs)
