@@ -1,0 +1,42 @@
+#
+# Available repositories are listed here:
+# https://github.com/travis-ci/apt-source-whitelist/blob/master/ubuntu.json
+#
+
+sudo: required
+dist: trusty
+
+language: cpp
+
+git:
+  depth: 3
+
+matrix:
+  include:
+    - env: COMPILER_VERSION=4.8
+      os: linux
+      compiler: g++
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-4.8
+            - gnupg
+    - env: COMPILER_VERSION=3.5
+      os: linux
+      compiler: clang++
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-precise-3.5
+          packages:
+            - clang-3.5
+            - gnupg
+
+install:
+  - pip install --user --upgrade nose
+  - pip install --user --upgrade PyHamcrest
+
+script: ./scripts/travis.sh
