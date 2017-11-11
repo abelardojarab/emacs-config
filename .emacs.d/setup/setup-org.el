@@ -49,7 +49,7 @@
          ("C-c v"        . org-reveal))
   :commands (org-mode org-capture org-store-link org-insert-link-global org-open-at-point-global)
   :init (progn
-          (setq load-path (cons (expand-file-name "org-mode/contrib/lisp" user-emacs-directory) load-path))
+          (setq load-path (cons (expand-file-name "org/contrib/lisp" user-emacs-directory) load-path))
           (defvar org-list-allow-alphabetical t)
           (defun org-element-bold-successor           (arg))
           (defun org-element-code-successor           (arg))
