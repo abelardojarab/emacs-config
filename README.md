@@ -6,11 +6,14 @@
 -   Emacs 25.x
 -   Emacs 26 (snapshots)
 
-## Packages included ##
+## Package management, update and auto-loading ##
 
+-   **Package installation and update:** Cask
 -   **Package auto-loading and deferral:** use-package
--   **Development:** company, flycheck, yasnippet, auctex, cmake-ide, ecb
--   **Network utilities:** wunderlust, sx, mu4e, elfeed
+
+## Included packages ## -
+**Development:** company, flycheck, yasnippet, auctex, cmake-ide, ecb -
+**Network utilities:** wunderlust, sx, mu4e, elfeed
 
 ## Fixes with respect to Spacemacs and Prelude ##
 
