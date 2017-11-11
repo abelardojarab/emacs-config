@@ -28,7 +28,7 @@
 (use-package org
   :defer t
   :mode (("\\.org$" . org-mode))
-  :load-path (lambda () (expand-file-name "org-mode/lisp" user-emacs-directory))
+  :load-path (lambda () (expand-file-name "org/lisp" user-emacs-directory))
   :bind (("C-c C"        . org-capture)
          ("C-c L"        . org-store-link)
          ("C-c I"        . org-insert-link-global)
