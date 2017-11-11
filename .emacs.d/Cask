@@ -44,7 +44,7 @@
 (depends-on "company-irony-c-headers")
 (depends-on "company-jedi")
 (depends-on "company-math")
-;; (depends-on "company-mode")
+(depends-on "company")
 (depends-on "company-quickhelp")
 (depends-on "company-tern")
 (depends-on "company-web")
