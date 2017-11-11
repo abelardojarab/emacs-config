@@ -51,6 +51,28 @@
 (use-package let-alist)
 (use-package color)
 
+;; Use Cask to fetch packages
+;; (when (file-exists-p "~/.cask/cask.el")
+;;     (require 'cask "~/.cask/cask.el")
+;;     (cask-initialize)
+
+;;     (use-package pallet
+;;       :load-path (lambda () (expand-file-name "pallet/" user-emacs-directory))
+;;       :config (pallet-mode t))
+
+;;     (defun my/add-subfolders-to-load-path (parent-dir)
+;;       "Add all level PARENT-DIR subdirs to the `load-path'."
+;;       (dolist (f (directory-files parent-dir))
+;;         (let ((name (expand-file-name f parent-dir)))
+;;           (when (and (file-directory-p name)
+;;                      (not (string-prefix-p "." f)))
+;;             (add-to-list 'load-path name)
+;;             (my/add-subfolders-to-load-path name)))))
+
+;;     (setq my/vendor-dir (expand-file-name ".cask/25.3/elpa" user-emacs-directory))
+;;     (add-to-list 'load-path my/vendor-dir)
+;;     (my/add-subfolders-to-load-path my/vendor-dir))
+
 ;; Namespace implementation (baseline package)
 (use-package async               :defer t :load-path (lambda () (expand-file-name "async/" user-emacs-directory)))
 (use-package ctable              :defer t :load-path (lambda () (expand-file-name "ctable/" user-emacs-directory)))
