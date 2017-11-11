@@ -1,2 +1,0 @@
-- [[https://github.com/jupl][jupl]]
-- [[https://github.com/syohex][syohex]]

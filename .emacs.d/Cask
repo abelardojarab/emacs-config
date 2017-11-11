@@ -1,3 +1,10 @@
+;; -*-mode: Emacs-Lisp; -*-
+;; Copyright (C) 1996-2017 Abelardo Jara-Berrocal
+;; URL: http://jaraberrocal.readmyblog.org
+;; This file is free software licensed under the terms of the
+;; GNU General Public License, version 3 or later.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (source gnu)
 (source melpa)
 (source org)
@@ -192,6 +199,7 @@
 (depends-on "newsticker")
 (depends-on "nodejs-repl")
 (depends-on "nyan-mode")
+(depends-on "org")
 (depends-on "org2blog")
 (depends-on "org-ac")
 ;; (depends-on "org-asciidoc")
@@ -199,7 +207,6 @@
 (depends-on "org-bullets")
 ;; (depends-on "org-html5presentation ")
 ;; (depends-on "org-ioslide")
-;; (depends-on "org-mode")
 (depends-on "org-ref")
 (depends-on "org-seek")
 ;; (depends-on "orgtblasciiplot")

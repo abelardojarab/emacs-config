@@ -1,6 +1,6 @@
 ;; -*-mode: Emacs-Lisp; -*-
 ;; Copyright (C) 1996-2017 Abelardo Jara-Berrocal
-;; URL: http://pintucoperu.wordpress.com
+;; URL: http://jaraberrocal.readmyblog.org
 ;; This file is free software licensed under the terms of the
 ;; GNU General Public License, version 3 or later.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -25,10 +25,6 @@
   (add-to-list 'load-path (expand-file-name "dadams/" user-emacs-directory))
   (add-to-list 'load-path (expand-file-name "setup/" user-emacs-directory))
   (add-to-list 'load-path (expand-file-name "use-package/" user-emacs-directory))
-  (add-to-list 'load-path (expand-file-name "helm/" user-emacs-directory))
-  (add-to-list 'load-path (expand-file-name "projectile/" user-emacs-directory))
-
-
 
   ;; Setup package
   (require 'setup-package)
