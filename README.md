@@ -11,11 +11,10 @@
 -   **Package installation and update:** Cask
 -   **Package auto-loading and deferral:** use-package
 
-## Included packages ## -
-**Development:** company, flycheck, yasnippet, auctex, cmake-ide, ecb -
-**Network utilities:** wunderlust, sx, mu4e, elfeed
-
-## Fixes with respect to Spacemacs and Prelude ##
+## Included packages ##
+-   **Development:** company, flycheck, yasnippet, auctex, cmake-ide, ecb
+-   **Network utilities:** wunderlust, sx, mu4e, elfeed ## Fixes with respect to
+Spacemacs and Prelude ##
 
 -   **Fixed htmlize** library so it does not fail to export code or text
     segments as formatted HTML
