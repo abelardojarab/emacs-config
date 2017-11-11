@@ -1,0 +1,27 @@
+;; Object aalresourcemgr_server/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "aalresourcemgr_server/"
+  :tables
+  (list
+    (semanticdb-table "Makefile.am"
+      :major-mode 'makefile-automake-mode
+      :tags 
+        '( ("MY_KBUILD_VERBOSE" variable (:default-value ("$(my__kbuild_verbose_$(V))")) nil [3339 3389])
+            ("my__kbuild_verbose_" variable (:default-value ("$(AM_DEFAULT_VERBOSITY)")) nil [3389 3436])
+            ("my__kbuild_verbose_0" variable (:default-value ("0")) nil [3436 3461])
+            ("my__kbuild_verbose_1" variable (:default-value ("1")) nil [3461 3486])
+            ("moduledir" variable (:default-value ("@AAL_OS_MODULE_INSTALL_PATH@")) nil [3487 3526])
+            ("module_DATA" variable (:default-value ("kbuild/@AALRMS_DRV_NAME@.ko")) nil [3527 3569])
+            ("EXTRA_DIST" variable (:default-value ("Kbuild.in")) nil [3570 3591])
+            ("EXTRA_PROGRAMS" variable (:default-value ("driver")) nil [3592 3614])
+            ("driver_SOURCES" variable (:default-value ("aalrm_server-file.c" "aalrm_server-int.h" "aalrm_server-ioctl.c" "aalrm_server-main.c" "aalrm_server-services.c" "aalrms-events-int.h")) nil [3615 3766])
+            ("kbuild/Module.symvers" function (:arguments ("$(abs_top_builddir)/aalbus/kbuild/Module.symvers" "$(driver_SOURCES)" "$(abs_top_builddir)/aalresourcemgr_server/kbuild/kOSAL.c" "$(abs_top_builddir)/aalresourcemgr_server/kbuild/Makefile")) nil [3819 5025])
+            ("clean-local" function nil nil [5026 5176]))          
+      :file "Makefile.am"
+      :pointmax 5176
+      :fsize 5175
+      :lastmodtime '(22515 14338 932622 97000)
+      :unmatched-syntax '((shell-command 5040 . 5175) (bol 5039 . 5039) (symbol 3796 . 3817) (punctuation 3794 . 3795) (symbol 3791 . 3794) (punctuation 3790 . 3791) (symbol 3775 . 3790) (punctuation 3774 . 3775) (symbol 3767 . 3774) (bol 3767 . 3767))))
+  :file "!home!abelardojara!workspace!aalsdk_private!aalkernel!aalresourcemgr_server!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.2")

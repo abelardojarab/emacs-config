@@ -1,0 +1,418 @@
+;; Object cci_PCIe_driver/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "cci_PCIe_driver/"
+  :tables
+  (list
+    (semanticdb-table "cci_pcie_driver_umapi_common.c"
+      :major-mode 'c-mode
+      :tags 
+        '( ("aalsdk/kernel/kosal.h" include nil nil [3505 3537])
+            ("MODULE_FLAGS" variable (:constant-flag t) nil [3547 3559])
+            ("cci_pcie_driver_umapi.h" include nil nil [3576 3610])
+            ("ccipdrv-events.h" include nil nil [3611 3638])
+            ("ccidrv_session_create" function
+               (:prototype-flag t
+                :pointer 1
+                :arguments 
+                  ( ("" variable (:type ("btPID" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3700 3707]))                  
+                :type ("ccidrv_session" type
+                     (:prototype t
+                      :type "struct")
+                      nil nil))
+                nil [3654 3708])
+            ("ccidrv_session_destroy" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("ccidrv_session" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [3738 3763]))                  
+                :type ("btInt" type (:type "class") nil nil))
+                nil [3709 3764])
+            ("ccidrv_messageHandler" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("ccidrv_session" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [3794 3819])
+                    ("" variable (:type ("btUnsigned32bitInt" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3849 3873])
+                    ("" variable
+                       (:pointer 1
+                        :type ("ccipui_ioctlreq" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [3903 3928])
+                    ("" variable (:type ("btWSSize" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3958 3982])
+                    ("" variable
+                       (:pointer 1
+                        :type ("ccipui_ioctlreq" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [4012 4037])
+                    ("" variable
+                       (:pointer 1
+                        :type ("btWSSize" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [4067 4091]))                  
+                :type ("btInt" type (:type "class") nil nil))
+                nil [3765 4092])
+            ("ccidrv_sendevent" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("aaldev_ownerSession" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [4118 4147])
+                    ("" variable
+                       (:pointer 1
+                        :type ("aal_q_item" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [4172 4192]))                  
+                :type ("btInt" type (:type "class") nil nil))
+                nil [4094 4193])
+            ("ccidrv_flush_eventqueue" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("psess" variable
+                       (:pointer 1
+                        :type ("ccidrv_session" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [4227 4256]))                  
+                :type ("btInt" type (:type "class") nil nil))
+                nil [4195 4257])
+            ("process_send_message" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("ccidrv_session" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [4286 4311])
+                    ("" variable
+                       (:pointer 1
+                        :type ("ccipui_ioctlreq" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [4339 4364])
+                    ("" variable
+                       (:pointer 1
+                        :type ("ccipui_ioctlreq" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [4392 4417])
+                    ("" variable
+                       (:pointer 1
+                        :type ("btWSSize" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [4445 4470]))                  
+                :type ("btInt" type (:type "class") nil nil))
+                nil [4259 4471])
+            ("process_bind_request" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("psess" variable
+                       (:pointer 1
+                        :type ("ccidrv_session" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [4501 4531])
+                    ("preq" variable
+                       (:pointer 1
+                        :type ("ccipui_ioctlreq" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [4560 4589]))                  
+                :type ("btInt" type (:type "class") nil nil))
+                nil [4473 4590])
+            ("ccidrv_marshal_upstream_message" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("preq" variable
+                       (:pointer 1
+                        :type ("ccipui_ioctlreq" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [4630 4659])
+                    ("pqitem" variable
+                       (:pointer 1
+                        :type ("aal_q_item" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [4699 4729])
+                    ("resp" variable
+                       (:pointer 1
+                        :type ("ccipui_ioctlreq" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [4769 4798])
+                    ("pOutbufsize" variable
+                       (:pointer 1
+                        :type ("btWSSize" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [4838 4873]))                  
+                :type ("btInt" type (:type "class") nil nil))
+                nil [4591 4874])
+            ("ccidrv_valwsid" function
+               (:prototype-flag t
+                :pointer 1
+                :arguments 
+                  ( ("" variable (:type ("btWSID" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [4907 4914]))                  
+                :type ("aal_wsid" type
+                     (:prototype t
+                      :type "struct")
+                      nil nil))
+                nil [4875 4915])
+            ("umDriver" variable
+               (:typemodifiers ("extern")
+                :type ("um_driver" type
+                     (:prototype t
+                      :type "struct")
+                      nil nil))
+                nil [4917 4950])
+            ("ccidrv_session_create" function
+               (:pointer 1
+                :arguments 
+                  ( ("pid" variable (:type ("btPID" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [6424 6434]))                  
+                :type ("ccidrv_session" type
+                     (:prototype t
+                      :type "struct")
+                      nil nil))
+                nil [6378 7370])
+            ("ccidrv_session_destroy" function
+               (:arguments 
+                  ( ("psess" variable
+                       (:pointer 1
+                        :type ("ccidrv_session" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [7845 7875]))                  
+                :type "int")
+                nil [7818 10028])
+            ("ccidrv_messageHandler" function
+               (:arguments 
+                  ( ("psess" variable
+                       (:pointer 1
+                        :type ("ccidrv_session" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [11766 11796])
+                    ("cmd" variable (:type ("btUnsigned32bitInt" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [11820 11848])
+                    ("preq" variable
+                       (:pointer 1
+                        :type ("ccipui_ioctlreq" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [11872 11901])
+                    ("InbufSize" variable (:type ("btWSSize" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [11925 11959])
+                    ("presp" variable
+                       (:pointer 1
+                        :type ("ccipui_ioctlreq" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [11983 12013])
+                    ("pOutbufSize" variable
+                       (:pointer 1
+                        :type ("btWSSize" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [12037 12073]))                  
+                :type ("btInt" type (:type "class") nil nil))
+                nil [11737 16130])
+            ("process_send_message" function
+               (:arguments 
+                  ( ("psess" variable
+                       (:pointer 1
+                        :type ("ccidrv_session" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [16563 16593])
+                    ("preq" variable
+                       (:pointer 1
+                        :type ("ccipui_ioctlreq" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [16615 16644])
+                    ("presp" variable
+                       (:pointer 1
+                        :type ("ccipui_ioctlreq" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [16666 16696])
+                    ("pOutbufSize" variable
+                       (:pointer 1
+                        :type ("btWSSize" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [16718 16754]))                  
+                :type ("btInt" type (:type "class") nil nil))
+                nil [16536 22219])
+            ("process_bind_request" function
+               (:arguments 
+                  ( ("psess" variable
+                       (:pointer 1
+                        :type ("ccidrv_session" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [22912 22942])
+                    ("preq" variable
+                       (:pointer 1
+                        :type ("ccipui_ioctlreq" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [22964 22993]))                  
+                :type ("btInt" type (:type "class") nil nil))
+                nil [22885 31060])
+            ("ccidrv_marshal_upstream_message" function
+               (:arguments 
+                  ( ("preq" variable
+                       (:pointer 1
+                        :type ("ccipui_ioctlreq" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [31936 31965])
+                    ("pqitem" variable
+                       (:pointer 1
+                        :type ("aal_q_item" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [31999 32029])
+                    ("resp" variable
+                       (:pointer 1
+                        :type ("ccipui_ioctlreq" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [32063 32092])
+                    ("pOutbufsize" variable
+                       (:pointer 1
+                        :type ("btWSSize" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [32126 32161]))                  
+                :type ("btInt" type (:type "class") nil nil))
+                nil [31897 33753])
+            ("ccidrv_sendevent" function
+               (:arguments 
+                  ( ("pOwnerSession" variable
+                       (:pointer 1
+                        :type ("aaldev_ownerSession" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [34114 34157])
+                    ("eventp" variable
+                       (:pointer 1
+                        :type ("aal_q_item" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [34175 34201]))                  
+                :type ("btInt" type (:type "class") nil nil))
+                nil [34091 34878])
+            ("ccidrv_getwsid" function
+               (:pointer 1
+                :arguments 
+                  ( ("pdev" variable
+                       (:pointer 1
+                        :type ("aal_device" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [35994 36018])
+                    ("id" variable (:type "unsigned long long") (reparse-symbol arg-sub-list) [36051 36073]))                  
+                :type ("aal_wsid" type
+                     (:prototype t
+                      :type "struct")
+                      nil nil))
+                nil [35962 37457])
+            ("ccidrv_freewsid" function
+               (:arguments 
+                  ( ("pwsid" variable
+                       (:pointer 1
+                        :type ("aal_wsid" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [37737 37760]))                  
+                :type ("btInt" type (:type "class") nil nil))
+                nil [37715 38554])
+            ("ccidrv_flush_eventqueue" function
+               (:arguments 
+                  ( ("psess" variable
+                       (:pointer 1
+                        :type ("ccidrv_session" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [38905 38934]))                  
+                :type "int")
+                nil [38875 39586])
+            ("ccidrv_valwsid" function
+               (:pointer 1
+                :arguments 
+                  ( ("wsidHandle" variable (:type ("btWSID" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [40027 40045]))                  
+                :type ("aal_wsid" type
+                     (:prototype t
+                      :type "struct")
+                      nil nil))
+                nil [39995 40736])
+            ("find_wsid" function
+               (:pointer 1
+                :arguments 
+                  ( ("ccidrv_sess_p" variable
+                       (:pointer 1
+                        :constant-flag t
+                        :type ("ccidrv_session" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [41304 41347])
+                    ("wsidHandle" variable (:type ("btWSID" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [41376 41394]))                  
+                :type ("aal_wsid" type
+                     (:prototype t
+                      :type "struct")
+                      nil nil))
+                nil [41276 43075]))          
+      :file "cci_pcie_driver_umapi_common.c"
+      :pointmax 43077
+      :fsize 43076
+      :lastmodtime '(22564 4951 363927 492000)
+      :unmatched-syntax nil
+      :lexical-table 
+        '(("MODULE_FLAGS" . ((symbol "UIDRV_DBG_MOD" 3560 . 3573)))
+          )
+)
+    (semanticdb-table "ccipdrv-events.h"
+      :file "ccipdrv-events.h"
+      :fsize 26359
+      :lastmodtime '(22515 14338 944621 816000)))
+  :file "!home!abelardojara!workspace!aalsdk_private!aalkernel!cmake_build_dir!cci_PCIe_driver!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.2")

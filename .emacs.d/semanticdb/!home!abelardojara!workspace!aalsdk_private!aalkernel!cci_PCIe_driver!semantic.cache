@@ -1,0 +1,260 @@
+;; Object cci_PCIe_driver/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "cci_PCIe_driver/"
+  :tables
+  (list
+    (semanticdb-table "ccip_igbt.c"
+      :major-mode 'c-mode
+      :tags 
+        '( ("pr_fmt" variable (:constant-flag t) nil [3517 3523])
+            ("aalsdk/kernel/kosal.h" include nil nil [3554 3586])
+            ("aalsdk/kernel/aalbus.h" include nil nil [3587 3620])
+            ("aalsdk/kernel/AALTransactionID_s.h" include nil nil [3621 3666])
+            ("aalsdk/kernel/aalbus-ipip.h" include nil nil [3667 3705])
+            ("aalsdk/kernel/ccip_defs.h" include nil nil [3706 3742])
+            ("aalsdk/kernel/ccipdriver.h" include nil nil [3743 3780])
+            ("ccipdrv-events.h" include nil nil [3781 3808])
+            ("ccip_igbt.h" include nil nil [3809 3831])
+            ("get_ccip_igbt" function
+               (:pointer 1
+                :arguments 
+                  ( ("kptr" variable (:type ("btVirtAddr" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [4105 4121])
+                    ("len" variable (:type ("btWSSize" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [4122 4135]))                  
+                :type ("ccip_igbt" type
+                     (:prototype t
+                      :type "struct")
+                      nil nil))
+                nil [4073 13131])
+            ("destroy_ccip_igbt" function
+               (:arguments 
+                  ( ("m_ccip_igbt" variable
+                       (:pointer 1
+                        :type ("ccip_igbt" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [13232 13262]))                  
+                :type "void")
+                nil [13209 14212])
+            ("ccip_igbt_hash_init" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("v" variable
+                       (:pointer 1
+                        :type ("ccip_igbt_verity" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [14367 14394])
+                    ("desc" variable
+                       (:pointer 1
+                        :type ("shash_desc" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [14395 14419]))                  
+                :type ("btInt" type (:type "class") nil nil))
+                nil [14334 14850])
+            ("ccip_igbt_hash_update" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("v" variable
+                       (:pointer 1
+                        :type ("ccip_igbt_verity" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [15011 15038])
+                    ("desc" variable
+                       (:pointer 1
+                        :type ("shash_desc" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [15039 15063])
+                    ("data" variable
+                       (:pointer 1
+                        :constant-flag t
+                        :type ("u8" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [15099 15114])
+                    ("len" variable (:type ("size_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [15115 15126]))                  
+                :type ("btInt" type (:type "class") nil nil))
+                nil [14976 15350])
+            ("ccip_igbt_hash_final" function
+               (:typemodifiers ("static")
+                :arguments 
+                  ( ("v" variable
+                       (:pointer 1
+                        :type ("ccip_igbt_verity" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [15566 15593])
+                    ("desc" variable
+                       (:pointer 1
+                        :type ("shash_desc" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [15594 15618])
+                    ("digest" variable
+                       (:pointer 1
+                        :type ("u8" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [15653 15664]))                  
+                :type ("btInt" type (:type "class") nil nil))
+                nil [15532 16138])
+            ("ccip_igbt_compute_hash" function
+               (:arguments 
+                  ( ("v" variable
+                       (:pointer 1
+                        :type ("ccip_igbt_verity" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [16253 16280]))                  
+                :type ("btInt" type (:type "class") nil nil))
+                nil [16224 17365])
+            ("ccip_igbt_check_signature" function
+               (:arguments 
+                  ( ("v" variable
+                       (:pointer 1
+                        :type ("ccip_igbt_verity" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [17521 17548]))                  
+                :type ("btInt" type (:type "class") nil nil))
+                nil [17489 18577])
+            ("ccip_igbt_verity" function
+               (:arguments 
+                  ( ("m_ccip_igbt" variable
+                       (:pointer 1
+                        :type ("ccip_igbt" type
+                             (:prototype t
+                              :type "struct")
+                              nil nil))
+                        (reparse-symbol arg-sub-list) [18755 18785]))                  
+                :type ("btInt" type (:type "class") nil nil))
+                nil [18732 19112]))          
+      :file "ccip_igbt.c"
+      :pointmax 19113
+      :fsize 19108
+      :lastmodtime '(22564 54942 100120 587000)
+      :unmatched-syntax nil
+      :lexical-table 
+        '(("pr_fmt" (spp-arg-list ("fmt") 3523 . 3528) . 
+              ((symbol "KBUILD_MODNAME" 3529 . 3543) (string "\": \"" 3544 . 3548) (symbol "fmt" 3549 . 3552)))
+          )
+)
+    (semanticdb-table "Makefile.am"
+      :major-mode 'makefile-automake-mode
+      :tags 
+        '( ("MY_KBUILD_VERBOSE" variable (:default-value ("$(my__kbuild_verbose_$(V))")) nil [3302 3352])
+            ("my__kbuild_verbose_" variable (:default-value ("$(AM_DEFAULT_VERBOSITY)")) nil [3352 3399])
+            ("my__kbuild_verbose_0" variable (:default-value ("0")) nil [3399 3424])
+            ("my__kbuild_verbose_1" variable (:default-value ("1")) nil [3424 3449])
+            ("moduledir" variable (:default-value ("@AAL_OS_MODULE_INSTALL_PATH@")) nil [3450 3489])
+            ("module_DATA" variable (:default-value ("kbuild/@CCIPCIEDRV_DRV_NAME@.ko")) nil [3490 3536])
+            ("EXTRA_DIST" variable (:default-value ("Kbuild.in")) nil [3537 3558])
+            ("EXTRA_PROGRAMS" variable (:default-value ("driver")) nil [3559 3581])
+            ("driver_SOURCES" variable (:default-value ("cci_pcie_driver_internal.h" "cci_pcie_driver_main_linux.c" "cci_pcie_common.c" "cci_pcie_driver_simulator.c" "ccip_sim_mmio.c" "cci_pcie_driver_PIPsession.c" "cci_pcie_driver_PIPsession.h" "cci_pcie_driver_simulator.h" "cci_pcie_driver_umapi_linux.c" "cci_pcie_driver_umapi_linux.h" "cci_pcie_driver_umapi_common.c" "ccipdrv-events.h" "ccip_fme.h" "ccip_fme.c" "ccip_port.h" "ccip_port.c" "ccip_afu.c" "ccip_stap.c" "ccip_igbt.h" "ccip_igbt.c" "ccip_pr.c" "ccip_pr.h" "ccip_perfmon.c" "ccip_perfmon_linux.c" "ccip_fme_mmap_linux.c" "ccip_perfmon.h" "ccip_logging.h" "ccip_logging.c" "ccip_logging_linux.h" "ccip_logging_linux.c" "ccip_pwr.c" "ccip_pwr.h")) nil [3582 4254])
+            ("kbuild/Module.symvers" function (:arguments ("$(abs_top_builddir)/aalbus/kbuild/Module.symvers" "$(driver_SOURCES)" "$(abs_top_builddir)/cci_PCIe_driver/kbuild/kOSAL.c" "$(abs_top_builddir)/cci_PCIe_driver/kbuild/Makefile")) nil [4312 5470])
+            ("clean-local" function nil nil [5471 5615]))          
+      :file "Makefile.am"
+      :pointmax 5615
+      :fsize 5614
+      :lastmodtime '(22564 4951 359927 598000)
+      :unmatched-syntax '((shell-command 5485 . 5614) (bol 5484 . 5484) (symbol 4289 . 4310) (punctuation 4287 . 4288) (symbol 4284 . 4287) (punctuation 4283 . 4284) (symbol 4264 . 4283) (punctuation 4263 . 4264) (symbol 4256 . 4263) (bol 4256 . 4256)))
+    (semanticdb-table "ccipdrv-events.h"
+      :file "ccipdrv-events.h"
+      :fsize 26359
+      :lastmodtime '(22515 14338 944621 816000))
+    (semanticdb-table "ccip_igbt.h"
+      :major-mode 'c++-mode
+      :tags 
+        '( ("CCIP_IGBT_H" variable (:constant-flag t) nil [3599 3610])
+            ("KRNSECURITY" variable (:constant-flag t) nil [3640 3651])
+            ("aalsdk/kernel/aalbus.h" include nil nil [3662 3695])
+            ("aalsdk/kernel/AALTransactionID_s.h" include nil nil [3696 3741])
+            ("aalsdk/kernel/aalbus-ipip.h" include nil nil [3742 3780])
+            ("aalsdk/kernel/ccip_defs.h" include nil nil [3781 3817])
+            ("aalsdk/kernel/ccipdriver.h" include nil nil [3818 3855])
+            ("ccipdrv-events.h" include nil nil [3856 3883])
+            ("linux/string.h" include (:system-flag t) nil [3884 3909])
+            ("linux/mpi.h" include (:system-flag t) nil [3910 3932])
+            ("linux/cred.h" include (:system-flag t) nil [3933 3956])
+            ("linux/err.h" include (:system-flag t) nil [3957 3979])
+            ("linux/ratelimit.h" include (:system-flag t) nil [3980 4008])
+            ("crypto/hash.h" include (:system-flag t) nil [4049 4073])
+            ("crypto/hash_info.h" include (:system-flag t) nil [4074 4103])
+            ("crypto/sha.h" include (:system-flag t) nil [4126 4149])
+            ("crypto/algapi.h" include (:system-flag t) nil [4150 4176])
+            ("crypto/public_key.h" include (:system-flag t) nil [4177 4207])
+            ("linux/key.h" include (:system-flag t) nil [4475 4497])
+            ("linux/key-type.h" include (:system-flag t) nil [4498 4525])
+            ("linux/digsig.h" include (:system-flag t) nil [4526 4551])
+            ("keys/asymmetric-type.h" include (:system-flag t) nil [4552 4585])
+            ("keys/user-type.h" include (:system-flag t) nil [4586 4613])
+            ("CCIP_IGBT_OFFSET_SIGNATURE" variable (:constant-flag t) nil [6207 6233])
+            ("CCIP_IGBT_SIZE_SIGNATURE" variable (:constant-flag t) nil [6289 6313])
+            ("CCIP_IGBT_OFFSET_PUBLICKEY" variable (:constant-flag t) nil [6375 6401])
+            ("CCIP_IGBT_SIZE_PUBLICKEY" variable (:constant-flag t) nil [6476 6500])
+            ("CCIP_IGBT_OFFSET_PUBLICKEY_HASH" variable (:constant-flag t) nil [6581 6612])
+            ("CCIP_IGBT_SIZE_PUBLICKEY_HASH" variable (:constant-flag t) nil [6674 6703])
+            ("CCIP_IGBT_OFFSET_META_DATA" variable (:constant-flag t) nil [6771 6797])
+            ("CCIP_IGBT_SIZE_META_DATA" variable (:constant-flag t) nil [6853 6877])
+            ("CCIP_IGBT_OFFSET_BITSTREAM" variable (:constant-flag t) nil [6940 6966])
+            ("CCIP_IGBT_OFFSET_PAYLOAD" variable (:constant-flag t) nil [7066 7090])
+            ("SHA256_DIGEST_LENGTH" variable (:constant-flag t) nil [7213 7233])
+            ("HEXDUMP_BUFFER_SIZE" variable (:constant-flag t) nil [7281 7300])
+            ((((0) "ccip_igbt_pk_signature_t")) type (:superclasses ("public_key_signature" type (:prototype t :type "struct") nil nil) :type "typedef") nil [7646 7707])
+            ((((0) "ccip_igbt_pk_t")) type (:superclasses ("public_key" type (:prototype t :type "struct") nil nil) :type "typedef") nil [8079 8120])
+            ((((0) "ccip_igbt_pk_digest_t")) type (:superclasses ("ccip_igbt_pk_digest" type (:members (((("digest" 0 nil nil nil)) variable (:type ("btVirtAddr" type (:type "class") nil nil)) (reparse-symbol classsubparts) [8466 8484]) ((("digest_size" 0 nil nil nil)) variable (:type ("btWSSize" type (:type "class") nil nil)) (reparse-symbol classsubparts) [8489 8512])) :type "struct") nil nil) :type "typedef") nil [8425 8573])
+            ((("ccip_igbt_meta_data_t" 0 nil nil nil)) variable (:type "int") nil [9438 9460])
+            ("verity_mode" type
+               (:members 
+                  ( ("DM_VERITY_MODE_ERROR" variable
+                       (:constant-flag t
+                        :type "int")
+                        (reparse-symbol enumsubparts) [9485 9506])
+                    ("DM_VERITY_MODE_LOGGING" variable
+                       (:constant-flag t
+                        :type "int")
+                        (reparse-symbol enumsubparts) [9570 9593])
+                    ("DM_VERITY_MODE_IGNORE" variable
+                       (:constant-flag t
+                        :type "int")
+                        (reparse-symbol enumsubparts) [9681 9769]))                  
+                :type "enum")
+                nil [9462 9770])
+            ((((0) "ccip_igbt_verity_t")) type (:superclasses ("ccip_igbt_verity" type (:members (((("key" 0 nil nil nil)) variable (:type ("key_ref_t" type (:type "class") nil nil)) (reparse-symbol classsubparts) [9844 9874]) ((("pk" 1 nil nil nil)) variable (:type ("ccip_igbt_pk_t" type (:type "class") nil nil)) (reparse-symbol classsubparts) [9879 9909]) ((("pk_signature" 1 nil nil nil)) variable (:type ("ccip_igbt_pk_signature_t" type (:type "class") nil nil)) (reparse-symbol classsubparts) [9949 9989]) ((("pk_digest" 1 nil nil nil)) variable (:type ("ccip_igbt_pk_digest_t" type (:type "class") nil nil)) (reparse-symbol classsubparts) [10027 10064]) ((("tfm_verity" 1 nil nil nil)) variable (:type ("crypto_akcipher" type (:prototype t :type "struct") nil nil)) (reparse-symbol classsubparts) [10103 10141]) ((("tfm" 1 nil nil nil)) variable (:type ("crypto_shash" type (:prototype t :type "struct") nil nil)) (reparse-symbol classsubparts) [10146 10177]) ((("kptr" 0 nil nil nil)) variable (:type ("btVirtAddr" type (:type "class") nil nil)) (reparse-symbol classsubparts) [10216 10247]) ((("len" 0 nil nil nil)) variable (:type ("btWSSize" type (:type "class") nil nil)) (reparse-symbol classsubparts) [10297 10327]) ((("hash_algo" 0 nil nil nil)) variable (:type ("btString" type (:type "class") nil nil)) (reparse-symbol classsubparts) [10377 10413]) ((("pk_x509_ptr" 0 nil nil nil)) variable (:type ("btVirtAddr" type (:type "class") nil nil)) (reparse-symbol classsubparts) [10450 10488]) ((("pk_x509_size" 0 nil nil nil)) variable (:type ("btWSSize" type (:type "class") nil nil)) (reparse-symbol classsubparts) [10535 10574]) ((("digest_ptr" 0 nil nil nil)) variable (:type ("btVirtAddr" type (:type "class") nil nil)) (reparse-symbol classsubparts) [10601 10638]) ((("digest_size" 0 nil nil nil)) variable (:type ("btWSSize" type (:type "class") nil nil)) (reparse-symbol classsubparts) [10671 10709]) ((("salt" 0 nil nil nil)) variable (:type ("btVirtAddr" type (:type "class") nil nil)) (reparse-symbol classsubparts) [10763 10794]) ((("salt_size" 0 nil nil nil)) variable (:type ("btWSSize" type (:type "class") nil nil)) (reparse-symbol classsubparts) [10833 10869]) ((("payload_ptr" 0 nil nil nil)) variable (:type ("btVirtAddr" type (:type "class") nil nil)) (reparse-symbol classsubparts) [10874 10912]) ((("payload_size" 0 nil nil nil)) variable (:type ("btWSSize" type (:type "class") nil nil)) (reparse-symbol classsubparts) [10942 10981]) ((("signature_ptr" 0 nil nil nil)) variable (:type ("btVirtAddr" type (:type "class") nil nil)) (reparse-symbol classsubparts) [11033 11073]) ((("signature_size" 0 nil nil nil)) variable (:type ("btUnsigned32bitInt" type (:type "class") nil nil)) (reparse-symbol classsubparts) [11108 11149]) ((("version" 0 nil nil nil)) variable (:type ("btInt" type (:type "class") nil nil)) (reparse-symbol classsubparts) [11203 11237]) ((("shash_descsize" 0 nil nil nil)) variable (:type ("btWSSize" type (:type "class") nil nil)) (reparse-symbol classsubparts) [11297 11338]) ((("verity_descsize" 0 nil nil nil)) variable (:type ("btWSSize" type (:type "class") nil nil)) (reparse-symbol classsubparts) [11393 11435]) ((("hash_failed" 0 nil nil nil)) variable (:type ("btBool" type (:type "class") nil nil)) (reparse-symbol classsubparts) [11495 11533]) ((("verity_failed" 0 nil nil nil)) variable (:type ("btBool" type (:type "class") nil nil)) (reparse-symbol classsubparts) [11581 11621]) ((("mode" 0 nil nil nil)) variable (:type ("verity_mode" type (:type "enum") nil nil)) (reparse-symbol classsubparts) [11674 11705]) ((("verify_wq" 1 nil nil nil)) variable (:type ("workqueue_struct" type (:prototype t :type "struct") nil nil)) (reparse-symbol classsubparts) [11754 11791])) :type "struct") nil nil) :type "typedef") nil [9772 11814])
+            ((((0) "ccip_igbt_t")) type (:superclasses ("ccip_igbt" type (:members (((("m_ccip_igbt_verity" 1 nil nil nil)) variable (:type ("ccip_igbt_verity_t" type (:type "class") nil nil)) (reparse-symbol classsubparts) [12126 12168]) ((("m_ccip_igbt_meta_data" 1 nil nil nil)) variable (:type ("ccip_igbt_meta_data_t" type (:type "class") nil nil)) (reparse-symbol classsubparts) [12267 12313]) ((("m_ccip_igbt_bitstream" 0 nil nil nil)) variable (:type ("btVirtAddr" type (:type "class") nil nil)) (reparse-symbol classsubparts) [12378 12411])) :type "struct") nil nil) :type "typedef") nil [12068 12463]))          
+      :file "ccip_igbt.h"
+      :pointmax 14141
+      :fsize 14140
+      :lastmodtime '(22564 47054 249004 738000)
+      :unmatched-syntax '((semantic-list 14096 . 14101) (symbol 14083 . 14096) (punctuation 14080 . 14081) (semantic-list 14060 . 14080) (symbol 14044 . 14060) (symbol 14038 . 14043) (EXTERN 14031 . 14037) (punctuation 13994 . 13995) (semantic-list 13967 . 13994) (symbol 13942 . 13967) (symbol 13936 . 13941) (EXTERN 13929 . 13935) (punctuation 13869 . 13870) (semantic-list 13842 . 13869) (symbol 13820 . 13842) (symbol 13814 . 13819) (EXTERN 13807 . 13813) (punctuation 13765 . 13766) (semantic-list 13745 . 13765) (symbol 13728 . 13745) (VOID 13723 . 13727) (EXTERN 13716 . 13722) (punctuation 13663 . 13664) (semantic-list 13641 . 13663) (symbol 13628 . 13641) (punctuation 13627 . 13628) (symbol 13617 . 13626) (STRUCT 13610 . 13616) (EXTERN 13603 . 13609) (semantic-list 13476 . 13547) (semantic-list 13460 . 13475) (symbol 13437 . 13460) (symbol 13426 . 13436) (INLINE 13419 . 13425) (STATIC 13412 . 13418) (semantic-list 13332 . 13410) (semantic-list 13316 . 13331) (symbol 13296 . 13316) (punctuation 13295 . 13296) (symbol 13276 . 13294) (INLINE 13269 . 13275) (STATIC 13262 . 13268) (semantic-list 13177 . 13261) (semantic-list 13161 . 13176) (symbol 13138 . 13161) (punctuation 13137 . 13138) (symbol 13115 . 13136) (INLINE 13108 . 13114) (STATIC 13101 . 13107) (semantic-list 12982 . 13100) (semantic-list 12966 . 12981) (symbol 12943 . 12966) (punctuation 12942 . 12943) (symbol 12920 . 12941) (INLINE 12913 . 12919) (STATIC 12906 . 12912) (semantic-list 12801 . 12905) (semantic-list 12785 . 12800) (symbol 12769 . 12785) (punctuation 12768 . 12769) (symbol 12753 . 12767) (INLINE 12746 . 12752) (STATIC 12739 . 12745) (semantic-list 12614 . 12738) (semantic-list 12598 . 12613) (symbol 12572 . 12598) (punctuation 12571 . 12572) (symbol 12546 . 12570) (INLINE 12539 . 12545) (STATIC 12532 . 12538) (semantic-list 8859 . 9437) (symbol 8839 . 8858) (semantic-list 8824 . 8838) (symbol 8811 . 8824) (semantic-list 8825 . 8837) (STRUCT 8804 . 8810) (close-paren 8837 . 8838) (semantic-list 8825 . 8837) (open-paren 8824 . 8825) (close-paren 8837 . 8838) (semantic-list 8825 . 8837) (open-paren 8824 . 8825) (TYPEDEF 8796 . 8803) (close-paren 8837 . 8838) (semantic-list 8825 . 8837) (open-paren 8824 . 8825) (close-paren 8837 . 8838) (semantic-list 8825 . 8837) (open-paren 8824 . 8825) (semantic-list 7327 . 7332) (symbol 7312 . 7327))
+      :lexical-table 
+        '(("CCIP_IGBT_SIZE_SIGNATURE" . ((number "256" 6324 . 6327)))
+          ("CCIP_IGBT_OFFSET_META_DATA" . ((number "1055" 6805 . 6809)))
+          ("CCIP_IGBT_OFFSET_SIGNATURE" . ((number "0" 6244 . 6245)))
+          ("CCIP_IGBT_SIZE_PUBLICKEY" . ((number "767" 6511 . 6514)))
+          ("HEXDUMP_BUFFER_SIZE" . ((number "43" 7301 . 7303)))
+          ("KRNSECURITY" . ((number "1" 3652 . 3653)))
+          ("CCIP_IGBT_OFFSET_PUBLICKEY" . ((number "256" 6410 . 6413)))
+          ("SHA256_DIGEST_LENGTH" . ((number "32" 7234 . 7236)))
+          ("CCIP_IGBT_SIZE_PUBLICKEY_HASH" . ((number "32" 6710 . 6712)))
+          ("CCIP_IGBT_OFFSET_PAYLOAD" . ((number "1023" 7100 . 7104)))
+          ("CCIP_IGBT_H")
+          ("CCIP_IGBT_OFFSET_PUBLICKEY_HASH" . ((number "1023" 6615 . 6619)))
+          ("CCIP_IGBT_OFFSET_BITSTREAM" . ((number "1102" 6974 . 6978)))
+          ("CCIP_IGBT_SIZE_META_DATA" . ((number "47" 6889 . 6891)))
+          )
+)
+    (semanticdb-table "cci_pcie_driver_umapi.h"
+      :file "cci_pcie_driver_umapi.h"
+      :fsize 5678
+      :lastmodtime '(22515 14338 936622 3000)))
+  :file "!home!abelardojara!workspace!aalsdk_private!aalkernel!cci_PCIe_driver!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.2")

@@ -1,0 +1,41 @@
+;; Object common_hdrs/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "common_hdrs/"
+  :tables
+  (list
+    (semanticdb-table "kosal.h"
+      :file "kosal.h"
+      :fsize 43393
+      :lastmodtime '(22515 14339 4620 416000))
+    (semanticdb-table "aalbus.h"
+      :file "aalbus.h"
+      :fsize 30932
+      :lastmodtime '(22515 14339 620 510000))
+    (semanticdb-table "AALTransactionID_s.h"
+      :file "AALTransactionID_s.h"
+      :fsize 4659
+      :lastmodtime '(22515 14339 620 510000))
+    (semanticdb-table "aalbus-ipip.h"
+      :file "aalbus-ipip.h"
+      :fsize 7622
+      :lastmodtime '(22515 14339 620 510000))
+    (semanticdb-table "ccip_defs.h"
+      :file "ccip_defs.h"
+      :fsize 58673
+      :lastmodtime '(22564 4951 391926 760000))
+    (semanticdb-table "ccipdriver.h"
+      :file "ccipdriver.h"
+      :fsize 24115
+      :lastmodtime '(22564 4951 391926 760000))
+    (semanticdb-table "aaltypes.h"
+      :major-mode 'c++-mode
+      :tags 
+        '( ("aalsdk/kernel/aaldefs.h" include (:system-flag t) nil [3436 3470]))          
+      :file "aaltypes.h"
+      :pointmax 25859
+      :fsize 25862
+      :lastmodtime '(22515 14339 620 510000)
+      :unmatched-syntax nil))
+  :file "!home!abelardojara!workspace!aalsdk_private!common_hdrs!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.2")

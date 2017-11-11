@@ -1,0 +1,29 @@
+language: cpp
+
+sudo: required
+dist: trusty
+
+addons:
+  apt:
+    sources:
+      - sourceline: 'ppa:ubuntu-elisp/ppa'
+    packages:
+      - libclang-dev
+      - emacs
+      - emacs-snapshot
+
+compiler:
+  - gcc
+  - clang
+
+env:
+  - EMACS=emacs
+  - EMACS=emacs-snapshot
+
+script:
+  - mkdir build
+  - cd build
+  - $EMACS --version
+  - cmake -DEMACS_EXECUTABLE=$(which $EMACS) ../server
+  - make -k
+  - make check

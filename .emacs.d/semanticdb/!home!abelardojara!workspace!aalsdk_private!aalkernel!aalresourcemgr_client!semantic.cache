@@ -1,0 +1,27 @@
+;; Object aalresourcemgr_client/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "aalresourcemgr_client/"
+  :tables
+  (list
+    (semanticdb-table "Makefile.am"
+      :major-mode 'makefile-automake-mode
+      :tags 
+        '( ("MY_KBUILD_VERBOSE" variable (:default-value ("$(my__kbuild_verbose_$(V))")) nil [3336 3386])
+            ("my__kbuild_verbose_" variable (:default-value ("$(AM_DEFAULT_VERBOSITY)")) nil [3386 3433])
+            ("my__kbuild_verbose_0" variable (:default-value ("0")) nil [3433 3458])
+            ("my__kbuild_verbose_1" variable (:default-value ("1")) nil [3458 3483])
+            ("moduledir" variable (:default-value ("@AAL_OS_MODULE_INSTALL_PATH@")) nil [3484 3523])
+            ("module_DATA" variable (:default-value ("kbuild/@AALRMC_DRV_NAME@.ko")) nil [3524 3566])
+            ("EXTRA_DIST" variable (:default-value ("Kbuild.in")) nil [3567 3588])
+            ("EXTRA_PROGRAMS" variable (:default-value ("driver")) nil [3589 3611])
+            ("driver_SOURCES" variable (:default-value ("aalrm-file.c" "aalrm-int.h" "aalrm-ioctl.c" "aalrm-main.c" "aalrm-events-int.h")) nil [3612 3708])
+            ("kbuild/Module.symvers" function (:arguments ("$(abs_top_builddir)/aalbus/kbuild/Module.symvers" "$(driver_SOURCES)" "$(abs_top_builddir)/aalresourcemgr_client/kbuild/kOSAL.c" "$(abs_top_builddir)/aalresourcemgr_client/kbuild/Makefile")) nil [3761 4967])
+            ("clean-local" function nil nil [4968 5118]))          
+      :file "Makefile.am"
+      :pointmax 5118
+      :fsize 5117
+      :lastmodtime '(22515 14338 928622 189000)
+      :unmatched-syntax '((shell-command 4982 . 5117) (bol 4981 . 4981) (symbol 3738 . 3759) (punctuation 3736 . 3737) (symbol 3733 . 3736) (punctuation 3732 . 3733) (symbol 3717 . 3732) (punctuation 3716 . 3717) (symbol 3709 . 3716) (bol 3709 . 3709))))
+  :file "!home!abelardojara!workspace!aalsdk_private!aalkernel!aalresourcemgr_client!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.2")
