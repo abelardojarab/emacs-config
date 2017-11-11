@@ -1,11 +1,12 @@
-# -*- mode: gitignore; -*-
-# Created by https://www.gitignore.io/api/emacs
+# Created by https://www.gitignore.io/api/tags,emacs
 
 ### Emacs ###
+# -*- mode: gitignore; -*-
 *~
 \#*\#
 /.emacs.desktop
 /.emacs.desktop.lock
+*.elc
 auto-save-list
 tramp
 .\#*
@@ -31,8 +32,8 @@ tramp
 /auto/
 
 # cask packages
-.cask/
-dist/
+# .cask/
+# dist/
 
 # Flycheck
 flycheck_*.el
@@ -42,60 +43,46 @@ flycheck_*.el
 
 # projectiles files
 .projectile
+projectile-bookmarks.eld
 
 # directory configuration
 .dir-locals.el
 
-# End of https://www.gitignore.io/api/emacs
+# saveplace
+places
 
-# Extras
+# url cache
+url/cache/
+
+# cedet
+ede-projects.el
+
+# smex
 smex-items
-.DS_Store
-*.DS_Store
-**/*.DS_Store
-.SYNC
-semanticdb
-.emacs.desktop
-.emacs.desktop.lock
-history
-ac-comphist.dat
-session*
-gmon.out
-flycheck_*
-bookmarks
-.bookmarks
-anything-c-adaptive-history
-.emacs.desktop
-.mc-lists.el
-tramp
-var/*
-.cask/
-.edbi-ds-history
-.persistent-scratch
-.projectile
-projectile-bookmarks.eld
-.projectile-bookmarks.eld
-projectile.cache
-.projectile.cache
-.smex.save
-ede-projects.el*
-elpa/*
-url/*
-auto-save-list/
-tramp-autosave/*
-srecode-map.el*
-.org-id-locations
-.travis.yml
-wget*-log*
-ergoemacs-themes.elc
-ergoemacs-theme-engine.elc
-.emacs.elc
-.sx
-Cask
-%backup%~
-.nfs*
-*.gz
+
+# company-statistics
+company-statistics-cache.el
+
+# anaconda-mode
+anaconda-mode/
+
+### Tags ###
+# Ignore tags created by etags, ctags, gtags (GNU global) and cscope
 TAGS
-cmake_build_dir/*
-*.rel
-.Rhistory
+.TAGS
+!TAGS/
+tags
+.tags
+!tags/
+gtags.files
+GTAGS
+GRTAGS
+GPATH
+GSYMS
+cscope.files
+cscope.out
+cscope.in.out
+cscope.po.out
+
+
+# End of https://www.gitignore.io/api/tags,emacs
