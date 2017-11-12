@@ -25,6 +25,7 @@
 ;;; Code:
 
 (use-package auctex
+  :defer t
   :load-path (lambda () (expand-file-name "auctex/" user-emacs-directory))
   :commands (LaTeX-math-mode TeX-source-correlate-mode)
   :mode ("\\.tex\\'" . LaTeX-mode)
@@ -56,10 +57,12 @@
           (add-hook 'LaTeX-mode-hook #'my/latex-mode-setup)))
 
 (use-package reftex
+  :defer t
   :commands turn-on-reftex
   :init (setq reftex-plug-into-AUCTeX t))
 
 (use-package bibtex
+  :defer t
   :mode ("\\.bib" . bibtex-mode)
   :init (progn
           (setq bibtex-completion-bibliography (list my/bibtex-completion-bibliography)
@@ -70,6 +73,7 @@
           (add-hook 'bibtex-mode-hook (lambda () (set-fill-column 120)))))
 
 (use-package ebib-handy
+  :defer t
   :load-path (lambda () (expand-file-name "ebib-handy/" user-emacs-directory))
   :bind ("C-c b" . ebib-handy)
   :config (progn
@@ -92,6 +96,7 @@
           (add-hook 'latex-mode-hook 'latex-unicode-simplified)))
 
 (use-package magic-latex-buffer
+  :defer t
   :commands magic-latex-buffer
   :load-path (lambda () (expand-file-name "magic-latex-buffer/" user-emacs-directory))
   :init (add-hook 'latex-mode-hook 'magic-latex-buffer)
@@ -104,6 +109,7 @@
 
 ;; Fast input methods for LaTeX environments and math
 (use-package cdlatex
+  :defer t
   :load-path (lambda () (expand-file-name "cdlatex/" user-emacs-directory)))
 
 (provide 'setup-latex)
