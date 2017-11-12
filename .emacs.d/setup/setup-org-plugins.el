@@ -48,9 +48,9 @@
   :load-path (lambda () (expand-file-name "org-autolist/" user-emacs-directory))
   :config (add-hook 'org-mode-hook (lambda () (org-autolist-mode 1))))
 
-;; ASCII doc
+;; ASCII doc exporter
 (use-package ox-asciidoc
-  :load-path (lambda () (expand-file-name "org-asciidoc/" user-emacs-directory)))
+  :load-path (lambda () (expand-file-name "ox-asciidoc/" user-emacs-directory)))
 
 ;; Table ASCII plot
 (use-package orgtbl-ascii-plot
