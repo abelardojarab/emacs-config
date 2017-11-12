@@ -84,6 +84,7 @@
 
 ;; Ido everywhere
 (use-package ido-ubiquitous
+  :disabled t
   :demand t
   :load-path (lambda () (expand-file-name "ido-ubiquitous/" user-emacs-directory))
   :config (ido-ubiquitous-mode 1))
