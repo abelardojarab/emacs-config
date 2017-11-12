@@ -52,10 +52,10 @@
 
             ;; Faster parsing
             (setq semantic-idle-work-parse-neighboring-files-flag nil
-                  semantic-idle-work-update-headers-flag      nil
+                  semantic-idle-work-update-headers-flag          nil
                   semantic-idle-scheduler-idle-time               432000
-                  semantic-idle-scheduler-work-idle-time      1800 ;; default is 60
-                  semantic-idle-scheduler-max-buffer-size     1)
+                  semantic-idle-scheduler-work-idle-time          1800 ;; default is 60
+                  semantic-idle-scheduler-max-buffer-size         1)
 
             ;; Disable Semantics for large files
             (add-hook 'semantic--before-fetch-tags-hook
@@ -184,20 +184,9 @@ Exit the save between databases if there is user input."
             ;; Default EDE directory
             (setq-default ede-project-placeholder-cache-file "~/.emacs.cache/ede-projects.el")
 
-            ;; Redefine ede add projects to avoid errors
-            (defun ede-add-project-to-global-list (proj)
-              "Add the project PROJ to the master list of projects.
-On success, return the added project."
-              (ignore-errors
-                (when (not proj)
-                  (error "No project created to add to master list"))
-                (when (not (eieio-object-p proj))
-                  (error "Attempt to add non-object to master project list"))
-                (when (not (obj-of-class-p proj ede-project-placeholder))
-                  (error "Attempt to add a non-project to the ede projects list"))
-                (if (stringp proj)
-                    (add-to-list 'ede-projects proj)))
-              proj)))
+            ;; Advice ede add projects to avoid errors
+            (defadvice ede-add-project-to-global-list (around bar activate)
+              (ignore-errors add-do-it))))
 
 ;; Show function in mode-line
 (use-package which-func
