@@ -43,11 +43,17 @@
   :after direx
   :load-path (lambda () (expand-file-name "direx/" user-emacs-directory)))
 
+;; dired-ranger pre-requisite
+(use-package dired-hacks-utils
+  :after dired
+  :defer t
+  :load-path (lambda () (expand-file-name "dired-hacks-utils/" user-emacs-directory)))
+
 ;; Enable copying and pasting files
 (use-package dired-ranger
   :defer t
-  :after dired
-  :load-path (lambda () (expand-file-name "dired-hacks-utils/" user-emacs-directory))
+  :after (dired dired-hacks-utils)
+  :load-path (lambda () (expand-file-name "dired-ranger/" user-emacs-directory))
   :bind (:map dired-mode-map
               ("W" . dired-ranger-copy)
               ("X" . dired-ranger-move)
