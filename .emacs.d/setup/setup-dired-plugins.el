@@ -135,28 +135,5 @@
             ;; Don't allow neotree to be the only open window
             (setq-default neo-dont-be-alone t)))
 
-;; Sunrise Commander
-(use-package sunrise-commander
-  :disabled t
-  :defer t
-  :commands (sunrise sr-dired cb-sunrise-commander/dired-this-dir)
-  :load-path (lambda () (expand-file-name "sunrise-commander/" user-emacs-directory))
-  :bind (("C-;" . cb-sunrise-commander/dired-this-dir)
-         :map sr-mode-map
-         ("J" . sr-goto-dir)
-         ("j" . dired-next-line)
-         ("k" . dired-previous-line)
-         ("n" . sr-goto-dir)
-         ("C-k" . dired-do-kill-lines))
-  :init (progn
-          (defun cb-sunrise-commander/dired-this-dir ()
-            (interactive)
-            (sr-dired default-directory)))
-  :config (progn
-            (setq sr-windows-locked nil)
-            (setq sr-cursor-follows-mouse nil)
-            (setq sr-windows-default-ratio 60)
-            (setq sr-use-commander-keys nil)))
-
 (provide 'setup-dired-plugins)
 ;;; setup-dired-plugins.el ends here

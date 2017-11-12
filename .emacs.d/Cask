@@ -162,7 +162,7 @@
 (depends-on "highlight-indent-guides")
 ;; (depends-on "highlight-sexp")
 (depends-on "highlight-symbol")
-;; (depends-on "hlinum-mode")
+(depends-on "hlinum")
 (depends-on "ht")
 (depends-on "htmlize")
 (depends-on "hydra")

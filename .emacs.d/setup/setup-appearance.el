@@ -85,7 +85,7 @@ non-nil."
   :commands visual-fill-column-mode
   :load-path (lambda () (expand-file-name "visual-fill-column/" user-emacs-directory))
   :config (setq-default visual-fill-column-center-text t
-			visual-fill-column-fringes-outside-margins nil))
+            visual-fill-column-fringes-outside-margins nil))
 
 ;; Just like the previous package, this one is also subtle.
 ;; It highlights characters that exceed a particular column margin. Very useful while coding.
@@ -102,12 +102,12 @@ non-nil."
   :demand t
   :commands linum-mode
   :init (dolist (hook my/linum-modes)
-	  (add-hook hook (lambda ()
-			   ;; turn off `linum-mode' when there are more than 5000 lines
-			   (if (and (> (buffer-size)
-				       (* 5000 80)))
-			       (linum-mode -1)
-			     (linum-mode 1)))))
+      (add-hook hook (lambda ()
+               ;; turn off `linum-mode' when there are more than 5000 lines
+               (if (and (> (buffer-size)
+                       (* 5000 80)))
+                   (linum-mode -1)
+                 (linum-mode 1)))))
   :config (progn
             (defadvice linum-update-window (around linum-dynamic activate)
               (let* ((w (length (number-to-string
@@ -118,7 +118,7 @@ non-nil."
 ;; Highlight line number
 (use-package hlinum
   :after linum-ex
-  :load-path (lambda () (expand-file-name "hlinum-mode/" user-emacs-directory))
+  :load-path (lambda () (expand-file-name "hlinum/" user-emacs-directory))
   :commands hlinum-activate)
 
 ;; Adaptive scrollbar
@@ -128,10 +128,10 @@ non-nil."
   :commands lawlist-scroll-bar-mode
   :diminish (lawlist-scroll-bar-mode)
   :init (dolist (hook my/linum-modes)
-	  (add-hook hook (lambda ()
-			   (unless (and (> (buffer-size)
-					   (* 5000 80)))
-			     (lawlist-scroll-bar-mode 1))))))
+      (add-hook hook (lambda ()
+               (unless (and (> (buffer-size)
+                       (* 5000 80)))
+                 (lawlist-scroll-bar-mode 1))))))
 
 ;; All the icons
 (use-package all-the-icons
