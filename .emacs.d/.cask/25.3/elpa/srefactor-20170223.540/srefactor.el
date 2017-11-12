@@ -173,7 +173,7 @@ to perform."
          (refresh (semantic-parse-changes-default))
          (srefactor--file-options (srefactor-ui--return-option-list 'file))
          (tag (srefactor--copy-tag))
-         (menu (srefactor-ui-menu :name "menu"))
+         (menu (make-instance 'srefactor-ui-menu :name "menu"))
          menu-item-list)
     (setq srefactor--current-local-var (srefactor--menu-add-rename-local-p))
     (when (srefactor--menu-add-function-implementation-p tag)
@@ -248,7 +248,7 @@ Based on the type of list passed above, either use
 (defun srefactor--copy-tag ()
   "Take the current tag, and place it in the tag ring."
   (semantic-fetch-tags)
-  (let ((ft (semantic-obtain-foreign-tag)))
+  (let ((ft (semantic-current-tag)))
     (when ft
       (ring-insert senator-tag-ring ft)
       (semantic-tag-set-bounds ft
@@ -843,8 +843,8 @@ BUFFER is the destination buffer from file user selects from contextual menu."
         ;; insert tag parent if any
         (unless (or (srefactor--tag-friend-p func-tag)
                     (eq type 'gen-func-proto)
-                    ;; must insert inside a tag
-                    (null (semantic-current-tag)))
+                    ;; check if parent exists for a tag
+                    (null (srefactor--calculate-parent-tag func-tag)))
           (insert (srefactor--tag-parents-string func-tag)))
 
         (when (srefactor--tag-function-constructor func-tag)

@@ -52,7 +52,7 @@
               (interactive)
               (c-set-style "Linux")
               (c-set-offset 'substatement-open 0)
-	      (c-set-offset 'innamespace 0)
+          (c-set-offset 'innamespace 0)
               (c-toggle-electric-state -1)
 
               (setq-default c-default-style "Linux")
@@ -98,7 +98,7 @@
 (use-package srefactor
   :defer t
   :commands srefactor-refactor-at-point
-  :load-path (lambda () (expand-file-name "semantic-refactor/" user-emacs-directory))
+  :load-path (lambda () (expand-file-name "srefactor/" user-emacs-directory))
   :bind (:map c-mode-map
               ("C-c C-r" . srefactor-refactor-at-point)
               :map c++-mode-map

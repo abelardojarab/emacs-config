@@ -248,7 +248,7 @@
 (depends-on "rich-minority")
 ;; (depends-on "rtags")
 (depends-on "s")
-;; (depends-on "semantic-refactor")
+(depends-on "srefactor")
 (depends-on "semi")
 (depends-on "seq")
 ;; (depends-on "setup")
