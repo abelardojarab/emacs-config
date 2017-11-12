@@ -56,6 +56,7 @@
 (depends-on "company-tern")
 (depends-on "company-web")
 ;; (depends-on "console-keys")
+(depends-on "counsel")
 ;; (depends-on "cpp-auto-include")
 (depends-on "ctable")
 ;; (depends-on "dadams")
