@@ -62,7 +62,7 @@
 
 ;; Export org-mode to Google I/O HTML5 slides
 (use-package ox-ioslide
-  :load-path (lambda () (expand-file-name "org-ioslide/" user-emacs-directory))
+  :load-path (lambda () (expand-file-name "ox-ioslide/" user-emacs-directory))
   :config (use-package ox-ioslide-helper))
 
 (provide 'setup-org-plugins)
