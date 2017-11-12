@@ -24,10 +24,6 @@
 
 ;;; Code:
 
-;; assorted emacs color themes
-(add-to-list 'load-path (expand-file-name "emacs-color-themes/themes/" user-emacs-directory))
-(add-to-list 'custom-theme-load-path (expand-file-name "emacs-color-themes/themes/" user-emacs-directory))
-
 ;; Add themes
 (dolist (my/theme
          (list
