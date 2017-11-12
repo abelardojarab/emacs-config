@@ -306,4 +306,4 @@
 (depends-on "yaml-mode")
 ;; (depends-on "yasnippet")
 (depends-on "yatemplate")
-;; (depends-on "yaxception ")
+(depends-on "yaxception")
