@@ -13,8 +13,9 @@
 
 ## Included packages ##
 -   **Development:** company, flycheck, yasnippet, auctex, cmake-ide, ecb
--   **Network utilities:** wunderlust, sx, mu4e, elfeed ## Fixes with respect to
-Spacemacs and Prelude ##
+-   **Network utilities:** wunderlust, sx, mu4e, elfeed
+
+## Fixes with respect to Spacemacs and Prelude ##
 
 -   **Fixed htmlize** library so it does not fail to export code or text
     segments as formatted HTML
