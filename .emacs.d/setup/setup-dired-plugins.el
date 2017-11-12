@@ -47,7 +47,7 @@
 (use-package dired-ranger
   :defer t
   :after dired
-  :load-path (lambda () (expand-file-name "dired-hacks/" user-emacs-directory))
+  :load-path (lambda () (expand-file-name "dired-hacks-utils/" user-emacs-directory))
   :bind (:map dired-mode-map
               ("W" . dired-ranger-copy)
               ("X" . dired-ranger-move)

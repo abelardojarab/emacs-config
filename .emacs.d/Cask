@@ -69,7 +69,7 @@
 ;; (depends-on "dictionaries")
 (depends-on "diff-hl")
 (depends-on "diminish")
-;; (depends-on "dired-hacks")
+(depends-on "dired-hacks-utils")
 (depends-on "dired-icon")
 (depends-on "dired-k")
 (depends-on "direx")
