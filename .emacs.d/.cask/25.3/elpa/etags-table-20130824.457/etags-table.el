@@ -6,6 +6,7 @@
 ;; Maintainer: Scott Frazer <frazer.scott@gmail.com>
 ;; Created: 28 Oct 2008
 ;; Version: 1.1
+;; Package-Version: 20130824.457
 ;; Keywords: etags tags tag
 
 ;; This file is free software; you can redistribute it and/or modify

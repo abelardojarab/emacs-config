@@ -4,6 +4,7 @@
 ;; Description: Drop-down menu interface
 ;; Author: Jaeyoun Chung [jay.chung@gmail.com]
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/download/dropdown-list.el
+;; Package-Version: 20120329.936
 ;; origin: http://www.emacswiki.org/cgi-bin/wiki/dropdown-list.el
 ;; Version: 1.45
 ;; Keywords: menu convenience dropdown
@@ -62,11 +63,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defface dropdown-list-face
-  '((t :inherit default :background "lightyellow" :foreground "black"))
+    '((t :inherit default :background "lightyellow" :foreground "black"))
   "*Bla." :group 'dropdown-list)
 
 (defface dropdown-list-selection-face
-  '((t :inherit dropdown-list :background "purple"))
+    '((t :inherit dropdown-list :background "purple"))
   "*Bla." :group 'dropdown-list)
 
 (defvar dropdown-list-overlays nil)
@@ -159,46 +160,46 @@
       (and start
            (dropdown-list-move-to-start-line (length candidates))
            (loop initially (vertical-motion 0)
-                 for candidate in candidates
-                 do (dropdown-list-line (+ (current-column) start) candidate)
-                 while (/= (vertical-motion 1) 0)
-                 finally return t)))))
+              for candidate in candidates
+              do (dropdown-list-line (+ (current-column) start) candidate)
+              while (/= (vertical-motion 1) 0)
+              finally return t)))))
 
 (defun dropdown-list (candidates)
   (let ((selection)
         (temp-buffer))
     (save-window-excursion
       (unwind-protect
-          (let ((candidate-count (length candidates))
-                done key selidx)
-            (while (not done)
-              (unless (dropdown-list-at-point candidates selidx)
-                (switch-to-buffer (setq temp-buffer (get-buffer-create "*selection*"))
-                                  'norecord)
-                (delete-other-windows)
-                (delete-region (point-min) (point-max))
-                (insert (make-string (length candidates) ?\n))
-                (goto-char (point-min))
-                (dropdown-list-at-point candidates selidx))
-              (setq key (read-key-sequence ""))
-              (cond ((and (stringp key)
-                          (>= (aref key 0) ?1)
-                          (<= (aref key 0) (+ ?0 (min 9 candidate-count))))
-                     (setq selection (- (aref key 0) ?1)
-                           done      t))
-                    ((member key `(,(char-to-string ?\C-p) [up]))
-                     (setq selidx (mod (+ candidate-count (1- (or selidx 0)))
-                                       candidate-count)))
-                    ((member key `(,(char-to-string ?\C-n) [down]))
-                     (setq selidx (mod (1+ (or selidx -1)) candidate-count)))
-                    ((member key `(,(char-to-string ?\C-i) [tab]))
-                     (setq done t
-                           selection (if (null selidx) 0 selidx)))
-                    ((member key `(,(char-to-string ?\f))))
-                    ((member key `(,(char-to-string ?\r) [return]))
-                     (setq selection selidx
-                           done      t))
-                    (t (setq done t)))))
+           (let ((candidate-count (length candidates))
+                 done key selidx)
+             (while (not done)
+               (unless (dropdown-list-at-point candidates selidx)
+                 (switch-to-buffer (setq temp-buffer (get-buffer-create "*selection*"))
+                                   'norecord)
+                 (delete-other-windows)
+                 (delete-region (point-min) (point-max))
+                 (insert (make-string (length candidates) ?\n))
+                 (goto-char (point-min))
+                 (dropdown-list-at-point candidates selidx))
+               (setq key (read-key-sequence ""))
+               (cond ((and (stringp key)
+                           (>= (aref key 0) ?1)
+                           (<= (aref key 0) (+ ?0 (min 9 candidate-count))))
+                      (setq selection (- (aref key 0) ?1)
+                            done      t))
+                     ((member key `(,(char-to-string ?\C-p) [up]))
+                      (setq selidx (mod (+ candidate-count (1- (or selidx 0)))
+                                        candidate-count)))
+                     ((member key `(,(char-to-string ?\C-n) [down]))
+                      (setq selidx (mod (1+ (or selidx -1)) candidate-count)))
+                     ((member key `(,(char-to-string ?\C-i) [tab]))
+                      (setq done t
+                            selection (if (null selidx) 0 selidx)))
+                     ((member key `(,(char-to-string ?\f))))
+                     ((member key `(,(char-to-string ?\r) [return]))
+                      (setq selection selidx
+                            done      t))
+                     (t (setq done t)))))
         (dropdown-list-hide)
         (and temp-buffer (kill-buffer temp-buffer)))
       ;;     (when selection

@@ -4,17 +4,18 @@
 ;; Description: Customizable behavior for `mouse-3'.
 ;; Author: Drew Adams
 ;; Maintainer: Drew Adams (concat "drew.adams" "@" "oracle" ".com")
-;; Copyright (C) 2010-2014, Drew Adams, all rights reserved.
+;; Copyright (C) 2010-2017, Drew Adams, all rights reserved.
 ;; Created: Tue Nov 30 15:22:56 2010 (-0800)
 ;; Version: 0
+;; Package-Version: 20170324.1050
 ;; Package-Requires: ()
-;; Last-Updated: Wed Feb 26 12:51:48 2014 (-0800)
+;; Last-Updated: Fri Mar 24 10:42:17 2017 (-0700)
 ;;           By: dradams
-;;     Update #: 1718
-;; URL: http://www.emacswiki.org/mouse3.el
+;;     Update #: 1762
+;; URL: https://www.emacswiki.org/emacs/download/mouse3.el
 ;; Doc URL: http://www.emacswiki.org/Mouse3
 ;; Keywords: mouse menu keymap kill rectangle region
-;; Compatibility: GNU Emacs: 20.x, 21.x, 22.x, 23.x, 24.x
+;; Compatibility: GNU Emacs: 20.x, 21.x, 22.x, 23.x, 24.x, 25.x
 ;;
 ;; Features that might be required by this library:
 ;;
@@ -280,14 +281,15 @@
 ;;   `mouse3-dired-set-to-toggle-marks',
 ;;   `mouse3-dired-this-file-marked-p',
 ;;   `mouse3-dired-this-file-unmarked-p',
-;;   `mouse3-dired-toggle-marks-in-region', `mouse3-file-or-dir',
-;;   `mouse3-nonempty-region-p', `mouse3-region-popup-choice',
-;;   `mouse3-region-popup-choice-1',
+;;   `mouse3-dired-toggle-marks-in-region', `mouse3-ffap-guesser',
+;;   `mouse3-file-or-dir', `mouse3-nonempty-region-p',
+;;   `mouse3-region-popup-choice', `mouse3-region-popup-choice-1',
 ;;   `mouse3-region-popup-custom-entries',
 ;;   `mouse3-second-click-command'.
 ;;
 ;; Internal variables defined here:
 ;;
+;;   `mouse3-ffap-max-region-size',
 ;;   `mouse3-noregion-popup-misc-submenu',
 ;;   `mouse3-region-popup-change-text-submenu',
 ;;   `mouse3-region-popup-check-convert-submenu',
@@ -312,6 +314,14 @@
 ;;
 ;;; Change Log:
 ;;
+;; 2016/12/21 dadams
+;;     Added: mouse3-ffap-max-region-size, mouse3-ffap-guesser.
+;;     mouse3-file-or-dir, mouse3-noregion-popup-misc-submenu: Use mouse3-ffap-guesser, not ffap-guesser.
+;; 2014/07/21 dadams
+;;     mouse3-region-popup-x-popup-panes:
+;;       Added items: String (Insert), Numbers (insert), Rectangular Region.
+;; 2014/04/15 dadams
+;;     mouse3-noregion-popup-misc-submenu: Update version test for Emacs 24.4 pretest - use version<.
 ;; 2014/02/26 dadams
 ;;     mouse3-noregion-popup-misc-submenu, mouse3-noregion-popup-x-popup-panes: Use hlt-(un)highlight-symbol.
 ;; 2014/02/24 dadams
@@ -434,11 +444,11 @@
 &body=Describe bug here, starting with `emacs -q'.  \
 Don't forget to mention your Emacs version and mouse3.el `Update #'."))
   :link '(url-link :tag "Other Libraries by Drew"
-          "http://www.emacswiki.org/cgi-bin/wiki/DrewsElispLibraries")
+          "http://www.emacswiki.org/DrewsElispLibraries")
   :link '(url-link :tag "Download"
-          "http://www.emacswiki.org/cgi-bin/wiki/mouse3.el")
+          "http://www.emacswiki.org/mouse3.el")
   :link '(url-link :tag "Description"
-          "http://www.emacswiki.org/cgi-bin/wiki/Mouse3")
+          "http://www.emacswiki.org/Mouse3")
   :link '(emacs-commentary-link :tag "Doc" "mouse3"))
 
 (defun mouse3-nonempty-region-p ()
@@ -461,9 +471,21 @@ Assumes that there is a file or dir name at that position."
   (interactive)
   (mouse3-dired 'OTHER-WINDOW))
 
+(defvar mouse3-ffap-max-region-size 1024 ; See also Emacs bug #25243.
+  "Max size of active region used to obtain file-name defaults.
+An active region larger than this many characters prevents
+`mouse3-ffap-guesser' from calling `ffap-guesser'.")
+
+(defun mouse3-ffap-guesser ()
+  "`ffap-guesser', but deactivate a large active region first."
+  (and (require 'ffap nil t)
+       ;; Prevent using a large active region to guess ffap: Emacs bug #25243.
+       (let ((mark-active  (and mark-active  (< (buffer-size) mouse3-ffap-max-region-size))))
+         (ffap-guesser))))
+
 (defun mouse3-file-or-dir ()
   "Return file or dir name at point.  Raise error if none."
-  (let ((guess  (ffap-guesser)))
+  (let ((guess  (mouse3-ffap-guesser)))
     (unless (and guess  (or (ffap-file-remote-p guess)
                             (file-directory-p (abbreviate-file-name (expand-file-name guess)))
                             (file-regular-p guess)))
@@ -647,8 +669,14 @@ restore it by yanking."
           (yank-rectangle)))
      ("Clear (Replace)"                         . clear-rectangle)
      ("String (Replace)"                        . string-rectangle)
+     ,@`,(and (fboundp 'string-insert-rectangle) ; Emacs 24.4+
+              '(("String (Insert)"              . string-insert-rectangle)))
+     ,@`,(and (fboundp 'rectangle-number-lines) ; Emacs 24.4+
+              '(("Numbers (Insert)"             . rectangle-number-lines)))
      ,@`,(and (fboundp 'delimit-columns-rectangle) ; Emacs 21+.
               '(("Delimit Columns"              . delimit-columns-rectangle)))
+     ,@`,(and (fboundp 'rectangle-mark-mode) ; Emacs 24.4+
+              '(("Rectangular Region"           . rectangle-mark-mode)))
      ("--")
      ("Delete to Register"
       . (lambda (register start end)
@@ -1098,8 +1126,14 @@ restore it by yanking."
         :visible (not buffer-read-only))
        (string-rectangle             menu-item "String (Replace)" string-rectangle
         :visible (not buffer-read-only))
+       (string-insert-rect           menu-item "String (Insert)" string-insert-rectangle
+        :visible (fboundp 'string-insert-rectangle)) ; Emacs 24.4+
+       (rect-number-lines            menu-item "Numbers (Insert)" rectangle-number-lines
+        :visible (fboundp 'rectangle-number-lines)) ; Emacs 24.4+
        (delimit-columns-rectangle    menu-item "Delimit Columns"  delimit-columns-rectangle
         :visible (and (fboundp 'delimit-columns-rectangle)  (not buffer-read-only))) ; Emacs 21+.
+       (rectangle-mark-mode          menu-item "Rectangular Region"  rectangle-mark-mode
+        :visible (fboundp 'rectangle-mark-mode)) ; Emacs 24.4+.
        (sep-rectangle                menu-item "--" nil :visible (not buffer-read-only))
        (delete-rectangle-to-register menu-item "Delete to Register"
         (lambda (register start end)
@@ -1286,7 +1320,7 @@ restore it by yanking."
         :enable (save-excursion
                   (mouse-set-point last-nonmenu-event)
                   (if (or (> emacs-major-version 24) ; Do not use `browse-url-url-at-point'.
-                          (and (= emacs-major-version 24)  (> emacs-minor-version 3)))
+                          (and (= emacs-major-version 24)  (not (version< emacs-version "24.3.50"))))
                       (thing-at-point 'url t)
                     (thing-at-point 'url))))
        (find-file menu-item "Visit File" ffap-at-mouse
@@ -1295,7 +1329,8 @@ restore it by yanking."
                                                                  (interactive)
                                                                  (save-excursion
                                                                    (mouse-set-point last-nonmenu-event)
-                                                                   (find-file-other-window (ffap-guesser))))
+                                                                   (find-file-other-window
+                                                                    (mouse3-ffap-guesser))))
         :enable (condition-case nil (mouse3-file-or-dir) (error nil)))
        (dired menu-item "Dired" mouse3-dired
         :enable (condition-case nil (mouse3-file-or-dir) (error nil)))
@@ -1306,7 +1341,7 @@ restore it by yanking."
                                                   (interactive)
                                                   (save-excursion
                                                     (mouse-set-point last-nonmenu-event)
-                                                    (describe-file (ffap-guesser))))
+                                                    (describe-file (mouse3-ffap-guesser))))
         :enable (condition-case nil (mouse3-file-or-dir) (error nil))
         :visible (fboundp 'describe-file)) ; Defined in `help-fns+.el'.
        (describe-function menu-item "Describe Function" (lambda ()
@@ -1764,7 +1799,8 @@ is the menu title and PANE-TITLE is a submenu title.
 
 ;; REPLACE ORIGINAL in `mouse.el'.
 ;;
-;; Use `mouse3-second-click-command' to determine the action for a second `mouse-3' click.
+;; 1. Use `mouse3-second-click-command' to determine the action for a second `mouse-3' click.
+;; 2. Added optional arg PREFIX.
 ;;
 ;;;###autoload
 (defun mouse-save-then-kill (click &optional prefix)
@@ -1860,8 +1896,8 @@ Provides commands to act on the selected files and directories."
           (function :tag "Use menu"     'mouse3-dired-use-menu)
           (function :tag "Toggle marks" 'mouse3-dired-use-toggle-marks)
           (const    :tag "No special behavior" :value nil))
-  :set #'(lambda (sym defs)
-           (custom-set-default sym defs)
+  :set #'(lambda (sym val)
+           (custom-set-default sym val)
            (if (functionp mouse3-dired-function)
                (funcall mouse3-dired-function)
              (remove-hook 'dired-after-readin-hook 'mouse3-dired-set-to-toggle-marks)

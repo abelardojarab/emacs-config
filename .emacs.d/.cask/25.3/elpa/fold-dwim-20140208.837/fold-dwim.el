@@ -1,9 +1,10 @@
 ;;; fold-dwim.el --- Unified user interface for Emacs folding modes
 ;;
-;; Copyright (C) 2004, 2014 P J Heslin
+;; Copyright (C) 2004 P J Heslin
 ;;
 ;; Author: Peter Heslin <p.j.heslin@dur.ac.uk>
 ;; URL: http://www.dur.ac.uk/p.j.heslin/Software/Emacs
+;; Package-Version: 20140208.837
 ;; Version: 1.2
 ;;
 ;; This program is free software; you can redistribute it and/or modify
@@ -74,7 +75,7 @@
 ;;
 ;; fold-dwim-hide-all: hide all folds in the buffer.
 ;;
-;; fold-dwim-show-all: show all folds in the buffer.
+;; fold-dwim-show-all: show all folds in the buffer.  
 
 ;;; Configuration
 ;;
@@ -226,7 +227,7 @@ the top or bottom of the screen"
         (folding-open-buffer))
       (when fold-dwim-toggle-selective-display
         (set-selective-display 'nil)))))
-
+  
 (defun fold-dwim-hide ()
   "Hide one item"
   (save-excursion
@@ -257,7 +258,7 @@ the top or bottom of the screen"
           (if (fold-dwim-outline-nested-p)
               (hide-subtree)
             (hide-entry)))))
-  (fold-dwim-maybe-recenter))
+    (fold-dwim-maybe-recenter))
 
 
 (defun fold-dwim-show ()
@@ -273,13 +274,13 @@ the top or bottom of the screen"
         (if (not (fold-dwim-outline-nested-p))
             (show-entry)
           (show-children)
-          (show-entry))
+          (show-entry))        
         (setq stop t))
       (when (and (not stop)
                  hs-minor-mode
                  (hs-already-hidden-p))
         (hs-show-block)
-        (setq stop t))
+        (setq stop t))   
       (when (and (not stop)
                  (boundp 'TeX-fold-mode)
                  TeX-fold-mode)
@@ -297,7 +298,7 @@ the top or bottom of the screen"
               (setq stop t))
             (setq overlays (cdr overlays))))
         (when stop
-          (nxml-show)))
+            (nxml-show)))
       (when (and (not stop)
                  (boundp 'folding-mode)
                  folding-mode
@@ -309,7 +310,7 @@ the top or bottom of the screen"
                        (folding-show-current-entry)
                        (setq stop t))))))
       stop)))
-
+                   
 (defun fold-dwim-toggle ()
   "Try fold-dwim-show to show any hidden text at point; if no
 hidden fold is found, try fold-dwim-hide to hide the construction
@@ -320,7 +321,7 @@ at the cursor."
     (save-excursion
       (unless (fold-dwim-show)
         (fold-dwim-hide)))))
-
+    
 
 (defun fold-dwim-auctex-env-or-macro ()
   (let ((type (cond
@@ -349,7 +350,7 @@ at the cursor."
                            (not (looking-at "\\\\begin[ \t]*{document}")))
                        (error nil)))
                 'env)
-               (t
+               (t 
                 nil))))
     type))
 

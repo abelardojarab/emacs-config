@@ -2,7 +2,7 @@
 
 ;; This file is not part of Emacs
 
-;; Copyright (C) 2000-2013, 2015 Jari Aalto
+;; Copyright (C) 2000-2016 Jari Aalto
 ;; Copyright (C) 1995, 1996, 1997, 1998, 1999 Jari Aalto, Anders Lindgren.
 ;; Copyright (C) 1994 Jari Aalto
 ;; Copyright (C) 1992, 1993 Jamie Lokier, All rights reserved.
@@ -13,6 +13,7 @@
 ;; Maintainer:  Jari Aalto <jari aalto A T cante dt net>
 ;; Created:     1992
 ;; Keywords:    tools
+;; Package-Version: 20170925.838
 ;;
 ;; [Latest devel version]
 ;; Vcs-URL:     http://savannah.nongnu.org/projects/emacs-tiny-tools
@@ -22,10 +23,10 @@
 
 ;;{{{ GPL
 
-;; This program is free software; you can redistribute it and/or
-;; modify it under the terms of the GNU General Public License as
-;; published by the Free Software Foundation,
-;; or (at your option) any later version.
+;; This file is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 2, or (at your option)
+;; any later version.
 ;;
 ;; GNU Emacs is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -1715,10 +1716,10 @@
     (folding-find-file-noselect))
 
   (defadvice make-sparse-keymap
-      (before
-       make-sparse-keymap-with-optional-argument
-       (&optional byte-compiler-happyfier)
-       activate)
+    (before
+     make-sparse-keymap-with-optional-argument
+     (&optional byte-compiler-happyfier)
+     activate)
     "This advice does nothing except adding an optional argument
 to keep the byte compiler happy when compiling Emacs specific code
 with XEmacs.")
@@ -2717,9 +2718,9 @@ When used on XEmacs, return nil if no character was under the mouse."
 (defun folding-is-hooked ()
   "Check if folding hooks are installed."
   (and (memq 'folding-mode-write-file
-             (symbol-value (folding-write-file-hook)))
+	     (symbol-value (folding-write-file-hook)))
        (memq 'folding-mode-find-file
-             (symbol-value (folding-find-file-hook)))))
+	     (symbol-value (folding-find-file-hook)))))
 
 ;;;###autoload
 (defun folding-uninstall-hooks ()
@@ -3060,7 +3061,7 @@ It prevents 'binary pollution' upon save."
       (folding-get-mode-marks (or mode major-mode))
     ;; `ignore' is not used, add no-op for byte compiler
     (or ignore
-        (setq ignore t))
+	(setq ignore t))
     (setq beg (concat "^[ \t]*" (regexp-quote beg) "[^\r\n]+"))
     (setq end (concat "^[ \t]*" (regexp-quote end)))
     (list
@@ -3084,8 +3085,8 @@ It prevents 'binary pollution' upon save."
         (with-current-buffer buffer
           (when (and (eq major-mode mode)
                      (or font-lock-mode
-                         (and (boundp 'global-font-lock-mode)
-                              global-font-lock-mode)))
+			 (and (boundp 'global-font-lock-mode)
+			      global-font-lock-mode)))
             ;; FIXME: Crude fix. should we use font-lock-fontify-buffer instead?
             (font-lock-mode -1)
             (font-lock-mode 1)))))))
@@ -3660,13 +3661,13 @@ visible. This is useful after some commands eg., search commands."
                              (setq folding-stack
                                    (if folding-stack
                                        (cons (cons (point-min-marker)
-                                                   (point-max-marker))
+						   (point-max-marker))
                                              folding-stack)
                                      '(folded)))
                              (folding-set-mode-line))
                            (folding-narrow-to-region
-                            (car data)
-                            (nth 1 data)))))))
+			    (car data)
+			    (nth 1 data)))))))
     (let ((goal (point)))
       (while (folding-skip-ellipsis-backward)
         (beginning-of-line)
@@ -3674,7 +3675,7 @@ visible. This is useful after some commands eg., search commands."
         (goto-char goal))
       (if folding-narrow-by-default
           (open-fold)
-        (widen)))))
+	(widen)))))
 
 ;;}}}
 ;;{{{ folding-shift-out
@@ -3700,8 +3701,8 @@ visible. This is useful after some commands eg., search commands."
         (if (eq (car folding-stack) 'folded)
             (folding-narrow-to-region nil nil t)
           (folding-narrow-to-region
-           (marker-position (car (car folding-stack)))
-           (marker-position (cdr (car folding-stack))) t))
+	   (marker-position (car (car folding-stack)))
+	   (marker-position (cdr (car folding-stack))) t))
         (and (consp (car folding-stack))
              (set-marker (car (car folding-stack)) nil)
              (set-marker (cdr (car folding-stack)) nil))
@@ -3726,10 +3727,10 @@ subfolds."
       (folding-skip-ellipsis-backward))
   (let ((point (point))
         backward
-        forward
-        start
-        end
-        subfolds-not-p)
+	forward
+	start
+	end
+	subfolds-not-p)
     (unwind-protect
         (or (and (integerp
                   (car-safe (setq backward (folding-skip-folds t))))
@@ -3756,19 +3757,19 @@ subfolds."
                    (folding-subst-regions
                     (append backward (nreverse forward))
                     ?\r ?\n)
-                   ;;  FIXME: this should be moved to font-lock:
-                   ;;  - When fold is closed, the whole line (with code)
-                   ;;    is treated as comment
-                   ;;  - Fon-lock changes all fonts to `font-lock-comment-face'
-                   ;;  - When you again open fold, all text is in color
-                   ;;
-                   ;;  => Font lock should stop at \r, and not use ".*"
-                   ;;     which includes \r character
-                   ;;  This is a workaround, not an efficient one
-                   (if (or (and (boundp 'global-font-lock-mode)
-                                global-font-lock-mode)
-                           font-lock-mode)
-                       (font-lock-fontify-region start end))
+		   ;;  FIXME: this should be moved to font-lock:
+		   ;;  - When fold is closed, the whole line (with code)
+		   ;;    is treated as comment
+		   ;;  - Fon-lock changes all fonts to `font-lock-comment-face'
+		   ;;  - When you again open fold, all text is in color
+		   ;;
+		   ;;  => Font lock should stop at \r, and not use ".*"
+		   ;;     which includes \r character
+		   ;;  This is a workaround, not an efficient one
+		   (if (or (and (boundp 'global-font-lock-mode)
+				global-font-lock-mode)
+			   font-lock-mode)
+		       (font-lock-fontify-region start end))
                    (list start end (not subfolds-not-p))))
             (if noerror
                 nil
@@ -4876,10 +4877,10 @@ nil means discard it; anything else is stream for print."
   (while cmds
     (eval
      `(defun ,(intern (concat "folding-" (symbol-name (car cmds))))
-          nil
-        "Automatically generated"
-        (interactive)
-        (folding-isearch-general (quote ,(car cmds)))))
+	nil
+	"Automatically generated"
+	(interactive)
+	(folding-isearch-general (quote ,(car cmds)))))
     (setq cmds (cdr cmds))))
 
 ;; The HEART! Executes command and updates the foldings.
