@@ -30,7 +30,7 @@ to perform almost all of their daily version control tasks directly from
 within Emacs.  While many fine Git clients exist, only Magit and Git
 itself deserve to be called porcelains.
 
-     This manual is for Magit version 2.11.0 (2.11.0-232-gac96a04f7+1).
+     This manual is for Magit version 2.11.0 (2.11.0-235-gc5ba3819a+1).
 
      Copyright (C) 2015-2017 Jonas Bernoulli <jonas@bernoul.li>
 
@@ -2470,7 +2470,7 @@ variable.
      Insert submodule sections.
 
      Hook ‘magit-module-sections-hook’ controls which module sections
-     are inserted, and option ‘magit-insert-modules-nested’ controls
+     are inserted, and option ‘magit-module-sections-nested’ controls
      whether they are wrapped in an additional section.
 
    • Option: magit-module-sections-hook
