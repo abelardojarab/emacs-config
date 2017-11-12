@@ -165,7 +165,7 @@
               ([(shift tab)]     . helm-c-yas-complete)
               ([backtab]         . helm-c-yas-complete)
               ("<S-iso-lefttab>" . helm-c-yas-complete)
-	      :map ctl-x-map
+          :map ctl-x-map
               ("y"               . helm-c-yas-complete)))
 
 ;; helm make support
@@ -342,9 +342,9 @@
 (use-package helm-hunks
   :defer t
   :commands (helm-hunks
-	     helm-hunks-current-buffer
-	     helm-hunks-staged
-	     helm-hunks-staged-current-buffer)
+         helm-hunks-current-buffer
+         helm-hunks-staged
+         helm-hunks-staged-current-buffer)
   :after (helm git-modes request)
   :load-path (lambda () (expand-file-name "helm-hunks/" user-emacs-directory)))
 
@@ -356,6 +356,13 @@
   :commands (helm-pass)
   :after (helm pass)
   :load-path (lambda () (expand-file-name "helm-pass/" user-emacs-directory)))
+
+(use-package helm-ctest
+  :defer t
+  :if (executable-find "ctest")
+  :commands (helm-ctest)
+  :after helm
+  :load-path (lambda () (expand-file-name "helm-ctest/" user-emacs-directory)))
 
 (provide 'setup-helm-plugins)
 ;;; setup-helm-plugins.el ends here
