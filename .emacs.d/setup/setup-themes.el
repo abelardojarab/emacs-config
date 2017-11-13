@@ -39,14 +39,7 @@
 ;; Font-core library
 (use-package font-core)
 
-;; Tomorrow theme
-(add-to-list 'load-path (expand-file-name "themes/sanityinc-tomorrow-theme/" user-emacs-directory))
-(add-to-list 'custom-theme-load-path (expand-file-name "themes/sanityinc-tomorrow-theme/" user-emacs-directory))
-(use-package color-theme-sanityinc-tomorrow)
-
 ;; Solarized theme
-(add-to-list 'load-path (expand-file-name "themes/solarized-theme/" user-emacs-directory))
-(add-to-list 'custom-theme-load-path (expand-file-name "themes/solarized-theme" user-emacs-directory))
 (use-package solarized
   :config (setq solarized-scale-org-headlines nil))
 
