@@ -3,8 +3,8 @@
 ;; Copyright (C) 2013 Wilfred Hughes
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
-;; Version: 2.2
-;; Package-Version: 20171024.1200
+;; Version: 2.3
+;; Package-Version: 20171112.1405
 ;; Keywords: hash table, hash map, hash
 ;; Package-Requires: ((dash "2.12.0"))
 

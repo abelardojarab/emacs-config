@@ -4,7 +4,7 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/helpful
-;; Package-Version: 20171103.1614
+;; Package-Version: 20171112.1321
 ;; Keywords: help, lisp
 ;; Version: 0.3
 ;; Package-Requires: ((emacs "24.4") (dash "2.12.0") (s "1.11.0") (elisp-refs "1.2"))
@@ -789,6 +789,7 @@ For example, \"(some-func FOO &optional BAR)\"."
   (pop-to-buffer (helpful--buffer symbol t))
   (helpful-update))
 
+;;;###autoload
 (defun helpful-callable (symbol)
   "Show help for function or macro named SYMBOL.
 
