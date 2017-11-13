@@ -27,7 +27,7 @@
       (grey-2         "#39393D")
       (white          "#FFFFFF")
       (yellow         "#FFDB45") ;; "#E2C770" "#F9BA32"
-      (orange         "#FD971F") ;; "#FF9009"
+      (orange         "#FF9009") ;; "#FD971F"
       (red            "#E74C3C") ;; "#F34A4A"
       (magenta        "#F92672")
       (violet         "#9C91E4")
@@ -112,7 +112,7 @@
      `(font-lock-comment-face ((,c (:foreground ,comment))))
      `(font-lock-comment-delimiter-face ((,c (:foreground ,anthracite))))
      `(font-lock-function-name-face ((,c (:foreground ,yellow))))
-     `(font-lock-type-face ((,c (:foreground ,diredcl))))
+     `(font-lock-type-face ((,c (:foreground ,orange))))
      `(font-lock-constant-face ((,c (:foreground ,yellow))))
      `(font-lock-warning-face ((,c (:underline (:color ,red :style wave)))))
 
