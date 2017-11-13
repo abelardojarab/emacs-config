@@ -77,10 +77,14 @@
 
 ;; Override zenburn colors
 (defvar zenburn-override-colors-alist
-  '(("zenburn-bg+05" . "#282828")
-    ("zenburn-bg+1"  . "#2F2F2F")
-    ("zenburn-bg+2"  . "#3F3F3F")
-    ("zenburn-bg+3"  . "#4F4F4F")))
+  '(("zenburn-bg-2"  . "#000000")
+    ("zenburn-bg-1"  . "#101010")
+    ("zenburn-bg-05" . "#282828")
+    ("zenburn-bg"    . "#2F2F2F")
+    ("zenburn-bg+05" . "#383838")
+    ("zenburn-bg+1"  . "#3F3F3F")
+    ("zenburn-bg+2"  . "#4F4F4F")
+    ("zenburn-bg+3"  . "#5F5F5F")))
 
 ;; Font-core library
 (use-package font-core)
