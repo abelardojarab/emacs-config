@@ -73,14 +73,6 @@
             ;; paragraphs properly
             (setq paragraph-start "^[ ]*\\(//+\\|\\**\\)[ ]*\\([ ]*$\\|@param\\)\\|^\f")))
 
-;; Insert and delete C++ header files automatically.
-(use-package cpp-auto-include
-  :defer t
-  :commands cpp-auto-include
-  :bind (:map c++-mode-map
-              ("C-c C-a" . cpp-auto-include))
-  :load-path (lambda () (expand-file-name "cpp-auto-include/" user-emacs-directory)))
-
 ;; Show inline arguments hint for the C/C++ function at point
 (use-package function-args
   :defer t

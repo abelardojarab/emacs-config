@@ -161,18 +161,18 @@
                     ("CANCELLED"   . 'font-lock-doc-face)))
 
             ;; Tag tasks with GTD-ish contexts
-            (setq org-tag-alist '(("@work"		. ?b)
-                                  ("@home"		. ?h)
-                                  ("@place"		. ?p)
-                                  ("@writing"		. ?w)
-                                  ("@errands"		. ?e)
-                                  ("@family"		. ?f)
-                                  ("@coding"		. ?c)
-                                  ("@tasks"		. ?t)
-                                  ("@learning"		. ?l)
-                                  ("@reading"		. ?r)
-                                  ("quantified"		. ?q)
-                                  ("high-energy"	. ?1)))
+            (setq org-tag-alist '(("@work"      . ?b)
+                                  ("@home"      . ?h)
+                                  ("@place"     . ?p)
+                                  ("@writing"       . ?w)
+                                  ("@errands"       . ?e)
+                                  ("@family"        . ?f)
+                                  ("@coding"        . ?c)
+                                  ("@tasks"     . ?t)
+                                  ("@learning"      . ?l)
+                                  ("@reading"       . ?r)
+                                  ("quantified"     . ?q)
+                                  ("high-energy"    . ?1)))
 
             ;; Projects
             (setq org-tags-exclude-from-inheritance '("PROJECT"))
@@ -769,10 +769,6 @@ Captured %<%Y-%m-%d %H:%M>
   :commands cfw:open-org-calendar
   :load-path (lambda () (expand-file-name "calfw/" user-emacs-directory))
   :config (use-package calfw-org))
-
-;; Lorg calendar
-(use-package lorg-calendar
-  :load-path (lambda () (expand-file-name "lorg-calendar/" user-emacs-directory)))
 
 (provide 'setup-org-agenda)
 ;;; setup-org-agenda.el ends here
