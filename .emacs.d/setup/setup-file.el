@@ -138,5 +138,10 @@
   :commands (sudo-edit sudo-edit-current-file)
   :load-path (lambda () (expand-file-name "sudo-edit/" user-emacs-directory)))
 
+;; Assure consistency when opening files
+(use-package unify-opening
+  :demand t
+  :load-path (lambda () (expand-file-name "unify-opening/" user-emacs-directory)))
+
 (provide 'setup-file)
 ;;; setup-file.el ends here

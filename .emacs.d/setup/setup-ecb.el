@@ -97,6 +97,10 @@ buffer is current which was it before calling this macro."
                                       (setq buffer-read-only t)))
                                 (ecb-error "Try to set a not existing buffer."))))
 
+            ;; Ignore errors in ecb-redraw-layout
+            (defadvice ecb-redraw-layout (around bar activate)
+              (ignore-errors add-do-it))
+
             ;; ECB setup
             (if (ecb--semantic-active-p)
                 (ecb-update-methods-buffer--internal nil nil t)
