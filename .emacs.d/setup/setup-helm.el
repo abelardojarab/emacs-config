@@ -53,6 +53,9 @@
             (defadvice helm-buffers-sort-transformer (around ignore activate)
               (setq ad-return-value (ad-get-arg 0)))
 
+            (defadvice helm-execute-persistent-action (around bar activate)
+              (ignore-errors add-do-it))
+
             ;; From https://gist.github.com/antifuchs/9238468
             (setq helm-always-two-windows t
                   helm-quick-update t
@@ -99,9 +102,9 @@
                   `((name . "Fonts")
                     (candidates . ,(font-family-list))
                     (action . (lambda (candidate) (progn
-					       (setq main-programming-font candidate)
-					       (set-face-attribute 'default nil :family candidate)
-					       (fontify-frame (selected-frame)))))))
+                           (setq main-programming-font candidate)
+                           (set-face-attribute 'default nil :family candidate)
+                           (fontify-frame (selected-frame)))))))
 
             (defun helm-fonts ()
               (interactive)

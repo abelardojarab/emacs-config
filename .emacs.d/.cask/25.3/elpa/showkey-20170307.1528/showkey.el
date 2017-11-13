@@ -1,29 +1,30 @@
 ;;; showkey.el --- Show keys as you use them.
-;;
+;; 
 ;; Filename: showkey.el
 ;; Description: Show keys as you use them.
 ;; Author: Drew Adams
 ;; Maintainer: Drew Adams
-;; Copyright (C) 2014-2016, Drew Adams, all rights reserved.
+;; Copyright (C) 2014-2017, Drew Adams, all rights reserved.
 ;; Created: Sun Mar 22 16:24:39 2015 (-0700)
 ;; Version: 0
+;; Package-Version: 20170307.1528
 ;; Package-Requires: ()
-;; Last-Updated: Tue Aug 16 22:46:45 2016 (-0700)
+;; Last-Updated: Tue Mar  7 15:28:38 2017 (-0800)
 ;;           By: dradams
-;;     Update #: 123
-;; URL: http://www.emacswiki.org/showkey.el
+;;     Update #: 138
+;; URL: https://www.emacswiki.org/emacs/download/showkey.el
 ;; Doc URL: http://www.emacswiki.org/ShowKey
 ;; Keywords: help keys mouse
 ;; Compatibility: GNU Emacs: 23.x, 24.x, 25.x
-;;
+;; 
 ;; Features that might be required by this library:
 ;;
-;;   None
+;;   `fit-frame'.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;;; Commentary:
-;;
+;; 
+;;; Commentary: 
+;; 
 ;;    Show key and mouse events and other events as you use them.
 ;;
 ;;  There are two ways to show them:
@@ -59,22 +60,26 @@
 ;;  * `showkey-tooltip-key-only-flag' non-nil means show only the key
 ;;    used, not also its description.  The default value is nil.
 ;;
+;;  * `showkey-tooltip-timeout' is the number of seconds to show the
+;;    tooltip, before hiding it.  (It is also hidden upon any user
+;;    event, such as hitting another key.)
 ;;
+;;
+;;
+;;  Commands defined here:
+;;
+;;    `showkey-log-mode', `showkey-tooltip-mode'.
 ;;
 ;;  User options defined here:
 ;;
 ;;    `showkey-log-erase-keys', `showkey-log-frame-alist',
 ;;    `showkey-tooltip-height', `showkey-log-ignored-events',
 ;;    `showkey-tooltip-ignored-events',
-;;    `showkey-tooltip-key-only-flag'.
+;;    `showkey-tooltip-key-only-flag', `showkey-tooltip-timeout'.
 ;;
 ;;  Faces defined here:
 ;;
-                                        ;     `showkey-log-latest'.
-;;
-;;  Commands defined here:
-;;
-;;    `showkey-log-mode', `showkey-tooltip-mode'.
+;;    `showkey-log-latest'.
 ;;
 ;;  Non-interactive functions defined here:
 ;;
@@ -87,9 +92,12 @@
 ;;    `showkey-nb-consecutives'.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
+;; 
 ;;; Change Log:
 ;;
+;; 2016/10/27 dadams
+;;     Added: showkey-tooltip-timeout.
+;;     showkey-show-tooltip: Use showkey-tooltip-timeout.
 ;; 2016/08/16 dadams
 ;;     showkey-log-frame-alist: Commented out font spec.
 ;; 2016/07/04 dadams
@@ -99,24 +107,24 @@
 ;;     showkey-show-tooltip: Respect those new options.
 ;; 2015/03/22 dadams
 ;;     Created.
-;;
+;; 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
+;; 
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or (at
 ;; your option) any later version.
-;;
+;; 
 ;; This program is distributed in the hope that it will be useful, but
 ;; WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ;; General Public License for more details.
-;;
+;; 
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
-;;
+;; 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
+;; 
 ;;; Code:
 
 (require 'fit-frame nil t) ; fit-frame
@@ -133,7 +141,7 @@ showkey.el bug: \
 &body=Describe bug here, starting with `emacs -q'.  \
 Don't forget to mention your Emacs and library versions."))
   :link '(url-link :tag "Other Libraries by Drew"
-                   "http://www.emacswiki.org/DrewsElispLibraries")
+          "http://www.emacswiki.org/DrewsElispLibraries")
   :link '(url-link :tag "Download" "http://www.emacswiki.org/showkey.el")
   :link '(url-link :tag "Description" "http://www.emacswiki.org/ShowKey")
   :link '(emacs-commentary-link :tag "Commentary" "showkey"))
@@ -169,13 +177,6 @@ This is used by `showkey-log-mode'."
   "Alist of frame parameters for the `*KEYS*' frame of `showkey-log-mode'."
   :type 'alist :group 'Show-Key)
 
-(defcustom showkey-tooltip-height 100
-  "The height of the tooltip text, in units of 1/10 point."
-  :type '(restricted-sexp
-          :match-alternatives ((lambda (x) (and (integerp x)  (> x 0))))
-          :value 100)
-  :group 'Show-Key)
-
 (defcustom showkey-log-ignored-events '("^<mouse-movement>")
   "List of strings naming events to ignore for `showkey-log-mode'.
 These events are not logged in buffer `*KEYS*'.
@@ -184,6 +185,13 @@ Each string is used as a regexp to match the user-friendly description
 of an event.  It should be `^' followed by the event name enclosed in
 angle brackets.  Example: \"^<mouse-movement>\"."
   :type '(repeat string) :group 'Show-Key)
+
+(defcustom showkey-tooltip-height 100
+  "The height of the tooltip text, in units of 1/10 point."
+  :type '(restricted-sexp
+          :match-alternatives ((lambda (x) (and (integerp x)  (> x 0))))
+          :value 100)
+  :group 'Show-Key)
 
 (defcustom showkey-tooltip-ignored-events '("^<mouse-movement>"
                                             "^<vertical-scroll-bar>"
@@ -199,6 +207,11 @@ angle brackets.  Example: \"^<mouse-movement>\"."
 (defcustom showkey-tooltip-key-only-flag nil
   "Non-nil means show only the key used, not also its description."
   :type 'boolean :group 'Show-Key)
+
+(defcustom showkey-tooltip-timeout 5
+  "Hide tooltip after this many seconds.
+\(It is also hidden upon any user event, such as hitting another key.)"
+  :type 'integer :group 'Show-Key)
 
 (defvar showkey-nb-consecutives 1
   "Counter of how many times the current key has been pressed.")
@@ -217,7 +230,7 @@ angle brackets.  Example: \"^<mouse-movement>\"."
 
 ;;;###autoload
 (define-minor-mode showkey-tooltip-mode
-  "Global minor mode that logs the keys you use.
+    "Global minor mode that logs the keys you use.
 See option `showkey-tooltip-ignored-events' for customization.
 
 Note that keys such as `C-g' that quit, and keys that raise an error,
@@ -274,11 +287,14 @@ are not indicated."
                (y    (cdr x.y)))
           (when (string= "" mouse-msg)
             (set-mouse-position (selected-frame) (+ 3 x) (+ 2 y))))
-        (x-show-tip
-         (propertize cmd-desc 'face `(:foreground "red" :height ,showkey-tooltip-height)))))))
+        (x-show-tip (propertize cmd-desc
+                                'face `(:foreground "red" :height ,showkey-tooltip-height))
+                    nil
+                    nil
+                    showkey-tooltip-timeout)))))
 ;;;###autoload
 (define-minor-mode showkey-log-mode
-  "Global minor mode that logs the keys you use.
+    "Global minor mode that logs the keys you use.
 See options `showkey-log-erase-keys', `showkey-log-ignored-events',
 and `showkey-log-frame-alist' for customization.
 
