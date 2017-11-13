@@ -52,10 +52,6 @@
 (use-package ox-asciidoc
   :load-path (lambda () (expand-file-name "ox-asciidoc/" user-emacs-directory)))
 
-;; Table ASCII plot
-(use-package orgtbl-ascii-plot
-  :load-path (lambda () (expand-file-name "orgtblasciiplot/" user-emacs-directory)))
-
 ;; Export org-mode to Google I/O HTML5 slides
 (use-package ox-ioslide
   :load-path (lambda () (expand-file-name "ox-ioslide/" user-emacs-directory))
