@@ -102,7 +102,7 @@
   :group 'my/customs)
 
 (defcustom my/emacs-theme
-  'monokai
+  'zenburn
   "Preferred Emacs theme"
   :group 'my/customs
   :type 'list)
