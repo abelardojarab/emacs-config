@@ -24,28 +24,14 @@
 
 ;;; Code:
 
-;; Override zenburn colors
-(use-package zenburn-theme
-  :init  (defvar zenburn-override-colors-alist
-           '(("zenburn-bg-2"  . "#000000")
-             ("zenburn-bg-1"  . "#101010")
-             ("zenburn-bg-05" . "#282828")
-             ("zenburn-bg"    . "#2F2F2F")
-             ("zenburn-bg+05" . "#383838")
-             ("zenburn-bg+1"  . "#3F3F3F")
-             ("zenburn-bg+2"  . "#4F4F4F")
-             ("zenburn-bg+3"  . "#5F5F5F"))))
-
 ;; Font-core library
 (use-package font-core)
 
-;; Solarized theme
-(use-package solarized
-  :config (setq solarized-scale-org-headlines nil))
-
 ;; Choose different themes depending if we are using GUI or not
 ;; Console colors are enabled if "export TERM=xterm-256color" is added into .bashrc
-(load-theme my/emacs-theme)
+(if (display-graphic-p)
+    (load-theme my/emacs-theme)
+  (load-theme my/emacs-theme-console))
 
 ;; Remember last theme
 (use-package remember-last-theme

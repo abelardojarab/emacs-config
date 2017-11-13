@@ -107,6 +107,12 @@
   :group 'my/customs
   :type 'list)
 
+(defcustom my/emacs-theme-console
+  'zerodark
+  "Preferred Emacs theme"
+  :group 'my/customs
+  :type 'list)
+
 (defcustom my/ecb-layout-theme "bodil"
   "Preferred ECB layout name"
   :group 'my/customs
