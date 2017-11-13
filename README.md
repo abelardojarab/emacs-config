@@ -14,6 +14,7 @@ Package management, update and auto-loading
 -   **Package auto-loading and deferral:** use-package
 
 ## Included packages ##
+
 -   **Development:** company, flycheck, yasnippet, auctex, cmake-ide, ecb
 -   **Network utilities:** wunderlust, sx, mu4e, elfeed
 
