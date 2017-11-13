@@ -218,6 +218,7 @@
      `(org-formula                  ((,c (:foreground ,orange))))
      `(org-list-dt                  ((,c (:foreground ,orange))))
      `(org-footnote                 ((,c (:foreground ,orange))))
+     `(org-priority                 ((,c (:foreground ,violet))))
 
      `(org-date                     ((,c (:foreground ,violet))))
      `(org-todo                     ((,c (:foreground ,yellow))))
