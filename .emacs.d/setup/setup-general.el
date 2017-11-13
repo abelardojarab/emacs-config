@@ -162,8 +162,11 @@
   :after elisp-refs
   :load-path (lambda () (expand-file-name "helpful/" user-emacs-directory))
   :bind (("C-h f" . helpful-function)
+         ("C-h c" . helpful-callable)
          ("C-h x" . helpful-command)
-         ("C-h z" . helpful-macro)))
+         ("C-h m" . helpful-macro)
+         ("C-h k" . helpful-key)
+         ("C-h v" . helpful-variable)))
 
 (provide 'setup-general)
 ;;; setup-general.el ends here
