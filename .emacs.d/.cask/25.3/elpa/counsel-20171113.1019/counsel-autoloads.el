@@ -3,8 +3,8 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil "counsel" "counsel.el" (23048 35545 472285
-;;;;;;  338000))
+;;;### (autoloads nil "counsel" "counsel.el" (23050 12200 659707
+;;;;;;  320000))
 ;;; Generated autoloads from counsel.el
 
 (autoload 'counsel-el "counsel" "\
@@ -289,6 +289,11 @@ And insert it into the minibuffer.  Useful during `eval-expression'.
 
 (autoload 'counsel-shell-command-history "counsel" "\
 Browse shell command history.
+
+\(fn)" t nil)
+
+(autoload 'counsel-minibuffer-history "counsel" "\
+Browse minibuffer history.
 
 \(fn)" t nil)
 
