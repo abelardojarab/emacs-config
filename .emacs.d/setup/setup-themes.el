@@ -24,67 +24,17 @@
 
 ;;; Code:
 
-;; Add themes
-(dolist (my/theme
-         (list
-          "ample"
-          "apropospriate"
-          "atom-one-dark"
-          "borland-blue"
-          "creamsody"
-          "danneskjold"
-          "darcula"
-          "darkokai"
-          "darktooth"
-          "dracula"
-          "eink"
-          "exotica"
-          "eziam"
-          "faff"
-          "flatui"
-          "goose"
-          "grandshell"
-          "gruber-darker"
-          "intellij"
-          "kaolin"
-          "leuven"
-          "madhat2r"
-          "material"
-          "minimal"
-          "moe"
-          "monochrome"
-          "monokai"
-          "monotropic"
-          "plan9"
-          "professional"
-          "spacemacs"
-          "spike"
-          "tao"
-          "white-sand"
-          "zenburn"
-          "zerodark"))
-  (progn
-    (add-to-list 'load-path (expand-file-name
-                             (concat "themes/"
-                                     my/theme
-                                     "-theme/")
-                             user-emacs-directory))
-    (add-to-list 'custom-theme-load-path (expand-file-name
-                                          (concat "themes/"
-                                                  my/theme
-                                                  "-theme/")
-                                          user-emacs-directory))))
-
 ;; Override zenburn colors
-(defvar zenburn-override-colors-alist
-  '(("zenburn-bg-2"  . "#050500")
-    ("zenburn-bg-1"  . "#101010")
-    ("zenburn-bg-05" . "#282828")
-    ("zenburn-bg"    . "#2F2F2F")
-    ("zenburn-bg+05" . "#383838")
-    ("zenburn-bg+1"  . "#3F3F3F")
-    ("zenburn-bg+2"  . "#4F4F4F")
-    ("zenburn-bg+3"  . "#5F5F5F")))
+(use-package zenburn-theme
+  :init  (defvar zenburn-override-colors-alist
+           '(("zenburn-bg-2"  . "#000000")
+             ("zenburn-bg-1"  . "#101010")
+             ("zenburn-bg-05" . "#282828")
+             ("zenburn-bg"    . "#2F2F2F")
+             ("zenburn-bg+05" . "#383838")
+             ("zenburn-bg+1"  . "#3F3F3F")
+             ("zenburn-bg+2"  . "#4F4F4F")
+             ("zenburn-bg+3"  . "#5F5F5F"))))
 
 ;; Font-core library
 (use-package font-core)
@@ -102,7 +52,7 @@
 
 ;; Choose different themes depending if we are using GUI or not
 ;; Console colors are enabled if "export TERM=xterm-256color" is added into .bashrc
-(load-theme my/emacs-theme t)
+(load-theme my/emacs-theme)
 
 ;; Remember last theme
 (use-package remember-last-theme

@@ -47,6 +47,7 @@
       (when (and (file-directory-p name)
                  (not (string-prefix-p "." f)))
         (add-to-list 'load-path name)
+        (add-to-list 'custom-theme-load-path name)
         (my/add-subfolders-to-load-path name)))))
 
 (setq my/vendor-dir (expand-file-name ".cask/25.3/elpa" user-emacs-directory))
