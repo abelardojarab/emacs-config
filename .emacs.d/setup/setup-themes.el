@@ -77,7 +77,7 @@
 
 ;; Override zenburn colors
 (defvar zenburn-override-colors-alist
-  '(("zenburn-bg-2"  . "#000000")
+  '(("zenburn-bg-2"  . "#050500")
     ("zenburn-bg-1"  . "#101010")
     ("zenburn-bg-05" . "#282828")
     ("zenburn-bg"    . "#2F2F2F")
