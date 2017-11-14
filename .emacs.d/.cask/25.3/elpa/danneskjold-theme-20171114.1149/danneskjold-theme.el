@@ -21,12 +21,18 @@
       ;; doom-molokai-colors
       ;; https://github.com/hlissner/emacs-doom-theme/blob/master/doom-molokai-theme.el
       (black          "#000000")
+      (black-c        "#FFFFFF")
+
+      (white          "#FFFFFF")
+      (white-c        "#000000")
+
+      (yellow         "#FFDB45") ;; "#E2C770" "#F9BA32"
+      (yellow-c       "#281580")
+
       (grey           "#C0C5CF")
       (grey-.5        "#828284")
       (grey-1         "#525254")
       (grey-2         "#39393D")
-      (white          "#FFFFFF")
-      (yellow         "#FFDB45") ;; "#E2C770" "#F9BA32"
       (orange         "#FF9009") ;; "#FD971F"
       (red            "#E74C3C") ;; "#F34A4A"
       (magenta        "#F92672")
@@ -40,9 +46,10 @@
 
 
       ;; danneskjold-colors
-      (frost          "#D0E1F9")
-      (comment        "#8593AE")
-      (anthracite     "#3a3f4b")
+      (frost        "#D0E1F9")
+      (invisible    "#7B9ED2")
+      (comment      "#A4C2EB")
+
       (sbt-midnight   "#282c34")
       (ada-midnight   "#21252b")
       (summer-flower  "#013220")
@@ -74,10 +81,10 @@
 
          (error-highlight red)
 
-         (linum-bg       current-line)
-         (linum-fg       "#3F3F48")
-         (linum-hl-fg    orange)
-         (linum-hl-bg    current-line)
+         ;; (linum-bg       current-line)
+         ;; (linum-fg       "#3F3F48")
+         ;; (linum-hl-fg    orange)
+         ;; (linum-hl-bg    current-line)
 
          (active-minibuffer "#404046")
          (modeline-fg    white)
@@ -95,22 +102,22 @@
 
     (custom-theme-set-faces
      'danneskjold
-     `(default ((,c (:foreground ,fg :background ,background))))
-     `(fringe ((,c (:background ,background))))
-     `(region ((,c (:background ,anthracite))))
+     `(default ((,c (:foreground ,white :background ,black))))
+     `(fringe ((,c (:background ,black))))
+     `(region ((,c (:background ,invisible))))
      `(button ((,c (:foreground ,frost :underline t :weight normal))))
      `(link ((,c (:foreground ,frost :underline t))))
-     `(menu ((,c (:foreground ,fg :background ,ada-midnight))))
+     `(menu ((,c (:foreground ,white :background ,ada-midnight))))
 
      `(show-paren-match ((,c (:background ,blue :foreground ,white))))
 
      `(font-lock-string-face ((,c (:foreground ,green))))
      `(font-lock-doc-face ((,c (:foreground ,green))))
      `(font-lock-builtin-face ((,c (:foreground ,blue))))
-     `(font-lock-variable-name-face ((,c (:foreground ,fg))))
+     `(font-lock-variable-name-face ((,c (:foreground ,white))))
      `(font-lock-keyword-face ((,c (:foreground ,frost))))
      `(font-lock-comment-face ((,c (:foreground ,comment))))
-     `(font-lock-comment-delimiter-face ((,c (:foreground ,anthracite))))
+     `(font-lock-comment-delimiter-face ((,c (:foreground ,invisible))))
      `(font-lock-function-name-face ((,c (:foreground ,yellow))))
      `(font-lock-type-face ((,c (:foreground ,orange))))
      `(font-lock-constant-face ((,c (:foreground ,yellow))))
@@ -118,7 +125,7 @@
 
      `(mmm-default-submode-face ((,c (:background ,ada-midnight))))
 
-     `(header-line ((,c (:background ,background
+     `(header-line ((,c (:background ,black
                          :foreground ,comment
                          :underline ,comment
                          :weight normal))))
@@ -144,33 +151,33 @@
      `(highlight ((,c (:background ,ada-midnight :foreground ,frost))))
 
      ;; Linum
-     `(linum ((,c (:foreground ,anthracite))))
+     `(linum ((,c (:foreground ,invisible))))
+     `(linum-highlight-face ((,c (:foreground ,white))))
 
-     `(widget-field ((,c (:foreground ,fg :background ,sbt-midnight))))
+     `(widget-field ((,c (:foreground ,white :background ,sbt-midnight))))
      `(widget-button ((,c (:foreground ,yellow))))
 
      ;; Highlight quoted mode-line
      `(highlight-quoted-symbol ((,c (:foreground ,waddles))))
-     `(highlight-symbol-face ((,c (:foreground ,background :background ,diredcl))))
+     `(highlight-symbol-face ((,c (:foreground ,black :background ,diredcl))))
 
-     ;; Hl-line and hlinum-activate
-     `(linum-highlight-face ((,c (:foreground ,anthracite :background ,ada-midnight :weight bold))))
-     `(hl-line ((,c (:foreground ,fg :background ,diredcl))))
+     ;; Hl-line
+     `(hl-line ((,c (:background "#284D80"))))
 
      ;; Diff
      `(diff-header ((,c (:foreground ,yellow))))
      `(diff-file-header ((,c (:foreground ,yellow))))
-     `(diff-indicator-removed ((,c (:foreground ,background))))
+     `(diff-indicator-removed ((,c (:foreground ,black))))
      `(diff-removed ((,c (:foreground ,red))))
      `(diff-added ((,c (:foreground ,green))))
-     `(diff-indicator-added ((,c (:foreground ,background))))
+     `(diff-indicator-added ((,c (:foreground ,black))))
      `(diff-refine-removed ((,c (:foreground ,red-forest))))
      `(diff-refine-added ((,c (:foreground ,summer-flower))))
 
      `(diff-context ((,c (:foreground ,comment))))
 
      ;; Magit
-     `(git-commit-summary ((,c (:foreground ,fg))))
+     `(git-commit-summary ((,c (:foreground ,white))))
      `(git-commit-comment-file ((,c (:foreground ,green))))
      `(git-commit-comment-heading ((,c (:foreground ,frost))))
 
@@ -178,23 +185,27 @@
      `(magit-diff-added-highlight ((,c (:foreground ,green))))
      `(magit-diff-removed ((,c (:foreground ,red))))
      `(magit-diff-removed-highlight ((,c (:foreground ,red))))
-     `(magit-diff-context ((,c (:background ,background :foreground ,frost))))
-     `(magit-diff-context-highlight ((,c (:background ,background :foreground ,frost))))
-     `(magit-section-highlight ((,c (:background ,background))))
+     `(magit-diff-context ((,c (:background ,black :foreground ,frost))))
+     `(magit-diff-context-highlight ((,c (:background ,black :foreground ,frost))))
+     `(magit-section-highlight ((,c (:background ,black))))
      `(magit-section-heading ((,c (:foreground ,yellow :inherit nil))))
      `(magit-diff-hunk-heading ((,c (:foreground ,blue :background ,sbt-midnight))))
      `(magit-diff-hunk-heading-highlight ((,c (:foreground ,blue :background ,sbt-midnight))))
      `(magit-diff-lines-heading ((,c (:foreground ,frost :background ,sbt-midnight))))
      `(magit-blame-heading ((,c (:foreground ,blue :background ,sbt-midnight))))
      `(magit-diff-lines-heading ((,c (:foreground ,orange :background ,sbt-midnight))))
-     `(magit-diff-lines-boundary ((,c (:foreground ,fg :background ,sbt-midnight))))
-     `(magit-diff-hunk-heading-highlight ((,c (:foreground ,fg :background ,sbt-midnight))))
+     `(magit-diff-lines-boundary ((,c (:foreground ,white :background ,sbt-midnight))))
+     `(magit-diff-hunk-heading-highlight ((,c (:foreground ,white :background ,sbt-midnight))))
+
+     ;; Monky
+     `(monky-diff-add ((,c (:foreground ,green))))
+     `(monky-diff-del ((,c (:foreground ,red))))
 
      ;; Org-mode
      `(org-tag                      ((,c (:foreground ,yellow :bold nil))))
      `(org-ellipsis                 ((,c (:inherit hs-face :underline nil))))
      `(org-link                     ((,c (:foreground ,frost :underline ,diredcl))))
-     `(org-hide                     ((,c (:foreground ,background))))
+     `(org-hide                     ((,c (:foreground ,black))))
      `(org-table                    ((,c (:foreground ,yellow))))
      `(org-quote                    ((,c (:slant italic :foreground ,grey :background ,current-line))))
      `(org-document-info            ((,c (:foreground ,orange))))
@@ -209,11 +220,11 @@
      `(org-level-2                  ((,c (:foreground ,green))))
      `(org-level-3                  ((,c (:foreground ,blue))))
      `(org-level-4                  ((,c (:foreground ,frost))))
-     `(org-level-5                  ((,c (:foreground ,fg))))
-     `(org-level-6                  ((,c (:foreground ,fg))))
+     `(org-level-5                  ((,c (:foreground ,white))))
+     `(org-level-6                  ((,c (:foreground ,white))))
      `(org-code                     ((,c (:foreground ,orange))))
-     `(org-column                   ((,c (:background ,background))))
-     `(org-column-title             ((,c (:background ,background :foreground ,comment))))
+     `(org-column                   ((,c (:background ,black))))
+     `(org-column-title             ((,c (:background ,black :foreground ,comment))))
      `(org-verbatim                 ((,c (:foreground ,diredcl))))
      `(org-formula                  ((,c (:foreground ,orange))))
      `(org-list-dt                  ((,c (:foreground ,orange))))
@@ -228,14 +239,14 @@
      `(org-checkbox-statistics-todo ((,c (:inherit org-todo))))
      `(org-checkbox-statistics-done ((,c (:inherit org-done))))
 
-     `(org-habit-clear-face ((,c (:background ,background :foreground ,frost :underline t))))
-     `(org-habit-clear-future-face ((,c (:background ,background :underline t :foreground ,frost))))
-     `(org-habit-ready-face ((,c (:background ,background :foreground ,green :underline t))))
-     `(org-habit-ready-future-face ((,c (:background ,background :underline t :foreground ,green))))
-     `(org-habit-alert-face ((,c (:background ,background :underline t :foreground ,yellow))))
-     `(org-habit-alert-future-face ((,c (:background ,background :underline t :foreground ,yellow))))
-     `(org-habit-overdue-face ((,c (:background ,background :underline t :foreground ,red))))
-     `(org-habit-overdue-future-face ((,c (:background ,background :underline t :foreground ,red))))
+     `(org-habit-clear-face ((,c (:background ,black :foreground ,frost :underline t))))
+     `(org-habit-clear-future-face ((,c (:background ,black :underline t :foreground ,frost))))
+     `(org-habit-ready-face ((,c (:background ,black :foreground ,green :underline t))))
+     `(org-habit-ready-future-face ((,c (:background ,black :underline t :foreground ,green))))
+     `(org-habit-alert-face ((,c (:background ,black :underline t :foreground ,yellow))))
+     `(org-habit-alert-future-face ((,c (:background ,black :underline t :foreground ,yellow))))
+     `(org-habit-overdue-face ((,c (:background ,black :underline t :foreground ,red))))
+     `(org-habit-overdue-future-face ((,c (:background ,black :underline t :foreground ,red))))
 
      `(org-scheduled-today ((,c (:foreground ,green))))
      `(org-scheduled-previously ((,c (:foreground ,orange))))
@@ -258,7 +269,7 @@
      ;; Hi
      `(hi-green-b ((,c (:foreground ,green))))
      `(hi-yellow-b ((,c (:foreground ,yellow))))
-     `(hi-yellow ((,c (:foreground ,background :background ,yellow))))
+     `(hi-yellow ((,c (:foreground ,black :background ,yellow))))
      `(hi-red-b ((,c (:foreground ,red))))
 
      ;; Wgrep
@@ -304,8 +315,8 @@
 
      ;; SQL*Plus
      `(sqlplus-table-head-face ((,c (:foreground ,yellow))))
-     `(sqlplus-table-even-rows-face ((,c (:foreground ,fg :background ,ada-midnight))))
-     `(sqlplus-table-odd-rows-face ((,c (:foreground ,fg))))
+     `(sqlplus-table-even-rows-face ((,c (:foreground ,white :background ,ada-midnight))))
+     `(sqlplus-table-odd-rows-face ((,c (:foreground ,white))))
 
      ;; Rainbow-delimiters
      `(rainbow-delimiters-depth-1-face ((,c (:foreground ,green))))
@@ -320,8 +331,8 @@
      `(rainbow-delimiters-depth-10-face ((,c (:foreground ,yellow))))
 
      ;; Company-mode
-     `(company-tooltip ((,c (:foreground ,fg :background ,ada-midnight))))
-     `(company-tooltip-selection ((,c (:foreground ,fg :background ,sbt-midnight))))
+     `(company-tooltip ((,c (:foreground ,white :background ,ada-midnight))))
+     `(company-tooltip-selection ((,c (:foreground ,white :background ,sbt-midnight))))
      `(company-scrollbar-fg ((,c (:background ,ada-midnight))))
      `(company-scrollbar-bg ((,c (:background ,sbt-midnight))))
      `(company-tooltip-common ((,c (:foreground ,yellow))))
@@ -332,7 +343,7 @@
      ;; Elfeed
      `(elfeed-search-feed-face ((,c (:foreground ,comment))))
      `(elfeed-search-tag-face ((,c (:foreground ,green))))
-     `(elfeed-search-unread-title-face ((,c (:foreground ,fg))))
+     `(elfeed-search-unread-title-face ((,c (:foreground ,white))))
      `(elfeed-search-date-face ((,c (:foreground ,diredcl))))
 
      ;; Flycheck
@@ -343,9 +354,9 @@
 
      ;; message
      `(message-header-name ((,c (:foreground ,comment))))
-     `(message-header-subject ((,c (:foreground ,fg))))
-     `(message-header-to ((,c (:foreground ,fg))))
-     `(message-header-other ((,c (:foreground ,fg))))
+     `(message-header-subject ((,c (:foreground ,white))))
+     `(message-header-to ((,c (:foreground ,white))))
+     `(message-header-other ((,c (:foreground ,white))))
      `(shr-link ((,c (:foreground ,frost :underline t))))
 
      ;; erc
@@ -361,15 +372,19 @@
      `(eshell-ls-executable ((,c (:foreground ,green))))
      `(eshell-ls-directory ((,c (:foreground ,blue))))
      `(eshell-ls-symlink ((,c (:foreground ,waddles))))
-     `(eshell-ls-readonly ((,c (:foreground ,anthracite))))
+     `(eshell-ls-readonly ((,c (:foreground ,invisible))))
      `(eshell-ls-missing ((,c (:foreground ,red))))
      `(eshell-ls-special ((,c (:foreground ,comment :underline t))))
+
+     `(epe-remote-face ((,c (:foreground ,comment))))
+     `(epe-dir-face ((,c (:foreground ,blue))))
+     `(epe-symbol-face ((,c (:foreground ,invisible))))
 
      ;; dired
      `(dired-directory ((,c (:foreground ,blue))))
      `(dired-git-face ((,c (:foreground ,red))))
-     `(dired-ignored ((,c (:foreground ,anthracite))))
-     `(dired-filetype-omit ((,c (:foreground ,anthracite))))
+     `(dired-ignored ((,c (:foreground ,invisible))))
+     `(dired-filetype-omit ((,c (:foreground ,invisible))))
      `(dired-filetype-common ((,c (:foreground ,yellow))))
      `(dired-filetype-execute ((,c (:foreground ,green))))
      `(dired-filetype-source ((,c (:foreground ,orange))))
@@ -377,15 +392,15 @@
      `(dired-filetype-link ((,c (:foreground ,blue :underline t))))
      `(dired-flagged ((,c (:foreground ,red :underline t))))
      `(dired-marked ((,c (:foreground ,yellow :underline t))))
-     `(dired-subtree-depth-1-face ((,c (:background ,background))))
-     `(dired-subtree-depth-2-face ((,c (:background ,background))))
-     `(dired-subtree-depth-3-face ((,c (:background ,background))))
-     `(dired-subtree-depth-4-face ((,c (:background ,background))))
-     `(dired-subtree-depth-5-face ((,c (:background ,background))))
-     `(dired-subtree-depth-6-face ((,c (:background ,background))))
-     `(dired-subtree-depth-7-face ((,c (:background ,background))))
-     `(dired-subtree-depth-8-face ((,c (:background ,background))))
-     `(dired-subtree-depth-9-face ((,c (:background ,background))))
+     `(dired-subtree-depth-1-face ((,c (:background ,black))))
+     `(dired-subtree-depth-2-face ((,c (:background ,black))))
+     `(dired-subtree-depth-3-face ((,c (:background ,black))))
+     `(dired-subtree-depth-4-face ((,c (:background ,black))))
+     `(dired-subtree-depth-5-face ((,c (:background ,black))))
+     `(dired-subtree-depth-6-face ((,c (:background ,black))))
+     `(dired-subtree-depth-7-face ((,c (:background ,black))))
+     `(dired-subtree-depth-8-face ((,c (:background ,black))))
+     `(dired-subtree-depth-9-face ((,c (:background ,black))))
 
    ;;; dired+
      `(diredp-dir-heading ((,c (:foreground ,red))))
@@ -400,38 +415,38 @@
      `(diredp-read-priv ((,c (:foreground ,red))))
      `(diredp-write-priv ((,c (:foreground ,yellow))))
      `(diredp-exec-priv ((,c (:foreground ,green))))
-     `(diredp-no-priv ((,c (:foreground ,fg))))
+     `(diredp-no-priv ((,c (:foreground ,white))))
      `(diredp-rare-priv ((,c (:foreground ,waddles))))
-     `(diredp-flag-mark ((,c (:foreground ,background))))
-     `(diredp-flag-mark-line ((,c (:foreground ,background :background ,yellow))))
+     `(diredp-flag-mark ((,c (:foreground ,black))))
+     `(diredp-flag-mark-line ((,c (:foreground ,black :background ,yellow))))
      `(diredp-mode-line-marked ((,c (:foreground ,yellow))))
-     `(diredp-deletion ((,c (:foreground ,background :background ,red))))
-     `(diredp-deletion-file-name ((,c (:foreground ,background :background ,red))))
+     `(diredp-deletion ((,c (:foreground ,black :background ,red))))
+     `(diredp-deletion-file-name ((,c (:foreground ,black :background ,red))))
      `(diredp-mode-line-flagged ((,c (:foreground ,red))))
 
      ;; ido
      `(minibuffer-prompt ((,c (:foreground ,diredcl))))
-     `(ido-first-match ((,c (:bold t :foreground ,fg))))
-     `(ido-only-match ((,c (:bold t :foreground ,fg))))
+     `(ido-first-match ((,c (:bold t :foreground ,white))))
+     `(ido-only-match ((,c (:bold t :foreground ,white))))
      `(ido-subdir ((,c (:foreground ,frost))))
      `(ido-virtual ((,c (:foreground ,comment))))
      `(ido-vertical-match-face ((,c (:underline ,diredcl))))
 
      ;; ivy
-     `(ivy-current-match ((,c (:inherit highlight))))
-     `(ivy-prompt-match ((,c (:bold t :foreground ,fg))))
+     `(ivy-current-match ((,c (:foreground "#FFCA00"))))
+     `(ivy-prompt-match ((,c (:bold t :foreground ,white))))
      `(ivy-confirm-face ((,c (:underline ,diredcl))))
 
      `(ivy-virtual ((,c (:foreground ,orange))))
-     `(ivy-remote ((,c (:foreground ,fg :slant italic))))
+     `(ivy-remote ((,c (:foreground ,white :slant italic))))
      `(ivy-cursor ((,c (:foreground ,comment))))
      `(ivy-action ((,c (:foreground ,yellow))))
      `(ivy-highlight-face ((,c (:foreground ,orange))))
-     `(ivy-minibuffer-match-face-1 ((,c (:foreground ,fg))))
+     `(ivy-minibuffer-match-face-1 ((,c (:foreground ,white))))
      `(ivy-minibuffer-match-face-2 ((,c (:underline ,red))))
      `(ivy-minibuffer-match-face-3 ((,c (:underline ,orange))))
      `(ivy-minibuffer-match-face-4 ((,c (:underline ,yellow))))
-     `(swiper-match-face-1 ((,c (:foreground ,fg))))
+     `(swiper-match-face-1 ((,c (:foreground ,white))))
      `(swiper-match-face-2 ((,c (:underline ,red))))
      `(swiper-match-face-3 ((,c (:underline ,orange))))
      `(swiper-match-face-4 ((,c (:underline ,yellow))))
@@ -443,7 +458,7 @@
      `(yas-field-highlight-face ((,c (:background ,ada-midnight))))
 
      ;; hackernews
-     `(hackernews-score-face ((,c (:foreground ,fg))))
+     `(hackernews-score-face ((,c (:foreground ,white))))
      `(hackernews-link-face ((,c (:foreground ,green))))
      `(hackernews-comment-count-face ((,c (:foreground ,red)))))))
 
