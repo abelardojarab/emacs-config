@@ -68,12 +68,12 @@
 
 ;; Use Cask to fetch packages
 (when (file-exists-p "~/.cask/cask.el")
-    (require 'cask "~/.cask/cask.el")
-    (cask-initialize)
+  (require 'cask "~/.cask/cask.el")
+  (cask-initialize)
 
-    (use-package pallet
-      :load-path (lambda () (expand-file-name "pallet/" user-emacs-directory))
-      :config (pallet-mode t)))
+  (use-package pallet
+    :load-path (lambda () (expand-file-name "pallet/" user-emacs-directory))
+    :config (pallet-mode t)))
 
 ;; Essential packages
 (use-package async               :defer t :load-path (lambda () (expand-file-name "async/" user-emacs-directory)))
@@ -106,6 +106,13 @@
 (use-package tabbar              :defer t :load-path (lambda () (expand-file-name "tabbar/" user-emacs-directory)))
 (use-package xml-rpc             :defer t :load-path (lambda () (expand-file-name "xml-rpc/" user-emacs-directory)))
 (use-package yaxception          :defer t :load-path (lambda () (expand-file-name "yaxception/" user-emacs-directory)))
+
+;; Paradox
+(use-package paradox
+  :defer t
+  :bind (("C-x C-u" . paradox-upgrade-packages))
+  :config (setq paradox-execute-asynchronously t)
+  :commands (paradox-upgrade-packages paradox-list-packages))
 
 (provide 'setup-package)
 ;;; setup-package.el ends here

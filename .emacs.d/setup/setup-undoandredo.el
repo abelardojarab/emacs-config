@@ -30,20 +30,23 @@
 
 ;; Better undo
 (use-package undo-tree
+  :defer 10
   :bind (("C-S-z" . undo-tree-redo)
          ("C-z"   . undo-tree-undo)
          ("<undo>" . undo-tree-undo)
          :map ctl-x-map
          ("u"     . undo-tree-undo))
   :diminish undo-tree-mode
+  :init (global-undo-tree-mode t)
+  :commands global-undo-tree-mode
   :config (progn
-            (setq undo-no-redo t)
-            (setq undo-tree-visualizer-diff t)
-            (setq undo-tree-visualizer-timestamps t)
-            (setq undo-tree-auto-save t)
-            (setq undo-tree-history-directory-alist
-                  '((".*" . "~/.emacs.cache/undo-tree")))
-            (global-undo-tree-mode)))
+            (setq undo-no-redo t
+                  undo-tree-visualizer-diff       t
+                  undo-tree-visualizer-timestamps t
+                  undo-tree-auto-save             t
+                  undo-tree-auto-save-history     t
+                  undo-tree-history-directory-alist
+                  '((".*" . "~/.emacs.cache/undo-tree")))))
 
 (provide 'setup-undoandredo)
 ;;; setup-undoandredo.el ends here
