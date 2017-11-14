@@ -60,6 +60,18 @@
 (declare-function cua-delete-region "cua-base")
 (declare-function cua--fallback "cua-base")
 
+(declare-function subword-kill "subword")
+(declare-function subword-forward "subword")
+(declare-function subword-backward "subword")
+
+(declare-function hungry-delete-backward "hungry-delete")
+(declare-function hungry-delete-forward "hungry-delete")
+
+(declare-function evil-get-register "evil-common")
+(declare-function evil-set-register "evil-common")
+(defvar evil-this-register)
+
+
 ;;; backport for older emacsen
 
 ;; introduced in 24.3
@@ -6465,7 +6477,7 @@ Note: prefix argument is shown after the example in
               (kill-append sp-last-kill-whitespace nil)))))))))
 
 (defun sp--cleanup-after-kill ()
-  (unless (looking-back "^[\t\s]+")
+  (unless (save-match-data (looking-back "^[\t\s]+" (1- (line-beginning-position))))
     (let ((bdel (save-excursion
                   (when (sp--looking-back-p " " 1)
                     (skip-chars-backward " \t")
@@ -8762,10 +8774,6 @@ string delimiter enclosing this string."
 This is the case if `subword-mode' is enabled and
 `sp-use-subword' is non-nil."
   (and sp-use-subword (bound-and-true-p subword-mode)))
-
-(declare-function subword-kill "subword")
-(declare-function subword-forward "subword")
-(declare-function subword-backward "subword")
 
 (defun sp--kill-word (&optional n)
   "Kill N words or subwords."
