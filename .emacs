@@ -18,11 +18,12 @@
     (setq user-emacs-directory "~/workspace/emacs-config/.emacs.d"))
 
 ;; Only utilize local files
-(let ((file-name-handler-alist nil))
+(let ((file-name-handler-alist nil)
+      ;; CEDET
+      (byte-compile-warnings nil))
 
   ;; Basics
   (add-to-list 'load-path (expand-file-name "elisp/" user-emacs-directory))
-  (add-to-list 'load-path (expand-file-name "dadams/" user-emacs-directory))
   (add-to-list 'load-path (expand-file-name "setup/" user-emacs-directory))
   (add-to-list 'load-path (expand-file-name "use-package/" user-emacs-directory))
 
@@ -31,30 +32,6 @@
 
   ;; Setup functions
   (require 'setup-functions)
-
-  ;; CEDET
-  (setq byte-compile-warnings nil)
-
-  (custom-set-variables
-   ;; custom-set-variables was added by Custom.
-   ;; If you edit it by hand, you could mess it up, so be careful.
-   ;; Your init file should contain only one such instance.
-   ;; If there is more than one, they won't work right.
-   '(ecb-options-version "2.50")
-   '(ecb-source-path
-     (quote
-      (("~/workspace/Documents" "Documents")
-       ("~/Dropbox/Documents" "Documents")
-       ("~/workspace/emacsfull" "Emacs")
-       ("~/workspace" "Workspace")
-       ("~/" "Home")
-       ("/" "File System"))))
-   '(ede-locate-setup-options (quote (ede-locate-global ede-locate-locate)))
-   '(ede-project-directories (quote ("~/workspace")))
-   '(initial-scratch-message
-     ";; This buffer is for notes you don't want to save, and for Lisp evaluation.
-;; If you want to create a file, visit that file with 【▤】【o】,
-;; then enter the text in that file's own buffer."))
 
   ;; Setup customs
   (require 'setup-customs)
