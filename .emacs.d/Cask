@@ -185,6 +185,7 @@
 ;; (depends-on "irony-mode")
 (depends-on "isearch+")
 (depends-on "isearch-prop")
+(depends-on "ivy")
 (depends-on "ivy-rich")
 ;; (depends-on "jar")
 (depends-on "jedi")
