@@ -50,6 +50,11 @@
          ("C-z"   . helm-select-action))
   :config (progn
 
+            ;; No idea why here find-file is set to nil (so it uses the native find-file
+            ;; for Emacs. This makes stuff like (find-file (read-file-name ...)) work with
+            ;; Helm again.
+            (add-to-list 'helm-completing-read-handlers-alist '(find-file . helm-completing-read-symbols))
+
             (defadvice helm-buffers-sort-transformer (around ignore activate)
               (setq ad-return-value (ad-get-arg 0)))
 

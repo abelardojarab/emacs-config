@@ -504,9 +504,7 @@
   :if (executable-find "git")
   :diminish gist-list
   :commands (gist-list gist-region-or-buffer)
-  :load-path (lambda () (expand-file-name "gist/" user-emacs-directory))
-  :bind (("M-s M-o" . gist-list)
-         ("M-s M-s" . gist-region-or-buffer)))
+  :load-path (lambda () (expand-file-name "gist/" user-emacs-directory)))
 
 ;; git-timemachine
 (use-package git-timemachine
@@ -540,6 +538,10 @@
 ;; Show blame for current line
 (use-package git-messenger
   :if (executable-find "git")
+  :commands (git-messenger:popup-message)
+  :config (progn
+            (setq git-messenger:show-detail t)
+            (define-key git-messenger-map (kbd "RET") 'git-messenger:popup-close))
   :load-path (lambda () (expand-file-name "git-messenger/" user-emacs-directory)))
 
 ;; Show git state for individual lines on the margin
