@@ -357,6 +357,7 @@
   :after (helm pass)
   :load-path (lambda () (expand-file-name "helm-pass/" user-emacs-directory)))
 
+;; helm ctest
 (use-package helm-ctest
   :defer t
   :if (executable-find "ctest")
