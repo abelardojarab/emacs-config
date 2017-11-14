@@ -500,9 +500,13 @@
 
 ;; gist
 (use-package gist
-  :demand t
+  :defer t
   :if (executable-find "git")
-  :load-path (lambda () (expand-file-name "gist/" user-emacs-directory)))
+  :diminish gist-list
+  :commands (gist-list gist-region-or-buffer)
+  :load-path (lambda () (expand-file-name "gist/" user-emacs-directory))
+  :bind (("M-s M-o" . gist-list)
+         ("M-s M-s" . gist-region-or-buffer)))
 
 ;; git-timemachine
 (use-package git-timemachine
