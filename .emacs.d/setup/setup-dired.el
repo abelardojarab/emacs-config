@@ -33,10 +33,12 @@
           ("C-c C-d" . dired-filter-by-directory)
           ("C-c C-f" . dired-filter-by-file)))
   :config (progn
+
             ;; extra hooks
             (defun my/dired-mode-hook ()
               (setq-local truncate-lines t)
               (dired-omit-mode 1)
+              (dired-hide-details-mode t)
               (hl-line-mode 1)
               (projectile-mode 1))
             (add-hook 'dired-mode-hook #'my/dired-mode-hook)
