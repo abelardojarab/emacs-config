@@ -7,7 +7,7 @@
 ;; Maintainer: Jason R. Blevins <jblevins@xbeta.org>
 ;; Created: May 24, 2007
 ;; Version: 2.4-dev
-;; Package-Version: 20171114.805
+;; Package-Version: 20171114.1801
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5"))
 ;; Keywords: Markdown, GitHub Flavored Markdown, itex
 ;; URL: https://jblevins.org/projects/markdown-mode/
@@ -2697,6 +2697,11 @@ inline code fragments and code blocks."
   "Face for preformatted text."
   :group 'markdown-faces)
 
+(defface markdown-table-face
+  '((t (:inherit (markdown-code-face))))
+  "Face for tables."
+  :group 'markdown-faces)
+
 (defface markdown-language-keyword-face
   '((t (:inherit font-lock-type-face)))
   "Face for programming language identifiers."
@@ -2913,6 +2918,7 @@ Depending on your font, some reasonable choices are:
                                             (5 markdown-markup-properties nil t)))
     (markdown-match-gfm-close-code-blocks . ((0 markdown-markup-properties)))
     (markdown-fontify-gfm-code-blocks)
+    (markdown-fontify-tables)
     (markdown-match-fenced-start-code-block . ((1 markdown-markup-properties)
                                                (2 markdown-markup-properties nil t)
                                                (3 markdown-language-keyword-properties nil t)
@@ -4301,6 +4307,15 @@ SEQ may be an atom or a sequence."
         (when (match-end 6)
           (add-text-properties
            (match-beginning 6) (match-end 6) right-markup-props))))
+    t))
+
+(defun markdown-fontify-tables (last)
+  (when (and (re-search-forward "|" last t)
+             (markdown-table-at-point-p))
+    (font-lock-append-text-property
+     (line-beginning-position) (min (1+ (line-end-position)) (point-max))
+     'face 'markdown-table-face)
+    (forward-line 1)
     t))
 
 (defun markdown-fontify-blockquotes (last)
