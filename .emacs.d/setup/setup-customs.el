@@ -415,7 +415,7 @@
 (setq-default custom-file-x "~/.emacs.cache/custom.el")
 (ignore-errors
     (if (file-exists-p custom-file-x)
-        (load custom-file-x)
+        (load custom-file-x :noerror :nomessage)
         ;; http://stackoverflow.com/questions/14071991/how-to-create-an-empty-file-by-elisp
         (write-region "" nil custom-file-x)))
 (setq-default custom-file "~/.emacs.cache/custom.el")
