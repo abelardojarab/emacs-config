@@ -30,7 +30,7 @@ to perform almost all of their daily version control tasks directly from
 within Emacs.  While many fine Git clients exist, only Magit and Git
 itself deserve to be called porcelains.
 
-     This manual is for Magit version 2.11.0 (2.11.0-242-ge0af5b39e+1).
+     This manual is for Magit version 2.11.0 (2.11.0-249-gcf6d30833+1).
 
      Copyright (C) 2015-2017 Jonas Bernoulli <jonas@bernoul.li>
 
@@ -3899,8 +3899,8 @@ having to type out the command name.
 ‘M-x magit-blame-reverse’     (‘magit-blame-reverse’)
 
      This command augments each line or chunk of lines in the current
-     file- or blob-visiting buffer with information about what
-     subsequent commit removes these lines.
+     file- or blob-visiting buffer with information about the last
+     revision in which a line still existed.
 
      Like ‘magit-blame’, this command can be used recursively.
 
@@ -3910,7 +3910,7 @@ having to type out the command name.
      appropriate infix arguments in a popup buffer.
 
    The above commands are also bound in the keymaps
-‘magit-blame-mode-map and ~magit-blob-mode-map’, and in the popup
+‘magit-blame-mode-map’ and ‘magit-blob-mode-map’, and in the popup
 ‘magit-file-popup’.  Once Magit-Blame mode is enabled in a file-visiting
 buffer, you can use ‘B’ to show the blaming popup, ‘b’ to blame
 recursively going backward in time, and ‘f’ to blame recursively going

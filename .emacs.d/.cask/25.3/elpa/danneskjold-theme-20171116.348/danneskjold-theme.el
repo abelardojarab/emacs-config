@@ -101,8 +101,8 @@
     (custom-theme-set-faces
      'danneskjold
      `(default ((,c (:foreground ,white :background ,black))))
-     `(fringe ((,c (:background ,black))))
-     `(region ((,c (:background ,invisible))))
+     `(fringe ((,c (:foreground ,invisible :background ,black))))
+     `(region ((,c (:foreground ,invisible :background ,white))))
      `(button ((,c (:foreground ,frost :underline t :weight normal))))
      `(link ((,c (:foreground ,frost :underline t))))
      `(menu ((,c (:foreground ,white :background ,ada-midnight))))
@@ -200,7 +200,7 @@
      `(monky-diff-del ((,c (:foreground ,red))))
 
      ;; Org-mode
-     `(org-tag                      ((,c (:foreground ,yellow :bold nil))))
+     `(org-tag                      ((,c (:foreground ,invisible :bold nil))))
      `(org-ellipsis                 ((,c (:inherit hs-face :underline nil))))
      `(org-link                     ((,c (:foreground ,frost :underline ,diredcl))))
      `(org-hide                     ((,c (:foreground ,black))))
@@ -213,7 +213,7 @@
      `(org-block-begin-line         ((,c (:foreground ,invisible))))
      `(org-block-end-line           ((,c (:inherit org-block-begin-line))))
      `(org-block-background         ((,c (:background ,current-line))))
-     `(org-archived                 ((,c (:foreground ,grey-.5))))
+     `(org-archived                 ((,c (:foreground ,invisible))))
      `(org-document-title           ((,c (:foreground ,blue))))
      `(org-level-1                  ((,c (:foreground ,red))))
      `(org-level-2                  ((,c (:foreground ,green))))
@@ -237,6 +237,10 @@
      `(org-special-keyword          ((,c (:foreground ,orange))))
      `(org-checkbox-statistics-todo ((,c (:inherit org-todo))))
      `(org-checkbox-statistics-done ((,c (:inherit org-done))))
+
+     ;; comint
+     `(comint-highlight-input ((,c (:foreground ,white :bold t))))
+     `(comint-highlight-prompt ((,c (:foreground ,invisible))))
 
      `(org-habit-clear-face ((,c (:background ,black :foreground ,frost :underline t))))
      `(org-habit-clear-future-face ((,c (:background ,black :underline t :foreground ,frost))))
@@ -461,7 +465,7 @@
      `(swiper-match-face-4 ((,c (:underline ,yellow))))
 
      ;; vertical-border
-     `(vertical-border ((,c (:foreground ,black))))
+     `(vertical-border ((,c (:foreground "#223959"))))
 
      ;; yas
      `(yas-field-highlight-face ((,c (:background ,ada-midnight))))
