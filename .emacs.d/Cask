@@ -235,6 +235,7 @@
 (depends-on "ox-ioslide")
 (depends-on "ox-pandoc")
 (depends-on "ox-twbs")
+(depends-on "quick-peek")
 (depends-on "page-break-lines")
 (depends-on "pallet")
 (depends-on "pandoc-mode")

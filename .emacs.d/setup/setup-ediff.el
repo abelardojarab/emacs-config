@@ -27,14 +27,36 @@
 ;; ediff
 (use-package ediff
   :defer t
-  :commands my/ediff-dwim
-  :init (progn
-          (defun my/setup-ediff ()
-            (interactive)
-            (ediff-setup-keymap)
-            (define-key ediff-mode-map (kbd "<down>") #'ediff-next-difference)
-            (define-key ediff-mode-map (kbd "<up>")   #'ediff-previous-difference))
-          (add-hook 'ediff-mode-hook 'my/setup-ediff))
+  :commands (ediff-current-file
+             my/ediff-dwim
+             my/update-modified-flag)
+  :config (progn
+
+            (defun my/update-modified-flag ()
+              "Update the buffer modified flag."
+              (interactive)
+              (let* ((buffer (current-buffer))
+                     (basefile
+                      (or (buffer-file-name buffer)
+                          (error "Buffer %s has no associated file" buffer)))
+                     (tempfile (make-temp-file "buffer-content-")))
+                (with-current-buffer buffer
+                  (save-restriction
+                    (widen)
+                    (write-region (point-min) (point-max) tempfile nil 'silent)))
+                (if (= (call-process "diff" nil nil nil basefile tempfile) 0)
+                    (progn
+                      (set-buffer-modified-p nil)
+                      (message "Buffer matches file"))
+                  (message "Buffer doesn't match file"))
+                (delete-file tempfile)))
+
+            (defun my/setup-ediff ()
+              (interactive)
+              (ediff-setup-keymap)
+              (define-key ediff-mode-map (kbd "<down>") #'ediff-next-difference)
+              (define-key ediff-mode-map (kbd "<up>")   #'ediff-previous-difference))
+            (add-hook 'ediff-mode-hook 'my/setup-ediff))
   :config (progn
             (setq ediff-window-setup-function 'ediff-setup-windows-plain
 

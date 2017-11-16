@@ -81,10 +81,12 @@
                         (flyspell-mode t)))
 
             ;; http://stackoverflow.com/questions/14275122/editing-markdown-pipe-tables-in-emacs
-            (defun my/cleanup-org-tables ()
+            (defun my/cleanup-org-tables (arg)
               (save-excursion
                 (goto-char (point-min))
-                (while (search-forward "-+-" nil t) (replace-match "-|-"))))
+                (while (search-forward "-+-" nil t) (replace-match "-|-")))
+              (save-buffer arg)
+              (set-buffer-modified-p nil))
             (add-hook 'markdown-mode-hook
                       (lambda () (add-hook 'after-save-hook 'my/cleanup-org-tables nil t)))
 

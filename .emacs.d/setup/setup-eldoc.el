@@ -31,28 +31,32 @@
           (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
           (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
           (add-hook 'c-mode-common-hook 'turn-on-eldoc-mode)
-	  (setq eldoc-idle-delay    0.8
-		eldoc-argument-case 'eldoc-argument-list)
+      (setq eldoc-idle-delay    0.8
+        eldoc-argument-case 'eldoc-argument-list)
 
-	  ;; http://emacsredux.com/blog/2016/03/02/pimp-my-minibuffer/
-	  (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
+      ;; http://emacsredux.com/blog/2016/03/02/pimp-my-minibuffer/
+      (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
 
-	  ;; Use gtags to show documentation
-	  (add-hook 'c-mode-common-hook
-		    (lambda ()
-		      (when (and (executable-find "global")
-				 (projectile-project-p)
-				 (file-exists-p (concat (projectile-project-root)
-							"GTAGS")))
-			(setq-local eldoc-documentation-function #'ggtags-eldoc-function))))))
+      ;; Use gtags to show documentation
+      (add-hook 'c-mode-common-hook
+            (lambda ()
+              (when (and (executable-find "global")
+                 (projectile-project-p)
+                 (file-exists-p (concat (projectile-project-root)
+                            "GTAGS")))
+            (setq-local eldoc-documentation-function #'ggtags-eldoc-function))))))
 
 (use-package inline-docs
   :defer t
   :load-path (lambda () (expand-file-name "inline-docs/" user-emacs-directory))
   :defines inline-docs-overlay)
 
+(use-package quick-peek
+  :load-path (lambda () (expand-file-name "quick-peek/" user-emacs-directory)))
+
 (use-package eldoc-overlay-mode
   :defer t
+  :after (eldoc quick-peek)
   :commands eldoc-overlay-mode
   :diminish eldoc-overlay-mode
   :load-path (lambda () (expand-file-name "eldoc-overlay-mode/" user-emacs-directory)))
