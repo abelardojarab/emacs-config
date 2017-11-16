@@ -16,7 +16,6 @@
 (let ((c '((class color) (min-colors 89)))
       (background     "#000000")
       (fg             "#ffffff")
-      (vsubtle        "#556172")
 
       ;; doom-molokai-colors
       ;; https://github.com/hlissner/emacs-doom-theme/blob/master/doom-molokai-theme.el
@@ -64,7 +63,6 @@
          (search-rest-bg violet)
          (search-rest-fg black)
          (highlight      orange)
-         (vertical-bar   grey-2)
          (current-line   "#1F1F1F")
          (selection      "#535556")
          (builtin        orange)
@@ -211,7 +209,8 @@
      `(org-document-info            ((,c (:foreground ,orange))))
      `(org-document-info-keyword    ((,c (:foreground ,grey-1))))
      `(org-meta-line                ((,c (:foreground ,comment))))
-     `(org-block-begin-line         ((,c (:foreground ,vsubtle))))
+     `(org-block                    ((,c ())))
+     `(org-block-begin-line         ((,c (:foreground ,invisible))))
      `(org-block-end-line           ((,c (:inherit org-block-begin-line))))
      `(org-block-background         ((,c (:background ,current-line))))
      `(org-archived                 ((,c (:foreground ,grey-.5))))
@@ -248,16 +247,19 @@
      `(org-habit-overdue-face ((,c (:background ,black :underline t :foreground ,red))))
      `(org-habit-overdue-future-face ((,c (:background ,black :underline t :foreground ,red))))
 
+     `(org-scheduled ((,c (:foreground ,white))))
+     `(org-warning ((,c (:foreground ,orange))))
      `(org-scheduled-today ((,c (:foreground ,green))))
-     `(org-scheduled-previously ((,c (:foreground ,orange))))
-     `(org-time-grid ((,c (:foreground ,comment))))
+     `(org-scheduled-previously ((,c (:foreground ,red))))
+     `(org-time-grid ((,c (:foreground ,invisible))))
 
      `(org-agenda-clocking ((,c (:foreground ,diredcl :background ,ada-midnight))))
-     `(org-agenda-date ((,c (:foreground ,blue))))
+     `(org-agenda-date ((,c (:foreground ,invisible))))
+     `(org-agenda-date-weekend ((,c (:foreground ,comment))))
      `(org-agenda-done ((,c (:foreground ,green))))
      `(org-agenda-dimmed-todo-face ((,c (:foreground ,comment))))
-     `(org-agenda-date-today ((,c (:foreground ,red))))
-     `(org-agenda-structure ((,c (:foreground ,violet))))
+     `(org-agenda-date-today ((,c (:foreground ,white))))
+     `(org-agenda-structure ((,c (:foreground ,invisible))))
      `(org-upcoming-deadline ((,c (:foreground ,violet))))
 
      `(secondary-selection ((,c (:background ,sbt-midnight))))
@@ -271,6 +273,12 @@
      `(hi-yellow-b ((,c (:foreground ,yellow))))
      `(hi-yellow ((,c (:foreground ,black :background ,yellow))))
      `(hi-red-b ((,c (:foreground ,red))))
+
+     ;; Bookmarks
+     `(bmkp-remote-file ((,c (:foreground ,green))))
+     `(bmkp-url ((,c (:foreground ,white))))
+     `(bmkp-local-directory ((,c (:foreground ,blue))))
+     `(bmkp-no-local ((,c (:foreground ,yellow :slant italic))))
 
      ;; Wgrep
      `(wgrep-face                  ((,c (:foreground ,yellow))))
@@ -403,12 +411,13 @@
      `(dired-subtree-depth-9-face ((,c (:background ,black))))
 
    ;;; dired+
+     `(diredp-date-time ((,c (:foreground ,diredcl))))
      `(diredp-dir-heading ((,c (:foreground ,red))))
      `(diredp-dir-name ((,c (:foreground ,blue))))
-     `(diredp-file-name ((,c (:foreground ,frost))))
-     `(diredp-file-suffix ((,c (:foreground ,frost))))
+     `(diredp-file-name ((,c (:foreground ,white))))
+     `(diredp-file-suffix ((,c (:foreground ,invisible))))
      `(diredp-ignored-file-name ((,c (:foreground ,comment))))
-     `(diredp-symlink ((,c (:foreground ,waddles))))
+     `(diredp-symlink ((,c (:foreground ,yellow))))
      `(diredp-number ((,c (:foreground ,yellow))))
 
      `(diredp-dir-priv ((,c (:foreground ,blue))))
@@ -452,7 +461,7 @@
      `(swiper-match-face-4 ((,c (:underline ,yellow))))
 
      ;; vertical-border
-     `(vertical-border ((,c (:foreground "#282a2e"))))
+     `(vertical-border ((,c (:foreground ,black))))
 
      ;; yas
      `(yas-field-highlight-face ((,c (:background ,ada-midnight))))

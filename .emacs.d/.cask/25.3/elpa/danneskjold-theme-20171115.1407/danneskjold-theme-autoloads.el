@@ -4,15 +4,15 @@
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
 ;;;### (autoloads nil "danneskjold-theme" "danneskjold-theme.el"
-;;;;;;  (23051 22860 715298 539000))
+;;;;;;  (23052 57607 136002 92000))
 ;;; Generated autoloads from danneskjold-theme.el
 
 (when load-file-name (add-to-list 'custom-theme-load-path (file-name-as-directory (file-name-directory load-file-name))))
 
 ;;;***
 
-;;;### (autoloads nil nil ("danneskjold-theme-pkg.el") (23051 22860
-;;;;;;  715298 539000))
+;;;### (autoloads nil nil ("danneskjold-theme-pkg.el") (23052 57607
+;;;;;;  135002 136000))
 
 ;;;***
 
