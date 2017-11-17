@@ -139,6 +139,20 @@
             (if (not (file-exists-p "~/cmake_builds"))
                 (make-directory "~/cmake_builds"))
 
+	    (defun cmake-ide--get-build-dir ()
+	      "Return the directory name to run CMake in."
+	      ;; build the directory key for the project
+	      (my/cmake-enable-ide)
+	      (let ((build-dir
+		     (expand-file-name (or (cmake-ide--build-dir-var)
+					   (cmake-ide--get-build-dir-from-hash))
+				       (cmake-ide--locate-project-dir))))
+		(when (not (file-accessible-directory-p build-dir))
+		  (cmake-ide--message "Making directory %s" build-dir)
+		  (make-directory build-dir))
+		(setq cmake-ide-build-dir build-dir)
+		(file-name-as-directory build-dir)))
+
             ;; Define cmake-ide-build-dir under ~/cmake_builds
             (defun my/cmake-enable-ide ()
               "Modify cmake-build-dir and make it point to ~/cmake_builds"
