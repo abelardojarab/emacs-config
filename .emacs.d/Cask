@@ -206,7 +206,7 @@
 (depends-on "magit")
 (depends-on "magit-gitflow")
 (depends-on "makey")
-;; (depends-on "markdown-mode")
+(depends-on "markdown-mode")
 (depends-on "math-symbol-lists")
 (depends-on "memoize")
 (depends-on "metaweblog")
