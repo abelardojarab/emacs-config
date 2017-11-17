@@ -33,10 +33,10 @@
 
 ;; Removes *Completions* from buffer after you've opened a file.
 (add-hook 'minibuffer-exit-hook
-	  '(lambda ()
-	     (let ((buffer "*Completions*"))
-	       (and (get-buffer buffer)
-		    (kill-buffer buffer)))))
+      '(lambda ()
+         (let ((buffer "*Completions*"))
+           (and (get-buffer buffer)
+            (kill-buffer buffer)))))
 
 ;; Put a nice title to the window, including filename
 (add-hook 'window-configuration-change-hook
@@ -48,16 +48,17 @@
                     (concat "/home/" user-login-name) "~"
                     (or buffer-file-name "%b"))))))
 
-;; Resize by pixels
-(setq frame-resize-pixelwise t
-      ;; Size new windows proportionally wrt other windows
-      window-combination-resize t)
-
 ;; default to maximised windows
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-;; prompt when trying to switch out of a dedicated window
-(setq switch-to-buffer-in-dedicated-window 'prompt)
+;; Resize by pixels
+(setq frame-resize-pixelwise               t
+      ;; Size new windows proportionally wrt other windows
+      window-combination-resize            t
+      ;; prompt when trying to switch out of a dedicated window
+      switch-to-buffer-in-dedicated-window 'prompt
+      ;; Treat all windows as same
+      same-window-regexps                  '("."))
 
 ;; Configure `display-buffer' behaviour for some special buffers.
 (setq display-buffer-alist
@@ -74,111 +75,13 @@
                   ))
          (display-buffer-reuse-window
           display-buffer-in-side-window)
-         (side            . bottom)
+         (side            . right)
          (reusable-frames . visible)
          (window-height   . 0.33))
         ;; Let `display-buffer' reuse visible frames for all buffers.  This must
         ;; be the last entry in `display-buffer-alist', because it overrides any
         ;; later entry with more specific actions.
         ("." nil (reusable-frames . visible))))
-
-;; creating new frames
-(defun clone-frame-1 (direction)
-  (let* ((frame (selected-frame))
-         (left (frame-parameter frame 'left))
-         (top (frame-parameter frame 'top))
-         (width (frame-width frame))
-         (height (frame-height frame))
-         (pixel-width (frame-pixel-width frame))
-         (display-width (x-display-pixel-width))
-         (x-offset 10) (y-offset 10))
-    (make-frame
-     `((left . ,(+ x-offset
-                   (min (- display-width pixel-width)
-                        (max 0 (+ left (* direction pixel-width))))))
-       (top . ,(+ y-offset top))
-       (width . ,width)
-       (height . ,height)))))
-(defun clone-frame-to-left ()
-  "Create a new frame in the same size as the current frame and
-place the new frame at the left side of the current frame."
-  (interactive)
-  (if (display-graphic-p)
-      (clone-frame-1 -1)
-    (select-frame (make-frame))))
-(defun clone-frame-to-right ()
-  "Create a new frame in the same size as the current frame and
-place the new frame at the right side of the current frame."
-  (interactive)
-  (if (display-graphic-p)
-      (clone-frame-1 1)
-    (select-frame (make-frame))))
-
-;; adjusting frame position
-(defcustom desktop-offset-left 0
-  "Left offset of the desktop in pixels"
-  :type 'number
-  :group 'frames)
-(defcustom desktop-offset-top 0
-  "Top offset of the desktop in pixels"
-  :type 'number
-  :group 'frames)
-(defcustom desktop-offset-right 0
-  "Right offset of the desktop in pixels"
-  :type 'number
-  :group 'frames)
-(defcustom desktop-offset-bottom 0
-  "Bottom offset of the desktop in pixels"
-  :type 'number
-  :group 'frames)
-(defun screen-size ()
-  (let ((screen-width 0) (screen-height 0))
-    (dolist (attrs (display-monitor-attributes-list))
-      (let* ((geometry (cdr (assq 'geometry attrs)))
-             (right (+ (nth 0 geometry) (nth 2 geometry)))
-             (bottom (+ (nth 1 geometry) (nth 3 geometry))))
-        (when (> right screen-width) (setq screen-width right))
-        (when (> bottom screen-height) (setq screen-height bottom))))
-    (list screen-width screen-height)))
-(defun fit-largest-display (position)
-  (let ((frame (selected-frame))
-        (largest-area 0) (screen (screen-size)) dimensions)
-    (dolist (attrs (display-monitor-attributes-list))
-      (let* ((geometry (cdr (assq 'geometry attrs)))
-             (left (nth 0 geometry))
-             (top (nth 1 geometry))
-             (width (nth 2 geometry))
-             (height (nth 3 geometry))
-             (area (* width height))
-             (right (+ left width))
-             (bottom (+ top height)))
-        (when (> area largest-area)
-          (setq dimensions (list left top right bottom width height)
-                largest-area area))))
-    (when dimensions
-      (let* ((frame-width (frame-pixel-width frame))
-             (left (if (eq position 'left)
-                       (max desktop-offset-left
-                            (nth 0 dimensions))
-                     (min (- (nth 0 screen) desktop-offset-right frame-width)
-                          (- (nth 2 dimensions) frame-width))))
-             (top (max desktop-offset-top (nth 1 dimensions)))
-             (height (/ (- (nth 5 dimensions)
-                           desktop-offset-top desktop-offset-bottom)
-                        (frame-char-height frame))))
-        (set-frame-position frame left top)
-        (set-frame-height frame height)))))
-(defun fit-largest-display-left ()
-  "Fit the current frame to the left end of the largest display."
-  (interactive)
-  (fit-largest-display 'left))
-(defun fit-largest-display-right ()
-  "Fit the current frame to the left end of the largest display."
-  (interactive)
-  (fit-largest-display 'right))
-
-;; Treat all windows as same
-(setq same-window-regexps '("."))
 
 ;; Prefer horizontal window splitting (new window on the right)
 ;; http://stackoverflow.com/questions/2081577/setting-emacs-split-to-horizontal
@@ -322,8 +225,8 @@ place the new frame at the right side of the current frame."
 
 ;; Window purpose
 (use-package window-purpose
-  :after helm
   :defer t
+  :after helm
   :commands purpose-mode
   :load-path (lambda () (expand-file-name "window-purpose/" user-emacs-directory))
   :init (progn
@@ -389,6 +292,7 @@ place the new frame at the right side of the current frame."
 
 ;; Helm interface to purpose
 (use-package helm-purpose
+  :defer t
   :after (helm window-purpose)
   :commands (helm-purpose-switch-buffer-with-purpose helm-purpose-switch-buffer-with-some-purpose)
   :load-path (lambda () (expand-file-name "helm-purpose/" user-emacs-directory)))
@@ -415,6 +319,7 @@ place the new frame at the right side of the current frame."
 
 ;; ace-window for switching windows, but we only call it as a subroutine from a hydra
 (use-package ace-window
+  :defer t
   :bind (:map ctl-x-map
               ("o" . ace-window))
   :load-path (lambda () (expand-file-name "ace-window/" user-emacs-directory))
@@ -441,6 +346,7 @@ place the new frame at the right side of the current frame."
 
 ;; Change window sizes based on currently open buffers and focus
 (use-package golden-ratio
+  :defer t
   :commands golden-ratio-adjust
   :load-path (lambda () (expand-file-name "golden-ratio/" user-emacs-directory)))
 
@@ -457,10 +363,10 @@ place the new frame at the right side of the current frame."
   :load-path (lambda () (expand-file-name "shackle/" user-emacs-directory))
   :commands shackle-mode
   :init (shackle-mode 1)
-  :config   (progn
+  :config (progn
               (setq shackle-lighter               ""
                     shackle-select-reused-windows nil
-                    shackle-default-alignment     'below
+                    shackle-default-alignment     'right
                     shackle-default-size          0.4)  ;; default 0.5
 
               (setq shackle-rules
@@ -470,7 +376,7 @@ place the new frame at the right side of the current frame."
                       ("*undo-tree*"             :size       0.25     :align               right)
                       ("*eshell*"                :select     t        :other               t)
                       ("*Shell Command Output*"  :select     nil)
-                      ("\\*Async Shell.*\\*"     :regexp     t        :ignore t)
+                      ("\\*Async Shell.*\\*"     :regexp     t        :ignore              t)
                       (occur-mode                :select     nil      :align               t)
                       ("*Help*"                  :select     t        :inhibit-window-quit t       :other               t)
                       ("*Completions*"           :size       0.3      :align               t)
