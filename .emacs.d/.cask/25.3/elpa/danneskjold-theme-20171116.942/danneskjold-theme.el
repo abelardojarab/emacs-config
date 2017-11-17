@@ -130,15 +130,15 @@
 
      ;; Mode-line
      `(mode-line ((,c (:background ,ada-midnight
-                                  :foreground ,comment
+                                  :foreground ,invisible
                                   :box ,(list
                                          :line-width 4
                                          :color ada-midnight)))))
      `(mode-line-inactive ((,c (:background ,sbt-midnight
-                                           :foreground ,comment
-                                           :box ,(list
-                                                  :line-width 4
-                                                  :color sbt-midnight)))))
+                                            :foreground ,invisible
+                                            :box ,(list
+                                                   :line-width 4
+                                                   :color sbt-midnight)))))
      `(mode-line-buffer-id ((,c (:foreground ,frost))))
 
      `(compilation-error ((,c (:foreground ,red))))
