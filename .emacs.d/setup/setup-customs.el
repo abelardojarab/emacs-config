@@ -308,7 +308,9 @@
     "cdefs.h"
     ;; C++ header files
     "new"
+    "cstdlib"
     "shared_ptr.h"
+    "unique_ptr.h"
     "std_mutex"
     "c++config.h")
   "List of buffers to be ignored on tabbar and when switching buffers"
