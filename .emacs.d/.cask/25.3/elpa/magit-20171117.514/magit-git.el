@@ -1185,6 +1185,12 @@ SORTBY is a key or list of keys to pass to the `--sort' flag of
 (defun magit-list-stashes (&optional format)
   (magit-git-lines "stash" "list" (concat "--format=" (or format "%gd"))))
 
+(defun magit-list-active-notes-refs ()
+  "Return notes refs according to `core.notesRef' and `notes.displayRef'."
+  (magit-git-lines "for-each-ref" "--format=%(refname)"
+                   (magit-get "core.notesRef")
+                   (magit-get-all "notes.displayRef")))
+
 (defun magit-list-notes-refnames ()
   (--map (substring it 6) (magit-list-refnames "refs/notes")))
 
@@ -1405,19 +1411,21 @@ the reference is used.  The first regexp submatch becomes the
               (magit-branch-remote  (push name remotes))
               (t                    (push name other)))))
         (setq remotes
-              (-keep (lambda (name)
-                       (string-match "\\`\\([^/]*\\)/\\(.*\\)\\'" name)
-                       (let ((r (match-string 1 name))
-                             (b (match-string 2 name)))
-                         (and (not (equal b "HEAD"))
-                              (if (equal (concat "refs/remotes/" name)
-                                         (magit-git-string
-                                          "symbolic-ref"
-                                          (format "refs/remotes/%s/HEAD" r)))
-                                  (propertize name
-                                              'face 'magit-branch-remote-head)
-                                name))))
-                     remotes))
+              (-keep
+               (lambda (name)
+                 (if (string-match "\\`\\([^/]*\\)/\\(.*\\)\\'" name)
+                     (let ((r (match-string 1 name))
+                           (b (match-string 2 name)))
+                       (and (not (equal b "HEAD"))
+                            (if (equal (concat "refs/remotes/" name)
+                                       (magit-git-string
+                                        "symbolic-ref"
+                                        (format "refs/remotes/%s/HEAD" r)))
+                                (propertize name
+                                            'face 'magit-branch-remote-head)
+                              name)))
+                   name))
+               remotes))
         (dolist (name branches)
           (let ((push (car (member (magit-get-push-branch name) remotes))))
             (when push

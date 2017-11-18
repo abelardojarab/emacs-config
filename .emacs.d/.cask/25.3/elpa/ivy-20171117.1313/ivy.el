@@ -3948,22 +3948,35 @@ EVENT gives the mouse position."
 (defvar ivy-occur-timer nil)
 (defvar counsel-grep-last-line)
 
+(defun ivy--occur-press-update-window ()
+  (cl-case (ivy-state-caller ivy-occur-last)
+    ((swiper counsel-git-grep counsel-grep counsel-ag counsel-rg)
+     (let ((window (ivy-state-window ivy-occur-last)))
+       (when (or (null (window-live-p window))
+                 (equal window (selected-window)))
+         (save-selected-window
+           (setf (ivy-state-window ivy-occur-last)
+                 (display-buffer (ivy-state-buffer ivy-occur-last)
+                                 'display-buffer-pop-up-window))))))
+
+    ((counsel-describe-function counsel-describe-variable)
+     (setf (ivy-state-window ivy-occur-last)
+           (selected-window))
+     (selected-window))))
+
+(defun ivy--occur-press-buffer ()
+  (let ((buffer (ivy-state-buffer ivy-last)))
+    (if (buffer-live-p buffer)
+        buffer
+      (current-buffer))))
+
 (defun ivy-occur-press ()
   "Execute action for the current candidate."
   (interactive)
+  (ivy--occur-press-update-window)
   (when (save-excursion
           (beginning-of-line)
           (looking-at "\\(?:./\\|    \\)\\(.*\\)$"))
-    (when (memq (ivy-state-caller ivy-occur-last)
-                '(swiper counsel-git-grep counsel-grep counsel-ag counsel-rg
-                  counsel-describe-function counsel-describe-variable))
-      (let ((window (ivy-state-window ivy-occur-last)))
-        (when (or (null (window-live-p window))
-                  (equal window (selected-window)))
-          (save-selected-window
-            (setf (ivy-state-window ivy-occur-last)
-                  (display-buffer (ivy-state-buffer ivy-occur-last)
-                                  'display-buffer-pop-up-window))))))
     (let* ((ivy-last ivy-occur-last)
            (ivy-text (ivy-state-text ivy-last))
            (str (buffer-substring
@@ -3974,7 +3987,7 @@ EVENT gives the mouse position."
            (ivy-exit 'done))
       (with-ivy-window
         (setq counsel-grep-last-line nil)
-        (with-current-buffer (ivy-state-buffer ivy-last)
+        (with-current-buffer (ivy--occur-press-buffer)
           (funcall action
                    (if (and (consp coll)
                             (consp (car coll)))
