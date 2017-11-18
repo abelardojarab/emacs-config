@@ -1589,7 +1589,8 @@ customizations apply to the current completion session."
                           (list (car source) (funcall (car source)))
                           ivy--extra-candidates))))))
       (setq ivy--extra-candidates '((original-source)))))
-  (let ((ivy-recursive-last (and (active-minibuffer-window) ivy-last))
+  (let ((inhibit-message t)
+        (ivy-recursive-last (and (active-minibuffer-window) ivy-last))
         (transformer-fn
          (plist-get ivy--display-transformers-list
                     (or caller (and (functionp collection)
@@ -3614,10 +3615,7 @@ Skip buffers that match `ivy-ignore-buffers'."
 
 (defun ivy-switch-buffer-occur ()
   "Occur function for `ivy-switch-buffer' using `ibuffer'."
-  (let* ((cand-regexp
-          (concat "\\(" (mapconcat #'regexp-quote ivy--old-cands "\\|") "\\)"))
-         (new-qualifier `((name . ,cand-regexp))))
-    (ibuffer nil (buffer-name) new-qualifier)))
+  (ibuffer nil (buffer-name) (list (cons 'name ivy--old-re))))
 
 ;;;###autoload
 (defun ivy-switch-buffer ()
@@ -3760,6 +3758,7 @@ buffer would modify `ivy-last'.")
     (define-key map (kbd "c") 'ivy-occur-toggle-calling)
     (define-key map (kbd "q") 'quit-window)
     (define-key map (kbd "R") 'read-only-mode)
+    (define-key map (kbd "C-d") 'ivy-occur-delete-candidate)
     map)
   "Keymap for Ivy Occur mode.")
 
@@ -3798,7 +3797,6 @@ When `ivy-calling' isn't nil, call `ivy-occur-press'."
 (defvar ivy-occur-grep-mode-map
   (let ((map (copy-keymap ivy-occur-mode-map)))
     (define-key map (kbd "C-x C-q") 'ivy-wgrep-change-to-wgrep-mode)
-    (define-key map (kbd "C-d") 'ivy-occur-delete-candidate)
     map)
   "Keymap for Ivy Occur Grep mode.")
 
