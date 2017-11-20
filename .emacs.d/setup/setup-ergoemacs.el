@@ -31,8 +31,9 @@
            (display-graphic-p))
   :load-path (lambda () (expand-file-name "ergoemacs-mode/" user-emacs-directory))
   :commands (ergoemacs-mode ergoemacs-mode-after-init-emacs)
-  :init (ergoemacs-mode-after-init-emacs)
+  :init (ergoemacs-mode t)
   :config (progn
+            (ergoemacs-mode-after-init-emacs)
             (setq ergoemacs-theme              "standard"
                   ergoemacs-keyboard-layout    "us"
                   ergoemacs-ignore-prev-global nil)

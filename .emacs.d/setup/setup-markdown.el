@@ -67,12 +67,12 @@
                         (setq truncate-lines t)
 
                         ;; Enable polymode minor mode
-                        ;; (polymode-minor-mode t)
+                        (polymode-minor-mode t)
 
                         ;; Org goodies; no longer needed
-                        ;; (orgtbl-mode t)
-                        ;; (orgstruct-mode t)
-                        ;; (orgstruct++-mode t)
+                        (orgtbl-mode t)
+                        (orgstruct-mode t)
+                        (orgstruct++-mode t)
 
                         ;; Extra modes
                         (outline-minor-mode t)
@@ -93,8 +93,8 @@
               (save-buffer)
               (set-buffer-modified-p nil))
             ;; no longer needed, markdown includes supports for tables now
-            ;; (add-hook 'markdown-mode-hook
-            ;;           (lambda () (add-hook 'after-save-hook 'my/cleanup-org-tables nil t)))
+            (add-hook 'markdown-mode-hook
+                      (lambda () (add-hook 'after-save-hook 'my/cleanup-org-tables nil t)))
 
             ;; Github markdown style
             (setq markdown-css-paths `(,(expand-file-name "styles/github-pandoc.css" user-emacs-directory)))

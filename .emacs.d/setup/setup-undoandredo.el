@@ -46,10 +46,7 @@
                   undo-tree-auto-save             t
                   undo-tree-auto-save-history     t
                   undo-tree-history-directory-alist
-                  '((".*" . "~/.emacs.cache/undo-tree")))
-
-            (defadvice undo-tree-undo (around bar activate)
-              (ignore-errors add-do-it))))
+                  '((".*" . "~/.emacs.cache/undo-tree")))))
 
 (provide 'setup-undoandredo)
 ;;; setup-undoandredo.el ends here
