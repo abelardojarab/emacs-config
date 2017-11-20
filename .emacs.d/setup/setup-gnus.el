@@ -32,7 +32,7 @@
   :config (progn
             (setq nndraft-directory "~/Mail/[Gmail].Drafts"
 
-                  ;; MH Spooling directory
+                  ;; MH spooling directory
                   nnmh-directory "~/Mail"
 
                   ;; Directory containing Unix mbox; defaults to message-directory
@@ -46,7 +46,7 @@
   :defer 1
   :after (starttls nnir epa)
   :commands (gnus compose-mail switch-to-gnus activate-gnus)
-  :bind (("M-G" . switch-to-gnus)
+  :bind (("M-G" . my/switch-to-gnus)
          :map ctl-x-map
          ("M"   . compose-mail))
   :config (progn
@@ -161,7 +161,7 @@
                 (message "Saving all MIME parts to %s...done" directory)))
 
             ;; https://www.emacswiki.org/emacs/SwitchToGnus
-            (defun switch-to-gnus (&optional arg)
+            (defun my/switch-to-gnus (&optional arg)
               "Switch to a Gnus related buffer.
     Candidates are buffers starting with
      *mail or *reply or *wide reply
