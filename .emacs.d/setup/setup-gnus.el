@@ -43,8 +43,8 @@
 
 ;; Gnus
 (use-package gnus
-  :after (starttls nnir epa)
   :defer 1
+  :after (starttls nnir epa)
   :commands (gnus compose-mail switch-to-gnus activate-gnus)
   :bind (("M-G" . switch-to-gnus)
          :map ctl-x-map

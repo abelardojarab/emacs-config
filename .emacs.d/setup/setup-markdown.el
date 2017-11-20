@@ -26,10 +26,10 @@
 
 ;; Polymode; syntax highlighting inside markdown
 (use-package polymode
-  :after org
   :defer t
+  :after org
   :diminish polymode-minor-mode
-  :commands (polymode-mode polymode-minor-mode)
+  :commands polymode-minor-mode
   :load-path (lambda () (expand-file-name "polymode/" user-emacs-directory))
   :init (add-to-list 'load-path (expand-file-name "polymode/modes" user-emacs-directory))
   :config (progn
@@ -40,12 +40,13 @@
 
 ;; Markdown
 (use-package markdown-mode
+  :defer t
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'"       . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
   :after org
   :commands markdown-mode
-  :load-path (lambda () (expand-file-name "markdown-mode/" user-emacs-directory))
+  :load-path (lambda () (expand-file-name "markdown-mode-2.0/" user-emacs-directory))
   :config (progn
 
             ;; http://endlessparentheses.com/ispell-and-org-mode.html
@@ -66,19 +67,23 @@
                         (setq truncate-lines t)
 
                         ;; Enable polymode minor mode
-                        (polymode-minor-mode t)
+                        ;; (polymode-minor-mode t)
 
-                        ;; Org goodies
-                        (outline-minor-mode t)
-                        (orgtbl-mode t)
-                        (orgstruct-mode t)
-                        (orgstruct++-mode t)
+                        ;; Org goodies; no longer needed
+                        ;; (orgtbl-mode t)
+                        ;; (orgstruct-mode t)
+                        ;; (orgstruct++-mode t)
 
                         ;; Extra modes
+                        (outline-minor-mode t)
                         (footnote-mode t)
                         (auto-fill-mode t)
+
+                        ;; Style/syntax check
                         (writegood-mode t)
-                        (flyspell-mode t)))
+                        (flyspell-mode t)
+                        (if (executable-find "proselint")
+                            (flycheck-mode t))))
 
             ;; http://stackoverflow.com/questions/14275122/editing-markdown-pipe-tables-in-emacs
             (defun my/cleanup-org-tables ()
@@ -87,8 +92,9 @@
                 (while (search-forward "-+-" nil t) (replace-match "-|-")))
               (save-buffer)
               (set-buffer-modified-p nil))
-            (add-hook 'markdown-mode-hook
-                      (lambda () (add-hook 'after-save-hook 'my/cleanup-org-tables nil t)))
+            ;; no longer needed, markdown includes supports for tables now
+            ;; (add-hook 'markdown-mode-hook
+            ;;           (lambda () (add-hook 'after-save-hook 'my/cleanup-org-tables nil t)))
 
             ;; Github markdown style
             (setq markdown-css-paths `(,(expand-file-name "styles/github-pandoc.css" user-emacs-directory)))
