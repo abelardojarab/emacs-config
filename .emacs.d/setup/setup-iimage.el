@@ -26,10 +26,13 @@
 
 ;; Manipulate images using ImageMagick
 (use-package image+
+  :defer t
   :if (and (executable-find "convert")
            (display-graphic-p))
   :load-path (lambda () (expand-file-name "image+/" user-emacs-directory))
   :init (use-package image)
+  :commands (imagex-global-sticky-mode
+             imagex-auto-adjust-mode)
   :config (progn
             (imagex-global-sticky-mode 1)
             (imagex-auto-adjust-mode 1)
@@ -45,6 +48,7 @@
 
 ;; Integrating graphics with text inside Emacs
 (use-package iimage
+  :defer t
   :if (and (executable-find "convert")
            (display-graphic-p))
   :after (org markdown-mode)
@@ -53,32 +57,7 @@
              org-insert-screenshot
              org-toggle-iimage
              my/reload-image-at-point
-             my/resize-image-at-point
-             my/iimage-scale-to-fit-width)
-  :init (progn
-          (defun image-p (obj)
-            "Return non-nil if OBJ is an image"
-            (eq (car-safe obj) 'image))
-
-          (defun my/iimage-scale-to-fit-width ()
-            "Scale over-sized images in the active buffer to the width of the currently selected window.
-  (imagemagick must be enabled)"
-            (interactive)
-            (let ((max-width (/ (window-width (selected-window) t) 3)))
-              (alter-text-property (point-min) (point-max)
-                                   'display
-                                   (lambda (prop)
-                                     (when (image-p prop)
-                                       (plist-put (cdr prop) :type 'imagemagick)
-                                       (plist-put (cdr prop) :max-width max-width)
-                                       prop)))))
-
-          (defun my/iimage-scale-on-window-configuration-change ()
-            "Hook function for major mode that display inline images:
-Adapt image size via `iimage-scale-to-fit-width' when the window size changes."
-            (add-hook 'window-configuration-change-hook #'my/iimage-scale-to-fit-width t t))
-
-          (add-hook 'markdown-mode-hook #'my/iimage-scale-on-window-configuration-change))
+             my/resize-image-at-point)
   :config (progn
 
             ;; Enable Imagemagick types
