@@ -278,6 +278,7 @@
 (depends-on "seq")
 ;; (depends-on "setup")
 (depends-on "shackle")
+(depends-on "shell-pop")
 (depends-on "showkey")
 ;; (depends-on "site-lisp")
 (depends-on "skewer-mode")

@@ -25,10 +25,10 @@
 ;;; Code:
 
 (use-package ielm
-  :bind (("C-'"  . ielm-repl)
-         ("C-0"  . ielm-repl)
+  :bind (("C-'"      . ielm-repl)
+         ("C-c C-z"  . ielm-repl)
          :map ctl-x-map
-         (("C-t" . ielm-repl)
+         (("C-z" . ielm-repl)
           ("z"   . ielm-repl))
          :map ielm-map
          (("C-t" . quit-window)))
@@ -53,10 +53,10 @@
 
 (use-package eshell
   :commands (eshell eshell-vertical eshell-horizontal)
-  :bind (("C-t"                     . eshell)
-         ("C-c C-t"                 . eshell)
+  :bind (("C-c C-t"                 . eshell)
          :map ctl-x-map
-         ("t"                       . eshell)
+         (("C-t"                    . eshell)
+          ("t"                      . eshell))
          :map eshell-mode-map
          (("C-t"                    . quit-window)
           ("C-c C-t"                . quit-window)
@@ -123,6 +123,17 @@
   :load-path (lambda () (expand-file-name "eshell-prompt-extras/" user-emacs-directory))
   :after eshell
   :config (setq eshell-prompt-function 'epe-theme-lambda))
+
+;; Get shell on current directory
+(use-package shell-pop
+  :defer t
+  :after eshell-prompt-extras
+  :bind (("C-t" . shell-pop))
+  :config (progn
+            (setq shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell)))))
+            (setq shell-pop-term-shell "/bin/bash")
+            ;; need to do this manually or not picked up by `shell-pop'
+            (shell-pop--set-shell-type 'shell-pop-shell-type shell-pop-shell-type)))
 
 ;; Shell mode
 (use-package sh-script
