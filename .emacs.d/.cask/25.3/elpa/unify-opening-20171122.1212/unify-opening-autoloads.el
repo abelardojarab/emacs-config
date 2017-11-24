@@ -3,8 +3,8 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil nil ("unify-opening.el") (23049 45514 955608
-;;;;;;  209000))
+;;;### (autoloads nil nil ("unify-opening.el") (23063 44038 608272
+;;;;;;  257000))
 
 ;;;***
 
