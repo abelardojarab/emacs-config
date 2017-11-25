@@ -92,7 +92,6 @@
 ;; Transient indentation guide
 (use-package highlight-indent-guides
   :defer t
-  :disabled t
   :commands highlight-indent-guides-mode
   :load-path (lambda () (expand-file-name "highlight-indent-guides/" user-emacs-directory))
   :config (progn
