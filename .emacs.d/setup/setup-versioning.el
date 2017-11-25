@@ -27,7 +27,12 @@
 ;; Follow symbolic links
 (use-package vc
   :defer t
-  :config (setq vc-follow-symlinks t))
+  :config (progn
+            (setq vc-follow-symlinks t)
+
+            ;; Ignore errors in vc-exec-after
+            (defadvice vc-exec-after (around bar activate)
+              (ignore-errors add-do-it))))
 
 ;; Designsync versioning control
 (use-package vc-sync
@@ -36,15 +41,15 @@
   :init (add-hook 'dired-after-readin-hook 'dired-sync-symlink-filter)
   :commands dired-sync-symlink-filter
   :config (defun dired-sync-symlink-filter ()
-        (save-excursion
-          ;; Goto the beginning of the buffer
-          (goto-char (point-min))
-          ;; For each matching symbolic link with sync_cache or sync/mirrors in the path name...
-          (while (re-search-forward "\\(-> .*/sync\\(_cache\\|/mirrors\\)/.*$\\)" nil t)
-        ;; Create an overlay that masks out everything between the -> and the end of line
-        (let ((o (make-overlay (match-beginning 1) (progn (end-of-line) (point)))))
-          (overlay-put o 'invisible t)
-          (overlay-put o 'evaporate t))))))
+            (save-excursion
+              ;; Goto the beginning of the buffer
+              (goto-char (point-min))
+              ;; For each matching symbolic link with sync_cache or sync/mirrors in the path name...
+              (while (re-search-forward "\\(-> .*/sync\\(_cache\\|/mirrors\\)/.*$\\)" nil t)
+                ;; Create an overlay that masks out everything between the -> and the end of line
+                (let ((o (make-overlay (match-beginning 1) (progn (end-of-line) (point)))))
+                  (overlay-put o 'invisible t)
+                  (overlay-put o 'evaporate t))))))
 
 ;; Display commit number that is associated with current line of code
 (use-package vc-msg
@@ -68,25 +73,25 @@
   :after vc
   :commands vc-annotate
   :config (defun vc-annotate-get-time-set-line-props ()
-        (let ((bol (point))
-          (date (vc-call-backend vc-annotate-backend 'annotate-time))
-          (inhibit-read-only t))
-          (assert (>= (point) bol))
-          (put-text-property bol (point) 'invisible 'vc-annotate-annotation)
-          (when (string-equal "Git" vc-annotate-backend)
-        (save-excursion
-          (goto-char bol)
-          (search-forward "(")
-          (let ((p1 (point)))
-            (re-search-forward " [0-9]")
-            (remove-text-properties p1 (1- (point)) '(invisible nil))
-            )))
-          date)))
+            (let ((bol (point))
+                  (date (vc-call-backend vc-annotate-backend 'annotate-time))
+                  (inhibit-read-only t))
+              (assert (>= (point) bol))
+              (put-text-property bol (point) 'invisible 'vc-annotate-annotation)
+              (when (string-equal "Git" vc-annotate-backend)
+                (save-excursion
+                  (goto-char bol)
+                  (search-forward "(")
+                  (let ((p1 (point)))
+                    (re-search-forward " [0-9]")
+                    (remove-text-properties p1 (1- (point)) '(invisible nil))
+                    )))
+              date)))
 
 ;; psvn
 (use-package psvn
-  :after vc
   :defer t
+  :after vc
   :config (setq svn-status-hide-unmodified        t
                 svn-status-hide-unknown           t
                 svn-status-svn-file-coding-system 'utf-8))
@@ -100,8 +105,8 @@
 
 ;; magit
 (use-package magit
-  :after vc
   :defer t
+  :after vc
   :commands (magit-init
              magit-status
              magit-diff
