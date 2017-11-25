@@ -55,8 +55,7 @@
   :commands (eshell eshell-vertical eshell-horizontal)
   :bind (("C-c C-t"                 . eshell)
          :map ctl-x-map
-         (("C-t"                    . eshell)
-          ("t"                      . eshell))
+         ("C-t"                     . eshell)
          :map eshell-mode-map
          (("C-t"                    . quit-window)
           ("C-c C-t"                . quit-window)
@@ -109,25 +108,23 @@
                 (other-window 1)
                 (eshell "new")
                 (rename-buffer (concat "*eshell: " name "*"))
-                (eshell-send-input)))))
+                (eshell-send-input)))
 
-;; Show fringe status for eshell
-(use-package eshell-fringe-status
-  :if (display-graphic-p)
-  :load-path (lambda () (expand-file-name "eshell-fringe-status/" user-emacs-directory))
-  :after eshell
-  :config (add-hook 'eshell-mode-hook 'eshell-fringe-status-mode))
+            ;; Show fringe status for eshell
+            (use-package eshell-fringe-status
+              :if (display-graphic-p)
+              :load-path (lambda () (expand-file-name "eshell-fringe-status/" user-emacs-directory))
+              :config (add-hook 'eshell-mode-hook 'eshell-fringe-status-mode))
 
-;; Show git branches on the prompt
-(use-package eshell-prompt-extras
-  :load-path (lambda () (expand-file-name "eshell-prompt-extras/" user-emacs-directory))
-  :after eshell
-  :config (setq eshell-prompt-function 'epe-theme-lambda))
+            ;; Show git branches on the prompt
+            (use-package eshell-prompt-extras
+              :load-path (lambda () (expand-file-name "eshell-prompt-extras/" user-emacs-directory))
+              :config (setq eshell-prompt-function 'epe-theme-lambda))))
 
 ;; Get shell on current directory
 (use-package shell-pop
   :defer t
-  :after eshell-prompt-extras
+  :after eshell
   :bind (("C-t" . shell-pop))
   :config (progn
             (setq shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell)))))
