@@ -109,6 +109,8 @@
 
      `(show-paren-match ((,c (:background ,blue :foreground ,white))))
 
+     `(highlight ((,c (:background ,invisible :foreground ,black))))
+
      `(font-lock-string-face ((,c (:foreground ,green))))
      `(font-lock-doc-face ((,c (:foreground ,green))))
      `(font-lock-builtin-face ((,c (:foreground ,blue))))
@@ -283,6 +285,7 @@
      `(bmkp-url ((,c (:foreground ,white))))
      `(bmkp-local-directory ((,c (:foreground ,blue))))
      `(bmkp-no-local ((,c (:foreground ,yellow :slant italic))))
+     `(bmkp-D-mark ((,c (:foreground ,red))))
 
      ;; Wgrep
      `(wgrep-face                  ((,c (:foreground ,yellow))))

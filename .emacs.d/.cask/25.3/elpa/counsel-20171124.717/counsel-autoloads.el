@@ -3,7 +3,7 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil "counsel" "counsel.el" (23061 64910 53349 669000))
+;;;### (autoloads nil "counsel" "counsel.el" (23065 2660 561959 22000))
 ;;; Generated autoloads from counsel.el
 
 (autoload 'counsel-el "counsel" "\
@@ -225,13 +225,15 @@ RG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument.
 
 (autoload 'counsel-grep "counsel" "\
 Grep for a string in the current file.
+When non-nil, INITIAL-INPUT is the initial search pattern.
 
-\(fn)" t nil)
+\(fn &optional INITIAL-INPUT)" t nil)
 
 (autoload 'counsel-grep-or-swiper "counsel" "\
 Call `swiper' for small buffers and `counsel-grep' for large ones.
+When non-nil, INITIAL-INPUT is the initial search pattern.
 
-\(fn)" t nil)
+\(fn &optional INITIAL-INPUT)" t nil)
 
 (autoload 'counsel-org-tag "counsel" "\
 Add or remove tags in `org-mode'.

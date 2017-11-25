@@ -1471,6 +1471,13 @@ like.")
   "Sorting won't be done for collections larger than this."
   :type 'integer)
 
+(defalias 'ivy--dirname-p
+  (if (fboundp 'directory-name-p)
+      #'directory-name-p
+    (lambda (name)
+      "Return non-nil if NAME ends with a directory separator."
+      (string-match-p "/\\'" name))))
+
 (defun ivy--sorted-files (dir)
   "Return the list of files in DIR.
 Directories come first."
@@ -1487,7 +1494,7 @@ Directories come first."
       (when (eq (setq sort-fn (ivy--sort-function 'read-file-name-internal))
                 #'ivy-sort-file-function-default)
         (setq seq (mapcar (lambda (x)
-                            (propertize x 'dirp (string-match-p "/\\'" x)))
+                            (propertize x 'dirp (ivy--dirname-p x)))
                           seq)))
       (when sort-fn
         (setq seq (cl-sort seq sort-fn)))
@@ -2340,11 +2347,11 @@ tries to ensure that it does not change depending on the number of candidates."
 
 (defun ivy--minibuffer-setup ()
   "Setup ivy completion in the minibuffer."
-  (set (make-local-variable 'completion-show-inline-help) nil)
-  (set (make-local-variable 'minibuffer-default-add-function)
-       (lambda ()
-         (list ivy--default)))
-  (set (make-local-variable 'inhibit-field-text-motion) nil)
+  (setq-local completion-show-inline-help nil)
+  (setq-local minibuffer-default-add-function
+              (lambda ()
+                (list ivy--default)))
+  (setq-local inhibit-field-text-motion nil)
   (when (display-graphic-p)
     (setq truncate-lines ivy-truncate-lines))
   (setq-local max-mini-window-height ivy-height)
@@ -3243,7 +3250,7 @@ FACE is the face to apply to STR."
 
 (defun ivy-read-file-transformer (str)
   "Transform candidate STR when reading files."
-  (if (string-match-p "/\\'" str)
+  (if (ivy--dirname-p str)
       (propertize str 'face 'ivy-subdir)
     str))
 
