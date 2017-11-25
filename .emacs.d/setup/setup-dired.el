@@ -25,6 +25,8 @@
 ;;; Code:
 
 (use-package dired-x
+  :defer t
+  :commands (dired dired-jump)
   :bind (("C-x C-j"  . dired-jump)
          :map dired-mode-map
          (("u"       . dired-up-directory)
@@ -135,14 +137,102 @@
                 ;; run the async shell command
                 (async-shell-command my/rsync-command "*rsync*")
                 ;; finally, switch to that window
-                (other-window 1)))))
+                (other-window 1)))
 
-;; async support for dired
-(use-package dired-async
-  :defer t
-  :commands dired-async-mode
-  :load-path (lambda () (expand-file-name "async/" user-emacs-directory))
-  :init (add-hook 'dired-mode-hook (lambda () (dired-async-mode 1))))
+            ;; dired-ranger pre-requisite
+            (use-package dired-hacks-utils
+              :after dired
+              :load-path (lambda () (expand-file-name "dired-hacks-utils/" user-emacs-directory)))
+
+            ;; Enable copying and pasting files
+            (use-package dired-ranger
+              :after (dired dired-hacks-utils)
+              :load-path (lambda () (expand-file-name "dired-ranger/" user-emacs-directory))
+              :bind (:map dired-mode-map
+                          ("W" . dired-ranger-copy)
+                          ("X" . dired-ranger-move)
+                          ("Y" . dired-ranger-paste)))
+
+            ;; Highlight dired buffer with K-shell coloring
+            (use-package dired-k
+              :after dired
+              :load-path (lambda () (expand-file-name "dired-k/" user-emacs-directory))
+              :bind (:map dired-mode-map
+                          ("K" . dired-k))
+              :commands (dired-k dired-k-no-revert)
+              :init (progn
+                      (add-hook 'dired-initial-position-hook 'dired-k)
+                      (add-hook 'dired-after-readin-hook 'dired-k-no-revert)))
+
+            ;; Display file icons in dired
+            (use-package dired-icon
+              :after dired
+              :load-path (lambda () (expand-file-name "dired-icon/" user-emacs-directory))
+              :if (display-graphic-p)
+              :commands (dired-icon-mode)
+              :init (add-hook 'dired-mode-hook 'dired-icon-mode))
+
+            ;; Facility to see images inside dired
+            (use-package image-dired
+              :disabled t ;; caused issue with emacs server
+              :after dired
+              :config (progn
+                        (setq image-dired-cmd-create-thumbnail-options
+                              (replace-regexp-in-string "-strip" "-auto-orient -strip" image-dired-cmd-create-thumbnail-options)
+                              image-dired-cmd-create-temp-image-options
+                              (replace-regexp-in-string "-strip" "-auto-orient -strip" image-dired-cmd-create-temp-image-options))))
+
+            ;; Preview files in dired
+            (use-package peep-dired
+              :after dired
+              :load-path (lambda () (expand-file-name "peep-dired/" user-emacs-directory))
+              :defer t ;; don't access `dired-mode-map' until `peep-dired' is loaded
+              :bind (:map dired-mode-map
+                          ("P" . peep-dired)))
+
+            ;; All the icons on dired
+            (use-package all-the-icons-dired
+              :if (display-graphic-p)
+              :after (dired all-the-icons)
+              :diminish all-the-icons-dired-mode
+              :load-path (lambda () (expand-file-name "all-the-icons-dired/" user-emacs-directory))
+              :commands all-the-icons-dired-mode
+              :config (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
+
+            ;; async support for dired
+            (use-package dired-async
+              :commands dired-async-mode
+              :load-path (lambda () (expand-file-name "async/" user-emacs-directory))
+              :init (add-hook 'dired-mode-hook (lambda () (dired-async-mode 1))))
+
+            ;; Simple directory explorer. It also works as a generic tree explore library
+            (use-package direx
+              :after dired
+              :load-path (lambda () (expand-file-name "direx/" user-emacs-directory))
+              :bind (:map dired-mode-map
+                          ("b"       . direx:jump-to-directory)
+                          :map direx:direx-mode-map
+                          ("b"       . dired-jump)
+                          ([mouse-1] . direx:mouse-2)
+                          ([mouse-3] . direx:mouse-1))
+              :config (setq direx:closed-icon "+ "
+                            direx:leaf-icon   "| "
+                            direx:open-icon   "> "))
+
+            ;; Integration with projectile
+            (use-package direx-project
+              :after (direx projectile)
+              :load-path (lambda () (expand-file-name "direx/" user-emacs-directory)))
+
+            ;; Choose starting dired directory
+            (use-package helm-dired-history
+              :after (dired savehist helm)
+              :bind (:map dired-mode-map
+                          ("," . helm-dired-history-view))
+              :load-path (lambda () (expand-file-name "helm-dired-history/" user-emacs-directory))
+              :config (progn
+                        (savehist-mode 1)
+                        (add-to-list 'savehist-additional-variables 'helm-dired-history-variable)))))
 
 (provide 'setup-dired)
 ;;; setup-dired.el ends here

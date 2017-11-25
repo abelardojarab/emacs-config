@@ -24,107 +24,12 @@
 
 ;;; Code:
 
-
-;; Simple directory explorer. It also works as a generic tree explore library
-(use-package direx
-  :after dired
-  :load-path (lambda () (expand-file-name "direx/" user-emacs-directory))
-  :bind (:map dired-mode-map
-              ("b"       . direx:jump-to-directory)
-              :map direx:direx-mode-map
-              ("b"       . dired-jump)
-              ([mouse-1] . direx:mouse-2)
-              ([mouse-3] . direx:mouse-1))
-  :config (setq direx:closed-icon "+ "
-                direx:leaf-icon   "| "
-                direx:open-icon   "> "))
-
-(use-package direx-project
-  :after direx
-  :load-path (lambda () (expand-file-name "direx/" user-emacs-directory)))
-
-;; dired-ranger pre-requisite
-(use-package dired-hacks-utils
-  :after dired
-  :defer t
-  :load-path (lambda () (expand-file-name "dired-hacks-utils/" user-emacs-directory)))
-
-;; Enable copying and pasting files
-(use-package dired-ranger
-  :defer t
-  :after (dired dired-hacks-utils)
-  :load-path (lambda () (expand-file-name "dired-ranger/" user-emacs-directory))
-  :bind (:map dired-mode-map
-              ("W" . dired-ranger-copy)
-              ("X" . dired-ranger-move)
-              ("Y" . dired-ranger-paste)))
-
-;; Highlight dired buffer with K-shell coloring
-(use-package dired-k
-  :defer t
-  :after dired
-  :load-path (lambda () (expand-file-name "dired-k/" user-emacs-directory))
-  :bind (:map dired-mode-map
-              ("K" . dired-k))
-  :commands (dired-k dired-k-no-revert)
-  :init (progn
-          (add-hook 'dired-initial-position-hook 'dired-k)
-          (add-hook 'dired-after-readin-hook 'dired-k-no-revert)))
-
-;; Display file icons in dired
-(use-package dired-icon
-  :defer t
-  :after dired
-  :load-path (lambda () (expand-file-name "dired-icon/" user-emacs-directory))
-  :if (display-graphic-p)
-  :commands (dired-icon-mode)
-  :init (add-hook 'dired-mode-hook 'dired-icon-mode))
-
-;; Facility to see images inside dired
-(use-package image-dired
-  :disabled t ;; issue with emacs server
-  :after dired
-  :config (progn
-            (setq image-dired-cmd-create-thumbnail-options
-                  (replace-regexp-in-string "-strip" "-auto-orient -strip" image-dired-cmd-create-thumbnail-options)
-                  image-dired-cmd-create-temp-image-options
-                  (replace-regexp-in-string "-strip" "-auto-orient -strip" image-dired-cmd-create-temp-image-options))))
-
-(use-package helm-dired-history
-  :defer t
-  :after (dired savehist helm)
-  :bind (:map dired-mode-map
-              ("," . helm-dired-history-view))
-  :load-path (lambda () (expand-file-name "helm-dired-history/" user-emacs-directory))
-  :config (progn
-            (savehist-mode 1)
-            (add-to-list 'savehist-additional-variables 'helm-dired-history-variable)))
-
-;; Preview files in dired
-(use-package peep-dired
-  :after dired
-  :load-path (lambda () (expand-file-name "peep-dired/" user-emacs-directory))
-  :defer t ;; don't access `dired-mode-map' until `peep-dired' is loaded
-  :bind (:map dired-mode-map
-              ("P" . peep-dired)))
-
-;; All the icons, dired plugin
-(use-package all-the-icons-dired
-  :defer t
-  :if (display-graphic-p)
-  :after (dired all-the-icons)
-  :diminish all-the-icons-dired-mode
-  :load-path (lambda () (expand-file-name "all-the-icons-dired/" user-emacs-directory))
-  :commands all-the-icons-dired-mode
-  :config (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
-
 ;; neotree side bar
 (use-package neotree
-  :disabled t
   :defer t
   :commands (neotree-toggle)
   :bind (:map ctl-x-map
-              ("C-t" . neotree-toggle)
+              ("t" . neotree-toggle)
               :map neotree-mode-map
               (("<C-return>" . neotree-change-root)
                ("C"          . neotree-change-root)
