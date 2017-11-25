@@ -34,6 +34,7 @@
 
 ;; higlight changes in documents
 (use-package hilit-chg
+  :defer t
   :if (display-graphic-p)
   :diminish highlight-changes-mode
   :init (global-highlight-changes-mode t)
@@ -52,8 +53,9 @@
 
 ;; Highlight the line
 (use-package hl-line
+  :init (global-hl-line-mode t)
+  :commands global-hl-line-mode
   :config (progn
-            (global-hl-line-mode t)
 
             ;; Highlight the line only in the active window
             (setq hl-line-sticky-flag nil)
@@ -124,6 +126,8 @@ create the new one."
 
 ;; Highlight the latest changes in the buffer (like text inserted from: yank, undo, etc.) until the next command is run
 (use-package volatile-highlights
+  :defer t
+  :commands volatile-highlights-mode
   :load-path (lambda () (expand-file-name "volatile-highlights/" user-emacs-directory))
   :diminish volatile-highlights-mode
   :config (volatile-highlights-mode t))

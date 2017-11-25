@@ -26,30 +26,36 @@
 
 ;; Show-paren-mode: subtle blinking of matching paren (defaults are ugly)
 (use-package paren
-  :demand t
+  :defer t
+  :init (show-paren-mode t)
+  :commands show-paren-mode
   :config (progn
             ;; Show paren-mode when off-screen
-            (defadvice show-paren-function
-                (after show-matching-paren-offscreen activate)
+            (defadvice show-paren-function (after show-matching-paren-offscreen activate)
               "If the matching paren is offscreen, show the matching line in the
         echo area. Has no effect if the character before point is not of
         the syntax class ')'."
               (interactive)
-              (let* ((cb (char-before (point)))
-                     (matching-text (and cb
-                                         (char-equal (char-syntax cb) ?\) )
-                                         (blink-matching-open))))
-                (when matching-text (message matching-text))))
+              (ignore-errors
+                (let* ((cb (char-before (point)))
+                       (matching-text (and cb
+                                           (char-equal (char-syntax cb) ?\) )
+                                           (blink-matching-open))))
+                  (when matching-text (message matching-text)))))
 
             ;; Enable mode
             (show-paren-mode 1)))
 
 ;; Smartparens
 (use-package smartparens
+  :defer t
   :diminish smartparens-mode
   :load-path (lambda () (expand-file-name "smartparens/" user-emacs-directory))
-  :init (use-package smartparens-config)
+  :init (progn (use-package smartparens-config)
+               (smartparens-global-mode t))
+  :commands (smartparens-global-mode smartparens-mode)
   :config (progn
+            ;; subtle blinking of matching paren (defaults are ugly)
             (show-smartparens-global-mode 1)
 
             ;; disable pairing of ' in minibuffer
@@ -61,7 +67,9 @@
 
 ;; Autopair
 (use-package autopair
+  :defer t
   :load-path (lambda () (expand-file-name "autopair/" user-emacs-directory))
+  :commands (autopair-mode autopair-global-mode)
   :diminish autopair-mode
   :config (progn
             (autopair-global-mode) ;; enable autopair in all buffers
@@ -82,10 +90,12 @@
 
 ;; Rainbow delimiters
 (use-package rainbow-delimiters
+  :defer t
   :load-path (lambda () (expand-file-name "rainbow-delimiters/" user-emacs-directory))
-  :config (progn
-            (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode)
-            (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)))
+  :commands rainbow-delimiters-mode
+  :init (progn
+          (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode)
+          (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)))
 
 ;; Legacy minor mode
 (use-package paredit
