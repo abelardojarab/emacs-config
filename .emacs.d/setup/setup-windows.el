@@ -33,10 +33,10 @@
 
 ;; Removes *Completions* from buffer after you've opened a file.
 (add-hook 'minibuffer-exit-hook
-      '(lambda ()
-         (let ((buffer "*Completions*"))
-           (and (get-buffer buffer)
-            (kill-buffer buffer)))))
+          '(lambda ()
+             (let ((buffer "*Completions*"))
+               (and (get-buffer buffer)
+                    (kill-buffer buffer)))))
 
 ;; Put a nice title to the window, including filename
 (add-hook 'window-configuration-change-hook
@@ -148,80 +148,7 @@
 (use-package popwin
   :defer t
   :commands popwin-mode
-  :load-path (lambda () (expand-file-name "popwin/" user-emacs-directory))
-  :config (progn
-            (defvar popwin:special-display-config-backup popwin:special-display-config)
-            (setq display-buffer-function 'popwin:display-buffer)
-
-            ;; basic
-            (push '("*Help*" :stick t :noselect t) popwin:special-display-config)
-            (push '("*Cedet Global*" :stick t :noselect t) popwin:special-display-config)
-
-            ;; magit
-            (push '("*magit-process*" :stick t) popwin:special-display-config)
-
-            ;; dictionaly
-            (push '("*dict*" :stick t) popwin:special-display-config)
-            (push '("*sdic*" :stick t) popwin:special-display-config)
-
-            ;; Elisp
-            (push '("*ielm*" :stick t) popwin:special-display-config)
-            (push '("*eshell pop*" :stick t) popwin:special-display-config)
-
-            ;; python
-            (push '("*Python*"   :stick t) popwin:special-display-config)
-            (push '("*Python Help*" :stick t :height 20) popwin:special-display-config)
-            (push '("*jedi:doc*" :stick t :noselect t) popwin:special-display-config)
-
-            ;; ecb
-            (push '("*ECB History*" :position left :width 0.3 :stick t)
-                  popwin:special-display-config)
-            (push '("*ECB Methods*" :position left :width 0.3 :stick t)
-                  popwin:special-display-config)
-            (push '("*ECB Directories*" :position right :width 0.3 :stick t)
-                  popwin:special-display-config)
-
-            ;; sgit
-            (push '("*sgit*" :position right :width 0.5 :stick t)
-                  popwin:special-display-config)
-
-            ;; git-gutter
-            (push '("*git-gutter:diff*" :width 0.5 :stick t)
-                  popwin:special-display-config)
-
-            ;; es-results-mode
-            (push '(es-result-mode :stick t :width 0.5)
-                  popwin:special-display-config)
-
-            ;; direx
-            (push '(direx:direx-mode :position left :width 40 :dedicated t)
-                  popwin:special-display-config)
-
-            (push '("*Occur*" :stick t) popwin:special-display-config)
-
-            ;; compilation
-            (push '("*compilation*" :stick t :height 30)
-                  popwin:special-display-config)
-
-            ;; org-mode
-            (push '("*Org tags*" :stick t :height 30)
-                  popwin:special-display-config)
-
-            ;; Completions
-            (push '("*Completions*" :stick t :noselect t) popwin:special-display-config)
-
-            ;; ggtags
-            (push '("*ggtags-global*" :stick t :noselect t :height 30) popwin:special-display-config)
-
-            ;; async shell commands
-            (push '("*Async Shell Command*" :stick t) popwin:special-display-config)
-
-            ;; helm
-            (push '("^\*helm .+\*$" :regexp t) popwin:special-display-config)
-            (push '("^\*helm-.+\*$" :regexp t) popwin:special-display-config)
-
-            ;; popwin conflicts with ecb
-            (popwin-mode -1)))
+  :load-path (lambda () (expand-file-name "popwin/" user-emacs-directory)))
 
 ;; Window purpose
 (use-package window-purpose
@@ -275,20 +202,20 @@
 
             ;; Load user preferences
             (purpose-compile-user-configuration)
-            (purpose-mode)))
+            (purpose-mode)
 
-;; Extensions for purpose
-(use-package window-purpose-x
-  :after window-purpose
-  :config (progn
+            ;; Extensions for purpose
+            (use-package window-purpose-x
+              :after window-purpose
+              :config (progn
 
-            ;; Single window magit
-            (purpose-x-magit-single-on)
+                        ;; Single window magit
+                        (purpose-x-magit-single-on)
 
-            ;; when killing a purpose-dedicated buffer that is displayed in a window,
-            ;; ensure that the buffer is replaced by a buffer with the same purpose
-            ;; (or the window deleted, if no such buffer)
-            (purpose-x-kill-setup)))
+                        ;; when killing a purpose-dedicated buffer that is displayed in a window,
+                        ;; ensure that the buffer is replaced by a buffer with the same purpose
+                        ;; (or the window deleted, if no such buffer)
+                        (purpose-x-kill-setup)))))
 
 ;; Helm interface to purpose
 (use-package helm-purpose
@@ -364,26 +291,25 @@
   :commands shackle-mode
   :init (shackle-mode 1)
   :config (progn
-              (setq shackle-lighter               ""
-                    shackle-select-reused-windows nil
-                    shackle-default-alignment     'right
-                    shackle-default-size          0.4)  ;; default 0.5
+            (setq shackle-lighter               ""
+                  shackle-select-reused-windows nil
+                  shackle-default-alignment     'right
+                  shackle-default-size          0.4)  ;; default 0.5
 
-              (setq shackle-rules
-                    ;; CONDITION(:regexp)        :select     :inhibit-window-quit   :size+:align|:other     :same|:popup
-                    '((compilation-mode          :select     nil)
-                      ("\\`\\*helm.*?\\*\\'"     :regexp     t        :align               t       :ratio               0.4)
-                      ("*undo-tree*"             :size       0.25     :align               right)
-                      ("*eshell*"                :select     t        :other               t)
-                      ("*Shell Command Output*"  :select     nil)
-                      ("\\*Async Shell.*\\*"     :regexp     t        :ignore              t)
-                      (occur-mode                :select     nil      :align               t)
-                      ("*Help*"                  :select     t        :inhibit-window-quit t       :other               t)
-                      ("*Completions*"           :size       0.3      :align               t)
-                      ("*Messages*"              :select     nil      :inhibit-window-quit t       :other               t)
-                      ("\\*[Wo]*Man.*\\*"        :regexp     t        :select              t       :inhibit-window-quit t :other t)
-                      ("\\`\\*helm.*?\\*\\'"     :regexp     t        :size                0.3     :align               t)
-                      ("*Calendar*"              :select     t        :size                0.3     :align               below)))))
+            (setq shackle-rules
+                  ;; CONDITION(:regexp)        :select     :inhibit-window-quit   :size+:align|:other     :same|:popup
+                  '((compilation-mode          :select     nil)
+                    ("*undo-tree*"             :size       0.25     :align               right)
+                    ("*eshell*"                :select     t        :other               t)
+                    ("*Shell Command Output*"  :select     nil)
+                    ("\\*Async Shell.*\\*"     :regexp     t        :ignore              t)
+                    (occur-mode                :select     nil      :align               t)
+                    ("*Help*"                  :select     t        :inhibit-window-quit t       :other               t)
+                    ("*Completions*"           :size       0.3      :align               t)
+                    ("*Messages*"              :select     nil      :inhibit-window-quit t       :other               t)
+                    ("\\*[Wo]*Man.*\\*"        :regexp     t        :select              t       :inhibit-window-quit t :other t)
+                    ("\\`\\*helm.*?\\*\\'"     :regexp     t        :size                0.3     :align               t)
+                    ("*Calendar*"              :select     t        :size                0.3     :align               below)))))
 
 (provide 'setup-windows)
 ;;; setup-windows.el ends here
