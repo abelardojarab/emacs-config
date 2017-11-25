@@ -91,6 +91,7 @@
 
 ;; Transient indentation guide
 (use-package highlight-indent-guides
+  :disabled t ;; this mode is super slow
   :defer t
   :commands highlight-indent-guides-mode
   :load-path (lambda () (expand-file-name "highlight-indent-guides/" user-emacs-directory))
