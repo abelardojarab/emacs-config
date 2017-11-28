@@ -78,7 +78,6 @@
 ;; Code Browser
 (use-package ecb
   :load-path (lambda () (expand-file-name "ecb/" user-emacs-directory))
-  ;; :init (ecb-activate)
   ;; :commands (ecb-activate) ;; enabling this line places ecb in autoload state
   :init (setq stack-trace-on-error t)
   :config (progn
@@ -209,7 +208,7 @@ the layout contains no persistent compilation window and the other windows get a
 little more place."
               (ecb-set-history-buffer)
               (ecb-split-ver 0.5)
-              (ecb-set-symboldef-buffer)
+              (ecb-set-analyse-buffer)
               (select-window (next-window (next-window)))
               (ecb-set-methods-buffer)
               (select-window (previous-window (previous-window (selected-window) 0) 0)))
@@ -302,23 +301,21 @@ If you have not set a compilation-window in `ecb-compile-window-height' then the
 layout contains no persistent compilation window and the other windows get a little
 more place."
               (ecb-set-history-buffer)
-              (ecb-split-ver 0.33)
-              (ecb-set-methods-buffer)
               (ecb-split-ver 0.5)
-              (ecb-set-analyse-buffer)
+              (ecb-set-methods-buffer)
               (select-window (next-window)))
 
             ;; disable global semantic idle scheduler.
             ;; it doesn't really seem to work all that well in automatically
             ;; reparsing buffers and it's actually intrusive when i'm typing:
             (add-hook 'ecb-activate-hook
-                      '(lambda()
+                      '(lambda ()
                          (semantic-mode t)
                          (setq global-semantic-idle-scheduler-mode nil)))
 
             ;; Reparse after a file save
             (add-hook 'after-save-hook
-                      '(lambda()
+                      '(lambda ()
                          (when (bound-and-true-p ecb-minor-mode)
                            (ignore-errors
                              ;; this is to get the methods buffer to refresh correctly.
