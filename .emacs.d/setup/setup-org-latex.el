@@ -27,6 +27,7 @@
 ;; Tweaks for LaTeX exporting
 (use-package ox-latex
   :defer 5
+  :after org
   :config (progn
 
             ;; Enable bibtex support

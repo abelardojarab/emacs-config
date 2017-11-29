@@ -1455,7 +1455,7 @@ also perform `outline-next-visible-heading'"
   (define-key isearch-mode-map (kbd "M-v") 'ergoemacs-paste)
   (define-key isearch-mode-map (kbd "C-v") 'ergoemacs-paste))
 
-(provide 'ergoemacs-mode)
+(provide 'ergoemacs-mode-fixed)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; ergoemacs-mode.el ends here
 ;; Local Variables:

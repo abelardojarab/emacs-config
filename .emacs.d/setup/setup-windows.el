@@ -25,11 +25,10 @@
 ;;; Code:
 
 ;; Removes *Help* from buffer after the mode has been set.
-;; https://unix.stackexchange.com/questions/19874/prevent-unwanted-buffers-from-opening
-(defun remove-help-buffer ()
-  (if (get-buffer "*Help*")
-      (kill-buffer "*Help*")))
-(add-hook 'after-change-major-mode-hook 'remove-help-buffer)
+;; (defun remove-help-buffer ()
+;;   (if (get-buffer "*Help*")
+;;       (kill-buffer "*Help*")))
+;; (add-hook 'after-change-major-mode-hook 'remove-help-buffer)
 
 ;; Removes *Completions* from buffer after you've opened a file.
 (add-hook 'minibuffer-exit-hook
@@ -147,12 +146,14 @@
 ;; Manage popup windows
 (use-package popwin
   :defer t
+  :disabled t
   :commands popwin-mode
   :load-path (lambda () (expand-file-name "popwin/" user-emacs-directory)))
 
 ;; Window purpose
 (use-package window-purpose
   :defer t
+  :disabled t
   :after helm
   :commands purpose-mode
   :load-path (lambda () (expand-file-name "window-purpose/" user-emacs-directory))
@@ -219,6 +220,7 @@
 
 ;; Helm interface to purpose
 (use-package helm-purpose
+  :disabled t
   :defer t
   :after (helm window-purpose)
   :commands (helm-purpose-switch-buffer-with-purpose helm-purpose-switch-buffer-with-some-purpose)

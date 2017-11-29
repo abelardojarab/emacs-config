@@ -68,6 +68,10 @@
             (use-package ox-org)
             (use-package ox-extra)
 
+        ;; Avoid error when inserting '_'
+            (defadvice org-backward-paragraph (around bar activate)
+              (ignore-errors add-do-it))
+
             ;; Tweaks
             (add-hook 'org-mode-hook
                       (lambda ()
@@ -76,7 +80,9 @@
                           (cua-mode t)
                           (flyspell-mode t)
                           (writegood-mode t)
-                          (yas-minor-mode t))))
+                          (yas-minor-mode t)
+                          (undo-tree-mode t)
+                          (aggressive-fill-paragraph-mode -1))))
 
             ;; Ignore tex commands during flyspell
             (add-hook 'org-mode-hook (lambda () (setq ispell-parser 'tex)))
@@ -140,11 +146,7 @@
                   org-list-allow-alphabetical    t
 
                   ;; Right-align tags to an indent from the right margin
-                  org-tags-column                120
-
-                  ;; Insert blank line before new heading
-                  org-blank-before-new-entry
-                  '((heading . t) (plain-list-item . auto)))
+                  org-tags-column                120)
 
             ;; Allow quotes to be verbatim
             (add-hook 'org-mode-hook
@@ -360,14 +362,21 @@
               (add-to-list 'org-file-apps '("\\.txt\\'" . "kate %s") t))
 
             ;; Change .pdf association directly within the alist
-            (setcdr (assoc "\\.pdf\\'" org-file-apps) "acroread %s")))
+            (setcdr (assoc "\\.pdf\\'" org-file-apps) "acroread %s")
+
+            ;; Beamer/ODT/Markdown exporters
+            (use-package ox-beamer)
+            (use-package ox-odt)
+            (use-package ox-md)))
 
 ;; Use footnotes as eldoc source
 (use-package org-eldoc
-  :defer 5
+  :defer t
+  :init (progn
+      (add-hook 'org-mode-hook #'org-eldoc-load)
+      (add-hook 'org-mode-hook #'eldoc-mode))
+  :commands org-eldoc-load
   :config (progn
-            (add-hook 'org-mode-hook #'org-eldoc-load)
-            (add-hook 'org-mode-hook #'eldoc-mode)
             (defun my/org-eldoc-get-footnote ()
               (save-excursion
                 (let ((fn (org-between-regexps-p "\\[fn:" "\\]")))
@@ -375,12 +384,7 @@
                     (save-match-data
                       (nth 3 (org-footnote-get-definition (buffer-substring (+ 1 (car fn)) (- (cdr fn) 1)))))))))
             (advice-add 'org-eldoc-documentation-function
-                        :before-until #'my/org-eldoc-get-footnote)
-
-            ;; Beamer/ODT/Markdown exporters
-            (use-package ox-beamer)
-            (use-package ox-odt)
-            (use-package ox-md)))
+                        :before-until #'my/org-eldoc-get-footnote)))
 
 (provide 'setup-org)
 ;;; setup-org.el ends here

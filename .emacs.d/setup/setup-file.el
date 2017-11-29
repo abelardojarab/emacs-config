@@ -34,7 +34,7 @@
   :defer t
   :commands aggressive-fill-paragraph-mode
   :load-path (lambda () (expand-file-name "aggressive-fill-paragraph/" user-emacs-directory))
-  :init (add-hook 'text-mode-hook 'aggressive-fill-paragraph-mode))
+  :config (add-hook 'text-mode-hook 'aggressive-fill-paragraph-mode))
 
 ;; Autorevert buffer
 (setq after-find-file-from-revert-buffer t)

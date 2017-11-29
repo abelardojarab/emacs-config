@@ -26,34 +26,45 @@
 
 ;; Org Table of Contents
 (use-package toc-org
+  :defer t
+  :after org
   :load-path (lambda () (expand-file-name "toc-org/" user-emacs-directory))
-  :config(add-hook 'org-mode-hook 'toc-org-enable))
+  :init (add-hook 'org-mode-hook 'toc-org-enable)
+  :commands toc-org-enable)
 
 ;; Nice bulleted lists
 (use-package org-bullets
+  :defer t
   :if (display-graphic-p)
+  :after org
   :load-path (lambda () (expand-file-name "org-bullets/" user-emacs-directory))
-  :config (progn
-            (setq org-bullets-bullet-list '("●" "►" "•" "•"))
-            (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))))
+  :init (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+  :commands org-bullets-mode
+  :config (setq org-bullets-bullet-list '("●" "►" "•" "•")))
 
 ;; Seek headlines or content inside org buffers
 (use-package org-seek
   :defer t
+  :after org
   :load-path (lambda () (expand-file-name "org-seek/" user-emacs-directory))
   :commands (org-seek-string org-seek-regexp org-seek-headlines))
 
 ;; Automated bulleting
 (use-package org-autolist
+  :defer t
+  :after org
   :load-path (lambda () (expand-file-name "org-autolist/" user-emacs-directory))
-  :config (add-hook 'org-mode-hook (lambda () (org-autolist-mode 1))))
+  :init (add-hook 'org-mode-hook (lambda () (org-autolist-mode 1)))
+  :commands org-autolist-mode)
 
 ;; ASCII doc exporter
 (use-package ox-asciidoc
+  :after org
   :load-path (lambda () (expand-file-name "ox-asciidoc/" user-emacs-directory)))
 
 ;; Export org-mode to Google I/O HTML5 slides
 (use-package ox-ioslide
+  :after org
   :load-path (lambda () (expand-file-name "ox-ioslide/" user-emacs-directory))
   :config (use-package ox-ioslide-helper))
 

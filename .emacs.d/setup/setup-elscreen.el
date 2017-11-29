@@ -32,14 +32,14 @@
           ;; Do not set a prefix (conflicts with helm)
           (setq elscreen-prefix-key (kbd "C-a")))
   :bind (:map ctl-x-map
-              ("0" . elscreen-start)
-              ("1" . elscreen-previous)
-              ("2" . elscreen-next)
+              ("C-0" . elscreen-start)
+              ("C-1" . elscreen-previous)
+              ("C-2" . elscreen-next)
               ;; Cloning is more useful than fresh creation
-              ("3" . elscreen-clone)
-              ("4" . elscreen-kill)
-              ("5" . elscreen-screen-nickname)
-              ("6" . elscreen-toggle-display-tab))
+              ("C-3" . elscreen-clone)
+              ("C-4" . elscreen-kill)
+              ("C-5" . elscreen-screen-nickname)
+              ("C-6" . elscreen-toggle-display-tab))
   :config (progn
             (set-face-attribute 'elscreen-tab-background-face nil :inherit 'default :background nil)
 
@@ -76,10 +76,7 @@
                     ("dict" . "OnlineDict")
                     ("*WL:Message*" . "Wanderlust")))
 
-            ;;  Use frame-title for tabs
-            ;; How to display the list of screens on the frame-title of my Emacs?
-            ;; This is broken. get-alist should be changed to alist-get
-            ;; https://www.emacswiki.org/emacs/EmacsLispScreen#toc8
+            ;; Use frame-title for tabs
             (defvar *elscreen-tab-truncate-length*
               20 "Number of characters to truncate tab names in frame title")
 
