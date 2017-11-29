@@ -78,7 +78,7 @@
 ;; Code Browser
 (use-package ecb
   :load-path (lambda () (expand-file-name "ecb/" user-emacs-directory))
-  :commands (ecb-activate) ;; enabling this line places ecb in autoload state
+  ;; :commands (ecb-activate) ;; enabling this line places ecb in autoload state
   :init (setq stack-trace-on-error t)
   :config (progn
 
@@ -325,10 +325,12 @@ more place."
                              (ecb-window-sync)))))
 
             ;; Finally activate ecb on HD-monitors or above
-            (if (or (and (> (car (screen-size)) 1900)
-                         (> (cadr (screen-size)) 1000))
-                    (not (display-graphic-p)))
-                (ecb-activate))))
+            (add-hook 'after-init-hook
+                          (lambda ()
+                            (if (or (and (> (car (screen-size)) 1900)
+                                         (> (cadr (screen-size)) 1000))
+                                    (not (display-graphic-p)))
+                                (ecb-activate))))))
 
 (provide 'setup-ecb)
 ;;; setup-ecb.el ends here

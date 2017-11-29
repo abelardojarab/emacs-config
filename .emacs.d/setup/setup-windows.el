@@ -24,12 +24,6 @@
 
 ;;; Code:
 
-;; Removes *Help* from buffer after the mode has been set.
-;; (defun remove-help-buffer ()
-;;   (if (get-buffer "*Help*")
-;;       (kill-buffer "*Help*")))
-;; (add-hook 'after-change-major-mode-hook 'remove-help-buffer)
-
 ;; Removes *Completions* from buffer after you've opened a file.
 (add-hook 'minibuffer-exit-hook
           '(lambda ()
@@ -146,14 +140,12 @@
 ;; Manage popup windows
 (use-package popwin
   :defer t
-  :disabled t
   :commands popwin-mode
   :load-path (lambda () (expand-file-name "popwin/" user-emacs-directory)))
 
 ;; Window purpose
 (use-package window-purpose
   :defer t
-  :disabled t
   :after helm
   :commands purpose-mode
   :load-path (lambda () (expand-file-name "window-purpose/" user-emacs-directory))
@@ -167,7 +159,7 @@
           (setq purpose-mode-map (make-sparse-keymap)))
   :config (progn
             (setq purpose-user-name-purposes
-                  '(("*ag*"               . search)))
+                  '(("*ag*"                        . search)))
 
             (setq purpose-user-regexp-purposes
                   '(("^\\*elfeed"                  . admin)
@@ -175,28 +167,29 @@
                     ))
 
             (setq purpose-user-mode-purposes
-                  '((eshell-mode          . terminal)
+                  '((eshell-mode                   . terminal)
 
-                    (python-mode          . py)
-                    (inferior-python-mode . py-repl)
+                    (python-mode                   . py)
+                    (inferior-python-mode          . py-repl)
 
-                    (circe-chat-mode      . comm)
-                    (circe-query-mode     . comm)
-                    (circe-lagmon-mode    . comm)
-                    (circe-server-mode    . comm)
+                    (circe-chat-mode               . comm)
+                    (circe-query-mode              . comm)
+                    (circe-lagmon-mode             . comm)
+                    (circe-server-mode             . comm)
 
-                    (ess-mode             . edit)
-                    (gitconfig-mode       . edit)
-                    (inferior-ess-mode    . interactive)
+                    (ess-mode                      . edit)
+                    (inferior-ess-mode             . interactive)
 
-                    (mu4e-main-mode       . admin)
-                    (mu4e-view-mode       . admin)
-                    (mu4e-about-mode      . admin)
-                    (mu4e-headers-mode    . admin)
-                    (mu4e-compose-mode    . edit)
+                    (gitconfig-mode                . edit)
 
-                    (pdf-view-mode        . view)
-                    (doc-view-mode        . view)))
+                    (mu4e-main-mode                . admin)
+                    (mu4e-view-mode                . admin)
+                    (mu4e-about-mode               . admin)
+                    (mu4e-headers-mode             . admin)
+                    (mu4e-compose-mode             . edit)
+
+                    (pdf-view-mode                 . view)
+                    (doc-view-mode                 . view)))
 
             ;; Prefer helm
             (setq purpose-preferred-prompt 'helm)
@@ -220,7 +213,6 @@
 
 ;; Helm interface to purpose
 (use-package helm-purpose
-  :disabled t
   :defer t
   :after (helm window-purpose)
   :commands (helm-purpose-switch-buffer-with-purpose helm-purpose-switch-buffer-with-some-purpose)

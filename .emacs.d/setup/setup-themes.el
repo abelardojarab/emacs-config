@@ -30,10 +30,10 @@
 ;; Choose different themes depending if we are using GUI or not
 ;; Console colors are enabled if "export TERM=xterm-256color" is added into .bashrc
 (add-hook 'after-init-hook
-	  (lambda ()
-	    (if (display-graphic-p)
-		(load-theme my/emacs-theme t)
-	      (load-theme my/emacs-theme-console t))))
+          (lambda ()
+            (if (display-graphic-p)
+                (load-theme my/emacs-theme t)
+              (load-theme my/emacs-theme-console t))))
 
 ;; Remember last theme
 (use-package remember-last-theme
