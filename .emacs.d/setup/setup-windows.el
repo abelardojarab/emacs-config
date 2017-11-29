@@ -296,7 +296,7 @@
             (setq shackle-lighter               ""
                   shackle-select-reused-windows nil
                   shackle-default-alignment     'right
-                  shackle-default-size          0.4)  ;; default 0.5
+                  shackle-default-size          0.5)  ;; default 0.5
 
             (setq shackle-rules
                   ;; CONDITION(:regexp)        :select     :inhibit-window-quit   :size+:align|:other     :same|:popup
@@ -307,11 +307,11 @@
                     ("\\*Async Shell.*\\*"     :regexp     t        :ignore              t)
                     (occur-mode                :select     nil      :align               t)
                     ("*Help*"                  :select     t        :inhibit-window-quit t       :other               t)
-                    ("*Completions*"           :size       0.3      :align               t)
+                    ("*Completions*"           :size       0.3      :align               right)
                     ("*Messages*"              :select     nil      :inhibit-window-quit t       :other               t)
                     ("\\*[Wo]*Man.*\\*"        :regexp     t        :select              t       :inhibit-window-quit t :other t)
-                    ("\\`\\*helm.*?\\*\\'"     :regexp     t        :size                0.3     :align               t)
-                    ("*Calendar*"              :select     t        :size                0.3     :align               below)))))
+                    ("\\`\\*helm.*?\\*\\'"     :regexp     t        :size                0.5     :align               left)
+                    ("*Calendar*"              :select     t        :size                0.4     :align               below)))))
 
 (provide 'setup-windows)
 ;;; setup-windows.el ends here
