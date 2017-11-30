@@ -3,7 +3,7 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil "ggtags" "ggtags.el" (23046 44981 353079 636000))
+;;;### (autoloads nil "ggtags" "ggtags.el" (23072 19472 31640 640000))
 ;;; Generated autoloads from ggtags.el
 
 (autoload 'ggtags-find-project "ggtags" "\

@@ -3,7 +3,7 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil nil ("helm-xref.el") (23046 44954 652238 717000))
+;;;### (autoloads nil nil ("helm-xref.el") (23072 19470 32703 263000))
 
 ;;;***
 
