@@ -61,7 +61,7 @@
   :commands (rtags-print-symbol-info
              rtags-find-symbol-at-point
              rtags-start-process-unless-running
-	     rtags-eldoc-function)
+             rtags-eldoc-function)
   :if (executable-find "rdm")
   :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory))
   :bind (:map c++-mode-map
@@ -70,18 +70,18 @@
   :init (add-hook 'c-mode-common-hook 'rtags-start-process-unless-running)
   :config (progn
             (use-package helm-rtags
-	      :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory)))
+              :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory)))
             (setq rtags-autostart-diagnostics      t
                   rtags-completions-enabled        t
-		  rtags-display-summary-as-tooltip t
-		  rtags-tooltips-enabled           t
+                  rtags-display-summary-as-tooltip t
+                  rtags-tooltips-enabled           t
                   rtags-use-helm                   t
-		  rtags-display-result-backend     'helm)
+                  rtags-display-result-backend     'helm)
             (rtags-enable-standard-keybindings)
-	    (rtags-set-periodic-reparse-timeout 2)
+            (rtags-set-periodic-reparse-timeout 2)
 
-	    ;; Kill rdm on Emacs exit
-	    (add-hook 'kill-emacs-hook 'rtags-quit-rdm)
+            ;; Kill rdm on Emacs exit
+            (add-hook 'kill-emacs-hook 'rtags-quit-rdm)
 
             ;; Integrating rtags with eldoc
             ;; https://github.com/Andersbakken/rtags/issues/987
@@ -109,11 +109,11 @@
 
             ;; Enable integration of rtags and eldoc
             (add-hook 'c-mode-common-hook (lambda ()
-					    (when (and (executable-find "rdm")
-						       (projectile-project-p)
-						       (not (file-exists-p (concat (projectile-project-root)
-										   "GTAGS"))))
-					      (setq-local eldoc-documentation-function #'rtags-eldoc-function))))))
+                                            (when (and (executable-find "rdm")
+                                                       (projectile-project-p)
+                                                       (not (file-exists-p (concat (projectile-project-root)
+                                                                                   "GTAGS"))))
+                                              (setq-local eldoc-documentation-function #'rtags-eldoc-function))))))
 
 ;; cmake syntax highlighting
 (use-package cmake-mode
@@ -139,19 +139,19 @@
             (if (not (file-exists-p "~/cmake_builds"))
                 (make-directory "~/cmake_builds"))
 
-	    (defun cmake-ide--get-build-dir ()
-	      "Return the directory name to run CMake in."
-	      ;; build the directory key for the project
-	      (my/cmake-enable-ide)
-	      (let ((build-dir
-		     (expand-file-name (or (cmake-ide--build-dir-var)
-					   (cmake-ide--get-build-dir-from-hash))
-				       (cmake-ide--locate-project-dir))))
-		(when (not (file-accessible-directory-p build-dir))
-		  (cmake-ide--message "Making directory %s" build-dir)
-		  (make-directory build-dir))
-		(setq cmake-ide-build-dir build-dir)
-		(file-name-as-directory build-dir)))
+            (defun cmake-ide--get-build-dir ()
+              "Return the directory name to run CMake in."
+              ;; build the directory key for the project
+              (my/cmake-enable-ide)
+              (let ((build-dir
+                     (expand-file-name (or (cmake-ide--build-dir-var)
+                                           (cmake-ide--get-build-dir-from-hash))
+                                       (cmake-ide--locate-project-dir))))
+                (when (not (file-accessible-directory-p build-dir))
+                  (cmake-ide--message "Making directory %s" build-dir)
+                  (make-directory build-dir))
+                (setq cmake-ide-build-dir build-dir)
+                (file-name-as-directory build-dir)))
 
             ;; Define cmake-ide-build-dir under ~/cmake_builds
             (defun my/cmake-enable-ide ()
