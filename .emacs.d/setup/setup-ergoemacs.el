@@ -26,7 +26,6 @@
 
 ;; Ergoemacs
 (use-package ergoemacs-mode-fixed
-  :ensure nil
   :demand t
   :if (and (executable-find "gzip")
            (display-graphic-p))

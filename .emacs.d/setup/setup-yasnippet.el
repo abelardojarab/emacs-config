@@ -30,8 +30,6 @@
   :load-path (lambda () (expand-file-name "yasnippet/" user-emacs-directory))
   :bind (:map yas-minor-mode-map
               ;; Remove Yasnippet's default tab key binding (avoid collision with auto-complete)
-              ([tab]         . nil)
-              ([?\t]         . nil)
               ([(shift tab)] . helm-c-yas-complete)
               ([backtab]     . helm-c-yas-complete)
               ("C-c r"       . yas-prev-field)

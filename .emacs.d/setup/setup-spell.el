@@ -138,10 +138,6 @@ Don't read buffer-local settings or word lists."
 (use-package flyspell
   :diminish flyspell-mode
   :if (not (equal 'system-type 'windows-nt))
-  :bind (:map flyspell-mode-map
-              ;; Disable flyspell keybindings
-              ("C-;" . nil)
-              ("C-." . nil))
   :commands (flyspell-mode flyspell-check-next-highlighted-word)
   :init (progn
           (dolist (hook my/flyspell-modes)

@@ -26,9 +26,6 @@
 
 ;; highlight phrases or regular expressions
 (use-package hi-lock
-  :bind (:map hi-lock-map
-              ;; Unbind the "C-x w" bindings because "M-s h" bindings provide the same thing.
-              ("C-x w" . nil))
   :commands global-hi-lock-mode
   :init (global-hi-lock-mode 1))
 
