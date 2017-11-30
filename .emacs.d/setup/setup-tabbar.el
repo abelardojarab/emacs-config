@@ -62,7 +62,7 @@ That is, a string used to represent it on the tab bar."
               (setq ad-return-value
                     (if (and (buffer-modified-p (tabbar-tab-value tab))
                              (buffer-file-name (tabbar-tab-value tab)))
-                        (concat "+" (concat ad-return-value ""))
+                        (concat " +" (concat ad-return-value ""))
                       (concat " " (concat ad-return-value "")))))
 
             ;; called each time the modification state of the buffer changed
