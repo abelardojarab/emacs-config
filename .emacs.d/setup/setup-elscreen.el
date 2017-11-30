@@ -43,37 +43,38 @@
   :config (progn
             (set-face-attribute 'elscreen-tab-background-face nil :inherit 'default :background nil)
 
-            ;; Do not show tabs to save space
-            ;; Can use M-x elscreen-toggle-display-tab
-            (setq elscreen-display-tab nil)
+            (setq
+             ;; Do not show tabs to save space
+             ;; Can use M-x elscreen-toggle-display-tab
+             elscreen-display-tab nil
 
-            ;; No preceding [X] for closing
-            (setq elscreen-tab-display-kill-screen nil)
+             ;; No preceding [X] for closing
+             elscreen-tab-display-kill-screen nil
 
-            ;; No [<->] at the beginning
-            (setq elscreen-tab-display-control nil)
+             ;; No [<->] at the beginning
+             elscreen-tab-display-control nil)
 
             ;; buffer-dependent naming scheme
             (setq elscreen-buffer-to-nickname-alist
                   '(("^dired-mode$" .
                      (lambda ()
                        (format "Dired(%s)" dired-directory)))
-                    ("^Info-mode$" .
+                    ("^Info-mode$"  .
                      (lambda ()
                        (format "Info(%s)" (file-name-nondirectory Info-current-file))))
                     ("^mew-draft-mode$" .
                      (lambda ()
                        (format "Mew(%s)" (buffer-name (current-buffer)))))
-                    ("^mew-" . "Mew")
-                    ("^irchat-" . "IRChat")
-                    ("^liece-" . "Liece")
-                    ("^lookup-" . "Lookup")))
+                    ("^mew-"        . "Mew")
+                    ("^irchat-"     . "IRChat")
+                    ("^liece-"      . "Liece")
+                    ("^lookup-"     . "Lookup")))
 
             (setq elscreen-mode-to-nickname-alist
-                  '(("[Ss]hell" . "shell")
-                    ("compilation" . "compile")
-                    ("-telnet" . "telnet")
-                    ("dict" . "OnlineDict")
+                  '(("[Ss]hell"     . "shell")
+                    ("compilation"  . "compile")
+                    ("-telnet"      . "telnet")
+                    ("dict"         . "OnlineDict")
                     ("*WL:Message*" . "Wanderlust")))
 
             ;; Use frame-title for tabs
