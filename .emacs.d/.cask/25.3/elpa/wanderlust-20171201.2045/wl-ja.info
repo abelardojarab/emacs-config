@@ -7380,7 +7380,7 @@ Wanderlust に関する議論は以下のメーリングリストで行われま
 と書いたメールを送って下さい。
 
    バグ報告やパッチの送付もこれらのメーリングリストへ送ってください。メ
-ーリ ングリストのメンバでなくとも、送信できる設定になっています。
+ーリ ングリスへの送信はメンバになる必要があります。
 
    また、バグ報告の場合はバックトレースを取って添付すると原因究明しやす
 くな ります。 (1)
@@ -9099,12 +9099,12 @@ Node: Migration191302
 Node: Before 2.12.0191549
 Node: Terminology192982
 Node: Mailing List193693
-Ref: Mailing List-Footnote-1194809
-Node: Addition194880
-Node: Index197570
-Node: Concept Index197802
-Node: Key Index213019
-Node: Variable Index241352
-Node: Function Index271482
+Ref: Mailing List-Footnote-1194802
+Node: Addition194873
+Node: Index197563
+Node: Concept Index197795
+Node: Key Index213012
+Node: Variable Index241345
+Node: Function Index271475
 
 End Tag Table

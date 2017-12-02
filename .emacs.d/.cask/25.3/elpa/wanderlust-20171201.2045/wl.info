@@ -30,7 +30,7 @@ versions.
 
 Indirect:
 wl.info-1: 1118
-wl.info-2: 315531
+wl.info-2: 315516
 
 Tag Table:
 (Indirect)
@@ -157,12 +157,12 @@ Node: Migration262452
 Node: Before 2.12.0262851
 Node: Terminology264976
 Node: Mailing List265963
-Ref: Mailing List-Footnote-1267491
-Node: Addition267569
-Node: Index271168
-Node: Concept Index271431
-Node: Key Index286162
-Node: Variable Index315531
-Node: Function Index345382
+Ref: Mailing List-Footnote-1267476
+Node: Addition267554
+Node: Index271153
+Node: Concept Index271416
+Node: Key Index286147
+Node: Variable Index315516
+Node: Function Index345367
 
 End Tag Table

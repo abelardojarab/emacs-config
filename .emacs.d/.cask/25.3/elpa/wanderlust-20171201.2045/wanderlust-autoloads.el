@@ -3,7 +3,7 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil "elmo" "elmo.el" (23046 44805 527712 554000))
+;;;### (autoloads nil "elmo" "elmo.el" (23074 63921 710651 415000))
 ;;; Generated autoloads from elmo.el
 
 (autoload 'elmo-make-folder "elmo" "\
@@ -16,8 +16,8 @@ encode and decode a multibyte string.
 
 ;;;***
 
-;;;### (autoloads nil "elmo-split" "elmo-split.el" (23046 44805 524712
-;;;;;;  684000))
+;;;### (autoloads nil "elmo-split" "elmo-split.el" (23074 63921 707651
+;;;;;;  508000))
 ;;; Generated autoloads from elmo-split.el
 
 (autoload 'elmo-split "elmo-split" "\
@@ -28,7 +28,7 @@ If prefix argument ARG is specified, do a reharsal (no harm).
 
 ;;;***
 
-;;;### (autoloads nil "wl" "wl.el" (23046 44805 489714 204000))
+;;;### (autoloads nil "wl" "wl.el" (23074 63921 676652 471000))
 ;;; Generated autoloads from wl.el
 
 (autoload 'wl "wl" "\
@@ -44,8 +44,8 @@ Pop up a frame to read messages via Wanderlust.
 
 ;;;***
 
-;;;### (autoloads nil "wl-addrmgr" "wl-addrmgr.el" (23046 44805 519712
-;;;;;;  901000))
+;;;### (autoloads nil "wl-addrmgr" "wl-addrmgr.el" (23074 63921 702651
+;;;;;;  663000))
 ;;; Generated autoloads from wl-addrmgr.el
 
 (autoload 'wl-addrmgr "wl-addrmgr" "\
@@ -55,8 +55,8 @@ Start an Address manager.
 
 ;;;***
 
-;;;### (autoloads nil "wl-draft" "wl-draft.el" (23046 44805 515713
-;;;;;;  75000))
+;;;### (autoloads nil "wl-draft" "wl-draft.el" (23074 63921 698651
+;;;;;;  788000))
 ;;; Generated autoloads from wl-draft.el
 
 (autoload 'wl-draft "wl-draft" "\
@@ -74,7 +74,7 @@ been implemented yet.  Partial support for SWITCH-FUNCTION now supported.
 
 ;;;***
 
-;;;### (autoloads nil "wl-qs" "wl-qs.el" (23046 44805 515713 75000))
+;;;### (autoloads nil "wl-qs" "wl-qs.el" (23074 63921 699651 756000))
 ;;; Generated autoloads from wl-qs.el
 
 (autoload 'wl-quicksearch-goto-search-folder-wrapper "wl-qs" "\
@@ -101,7 +101,7 @@ Call `wl-quicksearch-goto-search-folder' on a folder built from `wl-quicksearch-
 ;;;;;;  "wl-highlight.el" "wl-message.el" "wl-mime.el" "wl-refile.el"
 ;;;;;;  "wl-score.el" "wl-spam.el" "wl-summary.el" "wl-template.el"
 ;;;;;;  "wl-thread.el" "wl-util.el" "wl-vars.el" "wl-version.el")
-;;;;;;  (23046 44805 529712 467000))
+;;;;;;  (23074 63921 712651 353000))
 
 ;;;***
 
