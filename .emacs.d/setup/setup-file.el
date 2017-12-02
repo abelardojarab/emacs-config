@@ -29,12 +29,12 @@
 (add-hook 'text-mode-hook 'auto-fill-mode)
 (diminish 'auto-fill-function " Ⓕ")
 
-;; aggresive fill on paragraphs
+;; aggressive fill on paragraphs
 (use-package aggressive-fill-paragraph
+  :disabled t
   :defer t
   :commands aggressive-fill-paragraph-mode
-  :load-path (lambda () (expand-file-name "aggressive-fill-paragraph/" user-emacs-directory))
-  :config (add-hook 'text-mode-hook 'aggressive-fill-paragraph-mode))
+  :load-path (lambda () (expand-file-name "aggressive-fill-paragraph/" user-emacs-directory)))
 
 ;; Autorevert buffer
 (setq after-find-file-from-revert-buffer t)

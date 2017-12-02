@@ -26,6 +26,7 @@
 
 ;; w3m
 (use-package w3m
+  :if (executable-find "w3m")
   :load-path (lambda () (expand-file-name "w3m/" user-emacs-directory))
   :commands (w3m w3m-find-file w3m-goto-url-new-session)
   :init (progn

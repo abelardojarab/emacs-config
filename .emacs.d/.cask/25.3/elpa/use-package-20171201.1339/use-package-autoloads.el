@@ -3,8 +3,8 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil "use-package" "use-package.el" (23072 52452
-;;;;;;  458199 69000))
+;;;### (autoloads nil "use-package" "use-package.el" (23073 62551
+;;;;;;  356233 493000))
 ;;; Generated autoloads from use-package.el
 
 (autoload 'use-package-autoload-keymap "use-package" "\
@@ -60,10 +60,8 @@ this file.  Usage:
                  `:magic-fallback', or `:interpreter'.  This can be an integer,
                  to force loading after N seconds of idle time, if the package
                  has not already been loaded.
-
 :after           Defer loading of a package until after any of the named
                  features are loaded.
-
 :demand          Prevent deferred loading in all cases.
 
 :if EXPR         Initialize and load only if EXPR evaluates to a non-nil value.

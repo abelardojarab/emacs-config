@@ -7,7 +7,7 @@
 ;; Created: 17 Jun 2012
 ;; Modified: 29 Nov 2017
 ;; Version: 2.4
-;; Package-Version: 20171130.1238
+;; Package-Version: 20171201.1339
 ;; Package-Requires: ((emacs "24.3") (bind-key "2.4"))
 ;; Keywords: dotemacs startup speed config package
 ;; URL: https://github.com/jwiegley/use-package
@@ -43,8 +43,9 @@
 (require 'bind-key)
 (require 'bytecomp)
 (require 'cl-lib)
-(eval-when-compile (require 'cl))
-(eval-when-compile (require 'regexp-opt))
+(eval-when-compile
+  (require 'cl)
+  (require 'regexp-opt))
 
 (declare-function package-installed-p "package")
 (declare-function package-read-all-archive-contents "package" ())
@@ -85,11 +86,6 @@ The check is performed by looking for the module using `locate-library'."
 
 (defcustom use-package-always-demand nil
   "If non-nil, assume `:demand t` unless `:defer t` is given."
-  :type 'boolean
-  :group 'use-package)
-
-(defcustom use-package-always-defer-install nil
-  "If non-nil, assume `:defer-install t` unless `:defer-install nil` is given."
   :type 'boolean
   :group 'use-package)
 
@@ -139,15 +135,16 @@ the user specified."
 
 (defcustom use-package-keywords
   '(:disabled
-    :preface
     :pin
-    :defer-install
     :ensure
     :if
     :when
     :unless
     :requires
     :load-path
+    :defines
+    :functions
+    :preface
     :no-require
     :bind
     :bind*
@@ -158,10 +155,8 @@ the user specified."
     :magic
     :magic-fallback
     :commands
-    :defines
-    :functions
-    :defer
     :hook
+    :defer
     :custom
     :custom-face
     :init
@@ -200,9 +195,8 @@ Must be set before loading use-package."
   "Function that ensures a package is installed.
 This function is called with four arguments: the name of the
 package declared in the `use-package' form; the argument passed
-to `:ensure'; the current `state' plist created by previous
-handlers; and a keyword indicating the context in which the
-installation is occurring.
+to `:ensure'; and the current `state' plist created by previous
+handlers.
 
 Note that this function is called whenever `:ensure' is provided,
 even if it is nil. It is up to the function to decide on the
@@ -210,50 +204,14 @@ semantics of the various values for `:ensure'.
 
 This function should return non-nil if the package is installed.
 
-The default value uses package.el to install the package.
-
-Possible values for the context keyword are:
-
-:byte-compile - package installed during byte-compilation
-:ensure - package installed normally by :ensure
-:autoload - deferred installation triggered by an autoloaded
-            function
-:after - deferred installation triggered by the loading of a
-         feature listed in the :after declaration
-:config - deferred installation was specified at the same time
-          as :demand, so the installation was triggered
-          immediately
-:unknown - context not provided
-
-Note that third-party code can provide other values for the
-context keyword by calling `use-package-install-deferred-package'
-with the appropriate value."
+The default value uses package.el to install the package."
   :type '(choice (const :tag "package.el" use-package-ensure-elpa)
-                 (function :tag "Custom"))
-  :group 'use-package)
-
-(defcustom use-package-pre-ensure-function 'ignore
-  "Function that is called upon installation deferral.
-It is called immediately with the first three arguments that
-would be passed to `use-package-ensure-function' (the context
-keyword is omitted), but only if installation has been deferred.
-It is intended for package managers other than package.el which
-might want to activate the autoloads of a package immediately, if
-it's installed, but otherwise defer installation until later (if
-`:defer-install' is specified). The reason it is set to `ignore'
-by default is that package.el activates the autoloads for all
-known packages at initialization time, rather than one by one
-when the packages are actually requested."
-  :type '(choice (const :tag "None" ignore)
                  (function :tag "Custom"))
   :group 'use-package)
 
 (defcustom use-package-defaults
   '((:config '(t) t)
     (:ensure use-package-always-ensure use-package-always-ensure)
-    (:defer-install
-     use-package-always-defer-install
-     use-package-always-defer-install)
     (:pin use-package-always-pin use-package-always-pin))
   "Alist of default values for `use-package' keywords.
 Each entry in the alist is a list of three elements. The first
@@ -348,8 +306,8 @@ appended."
   "Return a form which will load or require NAME depending on
 whether it's a string or symbol."
   (if (stringp name)
-      `(load ,name ',noerror)
-    `(require ',name nil ',noerror)))
+      `(load ,name ,noerror)
+    `(require ',name nil ,noerror)))
 
 (defun use-package-expand (name label form)
   "FORM is a list of forms, so `((foo))' if only `foo' is being called."
@@ -388,6 +346,20 @@ ARGS is a list of forms, so `((foo))' if only `foo' is being called."
               `((run-hooks
                  ',(intern (concat "use-package--" name-string
                                    "--post-" keyword-name "-hook")))))))))))
+
+(defun use-package--require (name &optional no-require body)
+  (use-package--with-elapsed-timer
+      (format "Loading package %s" name)
+    (if use-package-expand-minimally
+        (use-package-concat
+         (unless no-require
+           (list (use-package-load-name name)))
+         body)
+      (if no-require
+          body
+        `((if (not ,(use-package-load-name name t))
+              (ignore (message (format "Cannot load %s" ',name)))
+            ,@body))))))
 
 (defun use-package--with-elapsed-timer (text body)
   "BODY is a list of forms, so `((foo))' if only `foo' is being called."
@@ -641,83 +613,6 @@ manually updated package."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;;; :defer-install
-;;
-
-(defvar use-package--deferred-packages (make-hash-table)
-  "Hash mapping packages to data about their installation.
-
-The keys are not actually symbols naming packages, but rather
-symbols naming the features which are the names of \"packages\"
-required by `use-package' forms. Since
-`use-package-ensure-function' could be set to anything, it is
-actually impossible for `use-package' to determine what package
-is supposed to provide the feature being ensured just based on
-the value of `:ensure'.
-
-Each value is a cons, with the car being the the value passed to
-`:ensure' and the cdr being the `state' plist. See
-`use-package-install-deferred-package' for information about how
-these values are used to call `use-package-ensure-function'.")
-
-(defun use-package-install-deferred-package (name &optional context)
-  "Install a package whose installation has been deferred.
-NAME should be a symbol naming a package (actually, a feature).
-This is done by calling `use-package-ensure-function' is called
-with four arguments: the key (NAME) and the two elements of the
-cons in `use-package--deferred-packages' (the value passed to
-`:ensure', and the `state' plist), and a keyword providing
-information about the context in which the installation is
-happening. (This defaults to `:unknown' but can be overridden by
-providing CONTEXT.)
-
-Return t if the package is installed, nil otherwise. (This is
-determined by the return value of `use-package-ensure-function'.)
-If the package is installed, its entry is removed from
-`use-package--deferred-packages'. If the package has no entry in
-`use-package--deferred-packages', do nothing and return t."
-  (interactive
-   (let ((packages nil))
-     (maphash (lambda (package info)
-                (push package packages))
-              use-package--deferred-packages)
-     (if packages
-         (list
-          (intern
-           (completing-read
-            "Select package: "
-            packages
-            nil
-            'require-match))
-          :interactive)
-       (user-error "No packages with deferred installation"))))
-  (let ((spec (gethash name use-package--deferred-packages)))
-    (if spec
-        (when (funcall use-package-ensure-function
-                       name (car spec) (cdr spec)
-                       (or context :unknown))
-          (remhash name use-package--deferred-packages)
-          t)
-      t)))
-
-(defalias 'use-package-normalize/:defer-install 'use-package-normalize-test)
-
-(defun use-package-handler/:defer-install (name keyword defer rest state)
-  (use-package-process-keywords name rest
-    ;; Just specifying `:defer-install' does not do anything; this
-    ;; sets up a marker so that if `:ensure' is specified as well then
-    ;; it knows to set up deferred installation. But then later, when
-    ;; `:config' is processed, it might turn out that `:demand' was
-    ;; specified as well, and the deferred installation needs to be
-    ;; run immediately. For this we need to know if the deferred
-    ;; installation was actually set up or not, so we need to set one
-    ;; marker value in `:defer-install', and then change it to a
-    ;; different value in `:ensure', if the first one is present. (The
-    ;; first marker is `:defer-install', and the second is `:ensure'.)
-    (plist-put state :defer-install (when defer :defer-install))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
 ;;; :ensure
 ;;
 (defvar package-archive-contents)
@@ -732,65 +627,45 @@ If the package is installed, its entry is removed from
            (concat ":ensure wants an optional package name "
                    "(an unquoted symbol name)")))))))
 
-(defun use-package-ensure-elpa (name ensure state context &optional no-refresh)
-  (let ((package (or (and (eq ensure t) (use-package-as-symbol name))
-                     ensure)))
+(defun use-package-ensure-elpa (name ensure state &optional no-refresh)
+  (let ((package
+         (or (and (eq ensure t) (use-package-as-symbol name))
+             ensure)))
     (when package
       (require 'package)
-      (or (package-installed-p package)
-          ;; Contexts in which the confirmation prompt is bypassed.
-          (not (or (member context '(:byte-compile :ensure :config))
-                   (y-or-n-p (format "Install package %S?" package))))
-          (condition-case-unless-debug err
-              (let ((pinned (assoc package (bound-and-true-p
-                                            package-pinned-packages))))
-                (when pinned
+      (unless (package-installed-p package)
+        (condition-case-unless-debug err
+            (progn
+              (when (assoc package (bound-and-true-p
+                                    package-pinned-packages))
+                (package-read-all-archive-contents))
+              (if (assoc package package-archive-contents)
+                  (package-install package)
+                (package-refresh-contents)
+                (when (assoc package (bound-and-true-p
+                                      package-pinned-packages))
                   (package-read-all-archive-contents))
-                (if (assoc package package-archive-contents)
-                    (package-install package)
-                  (package-refresh-contents)
-                  (when pinned
-                    (package-read-all-archive-contents))
-                  (package-install package))
-                t)
-            (error
-             (ignore
-              (display-warning 'use-package
-                               (format "Failed to install %s: %s"
-                                       name (error-message-string err))
-                               :error))))))))
+                (package-install package))
+              t)
+          (error
+           (ignore
+            (display-warning 'use-package
+                             (format "Failed to install %s: %s"
+                                     name (error-message-string err))
+                             :error))))))))
 
 (defun use-package-handler/:ensure (name keyword ensure rest state)
-  (let* ((body (use-package-process-keywords name rest
-                 ;; Here we are conditionally updating the marker
-                 ;; value for deferred installation; this will be
-                 ;; checked later by `:config'. For more information
-                 ;; see `use-package-handler/:defer-install'.
-                 (if (eq (plist-get state :defer-install)
-                         :defer-install)
-                     (plist-put state :defer-install :ensure)
-                   state))))
-    ;; We want to avoid installing packages when the `use-package'
-    ;; macro is being macro-expanded by elisp completion (see
-    ;; `lisp--local-variables'), but still do install packages when
-    ;; byte-compiling to avoid requiring `package' at runtime.
-    (cond
-     ((plist-get state :defer-install)
-      (push
-       `(puthash ',name '(,ensure . ,state)
-                 use-package--deferred-packages)
-       body)
-      (push `(,use-package-pre-ensure-function
-              ',name ',ensure ',state)
+  (let* ((body (use-package-process-keywords name rest state)))
+    ;; We want to avoid installing packages when the `use-package' macro is
+    ;; being macro-expanded by elisp completion (see `lisp--local-variables'),
+    ;; but still install packages when byte-compiling, to avoid requiring
+    ;; `package' at runtime.
+    (if (bound-and-true-p byte-compile-current-file)
+        ;; Eval when byte-compiling,
+        (funcall use-package-ensure-function name ensure state)
+      ;;  or else wait until runtime.
+      (push `(,use-package-ensure-function ',name ',ensure ',state)
             body))
-     ((bound-and-true-p byte-compile-current-file)
-      ;; Eval when byte-compiling,
-      (funcall use-package-ensure-function
-               name ensure state :byte-compile))
-     ;;  or else wait until runtime.
-     (t (push `(,use-package-ensure-function
-                ',name ',ensure ',state :ensure)
-              body)))
     body))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -936,7 +811,8 @@ If ALLOW-EMPTY is non-nil, it's OK for ARGS to be an empty list."
 
 (defun use-package-handler/:no-require (name keyword arg rest state)
   ;; This keyword has no functional meaning.
-  (use-package-process-keywords name rest state))
+  (use-package-process-keywords name rest
+    (plist-put state :no-require t)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -961,7 +837,7 @@ If ALLOW-EMPTY is non-nil, it's OK for ARGS to be an empty list."
 (defun use-package-handler/:preface (name keyword arg rest state)
   (let ((body (use-package-process-keywords name rest state)))
     (use-package-concat
-     (unless (null arg)
+     (when arg
        `((eval-and-compile ,@arg)))
      body)))
 
@@ -1099,9 +975,8 @@ representing symbols (that may need to be autloaded)."
         (use-package-plist-maybe-put rest :defer t))
        (use-package-plist-append state :commands commands))
      `((ignore
-        ,(macroexpand
-          `(,(if bind-macro bind-macro 'bind-keys)
-            :package ,name ,@nargs)))))))
+        (,(if bind-macro bind-macro 'bind-keys)
+         :package ,name ,@nargs))))))
 
 (defun use-package-handler/:bind* (name keyword arg rest state)
   (use-package-handler/:bind name keyword arg rest state 'bind-keys*))
@@ -1144,17 +1019,18 @@ representing symbols (that may need to be autloaded)."
 
 (defun use-package-handler/:bind-keymap
     (name keyword arg rest state &optional override)
-  (let ((form (mapcar
-               #'(lambda (binding)
-                   `(,(if override
-                          'bind-key*
-                        'bind-key)
-                     ,(car binding)
-                     #'(lambda ()
-                         (interactive)
-                         (use-package-autoload-keymap
-                          ',(cdr binding) ',(use-package-as-symbol name)
-                          ,override)))) arg)))
+  (let ((form
+         (mapcar
+          #'(lambda (binding)
+              `(,(if override
+                     'bind-key*
+                   'bind-key)
+                ,(car binding)
+                #'(lambda ()
+                    (interactive)
+                    (use-package-autoload-keymap
+                     ',(cdr binding) ',(use-package-as-symbol name)
+                     ,override)))) arg)))
     (use-package-concat
      (use-package-process-keywords name
        (use-package-sort-keywords
@@ -1254,8 +1130,7 @@ representing symbols (that may need to be autloaded)."
 (defalias 'use-package-normalize/:defines 'use-package-normalize-symlist)
 
 (defun use-package-handler/:defines (name keyword arg rest state)
-  (let ((body (use-package-process-keywords name rest state)))
-    body))
+  (use-package-process-keywords name rest state))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -1265,16 +1140,7 @@ representing symbols (that may need to be autloaded)."
 (defalias 'use-package-normalize/:functions 'use-package-normalize-symlist)
 
 (defun use-package-handler/:functions (name keyword arg rest state)
-  (let ((body (use-package-process-keywords name rest state)))
-    (if (not (bound-and-true-p byte-compile-current-file))
-        body
-      (use-package-concat
-       (unless (null arg)
-         `((eval-when-compile
-             ,@(mapcar
-                #'(lambda (fn)
-                    `(declare-function ,fn ,(use-package-as-string name))) arg))))
-       body))))
+  (use-package-process-keywords name rest state))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -1282,35 +1148,6 @@ representing symbols (that may need to be autloaded)."
 ;;
 
 (defalias 'use-package-normalize/:defer 'use-package-normalize-predicate)
-
-(defun use-package--autoload-with-deferred-install
-    (command package-name)
-  "Return a form defining an autoload supporting deferred install."
-  `(let* ((load-list-item '(defun . ,command))
-          (already-loaded (member load-list-item current-load-list)))
-     (defun ,command (&rest args)
-       "[Arg list not available until function definition is loaded.]
-
-  \(fn ...)"
-       (interactive)
-       (if (bound-and-true-p use-package--recursive-autoload)
-           (use-package-error
-            (format "Autoloading failed to define function %S"
-                    ',command))
-         (when (use-package-install-deferred-package
-                ',package-name :autoload)
-           (require ',package-name)
-           (let ((use-package--recursive-autoload t))
-             (if (called-interactively-p 'any)
-                 (call-interactively ',command)
-               (apply ',command args))))))
-     ;; This prevents the user's init-file from being recorded as the
-     ;; definition location for the function before it is actually
-     ;; loaded. (Our goal is to leave the `current-load-list'
-     ;; unchanged, so we only remove the entry for this function if it
-     ;; was not already present.)
-     (unless already-loaded
-       (setq current-load-list (remove load-list-item current-load-list)))))
 
 (defun use-package-handler/:defer (name keyword arg rest state)
   (let ((body (use-package-process-keywords name rest
@@ -1329,13 +1166,7 @@ representing symbols (that may need to be autloaded)."
           (when (symbolp command)
             (append
              `((unless (fboundp ',command)
-                 ;; Here we are checking the marker value set in
-                 ;; `use-package-handler/:ensure' to see if deferred
-                 ;; installation is actually happening. See
-                 ;; `use-package-handler/:defer-install' for more information.
-                 ,(if (eq (plist-get state :defer-install) :ensure)
-                      (use-package--autoload-with-deferred-install command name)
-                    `(autoload #',command ,name-string nil t))))
+                 (autoload #',command ,name-string nil t)))
              (when (bound-and-true-p byte-compile-current-file)
                `((eval-when-compile
                    (declare-function ,command ,name-string)))))))
@@ -1385,15 +1216,10 @@ representing symbols (that may need to be autloaded)."
         (setq arg (cons :all arg)))
     (use-package-concat
      (when arg
-       (list (funcall (use-package-require-after-load arg)
-                      (macroexp-progn
-                       ;; Here we are checking the marker value for deferred
-                       ;; installation set in `use-package-handler/:ensure'.
-                       ;; See also `use-package-handler/:defer-install'.
-                       `(,@(when (eq (plist-get state :defer-install) :ensure)
-                             `((use-package-install-deferred-package
-                                'name :after)))
-                         (require (quote ,name) nil t))))))
+       (list (funcall
+              (use-package-require-after-load arg)
+              (macroexp-progn
+               (use-package--require name)))))
      body)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1451,21 +1277,8 @@ representing symbols (that may need to be autloaded)."
         (unless (or (null config-body) (equal config-body '(t)))
           `((eval-after-load ,(if (symbolp name) `',name name)
               ',(macroexp-progn config-body))))
-      ;; Here we are checking the marker value for deferred
-      ;; installation set in `use-package-handler/:ensure'. See also
-      ;; `use-package-handler/:defer-install'.
-      (when (eq (plist-get state :defer-install) :ensure)
-        (use-package-install-deferred-package name :config))
-      (use-package--with-elapsed-timer
-          (format "Loading package %s" name)
-        (if use-package-expand-minimally
-            (use-package-concat
-             (list (use-package-load-name name))
-             config-body)
-          `((if (not ,(use-package-load-name name t))
-                (ignore
-                 (message (format "Cannot load %s" ',name)))
-              ,@config-body)))))))
+      (use-package--require name (plist-get state ':no-require)
+                            config-body))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -1715,10 +1528,8 @@ this file.  Usage:
                  `:magic-fallback', or `:interpreter'.  This can be an integer,
                  to force loading after N seconds of idle time, if the package
                  has not already been loaded.
-
 :after           Defer loading of a package until after any of the named
                  features are loaded.
-
 :demand          Prevent deferred loading in all cases.
 
 :if EXPR         Initialize and load only if EXPR evaluates to a non-nil value.
@@ -1738,49 +1549,57 @@ this file.  Usage:
           (orig-args args)
           (args (use-package-normalize-plist name args)))
       (dolist (spec use-package-defaults)
-        (setq args (use-package-sort-keywords
-                    (if (eval (nth 2 spec))
-                        (use-package-plist-maybe-put
-                         args (nth 0 spec) (eval (nth 1 spec)))
-                      args))))
+        (setq args (if (eval (nth 2 spec))
+                       (use-package-plist-maybe-put
+                        args (nth 0 spec) (eval (nth 1 spec)))
+                     args)))
 
       ;; When byte-compiling, pre-load the package so all its symbols are in
       ;; scope.
       (if (bound-and-true-p byte-compile-current-file)
           (setq args
-                (use-package-plist-cons
+                (use-package-plist-append
                  args :preface
-                 `(eval-when-compile
-                    ,@(mapcar #'(lambda (var) `(defvar ,var))
-                              (plist-get args :defines))
-                    ,@(mapcar #'(lambda (fn) `(declare-function
-                                          ,fn ,(use-package-as-string name)))
-                              (plist-get args :functions))
-                    (with-demoted-errors
-                        ,(format "Cannot load %s: %%S" name)
-                      ,(if (eq use-package-verbose 'debug)
-                           `(message "Compiling package %s" ',name-symbol))
-                      ,(unless (plist-get args :no-require)
-                         (use-package-load-name name)))))))
+                 (use-package-concat
+                  (mapcar #'(lambda (var) `(defvar ,var))
+                          (plist-get args :defines))
+                  (mapcar #'(lambda (fn) `(declare-function
+                                      ,fn ,(use-package-as-string name)))
+                          (plist-get args :functions))
+                  `((eval-when-compile
+                      (with-demoted-errors
+                          ,(format "Cannot load %s: %%S" name)
+                        ,(if (eq use-package-verbose 'debug)
+                             `(message "Compiling package %s" ',name-symbol))
+                        ,(unless (plist-get args :no-require)
+                           `(load ,(if (stringp name)
+                                       name
+                                     (symbol-name name)) nil t)))))))))
 
       (let ((body
-             (macroexp-progn
-              (use-package-process-keywords name
-                (let ((args* (if (and use-package-always-demand
-                                      (not (memq :defer args)))
-                                 (append args '(:demand t))
-                               args)))
-                  (when (and use-package-always-ensure
-                             (plist-member args* :load-path)
-                             (not (plist-member orig-args :ensure)))
-                    (plist-put args* :ensure nil))
-                  (unless (plist-member args* :init)
-                    (plist-put args* :init nil))
-                  (unless (plist-member args* :config)
-                    (plist-put args* :config nil))
-                  args*)
-                (and use-package-always-defer
-                     (list :deferred t))))))
+             `(progn
+                ,@(use-package-process-keywords name
+                    (let ((args*
+                           (use-package-sort-keywords
+                            (if (and use-package-always-demand
+                                     (not (memq :defer args)))
+                                (plist-put args :demand t)
+                              args))))
+                      ;; The :demand keyword should not override :after
+                      (if (and (plist-member args* :after)
+                               (plist-member args* :demand))
+                          (setq args* (use-package-plist-delete args* :demand)))
+                      (when (and use-package-always-ensure
+                                 (plist-member args* :load-path)
+                                 (not (plist-member orig-args :ensure)))
+                        (plist-put args* :ensure nil))
+                      (unless (plist-member args* :init)
+                        (plist-put args* :init nil))
+                      (unless (plist-member args* :config)
+                        (plist-put args* :config '(t)))
+                      args*)
+                    (and use-package-always-defer
+                         (list :deferred t))))))
         (when use-package-debug
           (display-buffer
            (save-current-buffer
