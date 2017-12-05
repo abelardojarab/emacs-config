@@ -28,9 +28,7 @@
 (use-package neotree
   :defer t
   :commands (neotree-toggle)
-  :bind (:map ctl-x-map
-              ("t" . neotree-toggle)
-              :map neotree-mode-map
+  :bind (:map neotree-mode-map
               (("<C-return>" . neotree-change-root)
                ("C"          . neotree-change-root)
                ("c"          . neotree-create-node)
