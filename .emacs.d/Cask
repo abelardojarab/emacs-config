@@ -311,7 +311,7 @@
 (depends-on "undo-tree")
 (depends-on "unfill")
 (depends-on "unify-opening")
-(depends-on "use-package")
+;; (depends-on "use-package")
 (depends-on "uuidgen")
 (depends-on "vc-msg")
 (depends-on "verilog-mode")

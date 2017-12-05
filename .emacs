@@ -25,7 +25,7 @@
   ;; Basics
   (add-to-list 'load-path (expand-file-name "elisp/" user-emacs-directory))
   (add-to-list 'load-path (expand-file-name "setup/" user-emacs-directory))
-  (add-to-list 'load-path (expand-file-name "use-package/" user-emacs-directory))
+  (add-to-list 'load-path (expand-file-name "use-package-2.3/" user-emacs-directory))
 
   ;; Setup package
   (require 'setup-package)
