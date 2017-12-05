@@ -39,12 +39,16 @@
          :map ctl-x-map
          ("s"       . swiper))
   :config (progn
-            (set-variable 'ivy-on-del-error-function '(lambda()))
-            (setq ivy-display-style 'fancy
-                  ivy-format-function 'ivy-format-function-arrow
-                  ivy-use-virtual-buffers t
-                  ivy-height 20
-                  completion-in-region-function 'ivy-completion-in-region)
+
+            (setq ivy-virtual-abbreviate   'full
+                  ivy-initial-inputs-alist nil
+                  ivy-count-format         "[%d/%d] "
+                  ivy-display-style        'fancy
+                  ivy-format-function      'ivy-format-function-arrow
+                  ivy-use-virtual-buffers  t
+                  ivy-height               20)
+
+            (setq completion-in-region-function 'ivy-completion-in-region)
 
             (ivy-set-actions
              'ivy-switch-buffer
@@ -69,7 +73,8 @@
          ("M-y"                     . counsel-yank-pop)
          ("C-o"                     . counsel-find-file)
          ("C-c C-v"                 . counsel-yank-pop)
-         ("C-c C-g"                 . counsel-git-grep)
+         ("C-c C-a"                 . counsel-git-grep)
+         ("C-c C-g"                 . counsel-git-checkout)
          ([remap bookmark-jump]     . counsel-bookmark) ;; Jump to book or set it if it doesn't exist, C-x r b
          ([remap bookmark-set]      . counsel-bookmark)  ;; C-x r m
          ([remap find-file]         . counsel-find-file)

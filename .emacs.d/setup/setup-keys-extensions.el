@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojara@ubuntu01>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -26,8 +26,8 @@
 
 ;; Showkey as typed
 (use-package showkey
-  :if (display-graphic-p)
   :defer t
+  :if (display-graphic-p)
   :load-path (lambda () (expand-file-name "dadams/" user-emacs-directory))
   :commands (showkey-tooltip-mode showkey-log-mode))
 
