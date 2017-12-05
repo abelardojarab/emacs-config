@@ -40,14 +40,20 @@
          ("s"       . swiper))
   :config (progn
 
-            (setq ivy-virtual-abbreviate   'full
-                  ivy-initial-inputs-alist nil
-                  ivy-count-format         "[%d/%d] "
-                  ivy-display-style        'fancy
-                  ivy-format-function      'ivy-format-function-arrow
-                  ivy-use-virtual-buffers  t
-                  ivy-height               20)
+            (setq ivy-do-completion-in-region      nil
+                  ivy-wrap                         t
+                  ivy-fixed-height-minibuffer      t
+                  ivy-height                       12
+                  ivy-virtual-abbreviate           'full
+                  ivy-initial-inputs-alist         nil
+                  ivy-count-format                 "[%d/%d]"
+                  ivy-display-style                'fancy
+                  ivy-format-function              'ivy-format-function-arrow
+                  ivy-use-virtual-buffers          t
+                  ;; disable magic slash on non-match
+                  ivy-magic-slash-non-match-action nil)
 
+            (push #'+ivy-yas-prompt yas-prompt-functions)
             (setq completion-in-region-function 'ivy-completion-in-region)
 
             (ivy-set-actions
