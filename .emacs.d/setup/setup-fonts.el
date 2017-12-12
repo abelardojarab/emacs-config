@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojara@ubuntu02>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -49,7 +49,6 @@
                       :weight 'normal)
   (add-hook 'text-mode-hook 'variable-pitch-mode))
 
-
 ;; Prefer user choices
 (when (find-font (font-spec :name my/main-programming-font))
 
@@ -90,7 +89,7 @@
                 (> (cadr (screen-size)) 1300))
            (progn ;; Ultra-HD monitor in Linux
              (setq my/main-programming-font-size "14")
-             (setq my/main-writing-font-size "15"))
+             (setq my/main-writing-font-size "14"))
          ;; high-resolution 2048x1152 and 1920x1028-pixel
          (if (and (> (car (screen-size)) 1900)
                   (> (cadr (screen-size)) 1000))
@@ -132,7 +131,6 @@
   ;; Use Symbola font on Unicode mathematical symbols
   (if (find-font (font-spec :name "Symbola"))
       (set-fontset-font t nil "Symbola")))
-
 
 ;; Fontify frame only for graphical mode
 (when (display-graphic-p)

@@ -83,7 +83,7 @@
                           (yas-minor-mode t)
                           (undo-tree-mode t)
                           ;; (aggressive-fill-paragraph-mode -1)
-			  )))
+              )))
 
             ;; Ignore tex commands during flyspell
             (add-hook 'org-mode-hook (lambda () (setq ispell-parser 'tex)))

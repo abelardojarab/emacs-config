@@ -25,14 +25,17 @@
 ;;; Code:
 
 (use-package dired-sidebar
+  :defer t
   :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))
+  :after (dired all-the-icons-dired)
   :commands (dired-sidebar-toggle-sidebar)
   :config  (progn
              (if (display-graphic-p)
                  (setq dired-sidebar-theme 'icons)
                (setq dired-sidebar-theme 'nerd))
              (setq dired-sidebar-use-term-integration t
-                   dired-sidebar-use-custom-font t)))
+                   dired-sidebar-use-all-the-icons    t
+                   dired-sidebar-use-custom-font      t)))
 
 ;; neotree side bar
 (use-package neotree
@@ -50,7 +53,7 @@
             ;; every time when the neotree window is
             ;; opened, it will try to find current
             ;; file and jump to node.
-            (setq-default neo-smart-open t)
+            (setq-default neo-smart-open    t)
             ;; Don't allow neotree to be the only open window
             (setq-default neo-dont-be-alone t)))
 

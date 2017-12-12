@@ -3,8 +3,7 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil "counsel" "counsel.el" (23087 29534 397154
-;;;;;;  135000))
+;;;### (autoloads nil "counsel" "counsel.el" (23088 4399 221595 225000))
 ;;; Generated autoloads from counsel.el
 
 (autoload 'counsel-el "counsel" "\
@@ -275,8 +274,10 @@ Text-mode emulation of looking and choosing from a menubar.
 
 (autoload 'counsel-yank-pop "counsel" "\
 Ivy replacement for `yank-pop'.
-ARG preselects the corresponding kill during completion.
-See `counsel-yank-pop-filter' for filtering candidates.
+ARG has the same meaning as in `yank-pop', but its default value
+can be controlled with `counsel-yank-pop-preselect-last', which
+see.  See also `counsel-yank-pop-filter' for how to filter
+candidates.
 Note: Duplicate elements of `kill-ring' are always deleted.
 
 \(fn &optional ARG)" t nil)

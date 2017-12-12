@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojara@ubuntu02>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -97,10 +97,6 @@ buffer is current which was it before calling this macro."
                                       (setq buffer-read-only t)))
                                 (ecb-error "Try to set a not existing buffer."))))
 
-            ;; Ignore errors in ecb-redraw-layout
-            (defadvice ecb-redraw-layout (around bar activate)
-              (ignore-errors add-do-it))
-
             ;; ECB setup
             (if (ecb--semantic-active-p)
                 (ecb-update-methods-buffer--internal nil nil t)
@@ -127,9 +123,9 @@ buffer is current which was it before calling this macro."
                   ecb-primary-secondary-mouse-buttons 'mouse-1--mouse-2
                   semantic-decoration-styles (list
                                               '("semantic-decoration-on-protected-members" . t)
-                                              '("semantic-decoration-on-private-members" . t)
-                                              '("semantic-decoration-on-includes" . t)
-                                              '("semantic-tag-boundary" . t)))
+                                              '("semantic-decoration-on-private-members"   . t)
+                                              '("semantic-decoration-on-includes"          . t)
+                                              '("semantic-tag-boundary"                    . t)))
 
             ;; Keep line truncation
             (setq ecb-truncate-lines t)
