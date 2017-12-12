@@ -309,6 +309,9 @@
   ;; Setup tab key
   (require 'setup-tabkey)
 
+  ;; Setup global jump (find references)
+  (require 'setup-jump)
+
   ;; Setup ergoemacs
   (require 'setup-ergoemacs)
 
