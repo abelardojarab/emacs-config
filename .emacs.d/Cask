@@ -74,6 +74,7 @@
 (depends-on "dired-icon")
 (depends-on "dired-k")
 (depends-on "dired-ranger")
+(depends-on "dired-sidebar")
 (depends-on "direx")
 (depends-on "discover-my-major")
 ;; (depends-on "docsets")

@@ -24,6 +24,16 @@
 
 ;;; Code:
 
+(use-package dired-sidebar
+  :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))
+  :commands (dired-sidebar-toggle-sidebar)
+  :config  (progn
+             (if (display-graphic-p)
+                 (setq dired-sidebar-theme 'icons)
+               (setq dired-sidebar-theme 'nerd))
+             (setq dired-sidebar-use-term-integration t
+                   dired-sidebar-use-custom-font t)))
+
 ;; neotree side bar
 (use-package neotree
   :defer t
