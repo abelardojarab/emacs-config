@@ -26,16 +26,21 @@
 
 (use-package dumb-jump
   :defer t
-  :bind (("M-g ." . dumb-jump-go)
-         ("M-g ," . dumb-jump-back))
-  :config (progn
-            (setq dumb-jump-selector 'ivy
-                  dumb-jump-aggressive nil)))
+  :commands (dumb-jump-go
+             dumb-jump-back)
+  :config (setq dumb-jump-selector 'ivy
+                  dumb-jump-aggressive nil))
 
 (use-package smart-jump
+  :defer t
   :after dumb-jump
+  :commands (smart-jump-go
+             smart-jump-back
+             smart-jump-references
+             smart-jump-simple-find-references)
   :config (progn
             (smart-jump-setup-default-registers)
+            (setq smart-jump-selector 'ivy)
 
             ;; Prefer rtags over ggtags
             (smart-jump-register :modes '(c-mode c++-mode)
