@@ -80,7 +80,7 @@
 	 ((:keywords "async")
 	  (:url . "http://elpa.gnu.org/packages/async.html"))])
  (auctex .
-	 [(11 92 0)
+	 [(12 1 0)
 	  nil "Integrated environment for *TeX*" tar
 	  ((:url . "http://www.gnu.org/software/auctex/"))])
  (aumix-mode .
@@ -952,7 +952,7 @@
 	      ((:url . "http://elpa.gnu.org/packages/smart-yank.html")
 	       (:keywords "convenience"))])
  (sml-mode .
-	   [(6 7)
+	   [(6 8)
 	    ((emacs
 	      (24))
 	     (cl-lib

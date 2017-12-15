@@ -555,62 +555,62 @@
   :diminish git-gutter-mode
   :after magit
   :load-path (lambda () (expand-file-name "git-gutter/" user-emacs-directory))
-  :commands global-git-gutter-mode)
-
-;; Use fringe instead of margin for git-gutter-plus
-(use-package git-gutter-fringe
-  :if (and (executable-find "git")
-           (display-graphic-p))
-  :after git-gutter
-  :load-path (lambda () (expand-file-name "git-gutter-fringe/" user-emacs-directory))
-  :demand t
+  :commands global-git-gutter-mode
   :config (progn
+            ;; Use fringe instead of margin for git-gutter-plus
+            (use-package git-gutter-fringe
+              :demand t
+              :if (and (executable-find "git")
+                       (display-graphic-p))
+              :after git-gutter
+              :load-path (lambda () (expand-file-name "git-gutter-fringe/" user-emacs-directory))
+              :config (progn
 
-            ;; Please adjust fringe width if your own sign is too big.
-            (setq-default left-fringe-width  20)
-            (setq-default right-fringe-width 20)
-            (setq git-gutter-fr:side 'left-fringe)
-            (set-face-foreground 'git-gutter-fr:modified "yellow")
-            (set-face-foreground 'git-gutter-fr:added    "blue")
-            (set-face-foreground 'git-gutter-fr:deleted  "white")
+                        ;; Please adjust fringe width if your own sign is too big.
+                        (setq-default left-fringe-width  20)
+                        (setq-default right-fringe-width 20)
+                        (setq git-gutter-fr:side 'left-fringe)
+                        (set-face-foreground 'git-gutter-fr:modified "yellow")
+                        (set-face-foreground 'git-gutter-fr:added    "blue")
+                        (set-face-foreground 'git-gutter-fr:deleted  "white")
 
-            (fringe-helper-define 'git-gutter-fr:added nil
-              ".XXXXXX."
-              "XXxxxxXX"
-              "XX....XX"
-              "XX....XX"
-              "XXXXXXXX"
-              "XXXXXXXX"
-              "XX....XX"
-              "XX....XX")
+                        (fringe-helper-define 'git-gutter-fr:added nil
+                          ".XXXXXX."
+                          "XXxxxxXX"
+                          "XX....XX"
+                          "XX....XX"
+                          "XXXXXXXX"
+                          "XXXXXXXX"
+                          "XX....XX"
+                          "XX....XX")
 
-            (fringe-helper-define 'git-gutter-fr:deleted nil
-              "XXXXXX.."
-              "XXXXXXX."
-              "XX...xXX"
-              "XX....XX"
-              "XX....XX"
-              "XX...xXX"
-              "XXXXXXX."
-              "XXXXXX..")
+                        (fringe-helper-define 'git-gutter-fr:deleted nil
+                          "XXXXXX.."
+                          "XXXXXXX."
+                          "XX...xXX"
+                          "XX....XX"
+                          "XX....XX"
+                          "XX...xXX"
+                          "XXXXXXX."
+                          "XXXXXX..")
 
-            (fringe-helper-define 'git-gutter-fr:modified nil
-              "XXXXXXXX"
-              "XXXXXXXX"
-              "Xx.XX.xX"
-              "Xx.XX.xX"
-              "Xx.XX.xX"
-              "Xx.XX.xX"
-              "Xx.XX.xX"
-              "Xx.XX.xX")
+                        (fringe-helper-define 'git-gutter-fr:modified nil
+                          "XXXXXXXX"
+                          "XXXXXXXX"
+                          "Xx.XX.xX"
+                          "Xx.XX.xX"
+                          "Xx.XX.xX"
+                          "Xx.XX.xX"
+                          "Xx.XX.xX"
+                          "Xx.XX.xX")
 
-            ;; Fringe fix in Windows
-            (unless (string-equal system-type "windows-nt")
-              (defadvice git-gutter-process-diff (before git-gutter-process-diff-advice activate)
-                (ad-set-arg 0 (file-truename (ad-get-arg 0)))))
+                        ;; Fringe fix in Windows
+                        (unless (string-equal system-type "windows-nt")
+                          (defadvice git-gutter-process-diff (before git-gutter-process-diff-advice activate)
+                            (ad-set-arg 0 (file-truename (ad-get-arg 0)))))
 
-            ;; Start git gutter mode
-            (global-git-gutter-mode t)))
+                        ;; Start git gutter mode
+                        (global-git-gutter-mode t)))))
 
 ;; highlight regions according to age
 (use-package smeargle
