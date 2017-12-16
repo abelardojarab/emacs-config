@@ -3,8 +3,8 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil "ivy-rich" "ivy-rich.el" (23046 44932 66219
-;;;;;;  188000))
+;;;### (autoloads nil "ivy-rich" "ivy-rich.el" (23093 32280 928118
+;;;;;;  337000))
 ;;; Generated autoloads from ivy-rich.el
 
 (autoload 'ivy-rich-switch-buffer-transformer "ivy-rich" "\

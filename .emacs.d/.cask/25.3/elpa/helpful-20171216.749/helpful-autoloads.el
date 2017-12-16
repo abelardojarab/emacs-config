@@ -3,8 +3,8 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil "helpful" "helpful.el" (23092 22109 591527
-;;;;;;  683000))
+;;;### (autoloads nil "helpful" "helpful.el" (23093 32281 334109
+;;;;;;  531000))
 ;;; Generated autoloads from helpful.el
 
 (autoload 'helpful-function "helpful" "\
