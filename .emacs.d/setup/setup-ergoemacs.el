@@ -26,13 +26,12 @@
 
 ;; Ergoemacs
 (use-package ergoemacs-mode-fixed
-  :demand t
   :if (and (executable-find "gzip")
            (display-graphic-p))
   :load-path (lambda () (expand-file-name "ergoemacs-mode/" user-emacs-directory))
+  :init (ergoemacs-mode-after-init-emacs)
   :commands (ergoemacs-mode ergoemacs-mode-after-init-emacs)
   :config (progn
-            (ergoemacs-mode-after-init-emacs)
             (setq ergoemacs-theme              "standard"
                   ergoemacs-keyboard-layout    "us"
                   ergoemacs-ignore-prev-global nil)
