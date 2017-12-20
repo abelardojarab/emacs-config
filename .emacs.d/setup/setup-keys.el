@@ -31,7 +31,10 @@
 ;; Windows-like mouse/arrow movement & selection
 (use-package cua-base
   ;; use CUA mode for rectangle selections etc but not copy/paste etc
-  :config (cua-selection-mode 1))
+  :config (progn
+            (global-set-key [remap scroll-up]   'cua-scroll-up)
+            (global-set-key [remap scroll-down] 'cua-scroll-down)
+            (cua-selection-mode 1)))
 
 ;; Shift mark package
 (use-package shift-mark
@@ -91,10 +94,10 @@
 (global-set-key (kbd "RET")      'newline-and-indent)
 (global-set-key (kbd "")         'other-window)
 (global-set-key [C-tab]          'comment-or-uncomment-region)
-(global-set-key [kp-prior]       'scroll-down)
-(global-set-key [prior]          'scroll-down)
-(global-set-key [kp-next]        'scroll-up)
-(global-set-key [next]           'scroll-up)
+(global-set-key [kp-prior]       'cua-scroll-down)
+(global-set-key [prior]          'cua-scroll-down)
+(global-set-key [kp-next]        'cua-scroll-up)
+(global-set-key [next]           'cua-scroll-up)
 (global-set-key [home]           'beginning-of-line)
 (global-set-key [end]            'end-of-line)
 (global-set-key [delete]         'delete-char)
@@ -116,8 +119,8 @@
 (global-set-key (kbd "C-c C->")  (lambda () (interactive) (unindent-dwim -1)))
 
 ;; Buffer navigation
-(global-set-key [(control n)]    'scroll-down)
-(global-set-key [(control p)]    'scroll-up)
+(global-set-key [(control n)]    'cua-scroll-down)
+(global-set-key [(control p)]    'cua-scroll-up)
 
 ;; Bookmarks
 (global-set-key (kbd "<f2>")     'bm-next)
@@ -222,8 +225,8 @@
 (define-key my/keys-minor-mode-map (kbd "C-`")              'helm-semantic-or-imenu)
 (define-key my/keys-minor-mode-map (kbd "<f12>")            'ivy-switch-buffer)
 (define-key my/keys-minor-mode-map (kbd "<f5>")             'recompile)
-(define-key my/keys-minor-mode-map [(control p)]            'scroll-down)
-(define-key my/keys-minor-mode-map [(control n)]            'scroll-up)
+(define-key my/keys-minor-mode-map [(control p)]            'cua-scroll-down)
+(define-key my/keys-minor-mode-map [(control n)]            'cua-scroll-up)
 (define-key my/keys-minor-mode-map [(control o)]            'counsel-find-file)
 (define-key my/keys-minor-mode-map [(control b)]            'ivy-switch-buffer)
 
