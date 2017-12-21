@@ -393,7 +393,7 @@
 
      `(epe-remote-face ((,c (:foreground ,comment))))
      `(epe-dir-face ((,c (:foreground ,blue))))
-     `(epe-symbol-face ((,c (:foreground ,invisible))))
+     `(epe-symbol-face ((,c (:foreground ,yellow))))
 
      ;; dired
      `(dired-directory ((,c (:foreground ,blue))))
@@ -426,7 +426,9 @@
      `(diredp-dir-name ((,c (:foreground ,blue))))
      `(diredp-file-name ((,c (:foreground ,white))))
      `(diredp-file-suffix ((,c (:foreground ,invisible))))
-     `(diredp-ignored-file-name ((,c (:foreground ,comment))))
+     `(diredp-ignored-file-name ((,c (:foreground ,invisible))))
+     `(diredp-compressed-file-suffix ((,c (:foreground ,orange))))
+     `(diredp-rainbow-media-face ((,c (:foreground ,yellow))))
      `(diredp-symlink ((,c (:foreground ,yellow))))
      `(diredp-number ((,c (:foreground ,yellow))))
 
