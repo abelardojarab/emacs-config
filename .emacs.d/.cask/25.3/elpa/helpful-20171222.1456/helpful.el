@@ -4,10 +4,10 @@
 
 ;; Author: Wilfred Hughes <me@wilfred.me.uk>
 ;; URL: https://github.com/Wilfred/helpful
-;; Package-Version: 20171222.47
+;; Package-Version: 20171222.1456
 ;; Keywords: help, lisp
-;; Version: 0.5
-;; Package-Requires: ((emacs "25.1") (dash "2.12.0") (s "1.11.0") (elisp-refs "1.2") (shut-up "0.3"))
+;; Version: 0.6
+;; Package-Requires: ((emacs "25.1") (dash "2.12.0") (dash-functional "1.2.0") (s "1.11.0") (elisp-refs "1.2") (shut-up "0.3"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -46,6 +46,7 @@
 (require 'elisp-refs)
 (require 'help)
 (require 'dash)
+(require 'dash-functional)
 (require 's)
 (require 'shut-up)
 (require 'find-func)
@@ -53,12 +54,30 @@
 (require 'info-look)
 (require 'edebug)
 (require 'trace)
+(require 'ring)
 
 (defvar-local helpful--sym nil)
 (defvar-local helpful--callable-p nil)
 (defvar-local helpful--associated-buffer nil
   "We store a reference to the buffer we were called from, so we can
 show the value of buffer-local variables.")
+
+(defgroup helpful nil
+  "A rich help system with contextual information.")
+
+(defcustom helpful-max-buffers
+  5
+  "Helpful will kill the oldest helpful buffer if there are
+more than this many.
+
+To disable cleanup entirely, set this variable to nil. See also
+`helpful-kill-buffers' for a one-off cleanup."
+  :group 'help
+  :type '(choice (const nil) number)
+  :group 'helpful)
+
+(defvar helpful--buffers (make-ring helpful-max-buffers)
+  "Buffers created by helpful.")
 
 (defun helpful--kind-name (symbol callable-p)
   "Describe what kind of symbol this is."
@@ -69,6 +88,12 @@ show the value of buffer-local variables.")
    ((functionp symbol) "function")
    ((special-form-p symbol) "special form")))
 
+(defun helpful--ring-remove-if (ring predicate)
+  "Remove items from RING where PREDICATE returns non-nil."
+  (dolist (i (number-sequence (1- (ring-length ring)) 0 -1))
+    (when (funcall predicate (ring-ref ring i))
+      (ring-remove ring i))))
+
 (defun helpful--buffer (symbol callable-p)
   "Return a buffer to show help for SYMBOL in."
   (let ((current-buffer (current-buffer))
@@ -76,16 +101,28 @@ show the value of buffer-local variables.")
               (format "*helpful %s: %s*"
                       (helpful--kind-name symbol callable-p)
                       symbol))))
+    ;; Initialise the buffer with the symbol and associated data.
     (with-current-buffer buf
       (helpful-mode)
       (setq helpful--sym symbol)
       (setq helpful--callable-p callable-p)
       (setq helpful--associated-buffer current-buffer))
+
+    ;; We keep track of buffers that we've created.
+    (ring-insert+extend helpful--buffers buf t)
+
+    ;; Clear out any buffers that the user has explicitly killed.
+    (helpful--ring-remove-if helpful--buffers (-not #'buffer-live-p))
+
+    (unless (null helpful-max-buffers)
+      ;; If we have too many buffers, kill the oldest buffers.
+      (while (> (ring-length helpful--buffers) helpful-max-buffers)
+        (kill-buffer (ring-remove helpful--buffers))))
     buf))
 
 (defun helpful--heading (text)
   "Propertize TEXT as a heading."
-  (propertize text 'face 'bold))
+  (format "%s\n" (propertize text 'face 'bold)))
 
 (defun helpful--format-closure (sym form)
   "Given a closure, return an equivalent defun form."
@@ -297,7 +334,7 @@ or disable if already enabled."
           ;; exist. Otherwise, we can clean it up.
           (when (and created (not should-edebug))
             (kill-buffer buf)))
-      
+
       (user-error "Could not find source for edebug"))))
 
 (defun helpful--edebug (button)
@@ -614,6 +651,7 @@ If the source code cannot be found, return the sexp used."
             (goto-char start-pos)
             (narrow-to-defun)
             (setq source (buffer-substring-no-properties (point-min) (point-max))))))
+      (setq source (s-trim-right source))
       (when (and source (buffer-file-name buf))
         (setq source (propertize source
                                  'helpful-path (buffer-file-name buf)
@@ -879,6 +917,10 @@ POSITION-HEADS takes the form ((123 (defun foo)) (456 (defun bar)))."
   (with-current-buffer buf
     (symbol-value sym)))
 
+(defun helpful--insert-section-break ()
+  "Insert section break into helpful buffer."
+  (insert "\n\n"))
+
 (defun helpful-update ()
   "Update the current *Helpful* buffer to the latest
 state of the current symbol."
@@ -891,6 +933,13 @@ state of the current symbol."
          (start-column (current-column))
          (primitive-p (helpful--primitive-p
                        helpful--sym helpful--callable-p))
+         (sym-type (cond
+                    ((not helpful--callable-p)
+                     "Variable")
+                    ((macrop helpful--sym)
+                     "Macro")
+                    (t
+                     "Function")))
          (look-for-src (or (not primitive-p)
                            find-function-C-source-directory))
          (source (when look-for-src
@@ -908,30 +957,21 @@ state of the current symbol."
         (setq references
               (--map (helpful--outer-sexp buf it) positions))
         (kill-buffer buf)))
+
     (erase-buffer)
+
     (if helpful--callable-p
         (insert
-         (helpful--heading
-          (if (macrop helpful--sym)
-              "Macro Signature\n"
-            "Function Signature\n"))
+         (helpful--heading (format "%s Signature" sym-type))
          (helpful--syntax-highlight (helpful--signature helpful--sym)))
       (insert
-       (helpful--heading
-        "Variable\n")
+       (helpful--heading sym-type)
        (symbol-name helpful--sym)))
 
     (-when-let (docstring (helpful--docstring helpful--sym helpful--callable-p))
+      (helpful--insert-section-break)
       (insert
-       "\n\n"
-       (helpful--heading
-        (cond
-         ((not helpful--callable-p)
-          "Variable Documentation\n")
-         ((macrop helpful--sym)
-          "Macro Documentation\n")
-         (t
-          "Function Documentation\n")))
+       (helpful--heading (format "%s Documentation" sym-type))
        (helpful--format-docstring docstring))
       (when (helpful--in-manual-p helpful--sym)
         (insert
@@ -942,10 +982,11 @@ state of the current symbol."
           'symbol helpful--sym))))
 
     (when (not helpful--callable-p)
+      (helpful--insert-section-break)
       (let ((sym helpful--sym)
             (buf (or helpful--associated-buffer (current-buffer))))
         (insert
-         (helpful--heading "\n\nValue\n")
+         (helpful--heading "Value")
          (helpful--pretty-print
           (helpful--sym-value sym buf))
          "\n\n")
@@ -974,12 +1015,14 @@ state of the current symbol."
     ;; Show keybindings.
     ;; TODO: allow users to conveniently add and remove keybindings.
     (when (commandp helpful--sym)
+      (helpful--insert-section-break)
       (insert
-       (helpful--heading "\n\nKey Bindings\n")
+       (helpful--heading "Key Bindings")
        (helpful--format-keys helpful--sym)))
 
+    (helpful--insert-section-break)
     (insert
-     (helpful--heading "\n\nReferences\n")
+     (helpful--heading "References")
      (cond
       ((and source-path references)
        (format "References in %s:\n%s"
@@ -1001,8 +1044,9 @@ state of the current symbol."
       'callable-p helpful--callable-p))
 
     (when (helpful--advised-p helpful--sym)
+      (helpful--insert-section-break)
       (insert
-       (helpful--heading "\n\nAdvice\n")
+       (helpful--heading "Advice")
        (format
         "This %s is advised." (if (macrop helpful--sym) "macro" "function"))))
 
@@ -1020,7 +1064,8 @@ state of the current symbol."
            (and (not (special-form-p helpful--sym))
                 (not primitive-p))))
       (when (or can-edebug can-trace can-disassemble can-forget)
-        (insert (helpful--heading "\n\nDebugging\n")))
+        (helpful--insert-section-break)
+        (insert (helpful--heading "Debugging")))
       (when can-edebug
         (insert
          (helpful--button
@@ -1064,19 +1109,21 @@ state of the current symbol."
 
     (let ((aliases (helpful--aliases helpful--sym helpful--callable-p)))
       (when (> (length aliases) 1)
+        (helpful--insert-section-break)
         (insert
-         (helpful--heading "\n\nAliases\n")
+         (helpful--heading "Aliases")
          (s-join "\n" (--map (helpful--format-alias it helpful--callable-p)
                              aliases)))))
 
+    (helpful--insert-section-break)
+
     (insert
-     (helpful--heading "\n\nSource Code\n")
+     (helpful--heading "Source Code")
      (cond
       (source-path
        (concat
-        (propertize
-         (if primitive-p "// Defined in " ";; Defined in ")
-         'face 'font-lock-comment-face)
+        (propertize (format "%s Defined in " (if primitive-p "//" ";;"))
+                    'face 'font-lock-comment-face)
         (helpful--navigate-button
          source-path
          (helpful--source-pos helpful--sym helpful--callable-p))
@@ -1107,9 +1154,11 @@ state of the current symbol."
          (helpful--syntax-highlight
           (helpful--pretty-print source))))))
 
+    (helpful--insert-section-break)
+
     (-when-let (formatted-props (helpful--format-properties helpful--sym))
       (insert
-       (helpful--heading "\n\nSymbol Properties\n")
+       (helpful--heading "Symbol Properties")
        formatted-props))
 
     (goto-char (point-min))
@@ -1317,39 +1366,10 @@ See also `helpful-callable' and `helpful-variable'."
         (widen))
       (goto-char pos))))
 
-(defun helpful--forward-button (direction)
-  "Move point the next/previous button."
-  (let ((step (if (< direction 0) -1 1)))
-    ;; Step over the current button, if any.
-    (while (and
-            (not (if (< direction 0) (bobp) (eobp)))
-            (get-text-property (point) 'button))
-      (forward-char step))
-    ;; Move forward until we hit a button.
-    (while (and
-            (not (if (< direction 0) (bobp) (eobp)))
-            (not (get-text-property (point) 'button)))
-      (forward-char step))
-    ;; Ensure we're on the first char of the button.
-    (while (and
-            (not (if (< direction 0) (bobp) (eobp)))
-            (get-text-property (point) 'button))
-      (forward-char -1))
-    (unless (bobp)
-      (forward-char 1))))
-
-(defun helpful-forward-button ()
-  "Move point forward to the next button."
-  (interactive)
-  (helpful--forward-button 1))
-
-(defun helpful-backward-button ()
-  "Move point backward to the next button."
-  (interactive)
-  (helpful--forward-button -1))
-
 (defun helpful-kill-buffers ()
-  "Kill all `helpful-mode' buffers."
+  "Kill all `helpful-mode' buffers.
+
+See also `helpful-max-buffers'."
   (interactive)
   (dolist (buffer (buffer-list))
     (when (eq (buffer-local-value 'major-mode buffer) 'helpful-mode)
@@ -1358,8 +1378,8 @@ See also `helpful-callable' and `helpful-variable'."
 (define-key helpful-mode-map (kbd "g") #'helpful-update)
 (define-key helpful-mode-map (kbd "RET") #'helpful-visit-reference)
 
-(define-key helpful-mode-map (kbd "TAB") #'helpful-forward-button)
-(define-key helpful-mode-map (kbd "<backtab>") #'helpful-backward-button)
+(define-key helpful-mode-map (kbd "TAB") #'forward-button)
+(define-key helpful-mode-map (kbd "<backtab>") #'backward-button)
 
 (provide 'helpful)
 ;;; helpful.el ends here
