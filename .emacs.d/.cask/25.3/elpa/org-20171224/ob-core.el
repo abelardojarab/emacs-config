@@ -2760,22 +2760,27 @@ block but are passed literally to the \"example-block\"."
                       (if org-babel-use-quick-and-dirty-noweb-expansion
                           (while (re-search-forward rx nil t)
                             (let* ((i (org-babel-get-src-block-info 'light))
-                                   (body (org-babel-expand-noweb-references i))
+                                   (body (if (org-babel-noweb-p (nth 2 i) :eval)
+					     (org-babel-expand-noweb-references i)
+					   (nth 1 i)))
                                    (sep (or (cdr (assq :noweb-sep (nth 2 i)))
                                             "\n"))
                                    (full (if comment
                                              (let ((cs (org-babel-tangle-comment-links i)))
-                                                (concat (funcall c-wrap (car cs)) "\n"
-                                                        body "\n"
-                                                        (funcall c-wrap (cadr cs))))
+					       (concat (funcall c-wrap (car cs)) "\n"
+						       body "\n"
+						       (funcall c-wrap (cadr cs))))
                                            body)))
                               (setq expansion (cons sep (cons full expansion)))))
                         (org-babel-map-src-blocks nil
-			  (let ((i (org-babel-get-src-block-info 'light)))
+			  (let ((i (let ((org-babel-current-src-block-location (point)))
+				     (org-babel-get-src-block-info 'light))))
                             (when (equal (or (cdr (assq :noweb-ref (nth 2 i)))
                                              (nth 4 i))
                                          source-name)
-                              (let* ((body (org-babel-expand-noweb-references i))
+                              (let* ((body (if (org-babel-noweb-p (nth 2 i) :eval)
+					       (org-babel-expand-noweb-references i)
+					     (nth 1 i)))
                                      (sep (or (cdr (assq :noweb-sep (nth 2 i)))
                                               "\n"))
                                      (full (if comment

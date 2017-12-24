@@ -107,6 +107,12 @@
        "tree-based completion" tar
        ((:keywords "point" "location")
 	(:url . "https://github.com/abo-abo/avy"))])
+ (bbdb .
+       [(3 2)
+	((emacs
+	  (24)))
+	"core of BBDB" tar
+	((:url . "http://elpa.gnu.org/packages/bbdb.html"))])
  (beacon .
 	 [(1 3 3)
 	  ((seq
@@ -782,7 +788,7 @@
       [(20171218)
        nil "Outline-based notes management and organizer" tar nil])
  (org-edna .
-	   [(1 0 -2 2)
+	   [(1 0 -2 3)
 	    ((emacs
 	      (25 1))
 	     (seq
