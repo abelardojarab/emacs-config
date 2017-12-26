@@ -1,4 +1,4 @@
-(define-package "cask" "20170917.1107" "Cask: Project management for Emacs package development"
+(define-package "cask" "20171225.2312" "Cask: Project management for Emacs package development"
   '((s "1.8.0")
     (dash "2.2.0")
     (f "0.16.0")
