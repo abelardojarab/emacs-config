@@ -33,22 +33,14 @@
             ;; Define email sources
             (setq mail-sources '((maildir :path "~/Mail/INBOX" :subdirs ("cur" "new"))))
 
-            (setq nndraft-directory "~/Mail/[Gmail].Drafts"
-
                   ;; mailbox settings
-                  nnmail-expiry-wait 30
+            (setq nnmail-expiry-wait 30
                   nnmail-crosspost nil
                   nnmail-extra-headers (quote (To Cc Newsgroups))
                   nnmail-scan-directory-mail-source-once t
 
-                  ;; MH spooling directory
-                  nnmh-directory "~/Mail"
-
                   ;; Directory containing Unix mbox; defaults to message-directory
-                  nnfolder-directory "~/Mail"
-
-                  ;; Spool directory; defaults to message-directory
-                  nnml-directory "~/Mail")))
+                  nnfolder-directory "~/Mail")))
 
 ;; Gnus
 (use-package gnus
@@ -116,14 +108,18 @@
                   gnus-select-method                 my/gnus-local
 
                   ;; Show email INBOX
-                  gnus-permanently-visible-groups    "INBOX"
+                  gnus-permanently-visible-groups    "local"
 
                   ;; Secondary sources
-                  gnus-secondary-select-methods      nil
+                  gnus-secondary-select-methods  (quote
+                                                  ((nnmaildir "" (directory "~/Mail")
+                                                              (directory-files nnheader-directory-files-safe)
+                                                              (get-new-mail nil)
+                                                              (nnir-search-engine notmuch)
+                                                              )))
 
                   ;; Archive methods
                   gnus-message-archive-method       gnus-select-method
-                  gnus-message-archive-group        "nnmaildir+local:[Gmail].Drafts/cur"
 
                   ;; Display a button for MIME parts
                   gnus-buttonized-mime-types        '("multipart/alternative")
