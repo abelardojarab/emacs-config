@@ -78,7 +78,7 @@
                                             (directory "~/Mail")
                                             (directory-files nnheader-directory-files-safe)
                                             (get-new-mail nil)
-                                            (nnir-search-engine notmuch)))
+                                            (nnir-search-engine notmuch))
                   my/gnus-gmail '(nnimap "gmail"
                                          (nnimap-address "imap.gmail.com")
                                          (nnimap-server-port 993)
