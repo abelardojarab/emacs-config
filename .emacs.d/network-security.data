@@ -1,0 +1,3 @@
+(
+ (:id "sha1:320055f2325e587bd9f2af199e595d08fa2a1714" :fingerprint "sha1:d2:1a:01:45:2b:5a:9b:06:10:69:46:93:0e:64:71:78:69:ff:7a:e0" :host "news.gmane.org:563" :conditions (:self-signed :unknown-ca :invalid))
+)

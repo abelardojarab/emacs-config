@@ -1,6 +1,6 @@
 ;;; setup-gnus.el ---                         -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -30,7 +30,16 @@
 ;; To be able to search within your gmail/imap mail
 (use-package nnir
   :config (progn
+            ;; Define email sources
+            (setq mail-sources '((maildir :path "~/Mail/INBOX" :subdirs ("cur" "new"))))
+
             (setq nndraft-directory "~/Mail/[Gmail].Drafts"
+
+                  ;; mailbox settings
+                  nnmail-expiry-wait 30
+                  nnmail-crosspost nil
+                  nnmail-extra-headers (quote (To Cc Newsgroups))
+                  nnmail-scan-directory-mail-source-once t
 
                   ;; MH spooling directory
                   nnmh-directory "~/Mail"
@@ -43,17 +52,12 @@
 
 ;; Gnus
 (use-package gnus
-  :defer 1
   :after (starttls nnir epa)
-  :commands (gnus compose-mail switch-to-gnus activate-gnus)
-  :bind (("M-G" . my/switch-to-gnus)
+  :commands (gnus compose-mail)
+  :bind (("M-G" . gnus)
          :map ctl-x-map
          ("M"   . compose-mail))
   :config (progn
-
-            ;; Start gnus if not available
-            (defun activate-gnus ()
-              (unless (get-buffer "*Group*") (gnus)))
 
             ;; http://sachachua.com/blog/2007/12/gnus-multi-pane-tricks-or-i-heart-planet-emacsen/
             (gnus-add-configuration
@@ -70,38 +74,62 @@
                            (vertical 60 (group 1.0))
                            (vertical 1.0 (summary 1.0 point)))))
 
+            (setq my/gnus-local '(nnmaildir "local"
+                                            (directory "~/Mail")
+                                            (directory-files nnheader-directory-files-safe)
+                                            (get-new-mail nil)
+                                            (nnir-search-engine notmuch)))
+                  my/gnus-gmail '(nnimap "gmail"
+                                         (nnimap-address "imap.gmail.com")
+                                         (nnimap-server-port 993)
+                                         (nnimap-stream tls)))
+
+            (setq my/gnus-gmane
+                  '(nntp "gmane"
+                         (nntp-address "news.gmane.org")
+                         (nntp-port-number 563)
+                         (nntp-open-connection-function nntp-open-tls-stream))
+                  my/gnus-aioe
+                  '(nntp "aioe"
+                         (nntp-address "nntp.aioe.org")
+                         (nntp-port-number 563)
+                         (nntp-open-connection-function nntp-open-tls-stream)))
+
             ;; You need this to be able to list all labels in gmail
-            (setq gnus-ignored-newsgroups ""
+            (setq gnus-ignored-newsgroups            "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]"
 
                   ;; Asynchronous support
-                  gnus-asynchronous t
+                  gnus-asynchronous                  t
+
+                  ;; Default levels
+                  gnus-activate-level                2
+                  gnus-group-default-list-level      3
+
+                  ;; Enable checking news groups
+                  gnus-check-new-newsgroups          t
 
                   ;; Dont ask question on exit
-                  gnus-interactive-catchup nil
-                  gnus-interactive-exit nil
+                  gnus-interactive-catchup           nil
+                  gnus-interactive-exit              nil
+
+                  ;; Add Unix mbox'es (mbsync); in case we have local email
+                  gnus-select-method                 my/gnus-local
+
+                  ;; Show email INBOX
+                  gnus-permanently-visible-groups    "INBOX"
+
+                  ;; Secondary sources
+                  gnus-secondary-select-methods      nil
+
+                  ;; Archive methods
+                  gnus-message-archive-method       gnus-select-method
+                  gnus-message-archive-group        "nnmaildir+local:[Gmail].Drafts/cur"
+
+                  ;; Display a button for MIME parts
+                  gnus-buttonized-mime-types        '("multipart/alternative")
 
                   ;; Headers we wanna see:
                   gnus-visible-headers "^From:\\|^Subject:\\|^X-Mailer:\\|^X-Newsreader:\\|^Date:\\|^To:\\|^Cc:\\|^User-agent:\\|^Newsgroups:\\|^Comments:"
-
-                  ;; And this to configure gmail imap
-                  gnus-select-method '(nnimap "gmail"
-                                              (nnimap-address "imap.gmail.com")
-                                              (nnimap-server-port 993)
-                                              (nnimap-stream ssl)
-                                              (nnir-search-engine imap))
-
-                  ;; Add Unix mbox'es (mbsync); in case we have local email
-                  gnus-secondary-select-methods '((nnmaildir "gmail"
-                                                             (directory "~/Mail")
-                                                             (directory-files nnheader-directory-files-safe)
-                                                             (get-new-mail nil)))
-
-                  ;; Archive outgoing email in Sent folder on imap.gmail.com
-                  gnus-message-archive-method '(nnimap "imap.gmail.com")
-                  gnus-message-archive-group "[Gmail]/Sent Mail"
-
-                  ;; Display a button for MIME parts
-                  gnus-buttonized-mime-types '("multipart/alternative")
 
                   ;; Gnus news
                   gnus-summary-line-format (concat "%*%0{%U%R%z%d%}"
@@ -111,15 +139,18 @@
                                                    "\n")
 
                   ;; A gravatar is an image registered to an e-mail address
-                  gnus-treat-from-gravatar t)
+                  gnus-treat-from-gravatar           t)
+
+            ;; Add news servers
+            (add-to-list 'gnus-secondary-select-methods my/gnus-gmane)
 
             ;; Use gnus for email
-            (setq mail-user-agent 'gnus-user-agent)
-            (setq read-mail-command 'gnus-user-agent)
+            (setq mail-user-agent             'gnus-user-agent)
+            (setq read-mail-command           'gnus-user-agent)
 
             ;; Mode hooks
-            (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
-            (add-hook 'gnus-group-mode-hook 'hl-line-mode)
+            (add-hook 'gnus-group-mode-hook   'gnus-topic-mode)
+            (add-hook 'gnus-group-mode-hook   'hl-line-mode)
             (add-hook 'gnus-summary-mode-hook 'hl-line-mode)
 
             ;; Truncate lines
@@ -135,7 +166,7 @@
             ;; Sort email
             (add-hook 'gnus-summary-exit-hook 'gnus-summary-bubble-group)
             (add-hook 'gnus-suspend-gnus-hook 'gnus-group-sort-groups-by-rank)
-            (add-hook 'gnus-exit-gnus-hook 'gnus-group-sort-groups-by-rank)
+            (add-hook 'gnus-exit-gnus-hook    'gnus-group-sort-groups-by-rank)
 
             ;; Get smarter about filtering depending on what I reed or mark.
             ;; I use ! (tick) for marking threads as something that interests me.
@@ -158,102 +189,20 @@
               (let ((directory "~/Downloads"))
                 (message "Saving all MIME parts to %s..." directory)
                 (gnus-summary-save-parts ".*" directory arg)
-                (message "Saving all MIME parts to %s...done" directory)))
-
-            ;; https://www.emacswiki.org/emacs/SwitchToGnus
-            (defun my/switch-to-gnus (&optional arg)
-              "Switch to a Gnus related buffer.
-    Candidates are buffers starting with
-     *mail or *reply or *wide reply
-     *Summary or
-     *Group*
-    Use a prefix argument to start Gnus if no candidate exists."
-              (interactive "P")
-              (let (candidate
-                    (alist '(("^\\*\\(mail\\|\\(wide \\)?reply\\)" t)
-                             ("^\\*Group")
-                             ("^\\*Summary")
-                             ("^\\*Article" nil (lambda ()
-                                                  (buffer-live-p gnus-article-current-summary))))))
-                (catch 'none-found
-                  (dolist (item alist)
-                    (let (last
-                          (regexp (nth 0 item))
-                          (optional (nth 1 item))
-                          (test (nth 2 item)))
-                      (dolist (buf (buffer-list))
-                        (when (and (string-match regexp (buffer-name buf))
-                                   (> (buffer-size buf) 0))
-                          (setq last buf)))
-                      (cond ((and last (or (not test) (funcall test)))
-                             (setq candidate last))
-                            (optional
-                             nil)
-                            (t
-                             (throw 'none-found t))))))
-                (cond (candidate
-                       (switch-to-buffer candidate))
-                      (arg
-                       (gnus))
-                      (t
-                       (error "No candidate found")))))))
+                (message "Saving all MIME parts to %s...done" directory)))))
 
 ;; To be able to send email with your gmail/smtp mail
 (use-package smtpmail
   :after gnus
   :config (progn
             ;; Using smptmail to assure portability; we dont always have postfix
-            (setq send-mail-function 'smtpmail-send-it
-                  message-send-mail-function 'smtpmail-send-it
-                  smtpmail-debug-info t smtpmail-debug-verb t)
-
-            (defun set-smtp (mech server port user password)
-              "Set related SMTP variables for supplied parameters."
-              (setq smtpmail-smtp-server server
-                    smtpmail-smtp-service port
-                    smtpmail-auth-credentials (list (list server port user
-                                                          password))
-                    smtpmail-auth-supported (list mech)
-                    smtpmail-starttls-credentials nil)
-              (message "Setting SMTP server to `%s:%s' for user `%s'."
-                       server port user))
-
-            (defun set-smtp-ssl (server port user password &optional key
-                                        cert)
-              "Set related SMTP and SSL variables for supplied parameters."
-              (setq smtpmail-smtp-server server
-                    smtpmail-smtp-service port
-                    smtpmail-auth-credentials (list (list server port user
-                                                          password))
-                    smtpmail-starttls-credentials (list (list
-                                                         server port key cert)))
-              (message
-               "Setting SMTP server to `%s:%s' for user `%s'. (SSL enabled.)" server port user))
-
-            (defun change-smtp ()
-              "Change the SMTP server according to the current from line."
-              (save-excursion
-                (loop with from = (save-restriction
-                                    (message-narrow-to-headers)
-                                    (message-fetch-field "from"))
-                      for (auth-mech address . auth-spec) in my/smtp-accounts
-                      when (string-match address from)
-                      do (cond
-                          ((memq auth-mech '(cram-md5 plain login))
-                           (return (apply 'set-smtp (cons auth-mech auth-spec))))
-                          ((eql auth-mech 'ssl)
-                           (return (apply 'set-smtp-ssl auth-spec)))
-                          (t (error "Unrecognized SMTP auth. mechanism: `%s'." auth-mech)))
-                      finally (error "Cannot infer SMTP information."))))
-
-            ;; The previous function will complain if you fill the from field with
-            ;; an account not present in my/smtp-accounts.
-            (defvar %smtpmail-via-smtp (symbol-function 'smtpmail-via-smtp))
-            (defun smtpmail-via-smtp (recipient smtpmail-text-buffer)
-              (with-current-buffer smtpmail-text-buffer
-                (change-smtp))
-              (funcall (symbol-value '%smtpmail-via-smtp) recipient
-                       smtpmail-text-buffer))))
+            (setq message-send-mail-function 'smtpmail-send-it
+                  send-mail-function         'smtpmail-send-it
+                  smtpmail-smtp-server       "smtp.gmail.com"
+                  smtpmail-smtp-service      465
+                  smtpmail-debug-info        t
+                  ;; StartTLS is evil.
+                  smtpmail-stream-type       'ssl)))
 
 ;; apel
 (use-package apel
@@ -262,7 +211,9 @@
 
 ;; MIME language support
 (use-package mml
+  :demand t
   :config (progn
+
             ;; Put attachments at end of buffer
             (defun my/mml-attach-file--go-to-eob (orig-fun &rest args)
               "Go to the end of buffer before attaching files."
@@ -275,22 +226,25 @@
 
 ;; Message mode
 (use-package message
+  :demand t
   :config (progn
-
-            ;; My version of gnus in my Mac does not handle html messages
-            ;; correctly (the one in the netbook does, I guess it is a different
-            ;; version). The following will chose plaintext every time this is
-            ;; possible.
-            (setq mm-discouraged-alternatives '("text/html" "text/richtext"))
-
 
             ;; decode html
             (use-package mm-decode
-              :config
-              (setq mm-discouraged-alternatives
-                    '("text/html" "text/richtext")
-                    mm-automatic-display
-                    (-difference mm-automatic-display '("text/html" "text/enriched" "text/richtext"))))
+              :demand t
+              :config (progn
+                        ;; Use w3m to render html
+                        (if (executable-find "w3m")
+                            (setq mm-text-html-renderer 'w3m))
+
+                        ;; Full sized images
+                        (setq mm-inline-text-html-with-images t
+                              mm-inline-large-images 'resize
+                              mm-attachment-file-modes 420
+                              mm-discouraged-alternatives
+                              '("text/html" "text/richtext" "application/msword")
+                              mm-automatic-display
+                              (-difference mm-automatic-display '("text/html" "application/msword" "text/enriched" "text/richtext")))))
 
             ;; use imagemagick, if available
             (when (and (fboundp 'imagemagick-register-types)
@@ -313,37 +267,27 @@
               (kill-ring-save (point-min) (point-max)))
             (add-hook 'message-send-hook #'my/copy-buffer-to-kill-ring)
 
-            ;; Use w3m to display HTML mails
-            ;; Use w3m to render html
-            (if (executable-find "w3m")
-                (setq mm-text-html-renderer 'w3m))
-
-            ;; Full sized images
-            (setq mm-inline-text-html-with-images t
-                  mm-inline-large-images 'resize
-                  mm-attachment-file-modes 420)
-
-            ;; store email in ~/Mail directory
-            (setq message-directory "~/Mail"
-
-                  ;; message preferences
-                  message-generate-headers-first t
-                  message-kill-buffer-on-exit t
-                  message-signature-file ".signature")
+            ;; message preferences
+            (setq message-generate-headers-first t
+                  message-kill-buffer-on-exit    t
+                  message-signature-file         ".signature")
 
             ;; message mode hooks
             (add-hook 'message-mode-hook
                       (lambda ()
                         ;; Org goodies
-                        (orgtbl-mode t)
-                        (orgstruct-mode t)
+                        (orgtbl-mode      t)
+                        (orgstruct-mode   t)
                         (orgstruct++-mode t)
 
                         ;; Extra modes
-                        (footnote-mode t)
+                        (footnote-mode  t)
                         (auto-fill-mode t)
                         (writegood-mode t)
-                        (flyspell-mode t)))
+                        (flyspell-mode  t)))
+
+            ;; Turn on PGP
+            (add-hook 'message-mode-hook 'epa-mail-mode)
 
             ;; Enable emacsclient in mutt
             (add-to-list 'auto-mode-alist '(".*mutt.*" . message-mode))
