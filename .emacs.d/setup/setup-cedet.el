@@ -1,6 +1,6 @@
 ;;; setup-cedet.el ---
 
-;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -34,6 +34,13 @@
             ;; Enable support for parsing additional languages
             (use-package semantic/wisent)
 
+        ;; The Semantic Database (SemanticDB) caches the results of parsing source code files.
+        (use-package semantic/db)
+
+        ;; Find system header files, if using gcc
+        (if (executable-find "gcc")
+        (use-package semantic/bovine/gcc))
+
             ;; Enabled features
             (setq semantic-default-submodes '(global-semantic-idle-scheduler-mode
                                               global-semanticdb-minor-mode
@@ -63,6 +70,12 @@
                                      (not (semantic-parse-tree-needs-rebuild-p)))
                                 nil
                               t)))
+
+        ;; Don't use information from system include files, by removing system
+        (setq-mode-local c-mode semanticdb-find-default-throttle
+                 '(project unloaded system recursive))
+        (setq-mode-local c++-mode semanticdb-find-default-throttle
+                 '(project unloaded system recursive))
 
             ;; Enable decoration mode
             (global-semantic-decoration-mode t)
@@ -127,48 +140,7 @@ Exit the save between databases if there is user input."
             ;; semanticdb support for global/gtags
             (when (executable-find "global")
               (semanticdb-enable-gnu-global-databases 'c-mode t)
-              (semanticdb-enable-gnu-global-databases 'c++-mode t))
-
-            ;; Helper functions to parse source code under directory using Semantic
-            (defvar semantic/c-files-regex ".*\\.\\(c\\|cpp\\|h\\|hpp\\)"
-              "A regular expression to match any c/c++ related files under a directory")
-
-            (defun semantic/semantic-parse-dir (root regex)
-              "This function is an attempt of mine to force semantic to
-     parse all source files under a root directory. Arguments:
-     -- root: The full path to the root directory
-     -- regex: A regular expression against which to match all files in the directory"
-              (let (;;make sure that root has a trailing slash and is a dir
-                    (root (file-name-as-directory root))
-                    (files (directory-files root t )))
-                ;; remove current dir and parent dir from list
-                (setq files (delete (format "%s." root) files))
-                (setq files (delete (format "%s.." root) files))
-                (while files
-                  (setq file (pop files))
-                  (if (not(file-accessible-directory-p file))
-                      ;;if it's a file that matches the regex we seek
-                      (progn (when (string-match-p regex file)
-                               (save-excursion
-                                 (semanticdb-file-table-object file))))
-                    ;;else if it's a directory
-                    (semantic/semantic-parse-dir file regex)))))
-
-            (defun semantic/semantic-parse-current-dir (regex)
-              "Parses all files under the current directory matching regex"
-              (semantic/semantic-parse-dir (file-name-directory(buffer-file-name)) regex))
-
-            (defun semantic/parse-curdir-c ()
-              "Parses all the c/c++ related files under the current directory
-     and inputs their data into semantic"
-              (interactive)
-              (semantic/semantic-parse-current-dir semantic/c-files-regex))
-
-            (defun semantic/parse-dir-c (dir)
-              "Prompts the user for a directory and parses all c/c++ related files
-     under the directory"
-              (interactive (list (read-directory-name "Provide the directory to search in:")))
-              (semantic/semantic-parse-dir (expand-file-name dir) semantic/c-files-regex))))
+              (semanticdb-enable-gnu-global-databases 'c++-mode t))))
 
 ;; Load contrib library
 (use-package eassist)
