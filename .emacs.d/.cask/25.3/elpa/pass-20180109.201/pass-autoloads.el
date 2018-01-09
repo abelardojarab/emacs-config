@@ -3,7 +3,7 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil "pass" "pass.el" (23046 44867 937003 145000))
+;;;### (autoloads nil "pass" "pass.el" (23125 9356 994964 562000))
 ;;; Generated autoloads from pass.el
 
 (autoload 'pass "pass" "\

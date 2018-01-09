@@ -2190,10 +2190,10 @@ example, :candidate-number-limit is bound to
   "The internal helm function called by `helm'.
 For ANY-SOURCES ANY-INPUT ANY-PROMPT ANY-RESUME ANY-PRESELECT ANY-BUFFER and
 ANY-KEYMAP ANY-DEFAULT ANY-HISTORY See `helm'."
+  (unless helm--nested (setq helm-initial-frame (selected-frame)))
   ;; Activate the advice for `tramp-read-passwd' and cua.
   ;; Advices will be available only in >=emacs-24.4, but
   ;; allow compiling without errors on lower emacs.
-  (setq helm-initial-frame (selected-frame))
   (when (fboundp 'advice-add)
     (advice-add 'tramp-read-passwd :around #'helm--advice-tramp-read-passwd)
     (advice-add 'ange-ftp-get-passwd :around #'helm--advice-ange-ftp-get-passwd)
@@ -2615,13 +2615,14 @@ The function used to display `helm-buffer' by calling
                    ((eq helm-split-window-default-side 'other) 'other)
                    (helm--window-side-state)
                    (t helm-split-window-default-side))
-           helm-split-window-default-side)))
-    (prog1
-        (funcall (with-current-buffer buffer
+           helm-split-window-default-side))
+        (disp-fn (with-current-buffer buffer
                    (helm-resolve-display-function
                     (if helm-actions-inherit-frame-settings
-                        (helm-this-command) this-command)))
-                 buffer)
+                        (helm-this-command) this-command)))))
+    (prog1
+        (funcall disp-fn buffer)
+      (with-helm-buffer (setq-local helm-display-function disp-fn))
       (setq helm-onewindow-p (one-window-p t))
       ;; Don't allow other-window and friends switching out of minibuffer.
       (when helm-prevent-escaping-from-minibuffer
@@ -2674,8 +2675,10 @@ configure frame size."
     (setq helm--buffer-in-new-frame-p t)
     (let* ((pos (window-absolute-pixel-position))
            (half-screen-size (/ (display-pixel-height x-display-name) 2))
+           (minibuf (> (cdr pos) half-screen-size))
            (frame-info (frame-geometry))
            (prmt-size (length helm--prompt))
+           (line-height (frame-char-height))
            (default-frame-alist
             `((width . ,helm-display-buffer-width)
               (height . ,helm-display-buffer-height)
@@ -2694,36 +2697,34 @@ configure frame size."
                           ;; Above point
                           (- (cdr pos)
                              ;; add 2 lines to make sure there is always a gap
-                             (* (+ helm-display-buffer-height 2) (frame-char-height))
+                             (* (+ helm-display-buffer-height 2) line-height)
                              ;; account for title bar height too
                              (cddr (assq 'title-bar-size frame-info)))
                         ;; Below point
-                        (+ (cdr pos) (frame-char-height))))
+                        (+ (cdr pos) line-height)))
               (title . "Helm")
               (vertical-scroll-bars . nil)
               (menu-bar-lines . 0)
               (fullscreen . nil)
               (visible . ,(null helm-display-buffer-reuse-frame))
-              (minibuffer . ,(> (cdr pos) half-screen-size))))
+              (minibuffer . ,minibuf)))
            display-buffer-alist)
       ;; Add the hook inconditionally, if
       ;; helm-echo-input-in-header-line is nil helm-hide-minibuffer-maybe
       ;; will have anyway no effect so no need to remove the hook.
       (add-hook 'helm-minibuffer-set-up-hook 'helm-hide-minibuffer-maybe)
       (with-helm-buffer
-        (if (> (cdr pos) half-screen-size)
-            (progn
-              (setq-local helm-echo-input-in-header-line nil))
-          (setq-local helm-echo-input-in-header-line t)))
+        (setq-local helm-echo-input-in-header-line (not minibuf)))
       (helm-display-buffer-popup-frame buffer default-frame-alist))
     (helm-log-run-hook 'helm-window-configuration-hook)))
 
 (defun helm-display-buffer-popup-frame (buffer frame-alist)
   (if helm-display-buffer-reuse-frame
-      (let ((x (cdr (assoc 'left frame-alist)))
-            (y (cdr (assoc 'top frame-alist)))
-            (minibuf (frame-parameter helm-popup-frame 'minibuffer))
-            (frame-live-p (frame-live-p helm-popup-frame)))
+      (let* ((x (cdr (assoc 'left frame-alist)))
+             (y (cdr (assoc 'top frame-alist)))
+             (frame-live-p (frame-live-p helm-popup-frame))
+             (minibuf (and frame-live-p
+                           (frame-parameter helm-popup-frame 'minibuffer))))
         ;; Minibuffer frame-parameter is not modifiable once frame is
         ;; created so frame needs to be deleted and recreated when the
         ;; minibuffer parameter change in FRAME-ALIST.
