@@ -1,6 +1,6 @@
 ;;; setup-ecb.el ---                       -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@ubuntu02>
 ;; Keywords:
@@ -30,7 +30,10 @@
   :if (display-graphic-p)
   :defines (sr-speedbar-exist-p)
   :commands (sr-speedbar-open
-             sr-speedbar-toggle)
+             sr-speedbar-toggle
+             sr-speedbar-refresh-turn-on)
+  :init (if (display-graphic-p)
+            (sr-speedbar-refresh-turn-on))
   :bind (:map speedbar-mode-map
               ([S-up]  . speedbar-up-directory)
               ([right] . speedbar-flush-expand-line)
@@ -104,6 +107,12 @@ buffer is current which was it before calling this macro."
 
             (defconst initial-frame-width (frame-width)
               "The width of frame will be changed ,remember the init value.")
+
+            (setq-default ecb-source-path
+                          (quote
+                           (("~/workspace/Documents"    "Documents")
+                            ("~/workspace"              "Local")
+                            ("~/workspace_remote"       "Shared"))))
 
             (setq ecb-tip-of-the-day nil
                   ecb-show-sources-in-directories-buffer 'always
@@ -296,9 +305,9 @@ little more place. "
 If you have not set a compilation-window in `ecb-compile-window-height' then the
 layout contains no persistent compilation window and the other windows get a little
 more place."
-              (ecb-set-history-buffer)
-              (ecb-split-ver 0.5)
-              (ecb-set-methods-buffer)
+              ;; (ecb-set-history-buffer)
+              ;; (ecb-split-ver 0.5)
+              (ecb-set-speedbar-buffer)
               (select-window (next-window)))
 
             ;; disable global semantic idle scheduler.
@@ -322,11 +331,11 @@ more place."
 
             ;; Finally activate ecb on HD-monitors or above
             (add-hook 'after-init-hook
-                          (lambda ()
-                            (if (or (and (> (car (screen-size)) 1900)
-                                         (> (cadr (screen-size)) 1000))
-                                    (not (display-graphic-p)))
-                                (ecb-activate))))))
+                      (lambda ()
+                        (if (or (and (> (car (screen-size)) 1900)
+                                     (> (cadr (screen-size)) 1000))
+                                (not (display-graphic-p)))
+                            (ecb-activate))))))
 
 (provide 'setup-ecb)
 ;;; setup-ecb.el ends here

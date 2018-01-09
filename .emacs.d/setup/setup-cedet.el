@@ -27,6 +27,8 @@
 (use-package semantic
   :config (progn
 
+            (setq format-args t)
+
             ;; To use additional features for names completion, and displaying of information for tags & classes,
             ;; you also need to load the semantic-ia package. Unfortunately, semantic makes Emacs slow
             (use-package semantic/ia)
@@ -34,12 +36,12 @@
             ;; Enable support for parsing additional languages
             (use-package semantic/wisent)
 
-        ;; The Semantic Database (SemanticDB) caches the results of parsing source code files.
-        (use-package semantic/db)
+            ;; The Semantic Database (SemanticDB) caches the results of parsing source code files.
+            (use-package semantic/db)
 
-        ;; Find system header files, if using gcc
-        (if (executable-find "gcc")
-        (use-package semantic/bovine/gcc))
+            ;; Find system header files, if using gcc
+            (if (executable-find "gcc")
+                (use-package semantic/bovine/gcc))
 
             ;; Enabled features
             (setq semantic-default-submodes '(global-semantic-idle-scheduler-mode
@@ -71,11 +73,11 @@
                                 nil
                               t)))
 
-        ;; Don't use information from system include files, by removing system
-        (setq-mode-local c-mode semanticdb-find-default-throttle
-                 '(project unloaded system recursive))
-        (setq-mode-local c++-mode semanticdb-find-default-throttle
-                 '(project unloaded system recursive))
+            ;; Don't use information from system include files, by removing system
+            (setq-mode-local c-mode semanticdb-find-default-throttle
+                             '(project unloaded system recursive))
+            (setq-mode-local c++-mode semanticdb-find-default-throttle
+                             '(project unloaded system recursive))
 
             ;; Enable decoration mode
             (global-semantic-decoration-mode t)
@@ -93,11 +95,11 @@ Exit the save between databases if there is user input."
                   (semantic-safe "Auto-DB Save: %S"
                     ;; FIXME: Use `while-no-input'?
                     (save-mark-and-excursion ;; <-- added line
-                     (semantic-exit-on-input 'semanticdb-idle-save
-                       (mapc (lambda (db)
-                               (semantic-throw-on-input 'semanticdb-idle-save)
-                               (semanticdb-save-db db t))
-                             semanticdb-database-list))))
+                      (semantic-exit-on-input 'semanticdb-idle-save
+                        (mapc (lambda (db)
+                                (semantic-throw-on-input 'semanticdb-idle-save)
+                                (semanticdb-save-db db t))
+                              semanticdb-database-list))))
                 (if (fboundp 'save-excursion)
                     (save-excursion ;; <-- added line
                       (semantic-exit-on-input 'semanticdb-idle-save

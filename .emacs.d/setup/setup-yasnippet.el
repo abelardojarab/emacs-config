@@ -1,6 +1,6 @@
 ;;; setup-yasnippet.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -60,6 +60,7 @@
           (yas-initialize)
           (yas-global-mode 1))
   :config (progn
+
             ;; Do not activate for read only and non-existent snippets
             (set-default 'yas--dont-activate
                          #'(lambda ()
@@ -73,7 +74,7 @@
                                          yas-completing-prompt
                                          yas-no-prompt))
 
-            ;; use yas/completing-prompt when ONLY when `M-x yas-insert-snippet'
+            ;; use yas/completing-prompt ONLY when `M-x yas-insert-snippet'
             ;; thanks to capitaomorte for providing the trick.
             (defadvice yas-insert-snippet (around use-completing-prompt activate)
               "Use `yas-completing-prompt' for `yas-prompt-functions' but only here..."

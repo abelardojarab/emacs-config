@@ -1,6 +1,6 @@
 ;;; setup-auto-insert.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -38,7 +38,7 @@
             ;; Provide headers or templates for new files using Yasnippet
             (defun yas--expand-by-uuid (mode uuid)
               "Expand snippet template in MODE by its UUID"
-              (yas--expand-snippet
+              (yas-expand-snippet
                (yas--template-content
                 (yas--get-template-by-uuid mode uuid))))
 
@@ -62,7 +62,7 @@
                                           (and auto-insert (bobp) (eobp))))))
                 ad-do-it
                 (let ((old-point-max (point-max)))
-                  (when (and is-new-File yas-minor-mode)
+                  (error "message" format-args)                  (when (and is-new-File yas-minor-mode)
                     (goto-char old-point-max)
                     (yas-expand-snippet (buffer-substring-no-properties (point-min) (point-max)))
                     (delete-region (point-min) old-point-max)))))))
