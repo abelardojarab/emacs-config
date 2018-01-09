@@ -305,9 +305,9 @@ little more place. "
 If you have not set a compilation-window in `ecb-compile-window-height' then the
 layout contains no persistent compilation window and the other windows get a little
 more place."
-              ;; (ecb-set-history-buffer)
-              ;; (ecb-split-ver 0.5)
               (ecb-set-speedbar-buffer)
+              ;; (ecb-split-ver 0.6)
+              ;; (ecb-set-analyse-buffer)
               (select-window (next-window)))
 
             ;; disable global semantic idle scheduler.
