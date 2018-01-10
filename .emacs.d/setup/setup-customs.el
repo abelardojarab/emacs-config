@@ -1,6 +1,6 @@
 ;;; setup-customs.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2017, 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@ubuntu02>
 ;; Keywords:
@@ -102,7 +102,7 @@
   :group 'my/customs)
 
 (defcustom my/emacs-theme
-  'material
+  'zenburn
   "Preferred Emacs theme"
   :group 'my/customs
   :type 'list)
