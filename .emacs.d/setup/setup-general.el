@@ -1,8 +1,8 @@
 ;;; setup-general.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojara@ubuntu02>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -170,6 +170,53 @@
          ("C-h m" . helpful-macro)
          ("C-h k" . helpful-key)
          ("C-h v" . helpful-variable)))
+
+;; Alignment
+(use-package ialign
+  :commands (ialign
+             align-whitespace
+             align-equals
+             align-ampersand
+             align-comma
+             align-colon
+             align-dot)
+  :config (progn
+           ;; Align functions
+           (defun align-whitespace (start end)
+             "Align columns by whitespace"
+             (interactive "r")
+             (align-regexp start end
+                           "\\(\\s-*\\)\\s-" 1 0 t))
+
+           (defun align-ampersand (start end)
+             "Align columns by ampersand"
+             (interactive "r")
+             (align-regexp start end
+                           "\\(\\s-*\\)&" 1 1 t))
+
+           (defun align-equals (start end)
+             "Align columns by equals sign"
+             (interactive "r")
+             (align-regexp start end
+                           "\\(\\s-*\\)=" 1 0 t))
+
+           (defun align-comma (start end)
+             "Align columns by comma"
+             (interactive "r")
+             (align-regexp start end
+                           "\\(\\s-*\\)," 1 1 t))
+
+           (defun align-dot (start end)
+             "Align columns by dot"
+             (interactive "r")
+             (align-regexp start end
+                           "\\(\\s-*\\)\\\." 1 1 t))
+
+           (defun align-colon (start end)
+             "Align columns by equals sign"
+             (interactive "r")
+             (align-regexp start end
+                           "\\(\\s-*\\):" 1 0 t))))
 
 (provide 'setup-general)
 ;;; setup-general.el ends here

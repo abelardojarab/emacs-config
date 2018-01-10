@@ -1,6 +1,6 @@
 ;;; setup-functions.el ---                   -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -348,7 +348,7 @@ Now it correctly stops at the beginning of the line when the pointer is at the f
   (interactive)
   (set-selective-display (if selective-display nil 1)))
 
-;; Xah next/previous buffer functions
+;; next/previous buffer functions
 (setq my/switch-buffer-ignore-dired t)
 
 (defun my/next-user-buffer ()
@@ -388,43 +388,6 @@ If `my/switch-buffer-ignore-dired' is true, also skip directory buffer.
           (progn (previous-buffer)
                  (setq i (1+ i)))
         (progn (setq i 100))))))
-
-;; Align functions
-(defun align-whitespace (start end)
-  "Align columns by whitespace"
-  (interactive "r")
-  (align-regexp start end
-                "\\(\\s-*\\)\\s-" 1 0 t))
-
-(defun align-ampersand (start end)
-  "Align columns by ampersand"
-  (interactive "r")
-  (align-regexp start end
-                "\\(\\s-*\\)&" 1 1 t))
-
-(defun align-equals (start end)
-  "Align columns by equals sign"
-  (interactive "r")
-  (align-regexp start end
-                "\\(\\s-*\\)=" 1 0 t))
-
-(defun align-comma (start end)
-  "Align columns by comma"
-  (interactive "r")
-  (align-regexp start end
-                "\\(\\s-*\\)," 1 1 t))
-
-(defun align-dot (start end)
-  "Align columns by dot"
-  (interactive "r")
-  (align-regexp start end
-                "\\(\\s-*\\)\\\." 1 1 t))
-
-(defun align-colon (start end)
-  "Align columns by equals sign"
-  (interactive "r")
-  (align-regexp start end
-                "\\(\\s-*\\):" 1 0 t))
 
 ;; Rotate the windows
 (defun rotate-windows ()
