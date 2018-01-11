@@ -1,8 +1,8 @@
 ;;; setup-ivy.el ---                              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -74,6 +74,7 @@
             (advice-add 'swiper :after #'my/swiper-recenter)))
 
 (use-package counsel
+  :defer t
   :load-path (lambda () (expand-file-name "swiper/" user-emacs-directory))
   :bind (("M-x"                     . counsel-M-x)
          ("M-y"                     . counsel-yank-pop)
@@ -100,6 +101,7 @@
   :load-path (lambda () (expand-file-name "swiper-helm/" user-emacs-directory)))
 
 (use-package ivy-rich
+  :demand t
   :after swiper
   :commands ivy-switch-buffer
   :load-path (lambda () (expand-file-name "ivy-rich/" user-emacs-directory))
@@ -110,6 +112,7 @@
             (setq ivy-rich-switch-buffer-align-virtual-buffer nil)))
 
 (use-package all-the-icons-ivy
+  :demand t
   :if (display-grayscale-p)
   :after swiper
   :load-path (lambda () (expand-file-name "all-the-icons-ivy/" user-emacs-directory))

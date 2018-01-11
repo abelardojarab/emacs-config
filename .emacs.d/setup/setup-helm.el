@@ -1,8 +1,8 @@
 ;;; setup-helm.el ---                                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2015, 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@ubuntu02>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -26,6 +26,7 @@
 
 ;; Helm
 (use-package helm-config
+  :demand t
   :load-path (lambda () (expand-file-name "helm/" user-emacs-directory))
   :bind (("C-`"   . helm-semantic-or-imenu)
          :map isearch-mode-map

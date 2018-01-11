@@ -1,8 +1,8 @@
 ;;; setup-python.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -28,6 +28,7 @@
 ;; the package python.el. The following changes that to python-mode.el:
 
 (use-package python-mode
+  :defer t
   :mode ("\\.py\\'" . python-mode)
   :commands python-mode
   :interpreter ("python" . python-mode)

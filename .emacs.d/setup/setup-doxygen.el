@@ -1,8 +1,8 @@
 ;;; setup-doxygen.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -34,7 +34,7 @@
   :if (executable-find "doxymacs_parser")
   :diminish doxymacs-mode
   :load-path (lambda () (expand-file-name "doxymacs/lisp" user-emacs-directory))
-  :init (add-hook 'c-mode-common-hook 'doxymacs-mode))
+  :init (add-hook 'c-mode-common-hook #'doxymacs-mode))
 
 (provide 'setup-doxygen)
 ;;; setup-doxygen.el ends here

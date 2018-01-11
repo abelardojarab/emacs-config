@@ -1,8 +1,8 @@
 ;;; setup-flycheck.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -26,6 +26,7 @@
 
 ;; Flycheck
 (use-package flycheck
+  :defer t
   :if (not (equal system-type 'windows-nt))
   :load-path (lambda () (expand-file-name "flycheck/" user-emacs-directory))
   :commands (flycheck-add-next-checker

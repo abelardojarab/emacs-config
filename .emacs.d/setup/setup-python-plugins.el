@@ -1,8 +1,8 @@
 ;;; setup-python-plugins.el ---                      -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -28,8 +28,7 @@
 (use-package python-environment
   :defer t
   :load-path (lambda () (expand-file-name "python-environment/" user-emacs-directory))
-  :init (progn
-          (setq python-environment-directory "~/.emacs.cache/python-environments")))
+  :init (setq python-environment-directory "~/.emacs.cache/python-environments"))
 
 (use-package epc
   :defer t
@@ -43,30 +42,27 @@
   :commands (jedi:setup)
   :after auto-complete
   :load-path (lambda () (expand-file-name "jedi/" user-emacs-directory))
+  :init (add-hook 'python-mode-hook #'jedi:setup)
   :config (progn
             (setq jedi:setup-keys nil
                   jedi:complete-on-dot t
                   jedi:tooltip-method t
                   jedi:get-in-function-call-delay 0.2)
 
-            (add-hook 'python-mode-hook 'jedi:setup)
             (if (featurep 'auto-complete)
-                (ac-flyspell-workaround))))
+                (ac-flyspell-workaround))
 
-;; Company backend for Python jedi
-(use-package company-jedi
-  :if (and (executable-find "python")
-           (check-python-module "epc")
-           (check-python-module "jedi"))
-  :after company
-  :load-path (lambda () (expand-file-name "company-jedi/" user-emacs-directory))
-  :config (add-hook 'python-mode-hook
-                    (lambda () (set (make-local-variable 'company-backends)
-                               '((company-yasnippet
-                                  company-jedi
-                                  company-capf
-                                  company-files
-                                  company-abbrev))))))
+	    ;; Company backend for Python jedi
+	    (use-package company-jedi
+	      :after (company jedi)
+	      :load-path (lambda () (expand-file-name "company-jedi/" user-emacs-directory))
+	      :config (add-hook 'python-mode-hook
+				(lambda () (set (make-local-variable 'company-backends)
+					   '((company-yasnippet
+					      company-jedi
+					      company-capf
+					      company-files
+					      company-abbrev))))))))
 
 (provide 'setup-python-plugins)
 ;;; setup-python-plugins.el ends here
