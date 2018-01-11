@@ -1,8 +1,8 @@
 ;;; setup-company.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojara@ubuntu02>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -38,13 +38,14 @@
          ("TAB"                       . company-complete-selection)
          ("<tab>"                     . company-complete-selection)
          ("RET"                       . company-complete-selection))
-  ;; set default lighter as nothing so in general it is not displayed
-  ;; but will still be shown when completion popup is active to show the
-  ;; backend which is in use
-  :init (progn
-          (setq company-lighter-base "")
-          (global-company-mode 1))
   :config (progn
+            ;; set default lighter as nothing so in general it is not displayed
+            ;; but will still be shown when completion popup is active to show the
+            ;; backend which is in use
+            (setq company-lighter-base "")
+
+            ;; Enable global-company mode
+            (global-company-mode 1)
 
             ;; Use Emacs' built-in TAB completion hooks to trigger AC (Emacs >= 23.2)
             (setq tab-always-indent 'complete)

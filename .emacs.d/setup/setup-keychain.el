@@ -40,6 +40,7 @@
 ;; Keychain access
 (use-package keychain-environment
   :demand t
+  :after starttls
   :load-path (lambda () (expand-file-name "keychain-environment/" user-emacs-directory))
   :config (keychain-refresh-environment))
 
@@ -78,6 +79,7 @@
 ;; Enable encryption/decryption of .gpg files
 (use-package epa-file
   :defer t
+  :after epg
   :commands epa-file-enable
   :config  (progn
              ;; 'silent to use symmetric encryption
@@ -91,6 +93,7 @@
 ;; EasyPG Emacs assistant
 (use-package epa
   :demand t
+  :after epa-file
   :config (progn
             (setq epa-popup-info-window nil
                   epa-armor             t)

@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojara@ubuntu02>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -26,9 +26,9 @@
 
 ;; Autoinsert skeletons and templates
 (use-package autoinsert
+  :demand t
   :after yasnippet
   :commands auto-insert-mode
-  :init (auto-insert-mode t)
   :config (progn
 
             ;; This turns off the prompt that auto-insert-mode asks before
@@ -65,15 +65,18 @@
                   (error "message" format-args)                  (when (and is-new-File yas-minor-mode)
                     (goto-char old-point-max)
                     (yas-expand-snippet (buffer-substring-no-properties (point-min) (point-max)))
-                    (delete-region (point-min) old-point-max)))))))
+                    (delete-region (point-min) old-point-max)))))
+
+            ;; Enable auto-insert mode
+            (auto-insert-mode t)))
 
 ;; Automated auto-insert of yasnippet templates on new files
 (use-package yatemplate
+  :defer t
   :after (auto-insert-mode yasnippet)
-  :defer 2 ;; WORKAROUND https://github.com/mineo/yatemplate/issues/3
   :load-path (lambda () (expand-file-name "yatemplate/" user-emacs-directory))
-  :init (yatemplate-fill-alist)
-  :commands yatemplate-fill-alist)
+  :commands yatemplate-fill-alist
+  :config (yatemplate-fill-alist))
 
 (provide 'setup-auto-insert)
 ;;; setup-auto-insert.el ends here

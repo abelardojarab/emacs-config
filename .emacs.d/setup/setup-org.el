@@ -1,8 +1,8 @@
 ;;; setup-org.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojara@ubuntu02>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify

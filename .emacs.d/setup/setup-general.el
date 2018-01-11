@@ -35,20 +35,24 @@
 
 ;; Auto-revert buffers of changed files
 (use-package autorevert
+  :demand t
   :if (not (equal system-type 'windows-nt))
-  :init (global-auto-revert-mode)
   :commands global-auto-revert-mode
-  :config (setq auto-revert-verbose nil
-                ;; Revert Dired buffers, too
-                global-auto-revert-non-file-buffers t)
+  :diminish (auto-revert-mode . " Ⓐ")
+  :config (progn
 
-  (when (eq system-type 'darwin)
-    ;; File notifications aren't supported on OS X
-    (setq auto-revert-use-notify nil))
-  :diminish (auto-revert-mode . " Ⓐ"))
+            (setq auto-revert-verbose nil
+                  global-auto-revert-non-file-buffers t)
+
+
+            (when (eq system-type 'darwin)
+              ;; File notifications aren't supported on OS X
+              (setq auto-revert-use-notify nil))
+            (global-auto-revert-mode)))
 
 ;; Emacs startup profiler
 (use-package esup
+  :defer t
   :load-path (lambda () (expand-file-name "esup/" user-emacs-directory))
   :commands esup)
 
@@ -56,8 +60,8 @@
 (use-package with-editor
   :load-path (lambda () (expand-file-name "with-editor/" user-emacs-directory))
   :init (progn
-          (add-hook 'shell-mode-hook  'with-editor-export-editor)
-          (add-hook 'eshell-mode-hook 'with-editor-export-editor)))
+          (add-hook 'shell-mode-hook  #'with-editor-export-editor)
+          (add-hook 'eshell-mode-hook #'with-editor-export-editor)))
 
 ;; Pos-tip library
 (use-package pos-tip
@@ -161,7 +165,7 @@
 
 ;; Improved help system
 (use-package helpful
-  :demand t
+  :defer t
   :after elisp-refs
   :load-path (lambda () (expand-file-name "helpful/" user-emacs-directory))
   :bind (("C-h f" . helpful-function)
@@ -173,6 +177,7 @@
 
 ;; Alignment
 (use-package ialign
+  :defer t
   :commands (ialign
              align-whitespace
              align-equals
@@ -181,42 +186,42 @@
              align-colon
              align-dot)
   :config (progn
-           ;; Align functions
-           (defun align-whitespace (start end)
-             "Align columns by whitespace"
-             (interactive "r")
-             (align-regexp start end
-                           "\\(\\s-*\\)\\s-" 1 0 t))
+            ;; Align functions
+            (defun align-whitespace (start end)
+              "Align columns by whitespace"
+              (interactive "r")
+              (align-regexp start end
+                            "\\(\\s-*\\)\\s-" 1 0 t))
 
-           (defun align-ampersand (start end)
-             "Align columns by ampersand"
-             (interactive "r")
-             (align-regexp start end
-                           "\\(\\s-*\\)&" 1 1 t))
+            (defun align-ampersand (start end)
+              "Align columns by ampersand"
+              (interactive "r")
+              (align-regexp start end
+                            "\\(\\s-*\\)&" 1 1 t))
 
-           (defun align-equals (start end)
-             "Align columns by equals sign"
-             (interactive "r")
-             (align-regexp start end
-                           "\\(\\s-*\\)=" 1 0 t))
+            (defun align-equals (start end)
+              "Align columns by equals sign"
+              (interactive "r")
+              (align-regexp start end
+                            "\\(\\s-*\\)=" 1 0 t))
 
-           (defun align-comma (start end)
-             "Align columns by comma"
-             (interactive "r")
-             (align-regexp start end
-                           "\\(\\s-*\\)," 1 1 t))
+            (defun align-comma (start end)
+              "Align columns by comma"
+              (interactive "r")
+              (align-regexp start end
+                            "\\(\\s-*\\)," 1 1 t))
 
-           (defun align-dot (start end)
-             "Align columns by dot"
-             (interactive "r")
-             (align-regexp start end
-                           "\\(\\s-*\\)\\\." 1 1 t))
+            (defun align-dot (start end)
+              "Align columns by dot"
+              (interactive "r")
+              (align-regexp start end
+                            "\\(\\s-*\\)\\\." 1 1 t))
 
-           (defun align-colon (start end)
-             "Align columns by equals sign"
-             (interactive "r")
-             (align-regexp start end
-                           "\\(\\s-*\\):" 1 0 t))))
+            (defun align-colon (start end)
+              "Align columns by equals sign"
+              (interactive "r")
+              (align-regexp start end
+                            "\\(\\s-*\\):" 1 0 t))))
 
 (provide 'setup-general)
 ;;; setup-general.el ends here
