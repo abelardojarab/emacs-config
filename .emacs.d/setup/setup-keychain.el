@@ -1,6 +1,6 @@
 ;;; setup-keychain.el ---                            -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2017, 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -26,6 +26,7 @@
 
 ;; Secure sockets layer support
 (use-package starttls
+  :demand t
   :config (progn
             ;; Options
             (if (executable-find "gnutls-cli")
@@ -40,8 +41,7 @@
 (use-package keychain-environment
   :demand t
   :load-path (lambda () (expand-file-name "keychain-environment/" user-emacs-directory))
-  :commands keychain-refresh-environment
-  :init (keychain-refresh-environment))
+  :config (keychain-refresh-environment))
 
 ;; Keeping Secrets in Emacs with GnuPG & EasyPG
 (use-package epg
@@ -120,6 +120,7 @@
 
 ;; .authinfo parsing
 (use-package auth-source
+  :demand t
   :config (progn
             (if (file-exists-p "~/.authinfo.gpg")
                 (add-to-list 'auth-sources "~/.authinfo.gpg"))
