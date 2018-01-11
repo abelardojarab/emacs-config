@@ -125,7 +125,7 @@
 
 ;; cmake-based IDE
 (use-package cmake-ide
-  :defer t
+  :demand t
   :after (rtags irony-mode cmake-mode)
   :commands (my/cmake-enable-ide
              cmake-ide-compile
@@ -133,7 +133,6 @@
              cmake-ide--locate-cmakelists)
   :if (executable-find "cmake")
   :load-path (lambda () (expand-file-name "cmake-ide/" user-emacs-directory))
-  :init (add-hook 'c-mode-common-hook 'my/cmake-enable-ide)
   :config (progn
 
             ;; Asure cmake_build directory exists
@@ -200,7 +199,10 @@
                                 (make-directory my/cmake-build-dir))
 
                             ;; Set cmake-ide-build-dir according to both top project and cmake project names
-                            (setq cmake-ide-build-dir my/cmake-build-dir)))))))))
+                            (setq cmake-ide-build-dir my/cmake-build-dir)))))))
+
+	    ;; Enable cmake-ide for C-like files
+	    (add-hook 'c-mode-common-hook #'my/cmake-enable-ide)))
 
 (provide 'setup-cmake)
 ;;; setup-cmake.el ends here
