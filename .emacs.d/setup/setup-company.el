@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@ubuntu02>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -23,10 +23,9 @@
 
 ;;; Code:
 (use-package company
-  :defer 10
+  :demand t
   :diminish company-mode
   :load-path (lambda () (expand-file-name "company/" user-emacs-directory))
-  :commands global-company-mode
   :bind (("C-;"                       . company-complete-common)
          :map company-mode-map
          ([remap completion-at-point] . company-complete-common-or-cycle)

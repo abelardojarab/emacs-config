@@ -1,6 +1,6 @@
 ;;; setup-calendar.el ---                            -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2017, 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -26,6 +26,7 @@
 
 ;; Calendar and diary file
 (use-package calendar
+  :demand t
   :config (progn
             ;; Set up Org default files
             (let ((todo_workspace "~/workspace/Documents/Org/todo.org")
@@ -58,9 +59,9 @@
                                            year "[^0-9]*[>]*")
                                          diary-date-forms))
 
-            (add-hook 'diary-display-hook 'fancy-diary-display)
+            (add-hook 'diary-display-hook          'fancy-diary-display)
             (add-hook 'today-visible-calendar-hook 'calendar-mark-today)
-            (add-hook 'list-diary-entries-hook 'sort-diary-entries t)
+            (add-hook 'list-diary-entries-hook     'sort-diary-entries t)
 
             ;; https://www.emacswiki.org/emacs/InsertingTodaysDate
             (defun my/insert-current-date (&optional omit-day-of-week-p)

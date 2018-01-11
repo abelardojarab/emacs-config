@@ -1,8 +1,8 @@
 ;;; setup-tabbar.el ---                         -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -91,21 +91,19 @@ That is, a string used to represent it on the tab bar."
 
 ;; Tabbar ruler pre-requisites
 (use-package mode-icons
+  :demand t
   :if (display-graphic-p)
-  :defer t
   :load-path (lambda () (expand-file-name "mode-icons/" user-emacs-directory)))
 
 ;; more tweaking to tabbar
 (use-package tabbar-ruler
+  :demand t
   :if (display-graphic-p)
   :after (powerline tabbar mode-icons projectile)
-  :defer t
   :load-path (lambda () (expand-file-name "tabbar-ruler/" user-emacs-directory))
-  :init (progn
-          (setq tabbar-ruler-global-tabbar 't)
-          (tabbar-install-faces))
-  :commands tabbar-install-faces
   :config (progn
+            (setq tabbar-ruler-global-tabbar 't)
+            (tabbar-install-faces)
 
             ;; https://github.com/mattfidler/tabbar-ruler.el/issues/10
             (setq tabbar-ruler-movement-timer-delay 1000000)

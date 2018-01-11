@@ -1,8 +1,8 @@
 ;;; setup-desktop.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -50,6 +50,7 @@
 
 ;; Savehist: save some history
 (use-package savehist
+  :demand t
   :init (setq savehist-additional-variables '(search ring regexp-search-ring)
               savehist-autosave-interval 120
               savehist-file "~/.emacs.cache/savehist")
@@ -65,12 +66,14 @@
 
 ;; Remember the position where we closed a file
 (use-package saveplace
+  :demand t
   :init (progn
           (setq save-place-file "~/.emacs.cache/emacs.saveplace")
           (setq-default save-place t)))
 
 ;; Automatically save and restore sessions
 (use-package desktop
+  :defer t
   :commands (desktop-save-mode desktop-read desktop-save)
   :init (progn
           ;; Save desktops a minute after Emacs was idle.
@@ -135,6 +138,7 @@
 
 ;; Dashboard startup screen
 (use-package dashboard
+  :demand t
   :load-path (lambda () (expand-file-name "dashboard/" user-emacs-directory))
   :if (display-graphic-p)
   :config (progn

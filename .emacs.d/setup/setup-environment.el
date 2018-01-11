@@ -1,8 +1,8 @@
 ;;; setup-environment.el ---                 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -25,9 +25,8 @@
 ;;; Code:
 
 ;; garbage collection
-(setq-default ;; alloc.c
- gc-cons-threshold most-positive-fixnum
- gc-cons-percentage 0.5)
+(setq-default gc-cons-threshold most-positive-fixnum
+              gc-cons-percentage 0.5)
 
 ;; Reset garbage collector after initialization is finished
 (add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 64 1204 1204))))
@@ -76,16 +75,16 @@
 
 ;; Features
 (put 'narrow-to-region 'disabled nil)
-(put 'narrow-to-page 'disabled nil)
-(put 'narrow-to-defun 'disabled nil)
+(put 'narrow-to-page   'disabled nil)
+(put 'narrow-to-defun  'disabled nil)
 
 ;; Printing
-(setq ps-paper-type 'a4
-      ps-font-size 7.0
-      ps-print-header nil
-      ps-print-color-p t
-      ps-landscape-mode nil    ;; for two pages per page: t
-      ps-number-of-columns 1)  ;; for two pages per page: 2
+(setq ps-paper-type        'a4
+      ps-font-size         7.0
+      ps-print-header      nil
+      ps-print-color-p     t
+      ps-landscape-mode    nil
+      ps-number-of-columns 1)
 
 ;; Define preferred shell
 (cond

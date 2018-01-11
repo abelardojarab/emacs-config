@@ -1,8 +1,8 @@
 ;;; setup-cmake.el ---                            -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -32,7 +32,7 @@
   :diminish irony-mode
   :load-path (lambda () (expand-file-name "irony-mode/" user-emacs-directory))
   :after (ggtags eldoc function-args company)
-  :init (add-hook 'c-mode-common-hook 'irony-mode)
+  :init (add-hook 'c-mode-common-hook #'irony-mode)
   :config (progn
             (if (file-exists-p "/usr/local/bin/irony-server")
                 (setq irony-server-install-prefix "/usr/local/"))
@@ -49,7 +49,7 @@
             (use-package irony-cdb-json)
 
             ;; Hooks
-            (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)))
+            (add-hook 'irony-mode-hook #'irony-cdb-autosetup-compile-options)))
 
 ;; rtags
 ;; sudo apt-get install libclang-dev / brew install llvm --with-clang
@@ -67,7 +67,7 @@
   :bind (:map c++-mode-map
               ("C-c C-i" . rtags-print-symbol-info)
               ("C-c C-s" . rtags-find-symbol-at-point))
-  :init (add-hook 'c-mode-common-hook 'rtags-start-process-unless-running)
+  :init (add-hook 'c-mode-common-hook #'rtags-start-process-unless-running)
   :config (progn
             (use-package helm-rtags
               :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory)))
@@ -81,7 +81,7 @@
             (rtags-set-periodic-reparse-timeout 2)
 
             ;; Kill rdm on Emacs exit
-            (add-hook 'kill-emacs-hook 'rtags-quit-rdm)
+            (add-hook 'kill-emacs-hook #'rtags-quit-rdm)
 
             ;; Integrating rtags with eldoc
             ;; https://github.com/Andersbakken/rtags/issues/987
@@ -117,6 +117,7 @@
 
 ;; cmake syntax highlighting
 (use-package cmake-mode
+  :defer t
   :commands cmake-mode
   :mode (("/CMakeLists\\.txt\\'" . cmake-mode)
          ("\\.cmake\\'"          . cmake-mode))

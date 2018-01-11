@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@ubuntu02>
+;; Author: Abelardo Jara-Berrocal <abelardojara@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -26,7 +26,7 @@
 
 ;; Autoinsert skeletons and templates
 (use-package autoinsert
-  :demand t
+  :defer t
   :after yasnippet
   :commands auto-insert-mode
   :config (progn
@@ -65,10 +65,7 @@
                   (error "message" format-args)                  (when (and is-new-File yas-minor-mode)
                     (goto-char old-point-max)
                     (yas-expand-snippet (buffer-substring-no-properties (point-min) (point-max)))
-                    (delete-region (point-min) old-point-max)))))
-
-            ;; Enable auto-insert mode
-            (auto-insert-mode t)))
+                    (delete-region (point-min) old-point-max)))))))
 
 ;; Automated auto-insert of yasnippet templates on new files
 (use-package yatemplate

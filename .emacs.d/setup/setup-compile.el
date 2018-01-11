@@ -1,8 +1,8 @@
 ;;; setup-compile.el ---
 
-;; Copyright (C) 2014, 2015, 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -26,6 +26,7 @@
 
 ;; Better compile buffer
 (use-package compile
+  :demand t
   :config (progn
 
             ;; make sure ant's output is in a format emacs likes

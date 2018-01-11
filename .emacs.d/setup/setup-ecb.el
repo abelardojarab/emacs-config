@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@ubuntu02>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -26,14 +26,12 @@
 
 ;; Speedbar
 (use-package sr-speedbar
-  :defer t
+  :demand t
   :if (display-graphic-p)
   :defines (sr-speedbar-exist-p)
   :commands (sr-speedbar-open
              sr-speedbar-toggle
              sr-speedbar-refresh-turn-on)
-  :init (if (display-graphic-p)
-            (sr-speedbar-refresh-turn-on))
   :bind (:map speedbar-mode-map
               ([S-up]  . speedbar-up-directory)
               ([right] . speedbar-flush-expand-line)
@@ -62,7 +60,10 @@
             (add-to-list 'speedbar-fetch-etags-parse-list
                          '("\\.js" . speedbar-parse-c-or-c++tag))
             (speedbar-add-supported-extension ".il")
-            (speedbar-add-supported-extension ".ils")))
+            (speedbar-add-supported-extension ".ils")
+
+            ;; Enable speed-bar auto-refresh
+            (sr-speedbar-refresh-turn-on)))
 
 ;; projectile and speedbar integration
 (use-package projectile-speedbar
@@ -81,7 +82,6 @@
 ;; Code Browser
 (use-package ecb
   :load-path (lambda () (expand-file-name "ecb/" user-emacs-directory))
-  ;; :commands (ecb-activate) ;; enabling this line places ecb in autoload state
   :init (setq stack-trace-on-error t)
   :config (progn
 

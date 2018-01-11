@@ -1,8 +1,8 @@
 ;;; setup-dired.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -141,6 +141,7 @@
 
             ;; dired-ranger pre-requisite
             (use-package dired-hacks-utils
+              :demand t
               :after dired
               :load-path (lambda () (expand-file-name "dired-hacks-utils/" user-emacs-directory)))
 
@@ -186,7 +187,6 @@
             (use-package peep-dired
               :after dired
               :load-path (lambda () (expand-file-name "peep-dired/" user-emacs-directory))
-              :defer t ;; don't access `dired-mode-map' until `peep-dired' is loaded
               :bind (:map dired-mode-map
                           ("P" . peep-dired)))
 
@@ -197,7 +197,7 @@
               :diminish all-the-icons-dired-mode
               :load-path (lambda () (expand-file-name "all-the-icons-dired/" user-emacs-directory))
               :commands all-the-icons-dired-mode
-              :config (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
+              :init (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 
             ;; async support for dired
             (use-package dired-async
@@ -207,6 +207,7 @@
 
             ;; Simple directory explorer. It also works as a generic tree explore library
             (use-package direx
+              :demand t
               :after dired
               :load-path (lambda () (expand-file-name "direx/" user-emacs-directory))
               :bind (:map dired-mode-map
@@ -221,6 +222,7 @@
 
             ;; Integration with projectile
             (use-package direx-project
+              :demand t
               :after (direx projectile)
               :load-path (lambda () (expand-file-name "direx/" user-emacs-directory)))
 

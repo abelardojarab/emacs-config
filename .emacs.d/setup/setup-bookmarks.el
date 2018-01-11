@@ -1,9 +1,9 @@
 ;;; setup-bookmarks.el ---                      -*- lexical-binding: t; -*-
 
 
-;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -27,6 +27,7 @@
 
 ;; Bookmark Plus
 (use-package bookmark+
+  :demand t
   :load-path (lambda () (expand-file-name "bookmark+/" user-emacs-directory))
   :config (progn
             (setq bookmark-save-flag 1)
@@ -34,6 +35,7 @@
 
 ;; Visible bookmarks
 (use-package bm
+  :demand t
   :load-path (lambda () (expand-file-name "bm/" user-emacs-directory))
   :commands (bm-repository-load bm-buffer-restore bm-buffer-save bm-buffer-save-all bm-repository-save bm-toggle)
   :bind (;; bind left mouse clicks and scrolls in left margin/fringe
