@@ -697,6 +697,8 @@ ACTION must be an action supported by `helm-dired-action'."
          helm-ff--move-to-first-real-candidate
          helm-display-source-at-screen-top ; prevent setting window-start.
          helm-ff-auto-update-initial-value
+         ;; If HFF is using a frame use a frame as well.
+         (helm-actions-inherit-frame-settings t)
          (dest   (with-helm-display-marked-candidates
                    helm-marked-buffer-name
                    (helm-ff--count-and-collect-dups ifiles)
@@ -3046,8 +3048,7 @@ Use it for non--interactive calls of `helm-find-files'."
                (not (minibuffer-window-active-p (minibuffer-window)))))
          (tap (thing-at-point 'filename))
          (def (and tap (or (file-remote-p tap)
-                           (expand-file-name tap))))
-         (helm-inhibit-minibuffer-in-header-line t))
+                           (expand-file-name tap)))))
     (helm-set-local-variable 'helm-follow-mode-persistent nil)
     (unless helm-source-find-files
       (setq helm-source-find-files (helm-make-source

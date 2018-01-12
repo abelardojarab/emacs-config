@@ -3,7 +3,7 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil "ialign" "ialign.el" (23126 22356 86669 834000))
+;;;### (autoloads nil "ialign" "ialign.el" (23128 62337 291803 550000))
 ;;; Generated autoloads from ialign.el
 
 (autoload 'ialign "ialign" "\

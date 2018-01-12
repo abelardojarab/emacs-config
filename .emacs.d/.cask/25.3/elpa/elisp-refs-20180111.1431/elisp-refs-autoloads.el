@@ -3,8 +3,8 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil "elisp-refs" "elisp-refs.el" (23105 31305 794284
-;;;;;;  410000))
+;;;### (autoloads nil "elisp-refs" "elisp-refs.el" (23128 62339 987752
+;;;;;;  978000))
 ;;; Generated autoloads from elisp-refs.el
 
 (autoload 'elisp-refs-function "elisp-refs" "\
