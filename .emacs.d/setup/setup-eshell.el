@@ -1,8 +1,8 @@
 ;;; setup-eshell.el ---                       -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -52,6 +52,7 @@
               (add-hook 'ielm-mode-hook 'ielm-auto-complete))))
 
 (use-package eshell
+  :defer t
   :commands (eshell eshell-vertical eshell-horizontal)
   :bind (("C-c C-t"                 . eshell)
          :map ctl-x-map

@@ -1,8 +1,8 @@
 ;;; setup-eldoc.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -25,18 +25,16 @@
 ;;; Code:
 
 (use-package eldoc
+  :demand t
   :diminish eldoc-mode
   :init (progn
-          (add-hook 'emacs-lisp-mode-hook       'turn-on-eldoc-mode)
-          (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
-          (add-hook 'ielm-mode-hook             'turn-on-eldoc-mode)
-          (add-hook 'c-mode-common-hook         'turn-on-eldoc-mode)
-          (setq
-           eldoc-idle-delay                  0.8
-           eldoc-echo-area-use-multiline-p   t
-           eldoc-argument-case               'eldoc-argument-list)
+          (add-hook 'emacs-lisp-mode-hook         #'turn-on-eldoc-mode)
+          (add-hook 'lisp-interaction-mode-hook   #'turn-on-eldoc-mode)
+          (add-hook 'ielm-mode-hook               #'turn-on-eldoc-mode)
+          (add-hook 'c-mode-common-hook           #'turn-on-eldoc-mode)
+          (setq eldoc-idle-delay                  0.8
+		eldoc-echo-area-use-multiline-p   t)
 
-          ;; http://emacsredux.com/blog/2016/03/02/pimp-my-minibuffer/
           (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
 
           ;; Use gtags to show documentation
