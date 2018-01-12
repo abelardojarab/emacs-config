@@ -140,10 +140,11 @@
             (if (not (file-exists-p "~/cmake_builds"))
                 (make-directory "~/cmake_builds"))
 
+	    ;; Overwrite get build dir function
             (defun cmake-ide--get-build-dir ()
               "Return the directory name to run CMake in."
               ;; build the directory key for the project
-              (my/cmake-ide-enable)
+              (my/cmake-ide-set-build-dir)
               (let ((build-dir
                      (expand-file-name (or (cmake-ide--build-dir-var)
                                            (cmake-ide--get-build-dir-from-hash))
@@ -154,18 +155,37 @@
                 (setq cmake-ide-build-dir build-dir)
                 (file-name-as-directory build-dir)))
 
+	    ;; Overwrite run cmake function
+	    (defun cmake-ide--run-cmake-impl (project-dir cmake-dir)
+	      "Run the CMake process for PROJECT-DIR in CMAKE-DIR."
+	      (when project-dir
+		(my/cmake-ide-set-build-dir)
+		(let ((default-directory cmake-ide))
+		  (cmake-ide--message "Running cmake for src path %s in build path %s" project-dir cmake-ide-build-dir)
+		  (apply 'start-process (append (list "cmake" "*cmake*" cmake-ide-cmake-command)
+						(split-string cmake-ide-cmake-opts)
+						(list "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON" project-dir))))))
+
+	    ;; Initialize cmake-ide
+	    (defun my/cmake-ide-enable ()
+	      "Initialize cmake-ide"
+	      (interactive)
+	      (progn
+		(my/cmake-ide-set-build-dir)
+		(cmake-ide-setup)))
+
             ;; Define cmake-ide-build-dir under ~/cmake_builds
-            (defun my/cmake-ide-enable ()
+            (defun my/cmake-ide-set-build-dir ()
               "Modify cmake-build-dir and make it point to ~/cmake_builds"
               (interactive)
               (let (my/cmake-build-dir my/projectile-build-dir)
-                (cmake-ide-setup)
                 (if (cmake-ide--locate-cmakelists)
                     (progn
                       (if (and (file-exists-p "~/cmake_builds")
                                (projectile-project-name))
                           (progn
                             (make-local-variable 'cmake-ide-build-dir)
+			    (make-local-variable 'cmake-dir)
 
                             ;; Define project build directory
                             (setq my/projectile-build-dir (concat
@@ -204,7 +224,8 @@
                                 (make-directory my/cmake-build-dir))
 
                             ;; Set cmake-ide-build-dir according to both top project and cmake project names
-                            (setq-default cmake-ide-build-dir my/cmake-build-dir)))))))))
+                            (setq cmake-ide-build-dir my/cmake-build-dir)
+			    (setq cmake-dir my/cmake-build-dir)))))))))
 
 (provide 'setup-cmake)
 ;;; setup-cmake.el ends here
