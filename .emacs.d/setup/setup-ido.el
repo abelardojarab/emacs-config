@@ -1,8 +1,8 @@
 ;;; setup-ido.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -91,10 +91,11 @@
 
 ;; Use ibuffer
 (use-package ibuffer
-  :defer nil
+  :demand t
   :commands ibuffer
   :bind (:map ctl-x-map
               ("b" . ibuffer))
+  :init (setq ibuffer-inline-columns t)
   :config (progn
             (setq ibuffer-saved-filter-groups
                   '(("Config" (or
@@ -157,7 +158,7 @@
 ;; ibuffer versioning-oriented grouping
 (use-package ibuffer-vc
   :after ibuffer
-  :defer nil
+  :demand t
   :commands ibuffer-vc-generate-filter-groups-by-vc-root
   :load-path (lambda () (expand-file-name "ibuffer-vc/" user-emacs-directory))
   :config (progn

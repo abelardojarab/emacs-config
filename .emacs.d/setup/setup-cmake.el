@@ -126,7 +126,7 @@
 ;; cmake-based IDE
 (use-package cmake-ide
   :demand t
-  :after (rtags irony-mode cmake-mode)
+  :after (rtags irony-mode)
   :functions cmake-ide--locate-cmakelists
   :commands (my/cmake-enable-ide
              cmake-ide-compile
