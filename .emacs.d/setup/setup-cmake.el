@@ -143,7 +143,7 @@
             (defun cmake-ide--get-build-dir ()
               "Return the directory name to run CMake in."
               ;; build the directory key for the project
-              (my/cmake-enable-ide)
+              (my/cmake-ide-enable)
               (let ((build-dir
                      (expand-file-name (or (cmake-ide--build-dir-var)
                                            (cmake-ide--get-build-dir-from-hash))
