@@ -125,15 +125,15 @@
 
 ;; cmake-based IDE
 (use-package cmake-ide
-  :demand t
-  :after (rtags irony-mode)
-  :functions cmake-ide--locate-cmakelists
-  :commands (my/cmake-enable-ide
+  :defer t
+  :after (rtags irony)
+  :commands (my/cmake-ide-enable
              cmake-ide-compile
+	     cmake-ide-setup
              cmake-ide-run-cmake)
   :if (executable-find "cmake")
   :load-path (lambda () (expand-file-name "cmake-ide/" user-emacs-directory))
-  :init (add-hook 'c-mode-common-hook #'my/cmake-enable-ide)
+  :init (add-hook 'c-mode-common-hook #'my/cmake-ide-enable)
   :config (progn
 
             ;; Asure cmake_build directory exists
@@ -155,7 +155,7 @@
                 (file-name-as-directory build-dir)))
 
             ;; Define cmake-ide-build-dir under ~/cmake_builds
-            (defun my/cmake-enable-ide ()
+            (defun my/cmake-ide-enable ()
               "Modify cmake-build-dir and make it point to ~/cmake_builds"
               (interactive)
               (let (my/cmake-build-dir my/projectile-build-dir)
@@ -181,18 +181,22 @@
                                                       (file-name-nondirectory
                                                        (directory-file-name
                                                         (expand-file-name
-                                                         (cmake-ide--locate-cmakelists))))
+							 (file-name-directory
+							  (cmake-ide--locate-cmakelists)))))
                                                       my/projectile-build-dir))
 
                             ;; Avoid path repetitions
                             (if (equal (file-name-nondirectory
                                         (directory-file-name
                                          (expand-file-name
-                                          (cmake-ide--locate-cmakelists))))
+					  (file-name-directory
+					   (cmake-ide--locate-cmakelists)))))
                                        (projectile-project-name))
                                 (setq my/cmake-build-dir (concat
                                                           "~/cmake_builds/"
                                                           (projectile-project-name))))
+
+			    ;; Assure we are not using the last CMakeLists.txt
                             (message "* cmake-ide Building directory set to: %s" my/cmake-build-dir)
 
                             ;; Create cmake project directory under project directory
@@ -200,7 +204,7 @@
                                 (make-directory my/cmake-build-dir))
 
                             ;; Set cmake-ide-build-dir according to both top project and cmake project names
-                            (setq cmake-ide-build-dir my/cmake-build-dir)))))))))
+                            (setq-default cmake-ide-build-dir my/cmake-build-dir)))))))))
 
 (provide 'setup-cmake)
 ;;; setup-cmake.el ends here
