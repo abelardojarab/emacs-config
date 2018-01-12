@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@ubuntu02>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -66,7 +66,7 @@ non-nil."
 ;; Marker if the line goes beyond the end of the screen (arrows)
 (global-visual-line-mode 1)
 (diminish 'visual-line-mode)
-(add-hook 'text-mode-hook 'turn-on-visual-line-mode)
+(add-hook 'text-mode-hook #'turn-on-visual-line-mode)
 (setq visual-line-fringe-indicators '(nil right-curly-arrow))
 (add-hook 'prog-mode-hook
           (lambda ()
@@ -95,7 +95,7 @@ non-nil."
   :diminish column-enforce-mode
   :init (setq column-enforce-column 99)
   :load-path (lambda () (expand-file-name "column-enforce-mode/" user-emacs-directory))
-  :config (add-hook 'prog-mode-hook 'column-enforce-mode))
+  :config (add-hook 'prog-mode-hook #'column-enforce-mode))
 
 ;; Faster line numbers
 (use-package linum-ex

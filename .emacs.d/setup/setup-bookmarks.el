@@ -51,18 +51,18 @@
           (setq bm-repository-file "~/.emacs.cache/bm-repository")
 
           ;; Loading the repository from file when on start up.
-          (add-hook 'after-init-hook 'bm-repository-load)
+          (add-hook 'after-init-hook #'bm-repository-load)
 
           ;; Restoring bookmarks when on file find.
-          (add-hook 'find-file-hook 'bm-buffer-restore)
+          (add-hook 'find-file-hook #'bm-buffer-restore)
 
           ;; Saving bookmark data on killing a buffer
-          (add-hook 'kill-buffer-hook 'bm-buffer-save)
+          (add-hook 'kill-buffer-hook #'bm-buffer-save)
 
           ;; Saving the repository to file when on exit.
-          (add-hook 'kill-emacs-hook '(lambda nil
-                                        (bm-buffer-save-all)
-                                        (bm-repository-save))))
+          (add-hook 'kill-emacs-hook (lambda ()
+                                       (progn (bm-buffer-save-all)
+                                              (bm-repository-save)))))
   :config (progn
             ;; Add fringe only if display is graphic (GUI)
             (when (display-graphic-p)

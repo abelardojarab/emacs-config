@@ -52,7 +52,7 @@
 
             ;; Enable company in Org mode
             (defun add-pcomplete-to-capf ()
-              (add-hook 'completion-at-point-functions 'pcomplete-completions-at-point nil t))
+              (add-hook 'completion-at-point-functions #'pcomplete-completions-at-point nil t))
             (add-hook 'org-mode-hook #'add-pcomplete-to-capf)
 
             ;; Default company backends
@@ -240,7 +240,7 @@
                                                 company-bibtex)
                                               company-backends)))
 
-                        (add-hook 'TeX-mode-hook 'my/latex-mode-setup)
+                        (add-hook 'TeX-mode-hook #'my/latex-mode-setup)
                         (add-hook 'LaTeX-mode-hook #'company-auctex-init)))))
 
 (provide 'setup-company)

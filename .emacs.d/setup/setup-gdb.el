@@ -64,7 +64,7 @@
               (if (eq major-mode 'gud-mode)
                   (delete-overlay gud-overlay)))
 
-            (add-hook 'kill-buffer-hook 'gud-kill-buffer)
+            (add-hook 'kill-buffer-hook #'gud-kill-buffer)
 
             ;; Keep the current line in sync with the point and in the center of the
             ;; buffer. Otherwise the current line may disappear from the buffer as you step

@@ -78,11 +78,10 @@
                           'my/dired-extract-index-name)
               (setq-local imenu-create-index-function
                           'my/dired-imenu-create-index))
-            (add-hook 'dired-mode-hook 'my/dired-imenu-init)
+            (add-hook 'dired-mode-hook #'my/dired-imenu-init)
 
             ;; Emacs 24.4 defaults to an ls -1 view, not ls -l, but I want
-            ;; details. This needs to be specified before requiring dired+ (see
-            ;; http://irreal.org/blog/?p=3341)
+            ;; details. This needs to be specified before requiring dired+
             (setq diredp-hide-details-initially-flag nil)
 
             ;; "In Dired, visit this file or directory instead of the Dired buffer."
@@ -97,15 +96,15 @@
             (setq dired-omit-files
                   (concat dired-omit-files "\\|^.DS_STORE$\\|^.projectile$"))
 
-            (setq ls-lisp-dirs-first t
-                  dired-listing-switches "-alhF --group-directories-first"
-                  dired-recursive-copies 'top
-                  dired-recursive-deletes 'top
-                  dired-dwim-target t
+            (setq ls-lisp-dirs-first                  t
+                  dired-listing-switches              "-alhF --group-directories-first"
+                  dired-recursive-copies              'top
+                  dired-recursive-deletes             'top
+                  dired-dwim-target                   t
                   ;; -F marks links with @
-                  dired-ls-F-marks-symlinks t
+                  dired-ls-F-marks-symlinks           t
                   ;; Auto refresh dired
-                  dired-auto-revert-buffer t
+                  dired-auto-revert-buffer            t
                   ;; Auto refresh dired, but be quiet about it
                   global-auto-revert-non-file-buffers t)
 
@@ -162,16 +161,16 @@
                           ("K" . dired-k))
               :commands (dired-k dired-k-no-revert)
               :init (progn
-                      (add-hook 'dired-initial-position-hook 'dired-k)
-                      (add-hook 'dired-after-readin-hook 'dired-k-no-revert)))
+                      (add-hook 'dired-initial-position-hook #'dired-k)
+                      (add-hook 'dired-after-readin-hook     #'dired-k-no-revert)))
 
             ;; Display file icons in dired
             (use-package dired-icon
               :after dired
               :load-path (lambda () (expand-file-name "dired-icon/" user-emacs-directory))
               :if (display-graphic-p)
-              :commands (dired-icon-mode)
-              :init (add-hook 'dired-mode-hook 'dired-icon-mode))
+              :commands dired-icon-mode
+              :init (add-hook 'dired-mode-hook #'dired-icon-mode))
 
             ;; Facility to see images inside dired
             (use-package image-dired
@@ -197,7 +196,7 @@
               :diminish all-the-icons-dired-mode
               :load-path (lambda () (expand-file-name "all-the-icons-dired/" user-emacs-directory))
               :commands all-the-icons-dired-mode
-              :init (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
+              :init (add-hook 'dired-mode-hook #'all-the-icons-dired-mode))
 
             ;; async support for dired
             (use-package dired-async

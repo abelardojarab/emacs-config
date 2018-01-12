@@ -47,7 +47,7 @@
                                     "-"
                                     my/main-writing-font-size)
                       :weight 'normal)
-  (add-hook 'text-mode-hook 'variable-pitch-mode))
+  (add-hook 'text-mode-hook #'variable-pitch-mode))
 
 ;; Prefer user choices
 (when (find-font (font-spec :name my/main-programming-font))
@@ -144,13 +144,13 @@
   (add-hook 'after-make-frame-functions #'fontify-frame)
 
   ;; hook for setting up UI when not running in daemon mode
-  (add-hook 'emacs-startup-hook '(lambda () (fontify-frame (selected-frame)))))
+  (add-hook 'emacs-startup-hook (lambda () (fontify-frame (selected-frame)))))
 
 ;; Fixed pitch for HTML
 (defun fixed-pitch-mode ()
   (buffer-face-mode -1))
-(add-hook 'html-mode-hook 'fixed-pitch-mode)
-(add-hook 'nxml-mode-hook 'fixed-pitch-mode)
+(add-hook 'html-mode-hook #'fixed-pitch-mode)
+(add-hook 'nxml-mode-hook #'fixed-pitch-mode)
 
 ;; Pretty lambdas
 (defun pretty-lambdas ()
@@ -159,8 +159,8 @@
           (0 (progn (compose-region (match-beginning 0) (match-end 0)
                                     ,(make-char 'greek-iso8859-7 107))
                     nil))))))
-(add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
-(add-hook 'lisp-mode-hook 'pretty-lambdas)
+(add-hook 'emacs-lisp-mode-hook #'pretty-lambdas)
+(add-hook 'lisp-mode-hook       #'pretty-lambdas)
 
 ;; Pretty mode
 (use-package pretty-mode

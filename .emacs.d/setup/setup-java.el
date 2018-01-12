@@ -1,8 +1,8 @@
 ;;; setup-java.el ---                                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -28,7 +28,7 @@
   :after auto-complete
   :load-path (lambda () (expand-file-name "ajc-java-complete/" user-emacs-directory))
   :config (progn
-            (add-hook 'java-mode-hook 'ajc-java-complete-mode)
+            (add-hook 'java-mode-hook #'ajc-java-complete-mode)
             (setq ajc-tag-file-list (list (expand-file-name "ajc-java-complete/java_base.tag" user-emacs-directory)))))
 
 (provide 'setup-java)

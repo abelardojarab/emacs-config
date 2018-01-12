@@ -32,15 +32,15 @@
             (global-font-lock-mode t)
             (setq font-lock-maximum-decoration nil
                   font-lock-maximum-size       (* 512 512)
-		  font-lock-support-mode       'jit-lock-mode)
-	    (setq jit-lock-defer-time          0.5
-		  jit-lock-defer-contextually  nil
-		  jit-lock-chunk-size	       8000
-		  jit-lock-stealth-load	       10
-		  jit-lock-stealth-time	       0.02
-		  jit-lock-stealth-nice	       0.01
-		  jit-lock-stealth-verbose     nil)
-	    (setq-default font-lock-multiline  t)
+          font-lock-support-mode       'jit-lock-mode)
+        (setq jit-lock-defer-time          0.5
+          jit-lock-defer-contextually  nil
+          jit-lock-chunk-size          8000
+          jit-lock-stealth-load        10
+          jit-lock-stealth-time        0.02
+          jit-lock-stealth-nice        0.01
+          jit-lock-stealth-verbose     nil)
+        (setq-default font-lock-multiline  t)
             (defun global-font-lock-mode-check-buffers () nil)
 
             ;; Do not fontify large files
@@ -50,7 +50,7 @@
                 (read-only-mode nil)
                 (buffer-disable-undo)
                 (fundamental-mode)))
-            (add-hook 'find-file-hook 'my/find-file-check-make-large-file-read-only-hook)
+            (add-hook 'find-file-hook #'my/find-file-check-make-large-file-read-only-hook)
 
             ;; In programming modes, make sure things like FIXME and TODO are highlighted so they stand out:
             (defun my/add-watchwords ()
@@ -98,7 +98,7 @@
   :load-path (lambda () (expand-file-name "rainbow-mode/" user-emacs-directory))
   :diminish rainbow-mode
   :config (mapc (lambda (mode)
-                  (add-hook mode 'rainbow-mode))
+                  (add-hook mode #'rainbow-mode))
                 my/rainbow-modes))
 
 (provide 'setup-font-lock)

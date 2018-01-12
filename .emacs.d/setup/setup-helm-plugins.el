@@ -252,56 +252,56 @@
             (defun dash-load-org ()
               (interactive)
               (setq-local helm-dash-docsets '("Org")))
-            (add-hook 'org-mode-hook 'dash-load-org)
+            (add-hook 'org-mode-hook #'dash-load-org)
 
             (defun dash-load-cmake ()
               (interactive)
               (setq-local helm-dash-docsets '("CMake")))
-            (add-hook 'cmake-mode-hook 'dash-load-cmake)
+            (add-hook 'cmake-mode-hook #'dash-load-cmake)
 
             (defun dash-load-elisp ()
               (interactive)
               (setq-local helm-dash-docsets '("Emacs_Lisp")))
-            (add-hook 'emacs-lisp-mode-hook 'dash-load-elisp)
+            (add-hook 'emacs-lisp-mode-hook #'dash-load-elisp)
 
             (defun dash-load-c ()
               (interactive)
               (setq-local helm-dash-docsets '("C")))
-            (add-hook 'c-mode-hook 'dash-load-c)
+            (add-hook 'c-mode-hook #'dash-load-c)
 
             (defun dash-load-c++ ()
               (interactive)
               (setq-local helm-dash-docsets '("C++"
                                               "GLib")))
-            (add-hook 'c++-mode-hook 'dash-load-c++)
+            (add-hook 'c++-mode-hook #'dash-load-c++)
 
             (defun dash-load-py ()
               (interactive)
               (setq-local helm-dash-docsets '("Python_2"
                                               "Pandas")))
-            (add-hook 'python-mode-hook 'dash-load-py)
+            (add-hook 'python-mode-hook #'dash-load-py)
 
             (defun dash-load-js ()
               (interactive)
               (setq-local helm-dash-docsets '("JavaScript"
                                               "NodeJS"
                                               "AngularJS")))
-            (add-hook 'js2-mode-hook 'dash-load-js)
+            (add-hook 'js2-mode-hook #'dash-load-js)
 
             (defun dash-load-r ()
               (interactive)
               (setq-local helm-dash-docsets '("R")))
-            (add-hook 'ess-mode-hook 'dash-load-r)
+            (add-hook 'ess-mode-hook #'dash-load-r)
 
             (defun dash-load-bash ()
               (interactive)
               (setq-local helm-dash-docsets '("Bash")))
-            (add-hook 'shell-mode-hook 'dash-load-bash)
+            (add-hook 'shell-mode-hook #'dash-load-bash)
 
             (defun dash-load-md ()
               (interactive)
               (setq-local helm-dash-docsets '("Markdown")))
-            (add-hook 'markdown-mode-hook 'dash-load-md)))
+            (add-hook 'markdown-mode-hook #'dash-load-md)))
 
 ;; helm company
 (use-package helm-company

@@ -68,7 +68,7 @@
 
               ;; tab width
               (setq-default tab-stop-list '(8 16 24 32 40 48 56 64 72 80 88 96 108)))
-            (add-hook 'c-mode-common-hook 'my/c-mode-init)
+            (add-hook 'c-mode-common-hook #'my/c-mode-init)
 
             ;; ensure fill-paragraph takes doxygen @ markers as start of new
             ;; paragraphs properly
@@ -84,7 +84,7 @@
               ("C-c C-m" . moo-complete)
               :map c++-mode-map
               ("C-c C-m" . moo-complete))
-  :init (add-hook 'c-mode-common-hook 'function-args-mode)
+  :init (add-hook 'c-mode-common-hook #'function-args-mode)
   :config (fa-config-default))
 
 ;; C/C++ refactoring tool based on Semantic parser framework

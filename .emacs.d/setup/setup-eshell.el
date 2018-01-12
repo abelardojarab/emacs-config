@@ -49,7 +49,7 @@
                                    ac-source-words-in-same-mode-buffers))
                 (add-to-list 'ac-modes 'inferior-emacs-lisp-mode)
                 (auto-complete-mode 1))
-              (add-hook 'ielm-mode-hook 'ielm-auto-complete))))
+              (add-hook 'ielm-mode-hook #'ielm-auto-complete))))
 
 (use-package eshell
   :defer t
@@ -81,7 +81,7 @@
                  eshell-aliases-file (concat user-emacs-directory ".eshell-aliases")
                  eshell-last-dir-ring-size 512))
   :config (progn
-            (add-hook 'eshell-mode-hook '(lambda () (eshell/export "NODE_NO_READLINE=1")))
+            (add-hook 'eshell-mode-hook (lambda () (eshell/export "NODE_NO_READLINE=1")))
 
             ;; Vertical split eshell
             (defun eshell-vertical ()
@@ -115,7 +115,7 @@
             (use-package eshell-fringe-status
               :if (display-graphic-p)
               :load-path (lambda () (expand-file-name "eshell-fringe-status/" user-emacs-directory))
-              :config (add-hook 'eshell-mode-hook 'eshell-fringe-status-mode))
+              :config (add-hook 'eshell-mode-hook #'eshell-fringe-status-mode))
 
             ;; Show git branches on the prompt
             (use-package eshell-prompt-extras
@@ -155,8 +155,8 @@
 
             ;; When compiling from shell, display error result as in compilation
             ;; buffer, with links to errors.
-            (add-hook 'sh-mode-hook 'compilation-shell-minor-mode)
-            (add-hook 'sh-mode-hook 'ansi-color-for-comint-mode-on)))
+            (add-hook 'sh-mode-hook #'compilation-shell-minor-mode)
+            (add-hook 'sh-mode-hook #'ansi-color-for-comint-mode-on)))
 
 ;; CShell mode
 (use-package csh-mode
@@ -175,9 +175,9 @@
                         (string-match "\\(.*\\)\\.csh$" (file-name-nondirectory (buffer-file-name))))
                 (setq-local indent-line-function   #'csh-indent-line)
                 (setq-local indent-region-function #'csh-indent-region)))
-            (add-hook 'sh-mode-hook #'my/tcsh-set-indent-functions)
+            (add-hook 'sh-mode-hook      #'my/tcsh-set-indent-functions)
             (add-hook 'sh-set-shell-hook #'my/tcsh-set-indent-functions)
-            (add-hook 'sh-mode-hook (lambda () (electric-indent-mode -1)))))
+            (add-hook 'sh-mode-hook      (lambda () (electric-indent-mode -1)))))
 
 ;; Send expressions to a REPL line-by-line by hitting C-RET
 (use-package eval-in-repl

@@ -1,8 +1,8 @@
 ;;; setup-pandoc.el ---                              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -29,10 +29,10 @@
   :load-path (lambda () (expand-file-name "pandoc-mode/" user-emacs-directory))
   :config (progn
             (setq pandoc-data-dir "~/.emacs.cache/pandoc/")
-            (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings)
-            (add-hook 'markdown-mode-hook 'pandoc-load-default-settings)
-            (add-hook 'org-mode-hook 'pandoc-load-default-settings)
-            (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings)))
+            (add-hook 'pandoc-mode-hook   #'pandoc-load-default-settings)
+            (add-hook 'markdown-mode-hook #'pandoc-load-default-settings)
+            (add-hook 'org-mode-hook      #'pandoc-load-default-settings)
+            (add-hook 'pandoc-mode-hook   #'pandoc-load-default-settings)))
 
 ;; Org integration with pandoc
 (use-package ox-pandoc

@@ -1,8 +1,8 @@
 ;;; setup-parenthesis.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -74,19 +74,19 @@
   :config (progn
             (autopair-global-mode) ;; enable autopair in all buffers
             (setq autopair-autowrap t)
-            (put 'autopair-insert-opening 'delete-selection t)
-            (put 'autopair-skip-close-maybe 'delete-selection t)
-            (put 'autopair-insert-or-skip-quote 'delete-selection t)
-            (put 'autopair-extra-insert-opening 'delete-selection t)
+            (put 'autopair-insert-opening         'delete-selection t)
+            (put 'autopair-skip-close-maybe       'delete-selection t)
+            (put 'autopair-insert-or-skip-quote   'delete-selection t)
+            (put 'autopair-extra-insert-opening   'delete-selection t)
             (put 'autopair-extra-skip-close-maybe 'delete-selection t)
-            (put 'autopair-backspace 'delete-selection 'supersede)
-            (put 'autopair-newline 'delete-selection t)
+            (put 'autopair-backspace              'delete-selection 'supersede)
+            (put 'autopair-newline                'delete-selection t)
 
             ;; only needed if you use autopair
             (add-hook 'text-mode-hook
-                      #'(lambda () (setq autopair-dont-activate t)))
+                      (lambda () (setq autopair-dont-activate t)))
             (add-hook 'org-mode-hook
-                      #'(lambda () (setq autopair-dont-activate t)))))
+                      (lambda () (setq autopair-dont-activate t)))))
 
 ;; Rainbow delimiters
 (use-package rainbow-delimiters
@@ -94,8 +94,8 @@
   :load-path (lambda () (expand-file-name "rainbow-delimiters/" user-emacs-directory))
   :commands rainbow-delimiters-mode
   :init (progn
-          (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode)
-          (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)))
+          (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
+          (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)))
 
 ;; Legacy minor mode
 (use-package paredit

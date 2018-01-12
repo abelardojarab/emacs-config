@@ -1,6 +1,6 @@
 ;;; setup-email.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com
 ;; Keywords:
@@ -143,8 +143,8 @@
                     (unless (y-or-n-p "Possibly missing an attachment. Send current draft?")
                       (error "Abort."))))))
 
-            (add-hook 'wl-mail-send-pre-hook 'my/wl-draft-subject-check)
-            (add-hook 'wl-mail-send-pre-hook 'my/wl-draft-attachment-check)
+            (add-hook 'wl-mail-send-pre-hook #'my/wl-draft-subject-check)
+            (add-hook 'wl-mail-send-pre-hook #'my/wl-draft-attachment-check)
 
             ;; Assure we use mu4e
             (if (boundp 'mail-user-agent)

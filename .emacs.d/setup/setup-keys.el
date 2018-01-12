@@ -1,8 +1,8 @@
 ;;; setup-keys.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -244,7 +244,7 @@
   (my/keys-minor-mode 0))
 
 ;; Disable overwrite for some modes
-(add-hook 'org-mode-hook 'my/keys-disable-setup-hook)
+(add-hook 'org-mode-hook #'my/keys-disable-setup-hook)
 
 ;; Advice to set proper order for keymaps
 (defadvice load (after give-my/keybindings-priority)

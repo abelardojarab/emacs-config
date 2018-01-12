@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@ubuntu02>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -90,7 +90,7 @@
             (defun flyspell-ignore-tex ()
               (interactive)
               (set (make-variable-buffer-local 'ispell-parser) 'tex))
-            (add-hook 'org-mode-hook 'flyspell-ignore-tex)
+            (add-hook 'org-mode-hook #'flyspell-ignore-tex)
 
             ;; source http://endlessparentheses.com/ispell-and-org-mode.html
             (defun my/org-ispell ()

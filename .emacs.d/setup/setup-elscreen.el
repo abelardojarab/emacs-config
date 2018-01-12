@@ -115,7 +115,7 @@ Set name truncation length in ELSCREEN-TRUNCATE-LENGTH"
               (setq *elscreen-tabs-as-string* (elscreen-tabs-as-string)))
 
             ;; Update *elscreen-tabs-as-string* whenever elscreen status updates
-            (add-hook 'elscreen-screen-update-hook 'update-elscreen-tabs-as-string)
+            (add-hook 'elscreen-screen-update-hook #'update-elscreen-tabs-as-string)
 
             ;; Set frame title format as combination of current elscreen tabs and buffer/path
             (setq frame-title-format '(:eval (concat *elscreen-tabs-as-string*

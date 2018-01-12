@@ -56,7 +56,7 @@
               (ediff-setup-keymap)
               (define-key ediff-mode-map (kbd "<down>") #'ediff-next-difference)
               (define-key ediff-mode-map (kbd "<up>")   #'ediff-previous-difference))
-            (add-hook 'ediff-mode-hook 'my/setup-ediff))
+            (add-hook 'ediff-mode-hook #'my/setup-ediff))
   :config (progn
             (setq ediff-window-setup-function 'ediff-setup-windows-plain
 
@@ -64,7 +64,7 @@
                   ediff-split-window-function 'split-window-horizontally
 
                   ;; Ignore whitespace
-                  ediff-diff-options "-w")
+                  ediff-diff-options          "-w")
 
             ;; taken from http://kaushalmodi.github.io/2015/03/09/do-ediff-as-i-mean/
             (defun my/ediff-dwim ()

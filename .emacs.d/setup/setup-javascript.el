@@ -1,8 +1,8 @@
 ;;; setup-javascript.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -47,7 +47,7 @@
             (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 
             (add-hook 'js2-mode-hook (lambda () (flycheck-mode 1)))
-            (add-hook 'js2-mode-hook 'skewer-mode)
+            (add-hook 'js2-mode-hook #'skewer-mode)
             (setq-default js2-basic-offset 4)
             (setq-default js2-allow-rhino-new-expr-initializer nil)
             (setq-default js2-auto-indent-p nil)
@@ -79,7 +79,7 @@
   :diminish tern-mode
   :after js2-mode
   :load-path (lambda () (expand-file-name "tern/emacs/" user-emacs-directory))
-  :init (add-hook 'js2-mode-hook 'tern-mode)
+  :init (add-hook 'js2-mode-hook #'tern-mode)
   :config (progn
             ;; When using auto-complete
             (when (featurep 'auto-complete)
@@ -103,16 +103,17 @@
   :commands js2-refactor-mode
   :diminish js2-refactor-mode
   :load-path (lambda () (expand-file-name "js2-refactor/" user-emacs-directory))
-  :init (add-hook 'js2-mode-hook 'js2-refactor-mode)
+  :init (add-hook 'js2-mode-hook #'js2-refactor-mode)
   :config (js2r-add-keybindings-with-prefix "C-c r"))
 
 ;; ac-js2
 (use-package ac-js2
+  :disabled t
   :after (auto-complete j2-mode)
   :load-path (lambda () (expand-file-name "ac-js2/" user-emacs-directory))
   :config (progn
             (when (featurep 'auto-complete)
-              (add-hook 'js2-mode-hook 'ac-js2-mode)
+              (add-hook 'js2-mode-hook #'ac-js2-mode)
               (setq-default ac-js2-evaluate-calls t))))
 
 (use-package company-tern
@@ -148,7 +149,7 @@
   :after (json-snatcher js2-mode)
   :load-path (lambda () (expand-file-name "json-mode/" user-emacs-directory))
   :config (progn
-            (add-hook 'json-mode-hook 'js2-minor-mode)
+            (add-hook 'json-mode-hook #'js2-minor-mode)
             (setq js-indent-level 4)))
 
 ;; Bring node.js to Emacs

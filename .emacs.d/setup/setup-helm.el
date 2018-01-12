@@ -96,7 +96,7 @@
                   (overlay-put ov 'face (let ((bg-color (face-background 'default nil)))
                                           `(:background ,bg-color :foreground ,bg-color)))
                   (setq-local cursor-type nil))))
-            (add-hook 'helm-minibuffer-set-up-hook 'helm-hide-minibuffer-maybe)
+            (add-hook 'helm-minibuffer-set-up-hook #'helm-hide-minibuffer-maybe)
 
             ;; Helm fonts listing
             (setq font-helm-source
@@ -132,8 +132,8 @@
               (setq projectile-switch-project-action 'helm-projectile)
               (setq projectile-completion-system 'helm))
             (my/projectile-setup)
-            (add-hook 'projectile-find-file-hook 'my/projectile-setup)
-            (add-hook 'projectile-mode-hook 'my/projectile-setup)))
+            (add-hook 'projectile-find-file-hook #'my/projectile-setup)
+            (add-hook 'projectile-mode-hook      #'my/projectile-setup)))
 
 ;; Indent semantic entries
 (use-package helm-imenu

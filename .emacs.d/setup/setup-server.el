@@ -94,7 +94,7 @@
                   (ergoemacs-mode -1))
               (setq my/really-kill-emacs t)
               (kill-emacs)
-	      (setq my/really-kill-emacs t)
+          (setq my/really-kill-emacs t)
               (kill-emacs)))
 
             ;; Detect presence of modified buffers

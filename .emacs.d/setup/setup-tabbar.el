@@ -74,8 +74,8 @@ That is, a string used to represent it on the tab bar."
             (defun my/on-buffer-modification ()
               (set-buffer-modified-p t)
               (my/modification-state-change))
-            (add-hook 'after-save-hook 'my/modification-state-change)
-            (add-hook 'first-change-hook 'my/on-buffer-modification)
+            (add-hook 'after-save-hook    #'my/modification-state-change)
+            (add-hook 'first-change-hook  #'my/on-buffer-modification)
 
             ;; Assure switching tabs uses switch-to-buffer
             (defun switch-tabbar (num)

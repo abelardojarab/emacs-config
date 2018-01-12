@@ -1,8 +1,8 @@
 ;;; setup-org-latex.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -40,7 +40,7 @@
             ;; CDLaTeX is “is a minor mode that is normally used in combination with a
             ;; major LaTeX mode like AUCTeX in order to speed-up insertion of environments
             ;; and math templates”
-            (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
+            (add-hook 'org-mode-hook #'turn-on-org-cdlatex)
 
             ;; Preview LaTeX equations in buffers by showing images (C-c C-x C-l)
             (if (executable-find "convert")
@@ -134,7 +134,7 @@
                              (delete-overlay ov)))
                          (setq org-latex-fragment-last el))))))
 
-              (add-hook 'post-command-hook 'org-latex-fragment-toggle))
+              (add-hook 'post-command-hook #'org-latex-fragment-toggle))
 
             ;; Force figure position
             (setq org-latex-default-figure-position "!htb")
@@ -518,7 +518,7 @@
                         (?x . "[]{%l}")
                         (?X . "{%l}")
                         )))))
-            (add-hook 'org-mode-hook 'org-mode-reftex-setup)
+            (add-hook 'org-mode-hook #'org-mode-reftex-setup)
 
             ;; Add cite link
             (org-add-link-type "cite" 'ebib

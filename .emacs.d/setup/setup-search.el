@@ -1,8 +1,8 @@
 ;;; setup-search.el ---                              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -41,7 +41,7 @@
               (recenter))
             (ad-activate 'isearch-repeat-forward)
             (ad-activate 'isearch-repeat-backward)
-            (add-hook 'isearch-mode-end-hook 'recenter-top-bottom)
+            (add-hook 'isearch-mode-end-hook #'recenter-top-bottom)
 
             ;; search forward with Ctrl-f
             (global-set-key [(control f)] 'isearch-forward)

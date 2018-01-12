@@ -33,7 +33,7 @@
             ;; Define email sources
             (setq mail-sources '((maildir :path "~/Mail/INBOX" :subdirs ("cur" "new"))))
 
-                  ;; mailbox settings
+            ;; mailbox settings
             (setq nnmail-expiry-wait 30
                   nnmail-crosspost nil
                   nnmail-extra-headers (quote (To Cc Newsgroups))
@@ -145,9 +145,9 @@
             (setq read-mail-command           'gnus-user-agent)
 
             ;; Mode hooks
-            (add-hook 'gnus-group-mode-hook   'gnus-topic-mode)
-            (add-hook 'gnus-group-mode-hook   'hl-line-mode)
-            (add-hook 'gnus-summary-mode-hook 'hl-line-mode)
+            (add-hook 'gnus-group-mode-hook   #'gnus-topic-mode)
+            (add-hook 'gnus-group-mode-hook   #'hl-line-mode)
+            (add-hook 'gnus-summary-mode-hook #'hl-line-mode)
 
             ;; Truncate lines
             (mapc (lambda (mode)
@@ -160,14 +160,13 @@
                     gnus-topic-mode-hook))
 
             ;; Sort email
-            (add-hook 'gnus-summary-exit-hook 'gnus-summary-bubble-group)
-            (add-hook 'gnus-suspend-gnus-hook 'gnus-group-sort-groups-by-rank)
-            (add-hook 'gnus-exit-gnus-hook    'gnus-group-sort-groups-by-rank)
+            (add-hook 'gnus-summary-exit-hook #'gnus-summary-bubble-group)
+            (add-hook 'gnus-suspend-gnus-hook #'gnus-group-sort-groups-by-rank)
+            (add-hook 'gnus-exit-gnus-hook    #'gnus-group-sort-groups-by-rank)
 
             ;; Get smarter about filtering depending on what I reed or mark.
             ;; I use ! (tick) for marking threads as something that interests me.
-            (setq gnus-use-adaptive-scoring 'line
-                  gnus-default-adaptive-score-alist
+            (setq gnus-default-adaptive-score-alist
                   '((gnus-dormant-mark (from 20) (subject 100))
                     (gnus-ticked-mark (subject 30))
                     (gnus-read-mark (subject 30))
@@ -175,9 +174,10 @@
                     (gnus-catchup-mark (subject -150))
                     (gnus-killed-mark (subject -1000))
                     (gnus-expirable-mark (from -1000) (subject -1000)))
+                  gnus-use-adaptive-scoring 'line
                   gnus-score-decay-constant 1
-                  gnus-score-decay-scale 0.03
-                  gnus-decay-scores t)
+                  gnus-score-decay-scale    0.03
+                  gnus-decay-scores         t)
 
             ;; Save email attachments
             (defun my/gnus-summary-save-parts (&optional arg)
@@ -283,7 +283,7 @@
                         (flyspell-mode  t)))
 
             ;; Turn on PGP
-            (add-hook 'message-mode-hook 'epa-mail-mode)
+            (add-hook 'message-mode-hook #'epa-mail-mode)
 
             ;; Enable emacsclient in mutt
             (add-to-list 'auto-mode-alist '(".*mutt.*" . message-mode))
@@ -297,8 +297,10 @@
 
 ;; Enabling attaching files from dired
 (use-package gnus-dired
+  :defer t
+  :init (add-hook 'dired-mode-hook #'turn-on-gnus-dired-mode)
+  :commands turn-on-gnus-dired-mode
   :config (progn
-            (add-hook 'dired-mode-hook 'turn-on-gnus-dired-mode)
 
             ;; make the `gnus-dired-mail-buffers' function also work on
             ;; message-mode derived modes, such as mu4e-compose-mode
@@ -324,7 +326,7 @@
   :after (dired all-the-icons gnus)
   :load-path (lambda () (expand-file-name "all-the-icons-gnus/" user-emacs-directory))
   :commands all-the-icons-gnus-setup
-  :init (add-hook 'gnus-group-mode-hook 'all-the-icons-gnus-setup))
+  :init (add-hook 'gnus-group-mode-hook #'all-the-icons-gnus-setup))
 
 (provide 'setup-gnus)
 ;;; setup-gnus.el ends here

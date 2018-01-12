@@ -59,9 +59,8 @@
                                            year "[^0-9]*[>]*")
                                          diary-date-forms))
 
-            (add-hook 'diary-display-hook          'fancy-diary-display)
-            (add-hook 'today-visible-calendar-hook 'calendar-mark-today)
-            (add-hook 'list-diary-entries-hook     'sort-diary-entries t)
+            (add-hook 'diary-display-hook          #'fancy-diary-display)
+            (add-hook 'today-visible-calendar-hook #'calendar-mark-today)
 
             ;; https://www.emacswiki.org/emacs/InsertingTodaysDate
             (defun my/insert-current-date (&optional omit-day-of-week-p)

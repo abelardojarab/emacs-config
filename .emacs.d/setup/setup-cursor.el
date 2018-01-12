@@ -1,8 +1,8 @@
 ;;; setup-cursor.el ---                              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -55,9 +55,10 @@
 ;; Blinking cursor
 (use-package heartbeat-cursor
   :if (not (equal system-type 'windows-nt))
-  :config (progn
-            (add-hook 'prog-mode-hook (lambda () (heartbeat-cursor-mode)))
-            (add-hook 'org-mode-hook (lambda () (heartbeat-cursor-mode)))))
+  :commands heartbeat-cursor-mode
+  :init (progn
+            (add-hook 'prog-mode-hook #'heartbeat-cursor-mode)
+            (add-hook 'org-mode-hook #'heartbeat-cursor-mode)))
 
 ;; Multiple cursors
 (use-package multiple-cursors

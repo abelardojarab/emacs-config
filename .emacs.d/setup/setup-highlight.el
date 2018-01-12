@@ -1,8 +1,8 @@
 ;;; setup-highlight.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -108,7 +108,7 @@ create the new one."
   :load-path (lambda () (expand-file-name "highlight-blocks/" user-emacs-directory))
   :diminish highlight-blocks-mode
   :config (mapc (lambda (mode)
-                  (add-hook mode 'highlight-sexp-mode))
+                  (add-hook mode #'highlight-sexp-mode))
                 my/highlight-blocks-modes))
 
 ;; Highlight s-exp
@@ -118,7 +118,7 @@ create the new one."
   :load-path (lambda () (expand-file-name "highlight-sexp/" user-emacs-directory))
   :diminish highlight-sexp-mode
   :config (mapc (lambda (mode)
-                  (add-hook mode 'highlight-sexp-mode))
+                  (add-hook mode #'highlight-sexp-mode))
                 my/highlight-sexp-modes))
 
 ;; Highlight the latest changes in the buffer (like text inserted from: yank, undo, etc.) until the next command is run

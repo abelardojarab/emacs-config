@@ -73,8 +73,8 @@
                 (setenv "DISPLAY" nil)))
 
             (when (getenv "DISPLAY")
-              (add-hook 'after-make-frame-functions 'my/fixup-gpg-agent)
-              (add-hook 'focus-in-hook 'my/fixup-gpg-agent))))
+              (add-hook 'after-make-frame-functions #'my/fixup-gpg-agent)
+              (add-hook 'focus-in-hook              #'my/fixup-gpg-agent))))
 
 ;; Enable encryption/decryption of .gpg files
 (use-package epa-file

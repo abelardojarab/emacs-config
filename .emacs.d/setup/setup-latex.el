@@ -1,8 +1,8 @@
 ;;; setup-latex.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -90,16 +90,16 @@
   :load-path (lambda () (expand-file-name "latex-pretty-symbols/" user-emacs-directory))
   :init (progn
           ;;AUCTeX
-          (add-hook 'LaTeX-mode-hook 'latex-unicode-simplified)
+          (add-hook 'LaTeX-mode-hook #'latex-unicode-simplified)
 
           ;;latex-mode
-          (add-hook 'latex-mode-hook 'latex-unicode-simplified)))
+          (add-hook 'latex-mode-hook #'latex-unicode-simplified)))
 
 (use-package magic-latex-buffer
   :defer t
   :commands magic-latex-buffer
   :load-path (lambda () (expand-file-name "magic-latex-buffer/" user-emacs-directory))
-  :init (add-hook 'latex-mode-hook 'magic-latex-buffer)
+  :init (add-hook 'latex-mode-hook #'magic-latex-buffer)
   :config (setq magic-latex-enable-block-highlight t
                 magic-latex-enable-suscript        t
                 magic-latex-enable-pretty-symbols  t

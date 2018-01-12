@@ -29,13 +29,13 @@
     (make-directory "~/.emacs.cache/backups") t)
 
 ;; Backups
-(setq make-backup-files nil
-      backup-by-copying t
-      backup-directory-alist '(("." . "~/.emacs.cache/backups"))
-      version-control t
-      kept-new-versions 2
-      kept-old-versions 1
-      delete-old-versions t)
+(setq backup-directory-alist '(("." . "~/.emacs.cache/backups"))
+      make-backup-files      nil
+      backup-by-copying      t
+      version-control        t
+      kept-new-versions      2
+      kept-old-versions      1
+      delete-old-versions    t)
 
 ;; Preserve the owner and group of the file you're editing
 (setq backup-by-copying-when-mismatch t)
@@ -52,8 +52,8 @@
 (use-package savehist
   :demand t
   :init (setq savehist-additional-variables '(search ring regexp-search-ring)
-              savehist-autosave-interval 120
-              savehist-file "~/.emacs.cache/savehist")
+              savehist-autosave-interval    120
+              savehist-file                 "~/.emacs.cache/savehist")
   :config (savehist-mode t))
 
 ;; filecache: http://www.emacswiki.org/cgi-bin/wiki/FileNameCache
@@ -126,14 +126,14 @@
                         (setq buffer-display-time-1
                               (or buffer-display-time (current-time)))))
                     (buffer-list)))
-            (add-hook 'desktop-save-hook 'save-buffer-display-time)
+            (add-hook 'desktop-save-hook #'save-buffer-display-time)
 
             (defun set-buffer-display-time ()
               (mapc (lambda (buf)
                       (with-current-buffer buf
                         (setq buffer-display-time buffer-display-time-1)))
                     (buffer-list)))
-            (add-hook 'desktop-after-read-hook 'set-buffer-display-time)
+            (add-hook 'desktop-after-read-hook #'set-buffer-display-time)
             (desktop-save-mode)))
 
 ;; Dashboard startup screen

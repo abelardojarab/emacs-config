@@ -53,7 +53,7 @@
                   sr-speedbar-right-side                nil)
 
             ;; Highlight the current line
-            (add-hook 'speedbar-mode-hook '(lambda () (hl-line-mode 1)))
+            (add-hook 'speedbar-mode-hook (lambda () (hl-line-mode 1)))
 
             ;; Add Javascript
             (speedbar-add-supported-extension ".js")

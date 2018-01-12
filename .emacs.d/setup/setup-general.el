@@ -91,7 +91,7 @@
   :defer t
   :commands subword-mode
   :init (mapc (lambda (mode)
-                (add-hook mode 'subword-mode))
+                (add-hook mode #'subword-mode))
               my/subword-modes))
 
 ;; Choose wrap prefix automatically

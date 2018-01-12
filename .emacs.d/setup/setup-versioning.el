@@ -1,8 +1,8 @@
 ;;; setup-versioning.el ---                         -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -38,7 +38,7 @@
 (use-package vc-sync
   :disabled t
   :after vc
-  :init (add-hook 'dired-after-readin-hook 'dired-sync-symlink-filter)
+  :init (add-hook 'dired-after-readin-hook #'dired-sync-symlink-filter)
   :commands dired-sync-symlink-filter
   :config (defun dired-sync-symlink-filter ()
             (save-excursion
@@ -65,7 +65,7 @@
                                (plist-get commit-info :author)
                                (plist-get commit-info :author-time)
                                (plist-get commit-info :author-summary))))
-            (add-hook 'vc-msg-hook 'vc-msg-hook-setup)))
+            (add-hook 'vc-msg-hook #'vc-msg-hook-setup)))
 
 ;; Annotate lines with author history
 (use-package vc-annotate
@@ -206,7 +206,7 @@
             (when (looking-at "\n")
               (open-line 1)))
 
-          (add-hook 'git-commit-mode-hook 'magit-commit-mode-init))
+          (add-hook 'git-commit-mode-hook #'magit-commit-mode-init))
   :config (progn
 
             ;; don't put "origin-" in front of new branch names by default
@@ -361,7 +361,7 @@
                   (my/add-magit-faces)))
 
               (remove-hook 'git-commit-setup-hook 'with-editor-usage-message)
-              (add-hook 'git-commit-setup-hook 'my/magit-commit-prompt)
+              (add-hook 'git-commit-setup-hook #'my/magit-commit-prompt)
               (advice-add 'magit-commit :after 'my/use-magit-commit-prompt))
 
             ;; This extension finds all the changes ("hunks") between a working copy of a
@@ -483,7 +483,7 @@
   :load-path (lambda () (expand-file-name "diff-hl/" user-emacs-directory))
   :init (progn
           ;; Integrate with Magit
-          (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
+          (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh)
 
           ;; Highlight changed files in the fringe of dired
           (add-hook 'dired-mode-hook #'diff-hl-dired-mode))

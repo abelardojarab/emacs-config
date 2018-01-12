@@ -1,6 +1,6 @@
 ;;; setup-file.el ---                                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -26,7 +26,7 @@
 
 ;; Automatic filling setup
 (setq-default fill-column 80)
-(add-hook 'text-mode-hook 'auto-fill-mode)
+(add-hook 'text-mode-hook #'auto-fill-mode)
 (diminish 'auto-fill-function " Ⓕ")
 
 ;; aggressive fill on paragraphs
@@ -99,13 +99,13 @@
 (ad-activate 'ansi-term)
 
 ;; update the copyright when present
-(add-hook 'before-save-hook 'copyright-update)
+(add-hook 'before-save-hook #'copyright-update)
 
 ;; deleting files goes to OS's trash folder
 (setq delete-by-moving-to-trash t)
 
 ;; Make URLs in comments/strings clickable, (emacs > v22)
-(add-hook 'find-file-hooks 'goto-address-prog-mode)
+(add-hook 'find-file-hooks #'goto-address-prog-mode)
 
 ;; Ignore case when looking for a file
 (setq read-file-name-completion-ignore-case t)
@@ -118,10 +118,10 @@
 (add-hook 'write-file-hooks 'time-stamp) ;; update when saving
 
 ;; More exhaustive cleaning of white space
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+(add-hook 'before-save-hook #'delete-trailing-whitespace)
 
 ;; Make shell scrips executable on save. Good!
-(add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
+(add-hook 'after-save-hook #'executable-make-buffer-file-executable-if-script-p)
 
 ;; Auto compile *.elc-files on save
 (defun auto-byte-recompile ()
@@ -130,7 +130,7 @@
   (when (and (eq major-mode 'emacs-lisp-mode)
              (file-exists-p (byte-compile-dest-file buffer-file-name)))
     (byte-compile-file buffer-file-name)))
-(add-hook 'after-save-hook 'auto-byte-recompile)
+(add-hook 'after-save-hook #'auto-byte-recompile)
 
 ;; sudo edit
 (use-package sudo-edit

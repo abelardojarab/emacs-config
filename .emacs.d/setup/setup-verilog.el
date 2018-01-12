@@ -1,8 +1,8 @@
 ;;; setup-verilog.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -28,9 +28,7 @@
 (use-package verilog-mode
   :mode ("\\.v\\'" . verilog-mode)
   :load-path (lambda () (expand-file-name "verilog-mode/" user-emacs-directory))
-  :config (progn
-            ;; Any files in verilog mode should have their keywords colorized
-            (add-hook 'verilog-mode-hook 'font-lock-mode)))
+  :config (add-hook 'verilog-mode-hook #'font-lock-mode))
 
 (provide 'setup-verilog)
 ;;; setup-verilog.el ends here

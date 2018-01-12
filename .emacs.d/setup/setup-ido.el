@@ -157,10 +157,11 @@
 
 ;; ibuffer versioning-oriented grouping
 (use-package ibuffer-vc
+  :defer t
   :after ibuffer
-  :demand t
-  :commands ibuffer-vc-generate-filter-groups-by-vc-root
+  :commands my/ibuffer-apply-filter-groups
   :load-path (lambda () (expand-file-name "ibuffer-vc/" user-emacs-directory))
+  :init (add-hook 'ibuffer-hook #'my/ibuffer-apply-filter-groups)
   :config (progn
             (defun my/ibuffer-apply-filter-groups ()
               "Combine my saved ibuffer filter groups with those generated
@@ -174,9 +175,7 @@
                 (when ibuf
                   (with-current-buffer ibuf
                     (pop-to-buffer ibuf)
-                    (ibuffer-update nil t)))))
-
-            (add-hook 'ibuffer-hook 'my/ibuffer-apply-filter-groups)))
+                    (ibuffer-update nil t)))))))
 
 (provide 'setup-ido)
 ;;; setup-ido.el ends here

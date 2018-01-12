@@ -42,7 +42,7 @@
             (use-package ess-eldoc)
 
             ;; also show in iESS buffers
-            (add-hook 'inferior-ess-mode-hook 'ess-use-eldoc)
+            (add-hook 'inferior-ess-mode-hook #'ess-use-eldoc)
 
             ;; http://www.kieranhealy.org/blog/archives/2009/10/12/make-shift-enter-do-a-lot-in-ess/
             (add-hook 'ess-mode-hook
@@ -90,9 +90,9 @@
 
             ;; Enable auto-complete
             (when (featurep 'auto-complete)
-              (add-hook 'R-mode-hook  '(lambda ()
-                                         (auto-complete-mode)
-                                         (setq ess-use-auto-complete t))))
+              (add-hook 'R-mode-hook  (lambda ()
+                                        (auto-complete-mode)
+                                        (setq ess-use-auto-complete t))))
 
             ;; config
             (setq ess-indent-level                 2

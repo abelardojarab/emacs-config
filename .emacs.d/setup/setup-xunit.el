@@ -1,8 +1,8 @@
 ;;; setup-xunit.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -27,8 +27,7 @@
 ;; Test-case mode
 (use-package test-case-mode
   :load-path (lambda () (expand-file-name "test-case-mode/" user-emacs-directory))
-  :init (progn
-          (add-hook 'find-file-hook 'enable-test-case-mode-if-test)))
+  :init (add-hook 'find-file-hook #'enable-test-case-mode-if-test))
 
 (provide 'setup-xunit)
 ;;; setup-xunit.el ends here

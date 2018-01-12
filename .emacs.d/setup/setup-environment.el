@@ -32,7 +32,7 @@
 (add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 64 1204 1204))))
 
 ;; automatically garbage collect when switch away from emacs
-(add-hook 'focus-out-hook 'garbage-collect)
+(add-hook 'focus-out-hook #'garbage-collect)
 
 ;; set high gc limit for minibuffer so doesn't slowdown on helm etc
 (defun my/minibuffer-setup ()
@@ -297,9 +297,8 @@
 
 ;; Edition of EMACS edition modes
 (setq major-mode 'text-mode)
-(add-hook 'text-mode-hook 'text-mode-hook-identify)
-(add-hook 'text-mode-hook (function
-                           (lambda () (ispell-minor-mode))))
+(add-hook 'text-mode-hook #'text-mode-hook-identify)
+(add-hook 'text-mode-hook (lambda () (ispell-minor-mode t)))
 
 ;; Change type files
 (setq auto-mode-alist
@@ -318,7 +317,7 @@
   "Show Emacs's startup time in the minibuffer"
   (message "Startup time: %s seconds."
            (emacs-uptime "%s")))
-(add-hook 'emacs-startup-hook 'show-startup-time 'append)
+(add-hook 'emacs-startup-hook #'show-startup-time 'append)
 
 ;; Replace expression with the value
 (defadvice eval-last-sexp (around replace-sexp (arg) activate)
@@ -356,6 +355,6 @@ LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
   (message "Emacs startup completed in: %.2fms"
            (my/time-subtract-millis after-init-time before-init-time)))
 
-(add-hook 'after-init-hook 'my/show-init-time)
+(add-hook 'after-init-hook #'my/show-init-time)
 
 (provide 'setup-environment)

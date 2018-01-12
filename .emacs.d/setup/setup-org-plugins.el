@@ -1,8 +1,8 @@
 ;;; setup-org-plugins.el ---                         -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@ubuntu-MacBookPro>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -29,7 +29,7 @@
   :defer t
   :after org
   :load-path (lambda () (expand-file-name "toc-org/" user-emacs-directory))
-  :init (add-hook 'org-mode-hook 'toc-org-enable)
+  :init (add-hook 'org-mode-hook #'toc-org-enable)
   :commands toc-org-enable)
 
 ;; Nice bulleted lists
