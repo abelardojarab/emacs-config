@@ -1,8 +1,8 @@
 ;;; setup-tags.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -191,7 +191,7 @@ tags table and its (recursively) included tags tables."
   :defer t
   ;; do not enable etags if global is present
   :if (and (executable-find "ctags")
-	   (not (executable-find "global")))
+       (not (executable-find "global")))
   :commands (ctags-create-or-update
              ctags-create-or-update-tags-table
              ctags-search)
@@ -251,7 +251,7 @@ tags table and its (recursively) included tags tables."
             ;; Use exhuberant ctags format
             (setenv "GTAGSLABEL" "exuberant-ctags")
 
-	    ;; Eldoc integration
+        ;; Eldoc integration
             (add-hook 'c-mode-common-hook
                       (lambda ()
                         (when (and (derived-mode-p 'c-mode 'c++-mode 'java-mode)

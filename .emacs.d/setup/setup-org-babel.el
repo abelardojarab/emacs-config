@@ -1,8 +1,8 @@
 ;;; setup-org-babel.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -28,8 +28,8 @@
   :after org
   :config (progn
 
-	    ;; Assure you can execute org code
-	    (use-package ob-org)
+        ;; Assure you can execute org code
+        (use-package ob-org)
 
             ;; Settings
             (setq org-src-tab-acts-natively t
