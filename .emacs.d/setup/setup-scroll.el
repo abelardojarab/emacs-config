@@ -41,5 +41,11 @@
   :commands smooth-scrolling-mode
   :config (smooth-scrolling-mode 1))
 
+;; Centered scrolling
+(use-package centered-cursor-mode
+  :defer t
+  :commands centered-cursor-mode
+  :config (centered-cursor-mode 1))
+
 (provide 'setup-scroll)
 ;;; setup-scroll.el ends here
