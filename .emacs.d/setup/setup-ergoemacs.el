@@ -1,6 +1,6 @@
 ;;; setup-ergoemacs.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -30,6 +30,7 @@
   :if (and (executable-find "gzip")
            (display-graphic-p))
   :load-path (lambda () (expand-file-name "ergoemacs-mode/" user-emacs-directory))
+  :init (ergoemacs-mode)
   :commands (ergoemacs-mode ergoemacs-mode-after-init-emacs)
   :config (progn
             (ergoemacs-mode-after-init-emacs)
