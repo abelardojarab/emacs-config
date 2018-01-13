@@ -47,7 +47,14 @@
          ("C-c t"        . org-show-todo-tree)
          ("C-c r"        . org-refile)
          ("C-c v"        . org-reveal))
-  :commands (org-mode org-capture org-store-link org-insert-link-global org-open-at-point-global)
+  :commands (org-mode
+             org-capture
+             org-store-link
+             org-insert-link-global
+             org-open-at-point-global
+             orgtbl-mode
+             orgstruct-mode
+             orgstruct++-mode)
   :init (progn
           (setq load-path (cons (expand-file-name "org/contrib/lisp" user-emacs-directory) load-path))
           (defvar org-list-allow-alphabetical t)
