@@ -1,4 +1,4 @@
-(define-package "gh" "20171120.1302" "A GitHub library for Emacs"
+(define-package "gh" "20180112.1110" "A GitHub library for Emacs"
   '((emacs "24.3")
     (s "1.9.0")
     (dash "2.9.0")

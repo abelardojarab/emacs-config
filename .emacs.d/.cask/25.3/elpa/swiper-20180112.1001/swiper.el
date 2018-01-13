@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20180102.1035
+;; Package-Version: 20180112.1001
 ;; Version: 0.10.0
 ;; Package-Requires: ((emacs "24.1") (ivy "0.9.0"))
 ;; Keywords: matching
@@ -532,6 +532,10 @@ When non-nil, INITIAL-INPUT is the initial search pattern."
         (goto-char swiper--opoint))
       (when (and (null res) (> (length ivy-text) 0))
         (cl-pushnew ivy-text swiper-history))
+      ;; This allows evil mode to use swiper searches as defaults in
+      ;; s-expressions
+      (when (bound-and-true-p evil-mode)
+        (setq isearch-string ivy-text))
       (when swiper--reveal-mode
         (reveal-mode 1)))))
 
