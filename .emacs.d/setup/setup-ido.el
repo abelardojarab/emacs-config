@@ -91,10 +91,8 @@
 
 ;; Use ibuffer
 (use-package ibuffer
-  :demand t
+  :defer t
   :commands ibuffer
-  :bind (:map ctl-x-map
-              ("b" . ibuffer))
   :init (setq ibuffer-inline-columns t)
   :config (progn
             (setq ibuffer-saved-filter-groups

@@ -36,6 +36,7 @@
          :map ctl-x-map
          ("C-r"   . helm-recentf)
          ("C-b"   . helm-buffers-list)
+	 ("b"     . helm-buffers-list)
          ("p"     . helm-show-kill-ring)
          ("n"     . helm-mini)
          ("h"     . helm-apropos)
@@ -57,22 +58,22 @@
             (defadvice helm-execute-persistent-action (around bar activate)
               (ignore-errors add-do-it))
 
-            ;; From https://gist.github.com/antifuchs/9238468
-            (setq helm-always-two-windows t
-                  helm-quick-update t
-                  helm-split-window-default-side 'right
-                  helm-split-window-in-side-p t
-                  helm-echo-input-in-header-line t
-                  helm-idle-delay 0.0 ;; update fast sources immediately (doesn't).
-                  helm-input-idle-delay 0.01  ;; this actually updates things quicker
-                  helm-yas-display-key-on-candidate t
-                  helm-M-x-requires-pattern nil
-                  helm-candidate-number-limit 50 ;; limit max number of matches displayed for speed
-                  helm-move-to-line-cycle-in-source nil ;; move to end or beginning of source when reaching top or bottom of source.
-                  helm-scroll-amount 8 ;; scroll 8 lines other window using M-<next>/M-<prior>
-                  helm-ff-search-library-in-sexp t ;; search for library in `require' and `declare-function' sexp.
-                  helm-ff-skip-boring-files t ;; ignore boring files like .o and .a
-                  helm-ff-file-name-history-use-recentf t)
+	    ;; preferences
+            (setq helm-always-two-windows	       t
+		  helm-quick-update		       t
+		  helm-split-window-default-side       'right
+		  helm-split-window-in-side-p	       t
+		  helm-echo-input-in-header-line       t
+		  helm-idle-delay		       0.0
+		  helm-input-idle-delay		       0.01
+		  helm-yas-display-key-on-candidate    t
+		  helm-M-x-requires-pattern	       nil
+		  helm-candidate-number-limit	       50
+		  helm-move-to-line-cycle-in-source    nil
+		  helm-scroll-amount		       8
+		  helm-ff-search-library-in-sexp       t
+		  helm-ff-skip-boring-files	       t
+		  helm-ff-file-name-history-use-recentf t)
 
             ;; use silver searcher when available
             (when (executable-find "ag-grep")
@@ -103,9 +104,9 @@
                   `((name . "Fonts")
                     (candidates . ,(font-family-list))
                     (action . (lambda (candidate) (progn
-                           (setq my/main-programming-font candidate)
-                           (set-face-attribute 'default nil :family candidate)
-                           (fontify-frame (selected-frame)))))))
+					       (setq my/main-programming-font candidate)
+					       (set-face-attribute 'default nil :family candidate)
+					       (fontify-frame (selected-frame)))))))
 
             (defun helm-fonts ()
               (interactive)

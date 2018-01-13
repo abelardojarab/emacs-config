@@ -358,3 +358,4 @@ LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
 (add-hook 'after-init-hook #'my/show-init-time)
 
 (provide 'setup-environment)
+;;; setup-environment.el ends here
