@@ -44,7 +44,7 @@
   (setq gc-cons-threshold (* 64 1024 1024)))
 
 (add-hook 'minibuffer-setup-hook #'my/minibuffer-setup)
-(add-hook 'minibuffer-exit-hook #'my/minibuffer-exit)
+(add-hook 'minibuffer-exit-hook  #'my/minibuffer-exit)
 
 ;; Improve Emacs performance
 (if (boundp 'max-specpdl-size)
@@ -302,14 +302,14 @@
 
 ;; Change type files
 (setq auto-mode-alist
-      (append '(("\\.cpp$" . c++-mode)
-                ("\\.h$" . c++-mode)
-                ("\\.hpp$" . c++-mode)
-                ("\\.lsp$" . lisp-mode)
-                ("\\.il$" . lisp-mode)
-                ("\\.ils$" . lisp-mode)
-                ("\\.scm$" . scheme-mode)
-                ("\\.pl$" . perl-mode)
+      (append '(("\\.cpp$"  . c++-mode)
+                ("\\ .h$"   . c++-mode)
+                ("\\ .hpp$" . c++-mode)
+                ("\\ .lsp$" . lisp-mode)
+                ("\\ .il$"  . lisp-mode)
+                ("\\ .ils$" . lisp-mode)
+                ("\\ .scm$" . scheme-mode)
+                ("\\ .pl$"  . perl-mode)
                 ) auto-mode-alist))
 
 ;; Measure Emacs startup time

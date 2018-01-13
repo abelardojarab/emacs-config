@@ -71,15 +71,15 @@
            ;; First, Emacs doesn't handle less well, so use cat instead for the shell pager:
            (setenv "PAGER" "cat")
            (setq-default eshell-directory-name "~/.emacs.cache/eshell")
-           (setq eshell-glob-case-insensitive t
+           (setq eshell-glob-case-insensitive     t
                  eshell-scroll-to-bottom-on-input 'this
-                 eshell-buffer-shorthand t
-                 eshell-history-size 1024
-                 eshell-buffer-shorthand t
-                 eshell-cmpl-ignore-case t
-                 eshell-cmpl-cycle-completions nil
-                 eshell-aliases-file (concat user-emacs-directory ".eshell-aliases")
-                 eshell-last-dir-ring-size 512))
+                 eshell-buffer-shorthand          t
+                 eshell-history-size              1024
+                 eshell-buffer-shorthand          t
+                 eshell-cmpl-ignore-case          t
+                 eshell-cmpl-cycle-completions    nil
+                 eshell-aliases-file              (concat user-emacs-directory ".eshell-aliases")
+                 eshell-last-dir-ring-size        512))
   :config (progn
             (add-hook 'eshell-mode-hook (lambda () (eshell/export "NODE_NO_READLINE=1")))
 
@@ -115,10 +115,12 @@
             (use-package eshell-fringe-status
               :if (display-graphic-p)
               :load-path (lambda () (expand-file-name "eshell-fringe-status/" user-emacs-directory))
-              :config (add-hook 'eshell-mode-hook #'eshell-fringe-status-mode))
+              :commands eshell-fringe-status-mode
+              :init (add-hook 'eshell-mode-hook #'eshell-fringe-status-mode))
 
             ;; Show git branches on the prompt
             (use-package eshell-prompt-extras
+              :demand t
               :load-path (lambda () (expand-file-name "eshell-prompt-extras/" user-emacs-directory))
               :config (setq eshell-prompt-function 'epe-theme-lambda))))
 
