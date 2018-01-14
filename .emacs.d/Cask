@@ -95,7 +95,7 @@
 (depends-on "epc")
 (depends-on "epl")
 ;; (depends-on "ergoemacs-extras")
-;; (depends-on "ergoemacs-mode")
+(depends-on "ergoemacs-mode")
 (depends-on "eshell-fringe-status")
 (depends-on "eshell-prompt-extras")
 (depends-on "esqlite")
