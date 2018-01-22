@@ -43,7 +43,7 @@
          ("u"     . helm-resume)
          ("f"     . helm-for-files)
          ("<tab>" . helm-find-files)
-         :map helm-map
+         :map helm-command-map
          ;; rebind tab to run persistent action
          ("<tab>" . helm-execute-persistent-action)
          ;; make TAB works in terminal
