@@ -213,9 +213,9 @@
 
  ;; Windows
   ((equal system-type 'windows-nt)
- ;;  (if (or (file-directory-p "c:/cygwin64/bin")
- ;;          (file-directory-p "c:/cygwin64/bin"))
- ;;      (require 'setup-cygwin))
+  (if (or (file-directory-p "c:/cygwin64/bin")
+          (file-directory-p "c:/cygwin64/bin"))
+      (require 'setup-cygwin))
 
   ;; Custom $PATH
   (when (file-directory-p "c:/cygwin/bin")
