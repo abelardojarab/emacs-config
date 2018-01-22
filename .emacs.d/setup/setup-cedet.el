@@ -69,7 +69,7 @@
 
             ;; Disable Semantics for large files
             (add-hook 'semantic--before-fetch-tags-hook
-                      (lambda () (if (and (> (point-max) 500)
+                      (lambda () (if (and (>= (point-max) 0)
                                      (not (semantic-parse-tree-needs-rebuild-p)))
                                 nil
                               t)))
@@ -96,11 +96,11 @@ Exit the save between databases if there is user input."
                   (semantic-safe "Auto-DB Save: %S"
                     ;; FIXME: Use `while-no-input'?
                     (save-mark-and-excursion ;; <-- added line
-                      (semantic-exit-on-input 'semanticdb-idle-save
-                        (mapc (lambda (db)
-                                (semantic-throw-on-input 'semanticdb-idle-save)
-                                (semanticdb-save-db db t))
-                              semanticdb-database-list))))
+                     (semantic-exit-on-input 'semanticdb-idle-save
+                       (mapc (lambda (db)
+                               (semantic-throw-on-input 'semanticdb-idle-save)
+                               (semanticdb-save-db db t))
+                             semanticdb-database-list))))
                 (if (fboundp 'save-excursion)
                     (save-excursion ;; <-- added line
                       (semantic-exit-on-input 'semanticdb-idle-save
@@ -165,9 +165,14 @@ Exit the save between databases if there is user input."
 
 ;; Show function in mode-line
 (use-package which-func
-  :defer t
+  :demand t
   :commands which-function-mode
   :config (progn
+            (ignore-errors
+              (defun which-func-update ()
+                nil)
+              (cancel-function-timers 'which-func-update))
+
             ;; Enable which-function-mode for selected major modes
             (setq which-func-unknown "⊥"
                   which-func-maxout 1024

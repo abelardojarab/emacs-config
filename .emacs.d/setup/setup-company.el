@@ -57,8 +57,8 @@
 
             ;; Default company backends
             (setq company-backends
-                  '((company-semantic
-                     ;;company-capf
+                  '((;;company-semantic
+                     company-capf
                      company-yasnippet
                      company-keywords
                      company-dabbrev-code)
@@ -149,7 +149,7 @@
                   company-tooltip-limit             10
                   company-dabbrev-downcase          nil
                   company-dabbrev-ignore-case       t
-                  company-semantic-insert-arguments t
+                  company-semantic-insert-arguments nil
                   company-gtags-insert-arguments    t)
 
             ;; Enable company in minibufer
