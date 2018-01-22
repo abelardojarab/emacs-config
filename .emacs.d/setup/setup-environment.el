@@ -212,7 +212,7 @@
     (setq org-export-odt-convert-processes '(("LibreOffice" "/Applications/LibreOffice.app/Contents/MacOS/soffice --headless --convert-to %f%x --outdir %d %i")))))
 
  ;; Windows
- ;; ((equal system-type 'windows-nt)
+  ((equal system-type 'windows-nt)
  ;;  (if (or (file-directory-p "c:/cygwin64/bin")
  ;;          (file-directory-p "c:/cygwin64/bin"))
  ;;      (require 'setup-cygwin))
