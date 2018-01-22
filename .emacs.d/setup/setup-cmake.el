@@ -29,6 +29,7 @@
   :defer t
   :commands (irony-mode irony-install-server)
   :if (executable-find "irony-server")
+
   :diminish irony-mode
   :load-path (lambda () (expand-file-name "irony-mode/" user-emacs-directory))
   :after (ggtags eldoc function-args company)
@@ -125,6 +126,7 @@
 
 ;; cmake-based IDE
 (use-package cmake-ide
+  :if (not (equal system-type 'windows-nt))
   :defer t
   :after (rtags irony)
   :commands (my/cmake-ide-enable
