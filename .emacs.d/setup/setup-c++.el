@@ -31,6 +31,8 @@
               ("C-c C-o" . ff-find-other-file)
               :map c++-mode-map
               ("C-c C-o" . ff-find-other-file))
+  :init (add-hook 'c-mode-common-hook #'my/c-mode-init)
+  :commands my/c-mode-init
   :config (progn
             ;; Put c++-mode as default for *.h files (improves parsing)
             (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
@@ -53,7 +55,7 @@
               (interactive)
               (c-set-style "Linux")
               (c-set-offset 'substatement-open 0)
-          (c-set-offset 'innamespace 0)
+              (c-set-offset 'innamespace 0)
               (c-toggle-electric-state -1)
 
               (setq-default c-default-style "Linux")
@@ -68,7 +70,6 @@
 
               ;; tab width
               (setq-default tab-stop-list '(8 16 24 32 40 48 56 64 72 80 88 96 108)))
-            (add-hook 'c-mode-common-hook #'my/c-mode-init)
 
             ;; ensure fill-paragraph takes doxygen @ markers as start of new
             ;; paragraphs properly
@@ -111,10 +112,10 @@
   :commands (basic-c-compile-file basic-c-compile-run-c basic-c-compile-makefile)
   :load-path (lambda () (expand-file-name "basic-c-compile/" user-emacs-directory))
   :config (setq basic-c-compiler "g++"
-        basic-c-compile-all-files nil
-        basic-c-compile-compiler-flags "-Wall -Werror -std=c++11"
-        basic-c-compile-outfile-extension nil
-        basic-c-compile-make-clean "find . -type f -executable -delete"))
+		basic-c-compile-all-files nil
+		basic-c-compile-compiler-flags "-Wall -Werror -std=c++11"
+		basic-c-compile-outfile-extension nil
+		basic-c-compile-make-clean "find . -type f -executable -delete"))
 
 (provide 'setup-c++)
 ;;; setup-c++.el ends here
