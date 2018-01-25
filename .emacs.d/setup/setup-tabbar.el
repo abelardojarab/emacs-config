@@ -34,13 +34,12 @@
          ("C-c <up>"    . tabbar-backward-group)
          ("C-c <down>"  . tabbar-forward-group))
   :config (progn
-            (setq tabbar-auto-scroll-flag  t
+            (setq tabbar-auto-scroll-flag  nil
                   tabbar-use-images        t
                   tabbar-cycle-scope       (quote  tabs)
                   table-time-before-update 0.1)
 
             ;; Reduce tabbar width to enable as many buffers as possible
-            ;; https://gist.github.com/3demax/1264635
             (defun tabbar-buffer-tab-label (tab)
               "Return a label for TAB.
 That is, a string used to represent it on the tab bar."
@@ -50,7 +49,7 @@ That is, a string used to represent it on the tab bar."
                 ;; Unless the tab bar auto scrolls to keep the selected tab
                 ;; visible, shorten the tab label to keep as many tabs as possible
                 ;; in the visible area of the tab bar.
-                (if tabbar-auto-scroll-flag
+                (if nil ;; tabbar-auto-scroll-flag
                     label
                   (tabbar-shorten
                    label (max 1 (/ (window-width)
@@ -62,8 +61,8 @@ That is, a string used to represent it on the tab bar."
               (setq ad-return-value
                     (if (and (buffer-modified-p (tabbar-tab-value tab))
                              (buffer-file-name (tabbar-tab-value tab)))
-                        (concat " +" (concat ad-return-value ""))
-                      (concat " " (concat ad-return-value "")))))
+                        (concat "+" (concat ad-return-value ""))
+                      (concat "" (concat ad-return-value "")))))
 
             ;; called each time the modification state of the buffer changed
             (defun my/modification-state-change ()

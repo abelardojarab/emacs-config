@@ -67,7 +67,7 @@
                   semantic-idle-scheduler-work-idle-time          1800 ;; default is 60
                   semantic-idle-scheduler-max-buffer-size         1)
 
-            ;; Disable Semantics for large files
+            ;; Disable semantics for large files
             (add-hook 'semantic--before-fetch-tags-hook
                       (lambda () (if (and (>= (point-max) 0)
                                      (not (semantic-parse-tree-needs-rebuild-p)))
