@@ -24,6 +24,11 @@
 
 ;;; Code:
 
+;; Missing variables
+(defvar scheme-imenu-generic-expression "")
+
+(defvar cursor-sensor-inhibit nil)
+
 (defvar debian-aspell-only-dictionary-alist nil)
 
 ;; Missing cl-lib function
@@ -32,7 +37,7 @@
     (while (and p (not (eq (car p) tag))) (setq p (cdr (cdr p))))
     (if p (progn (setcar (cdr p) val) plist) (list* tag val plist))))
 
-(require 'eieio-core)
+(use-package eieio-core)
 
 ;; Missing function
 (when (not (fboundp 'font-lock-flush))
@@ -90,30 +95,19 @@ Defaults to `error'."
         (forward-line (1- n)))
     (goto-eol) (point)))
 
-;; Missing variable
-(defvar scheme-imenu-generic-expression "")
-
-;; Missing variable
-(defvar cursor-sensor-inhibit nil)
-
-;; https://github.com/kentaro/auto-save-buffers-enhanced
-;; `regexp-match-p` function modified by @sds on stackoverflow
-;; http://stackoverflow.com/questions/20343048/distinguishing-files-with-extensions-from-hidden-files-and-no-extensions
 (defun regexp-match-p (regexps string)
   (and string
        (catch 'matched
-         (let ((inhibit-changing-match-data t)) ; small optimization
+         (let ((inhibit-changing-match-data t)) ;; small optimization
            (dolist (regexp regexps)
              (when (string-match regexp string)
                (throw 'matched t)))))))
 
-;; Insertion of Dates, bind to C-c i
 (defun insert-date-string ()
   "Insert a nicely formated date string."
   (interactive)
   (insert (format-time-string "%Y-%m-%d")))
 
-;; Line spacing
 (defun toggle-line-spacing ()
   "Toggle line spacing between no extra space to extra half line height."
   (interactive)
@@ -122,12 +116,10 @@ Defaults to `error'."
     (setq-default line-spacing nil))
   (redraw-display))
 
-;; Refresh file
 (defun refresh-file ()
   (interactive)
   (revert-buffer t t t))
 
-;; Put file name on clip board
 (defun put-file-name-on-clipboard ()
   "Put the current file name on the clipboard"
   (interactive)
@@ -140,7 +132,6 @@ Defaults to `error'."
         (clipboard-kill-region (point-min) (point-max)))
       (message filename))))
 
-;; Remove the trailing spaces
 (defun remove-trailing-spaces ()
   "Remove trailing spaces in the whole buffer."
   (interactive)
@@ -153,33 +144,6 @@ Defaults to `error'."
           (replace-match "" nil nil))
         (message (format "%d Trailing spaces removed from buffer." remove-count))))))
 
-;; Do what i mean when indenting
-(defun unindent-dwim (&optional count-arg)
-  "Keeps relative spacing in the region.  Unindents to the next multiple of the current tab-width"
-  (interactive)
-  (let ((deactivate-mark nil)
-        (beg (or (and mark-active (region-beginning)) (line-beginning-position)))
-        (end (or (and mark-active (region-end)) (line-end-position)))
-        (min-indentation)
-        (count (or count-arg 1)))
-    (save-excursion
-      (goto-char beg)
-      (while (< (point) end)
-        (add-to-list 'min-indentation (current-indentation))
-        (forward-line)))
-    (if (< 0 count)
-        (if (not (< 0 (apply 'min min-indentation)))
-            (error "Can't indent any more.  Try `indent-rigidly` with a negative arg.")))
-    (if (> 0 count)
-        (indent-rigidly beg end (* (- 0 tab-width) count))
-      (let (
-            (indent-amount
-             (apply 'min (mapcar (lambda (x) (- 0 (mod x tab-width))) min-indentation))))
-        (indent-rigidly beg end (or
-                                 (and (< indent-amount 0) indent-amount)
-                                 (* (or count 1) (- 0 tab-width))))))))
-
-;; dos2unix
 (defun dos2unix ()
   "Replace DOS eolns CR LF with Unix eolns CR"
   (interactive)
@@ -187,20 +151,17 @@ Defaults to `error'."
   (while (search-forward "\r" nil t) (replace-match ""))
   (set-buffer-file-coding-system 'unix 't))
 
-;; unix2dos
 (defun unix2dos ()
   "Opposite of dos2unix"
   (interactive)
   (goto-char (point-min))
   (while (search-forward "\n" nil t) (replace-match "\r\n")))
 
-;; Beautify region
 (defun beautify-region (beg end)
   (interactive "r")
   (setq end (save-excursion (goto-char end) (point-marker)))
   (indent-region beg end nil))
 
-;; Beautify buffer
 (defun beautify-buffer ()
   "Beautify buffer by applying indentation, whitespace fixup, alignment, and
 case fixing to entire buffer. Calls `vhdl-beautify-region' for the entire
@@ -209,7 +170,6 @@ buffer."
   (beautify-region (point-min) (point-max))
   (when noninteractive (save-buffer)))
 
-;; Move to matching parenthesis
 (defun goto-match-paren-or-up (arg)
   "Go to the matching parenthesis if on parenthesis. Else go to
    the opening parenthesis one level up."
@@ -228,7 +188,6 @@ buffer."
                          (backward-list 1)
                          (backward-char 1)))))))))
 
-;; Move to matching parenthesis
 (defun goto-match-paren (arg)
   "Go to the matching parenthesis if on parenthesis, otherwise
    insert the character typed."
@@ -237,7 +196,6 @@ buffer."
         ((looking-at "\\s\)") (forward-char 1) (backward-list 1))
         (t (self-insert-command (or arg 1)))))
 
-;; Indent and unindent blocks
 (defun indent-block()
   (shift-region my/tab-width)
   (setq deactivate-mark nil))
@@ -284,7 +242,6 @@ Now it correctly stops at the beginning of the line when the pointer is at the f
                 (delete-horizontal-space)
               (backward-kill-word 1))))))))
 
-;; Rename buffer and file
 (defun rename-file-and-buffer ()
   "Renames current buffer and file it is visiting."
   (interactive)
@@ -301,7 +258,6 @@ Now it correctly stops at the beginning of the line when the pointer is at the f
                (set-visited-file-name new-name)
                (set-buffer-modified-p nil)))))))
 
-;; Delete file and kill buffer
 (defun delete-buffer-and-file ()
   "Removes file connected to current buffer and kills buffer."
   (interactive)
@@ -315,7 +271,6 @@ Now it correctly stops at the beginning of the line when the pointer is at the f
         (kill-buffer buffer)
         (message "File '%s' successfully removed" filename)))))
 
-;; Number lines on a rectangle
 (defun number-rectangle (start end format-string from)
   "Delete (don't save) text in the region-rectangle, then number it."
   (interactive
@@ -338,18 +293,15 @@ Now it correctly stops at the beginning of the line when the pointer is at the f
           (forward-line 1)))
   (goto-char start))
 
-;; Check for web access
 (defun internet-up-p (&optional host)
   (= 0 (call-process "ping" nil nil nil "-c" "1" "-W" "1"
                      (if host host "www.google.com"))))
 
-;; Toggle selective display
 (defun toggle-selective-display ()
   (interactive)
   (set-selective-display (if selective-display nil 1)))
 
-;; next/previous buffer functions
-(setq my/switch-buffer-ignore-dired t)
+(defvar my/switch-buffer-ignore-dired t)
 
 (defun my/next-user-buffer ()
   "Switch to the next user buffer.
@@ -389,7 +341,6 @@ If `my/switch-buffer-ignore-dired' is true, also skip directory buffer.
                  (setq i (1+ i)))
         (progn (setq i 100))))))
 
-;; Rotate the windows
 (defun rotate-windows ()
   "Rotate your windows"
   (interactive)
@@ -415,10 +366,7 @@ If `my/switch-buffer-ignore-dired' is true, also skip directory buffer.
              (setq i (1+ i)))))))
 
 ;; Set this constant to the number of times `update-progress-bar' is called during init
-;; Taken from: https://github.com/philippe-grenet/exordium/blob/master/modules/init-progress-bar.el
 (defconst my/loading-step-count 22)
-
-;;; Don't change any of these:
 (defconst my/loading-step-size
   (/ (window-total-size nil 'width) my/loading-step-count))
 (defconst my/loading-char ?*)
@@ -439,7 +387,6 @@ If `my/switch-buffer-ignore-dired' is true, also skip directory buffer.
     (setq mode-line-format my/loading-string)
     (redisplay)))
 
-;;; Files
 (defun my/directory-tree (dir)
   "Returns the list of subdirs of 'dir' excluding any dot
 dirs. Input is a string and output is a list of strings."
@@ -471,47 +418,49 @@ dirs. Input is a string and output is a list of strings."
   (file-name-directory (directory-file-name dir)))
 
 ;; String manipulation functions
-(require 'subr-x)
-
-;; string-prefix-p has been in Emacs for years, but string-suffix-p was
-;; introduced only in Emacs 24.4.
-
-(unless (fboundp 'string-suffix-p)
-  (defun string-suffix-p (suffix string  &optional ignore-case)
-    "Return non-nil if SUFFIX is a suffix of STRING.
+(use-package subr-x
+  :defer t
+  :commands (string-trim-left
+             string-trim-right
+             string-trim-right
+             strim-truncate
+             string-suffix-p)
+  :config (progn
+            (unless (fboundp 'string-suffix-p)
+              (defun string-suffix-p (suffix string  &optional ignore-case)
+                "Return non-nil if SUFFIX is a suffix of STRING.
 If IGNORE-CASE is non-nil, the comparison is done without paying
 attention to case differences."
-    (let ((start-pos (- (length string) (length suffix))))
-      (and (>= start-pos 0)
-           (eq t (compare-strings suffix nil nil
-                                  string start-pos nil ignore-case))))))
+                (let ((start-pos (- (length string) (length suffix))))
+                  (and (>= start-pos 0)
+                       (eq t (compare-strings suffix nil nil
+                                              string start-pos nil ignore-case))))))
 
-;; Other string functions introduced in Emacs 24.4:
-(unless (fboundp 'string-trim-left)
-  (defsubst string-trim-left (string)
-    "Remove leading whitespace from STRING."
-    (if (string-match "\\`[ \t\n\r]+" string)
-        (replace-match "" t t string)
-      string)))
+            ;; Other string functions introduced in Emacs 24.4:
+            (unless (fboundp 'string-trim-left)
+              (defsubst string-trim-left (string)
+                "Remove leading whitespace from STRING."
+                (if (string-match "\\`[ \t\n\r]+" string)
+                    (replace-match "" t t string)
+                  string)))
 
-(unless (fboundp 'string-trim-right)
-  (defsubst string-trim-right (string)
-    "Remove trailing whitespace from STRING."
-    (if (string-match "[ \t\n\r]+\\'" string)
-        (replace-match "" t t string)
-      string)))
+            (unless (fboundp 'string-trim-right)
+              (defsubst string-trim-right (string)
+                "Remove trailing whitespace from STRING."
+                (if (string-match "[ \t\n\r]+\\'" string)
+                    (replace-match "" t t string)
+                  string)))
 
-(unless (fboundp 'string-trim)
-  (defsubst string-trim (string)
-    "Remove leading and trailing whitespace from STRING."
-    (string-trim-left (string-trim-right string))))
+            (unless (fboundp 'string-trim)
+              (defsubst string-trim (string)
+                "Remove leading and trailing whitespace from STRING."
+                (string-trim-left (string-trim-right string))))
 
-(unless (fboundp 'string-truncate)
-  (defun string-truncate (string n)
-    "Return STRING minus the last N characters."
-    (substring string 0 (max 0(- (length string) n)))))
+            (unless (fboundp 'string-truncate)
+              (defun string-truncate (string n)
+                "Return STRING minus the last N characters."
+                (substring string 0 (max 0(- (length string) n)))))))
 
-;; Page navigation funtions
 (defun my/page-down ()
   (interactive)
   (next-line
@@ -524,7 +473,6 @@ attention to case differences."
    (- (window-text-height)
       next-screen-context-lines)))
 
-;; Frame functions
 (defun screen-size ()
   (let ((screen-width 0) (screen-height 0))
     (dolist (attrs (display-monitor-attributes-list))
