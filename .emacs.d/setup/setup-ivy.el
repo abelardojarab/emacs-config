@@ -54,7 +54,7 @@
                   ivy-magic-slash-non-match-action nil)
 
             (push #'+ivy-yas-prompt yas-prompt-functions)
-            (setq completion-in-region-function 'ivy-completion-in-region)
+            (setq completion-in-region-function #'ivy-completion-in-region)
 
             (ivy-set-actions
              'ivy-switch-buffer

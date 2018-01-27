@@ -30,7 +30,6 @@
   :if (and (executable-find "gzip")
            (display-graphic-p))
   :load-path (lambda () (expand-file-name "ergoemacs-mode/" user-emacs-directory))
-  :init (ergoemacs-mode)
   :commands ergoemacs-mode
   :config (progn
             (ergoemacs-mode-after-init-emacs)

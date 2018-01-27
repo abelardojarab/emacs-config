@@ -28,9 +28,10 @@
 (setq standard-indent my/tab-width)
 
 ;; My personal configurations, has to use setq-default
-(setq-default indent-tabs-mode nil
-              default-tab-width my/tab-width
-              tab-width my/tab-width)
+(setq-default indent-tabs-mode   nil
+              default-tab-width  my/tab-width
+              tab-width          my/tab-width
+              tabify-regexp      "^\t* [ \t]+")
 
 (defun unindent-dwim (&optional count-arg)
   "Keeps relative spacing in the region.  Unindents to the next multiple of the current tab-width"
@@ -57,7 +58,7 @@
                                  (and (< indent-amount 0) indent-amount)
                                  (* (or count 1) (- 0 tab-width))))))))
 
-(defun tabtab/forward-char (n)
+(defun my/tab-forward-char (n)
   (let ((space (- (line-end-position) (point))))
     (if (> space my/tab-width)
         (forward-char n)
@@ -67,7 +68,7 @@
 (defun my/tab-jump ()
   (interactive)
   (let ((shift (mod (current-column) my/tab-width)))
-    (tabtab/forward-char (- my/tab-width shift))))
+    (my/tab-forward-char (- my/tab-width shift))))
 
 ;; if indent-tabs-mode is off, untabify before saving
 (add-hook 'write-file-hooks
@@ -92,6 +93,17 @@
 (if (featurep 'electric-indent-mode)
     (add-hook 'prog-mode-hook (lambda () (electric-indent-local-mode -1))))
 
+;; Whitespace-mode
+(use-package whitespace-mode
+             :defer        t
+             :config       (setq       whitespace-style
+             '(face        indentation tabs tab-mark spaces space-mark newline newline-mark
+             trailing      lines-tail)
+             whitespace-display-mappings
+             '((tab-mark   ?\t         [?›  ?\t])
+             (newline-mark ?\n         [?¬  ?\n])
+             (space-mark   ?\          [?·] [?.]))))
+
 ;; Auto-indent mode
 (use-package auto-indent-mode
   :pin manual
@@ -99,11 +111,11 @@
   :commands auto-indent-mode
   :load-path (lambda () (expand-file-name "auto-indent-mode/" user-emacs-directory))
   :init (progn
-          (setq auto-indent-indent-style 'conservative)
-          (setq auto-indent-on-visit-file nil) ;; do not indent when a file is visit
-          (setq auto-indent-blank-lines-on-move nil)
-          (setq auto-indent-next-pair-timer-geo-mean (quote ((default 0.0005 0))))
-          (setq auto-indent-disabled-modes-list (list (quote vhdl-mode)))))
+          (setq auto-indent-indent-style              'conservative
+                auto-indent-on-visit-file             nil
+                auto-indent-blank-lines-on-move       nil
+                auto-indent-next-pair-timer-geo-mean  (quote ((default 0.0005 0)))
+                auto-indent-disabled-modes-list       (list (quote vhdl-mode)))))
 
 ;; Permanent indentation guide
 (use-package indent-hint
@@ -111,8 +123,8 @@
   :commands indent-hint-mode
   :load-path (lambda () (expand-file-name "indent-hint/" user-emacs-directory))
   :init (progn
-          (setq indent-hint-background-overlay t)
-          (setq indent-hint-bg nil)))
+          (setq indent-hint-background-overlay t
+                indent-hint-bg                 nil)))
 
 ;; Transient indentation guide
 (use-package highlight-indent-guides
