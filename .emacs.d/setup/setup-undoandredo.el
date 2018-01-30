@@ -40,13 +40,15 @@
   :init (global-undo-tree-mode t)
   :commands global-undo-tree-mode
   :config (progn
-            (setq undo-no-redo t
-                  undo-tree-visualizer-diff       t
-                  undo-tree-visualizer-timestamps t
-                  undo-tree-auto-save             t
-                  undo-tree-auto-save-history     t
-                  undo-tree-history-directory-alist
-                  '((".*" . "~/.emacs.cache/undo-tree")))))
+            (setq undo-no-redo                        t
+                  undo-tree-visualizer-diff           t
+                  undo-tree-visualizer-timestamps     t
+                  undo-tree-auto-save                 t
+                  undo-tree-auto-save-history         t
+                  undo-tree-history-directory-alist   (list
+						       (cons "."
+							     (concat my/emacs-cache-dir
+								     "/undo-tree-hist/"))))))
 
 (provide 'setup-undoandredo)
 ;;; setup-undoandredo.el ends here

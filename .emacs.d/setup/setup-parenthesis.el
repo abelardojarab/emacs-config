@@ -63,7 +63,11 @@
 
             ;; use smartparens to automatically indent correctly when opening new block
             (dolist (mode '(c-mode c++-mode java-mode))
-              (sp-local-pair mode "{" nil :post-handlers '((apm-c-mode-common-open-block "RET"))))))
+              (sp-local-pair mode "{" nil :post-handlers '((apm-c-mode-common-open-block "RET"))))
+
+	    (dolist (mode '(xml-mode php-mode))
+	      (sp-local-pair mode "<!--" "-->"
+			     :post-handlers '(("| " "SPC"))))))
 
 ;; Autopair
 (use-package autopair

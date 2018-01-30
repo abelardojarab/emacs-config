@@ -24,6 +24,11 @@
 
 ;;; Code:
 
+(defcustom my/emacs-cache-dir "~/.emacs.cache"
+  "Preferred directory to place temporary files"
+  :type 'string
+  :group 'my/customs)
+
 (defcustom my/bibtex-completion-bibliography "~/workspace/Documents/Bibliography/biblio.bib"
   "Preferred bibliography file"
   :type 'string
@@ -414,13 +419,12 @@
   :group 'my/customs)
 
 ;; User-specific configuration file
-(setq-default custom-file-x "~/.emacs.cache/custom.el")
+(setq-default custom-file-x (concat my/emacs-cache-dir "/custom.el"))
 (ignore-errors
     (if (file-exists-p custom-file-x)
         (load custom-file-x :noerror :nomessage)
-        ;; http://stackoverflow.com/questions/14071991/how-to-create-an-empty-file-by-elisp
         (write-region "" nil custom-file-x)))
-(setq-default custom-file "~/.emacs.cache/custom.el")
+(setq-default custom-file (concat my/emacs-cache-dir "/custom.el"))
 
 ;; User information
 (setq user-full-name my/user-full-name)
@@ -431,7 +435,7 @@
           'custom-prompt-customize-unsaved-options)
 
 ;; Settings for currently logged in user
-(setq user-settings-dir "~/.emacs.cache/custom")
+(setq user-settings-dir (concat my/emacs-cache-dir "/custom"))
 (add-to-list 'load-path user-settings-dir)
 
 (provide 'setup-customs)
