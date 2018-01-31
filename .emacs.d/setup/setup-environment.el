@@ -116,7 +116,9 @@
       (setenv "SHELL" "/bin/bash"))
 
   (when (display-graphic-p)
-    (setq x-select-enable-clipboard t)
+    (setq x-select-request-type     '(UTF8_STRING COMPOUND_TEXT TEXT STRING)
+          select-enable-clipboard   t
+          select-enable-primary     t)
     (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
 
     (when (executable-find "xsel")
@@ -131,6 +133,9 @@
             xsel-output )))
       (setq interprogram-cut-function 'xsel-cut-function)
       (setq interprogram-paste-function 'xsel-paste-function)))
+
+  ;; native tooltips are ugly!
+  (setq x-gtk-use-system-tooltips nil)
 
   ;; Get back font antialiasing
   (push '(font-backend xft x) default-frame-alist)

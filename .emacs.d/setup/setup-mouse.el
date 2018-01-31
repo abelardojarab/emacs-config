@@ -35,6 +35,9 @@
 ;; Do not copy region use mouse dragging
 (setq mouse-drag-copy-region nil)
 
+;; middle-click paste at point, not at click
+(setq mouse-yank-at-point t)
+
 ;; Mouse wheel scroll support
 (mouse-wheel-mode t)
 

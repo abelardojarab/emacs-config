@@ -67,6 +67,9 @@
   :load-path (lambda () (expand-file-name "spaceline-all-the-icons/" user-emacs-directory))
   :config (progn
 
+            ;; disable mode-line mouseovers
+            (setq-default mode-line-default-help-echo nil)
+
             ;; Build a segment for the version control branch
             (spaceline-define-segment my/version-control
               (when vc-mode

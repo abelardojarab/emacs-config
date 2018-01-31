@@ -84,8 +84,12 @@ non-nil."
   :defer t
   :commands visual-fill-column-mode
   :load-path (lambda () (expand-file-name "visual-fill-column/" user-emacs-directory))
-  :config (setq-default visual-fill-column-center-text t
-            visual-fill-column-fringes-outside-margins nil))
+  :config (setq-default visual-fill-column-center-text             t
+                        visual-fill-column-fringes-outside-margins nil
+                        visual-fill-column-width
+                        ;; take Emacs 26 line numbers into account
+                        (+ (if (boundp 'display-line-numbers) 6 0)
+                           fill-column)))
 
 ;; Just like the previous package, this one is also subtle.
 ;; It highlights characters that exceed a particular column margin. Very useful while coding.
@@ -101,13 +105,14 @@ non-nil."
 (use-package linum-ex
   :demand t
   :commands linum-mode
+  :unless (boundp 'display-line-numbers) ;; Emacs 26 includes native line numbering
   :init (dolist (hook my/linum-modes)
-      (add-hook hook (lambda ()
-               ;; turn off `linum-mode' when there are more than 5000 lines
-               (if (and (> (buffer-size)
-                       (* 5000 80)))
-                   (linum-mode -1)
-                 (linum-mode 1)))))
+          (add-hook hook (lambda ()
+                           ;; turn off `linum-mode' when there are more than 5000 lines
+                           (if (and (> (buffer-size)
+                                       (* 5000 80)))
+                               (linum-mode -1)
+                             (linum-mode 1)))))
   :config (progn
             (defadvice linum-update-window (around linum-dynamic activate)
               (let* ((w (length (number-to-string
@@ -129,10 +134,10 @@ non-nil."
   :commands lawlist-scroll-bar-mode
   :diminish (lawlist-scroll-bar-mode)
   :init (dolist (hook my/linum-modes)
-      (add-hook hook (lambda ()
-               (unless (and (> (buffer-size)
-                       (* 5000 80)))
-                 (lawlist-scroll-bar-mode 1))))))
+          (add-hook hook (lambda ()
+                           (unless (and (> (buffer-size)
+                                           (* 5000 80)))
+                             (lawlist-scroll-bar-mode 1))))))
 
 ;; All the icons
 (use-package all-the-icons

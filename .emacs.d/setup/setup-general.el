@@ -68,6 +68,10 @@
   :defer t
   :load-path (lambda () (expand-file-name "pos-tip/" user-emacs-directory))
   :config (progn
+            ;; pos-tip defaults
+            (setq-default pos-tip-internal-border-width 6
+                          pos-tip-border-width          1)
+
             (defadvice popup-menu-show-quick-help
                 (around pos-tip-popup-menu-show-quick-help () activate)
               "Show quick help using `pos-tip-show'."

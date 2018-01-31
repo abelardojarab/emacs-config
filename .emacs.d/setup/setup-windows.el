@@ -51,7 +51,14 @@
       ;; prompt when trying to switch out of a dedicated window
       switch-to-buffer-in-dedicated-window 'prompt
       ;; Treat all windows as same
-      same-window-regexps                  '("."))
+      same-window-regexps                  '(".")
+      ;; Resize frames implicitely
+      frame-inhibit-implied-resize         t
+      ;; Minibuffer resizing
+      resize-mini-windows                  'grow-only
+      ;; do not highlight region on non-selected windows
+      highlight-nonselected-windows        nil
+      max-mini-window-height               0.3)
 
 ;; Configure `display-buffer' behaviour for some special buffers.
 (setq display-buffer-alist
