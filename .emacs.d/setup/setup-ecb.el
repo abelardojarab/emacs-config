@@ -37,7 +37,10 @@
               ([right] . speedbar-flush-expand-line)
               ([left]  . speedbar-contract-line))
   :config (progn
-            (setq speedbar-hide-button-brackets-flag    t
+            (speedbar-set-timer 0.2)
+            (setq speedbar-update-flag-disable          nil
+                  speedbar-update-flag                  t
+                  speedbar-hide-button-brackets-flag    t
                   speedbar-show-unknown-files           t
                   speedbar-smart-directory-expand-flag  t
                   speedbar-directory-button-trim-method 'trim
@@ -45,7 +48,6 @@
                   speedbar-indentation-width            2
                   speedbar-use-imenu-flag               t
                   speedbar-file-unshown-regexp          "flycheck-.*"
-                  speedbar-update-flag                  t
                   sr-speedbar-width                     40
                   sr-speedbar-width-x                   40
                   sr-speedbar-auto-refresh              t
