@@ -375,7 +375,24 @@
             ;; Beamer/ODT/Markdown exporters
             (use-package ox-beamer)
             (use-package ox-odt)
-            (use-package ox-md)))
+            (use-package ox-md)
+
+            ;; Org extensions
+
+            ;; Setup Org Agenda
+            (use-package setup-org-agenda)
+
+            ;; Setup Org (babel support)
+            (use-package setup-org-babel)
+
+            ;; Setup Org plugins
+            (use-package setup-org-plugins)
+
+            ;; Setup Org (latex support)
+            (use-package setup-org-latex)
+
+            ;; Setup Org (html support)
+            (use-package setup-org-html)))
 
 ;; Use footnotes as eldoc source
 (use-package org-eldoc

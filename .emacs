@@ -20,8 +20,8 @@
 ;; Only utilize local files
 (with-no-warnings
   (let ((file-name-handler-alist nil)
-	;; CEDET
-	(byte-compile-warnings nil))
+    ;; CEDET
+    (byte-compile-warnings nil))
 
     ;; Basics
     (add-to-list 'load-path (expand-file-name "elisp/" user-emacs-directory))
@@ -117,21 +117,6 @@
 
     ;; Setup Org
     (require 'setup-org)
-
-    ;; Setup Org Agenda
-    (require 'setup-org-agenda)
-
-    ;; Setup Org (babel support)
-    (require 'setup-org-babel)
-
-    ;; Setup Org plugins
-    (require 'setup-org-plugins)
-
-    ;; Setup Org (latex support)
-    (require 'setup-org-latex)
-
-    ;; Setup Org (html support)
-    (require 'setup-org-html)
 
     ;; Setup LaTeX
     (require 'setup-latex)
