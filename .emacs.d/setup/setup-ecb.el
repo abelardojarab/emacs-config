@@ -120,7 +120,9 @@ buffer is current which was it before calling this macro."
                   ecb-compile-window-width 'edit-window
                   ecb-compile-window-temporally-enlarge nil
                   ecb-eshell-fit-window-to-command-output nil
-                  ecb-create-layout-file "~/.emacs.cache/ecb-user-layouts.el"
+                  ecb-create-layout-file  (concat (file-name-as-directory
+                                                   my/emacs-cache-dir)
+                                                  "ecb-user-layouts.el")
                   ecb-windows-width 35
                   ecb-fix-window-size 'width
                   ecb-layout-name my/ecb-layout-theme
@@ -128,7 +130,9 @@ buffer is current which was it before calling this macro."
                   ecb-highlight-tag-with-point-delay 180
                   ecb-kill-buffer-clears-history 'auto
                   ecb-tip-of-the-day nil
-                  ecb-tip-of-the-day-file "~/.emacs.cache/ecb-tip-of-day.el"
+                  ecb-tip-of-the-day-file  (concat (file-name-as-directory
+                                                    my/emacs-cache-dir)
+                                                   "ecb-tip-of-day.el")
                   ecb-primary-secondary-mouse-buttons 'mouse-1--mouse-2
                   semantic-decoration-styles (list
                                               '("semantic-decoration-on-protected-members" . t)

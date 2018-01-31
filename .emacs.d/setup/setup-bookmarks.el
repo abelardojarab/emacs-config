@@ -31,7 +31,8 @@
   :load-path (lambda () (expand-file-name "bookmark+/" user-emacs-directory))
   :config (progn
             (setq bookmark-save-flag 1)
-            (setq-default bookmark-default-file "~/.emacs.cache/bookmarks")))
+            (setq-default bookmark-default-file (concat (file-name-as-directory my/emacs-cache-dir)
+                                                        "bookmarks"))))
 
 ;; Visible bookmarks
 (use-package bm
@@ -48,7 +49,8 @@
   :init (progn
 
           ;; bm-repository
-          (setq bm-repository-file "~/.emacs.cache/bm-repository")
+          (setq bm-repository-file (concat (file-name-as-directory
+                                            my/emacs-cache-dir) "bm-repository"))
 
           ;; Loading the repository from file when on start up.
           (add-hook 'after-init-hook #'bm-repository-load)

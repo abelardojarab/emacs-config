@@ -419,12 +419,14 @@
   :group 'my/customs)
 
 ;; User-specific configuration file
-(setq-default custom-file-x (concat my/emacs-cache-dir "/custom.el"))
+(setq-default custom-file-x (concat (file-name-as-directory
+                                     my/emacs-cache-dir) "custom.el"))
 (ignore-errors
     (if (file-exists-p custom-file-x)
         (load custom-file-x :noerror :nomessage)
         (write-region "" nil custom-file-x)))
-(setq-default custom-file (concat my/emacs-cache-dir "/custom.el"))
+(setq-default custom-file (concat (file-name-as-directory
+                                   my/emacs-cache-dir) "custom.el"))
 
 ;; User information
 (setq user-full-name my/user-full-name)
@@ -435,7 +437,8 @@
           'custom-prompt-customize-unsaved-options)
 
 ;; Settings for currently logged in user
-(setq user-settings-dir (concat my/emacs-cache-dir "/custom"))
+(defvar user-settings-dir (concat (file-name-as-directory
+                                 my/emacs-cache-dir) "custom"))
 (add-to-list 'load-path user-settings-dir)
 
 (provide 'setup-customs)

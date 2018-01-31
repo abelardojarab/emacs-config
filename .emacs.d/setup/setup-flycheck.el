@@ -32,8 +32,8 @@
   :commands (flycheck-add-next-checker
              flycheck-mode)
   :init (mapc (lambda (mode)
-		(add-hook mode (lambda () (flycheck-mode t))))
-	      my/flycheck-modes)
+        (add-hook mode (lambda () (flycheck-mode t))))
+          my/flycheck-modes)
   :config (progn
             (add-to-list 'display-buffer-alist
                          `(,(rx bos "*Flycheck errors*" eos)
@@ -87,7 +87,9 @@
 (use-package flycheck-irony
   :defer t
   :after (flycheck irony)
-  :if (or (file-exists-p "~/.emacs.cache/irony-server/bin/irony-server")
+  :if (or (file-exists-p  (concat (file-name-as-directory
+                                   my/emacs-cache-dir)
+                                  "irony-server/bin/irony-server"))
           (executable-find "irony-server"))
   :load-path (lambda () (expand-file-name "flycheck-irony/" user-emacs-directory))
   :commands flycheck-irony-setup
@@ -103,7 +105,7 @@
   :commands my/flycheck-rtags-setup
   :init (add-hook 'c-mode-common-hook #'my/flycheck-rtags-setup)
   :config (defun my/flycheck-rtags-setup ()
-	    (flycheck-select-checker 'rtags)))
+        (flycheck-select-checker 'rtags)))
 
 ;; Tooltips
 (use-package flycheck-tip

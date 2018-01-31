@@ -24,12 +24,20 @@
 
 ;;; Code:
 
-;; Assure .emacs.cache/backup directory exists
-(if (not (file-exists-p "~/.emacs.cache/backups"))
-    (make-directory "~/.emacs.cache/backups") t)
+;; Assure backup directory exists
+(if (not (file-exists-p (concat (file-name-as-directory
+                                 my/emacs-cache-dir)
+                                "backups")))
+    (make-directory (concat (file-name-as-directory
+                             my/emacs-cache-dir)
+                            "backups") t))
+(defvar my/backups-folder (concat (file-name-as-directory
+                                     my/emacs-cache-dir)
+                                  "backups")
+  "Folder for backups")
 
 ;; Backups
-(setq backup-directory-alist '(("." . "~/.emacs.cache/backups"))
+(setq backup-directory-alist `(("." . ,my/backups-folder))
       make-backup-files      nil
       backup-by-copying      t
       version-control        t
@@ -43,8 +51,13 @@
 ;; Autosave
 (setq auto-save-default nil)
 (setq auto-save-interval 500)
-(defvar my/auto-save-folder "~/.emacs.cache/auto-save/" "Folder for auto-saves")
-(setq auto-save-list-file-prefix "~/.emacs.cache/auto-save/.saves-") ;; set prefix for auto-saves
+(defvar my/auto-save-folder (concat (file-name-as-directory
+                                     my/emacs-cache-dir)
+                                    "auto-save")
+  "Folder for auto-saves")
+(setq auto-save-list-file-prefix (concat (file-name-as-directory
+                                          my/auto-save-folder)
+                                         ".saves-"))
 (setq auto-save-file-name-transforms `((".*" ,my/auto-save-folder t))) ;; location for all auto-save files
 (make-directory my/auto-save-folder t)
 
@@ -53,10 +66,12 @@
   :demand t
   :init (setq savehist-additional-variables '(search ring regexp-search-ring)
               savehist-autosave-interval    120
-              savehist-file                 "~/.emacs.cache/savehist")
+              savehist-file                  (concat (file-name-as-directory
+                                                      my/emacs-cache-dir)
+                                                     "savehist"))
   :config (savehist-mode t))
 
-;; filecache: http://www.emacswiki.org/cgi-bin/wiki/FileNameCache
+;; Filecache
 (use-package file-cache
   :disabled t
   :config (progn
@@ -68,7 +83,9 @@
 (use-package saveplace
   :demand t
   :init (progn
-          (setq save-place-file "~/.emacs.cache/emacs.saveplace")
+          (setq save-place-file  (concat (file-name-as-directory
+                                          my/emacs-cache-dir)
+                                         "emacs.saveplace"))
           (setq-default save-place t)))
 
 ;; Automatically save and restore sessions
@@ -78,19 +95,19 @@
   :init (progn
           ;; Save desktops a minute after Emacs was idle.
           (setq-default desktop-missing-file-warning nil)
-          (setq desktop-dirname             "~/.emacs.cache/"
-                desktop-base-file-name      "emacs.desktop"
-                desktop-base-lock-name      "lock"
-                desktop-path                (list desktop-dirname)
-                desktop-save                t
-                desktop-load-locked-desktop t
-                desktop-save 'ask-if-new
-                desktop-file-name-format 'absolute
-                desktop-restore-frames nil
+          (setq desktop-dirname                    (file-name-as-directory my/emacs-cache-dir)
+                desktop-base-file-name             "emacs.desktop"
+                desktop-base-lock-name             "lock"
+                desktop-path                       (list desktop-dirname)
+                desktop-save                       t
+                desktop-load-locked-desktop        t
+                desktop-save                       'ask-if-new
+                desktop-file-name-format           'absolute
+                desktop-restore-frames             nil
                 desktop-restore-in-current-display t
-                desktop-restore-forces-onscreen nil
-                desktop-restore-eager 0
-                desktop-auto-save-timeout 60
+                desktop-restore-forces-onscreen    nil
+                desktop-restore-eager              0
+                desktop-auto-save-timeout          60
                 desktop-globals-to-save
                 '((extended-command-history . 30)
                   (file-name-history        . 100)

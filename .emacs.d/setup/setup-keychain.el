@@ -157,7 +157,9 @@
   :config (auth-pass-enable))
 
 ;; Secrets file
-(let ((secrets-file "~/.emacs.cache/.secret.el"))
+(let ((secrets-file (concat (file-name-as-directory
+                              my/emacs-cache-dir)
+                             ".secret.el")))
   (when (file-exists-p secrets-file)
     (load secrets-file)))
 

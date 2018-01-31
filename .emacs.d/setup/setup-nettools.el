@@ -31,27 +31,30 @@
            (internet-up-p))
   :load-path (lambda () (expand-file-name "newsticker/" user-emacs-directory))
   :config (progn
-            (require 'newsticker-notify)
-            (setq newsticker-dir "~/.emacs.cache/newsticker")
-            (setq newsticker-url-list-defaults nil)
-            (setq newsticker-automatically-mark-items-as-old t)
-            (setq newsticker-automatically-mark-visited-items-as-old t)
-            (setq newsticker-retrieval-interval 600)
-            (setq newsticker-html-renderer 'w3m-region)
-            (setq newsticker-retrieval-method 'extern)
-            (setq newsticker-treeview-treewindow-width 40)
-            (setq newsticker-treeview-listwindow-height 30)
-            (setq newsticker-obsolete-item-max-age (* 30 (* 24 3600)))
-            (setq newsticker-ticker-interval 4.3) ;;
-            (setq newsticker-display-interval 3.3) ;; 0.3 for scroll-smooth, 15.3 otherwise
-            (setq newsticker-scroll-smoothly nil) ;; dont make it t otherwise will start scrolling
-            (setq newsticker-wget-arguments '("-q" "-O" "-"
-                                              "--user-agent" "testing"))
-            (setq newsticker-sort-method (quote sort-by-time))
-            (setq newsticker-url-list
+            (use-package newsticker-notify)
+
+            (setq newsticker-dir (concat (file-name-as-directory
+                                          my/emacs-cache-dir)
+                                         "newsticker")
+                  newsticker-url-list-defaults                       nil
+                  newsticker-automatically-mark-items-as-old         t
+                  newsticker-automatically-mark-visited-items-as-old t
+                  newsticker-retrieval-interval                      600
+                  newsticker-html-renderer                           'w3m-region
+                  newsticker-retrieval-method                        'extern
+                  newsticker-treeview-treewindow-width               40
+                  newsticker-treeview-listwindow-height              30
+                  newsticker-obsolete-item-max-age                   (* 30 (* 24 3600))
+                  newsticker-ticker-interval                         4.3
+                  newsticker-display-interval                        3.3
+                  newsticker-scroll-smoothly                         nil
+                  newsticker-wget-arguments '("-q" "-O" "-"
+                                              "--user-agent" "testing")
+                  newsticker-sort-method (quote sort-by-time)
+                  newsticker-url-list
                   (quote (("Phoronix" "http://www.phoronix.com/rss.php")
-                          ("Google News" "http://news.google.com/?output=rss"))))
-            (setq newsticker-url-list-defaults
+                          ("Google News" "http://news.google.com/?output=rss")))
+                  newsticker-url-list-defaults
                   (quote (("Phoronix" "http://www.phoronix.com/rss.php")
                           ("Google News" "http://news.google.com/?output=rss"))))
             (newsticker-start)
@@ -130,7 +133,9 @@
               ("S-TAB"    . shr-previous-link))
   :config (progn
             (setq elfeed-use-curl               t
-                  elfeed-db-directory           "~/.emacs.cache/elfeed"
+                  elfeed-db-directory           (concat (file-name-as-directory
+                                                         my/emacs-cache-dir)
+                                                        "elfeed")
                   elfeed-search-filter          "@4-days-old +unread"
                   elfeed-search-title-max-width 100)
 

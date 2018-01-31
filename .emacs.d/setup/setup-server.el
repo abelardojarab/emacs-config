@@ -40,8 +40,12 @@
           ;; Server configuration
           (setq server-use-tcp nil)
           (setq server-port 9999)
-          (setq server-auth-dir "~/.emacs.cache/server")
-          (setq server-socket-dir "~/.emacs.cache/server")
+          (setq server-auth-dir (concat (file-name-as-directory
+                                         my/emacs-cache-dir)
+                                        "server"))
+          (setq server-socket-dir (concat (file-name-as-directory
+                                           my/emacs-cache-dir)
+                                          "server"))
           (if (not (file-exists-p server-auth-dir))
               (make-directory server-auth-dir t)))
   :config (progn
@@ -58,7 +62,6 @@
                 ad-do-it))
 
             ;; Keeping emacs running even when "exiting"
-            ;; http://bnbeckwith.com/blog/not-killing-emacs-on-windows.html
             (defun my/exit ()
               (interactive)
               ;; message
@@ -90,12 +93,12 @@
             (defun quit-emacs ()
               (interactive)
               (ignore-errors
-		(if (bound-and-true-p ergoemacs-mode)
-		    (ergoemacs-mode -1))
-		(setq my/really-kill-emacs t)
-		(kill-emacs)
-		(setq my/really-kill-emacs t)
-		(kill-emacs)))
+        (if (bound-and-true-p ergoemacs-mode)
+            (ergoemacs-mode -1))
+        (setq my/really-kill-emacs t)
+        (kill-emacs)
+        (setq my/really-kill-emacs t)
+        (kill-emacs)))
 
             ;; Detect presence of modified buffers
             (defun my/modified-buffers-exist()

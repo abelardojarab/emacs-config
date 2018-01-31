@@ -48,9 +48,16 @@
               (setq org-latex-create-formula-image-program 'dvipng))
 
             ;; Directory where LaTeX previews are stored
-            (if (not (file-exists-p "~/.emacs.cache/ltxpng"))
-                (make-directory "~/.emacs.cache/ltxpng") t)
-            (setq org-latex-preview-ltxpng-directory "~/.emacs.cache/ltxpng/")
+            (if (not (file-exists-p (concat (file-name-as-directory
+                                             my/emacs-cache-dir)
+                                            "ltxpng")))
+                (make-directory (concat (file-name-as-directory
+                                         my/emacs-cache-dir)
+                                        "ltxpng") t))
+            (setq org-latex-preview-ltxpng-directory (file-name-as-directory
+                                                      (concat (file-name-as-directory
+                                                               my/emacs-cache-dir)
+                                                              "ltxpng")))
 
             ;; Bigger LaTeX fragments and other options for LaTeX export
             (setq org-format-latex-options '(:scale 2.0
@@ -478,8 +485,8 @@
 ;; Reftex
 (use-package reftex-cite
   :bind (:map org-mode-map
-         ("C-c )" . reftex-citation)
-         ("C-c (" . org-mode-reftex-search))
+              ("C-c )" . reftex-citation)
+              ("C-c (" . org-mode-reftex-search))
   :config (progn
 
             ;; Make RefTeX faster

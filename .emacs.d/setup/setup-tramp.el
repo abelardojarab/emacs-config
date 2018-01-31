@@ -79,8 +79,12 @@ information retrieved from files created by the keychain script."
                   (my/keychain-refresh-environment)))
 
             ;; Fix auto save problem
-            (setq tramp-persistency-file-name "~/.emacs.cache/tramp")
-            (setq tramp-auto-save-directory "~/.emacs.cache/auto-save")
+            (setq tramp-persistency-file-name (concat (file-name-as-directory
+                                                       my/emacs-cache-dir)
+                                                      "tramp"))
+            (setq tramp-auto-save-directory (concat (file-name-as-directory
+                                                     my/emacs-cache-dir)
+                                                    "auto-save"))
 
             ;; Tramp configurations
             (setq my/tramp-ssh-completions
@@ -93,8 +97,8 @@ information retrieved from files created by the keychain script."
             ;; have tramp save temps locally
             (unless (string-equal system-type "windows-nt")
               (setq auto-save-file-name-transforms
-                    '(("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" "/tmp/\\2" t)
-                      ("\\`/?\\([^/]*/\\)*\\([^/]*\\)\\'" "~/.emacs.cache/auto-save/" t))))))
+                    `(("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" "/tmp/\\2" t)
+                      ("\\`/?\\([^/]*/\\)*\\([^/]*\\)\\'" my/auto-save-folder t))))))
 
 ;; End of line, needed by tramp
 (use-package eol-conversion

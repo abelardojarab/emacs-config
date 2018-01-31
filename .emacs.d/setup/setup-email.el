@@ -36,11 +36,18 @@
   :config (progn
 
             ;; Location for custom scripts
-            (setq wl-root-dir "~/.emacs.cache/wanderlust/")
+            (setq wl-root-dir (file-name-as-directory
+                               (concat (file-name-as-directory
+                                        my/emacs-cache-dir)
+                                       "wanderlust")))
 
             ;; Assure wanderlust directory exists
-            (if (not (file-exists-p "~/.emacs.cache/wanderlust"))
-                (make-directory "~/.emacs.cache/wanderlust") t)
+            (if (not (file-exists-p  (concat (file-name-as-directory
+                                              my/emacs-cache-dir)
+                                             "wanderlust")))
+                (make-directory  (concat (file-name-as-directory
+                                          my/emacs-cache-dir)
+                                         "wanderlust") t))
 
             ;; General settings
             (setq elmo-maildir-folder-path "~/Maildir"  ;; where i store my mail
@@ -169,7 +176,7 @@
   :load-path (lambda () (expand-file-name "mu/mu4e/" user-emacs-directory))
   :commands mu4e
   :init (progn
-          ;; Assure .emacs.cache/mu4e exists
+          ;; Assure mu4e exists
           (if (not (file-exists-p my/mu4e-maildir))
               (make-directory my/mu4e-maildir) t))
   :config (progn

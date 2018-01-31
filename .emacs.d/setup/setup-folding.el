@@ -55,7 +55,9 @@
   :defer t
   :after region-bindings-mode
   :load-path (lambda () (expand-file-name "fold-this/" user-emacs-directory))
-  :init (setq fold-this-persistent-folds-file "~/.emacs.cache/folds-saved")
+  :init (setq fold-this-persistent-folds-file  (concat (file-name-as-directory
+                                                        my/emacs-cache-dir)
+                                                       "folds-saved"))
   :bind (:map fold-this-keymap
               ;; left-click on ellipsis to unfold
               ("<mouse-1>" . fold-this-unfold-at-point)
@@ -329,7 +331,10 @@ If prefix argument is used, `set-selective-display' to the current column."
   :load-path (lambda () (expand-file-name "vimish-fold/" user-emacs-directory))
   :config (progn
             (setq-default
-             vimish-fold-dir "~/.emacs.cache/.vimish-fold/"
+             vimish-fold-dir  (file-name-as-directory
+                               (concat (file-name-as-directory
+                                        my/emacs-cache-dir)
+                                       "vimish-fold"))
              vimish-fold-header-width 79)))
 
 (provide 'setup-folding)

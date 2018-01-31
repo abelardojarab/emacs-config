@@ -70,7 +70,9 @@
 
            ;; First, Emacs doesn't handle less well, so use cat instead for the shell pager:
            (setenv "PAGER" "cat")
-           (setq-default eshell-directory-name "~/.emacs.cache/eshell")
+           (setq-default eshell-directory-name    (concat (file-name-as-directory
+                                                           my/emacs-cache-dir)
+                                                          "eshell"))
            (setq eshell-glob-case-insensitive     t
                  eshell-scroll-to-bottom-on-input 'this
                  eshell-buffer-shorthand          t

@@ -31,14 +31,16 @@
              recentf-apply-filename-handlers)
   :init (progn
           (setq recentf-filename-handlers '(abbreviate-file-name))
-          (setq recentf-save-file "~/.emacs.cache/recentf")
+          (setq recentf-save-file (concat (file-name-as-directory
+                                           my/emacs-cache-dir)
+                                          "recentf"))
           (setq recentf-max-saved-items 300
                 recentf-exclude '("/auto-install/" ".recentf" "/repos/" "/elpa/"
                                   "\\.mime-example" "\\.ido.last" "COMMIT_EDITMSG"
                                   ".gz"
                                   "~$" "/tmp/" "/ssh:" "/sudo:" "/scp:")
                 recentf-auto-cleanup 600)
-          (when (not noninteractive) (recentf-mode 1))
+          (if (not noninteractive) (recentf-mode 1))
 
           (defun recentf-save-list ()
             "Save the recent list.

@@ -37,14 +37,24 @@
   :config (progn
             (if (file-exists-p "/usr/local/bin/irony-server")
                 (setq irony-server-install-prefix "/usr/local/"))
-            (if (file-exists-p "~/.emacs.cache/irony-server/bin/irony-server")
-                (setq irony-server-install-prefix "~/.emacs.cache/irony-server/"))
+            (if (file-exists-p (concat (file-name-as-directory
+                                        my/emacs-cache-dir)
+                                       "irony-server/bin/irony-server"))
+                (setq irony-server-install-prefix (concat (file-name-as-directory
+                                                           my/emacs-cache-dir)
+                                                          "irony-server/")))
 
             (push "-std=c++11" irony-additional-clang-options)
 
-            (if (not (file-exists-p "~/.emacs.cache/irony-user-dir"))
-                (make-directory "~/.emacs.cache/irony-user-dir") t)
-            (setq irony-user-dir "~/.emacs.cache/irony-user-dir/")
+            (if (not (file-exists-p (concat (file-name-as-directory
+                                             my/emacs-cache-dir)
+                                            "irony-user-dir")))
+                     (make-directory (concat (file-name-as-directory
+                                              my/emacs-cache-dir)
+                                             "irony-user-dir") t))
+            (setq irony-user-dir (concat (file-name-as-directory
+                                          my/emacs-cache-dir)
+                                         "irony-user-dir/"))
 
             ;; Irony json projects
             (use-package irony-cdb-json)
@@ -53,10 +63,7 @@
             (add-hook 'irony-mode-hook #'irony-cdb-autosetup-compile-options)))
 
 ;; rtags
-;; sudo apt-get install libclang-dev / brew install llvm --with-clang
-;; git clone --recursive https://github.com/Andersbakken/rtags.git &
 ;; (LIBCLANG_LLVM_CONFIG_EXECUTABLE=path_to_llvm-config CC=gcc CXX=g++ cmake ../rtags -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_INSTALL_PREFIX=where_to_install_rtags)
-;; cmake --build ./ --target install
 (use-package rtags
   :defer t
   :commands (rtags-print-symbol-info
@@ -131,7 +138,7 @@
   :after (rtags irony)
   :commands (my/cmake-ide-enable
              cmake-ide-compile
-	     cmake-ide-setup
+         cmake-ide-setup
              cmake-ide-run-cmake)
   :if (executable-find "cmake")
   :load-path (lambda () (expand-file-name "cmake-ide/" user-emacs-directory))
@@ -142,7 +149,7 @@
             (if (not (file-exists-p "~/cmake_builds"))
                 (make-directory "~/cmake_builds"))
 
-	    ;; Overwrite get build dir function
+        ;; Overwrite get build dir function
             (defun cmake-ide--get-build-dir ()
               "Return the directory name to run CMake in."
               ;; build the directory key for the project
@@ -157,24 +164,24 @@
                 (setq cmake-ide-build-dir build-dir)
                 (file-name-as-directory build-dir)))
 
-	    ;; Overwrite run cmake function
-	    (defun cmake-ide--run-cmake-impl (project-dir cmake-dir)
-	      "Run the CMake process for PROJECT-DIR in CMAKE-DIR."
-	      (when project-dir
-		(my/cmake-ide-set-build-dir)
-		(let ((default-directory cmake-ide))
-		  (cmake-ide--message "Running cmake for src path %s in build path %s" project-dir cmake-ide-build-dir)
-		  (apply 'start-process (append (list "cmake" "*cmake*" cmake-ide-cmake-command)
-						(split-string cmake-ide-cmake-opts)
-						(list "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON" project-dir))))))
+        ;; Overwrite run cmake function
+        (defun cmake-ide--run-cmake-impl (project-dir cmake-dir)
+          "Run the CMake process for PROJECT-DIR in CMAKE-DIR."
+          (when project-dir
+        (my/cmake-ide-set-build-dir)
+        (let ((default-directory cmake-ide))
+          (cmake-ide--message "Running cmake for src path %s in build path %s" project-dir cmake-ide-build-dir)
+          (apply 'start-process (append (list "cmake" "*cmake*" cmake-ide-cmake-command)
+                        (split-string cmake-ide-cmake-opts)
+                        (list "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON" project-dir))))))
 
-	    ;; Initialize cmake-ide
-	    (defun my/cmake-ide-enable ()
-	      "Initialize cmake-ide"
-	      (interactive)
-	      (progn
-		(my/cmake-ide-set-build-dir)
-		(cmake-ide-setup)))
+        ;; Initialize cmake-ide
+        (defun my/cmake-ide-enable ()
+          "Initialize cmake-ide"
+          (interactive)
+          (progn
+        (my/cmake-ide-set-build-dir)
+        (cmake-ide-setup)))
 
             ;; Define cmake-ide-build-dir under ~/cmake_builds
             (defun my/cmake-ide-set-build-dir ()
@@ -187,7 +194,7 @@
                                (projectile-project-name))
                           (progn
                             (make-local-variable 'cmake-ide-build-dir)
-			    (make-local-variable 'cmake-dir)
+                (make-local-variable 'cmake-dir)
 
                             ;; Define project build directory
                             (setq my/projectile-build-dir (concat
@@ -203,22 +210,22 @@
                                                       (file-name-nondirectory
                                                        (directory-file-name
                                                         (expand-file-name
-							 (file-name-directory
-							  (cmake-ide--locate-cmakelists)))))
+                             (file-name-directory
+                              (cmake-ide--locate-cmakelists)))))
                                                       my/projectile-build-dir))
 
                             ;; Avoid path repetitions
                             (if (equal (file-name-nondirectory
                                         (directory-file-name
                                          (expand-file-name
-					  (file-name-directory
-					   (cmake-ide--locate-cmakelists)))))
+                      (file-name-directory
+                       (cmake-ide--locate-cmakelists)))))
                                        (projectile-project-name))
                                 (setq my/cmake-build-dir (concat
                                                           "~/cmake_builds/"
                                                           (projectile-project-name))))
 
-			    ;; Assure we are not using the last CMakeLists.txt
+                ;; Assure we are not using the last CMakeLists.txt
                             (message "* cmake-ide Building directory set to: %s" my/cmake-build-dir)
 
                             ;; Create cmake project directory under project directory
@@ -227,7 +234,7 @@
 
                             ;; Set cmake-ide-build-dir according to both top project and cmake project names
                             (setq cmake-ide-build-dir my/cmake-build-dir)
-			    (setq cmake-dir my/cmake-build-dir)))))))))
+                (setq cmake-dir my/cmake-build-dir)))))))))
 
 (provide 'setup-cmake)
 ;;; setup-cmake.el ends here

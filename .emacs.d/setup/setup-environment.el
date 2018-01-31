@@ -55,17 +55,14 @@
 (setq byte-compile-warnings nil)
 
 ;; prefer newer non-byte compiled sources to older byte compiled ones
-;; Setting load-prefer-newer break Emacs startup
-;; Debian Bug report logs - #803462
 (setq load-prefer-newer nil)
 
-;; fix recursive load *.el.gz issue with emacs-snapshot -
-;; https://github.com/purcell/emacs.d/issues/340#issuecomment-237177032
+;; fix recursive load *.el.gz issue with emacs-snapshot
 (setq load-file-rep-suffixes '(""))
 
-;; Assure .emacs.cache directory exists
-(if (not (file-exists-p "~/.emacs.cache"))
-    (make-directory "~/.emacs.cache") t)
+;; Assure cache directory exists
+(if (not (file-exists-p  my/emacs-cache-dir))
+    (make-directory my/emacs-cache-dir) t)
 
 ;; Inhibit startup window, very annoying
 (setq inhibit-startup-message t)

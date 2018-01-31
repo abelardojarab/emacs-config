@@ -54,8 +54,12 @@
                                               global-semantic-idle-completions-mode))
 
             ;; Assure .emacs.cache/semanticdb directory exists
-            (if (not (file-exists-p "~/.emacs.cache/semanticdb"))
-                (make-directory "~/.emacs.cache/semanticdb") t)
+            (if (not (file-exists-p (concat (file-name-as-directory
+                                             my/emacs-cache-dir)
+                                            "semanticdb")))
+                (make-directory (concat (file-name-as-directory
+                                         my/emacs-cache-dir)
+                                        "semanticdb") t))
 
             ;; Enable case-insensitive searching
             (set-default 'semantic-case-fold t)
@@ -138,7 +142,9 @@ Exit the save between databases if there is user input."
               (ignore-errors add-do-it))
 
             ;; Default semanticdb directory
-            (setq-default semanticdb-default-save-directory "~/.emacs.cache/semanticdb")
+            (setq-default semanticdb-default-save-directory (concat (file-name-as-directory
+                                                                     my/emacs-cache-dir)
+                                                                    "semanticdb"))
 
             ;; semanticdb support for global/gtags
             (when (executable-find "global")
@@ -157,7 +163,9 @@ Exit the save between databases if there is user input."
             (setq ede-project-directories t)
 
             ;; Default EDE directory
-            (setq-default ede-project-placeholder-cache-file "~/.emacs.cache/ede-projects.el")
+            (setq-default ede-project-placeholder-cache-file (concat (file-name-as-directory
+                                                                      my/emacs-cache-dir)
+                                                                     "ede-projects.el"))
 
             ;; Advice ede add projects to avoid errors
             (defadvice ede-add-project-to-global-list (around bar activate)
@@ -169,8 +177,7 @@ Exit the save between databases if there is user input."
   :commands which-function-mode
   :config (progn
             (ignore-errors
-              (defun which-func-update ()
-                nil)
+              (defun which-func-update () nil)
               (cancel-function-timers 'which-func-update))
 
             ;; Enable which-function-mode for selected major modes
@@ -181,21 +188,7 @@ Exit the save between databases if there is user input."
                                      c-mode
                                      emacs-lisp-mode
                                      org-mode
-                                     c++-mode)
-                  which-func-format
-                  `(" "
-                    (:propertize which-func-current local-map
-                                 (keymap
-                                  (mode-line keymap
-                                             (mouse-3 . end-of-defun)
-                                             (mouse-2 . narrow-to-defun)
-                                             (mouse-1 . beginning-of-defun)))
-                                 face which-func
-                                 mouse-face mode-line-highlight
-                                 help-echo "mouse-1: go to beginning\n\
-mouse-2: toggle rest visibility\n\
-mouse-3: go to end")
-                    " "))))
+                                     c++-mode))))
 
 (provide 'setup-cedet)
 ;;; setup-cedet.el ends here

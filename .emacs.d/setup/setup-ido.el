@@ -43,7 +43,9 @@
                   ido-show-dot-for-dired                 t
                   ido-default-file-method                'samewindow
                   ido-default-buffer-method              'selected-window
-                  ido-save-directory-list-file           "~/.emacs.cache/ido.last"
+                  ido-save-directory-list-file            (concat (file-name-as-directory
+                                                                   my/emacs-cache-dir)
+                                                                  "ido.last")
                   ido-ignore-buffers                     '("\\` " "^\*Mess" "^\*Back" ".*Completion" "^\*Ido" "^\*trace" "^\*compilation" "^\*GTAGS" "^session\.*" "^\*")
                   ido-work-directory-list                '("~/" "~/Desktop" "~/Documents" "~/workspace")
                   ido-case-fold                          t

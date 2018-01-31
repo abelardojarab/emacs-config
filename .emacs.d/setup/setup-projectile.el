@@ -42,13 +42,17 @@
             (add-to-list 'projectile-project-root-files ".clang_complete.in")
             (add-to-list 'projectile-project-root-files "AndroidManifest.xml")
 
-            (setq projectile-known-projects-file "~/.emacs.cache/projectile-bookmarks.eld"
-                  projectile-cache-file "~/.emacs.cache/projectile.cache"
-                  projectile-enable-caching t
-                  projectile-sort-order 'recently-active
-                  projectile-indexing-method 'alien
+            (setq projectile-known-projects-file (concat (file-name-as-directory
+                                                          my/emacs-cache-dir)
+                                                         "projectile-bookmarks.eld")
+                  projectile-cache-file          (concat (file-name-as-directory
+                                                          my/emacs-cache-dir)
+                                                         "projectile.cache")
+                  projectile-enable-caching      t
+                  projectile-sort-order          'recently-active
+                  projectile-indexing-method     'alien
                   projectile-globally-ignored-files (quote ("TAGS" "*.log" "*DS_Store" "node-modules")))
-	    (projectile-global-mode)))
+            (projectile-global-mode)))
 
 (provide 'setup-projectile)
 ;;; setup-projectile.el ends here

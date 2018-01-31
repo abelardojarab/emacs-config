@@ -28,7 +28,9 @@
 (use-package python-environment
   :defer t
   :load-path (lambda () (expand-file-name "python-environment/" user-emacs-directory))
-  :init (setq python-environment-directory "~/.emacs.cache/python-environments"))
+  :init (setq python-environment-directory (concat (file-name-as-directory
+                                                    my/emacs-cache-dir)
+                                                   "python-environments")))
 
 (use-package epc
   :defer t
@@ -52,17 +54,17 @@
             (if (featurep 'auto-complete)
                 (ac-flyspell-workaround))
 
-	    ;; Company backend for Python jedi
-	    (use-package company-jedi
-	      :after (company jedi)
-	      :load-path (lambda () (expand-file-name "company-jedi/" user-emacs-directory))
-	      :config (add-hook 'python-mode-hook
-				(lambda () (set (make-local-variable 'company-backends)
-					   '((company-yasnippet
-					      company-jedi
-					      company-capf
-					      company-files
-					      company-abbrev))))))))
+        ;; Company backend for Python jedi
+        (use-package company-jedi
+          :after (company jedi)
+          :load-path (lambda () (expand-file-name "company-jedi/" user-emacs-directory))
+          :config (add-hook 'python-mode-hook
+                (lambda () (set (make-local-variable 'company-backends)
+                       '((company-yasnippet
+                          company-jedi
+                          company-capf
+                          company-files
+                          company-abbrev))))))))
 
 (provide 'setup-python-plugins)
 ;;; setup-python-plugins.el ends here

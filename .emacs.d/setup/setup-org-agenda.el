@@ -92,7 +92,9 @@
                 (setq org-time-stamp-custom-formats '("<%A, %B %e, %Y>" . "<%A, %B %e, %Y %H:%M>"))
 
                 ;; Set remaining Org files
-                (setq org-id-locations-file "~/.emacs.cache/org-id-locations")
+                (setq org-id-locations-file (concat (file-name-as-directory
+                                                     my/emacs-cache-dir)
+                                                    "org-id-locations"))
                 (setq org-default-notes-file (concat org-directory "/notes.org"))
                 (setq org-default-refile-file (concat org-directory "/refile.org"))
                 (setq org-agenda-default-file (concat org-directory "/agenda.org"))

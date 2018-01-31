@@ -28,7 +28,10 @@
 (use-package pandoc-mode
   :load-path (lambda () (expand-file-name "pandoc-mode/" user-emacs-directory))
   :config (progn
-            (setq pandoc-data-dir "~/.emacs.cache/pandoc/")
+            (setq pandoc-data-dir (file-name-as-directory
+                                   (concat (file-name-as-directory
+                                           my/emacs-cache-dir)
+                                          "pandoc")))
             (add-hook 'pandoc-mode-hook   #'pandoc-load-default-settings)
             (add-hook 'markdown-mode-hook #'pandoc-load-default-settings)
             (add-hook 'org-mode-hook      #'pandoc-load-default-settings)

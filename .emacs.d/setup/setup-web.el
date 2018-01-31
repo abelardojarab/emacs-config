@@ -30,7 +30,9 @@
   :load-path (lambda () (expand-file-name "w3m/" user-emacs-directory))
   :commands (w3m w3m-find-file w3m-goto-url-new-session)
   :init (progn
-          (setq w3m-init-file "~/.emacs.cache/emacs-w3m"
+          (setq w3m-init-file (concat (file-name-as-directory
+                                       my/emacs-cache-dir)
+                                      "w3m")
                 w3m-home-page "http://www.google.com"
                 w3m-use-cookies t
                 w3m-command-arguments '("-cookie" "-F")
@@ -43,8 +45,12 @@
   :if (fboundp 'eww)
   :config (progn
             (setq browse-url-browser-function 'eww-browse-url)
-            (setq-default url-configuration-directory "~/.emacs.cache/url")
-            (setq-default url-cookie-file "~/.emacs.cache/url/cookies")
+            (setq-default url-configuration-directory (concat (file-name-as-directory
+                                                               my/emacs-cache-dir)
+                                                              "url"))
+            (setq-default url-cookie-file (concat (file-name-as-directory
+                                                   my/emacs-cache-dir)
+                                                  "cookies"))
 
             (ignore-errors (advice-add 'url-http-user-agent-string :around
                         (lambda (ignored)
