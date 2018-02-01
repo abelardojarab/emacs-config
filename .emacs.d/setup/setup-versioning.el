@@ -319,14 +319,14 @@
 
               (setq pretty-magit-alist nil)
               (setq pretty-magit-prompt nil)
-              (pretty-magit "New feature"   ?⭜ (:foreground "slate gray" :height 1.1))
-              (pretty-magit "Add code"      ?⭇ (:foreground "#375E97" :height 1.1))
-              (pretty-magit "Bug Fix"       ?⚒ (:foreground "#FB6542" :height 1.1))
-              (pretty-magit "Refactor"      ?♽ (:foreground "#FFBB00" :height 1.1))
-              (pretty-magit "Docs"          ?🕮 (:foreground "#3F681C" :height 1.1))
-              (pretty-magit "Tag"           ? (:foreground "#3F681C" :height 1.1))
-              (pretty-magit "master"        ?⭗ (:box nil :height 1.0) t)
-              (pretty-magit "origin"        ?⭗ (:box nil :height 1.0) t)
+              (pretty-magit "Start new feature"   ?⮑ (:foreground "slate gray" :height 1.1))
+              (pretty-magit "Continue feature"    ?⭇ (:foreground "#375E97" :height 1.1))
+              (pretty-magit "Fix bug"             ?⚒ (:foreground "#FB6542" :height 1.1))
+              (pretty-magit "Refactor"            ?♽ (:foreground "#FFBB00" :height 1.1))
+              (pretty-magit "Docs"                ?🕮 (:foreground "#3F681C" :height 1.1))
+              (pretty-magit "Tag"                 ? (:foreground "#3F681C" :height 1.1))
+              (pretty-magit "master"              ?⯎ (:box nil :height 1.0) t)
+              (pretty-magit "origin"              ?⭗ (:box nil :height 1.0) t)
 
               (defun my/add-magit-faces ()
                 "Add face properties and compose symbols for buffer from pretty-magit."
