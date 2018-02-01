@@ -1,6 +1,6 @@
 ;;; setup-c++.el ---                                 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -112,10 +112,10 @@
   :commands (basic-c-compile-file basic-c-compile-run-c basic-c-compile-makefile)
   :load-path (lambda () (expand-file-name "basic-c-compile/" user-emacs-directory))
   :config (setq basic-c-compiler "g++"
-		basic-c-compile-all-files nil
-		basic-c-compile-compiler-flags "-Wall -Werror -std=c++11"
-		basic-c-compile-outfile-extension nil
-		basic-c-compile-make-clean "find . -type f -executable -delete"))
+        basic-c-compile-all-files nil
+        basic-c-compile-compiler-flags "-Wall -Werror -std=c++11"
+        basic-c-compile-outfile-extension nil
+        basic-c-compile-make-clean "find . -type f -executable -delete"))
 
 (provide 'setup-c++)
 ;;; setup-c++.el ends here

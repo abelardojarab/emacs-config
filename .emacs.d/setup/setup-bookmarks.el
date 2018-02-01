@@ -1,7 +1,6 @@
 ;;; setup-bookmarks.el ---                      -*- lexical-binding: t; -*-
 
-
-;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -36,7 +35,7 @@
 
 ;; Visible bookmarks
 (use-package bm
-  :demand t
+  :defer t
   :load-path (lambda () (expand-file-name "bm/" user-emacs-directory))
   :commands (bm-repository-load bm-buffer-restore bm-buffer-save bm-buffer-save-all bm-repository-save bm-toggle)
   :bind (;; bind left mouse clicks and scrolls in left margin/fringe

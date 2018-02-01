@@ -1,6 +1,6 @@
 ;;; setup-flycheck.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -32,8 +32,8 @@
   :commands (flycheck-add-next-checker
              flycheck-mode)
   :init (mapc (lambda (mode)
-        (add-hook mode (lambda () (flycheck-mode t))))
-          my/flycheck-modes)
+                (add-hook mode (lambda () (flycheck-mode t))))
+              my/flycheck-modes)
   :config (progn
             (add-to-list 'display-buffer-alist
                          `(,(rx bos "*Flycheck errors*" eos)
@@ -105,7 +105,7 @@
   :commands my/flycheck-rtags-setup
   :init (add-hook 'c-mode-common-hook #'my/flycheck-rtags-setup)
   :config (defun my/flycheck-rtags-setup ()
-        (flycheck-select-checker 'rtags)))
+            (flycheck-select-checker 'rtags)))
 
 ;; Tooltips
 (use-package flycheck-tip

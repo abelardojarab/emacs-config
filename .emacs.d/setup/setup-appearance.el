@@ -1,6 +1,6 @@
 ;;; setup-appearance.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -103,7 +103,7 @@ non-nil."
 
 ;; Faster line numbers
 (use-package linum-ex
-  :demand t
+  :defer t
   :commands linum-mode
   :unless (boundp 'display-line-numbers) ;; Emacs 26 includes native line numbering
   :init (dolist (hook my/linum-modes)

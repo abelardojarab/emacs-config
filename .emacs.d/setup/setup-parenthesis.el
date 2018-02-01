@@ -1,6 +1,6 @@
 ;;; setup-parenthesis.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara <abelardojarab@gmail.com>
 ;; Keywords:
@@ -30,6 +30,7 @@
   :init (show-paren-mode t)
   :commands show-paren-mode
   :config (progn
+
             ;; Show paren-mode when off-screen
             (defadvice show-paren-function (after show-matching-paren-offscreen activate)
               "If the matching paren is offscreen, show the matching line in the
@@ -65,9 +66,9 @@
             (dolist (mode '(c-mode c++-mode java-mode))
               (sp-local-pair mode "{" nil :post-handlers '((apm-c-mode-common-open-block "RET"))))
 
-	    (dolist (mode '(xml-mode php-mode))
-	      (sp-local-pair mode "<!--" "-->"
-			     :post-handlers '(("| " "SPC"))))))
+        (dolist (mode '(xml-mode php-mode))
+          (sp-local-pair mode "<!--" "-->"
+                 :post-handlers '(("| " "SPC"))))))
 
 ;; Autopair
 (use-package autopair

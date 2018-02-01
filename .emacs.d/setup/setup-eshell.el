@@ -1,6 +1,6 @@
 ;;; setup-eshell.el ---                       -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -25,13 +25,14 @@
 ;;; Code:
 
 (use-package ielm
+  :defer t
   :bind (("C-'"      . ielm-repl)
          ("C-c C-z"  . ielm-repl)
          :map ctl-x-map
-         (("C-z" . ielm-repl)
-          ("z"   . ielm-repl))
+         (("C-z"     . ielm-repl)
+          ("z"       . ielm-repl))
          :map ielm-map
-         (("C-t" . quit-window)))
+         (("C-t"     . quit-window)))
   :config (progn
             (defun ielm-repl ()
               (interactive)
@@ -132,7 +133,7 @@
   :after eshell
   :bind (("C-t" . shell-pop)
          :map ctl-x-map
-         ("t" . shell-pop))
+         ("t"   . shell-pop))
   :config (progn
             (setq shell-pop-window-size 45)
             (setq shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell)))))
@@ -142,8 +143,12 @@
 
 ;; Shell mode
 (use-package sh-script
+  :defer t
   :commands sh-mode
-  :mode (("\\.sh$" . sh-mode))
+  :mode (("\\.sh$"         . sh-mode)
+         ("\\.zsh\\'"      . sh-mode)
+         ("\\.csh\\'"      . sh-mode)
+         ("\\.cshrc\\'"    . sh-mode))
   :config (progn
             ;; create keymap
             (setq sh-mode-map (make-sparse-keymap))
@@ -151,69 +156,68 @@
             ;; Configuration choices
             (add-hook 'sh-mode-hook
                       (lambda ()
-                        (setq sh-indentation 2)
-                        (setq sh-basic-offset 2)
-                        (show-paren-mode -1)
-                        (flycheck-mode -1)
-                        (setq blink-matching-paren nil)))
+                        (setq sh-indentation  2
+                              sh-basic-offset 2)
+                        (electric-indent-mode -1)))
 
             ;; When compiling from shell, display error result as in compilation
             ;; buffer, with links to errors.
             (add-hook 'sh-mode-hook #'compilation-shell-minor-mode)
-            (add-hook 'sh-mode-hook #'ansi-color-for-comint-mode-on)))
+            (add-hook 'sh-mode-hook #'ansi-color-for-comint-mode-on))
 
-;; CShell mode
-(use-package csh-mode
-  :after sh-script
-  :config (progn
-            (dolist (elt interpreter-mode-alist)
-              (when (member (car elt) (list "csh" "tcsh"))
-                (setcdr elt 'csh-mode)))
+  ;; CShell mode - fix issues in csh indentation
+  (use-package csh-mode
+    :demand t
+    :config (progn
+              (dolist (elt interpreter-mode-alist)
+                (when (member (car elt) (list "csh" "tcsh"))
+                  (setcdr elt 'csh-mode)))
 
-            ;; Fix issues in csh indentation
-            (add-to-list 'auto-mode-alist '("\\.zsh\\'" . sh-mode))
-            (add-to-list 'auto-mode-alist '("\\.csh\\'" . sh-mode))
-            (add-to-list 'auto-mode-alist '("\\.cshrc\\'" . sh-mode))
-            (defun my/tcsh-set-indent-functions ()
-              (when (or (string-match ".*\\.alias" (buffer-file-name))
-                        (string-match "\\(.*\\)\\.csh$" (file-name-nondirectory (buffer-file-name))))
-                (setq-local indent-line-function   #'csh-indent-line)
-                (setq-local indent-region-function #'csh-indent-region)))
-            (add-hook 'sh-mode-hook      #'my/tcsh-set-indent-functions)
-            (add-hook 'sh-set-shell-hook #'my/tcsh-set-indent-functions)
-            (add-hook 'sh-mode-hook      (lambda () (electric-indent-mode -1)))))
+              (defun my/tcsh-set-indent-functions ()
+                (when (or (string-match ".*\\.alias" (buffer-file-name))
+                          (string-match "\\(.*\\)\\.csh$" (file-name-nondirectory (buffer-file-name))))
+                  (setq-local indent-line-function   #'csh-indent-line)
+                  (setq-local indent-region-function #'csh-indent-region)))
+              (add-hook 'sh-mode-hook      #'my/tcsh-set-indent-functions)
+              (add-hook 'sh-set-shell-hook #'my/tcsh-set-indent-functions))))
 
 ;; Send expressions to a REPL line-by-line by hitting C-RET
 (use-package eval-in-repl
+  :defer t
+  :commands (eir-eval-in-ielm
+             eir-eval-in-shell
+             eir-eval-in-python
+             eir-eval-in-javascript)
   :load-path (lambda () (expand-file-name "eval-in-repl/" user-emacs-directory))
   :config (progn
-            (setq eir-jump-after-eval nil)
-            (setq eir-always-split-script-window t)
-            (setq eir-delete-other-windows t)
-            (setq eir-repl-placement 'right)))
+            (setq eir-jump-after-eval            nil
+                  eir-always-split-script-window t
+                  eir-delete-other-windows       t
+                  eir-repl-placement             'right)
 
-;; ielm support (for emacs lisp)
-(use-package eval-in-repl-ielm
-  :load-path (lambda () (expand-file-name "eval-in-repl/" user-emacs-directory))
-  :commands eir-eval-in-ielm)
+            ;; ielm support (for emacs lisp)
+            (use-package eval-in-repl-ielm
+              :load-path (lambda () (expand-file-name "eval-in-repl/" user-emacs-directory))
+              :commands eir-eval-in-ielm)
 
-;; Shell support
-(use-package eval-in-repl-shell
-  :load-path (lambda () (expand-file-name "eval-in-repl/" user-emacs-directory))
-  :commands eir-eval-in-shell)
+            ;; Shell support
+            (use-package eval-in-repl-shell
+              :load-path (lambda () (expand-file-name "eval-in-repl/" user-emacs-directory))
+              :commands eir-eval-in-shell)
 
-;; Python support
-(use-package eval-in-repl-python
-  :load-path (lambda () (expand-file-name "eval-in-repl/" user-emacs-directory))
-  :commands eir-eval-in-python)
+            ;; Python support
+            (use-package eval-in-repl-python
+              :load-path (lambda () (expand-file-name "eval-in-repl/" user-emacs-directory))
+              :commands eir-eval-in-python)
 
-;; Javascript support
-(use-package eval-in-repl-javascript
-  :load-path (lambda () (expand-file-name "eval-in-repl/" user-emacs-directory))
-  :commands eir-eval-in-javascript)
+            ;; Javascript support
+            (use-package eval-in-repl-javascript
+              :load-path (lambda () (expand-file-name "eval-in-repl/" user-emacs-directory))
+              :commands eir-eval-in-javascript)))
 
 ;; Emacs interaction with tmux
 (use-package emamux
+  :defer t
   :load-path (lambda () (expand-file-name "emamux/" user-emacs-directory))
   :commands (emamux:send-command
              emamux:run-command
@@ -228,6 +232,7 @@
              emamux:yank-from-list-buffers))
 
 (use-package multi-term
+  :defer t
   :commands (multi-term
              my/multi-term-vertical
              my/multi-term-horizontal)

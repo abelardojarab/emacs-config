@@ -1,6 +1,6 @@
 ;;; setup-environment.el ---                 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -237,7 +237,6 @@
   (setq dlgopen-executable-path (expand-file-name "elisp/getfile.exe" user-emacs-directory))))
 
 ;; Make directory on-the-fly if non-existent
-;; http://mbork.pl/2016-07-25_Making_directories_on_the_fly
 (defun make-parent-directory ()
   "Make sure the directory of `buffer-file-name' exists."
   (make-directory (file-name-directory buffer-file-name) t))
@@ -263,12 +262,11 @@
 ;; Bell instead of annoying beep
 (setq visible-bell t)
 
-;; Turn off the bell http://www.emacswiki.org/cgi-bin/wiki?AlarmBell
+;; Turn off the bell
 (setq ring-bell-function 'ignore)
 
 ;; Save whatever’s in the current (system) clipboard before
 ;; replacing it with the Emacs’ text.
-;; https://github.com/dakrone/eos/blob/master/eos.org
 (setq save-interprogram-paste-before-kill t)
 
 ;; The default goes to the middle first. I prefer that the default goes to the top first. Let’s change this.
@@ -332,8 +330,7 @@
         (forward-sexp))
     ad-do-it))
 
-;; From init benchmark at:
-;; https://github.com/purcell/emacs.d/blob/master/lisp/init-benchmarking.el
+;; Benchmark initialization
 (defun my/time-subtract-millis (b a)
   (* 1000.0 (float-time (time-subtract b a))))
 

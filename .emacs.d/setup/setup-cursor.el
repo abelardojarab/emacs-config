@@ -1,6 +1,6 @@
 ;;; setup-cursor.el ---                              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -62,6 +62,7 @@
 
 ;; Multiple cursors
 (use-package multiple-cursors
+  :defer t
   :bind (:map region-bindings-mode-map
          ("C-c l" . mc/edit-lines)
          ("C-c n" . mc/mark-next-like-this)
