@@ -72,3 +72,4 @@ Defaults to `error'."
       (when message (put name 'error-message message)))))
 
 (provide 'setup-functions-required)
+;;; setup-functions-required.el ends here

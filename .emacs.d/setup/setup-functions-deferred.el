@@ -351,3 +351,4 @@ dirs. Input is a string and output is a list of strings."
   (file-name-directory (directory-file-name dir)))
 
 (provide 'setup-functions-deferred)
+;;; setup-functions-deferred.el ends here
