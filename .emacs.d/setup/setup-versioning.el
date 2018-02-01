@@ -1,6 +1,6 @@
 ;;; setup-versioning.el ---                         -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -99,8 +99,8 @@
 ;; git-modes
 (use-package git-modes
   :demand t
-  :if (executable-find "git")
   :after vc
+  :if (executable-find "git")
   :load-path (lambda () (expand-file-name "git-modes/" user-emacs-directory)))
 
 ;; magit
@@ -190,9 +190,7 @@
           ;; Turn off the horrible warning about magit auto-revert of saved buffers
           (setq magit-last-seen-setup-instructions "1.4.0")
 
-          ;; Close popup when commiting - this stops the commit window
-          ;; hanging around
-          ;; From: http://git.io/rPBE0Q
+          ;; Close popup when commiting
           (defadvice git-commit-commit (after delete-window activate)
             (delete-window))
 
@@ -321,13 +319,14 @@
 
               (setq pretty-magit-alist nil)
               (setq pretty-magit-prompt nil)
-              (pretty-magit "Feature" ? (:foreground "slate gray" :height 1.1))
-              (pretty-magit "Add"     ?☑ (:foreground "#375E97" :height 1.1))
-              (pretty-magit "Fix"     ? (:foreground "#FB6542" :height 1.1))
-              (pretty-magit "Clean"   ?✄ (:foreground "#FFBB00" :height 1.1))
-              (pretty-magit "Docs"    ? (:foreground "#3F681C" :height 1.1))
-              (pretty-magit "master"  ?  (:box nil :height 1.1) t)
-              (pretty-magit "origin"  ? (:box nil :height 1.1) t)
+              (pretty-magit "New feature"   ?⭜ (:foreground "slate gray" :height 1.1))
+              (pretty-magit "Add code"      ?⭇ (:foreground "#375E97" :height 1.1))
+              (pretty-magit "Bug Fix"       ?⚒ (:foreground "#FB6542" :height 1.1))
+              (pretty-magit "Refactor"      ?♽ (:foreground "#FFBB00" :height 1.1))
+              (pretty-magit "Docs"          ?🕮 (:foreground "#3F681C" :height 1.1))
+              (pretty-magit "Tag"           ? (:foreground "#3F681C" :height 1.1))
+              (pretty-magit "master"        ?⭗ (:box nil :height 1.0) t)
+              (pretty-magit "origin"        ?⭗ (:box nil :height 1.0) t)
 
               (defun my/add-magit-faces ()
                 "Add face properties and compose symbols for buffer from pretty-magit."
