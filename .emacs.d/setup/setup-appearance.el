@@ -79,6 +79,10 @@ non-nil."
             (toggle-truncate-lines t)
             (setq truncate-lines t)))
 
+;; make the left fringe 14 pixels wide and the right 12
+(if (display-graphic-p)
+    (fringe-mode '(18 . 12)))
+
 ;; Get centered text when visual-line-mode is on
 (use-package visual-fill-column
   :defer t
