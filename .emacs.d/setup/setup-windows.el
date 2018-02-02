@@ -148,7 +148,8 @@
 (use-package popwin
   :defer t
   :commands popwin-mode
-  :load-path (lambda () (expand-file-name "popwin/" user-emacs-directory)))
+  :load-path (lambda () (expand-file-name "popwin/" user-emacs-directory))
+  :config (add-to-list popwin:special-display-config '(help-mode 0.5 :position below)))
 
 ;; Window purpose
 (use-package window-purpose
@@ -203,7 +204,7 @@
 
             ;; Load user preferences
             (purpose-compile-user-configuration)
-            (purpose-mode)
+            (purpose-mode -1)
 
             ;; Extensions for purpose
             (use-package window-purpose-x
@@ -292,6 +293,8 @@
   :commands shackle-mode
   :init (shackle-mode 1)
   :config (progn
+
+            (setq helm-display-function 'pop-to-buffer)
             (setq shackle-lighter               ""
                   shackle-select-reused-windows nil
                   shackle-default-alignment     'right
@@ -299,18 +302,17 @@
 
             (setq shackle-rules
                   ;; CONDITION(:regexp)        :select     :inhibit-window-quit   :size+:align|:other     :same|:popup
-                  '((compilation-mode          :select     nil)
-                    ("*undo-tree*"             :size       0.25     :align               right)
-                    ("*eshell*"                :select     t        :other               t)
+                  '((compilation-mode          :select     nil      :align      t)
+                    (help-mode                 :select     nil      :align      below)
+                    ("*undo-tree*"             :align               t)
+                    ("*eshell*"                :select     t        :other      t)
                     ("*Shell Command Output*"  :select     nil)
-                    ("\\*Async Shell.*\\*"     :regexp     t        :ignore              t)
-                    (occur-mode                :select     nil      :align               t)
-                    ("*Help*"                  :select     t        :inhibit-window-quit t       :other               t)
-                    ("*Completions*"           :size       0.3      :align               right)
-                    ("*Messages*"              :select     nil      :inhibit-window-quit t       :other               t)
-                    ("\\*[Wo]*Man.*\\*"        :regexp     t        :select              t       :inhibit-window-quit t :other t)
-                    ("\\`\\*helm.*?\\*\\'"     :regexp     t        :size                0.5     :align               left)
-                    ("*Calendar*"              :select     t        :size                0.4     :align               below)))))
+                    ("\\*Async Shell.*\\*"     :regexp     t        :ignore     t)
+                    ("*Help*"                  :select     nil      :align      below   :inhibit-window-quit t       :other   t)
+                    ("*Completions*"           :align      t)
+                    ("*Messages*"              :select     nil      :other      :inhibit-window-quit t )
+                    ("\\`\\*helm.*?\\*\\'"     :regexp     t        :align      t)
+                    ("*Calendar*"              :select     t        :align      below)))))
 
 (provide 'setup-windows)
 ;;; setup-windows.el ends here
