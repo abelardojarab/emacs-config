@@ -192,7 +192,60 @@
 			  (make-local-variable 'cmake-project-build-directory)
 			  (setq cmake-project-build-directory cmake-ide-build-dir)
 			  (message "* cmake-project Building directory set to: %s" cmake-project-build-directory)
-			  (file-name-as-directory cmake-ide-build-dir))))
+			  (file-name-as-directory cmake-ide-build-dir))
+
+			(defun cmake-project-configure-project (build-directory generator &optional flags)
+			  "Configure or reconfigure a CMake build tree.
+BUILD-DIRECTORY is the path to the build-tree directory.  If the
+directory does not already exist, it will be created.  The source
+directory is found automatically based on the current
+buffer. With a prefix argument additional CMake flags can be
+specified interactively."
+			  (interactive
+			   (let ((directory-parts
+				  (when cmake-project-build-directory (cmake-project--split-directory-path
+								       cmake-project-build-directory))))
+			     (let ((root (car directory-parts))
+				   (directory-name (cdr directory-parts)))
+			       (list (read-directory-name
+				      "Configure in directory: " root nil nil directory-name)
+				     (completing-read
+				      "Generator (optional): "
+				      (cmake-project--available-generators) nil t)
+				     (if current-prefix-arg
+					 (read-from-minibuffer "Additional CMake flags (optional): "))))))
+			  (let ((source-directory (cmake-project-find-root-directory))
+				(build-directory (file-name-as-directory build-directory)))
+			    (unless (file-exists-p build-directory) (make-directory build-directory))
+			    ;; Must force `default-directory' here as `compilation-start' has
+			    ;; a bug in it. It is supposed to notice the `cd` command and
+			    ;; adjust `default-directory' accordingly but it gets confused by
+			    ;; spaces in the directory path, even when properly quoted.
+			    ;;
+			    ;; TODO: this isn't actually the directory we want. It needs the
+			    ;; source directory.
+			    (let ((default-directory build-directory))
+			      (compilation-start
+			       (concat
+				;; HACK: force compilation-start to cd to default-directory
+				;; by inserting dummy cd at front.  Without this, the old
+				;; broken version may pick up quoted path without spaces and
+				;; then assume the quotes are part of the path causing an
+				;; error (see
+				;; https://github.com/alamaison/emacs-cmake-project/issues/1)
+				"cd . && "
+				"cd " (shell-quote-argument (expand-file-name build-directory))
+				" && cmake "
+				(unless (string= "" flags) (concat flags " "))
+				(shell-quote-argument
+				 (expand-file-name source-directory))
+				" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON "
+				(if (string= "" generator)
+				    ""
+				  ;; Set the user defined architecture on windows.
+				  (concat " -G " (shell-quote-argument (cmake-project-set-architecture generator)))
+				  )))
+			      (cmake-project--changed-build-directory build-directory))))))
 
             ;; Initialize cmake-ide
             (defun my/cmake-ide-enable ()
