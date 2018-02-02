@@ -71,5 +71,11 @@ Defaults to `error'."
            (delete-dups (copy-sequence (cons name conditions))))
       (when message (put name 'error-message message)))))
 
+;; Utility function
+(defun my/tabs-setup (tabs length)
+  (setq-default indent-tabs-mode tabs)
+  (setq-default tab-width length)
+  (setq-default tab-stop-list (number-sequence length 100 length)))
+
 (provide 'setup-functions-required)
 ;;; setup-functions-required.el ends here

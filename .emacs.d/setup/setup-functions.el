@@ -49,7 +49,8 @@
              font-lock-flush
              special-form-p
              define-error
-             internet-up-p))
+             internet-up-p
+             my/tabs-setup))
 
 ;; Deferred functions
 (use-package setup-functions-deferred

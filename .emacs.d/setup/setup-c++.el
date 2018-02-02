@@ -59,21 +59,17 @@
               (c-toggle-electric-state -1)
 
               (setq-default c-default-style "Linux")
-              (setq-default indent-tabs-mode t)
-              (setq-default tab-width 8)
-              (setq comment-multi-line t)
+              (my/tabs-setup t 8)
 
               (make-local-variable 'c-basic-offset)
               (setq c-basic-offset tab-width)
               (make-local-variable 'c-indent-level)
               (setq c-indent-level tab-width)
 
-              ;; tab width
-              (setq-default tab-stop-list '(8 16 24 32 40 48 56 64 72 80 88 96 108)))
-
-            ;; ensure fill-paragraph takes doxygen @ markers as start of new
-            ;; paragraphs properly
-            (setq paragraph-start "^[ ]*\\(//+\\|\\**\\)[ ]*\\([ ]*$\\|@param\\)\\|^\f")))
+              ;; ensure fill-paragraph takes doxygen @ markers as start of new
+              ;; paragraphs properly
+              (setq-default comment-multi-line t
+                            paragraph-start "^[ ]*\\(//+\\|\\**\\)[ ]*\\([ ]*$\\|@param\\)\\|^\f"))))
 
 ;; Show inline arguments hint for the C/C++ function at point
 (use-package function-args
@@ -112,10 +108,10 @@
   :commands (basic-c-compile-file basic-c-compile-run-c basic-c-compile-makefile)
   :load-path (lambda () (expand-file-name "basic-c-compile/" user-emacs-directory))
   :config (setq basic-c-compiler "g++"
-        basic-c-compile-all-files nil
-        basic-c-compile-compiler-flags "-Wall -Werror -std=c++11"
-        basic-c-compile-outfile-extension nil
-        basic-c-compile-make-clean "find . -type f -executable -delete"))
+                basic-c-compile-all-files nil
+                basic-c-compile-compiler-flags "-Wall -Werror -std=c++11"
+                basic-c-compile-outfile-extension nil
+                basic-c-compile-make-clean "find . -type f -executable -delete"))
 
 (provide 'setup-c++)
 ;;; setup-c++.el ends here

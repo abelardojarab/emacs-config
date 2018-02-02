@@ -1,6 +1,6 @@
 ;;; setup-python.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -48,13 +48,9 @@
             (add-hook 'python-mode-hook
                       (function (lambda ()
                                   (progn
-                                    (set-variable 'python-indent-offset 4)
-                                    (set-variable 'py-indent-offset 4)
-                                    (set-variable 'indent-tabs-mode nil))
-                                  (setq indent-tabs-mode nil
-                                        python-indent-offset 4
-                                        py-indent-offset 4
-                                        tab-width 4))))
+                                    (setq-default python-indent-offset 4
+                                                  py-indent-offset     4)
+                                    (my/tabs-setup nil 4)))))
 
             ;; Update imenu
             (defun python-reset-imenu ()
@@ -71,8 +67,8 @@
 
             ;; Python settings
             (setq py-shell-switch-buffers-on-execute-p t
-                  py-switch-buffers-on-execute-p t
-                  py-smart-indentation t
+                  py-switch-buffers-on-execute-p       t
+                  py-smart-indentation                 t
                   py-split-windows-on-execute-function 'split-window-horizontally)
 
             ;; Stop cedet semantic-python-get-system-include-path to start the python interpreter
@@ -80,17 +76,16 @@
 
             ;; Use ipython as default interpreter
             (if (executable-find "ipython")
-                (setq-default
-                 python-shell-interpreter "ipython"
-                 python-shell-interpreter-args "--colors=Linux --profile=default"
-                 python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
-                 python-shell-prompt-regexp "In \\[[0-9]+\\]: "
-                 python-shell-completion-setup-code
-                 "from IPython.core.completerlib import module_completion"
-                 python-shell-completion-module-string-code
-                 "';'.join(module_completion('''%s'''))\n"
-                 python-shell-completion-string-code
-                 "';'.join(get_ipython().Completer.all_completions('''%s'''))\n"))
+                (setq-default python-shell-interpreter "ipython"
+                              python-shell-interpreter-args "--colors=Linux --profile=default"
+                              python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
+                              python-shell-prompt-regexp "In \\[[0-9]+\\]: "
+                              python-shell-completion-setup-code
+                              "from IPython.core.completerlib import module_completion"
+                              python-shell-completion-module-string-code
+                              "';'.join(module_completion('''%s'''))\n"
+                              python-shell-completion-string-code
+                              "';'.join(get_ipython().Completer.all_completions('''%s'''))\n"))
 
             ;; Remove wisent, python becomes unusuable slow
             (remove-hook 'python-mode-hook 'wisent-python-default-setup)))

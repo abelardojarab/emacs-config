@@ -84,7 +84,6 @@
         ("." nil (reusable-frames . visible))))
 
 ;; Prefer horizontal window splitting (new window on the right)
-;; http://stackoverflow.com/questions/2081577/setting-emacs-split-to-horizontal
 (setq split-height-threshold nil)
 (setq split-width-threshold 1000)
 
@@ -110,9 +109,10 @@
                    (split-window-right))))))))
 
 (setq split-window-preferred-function 'my/split-window-sensibly)
-(defadvice org-agenda (around split-vertically activate)
-  (let ((split-width-threshold 100)) ;; or whatever width makes sense for you
-    ad-do-it))
+(eval-after-load 'org
+  (defadvice org-agenda (around split-vertically activate)
+    (let ((split-width-threshold 100)) ;; or whatever width makes sense for you
+      ad-do-it)))
 
 ;; Switch between vertical and horizontal splitting
 (defun toggle-window-split ()
@@ -294,8 +294,8 @@
   :init (shackle-mode 1)
   :config (progn
 
-            (setq helm-display-function 'pop-to-buffer)
-            (setq shackle-lighter               ""
+            (setq helm-display-function         'pop-to-buffer
+                  shackle-lighter               ""
                   shackle-select-reused-windows nil
                   shackle-default-alignment     'right
                   shackle-default-size          0.5)  ;; default 0.5
