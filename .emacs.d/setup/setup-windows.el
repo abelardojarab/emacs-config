@@ -109,10 +109,10 @@
                    (split-window-right))))))))
 
 (setq split-window-preferred-function 'my/split-window-sensibly)
-(eval-after-load 'org
-  (defadvice org-agenda (around split-vertically activate)
-    (let ((split-width-threshold 100)) ;; or whatever width makes sense for you
-      ad-do-it)))
+;;(eval-after-load 'org
+;;  (defadvice org-agenda (around split-vertically activate)
+;;    (let ((split-width-threshold 100)) ;; or whatever width makes sense for you
+;;      ad-do-it)))
 
 ;; Switch between vertical and horizontal splitting
 (defun toggle-window-split ()
