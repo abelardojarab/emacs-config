@@ -58,7 +58,8 @@
       resize-mini-windows                  'grow-only
       ;; do not highlight region on non-selected windows
       highlight-nonselected-windows        nil
-      max-mini-window-height               0.3)
+      ;; maximum small window height
+      max-mini-window-height               0.5)
 
 ;; Configure `display-buffer' behaviour for some special buffers.
 (setq display-buffer-alist
@@ -66,6 +67,7 @@
         ;; Put REPLs and error lists into the bottom side window
         (,(rx bos
               (or "*Help*"                        ;; Help buffers
+		  "*Python-Help*"                 ;; Python help
                   "*Warnings*"                    ;; Emacs warnings
                   "*Compile-Log*"                 ;; Emacs byte compiler log
                   "*compilation"                  ;; Compilation buffers
@@ -75,9 +77,9 @@
                   ))
          (display-buffer-reuse-window
           display-buffer-in-side-window)
-         (side            . right)
+         (side            . bottom)
          (reusable-frames . visible)
-         (window-height   . 0.33))
+         (window-height   . 0.25))
         ;; Let `display-buffer' reuse visible frames for all buffers.  This must
         ;; be the last entry in `display-buffer-alist', because it overrides any
         ;; later entry with more specific actions.
@@ -297,22 +299,23 @@
             (setq helm-display-function         'pop-to-buffer
                   shackle-lighter               ""
                   shackle-select-reused-windows nil
-                  shackle-default-alignment     'right
-                  shackle-default-size          0.5)  ;; default 0.5
+                  shackle-default-alignment     'below
+                  shackle-default-size          0.25)  ;; default 0.5
 
             (setq shackle-rules
                   ;; CONDITION(:regexp)        :select     :inhibit-window-quit   :size+:align|:other     :same|:popup
                   '((compilation-mode          :select     nil      :align      t)
-                    (help-mode                 :select     nil      :align      below)
-                    ("*undo-tree*"             :align               t)
+                    (help-mode                 :select     nil      :align      t)
+                    ("*undo-tree*"             :align      t)
                     ("*eshell*"                :select     t        :other      t)
                     ("*Shell Command Output*"  :select     nil)
                     ("\\*Async Shell.*\\*"     :regexp     t        :ignore     t)
-                    ("*Help*"                  :select     nil      :align      below   :inhibit-window-quit t       :other   t)
+                    ("*Help*"                  :select     nil      :align      t   :inhibit-window-quit t       :other   t)
+		    ("*Python-Help*"           :select     nil      :align      t   :inhibit-window-quit t       :other   t)
                     ("*Completions*"           :align      t)
-                    ("*Messages*"              :select     nil      :other      :inhibit-window-quit t )
+                    ("*Messages*"              :select     nil      :other      t   :inhibit-window-quit t)
                     ("\\`\\*helm.*?\\*\\'"     :regexp     t        :align      t)
-                    ("*Calendar*"              :select     t        :align      below)))))
+                    ("*Calendar*"              :select     t        :align      t)))))
 
 (provide 'setup-windows)
 ;;; setup-windows.el ends here
