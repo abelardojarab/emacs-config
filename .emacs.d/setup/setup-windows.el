@@ -77,7 +77,7 @@
                   ))
          (display-buffer-in-side-window
           display-buffer-reuse-window)
-         (side            . right)
+         (side            . bottom)
          (reusable-frames . visible)
          (window-height   . 0.25)
          (inhibit-same-window . t))
@@ -300,7 +300,7 @@
             (setq helm-display-function         'pop-to-buffer
                   shackle-lighter               ""
                   shackle-select-reused-windows nil
-                  shackle-default-alignment     'right
+                  shackle-default-alignment     'below
                   shackle-default-size          0.25)  ;; default 0.5
 
             (setq shackle-rules
