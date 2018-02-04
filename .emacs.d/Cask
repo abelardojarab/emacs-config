@@ -114,6 +114,7 @@
 (depends-on "flycheck-pos-tip")
 (depends-on "flycheck-tip")
 (depends-on "flyspell-correct")
+(depends-on "flycheck-mmark")
 (depends-on "focus")
 (depends-on "folding")
 (depends-on "fold-dwim")
