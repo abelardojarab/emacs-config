@@ -85,7 +85,6 @@
 (use-package ecb
   :load-path (lambda () (expand-file-name "ecb/" user-emacs-directory))
   :init (setq stack-trace-on-error t)
-  :commands ecb-activate
   :config (progn
 
             ;; Fix error with symboldef sync
