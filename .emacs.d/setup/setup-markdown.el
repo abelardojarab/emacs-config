@@ -46,7 +46,6 @@
          ("\\.markdown\\'" . markdown-mode))
   :after org
   :commands markdown-mode
-  :load-path (lambda () (expand-file-name "markdown-mode-2.0/" user-emacs-directory))
   :config (progn
 
             (use-package flycheck-mmark
