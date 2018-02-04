@@ -176,6 +176,7 @@ Exit the save between databases if there is user input."
   :demand t
   :commands which-function-mode
   :config (progn
+            (which-function-mode -1)
             (ignore-errors
               (defun which-func-update () nil)
               (cancel-function-timers 'which-func-update))

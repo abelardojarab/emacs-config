@@ -1,6 +1,6 @@
 ;;; setup-modeline.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016, 2017, 2018 Abelardo Jara-Berrocal
+;; Copyright (C) 2018 Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -112,7 +112,7 @@
                  all-the-icons-buffer-size) :face default-face :skip-alternate t)
 
                (all-the-icons-projectile :face default-face)
-               ((all-the-icons-vc-status) " " :separator "")
+               ((all-the-icons-vc-status) "" :separator "")
 
                ((remote-host
                  all-the-icons-buffer-path
