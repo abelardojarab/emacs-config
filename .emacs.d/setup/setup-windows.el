@@ -67,7 +67,7 @@
         ;; Put REPLs and error lists into the bottom side window
         (,(rx bos
               (or "*Help*"                        ;; Help buffers
-		  "*Python-Help*"                 ;; Python help
+                  "*Python-Help*"                 ;; Python help
                   "*Warnings*"                    ;; Emacs warnings
                   "*Compile-Log*"                 ;; Emacs byte compiler log
                   "*compilation"                  ;; Compilation buffers
@@ -75,11 +75,12 @@
                   "*shell"                        ;; Shell window
                   (and (1+ nonl) " output*")      ;; AUCTeX command output
                   ))
-         (display-buffer-reuse-window
-          display-buffer-in-side-window)
-         (side            . bottom)
+         (display-buffer-in-side-window
+          display-buffer-reuse-window)
+         (side            . right)
          (reusable-frames . visible)
-         (window-height   . 0.25))
+         (window-height   . 0.25)
+         (inhibit-same-window . t))
         ;; Let `display-buffer' reuse visible frames for all buffers.  This must
         ;; be the last entry in `display-buffer-alist', because it overrides any
         ;; later entry with more specific actions.
@@ -299,7 +300,7 @@
             (setq helm-display-function         'pop-to-buffer
                   shackle-lighter               ""
                   shackle-select-reused-windows nil
-                  shackle-default-alignment     'below
+                  shackle-default-alignment     'right
                   shackle-default-size          0.25)  ;; default 0.5
 
             (setq shackle-rules
@@ -311,7 +312,7 @@
                     ("*Shell Command Output*"  :select     nil)
                     ("\\*Async Shell.*\\*"     :regexp     t        :ignore     t)
                     ("*Help*"                  :select     nil      :align      t   :inhibit-window-quit t       :other   t)
-		    ("*Python-Help*"           :select     nil      :align      t   :inhibit-window-quit t       :other   t)
+                    ("*Python-Help*"           :select     nil      :align      t   :inhibit-window-quit t       :other   t)
                     ("*Completions*"           :align      t)
                     ("*Messages*"              :select     nil      :other      t   :inhibit-window-quit t)
                     ("\\`\\*helm.*?\\*\\'"     :regexp     t        :align      t)

@@ -47,9 +47,29 @@
                ("c"          . neotree-create-node)
                ("+"          . neotree-create-node)
                ("d"          . neotree-delete-node)
-               ("r"          . neotree-rename-node)))
+               ("r"          . neotree-rename-node)
+               ("q"          . kill-buffer-and-window)))
   :load-path (lambda () (expand-file-name "neotree/" user-emacs-directory))
   :config (progn
+
+            ;; Fix neotree to not collide with ecb
+            (defun neo-global--create-window ()
+              "Create global neotree window."
+              (let ((window nil)
+                    (split-width-threshold 100)
+                    (buffer (neo-global--get-buffer t))
+                    (window-pos (if (eq neo-window-position 'left) 'left 'right)))
+                (setq window
+                      (select-window
+                       ;; (split-window
+                       ;;  (frame-root-window (window-frame (selected-window)))
+                       ;;  nil window-pos)
+                       (split-window)))
+                (neo-window--init window buffer)
+                (neo-global--attach)
+                (neo-global--reset-width)
+                window))
+
             ;; every time when the neotree window is
             ;; opened, it will try to find current
             ;; file and jump to node.
