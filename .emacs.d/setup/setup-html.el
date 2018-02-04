@@ -60,13 +60,13 @@
             (setq web-mode-enable-auto-pairing nil)
 
             ;; extra settings
-            (setq web-mode-enable-css-colorization t
-                  web-mode-enable-auto-quoting t
-                  web-mode-enable-auto-closing t
-                  web-mode-style-padding 2
-                  web-mode-script-padding 2
-                  web-mode-markup-indent-offset 2
-                  web-mode-code-indent-offset 2
+            (setq web-mode-enable-css-colorization          t
+                  web-mode-enable-auto-quoting              t
+                  web-mode-enable-auto-closing              t
+                  web-mode-style-padding                    2
+                  web-mode-script-padding                   2
+                  web-mode-markup-indent-offset             2
+                  web-mode-code-indent-offset               2
                   web-mode-enable-current-element-highlight t)))
 
 ;; Company backend
