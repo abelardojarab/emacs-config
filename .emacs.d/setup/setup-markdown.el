@@ -49,7 +49,10 @@
   :load-path (lambda () (expand-file-name "markdown-mode-2.0/" user-emacs-directory))
   :config (progn
 
-            ;; http://endlessparentheses.com/ispell-and-org-mode.html
+            (use-package flycheck-mmark
+              :init (add-hook 'flycheck-mode-hook #'flycheck-mmark-setup)
+              :commands (flycheck-mmark-setup))
+
             (defun my/markdown-ispell ()
               "Configure `ispell-skip-region-alist' for `markdown-mode'."
               (make-local-variable 'ispell-skip-region-alist)
@@ -82,7 +85,8 @@
                         ;; Style/syntax check
                         (writegood-mode t)
                         (flyspell-mode t)
-                        (if (executable-find "proselint")
+                        (if (or (executable-find "proselint")
+                                (executable-find "mmark"))
                             (flycheck-mode t))))
 
             ;; http://stackoverflow.com/questions/14275122/editing-markdown-pipe-tables-in-emacs
