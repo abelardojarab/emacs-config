@@ -29,6 +29,8 @@
 
 (require 'magit)
 
+;;; Commands
+
 ;;;###autoload (autoload 'magit-merge-popup "magit" nil t)
 (magit-define-popup magit-merge-popup
   "Popup console for merge commands."
@@ -45,7 +47,7 @@
               (?i "Merge into"             magit-merge-into))
   :sequence-actions   '((?m "Commit merge" magit-commit)
                         (?a "Abort merge"  magit-merge-abort))
-  :sequence-predicate 'magit-merge-state
+  :sequence-predicate 'magit-merge-in-progress-p
   :default-action 'magit-merge
   :max-action-columns 2)
 
@@ -218,8 +220,18 @@ branch, then also remove the respective remote branch."
          (magit-call-git "checkout" arg "--" file)
          (magit-run-git "add" "-u" "--" file)))))
 
-(defun magit-merge-state ()
+;;; Utilities
+
+(defun magit-merge-in-progress-p ()
   (file-exists-p (magit-git-dir "MERGE_HEAD")))
+
+(defun magit--merge-range (&optional head)
+  (unless head
+    (setq head (magit-get-shortname
+                (car (magit-file-lines (magit-git-dir "MERGE_HEAD"))))))
+  (and head
+       (concat (magit-git-string "merge-base" "--octopus" "HEAD" head)
+               ".." head)))
 
 (defun magit-merge-assert ()
   (or (not (magit-anything-modified-p t))
@@ -232,22 +244,31 @@ branch, then also remove the respective remote branch."
     (?t "[t]heir stage" "--theirs")
     (?c "[c]onflict"    "--merge")))
 
+;;; Sections
+
+(defvar magit-unmerged-section-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map [remap magit-visit-thing] 'magit-diff-dwim)
+    map)
+  "Keymap for `unmerged' sections.")
+
 (defun magit-insert-merge-log ()
   "Insert section for the on-going merge.
 Display the heads that are being merged.
 If no merge is in progress, do nothing."
-  (-when-let (heads (mapcar 'magit-get-shortname
-                            (magit-file-lines (magit-git-dir "MERGE_HEAD"))))
-    (magit-insert-section (commit (car heads))
-      (magit-insert-heading
-        (format "Merging %s:" (mapconcat 'identity heads ", ")))
-      (magit-insert-log
-       (concat (magit-git-string "merge-base" "--octopus" "HEAD" (car heads))
-               ".." (car heads))
-       (let ((args magit-log-section-arguments))
-         (unless (member "--decorate=full" magit-log-section-arguments)
-           (push "--decorate=full" args))
-         args)))))
+  (when (magit-merge-in-progress-p)
+    (let* ((heads (mapcar #'magit-get-shortname
+                          (magit-file-lines (magit-git-dir "MERGE_HEAD"))))
+           (range (magit--merge-range (car heads))))
+      (magit-insert-section (unmerged range)
+        (magit-insert-heading
+          (format "Merging %s:" (mapconcat #'identity heads ", ")))
+        (magit-insert-log
+         range
+         (let ((args magit-log-section-arguments))
+           (unless (member "--decorate=full" magit-log-section-arguments)
+             (push "--decorate=full" args))
+           args))))))
 
 (provide 'magit-merge)
 ;;; magit-merge.el ends here

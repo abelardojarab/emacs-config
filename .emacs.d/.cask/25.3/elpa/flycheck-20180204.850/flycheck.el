@@ -226,6 +226,7 @@ attention to case differences."
     r-lintr
     racket
     rpm-rpmlint
+    markdown-markdownlint-cli
     markdown-mdl
     nix
     rst-sphinx
@@ -8164,6 +8165,23 @@ See URL `https://eslint.org' for more information about ESLint."
           (let-alist (caar (flycheck-parse-json output))
             .messages)))
 
+(defun flycheck-eslint--find-working-directory (_checker)
+  "Look for a working directory to run CHECKER in.
+
+This will either be the directory that contains `.eslintrc' by
+supports configuration files formats or `.eslintignore', if no
+such file is found in the directory hierarchy, searches
+`node_modules' directory to detect root of project."
+  (let* ((regex-config (concat "\\`\\.eslintrc"
+                               "\\(\\.\\(js\\|ya?ml\\|json\\)\\)?\\'")))
+    (when buffer-file-name
+      (or (locate-dominating-file buffer-file-name "node_modules")
+          (locate-dominating-file buffer-file-name ".eslintignore")
+          (locate-dominating-file
+           (file-name-directory buffer-file-name)
+           (lambda (directory)
+             (> (length (directory-files directory nil regex-config t)) 0)))))))
+
 (flycheck-define-checker javascript-eslint
   "A Javascript syntax and style checker using eslint.
 
@@ -8175,6 +8193,7 @@ See URL `http://eslint.org/'."
   :error-parser flycheck-parse-eslint
   :enabled (lambda () (flycheck-eslint-config-exists-p))
   :modes (js-mode js-jsx-mode js2-mode js2-jsx-mode js3-mode rjsx-mode)
+  :working-directory flycheck-eslint--find-working-directory
   :verify
   (lambda (_)
     (let* ((default-directory
@@ -8959,6 +8978,28 @@ See URL `https://sourceforge.net/projects/rpmlint/'."
   :predicate (lambda () (or (not (eq major-mode 'sh-mode))
                             ;; In `sh-mode', we need the proper shell
                             (eq sh-shell 'rpm))))
+
+(flycheck-def-config-file-var flycheck-markdown-markdownlint-cli-config
+    markdown-markdownlint-cli nil
+  :safe #'stringp
+  :package-version '(flycheck . "32"))
+
+(flycheck-define-checker markdown-markdownlint-cli
+  "Markdown checker using markdownlint-cli.
+
+See URL `https://github.com/igorshubovych/markdownlint-cli'."
+  :command ("markdownlint"
+            (config-file "--config" flycheck-markdown-markdownlint-cli-config)
+            source)
+  :error-patterns
+  ((error line-start
+          (file-name) ": " line ": " (id (one-or-more (not (any space))))
+          " " (message) line-end))
+  :error-filter
+  (lambda (errors)
+    (flycheck-sanitize-errors
+     (flycheck-remove-error-file-names "(string)" errors)))
+  :modes (markdown-mode gfm-mode))
 
 (flycheck-def-option-var flycheck-markdown-mdl-rules nil markdown-mdl
   "Rules to enable for mdl.
