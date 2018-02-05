@@ -1,6 +1,6 @@
 ;;; setup-gnuplot.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:

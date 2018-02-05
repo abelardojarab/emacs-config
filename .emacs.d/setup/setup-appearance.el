@@ -32,9 +32,6 @@
   (when (fboundp 'horizontal-scroll-bar-mode)
     (horizontal-scroll-bar-mode 0)))
 
-;; Dont pause screen refresh
-(setq redisplay-dont-pause t)
-
 ;; Optimization
 (setq-default bidi-display-reordering nil)
 
@@ -81,7 +78,7 @@ non-nil."
 
 ;; make the left fringe 14 pixels wide and the right 12
 (if (display-graphic-p)
-    (fringe-mode '(18 . 12)))
+    (fringe-mode '(28 . 12)))
 
 ;; Get centered text when visual-line-mode is on
 (use-package visual-fill-column
@@ -107,7 +104,7 @@ non-nil."
 
 ;; Faster line numbers
 (use-package linum-ex
-  :defer t
+  :demand t
   :commands linum-mode
   :unless (boundp 'display-line-numbers) ;; Emacs 26 includes native line numbering
   :init (dolist (hook my/linum-modes)

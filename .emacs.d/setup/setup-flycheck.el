@@ -35,13 +35,6 @@
                 (add-hook mode (lambda () (flycheck-mode t))))
               my/flycheck-modes)
   :config (progn
-            (add-to-list 'display-buffer-alist
-                         `(,(rx bos "*Flycheck errors*" eos)
-                           (display-buffer-reuse-window
-                            display-buffer-in-side-window)
-                           (reusable-frames . visible)
-                           (side            . bottom)
-                           (window-height   . 0.4)))
 
             ;; Ubuntu 16.04 shellcheck is too old to understand this
             ;; command-line option

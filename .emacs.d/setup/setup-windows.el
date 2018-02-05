@@ -61,33 +61,6 @@
       ;; maximum small window height
       max-mini-window-height               0.5)
 
-;; Prefer horizontal window splitting (new window on the right)
-(setq split-height-threshold nil)
-(setq split-width-threshold 1000)
-
-;; http://stackoverflow.com/questions/23659909/reverse-evaluation-order-of-split-height-threshold-and-split-width-threshold-in
-(defun my/split-window-sensibly (&optional window)
-  (let ((window (or window (selected-window))))
-    (or (and (window-splittable-p window t)
-             ;; Split window horizontally.
-             (with-selected-window window
-               (split-window-right)))
-        (and (window-splittable-p window)
-             ;; Split window vertically.
-             (with-selected-window window
-               (split-window-below)))
-        (and (eq window (frame-root-window (window-frame window)))
-             (not (window-minibuffer-p window))
-             ;; If WINDOW is the only window on its frame and is not the
-             ;; minibuffer window, try to split it horizontally disregarding
-             ;; the value of `split-width-threshold'.
-             (let ((split-width-threshold 100))
-               (when (window-splittable-p window t)
-                 (with-selected-window window
-                   (split-window-right))))))))
-
-(setq split-window-preferred-function 'my/split-window-sensibly)
-
 ;; Switch between vertical and horizontal splitting
 (defun toggle-window-split ()
   (interactive)
@@ -268,28 +241,34 @@
   :init (shackle-mode 1)
   :config (progn
 
+            ;; Prefer horizontal split (new window to the right)
+            (setq split-height-threshold 0)
+            (setq split-width-threshold nil)
+
             (setq helm-display-function         'pop-to-buffer
                   shackle-lighter               ""
                   shackle-select-reused-windows t
-                  shackle-default-alignment     'right
-                  shackle-default-size          0.5)  ;; default 0.5
+                  shackle-default-rule          '(:same t :select t)
+                  shackle-default-alignment     'below
+                  shackle-default-size          0.3)  ;; default 0.5
 
             (setq shackle-rules
                   ;; CONDITION(:regexp)        :select     :inhibit-window-quit   :size+:align|:other     :same|:popup
-                  '((compilation-mode          :select     nil      :align      t)
-                    (help-mode                 :select     nil      :align      t)
-                    ("\\*Org Src.*"            :regexp     t        :align      below    :select t)
-                    (" *Org todo*"             :align      below    :select     t)
-                    ("*undo-tree*"             :align      t)
-                    ("*eshell*"                :select     t        :other      nil)
-                    ("*Shell Command Output*"  :select     nil)
-                    ("\\*Async Shell.*\\*"     :regexp     t        :ignore     t)
-                    ("*Help*"                  :select     nil      :align      t        :inhibit-window-quit t       :other   t)
-                    ("*Python-Help*"           :select     nil      :align      t        :inhibit-window-quit t       :other   t)
-                    ("*Completions*"           :align      t)
-                    ("*Messages*"              :select     nil      :other      t        :inhibit-window-quit t)
-                    ("\\`\\*helm.*?\\*\\'"     :regexp     t        :align      t)
-                    ("*Calendar*"              :select     t        :align      t)))))
+                  '((compilation-mode          :regexp nil :select nil :align t :other t)
+                    (help-mode                 :regexp nil :select nil :align t :other t)
+                    ("\\*Org Src.*"            :regexp t   :select nil :align t :other t)
+                    (" *Org todo*"             :regexp nil :select nil :align t :other t)
+                    ("*Flycheck errors*"       :regexp nil :select nil :align t :other t)
+                    ("*undo-tree*"             :regexp nil :select nil :align t :other t)
+                    ("*eshell*"                :regexp nil :select nil :align t :other t)
+                    ("*Shell Command Output*"  :regexp nil :select nil :align t :other t)
+                    ("\\*Async Shell.*\\*"     :regexp t   :select nil :align t :other t)
+                    ("*Help*"                  :regexp nil :select nil :align t :other t)
+                    ("*Python-Help*"           :regexp nil :select nil :align t :other t)
+                    ("*Completions*"           :regexp nil :select nil :align t :other t)
+                    ("*Messages*"              :regexp nil :select nil :align t :other t)
+                    ("\\`\\*helm.*?\\*\\'"     :regexp t   :select nil :align t :other t)
+                    ("*Calendar*"              :regexp nil :select nil :align t :other t)))))
 
 (provide 'setup-windows)
 ;;; setup-windows.el ends here

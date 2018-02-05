@@ -1,6 +1,6 @@
 ;;; setup-compile.el ---
 
-;; Copyright (C) 2014, 2015, 2016, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -41,16 +41,6 @@
                   compilation-window-height 12                ;; keep it readable
                   compilation-auto-jump-to-first-error t      ;; jump to first error auto
                   compilation-auto-jump-to-next-error t)      ;; jump to next error
-
-            ;; If there is no compilation window, open one at the bottom, spanning the complete width of the frame.
-            ;; Otherwise, reuse existing window
-            (add-to-list 'display-buffer-alist
-                         `(,(rx bos "*compilation*" eos)
-                           (display-buffer-reuse-window
-                            display-buffer-in-side-window)
-                           (reusable-frames . visible)
-                           (side            . bottom)
-                           (window-height   . 0.3)))
 
             ;; If the value is first-error, scrolling stops when the first error appears
             (setq compilation-scroll-output 'first-error)))
