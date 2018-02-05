@@ -73,7 +73,9 @@
   :defer t
   :commands persp-mode
   :load-path (lambda () (expand-file-name "perspective/" user-emacs-directory))
+  :init (devfvar persp-mode t)
   :config (progn
+
             ;; Assure .emacs.cache/perspective-configs directory exists
             (if (not (file-exists-p (concat (file-name-as-directory
                                              my/emacs-cache-dir)
