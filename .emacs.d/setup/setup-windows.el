@@ -241,34 +241,64 @@
   :init (shackle-mode 1)
   :config (progn
 
+            (defvar my/popup-window-parameters
+              '(:noesc :modeline :autokill :autoclose :autofit :static)
+              "A list of window parameters that are set (and cleared) when `doom-popup-mode
+is enabled/disabled.'")
+
+            (defvar my/popup-blacklist
+              '("*Python-Help*")
+              "TODO")
+
+            ;; NOTE This is a temporary fix while I rewrite core-popups
+            (defun my/display-buffer-condition (buffer _action)
+              (and (cl-loop for re in my/popup-blacklist
+                            when (string-match-p re buffer)
+                            return nil
+                            finally return t)
+                   (shackle-match buffer)))
+
+            (defun my/display-buffer-action (buffer alist)
+              (shackle-display-buffer buffer alist (shackle-match buffer)))
+
+            (add-hook 'after-init-hook
+                      (lambda ()
+                        (setq display-buffer-alist
+                              (cons 'my/display-buffer-condition doom-display-buffer-action)
+                                    display-buffer-alist)))
+
             ;; Prefer horizontal split (new window to the right)
             (setq split-height-threshold 0)
             (setq split-width-threshold nil)
 
             (setq helm-display-function         'pop-to-buffer
                   shackle-lighter               ""
-                  shackle-select-reused-windows t
-                  shackle-default-rule          '(:same t :select t)
+                  shackle-select-reused-windows nil
                   shackle-default-alignment     'below
-                  shackle-default-size          0.3)  ;; default 0.5
+                  shackle-default-size          8)  ;; default 0.5
 
             (setq shackle-rules
                   ;; CONDITION(:regexp)        :select     :inhibit-window-quit   :size+:align|:other     :same|:popup
-                  '((compilation-mode          :regexp nil :select nil :align t)
-                    (help-mode                 :regexp nil :select nil :align t)
-                    ("\\*Org Src.*"            :regexp t   :select nil :align t)
-                    (" *Org todo*"             :regexp nil :select nil :align t)
-                    ("*Flycheck errors*"       :regexp nil :select t   :align t)
-                    ("*undo-tree*"             :regexp nil :select t   :align t)
-                    ("*eshell*"                :regexp nil :select t   :align t)
-                    ("*Shell Command Output*"  :regexp nil :select nil :align t)
-                    ("\\*Async Shell.*\\*"     :regexp t   :select nil :align t)
-                    ("*Help*"                  :regexp nil :select nil :align t)
-                    ("*Python-Help*"           :regexp nil :select nil :align t :inhibit-window-quit t)
-                    ("*Completions*"           :regexp nil :select nil :align t)
-                    ("*Messages*"              :regexp nil :select nil :align t)
-                    ("\\`\\*helm.*?\\*\\'"     :regexp t   :select t   :align t)
-                    ("*Calendar*"              :regexp nil :select nil :align t)))))
+                  '((compilation-mode             :regexp nil :select nil :align t)
+                    (help-mode                    :regexp nil :select nil :align t)
+                    (apropos-mode                 :size   0.3 :autokill t :autoclose t)
+                    (comint-mode                  :noesc  t)
+                    ("*Warnings*"                 :size 12    :noselect t :autofit t)
+                    ("\\*Org Src.*"               :regexp t   :select nil :align t)
+                    (" *Org todo*"                :regexp nil :select nil :align t)
+                    ("*Flycheck errors*"          :regexp nil :select t   :align t)
+                    ("*undo-tree*"                :regexp nil :select t   :align t)
+                    ("*eshell*"                   :regexp nil :select t   :align t)
+                    ("*info*"                     :size 0.5   :select t   :autokill t)
+                    ("\\*Async Shell.*\\*"        :regexp t   :select nil :align t)
+                    ("*Help*"                     :size 0.3   :select nil :autokill t)
+                    ("^\\*.*Shell Command.*\\*$"  :regexp t   :size 20    :noselect t :autokill t)
+                    ("*Python-Help*"              :regexp nil :select nil :align t    :inhibit-window-quit t)
+                    ("*Completions*"              :regexp nil :select nil :align t)
+                    ("*Messages*"                 :regexp nil :select nil :align t)
+                    ("\\`\\*helm.*?\\*\\'"        :regexp t   :select t   :align t)
+                    ("*Calendar*"                 :regexp nil :select nil :align t)
+                    ("^ ?\\*"                     :regexp t   :size 15    :noselect t :autokill t :autoclose t)))))
 
 (provide 'setup-windows)
 ;;; setup-windows.el ends here
