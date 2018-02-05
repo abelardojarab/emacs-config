@@ -237,25 +237,28 @@ is enabled/disabled.'")
                                     display-buffer-alist)))
 
             ;; Prefer horizontal split (new window to the right)
-            (setq split-height-threshold 0)
-            (setq split-width-threshold nil)
+            (setq split-height-threshold nil)
+            (setq split-width-threshold 1)
 
             (setq helm-display-function         'pop-to-buffer
                   shackle-lighter               ""
                   shackle-select-reused-windows nil
                   shackle-default-alignment     'below
-                  shackle-default-size          8)  ;; default 0.5
+                  shackle-default-rule          '(:select t :autofit t :size 20)
+                  shackle-default-size          0.5)  ;; default 0.5
 
             (setq shackle-rules
                   ;; CONDITION(:regexp)        :select     :inhibit-window-quit   :size+:align|:other     :same|:popup
                   '((compilation-mode             :regexp nil :select nil :align t)
                     (help-mode                    :regexp nil :select nil :align t)
-                    (apropos-mode                 :size 0.3   :autokill t :autoclose t)
+                    (apropos-mode                 :size 0.5   :autokill t :autoclose t)
                     (comint-mode                  :noesc  t)
+                    (grep-mode                    :size 20    :noselect t :autokill t)
+                    (Buffer-menu-mode             :size 20    :autokill t)
+                    (tabulated-list-mode          :noesc t)
                     ("*Warnings*"                 :size 0.3   :noselect t :autofit t)
                     ("\\*Org Src.*"               :regexp t   :select nil :align t)
                     (" *Org todo*"                :regexp nil :select nil :align t)
-                    ;; Finally, autofit makes flycheck work nice with ecb
                     ("*Flycheck errors*"          :size 8     :regexp nil :select t   :autofit t)
                     ("*undo-tree*"                :regexp nil :select t   :align t)
                     ("*eshell*"                   :regexp nil :select t   :align t)
@@ -263,7 +266,7 @@ is enabled/disabled.'")
                     ("\\*Async Shell.*\\*"        :regexp t   :select nil :align t)
                     ("*Help*"                     :size 0.3   :select nil :autokill t)
                     ("^\\*.*Shell Command.*\\*$"  :regexp t   :size 20    :noselect t :autokill t)
-                    ("*Python-Help*"              :regexp nil :select nil :align t    :inhibit-window-quit t)
+                    ("*Python-Help*"              :regexp nil :select nil :autofit t  :inhibit-window-quit t)
                     ("*Completions*"              :regexp nil :select nil :align t)
                     ("*Messages*"                 :regexp nil :select nil :align t)
                     ("\\`\\*helm.*?\\*\\'"        :regexp t   :select t   :align t)
