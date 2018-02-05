@@ -59,7 +59,7 @@
       ;; do not highlight region on non-selected windows
       highlight-nonselected-windows        nil
       ;; maximum small window height
-      max-mini-window-height               40)
+      max-mini-window-height               30)
 
 ;; Manage popup windows
 (use-package popwin
@@ -255,6 +255,7 @@ is enabled/disabled.'")
                     ("*Warnings*"                 :size 0.3   :noselect t :autofit t)
                     ("\\*Org Src.*"               :regexp t   :select nil :align t)
                     (" *Org todo*"                :regexp nil :select nil :align t)
+                    ;; Finally, autofit makes flycheck work nice with ecb
                     ("*Flycheck errors*"          :size 8     :regexp nil :select t   :autofit t)
                     ("*undo-tree*"                :regexp nil :select t   :align t)
                     ("*eshell*"                   :regexp nil :select t   :align t)
