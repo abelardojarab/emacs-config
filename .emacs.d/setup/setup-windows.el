@@ -70,10 +70,9 @@
 
 ;; Perspective
 (use-package perspective
-  :demand t
+  :defer t
   :commands persp-mode
   :load-path (lambda () (expand-file-name "perspective/" user-emacs-directory))
-  :init (defvar persp-mode t)
   :config (progn
 
             ;; Assure .emacs.cache/perspective-configs directory exists
@@ -169,7 +168,7 @@
               :config (progn
 
                         ;; Integration with perspective
-                        (purpose-x-persp-setup)
+                        ;; (purpose-x-persp-setup)
 
                         ;; Single window magit
                         (purpose-x-magit-single-on)
