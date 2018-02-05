@@ -171,7 +171,6 @@
   :load-path (lambda () (expand-file-name "ace-window/" user-emacs-directory))
   :config (progn
             ;; Customize font on ace-window leading char
-            ;; http://oremacs.com/2015/02/27/ace-window-leading-char/
             (if (display-graphic-p)
                 (custom-set-faces
                  '(aw-leading-char-face
@@ -251,15 +250,15 @@ is enabled/disabled.'")
                   ;; CONDITION(:regexp)        :select     :inhibit-window-quit   :size+:align|:other     :same|:popup
                   '((compilation-mode             :regexp nil :select nil :align t)
                     (help-mode                    :regexp nil :select nil :align t)
-                    (apropos-mode                 :size   0.3 :autokill t :autoclose t)
+                    (apropos-mode                 :size 0.3   :autokill t :autoclose t)
                     (comint-mode                  :noesc  t)
-                    ("*Warnings*"                 :size 12    :noselect t :autofit t)
+                    ("*Warnings*"                 :size 0.3   :noselect t :autofit t)
                     ("\\*Org Src.*"               :regexp t   :select nil :align t)
                     (" *Org todo*"                :regexp nil :select nil :align t)
-                    ("*Flycheck errors*"          :regexp nil :select t   :align t)
+                    ("*Flycheck errors*"          :size 8     :regexp nil :select t   :autofit t)
                     ("*undo-tree*"                :regexp nil :select t   :align t)
                     ("*eshell*"                   :regexp nil :select t   :align t)
-                    ("*info*"                     :size 0.5   :select t   :autokill t)
+                    ("*info*"                     :size 0.3   :select t   :autokill t)
                     ("\\*Async Shell.*\\*"        :regexp t   :select nil :align t)
                     ("*Help*"                     :size 0.3   :select nil :autokill t)
                     ("^\\*.*Shell Command.*\\*$"  :regexp t   :size 20    :noselect t :autokill t)

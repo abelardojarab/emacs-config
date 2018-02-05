@@ -1,6 +1,6 @@
 ;;; setup-calendar.el ---                            -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -44,12 +44,12 @@
                     (setq org-directory "~/Google Drive/Documents/Org")))))
 
             (setq diary-file (concat org-directory "/agenda.org")
-                  diary-date-forms diary-iso-date-forms
-                  calendar-set-date-style 'iso
-                  calendar-week-start-day 1
+                  diary-date-forms                   diary-iso-date-forms
+                  calendar-set-date-style            'iso
+                  calendar-week-start-day            1
                   calendar-view-diary-initially-flag t
-                  calendar-mark-diary-entries-flag t
-                  calendar-today-marker 'calendar-today-face)
+                  calendar-mark-diary-entries-flag   t
+                  calendar-today-marker              'calendar-today-face)
 
             ;; Enable Org date formatting
             (setq diary-date-forms (cons '(" *" "[<\* ]*" " *"
@@ -62,7 +62,6 @@
             (add-hook 'diary-display-hook          #'fancy-diary-display)
             (add-hook 'today-visible-calendar-hook #'calendar-mark-today)
 
-            ;; https://www.emacswiki.org/emacs/InsertingTodaysDate
             (defun my/insert-current-date (&optional omit-day-of-week-p)
               "Insert today's date using the current locale.
   With a prefix argument, the date is inserted without the day of

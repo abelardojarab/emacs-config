@@ -31,16 +31,15 @@
   :config (progn
             (global-font-lock-mode t)
             (setq font-lock-maximum-decoration nil
-                  font-lock-maximum-size       (* 512 512)
-          font-lock-support-mode       'jit-lock-mode)
-        (setq jit-lock-defer-time          0.5
-          jit-lock-defer-contextually  nil
-          jit-lock-chunk-size          8000
-          jit-lock-stealth-load        10
-          jit-lock-stealth-time        0.02
-          jit-lock-stealth-nice        0.01
-          jit-lock-stealth-verbose     nil)
-        (setq-default font-lock-multiline  t)
+                  font-lock-support-mode       'jit-lock-mode)
+            (setq jit-lock-defer-time          0.5
+                  jit-lock-defer-contextually  nil
+                  jit-lock-chunk-size          8000
+                  jit-lock-stealth-load        10
+                  jit-lock-stealth-time        0.02
+                  jit-lock-stealth-nice        0.01
+                  jit-lock-stealth-verbose     nil)
+            (setq-default font-lock-multiline  t)
             (defun global-font-lock-mode-check-buffers () nil)
 
             ;; Do not fontify large files
@@ -61,7 +60,6 @@
             (add-hook 'prog-mode-hook #'my/add-watchwords)
 
             ;; Displaying image tooltips in Emacs
-            ;; http://kitchingroup.cheme.cmu.edu/blog/2016/03/21/Displaying-image-overlays-on-image-filenames-in-Emacs/
             (defvar image-tooltip-re (concat  "\\(?3:'\\|\"\\)\\(?1:.*\\."
                                               (regexp-opt '("png" "PNG" "JPG" "jpeg"
                                                             "jpg" "JPEG" "eps" "EPS"
