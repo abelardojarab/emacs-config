@@ -70,7 +70,7 @@
 
 ;; Perspective
 (use-package perspective
-  :defer t
+  :demand t
   :commands persp-mode
   :load-path (lambda () (expand-file-name "perspective/" user-emacs-directory))
   :init (defvar persp-mode t)
