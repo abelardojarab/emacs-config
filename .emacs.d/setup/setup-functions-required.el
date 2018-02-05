@@ -42,6 +42,10 @@
         (font-lock-fontify-buffer)))))
 
 ;; Missing function
+(when (not (fboundp 'make-variable-frame-local))
+  (defun make-variable-frame-local (variable) variable))
+
+;; Missing function
 (when (not (fboundp 'special-form-p))
   (defun special-form-p (object)
     "Non-nil if and only if OBJECT is a special form."

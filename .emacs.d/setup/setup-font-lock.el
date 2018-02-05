@@ -1,6 +1,6 @@
 ;;; setup-font-lock.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -32,7 +32,7 @@
             (global-font-lock-mode t)
             (setq font-lock-maximum-decoration nil
                   font-lock-support-mode       'jit-lock-mode)
-            (setq jit-lock-defer-time          0.5
+            (setq jit-lock-defer-time          0.1
                   jit-lock-defer-contextually  nil
                   jit-lock-chunk-size          8000
                   jit-lock-stealth-load        10

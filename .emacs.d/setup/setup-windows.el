@@ -68,49 +68,87 @@
   :load-path (lambda () (expand-file-name "popwin/" user-emacs-directory))
   :config (add-to-list popwin:special-display-config '(help-mode 0.5 :position below)))
 
+;; Perspective
+(use-package perspective
+  :defer t
+  :commands persp-mode
+  :load-path (lambda () (expand-file-name "perspective/" user-emacs-directory))
+  :config (progn
+            ;; Assure .emacs.cache/perspective-configs directory exists
+            (if (not (file-exists-p (concat (file-name-as-directory
+                                             my/emacs-cache-dir)
+                                            "perspective-configs")))
+                (make-directory (concat (file-name-as-directory
+                                         my/emacs-cache-dir)
+                                        "perspective-configs") t))
+
+            (setq persp-auto-save-opt             0
+                  persp-autokill-buffer-on-remove 'kill-weak
+                  persp-auto-resume-time          0.1
+                  persp-auto-save-num-of-backups  1
+                  persp-autokill-buffer-on-remove 'kill-weak
+                  persp-save-dir (file-name-as-directory
+                                  (concat (file-name-as-directory my/emacs-cache-dir)
+                                          "perspective-configs")))
+
+            (setq persp-keymap-prefix (kbd "C-c p"))
+            (persp-mode t)))
+
 ;; Window purpose
 (use-package window-purpose
   :defer t
   :after helm
   :commands purpose-mode
   :load-path (lambda () (expand-file-name "window-purpose/" user-emacs-directory))
-  :init (progn
-          ;; Prefer helm
-          (setq purpose-preferred-prompt 'helm)
-
-          ;; overriding `purpose-mode-map' with empty keymap, so it doesn't conflict
-          ;; with original `C-x C-f', `C-x b', etc. and `semantic' key bindings. must
-          ;; be done before `window-purpose' is loaded
-          (setq purpose-mode-map (make-sparse-keymap)))
+  :init (purpose-mode)
   :config (progn
+
+            ;; Prefer helm
+            (setq purposxe-preferred-prompt 'helm)
+
+            ;; overriding `purpose-mode-map' with empty keymap, so it doesn't conflict
+            ;; with original `C-x C-f', `C-x b', etc. and `semantic' key bindings. must
+            ;; be done before `window-purpose' is loaded
+            (setq purpose-mode-map (make-sparse-keymap)))
+  :config (progn
+            ;; Assure .emacs.cache/layouts directory exists
+            (if (not (file-exists-p (concat (file-name-as-directory
+                                             my/emacs-cache-dir)
+                                            "purpose-layouts")))
+                (make-directory (concat (file-name-as-directory
+                                         my/emacs-cache-dir)
+                                        "purpose-layouts") t))
+
+            (setq purpose-layout-dirs (concat (file-name-as-directory my/emacs-cache-dir)
+                                              "purpose-layouts"))
+
             (setq purpose-user-name-purposes
                   '(("*ag*"                        . search)))
 
             (setq purpose-user-regexp-purposes
-                  '(("^\\*elfeed"                  . admin)
+                  '(("^\\*elfeed"                  . internet)
                     ("^\\*Python Completions"      . minibuf)
                     ))
 
             (setq purpose-user-mode-purposes
                   '((eshell-mode                   . terminal)
 
-                    (python-mode                   . py)
-                    (inferior-python-mode          . py-repl)
+                    (c-mode                        . edit)
+                    (c++-mode                      . edit)
+                    (js2-mode                      . edit)
 
-                    (circe-chat-mode               . comm)
-                    (circe-query-mode              . comm)
-                    (circe-lagmon-mode             . comm)
-                    (circe-server-mode             . comm)
+                    (python-mode                   . edit)
+                    (inferior-python-mode          . interactive)
 
                     (ess-mode                      . edit)
                     (inferior-ess-mode             . interactive)
 
                     (gitconfig-mode                . edit)
 
-                    (mu4e-main-mode                . admin)
-                    (mu4e-view-mode                . admin)
-                    (mu4e-about-mode               . admin)
-                    (mu4e-headers-mode             . admin)
+                    (mu4e-main-mode                . internet)
+                    (mu4e-view-mode                . internet)
+                    (mu4e-about-mode               . internet)
+                    (mu4e-headers-mode             . internet)
                     (mu4e-compose-mode             . edit)
 
                     (pdf-view-mode                 . view)
@@ -121,12 +159,15 @@
 
             ;; Load user preferences
             (purpose-compile-user-configuration)
-            (purpose-mode -1)
+            (purpose-mode t)
 
             ;; Extensions for purpose
             (use-package window-purpose-x
               :after window-purpose
               :config (progn
+
+                        ;; Integration with perspective
+                        (purpose-x-persp-setup)
 
                         ;; Single window magit
                         (purpose-x-magit-single-on)
@@ -148,13 +189,6 @@
   :defer t
   :commands resize-window
   :load-path (lambda () (expand-file-name "resize-window/" user-emacs-directory)))
-
-;; Perspective
-(use-package perspective
-  :defer t
-  :commands persp-mode
-  :load-path (lambda () (expand-file-name "perspective/" user-emacs-directory))
-  :config (persp-mode))
 
 ;; Switch window
 (use-package switch-window
@@ -212,7 +246,7 @@
 
             (defvar my/popup-window-parameters
               '(:noesc :modeline :autokill :autoclose :autofit :static)
-              "A list of window parameters that are set (and cleared) when `doom-popup-mode
+              "A list of window parameters that are set (and cleared) when `my/popup-mode
 is enabled/disabled.'")
 
             (defvar my/popup-blacklist
@@ -233,45 +267,42 @@ is enabled/disabled.'")
             (add-hook 'after-init-hook
                       (lambda ()
                         (setq display-buffer-alist
-                              (cons 'my/display-buffer-condition doom-display-buffer-action)
-                                    display-buffer-alist)))
-
-            ;; Prefer horizontal split (new window to the right)
-            (setq split-height-threshold nil)
-            (setq split-width-threshold 1)
+                              (cons 'my/display-buffer-condition my/display-buffer-action)
+                              display-buffer-alist)))
 
             (setq helm-display-function         'pop-to-buffer
                   shackle-lighter               ""
                   shackle-select-reused-windows nil
                   shackle-default-alignment     'below
                   shackle-default-rule          '(:select t :autofit t :size 20)
-                  shackle-default-size          0.5)  ;; default 0.5
+                  shackle-default-size           20
+                  shackle-default-ratio          0.3)  ;; default 0.5
 
             (setq shackle-rules
                   ;; CONDITION(:regexp)        :select     :inhibit-window-quit   :size+:align|:other     :same|:popup
                   '((compilation-mode             :regexp nil :select nil :align t)
                     (help-mode                    :regexp nil :select nil :align t)
-                    (apropos-mode                 :size 0.5   :autokill t :autoclose t)
+                    (apropos-mode                 :autokill t :autoclose t)
                     (comint-mode                  :noesc  t)
-                    (grep-mode                    :size 20    :noselect t :autokill t)
-                    (Buffer-menu-mode             :size 20    :autokill t)
+                    (grep-mode                    :noselect t :autokill t)
+                    (Buffer-menu-mode             :autokill t)
                     (tabulated-list-mode          :noesc t)
-                    ("*Warnings*"                 :size 0.3   :noselect t :autofit t)
+                    ("*Warnings*"                 :noselect t :autofit t)
                     ("\\*Org Src.*"               :regexp t   :select nil :align t)
                     (" *Org todo*"                :regexp nil :select nil :align t)
                     ("*Flycheck errors*"          :size 8     :regexp nil :select t   :autofit t)
                     ("*undo-tree*"                :regexp nil :select t   :align t)
                     ("*eshell*"                   :regexp nil :select t   :align t)
-                    ("*info*"                     :size 0.3   :select t   :autokill t)
+                    ("*info*"                     :size 8     :select t   :autokill t)
                     ("\\*Async Shell.*\\*"        :regexp t   :select nil :align t)
-                    ("*Help*"                     :size 0.3   :select nil :autokill t)
-                    ("^\\*.*Shell Command.*\\*$"  :regexp t   :size 20    :noselect t :autokill t)
+                    ("*Help*"                     :select nil :autokill t)
+                    ("^\\*.*Shell Command.*\\*$"  :regexp t   :noselect t :autokill t)
                     ("*Python-Help*"              :regexp nil :select nil :autofit t  :inhibit-window-quit t)
                     ("*Completions*"              :regexp nil :select nil :align t)
                     ("*Messages*"                 :regexp nil :select nil :align t)
                     ("\\`\\*helm.*?\\*\\'"        :regexp t   :select t   :align t)
                     ("*Calendar*"                 :regexp nil :select nil :align t)
-                    ("^ ?\\*"                     :regexp t   :size 15    :noselect t :autokill t :autoclose t)))))
+                    ("^ ?\\*"                     :regexp t   :noselect t :autokill t :autoclose t)))))
 
 (provide 'setup-windows)
 ;;; setup-windows.el ends here
