@@ -61,31 +61,6 @@
       ;; maximum small window height
       max-mini-window-height               0.5)
 
-;; Configure `display-buffer' behaviour for some special buffers.
-(setq display-buffer-alist
-      `(
-        ;; Put REPLs and error lists into the bottom side window
-        (,(rx bos
-              (or "*Help*"                        ;; Help buffers
-                  "*Python-Help*"                 ;; Python help
-                  "*Warnings*"                    ;; Emacs warnings
-                  "*Compile-Log*"                 ;; Emacs byte compiler log
-                  "*compilation"                  ;; Compilation buffers
-                  "*Flycheck errors*"             ;; Flycheck error list
-                  "*shell"                        ;; Shell window
-                  (and (1+ nonl) " output*")      ;; AUCTeX command output
-                  ))
-         (display-buffer-in-side-window
-          display-buffer-reuse-window)
-         (side            . bottom)
-         (reusable-frames . visible)
-         (window-height   . 0.25)
-         (inhibit-same-window . t))
-        ;; Let `display-buffer' reuse visible frames for all buffers.  This must
-        ;; be the last entry in `display-buffer-alist', because it overrides any
-        ;; later entry with more specific actions.
-        ("." nil (reusable-frames . visible))))
-
 ;; Prefer horizontal window splitting (new window on the right)
 (setq split-height-threshold nil)
 (setq split-width-threshold 1000)
@@ -112,10 +87,6 @@
                    (split-window-right))))))))
 
 (setq split-window-preferred-function 'my/split-window-sensibly)
-;;(eval-after-load 'org
-;;  (defadvice org-agenda (around split-vertically activate)
-;;    (let ((split-width-threshold 100)) ;; or whatever width makes sense for you
-;;      ad-do-it)))
 
 ;; Switch between vertical and horizontal splitting
 (defun toggle-window-split ()
@@ -299,22 +270,24 @@
 
             (setq helm-display-function         'pop-to-buffer
                   shackle-lighter               ""
-                  shackle-select-reused-windows nil
-                  shackle-default-alignment     'below
-                  shackle-default-size          0.25)  ;; default 0.5
+                  shackle-select-reused-windows t
+                  shackle-default-alignment     'right
+                  shackle-default-size          0.5)  ;; default 0.5
 
             (setq shackle-rules
                   ;; CONDITION(:regexp)        :select     :inhibit-window-quit   :size+:align|:other     :same|:popup
                   '((compilation-mode          :select     nil      :align      t)
                     (help-mode                 :select     nil      :align      t)
+                    ("\\*Org Src.*"            :regexp     t        :align      below    :select t)
+                    (" *Org todo*"             :align      below    :select     t)
                     ("*undo-tree*"             :align      t)
-                    ("*eshell*"                :select     t        :other      t)
+                    ("*eshell*"                :select     t        :other      nil)
                     ("*Shell Command Output*"  :select     nil)
                     ("\\*Async Shell.*\\*"     :regexp     t        :ignore     t)
-                    ("*Help*"                  :select     nil      :align      t   :inhibit-window-quit t       :other   t)
-                    ("*Python-Help*"           :select     nil      :align      t   :inhibit-window-quit t       :other   t)
+                    ("*Help*"                  :select     nil      :align      t        :inhibit-window-quit t       :other   t)
+                    ("*Python-Help*"           :select     nil      :align      t        :inhibit-window-quit t       :other   t)
                     ("*Completions*"           :align      t)
-                    ("*Messages*"              :select     nil      :other      t   :inhibit-window-quit t)
+                    ("*Messages*"              :select     nil      :other      t        :inhibit-window-quit t)
                     ("\\`\\*helm.*?\\*\\'"     :regexp     t        :align      t)
                     ("*Calendar*"              :select     t        :align      t)))))
 

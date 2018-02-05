@@ -1,6 +1,6 @@
 ;;; setup-org-agenda.el ---                          -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -37,6 +37,10 @@
          ("X"     . my/org-agenda-mark-done-and-add-followup)
          ("N"     . my/org-agenda-new))
   :config (progn
+
+            (defadvice org-agenda (around split-vertically activate)
+              (let ((split-width-threshold 100)) ;; or whatever width makes sense for you
+                ad-do-it))
 
             ;; Org log
             (setq org-log-done t

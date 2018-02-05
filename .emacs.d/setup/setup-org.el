@@ -1,6 +1,6 @@
 ;;; setup-org.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -54,7 +54,8 @@
              org-open-at-point-global
              orgtbl-mode
              orgstruct-mode
-             orgstruct++-mode)
+             orgstruct++-mode
+             org-agenda)
   :init (progn
           (setq load-path (cons (expand-file-name "org/contrib/lisp" user-emacs-directory) load-path))
           (defvar org-list-allow-alphabetical t)
@@ -75,7 +76,7 @@
             (use-package ox-org)
             (use-package ox-extra)
 
-        ;; Avoid error when inserting '_'
+            ;; Avoid error when inserting '_'
             (defadvice org-backward-paragraph (around bar activate)
               (ignore-errors add-do-it))
 
@@ -88,9 +89,7 @@
                           (flyspell-mode t)
                           (writegood-mode t)
                           (yas-minor-mode t)
-                          (undo-tree-mode t)
-                          ;; (aggressive-fill-paragraph-mode -1)
-              )))
+                          (undo-tree-mode t))))
 
             ;; Ignore tex commands during flyspell
             (add-hook 'org-mode-hook (lambda () (setq ispell-parser 'tex)))
@@ -392,24 +391,24 @@
             (use-package setup-org-latex)
 
             ;; Setup Org (html support)
-            (use-package setup-org-html)))
+            (use-package setup-org-html)
 
-;; Use footnotes as eldoc source
-(use-package org-eldoc
-  :defer t
-  :init (progn
-      (add-hook 'org-mode-hook #'org-eldoc-load)
-      (add-hook 'org-mode-hook #'eldoc-mode))
-  :commands org-eldoc-load
-  :config (progn
-            (defun my/org-eldoc-get-footnote ()
-              (save-excursion
-                (let ((fn (org-between-regexps-p "\\[fn:" "\\]")))
-                  (when fn
-                    (save-match-data
-                      (nth 3 (org-footnote-get-definition (buffer-substring (+ 1 (car fn)) (- (cdr fn) 1)))))))))
-            (advice-add 'org-eldoc-documentation-function
-                        :before-until #'my/org-eldoc-get-footnote)))
+            ;; Use footnotes as eldoc source
+            (use-package org-eldoc
+              :defer t
+              :init (progn
+                      (add-hook 'org-mode-hook #'org-eldoc-load)
+                      (add-hook 'org-mode-hook #'eldoc-mode))
+              :commands org-eldoc-load
+              :config (progn
+                        (defun my/org-eldoc-get-footnote ()
+                          (save-excursion
+                            (let ((fn (org-between-regexps-p "\\[fn:" "\\]")))
+                              (when fn
+                                (save-match-data
+                                  (nth 3 (org-footnote-get-definition (buffer-substring (+ 1 (car fn)) (- (cdr fn) 1)))))))))
+                        (advice-add 'org-eldoc-documentation-function
+                                    :before-until #'my/org-eldoc-get-footnote)))))
 
 (provide 'setup-org)
 ;;; setup-org.el ends here
