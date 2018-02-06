@@ -71,7 +71,7 @@
 
 (defcustom my/smtp-accounts
   '((ssl "abelardotomasjb@gmail.com" "smtp.gmail.com"
-     587 "abelardojarab@gmail.com"))
+	 587 "abelardojarab@gmail.com"))
   "Availble SMTP accounts"
   :group 'my/customs
   :type 'list)
@@ -421,12 +421,12 @@
 ;; User-specific configuration file
 (setq-default custom-file-x (concat (file-name-as-directory
                                      my/emacs-cache-dir) "custom.el"))
+
 (ignore-errors
-    (if (file-exists-p custom-file-x)
-        (load custom-file-x :noerror :nomessage)
-        (write-region "" nil custom-file-x)))
-(setq-default custom-file (concat (file-name-as-directory
-                                   my/emacs-cache-dir) "custom.el"))
+  (if (file-exists-p custom-file-x)
+      (load custom-file-x :noerror :nomessage)
+    (write-region "" nil custom-file-x)))
+(setq-default custom-file custom-file-x)
 
 ;; User information
 (setq user-full-name my/user-full-name)
@@ -438,7 +438,7 @@
 
 ;; Settings for currently logged in user
 (defvar user-settings-dir (concat (file-name-as-directory
-                                 my/emacs-cache-dir) "custom"))
+                                   my/emacs-cache-dir) "custom"))
 (add-to-list 'load-path user-settings-dir)
 
 (provide 'setup-customs)
