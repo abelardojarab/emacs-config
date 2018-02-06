@@ -75,14 +75,20 @@
 (use-package function-args
   :defer t
   :diminish function-args-mode
-  :commands (moo-complete moo-jump-local function-args-mode)
+  :bind (:map c-mode-map
+              ("C-j" . moo-jump-directory)
+              :map c++-mode-map
+              ("C-j" . moo-jump-directory))
+  :commands (moo-complete moo-jump-local moo-jump-directory function-args-mode)
   :load-path (lambda () (expand-file-name "function-args/" user-emacs-directory))
   :bind (:map c-mode-map
               ("C-c C-m" . moo-complete)
               :map c++-mode-map
               ("C-c C-m" . moo-complete))
   :init (add-hook 'c-mode-common-hook #'function-args-mode)
-  :config (fa-config-default))
+  :config (progn
+            (fa-config-default)
+            (setq moo-select-method 'ivy)))
 
 ;; C/C++ refactoring tool based on Semantic parser framework
 (use-package srefactor

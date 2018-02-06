@@ -1,6 +1,6 @@
 ;;; setup-ivy.el ---                              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -43,7 +43,7 @@
             (setq ivy-do-completion-in-region      nil
                   ivy-wrap                         t
                   ivy-fixed-height-minibuffer      t
-                  ivy-height                       12
+                  ivy-height                       20
                   ivy-virtual-abbreviate           'full
                   ivy-initial-inputs-alist         nil
                   ivy-count-format                 "[%d/%d]"
