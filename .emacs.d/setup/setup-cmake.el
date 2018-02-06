@@ -28,8 +28,8 @@
 (use-package irony
   :defer t
   :commands (irony-mode
-	     irony-install-server
-	     irony-cdb-json-add-compile-commands-path)
+             irony-install-server
+             irony-cdb-json-add-compile-commands-path)
   :if (executable-find "irony-server")
   :diminish irony-mode
   :load-path (lambda () (expand-file-name "irony-mode/" user-emacs-directory))
@@ -55,27 +55,27 @@
                                         "irony-user-dir") t))
             (setq irony-user-dir (concat (file-name-as-directory
                                           my/emacs-cache-dir)
-						 "irony-user-dir/"))))
+                                         "irony-user-dir/"))))
 
 ;; Irony json projects
 (use-package irony-cdb-json
   :defer t
   :after irony
   :commands (irony-cdb-json-add-compile-commands-path
-	     irony-cdb-autosetup-compile-options)
+             irony-cdb-autosetup-compile-options)
   :init (progn
-	  (setq irony-user-dir (concat (file-name-as-directory
+          (setq irony-user-dir (concat (file-name-as-directory
                                         my/emacs-cache-dir)
-				       "irony-user-dir/"))
-	  (setq irony-cdb-json--project-alist-file
-	    (concat irony-user-dir "cdb-json-projects"))
-	  (add-hook 'irony-mode-hook #'irony-cdb-autosetup-compile-options))
+                                       "irony-user-dir/"))
+          (setq irony-cdb-json--project-alist-file
+                (concat irony-user-dir "cdb-json-projects"))
+          (add-hook 'irony-mode-hook #'irony-cdb-autosetup-compile-options))
   :config (progn
-	    (setq irony-user-dir (concat (file-name-as-directory
+            (setq irony-user-dir (concat (file-name-as-directory
                                           my/emacs-cache-dir)
-					 "irony-user-dir/"))
-	    (setq irony-cdb-json--project-alist-file
-		  (concat irony-user-dir "cdb-json-projects"))))
+                                         "irony-user-dir/"))
+            (setq irony-cdb-json--project-alist-file
+                  (concat irony-user-dir "cdb-json-projects"))))
 
 ;; rtags
 ;; (LIBCLANG_LLVM_CONFIG_EXECUTABLE=path_to_llvm-config CC=gcc CXX=g++ cmake ../rtags -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_INSTALL_PREFIX=where_to_install_rtags)
@@ -155,7 +155,8 @@
              cmake-ide-compile
              cmake-ide-setup
              cmake-ide-run-cmake
-             cmake-ide--locate-cmakelists)
+             cmake-ide--locate-cmakelists
+             cmake-ide--get-build-dir)
   :if (executable-find "cmake")
   :load-path (lambda () (expand-file-name "cmake-ide/" user-emacs-directory))
   :init (add-hook 'c-mode-common-hook #'my/cmake-ide-enable)
@@ -164,8 +165,8 @@
             (if (not (file-exists-p "~/cmake_builds"))
                 (make-directory "~/cmake_builds"))
 
-	    (when (not (fboundp 'cmake-ide--locate-cmakelists))
-	      (use-package cmake-ide-backup))
+            (when (not (fboundp 'cmake-ide--locate-cmakelists))
+              (use-package cmake-ide-backup))
 
             ;; Overwrite get build dir function
             (defun cmake-ide--get-build-dir ()
