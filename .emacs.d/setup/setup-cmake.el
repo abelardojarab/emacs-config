@@ -155,8 +155,7 @@
              cmake-ide-compile
              cmake-ide-setup
              cmake-ide-run-cmake
-             cmake-ide--locate-cmakelists
-             cmake-ide--get-build-dir)
+             cmake-ide--locate-cmakelists)
   :if (executable-find "cmake")
   :load-path (lambda () (expand-file-name "cmake-ide/" user-emacs-directory))
   :init (add-hook 'c-mode-common-hook #'my/cmake-ide-enable)
