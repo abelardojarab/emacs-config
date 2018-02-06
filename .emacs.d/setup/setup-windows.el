@@ -245,32 +245,6 @@
   :init (shackle-mode 1)
   :config (progn
 
-            (defvar my/popup-window-parameters
-              '(:noesc :modeline :autokill :autoclose :autofit :static)
-              "A list of window parameters that are set (and cleared) when `my/popup-mode
-is enabled/disabled.'")
-
-            (defvar my/popup-blacklist
-              '("*Python-Help*")
-              "TODO")
-
-            ;; NOTE This is a temporary fix while I rewrite core-popups
-            (defun my/display-buffer-condition (buffer _action)
-              (and (cl-loop for re in my/popup-blacklist
-                            when (string-match-p re buffer)
-                            return nil
-                            finally return t)
-                   (shackle-match buffer)))
-
-            (defun my/display-buffer-action (buffer alist)
-              (shackle-display-buffer buffer alist (shackle-match buffer)))
-
-            (add-hook 'after-init-hook
-                      (lambda ()
-                        (setq display-buffer-alist
-                              (cons 'my/display-buffer-condition my/display-buffer-action)
-                              display-buffer-alist)))
-
             (setq helm-display-function         'pop-to-buffer
                   shackle-lighter               ""
                   shackle-select-reused-windows nil

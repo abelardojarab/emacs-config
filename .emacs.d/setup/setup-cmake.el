@@ -144,7 +144,6 @@
   :load-path (lambda () (expand-file-name "cmake-ide/" user-emacs-directory))
   :init (add-hook 'c-mode-common-hook #'my/cmake-ide-enable)
   :config (progn
-
             ;; Asure cmake_build directory exists
             (if (not (file-exists-p "~/cmake_builds"))
                 (make-directory "~/cmake_builds"))
