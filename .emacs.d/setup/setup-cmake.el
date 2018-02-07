@@ -164,9 +164,6 @@
             (if (not (file-exists-p "~/cmake_builds"))
                 (make-directory "~/cmake_builds"))
 
-            (when (not (fboundp 'cmake-ide--locate-cmakelists))
-              (use-package cmake-ide-backup))
-
             ;; Overwrite get build dir function
             (defun cmake-ide--get-build-dir ()
               "Return the directory name to run CMake in."
@@ -280,6 +277,8 @@ specified interactively."
               "Modify cmake-build-dir and make it point to ~/cmake_builds"
               (interactive)
               (let (my/cmake-build-dir my/projectile-build-dir)
+                (when (not (fboundp 'cmake-ide--locate-cmakelists))
+                  (use-package cmake-ide-backup))
                 (if (cmake-ide--locate-cmakelists)
                     (progn
                       (if (and (file-exists-p "~/cmake_builds")
