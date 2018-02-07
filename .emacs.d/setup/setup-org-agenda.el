@@ -89,7 +89,6 @@
                       (setq org-directory "~/workspace/Documents/Org")
                     (setq org-directory "~/Google Drive/Documents/Org")))
 
-                ;; http://emacs.stackexchange.com/questions/19863/how-to-set-my-own-date-format-for-org
                 ;; This will give you <Thu Jan 26 2016> for date timestamps
                 ;; or <Thu Jan 26 2016 11:30> for timestamps with times.
                 (setq-default org-display-custom-times t)
@@ -112,7 +111,8 @@
                                         (concat org-directory "/todo.org")
                                         (concat org-directory "/notes.org")
                                         (concat org-directory "/mobile.org")
-                                        (concat org-directory "/refile.org")))))
+                                        (concat org-directory "/refile.org")
+                                        (concat org-directory "/refile-beorg.org")))))
 
             ;; Make appt aware of appointments from the agenda
             ;; http://sachachua.com/blog/2007/11/setting-up-appointment-reminders-in-org/
@@ -149,7 +149,6 @@
                         (appt-activate 1)))                       ;; active appt (appointment notification)
 
             ;; Fontify done checkbox items in org-mode
-            ;; https://fuco1.github.io/2017-05-25-Fontify-done-checkbox-items-in-org-mode.html
             (font-lock-add-keywords
              'org-mode
              `(("^[ \t]*\\(?:[-+*]\\|[0-9]+[).]\\)[ \t]+\\(\\(?:\\[@\\(?:start:\\)?[0-9]+\\][ \t]*\\)?\\[\\(?:X\\|\\([0-9]+\\)/\\2\\)\\][^\n]*\n\\)" 1 'org-headline-done prepend))
