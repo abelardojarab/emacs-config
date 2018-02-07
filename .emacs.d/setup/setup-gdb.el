@@ -1,6 +1,6 @@
 ;;; setup-gdb.el ---                                 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -33,6 +33,7 @@
               ([(f7)] . gud-finish)
               ([(f8)] . gud-cont))
   :commands (gdb-few-windows gdb-many-windows)
+  :init (setq gud-key-prefix "\C-c\C-d")
   :config (progn
 
             ;; gdb should use multi-windowed like all the other debuggers out there.
