@@ -48,25 +48,33 @@
     (find-file-at-point . helm-completing-read-sync-default-handler)
     (ffap . helm-completing-read-sync-default-handler)
     (execute-extended-command . nil))
-  "Alist of handlers to replace `completing-read', `read-file-name' in `helm-mode'.
-Each entry is a cons cell like \(emacs_command . completing-read_handler\)
+  "Completing read functions for specific Emacs commands.
+
+By default `helm-mode' use `helm-completing-read-default-handler' to
+provide helm completion in each `completing-read' or `read-file-name'
+found, but other functions can be specified here for specific
+commands. This also allow disabling helm completion for some commands
+when needed.
+ 
+Each entry is a cons cell like (EMACS_COMMAND . COMPLETING-READ_HANDLER)
 where key and value are symbols.
 
 Each key is an Emacs command that use originaly `completing-read'.
 
-Each value maybe an helm function that take same arguments as
+Each value maybe a helm function that takes same arguments as
 `completing-read' plus NAME and BUFFER, where NAME is the name of the new
-helm source and BUFFER the name of the buffer we will use.
+helm source and BUFFER the name of the buffer we will use, but it can
+be also a function not using helm, in this case the function should
+take same args as `completing-read' and not be prefixed by \"helm-\".
 
 `helm' will use the name of the command calling `completing-read' as
 NAME and BUFFER will be computed as well with NAME but prefixed with
 \"*helm-mode-\".
 
-This function prefix name must start by \"helm-\", if it doesn't `helm'
-assumes the function is not a helm function and takes same args as
-`completing-read'.
-This allow you to define an handler not using helm completion, in this
-case give it the same args as `completing-read'.
+This function prefix name must start by \"helm-\" when it uses helm,
+otherwise `helm' assumes the function is not a helm function and
+expects same args as `completing-read', this allow you to define a
+handler not using helm completion.
 
 Example:
 
@@ -100,7 +108,7 @@ If the value of an entry is nil completion will fall back to
 emacs vanilla behavior.
 Example:
 
-If you want to disable helm completion for `describe-function':
+If you want to disable helm completion for `describe-function', use:
 
     (describe-function . nil)
 
@@ -115,8 +123,8 @@ same as
 
     (find-file . ido-read-file-name)
 
-Note that you don't need to enable `ido-mode' for this to work.
-See `helm-mode' documentation."
+Note that you don't need to enable `ido-mode' for this to work, see
+`helm-mode' documentation."
   :group 'helm-mode
   :type '(alist :key-type symbol :value-type symbol))
 
