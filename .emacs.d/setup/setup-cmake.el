@@ -268,8 +268,10 @@ specified interactively."
               (interactive)
               (progn
                 (my/cmake-ide-set-build-dir)
-                (when (cmake-ide--locate-cmakelists)
-                  (cmake-ide-setup)
+                (when (and (cmake-ide--locate-cmakelists)
+			   (file-exists-p (cmake-ide--locate-cmakelists)))
+                  (cmake-ide-maybe-run-cmake)
+                  (cmake-ide-maybe-start-rdm)
                   (cmake-project-mode 1))))
 
             ;; Define cmake-ide-build-dir under ~/cmake_builds
