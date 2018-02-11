@@ -374,41 +374,39 @@
             ;; Beamer/ODT/Markdown exporters
             (use-package ox-beamer)
             (use-package ox-odt)
-            (use-package ox-md)
+            (use-package ox-md)))
 
-            ;; Org extensions
+;; Setup Org Agenda
+(use-package setup-org-agenda)
 
-            ;; Setup Org Agenda
-            (use-package setup-org-agenda)
+;; Setup Org (babel support)
+(use-package setup-org-babel)
 
-            ;; Setup Org (babel support)
-            (use-package setup-org-babel)
+;; Setup Org plugins
+(use-package setup-org-plugins)
 
-            ;; Setup Org plugins
-            (use-package setup-org-plugins)
+;; Setup Org (latex support)
+(use-package setup-org-latex)
 
-            ;; Setup Org (latex support)
-            (use-package setup-org-latex)
+;; Setup Org (html support)
+(use-package setup-org-html)
 
-            ;; Setup Org (html support)
-            (use-package setup-org-html)
-
-            ;; Use footnotes as eldoc source
-            (use-package org-eldoc
-              :defer t
-              :init (progn
-                      (add-hook 'org-mode-hook #'org-eldoc-load)
-                      (add-hook 'org-mode-hook #'eldoc-mode))
-              :commands org-eldoc-load
-              :config (progn
-                        (defun my/org-eldoc-get-footnote ()
-                          (save-excursion
-                            (let ((fn (org-between-regexps-p "\\[fn:" "\\]")))
-                              (when fn
-                                (save-match-data
-                                  (nth 3 (org-footnote-get-definition (buffer-substring (+ 1 (car fn)) (- (cdr fn) 1)))))))))
-                        (advice-add 'org-eldoc-documentation-function
-                                    :before-until #'my/org-eldoc-get-footnote)))))
+;; Use footnotes as eldoc source
+(use-package org-eldoc
+  :defer t
+  :init (progn
+          (add-hook 'org-mode-hook #'org-eldoc-load)
+          (add-hook 'org-mode-hook #'eldoc-mode))
+  :commands org-eldoc-load
+  :config (progn
+            (defun my/org-eldoc-get-footnote ()
+              (save-excursion
+                (let ((fn (org-between-regexps-p "\\[fn:" "\\]")))
+                  (when fn
+                    (save-match-data
+                      (nth 3 (org-footnote-get-definition (buffer-substring (+ 1 (car fn)) (- (cdr fn) 1)))))))))
+            (advice-add 'org-eldoc-documentation-function
+                        :before-until #'my/org-eldoc-get-footnote)))
 
 (provide 'setup-org)
 ;;; setup-org.el ends here
