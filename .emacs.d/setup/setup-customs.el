@@ -71,7 +71,7 @@
 
 (defcustom my/smtp-accounts
   '((ssl "abelardotomasjb@gmail.com" "smtp.gmail.com"
-	 587 "abelardojarab@gmail.com"))
+     587 "abelardojarab@gmail.com"))
   "Availble SMTP accounts"
   :group 'my/customs
   :type 'list)
@@ -107,7 +107,7 @@
   :group 'my/customs)
 
 (defcustom my/emacs-theme
-  'eziam-light
+  'ample
   "Preferred Emacs theme"
   :group 'my/customs
   :type 'list)
