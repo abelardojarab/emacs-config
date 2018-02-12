@@ -113,7 +113,7 @@
   :type 'list)
 
 (defcustom my/emacs-theme-console
-  'zenburn
+  'zerodark
   "Preferred Emacs theme"
   :group 'my/customs
   :type 'list)
