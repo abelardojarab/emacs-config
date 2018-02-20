@@ -264,7 +264,7 @@
                     (tabulated-list-mode          :noesc t)
                     ("*Warnings*"                 :noselect t :autofit t)
                     ("\\*Org Src.*"               :regexp t   :select nil :align t)
-                    (" *Org todo*"                :regexp nil :select nil :align t)
+                    ("\\*Org todo.*"              :regexp t   :select nil :align t    :autofit t)
                     ("*Flycheck errors*"          :size 8     :regexp nil :select t   :autofit t)
                     ("*undo-tree*"                :regexp nil :select t   :align t)
                     ("*eshell*"                   :regexp nil :select t   :align t)
