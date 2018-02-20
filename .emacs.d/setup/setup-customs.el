@@ -107,13 +107,13 @@
   :group 'my/customs)
 
 (defcustom my/emacs-theme
-  'zenburn
+  'eziam-dusk
   "Preferred Emacs theme"
   :group 'my/customs
   :type 'list)
 
 (defcustom my/emacs-theme-console
-  'zenburn
+  'sourcerer
   "Preferred Emacs theme"
   :group 'my/customs
   :type 'list)
