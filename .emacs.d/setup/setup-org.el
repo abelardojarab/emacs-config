@@ -124,7 +124,7 @@
              ("C-c {"   . org-table-toggle-formula-debugger))
 
             ;; Miscellanenous settings
-            (setq org-startup-folded              t
+            (setq org-startup-folded              nil
                   org-startup-indented            t
                   org-cycle-separator-lines       1
                   org-cycle-include-plain-lists   'integrate

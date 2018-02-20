@@ -107,7 +107,7 @@
   :group 'my/customs)
 
 (defcustom my/emacs-theme
-  'goose
+  'darcula
   "Preferred Emacs theme"
   :group 'my/customs
   :type 'list)
