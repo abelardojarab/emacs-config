@@ -28,8 +28,9 @@
   :load-path (lambda () (expand-file-name "company/" user-emacs-directory))
   :bind (("C-;"                       . company-complete-common)
          :map company-mode-map
-         ([remap completion-at-point] . company-complete-common-or-cycle)
-         ([remap complete-symbol]     . company-complete-common)
+         ([remap completion-at-point]        . company-complete-common-or-cycle)
+         ([remap complete-symbol]            . company-complete-common)
+         ([remap indent-for-tab-command]     . company-indent-for-tab-command)
          :map company-active-map
          ("C-n"                       . company-select-next)
          ("C-p"                       . company-select-previous)
@@ -50,10 +51,22 @@
             (setq tab-always-indent 'complete)
             (add-to-list 'completion-styles 'initials t)
 
+            (defvar completion-at-point-functions-saved nil)
+            (defun company-indent-for-tab-command (&optional arg)
+              (interactive "P")
+              (let ((completion-at-point-functions-saved completion-at-point-functions)
+                    (completion-at-point-functions '(company-complete-common-wrapper)))
+                (indent-for-tab-command arg)))
+            (defun company-complete-common-wrapper ()
+              (let ((completion-at-point-functions completion-at-point-functions-saved))
+                (company-complete-common)))
+
             ;; Enable company in Org mode
             (defun add-pcomplete-to-capf ()
               (add-hook 'completion-at-point-functions #'pcomplete-completions-at-point nil t))
             (add-hook 'org-mode-hook #'add-pcomplete-to-capf)
+
+            (add-to-list 'company-begin-commands 'outshine-self-insert-command)
 
             ;; Default company backends
             (setq company-backends

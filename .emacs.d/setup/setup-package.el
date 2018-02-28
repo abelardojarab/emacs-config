@@ -57,6 +57,7 @@
 ;; Use Package
 (eval-when-compile
   (require 'use-package))
+(setq use-package-expand-minimally t)
 
 ;; Baseline packages
 (use-package cl)

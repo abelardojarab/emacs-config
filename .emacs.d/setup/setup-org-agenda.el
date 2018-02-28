@@ -24,6 +24,15 @@
 
 ;;; Code:
 
+;; appointment notification functions
+(use-package appt
+  :init (setq
+         appt-message-warning-time 30
+         appt-display-interval 15
+         appt-display-mode-line t
+         appt-display-format 'window)
+  :config (appt-activate 1))
+
 (use-package org-agenda
   :defer t
   :after (org calendar)

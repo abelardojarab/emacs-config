@@ -132,7 +132,7 @@
 
                (("" all-the-icons-flycheck-status)
                 :face default-face)
-               (all-the-icons-time)
+               ;; (all-the-icons-time) ;; display time is nicer
 
                (global :face highlight-face)))
 

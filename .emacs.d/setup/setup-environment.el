@@ -356,5 +356,11 @@ LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
 
 (add-hook 'after-init-hook #'my/show-init-time)
 
+;; display the time in the mode-line
+(setq display-time-24hr-format t)
+(setq display-time-default-load-average nil)
+(setq display-time-use-mail-icon t)
+(display-time)
+
 (provide 'setup-environment)
 ;;; setup-environment.el ends here
