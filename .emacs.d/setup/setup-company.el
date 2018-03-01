@@ -210,8 +210,9 @@
               :load-path (lambda () (expand-file-name "company-quickhelp/" user-emacs-directory))
               :if (display-graphic-p)
               :config (progn
-                        (setq company-quickhelp-delay 0.2)
-                        (add-hook 'global-company-mode-hook #'company-quickhelp-mode)
+                        (setq company-quickhelp-delay                0.2
+                              company-quickhelp-use-propertized-text t)
+                        (company-quickhelp-mode 1)
 
                         ;; Update front-end tooltip
                         (setq company-frontends (delq 'company-echo-metadata-frontend company-frontends))))
