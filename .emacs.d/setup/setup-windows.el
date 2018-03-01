@@ -245,11 +245,48 @@
   :init (shackle-mode 1)
   :config (progn
 
+            (with-eval-after-load "window"
+              (defcustom split-window-below nil
+                "If non-nil, vertical splits produce new windows below."
+                :group 'windows
+                :type 'boolean)
+
+              (defcustom split-window-right nil
+                "If non-nil, horizontal splits produce new windows to the right."
+                :group 'windows
+                :type 'boolean)
+
+              (fmakunbound #'split-window-sensibly)
+              (defun split-window-sensibly
+                  (&optional window)
+                "Split WINDOW in a way suitable for `display-buffer'."
+                (setq window (or window (selected-window)))
+                (or (and (window-splittable-p window t)
+                         ;; Split window horizontally.
+                         (split-window window nil (if split-window-right 'left  'right)))
+                    (and (window-splittable-p window)
+                         ;; Split window vertically.
+                         (split-window window nil (if split-window-below 'above 'below)))
+                    (and (eq window (frame-root-window (window-frame window)))
+                         (not (window-minibuffer-p window))
+                         ;; If WINDOW is the only window on its frame and is not the
+                         ;; minibuffer window, try to split it horizontally disregarding the
+                         ;; value of `split-width-threshold'.
+                         (let ((split-width-threshold 0))
+                           (when (window-splittable-p window t)
+                             (split-window window nil (if split-window-right
+                                                          'left
+                                                        'right))))))))
+
+            (setq split-window-right nil)
+            (setq-default split-height-threshold  8000
+                          split-width-threshold   0) ;; the reasonable limit for horizontal splits
+
             (setq helm-display-function         'pop-to-buffer
                   shackle-lighter               ""
                   shackle-select-reused-windows nil
-                  shackle-default-alignment     'below
-                  shackle-default-rule          '(:select t :autofit t :size 20)
+                  shackle-default-alignment     'right
+                  shackle-default-rule          '(:select t :autofit t :size 40)
                   shackle-default-size           20
                   shackle-default-ratio          0.3)  ;; default 0.5
 
