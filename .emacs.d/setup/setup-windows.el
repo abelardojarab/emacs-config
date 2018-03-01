@@ -279,8 +279,8 @@
                                                         'right))))))))
 
             (setq split-window-right nil)
-            (setq-default split-height-threshold  8000
-                          split-width-threshold   0) ;; the reasonable limit for horizontal splits
+            (setq-default split-height-threshold  80 ;; the reasonable limit for vertical splits
+                          split-width-threshold   0)
 
             (setq helm-display-function         'pop-to-buffer
                   shackle-lighter               ""
