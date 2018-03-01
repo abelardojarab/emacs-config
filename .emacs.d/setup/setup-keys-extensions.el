@@ -40,39 +40,37 @@
   :config (progn
             (when (if (not (equal system-type 'windows-nt))
                       (display-graphic-p))
-              (setq
-               which-key-sort-order            #'which-key-prefix-then-key-order
-               which-key-sort-uppercase-first  nil
-               which-key-add-column-padding    1
-               which-key-max-display-columns   nil
-               which-key-min-display-lines     5
-               which-key-idle-delay            2.0
-               which-key-popup-type            'minibuffer
-               which-key-side-window-location  'right
-               which-key-side-window-max-width 0.33
-
-               which-key-key-replacement-alist
-               '(("<\\([[:alnum:]-]+\\)>" . "\\1")
-                 ("TAB"                   . "↹")
-                 ("RET"                   . "⏎")
-                 ("SPC"                   . "␣")
-                 ("up"                    . "↑")
-                 ("right"                 . "→")
-                 ("down"                  . "↓")
-                 ("left"                  . "←")
-                 ("DEL"                   . "⇤")
-                 ("deletechar"            . "⌫")
-                 ("RET"                   . "⏎"))
-               which-key-description-replacement-alist
-               '(("Prefix Command" . "prefix")
-                 ;; Lambdas
-                 ("\\`\\?\\?\\'"   . "λ")
-                 ;; Prettify hydra entry points
-                 ("/body\\'"       . "|=")
-                 ;; Drop/shorten package prefixes
-                 ("\\`lunaryorn-"  . "")
-                 ("projectile-"    . "proj-")
-                 ("magit-"         . "ma-")))
+              (setq which-key-sort-order            #'which-key-prefix-then-key-order
+                    which-key-sort-uppercase-first  nil
+                    which-key-add-column-padding    1
+                    which-key-max-display-columns   nil
+                    which-key-min-display-lines     5
+                    which-key-idle-delay            2.0
+                    which-key-popup-type            'minibuffer
+                    which-key-side-window-location  'right
+                    which-key-side-window-max-width 0.33
+                    which-key-key-replacement-alist
+                    '(("<\\([[:alnum:]-]+\\)>" . "\\1")
+                      ("TAB"                   . "↹")
+                      ("RET"                   . "⏎")
+                      ("SPC"                   . "␣")
+                      ("up"                    . "↑")
+                      ("right"                 . "→")
+                      ("down"                  . "↓")
+                      ("left"                  . "←")
+                      ("DEL"                   . "⇤")
+                      ("deletechar"            . "⌫")
+                      ("RET"                   . "⏎"))
+                    which-key-description-replacement-alist
+                    '(("Prefix Command" . "prefix")
+                      ;; Lambdas
+                      ("\\`\\?\\?\\'"   . "λ")
+                      ;; Prettify hydra entry points
+                      ("/body\\'"       . "|=")
+                      ;; Drop/shorten package prefixes
+                      ("\\`lunaryorn-"  . "")
+                      ("projectile-"    . "proj-")
+                      ("magit-"         . "ma-")))
 
               (add-to-list 'which-key-key-replacement-alist '("TAB" . "↹"))
               (add-to-list 'which-key-key-replacement-alist '("RET" . "⏎"))

@@ -48,6 +48,16 @@
   :commands markdown-mode
   :config (progn
 
+            (setq markdown-asymmetric-header         t
+                  markdown-header-scaling            t
+                  markdown-enable-wiki-links         t
+                  markdown-list-indent-width         2
+                  markdown-enable-wiki-links         t
+                  markdown-footnote-location         'immediately
+                  markdown-wiki-link-fontify-missing t
+                  markdown-wiki-link-alias-first     nil
+                  markdown-indent-on-enter           'indent-and-new-item)
+
             (use-package flycheck-mmark
               :init (add-hook 'flycheck-mode-hook #'flycheck-mmark-setup)
               :commands (flycheck-mmark-setup))
@@ -104,7 +114,7 @@
             (setq markdown-command
                   (concat "pandoc --smart -c "
                           (concat user-emacs-directory
-                                  "/styles/github-pandoc.css")
+                                  "/styles/panam-pandoc.css")
                           " --from markdown_github -t html5 --mathjax --highlight-style pygments --standalone"))))
 
 (provide 'setup-markdown)
