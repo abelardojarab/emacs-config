@@ -365,8 +365,8 @@
             ;; .txt files aren't in the list initially, but in case that changes
             ;; in a future version of org, use if to avoid errors
             (if (assoc "\\.txt\\'" org-file-apps)
-                (setcdr (assoc "\\.txt\\'" org-file-apps) "kate %s")
-              (add-to-list 'org-file-apps '("\\.txt\\'" . "kate %s") t))
+                (setcdr (assoc "\\.txt\\'" org-file-apps) "gedit %s")
+              (add-to-list 'org-file-apps '("\\.txt\\'" . "gedit %s") t))
 
             ;; Change .pdf association directly within the alist
             (setcdr (assoc "\\.pdf\\'" org-file-apps) "acroread %s")
@@ -374,7 +374,10 @@
             ;; Beamer/ODT/Markdown exporters
             (use-package ox-beamer)
             (use-package ox-odt)
-            (use-package ox-md)))
+            (use-package ox-md)
+
+            ;; HTML5 slide exporter
+            (use-package ox-html5slide)))
 
 ;; Setup Org Agenda
 (use-package setup-org-agenda)
@@ -407,6 +410,21 @@
                       (nth 3 (org-footnote-get-definition (buffer-substring (+ 1 (car fn)) (- (cdr fn) 1)))))))))
             (advice-add 'org-eldoc-documentation-function
                         :before-until #'my/org-eldoc-get-footnote)))
+
+;; Use UTF8 symbols for Org Todo priorities
+(use-package org-fancy-priorities
+  :defer t
+  :init (add-hook 'org-mode-hook 'org-fancy-priorities-mode)
+  :commands org-fancy-priorities-mode
+  :config (setq org-fancy-priorities-list '((?A . "❗")
+                                              (?B . "⬆")
+                                              (?C . "⬇")
+                                              (?D . "☕")
+                                              (?1 . "⚡")
+                                              (?2 . "⮬")
+                                              (?3 . "⮮")
+                                              (?4 . "☕")
+                                              (?I . "Important"))))
 
 (provide 'setup-org)
 ;;; setup-org.el ends here
