@@ -52,12 +52,21 @@
   :defer t
   :diminish smartparens-mode
   :load-path (lambda () (expand-file-name "smartparens/" user-emacs-directory))
-  :init (progn (use-package smartparens-config)
-               (smartparens-global-mode t))
-  :commands (smartparens-global-mode smartparens-mode)
+  :commands (smartparens-global-mode
+             smartparens-mode
+             show-smartparens-global-mode
+             show-smartparens-mode)
+  :init (progn
+          (use-package smartparens-config)
+
+          ;; subtle blinking of matching paren (defaults are ugly)
+          (show-smartparens-global-mode t)
+
+          (smartparens-global-mode t))
   :config (progn
-            ;; subtle blinking of matching paren (defaults are ugly)
-            (show-smartparens-global-mode 1)
+
+            ;; Faster performance
+            (setq-default sp-max-pair-length 2)
 
             ;; disable pairing of ' in minibuffer
             (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)
