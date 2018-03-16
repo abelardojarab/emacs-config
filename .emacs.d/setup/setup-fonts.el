@@ -49,12 +49,17 @@
                       :weight 'normal)
   (add-hook 'text-mode-hook #'variable-pitch-mode))
 
+(unless (fboundp 'set-default-font)
+  (defun set-default-font (font frame)
+    (interactive "sFont Name-Size: ")
+    (set-face-attribute 'default nil :font font)))
+
 ;; Prefer user choices
 (when (find-font (font-spec :name my/main-programming-font))
 
   ;; Set fontset
   (if (not (find-font (font-spec :name my/main-writing-font)))
-    (setq my/main-writing-font my/main-programming-font)))
+      (setq my/main-writing-font my/main-programming-font)))
 
 ;; Dynamic font adjusting based on monitor resolution, using Android fonts
 (defun fontify-frame (&optional frame)
