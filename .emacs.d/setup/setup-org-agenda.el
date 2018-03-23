@@ -24,6 +24,40 @@
 
 ;;; Code:
 
+;; appointment notification functions
+(use-package appt
+  :defer t
+  :commands (appt-activate org-agenda-to-appt)
+  :config (progn
+            (setq appt-message-warning-time        30
+                  appt-display-interval            15
+                  appt-display-mode-line           t
+                  calendar-mark-diary-entries-flag t
+                  appt-display-diary               nil
+                  appt-display-format              'window)
+
+            ;; Make appt aware of appointments from the agenda
+            (defun org-agenda-to-appt ()
+              "Activate appointments found in `org-agenda-files'."
+              (interactive)
+              (let* ((today (org-date-to-gregorian
+                             (time-to-days (current-time))))
+                     (files org-agenda-files) entries file)
+                (while (setq file (pop files))
+                  (setq entries (append entries (org-agenda-get-day-entries
+                                                 file today :timestamp))))
+                (setq entries (delq nil entries))
+                (mapc (lambda(x)
+                        (let* ((event (org-trim (get-text-property 1 'txt x)))
+                               (time-of-day (get-text-property 1 'time-of-day x)) tod)
+                          (when time-of-day
+                            (setq tod (number-to-string time-of-day)
+                                  tod (when (string-match
+                                             "\\([0-9]\\{1,2\\}\\)\\([0-9]\\{2\\}\\)" tod)
+                                        (concat (match-string 1 tod) ":"
+                                                (match-string 2 tod))))
+                            (if tod (appt-add tod event))))) entries)))))
+
 (use-package org-agenda
   :defer t
   :after (org calendar)
@@ -109,37 +143,7 @@
                                         (concat org-directory "/refile.org")
                                         (concat org-directory "/refile-beorg.org")))))
 
-            ;; Make appt aware of appointments from the agenda
-            (defun org-agenda-to-appt ()
-              "Activate appointments found in `org-agenda-files'."
-              (interactive)
-              (let* ((today (org-date-to-gregorian
-                             (time-to-days (current-time))))
-                     (files org-agenda-files) entries file)
-                (while (setq file (pop files))
-                  (setq entries (append entries (org-agenda-get-day-entries
-                                                 file today :timestamp))))
-                (setq entries (delq nil entries))
-                (mapc (lambda(x)
-                        (let* ((event (org-trim (get-text-property 1 'txt x)))
-                               (time-of-day (get-text-property 1 'time-of-day x)) tod)
-                          (when time-of-day
-                            (setq tod (number-to-string time-of-day)
-                                  tod (when (string-match
-                                             "\\([0-9]\\{1,2\\}\\)\\([0-9]\\{2\\}\\)" tod)
-                                        (concat (match-string 1 tod) ":"
-                                                (match-string 2 tod))))
-                            (if tod (appt-add tod event))))) entries)))
-
-            ;; appointment notification functions
-            (use-package appt
-              :init (setq appt-message-warning-time        30
-                          appt-display-interval            15
-                          appt-display-mode-line           t
-                          calendar-mark-diary-entries-flag t
-                          appt-display-diary               nil
-                          appt-display-format              'window)
-              :commands (appt-activate))
+            ;; Sync org-agenda with appt package
             (add-hook 'org-finalize-agenda-hook
                       (lambda ()
                         (hl-line-mode t)

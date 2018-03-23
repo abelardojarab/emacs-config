@@ -287,8 +287,8 @@
                   shackle-select-reused-windows nil
                   shackle-default-alignment     'right
                   shackle-default-rule          '(:select t :autofit t :size 40)
-                  shackle-default-size           20
-                  shackle-default-ratio          0.3)  ;; default 0.5
+                  shackle-default-size           30
+                  shackle-default-ratio          0.4)  ;; default 0.5
 
             (setq shackle-rules
                   ;; CONDITION(:regexp)        :select     :inhibit-window-quit   :size+:align|:other     :same|:popup
