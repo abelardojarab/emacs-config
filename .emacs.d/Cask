@@ -198,6 +198,7 @@
 (depends-on "isearch+")
 (depends-on "isearch-prop")
 (depends-on "ivy")
+(depends-on "ivy-purpose")
 (depends-on "ivy-rich")
 ;; (depends-on "jar")
 (depends-on "jedi")
