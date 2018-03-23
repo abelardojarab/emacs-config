@@ -92,28 +92,19 @@ non-nil."
                         (+ (if (boundp 'display-line-numbers) 6 0)
                            fill-column)))
 
-;; Just like the previous package, this one is also subtle.
-;; It highlights characters that exceed a particular column margin. Very useful while coding.
-(use-package column-enforce-mode
-  :defer t
-  :commands column-enforce-mode
-  :diminish column-enforce-mode
-  :init (setq column-enforce-column 99)
-  :load-path (lambda () (expand-file-name "column-enforce-mode/" user-emacs-directory))
-  :config (add-hook 'prog-mode-hook #'column-enforce-mode))
-
 ;; Faster line numbers
 (use-package linum-ex
   :demand t
   :commands linum-mode
-  :unless (boundp 'display-line-numbers) ;; Emacs 26 includes native line numbering
   :init (dolist (hook my/linum-modes)
           (add-hook hook (lambda ()
                            ;; turn off `linum-mode' when there are more than 5000 lines
                            (if (and (> (buffer-size)
                                        (* 5000 80)))
                                (linum-mode -1)
-                             (linum-mode 1)))))
+                             (if (boundp 'display-line-numbers)
+                                 (display-line-numbers-mode 1)
+                               (linum-mode 1))))))
   :config (progn
             (defadvice linum-update-window (around linum-dynamic activate)
               (let* ((w (length (number-to-string
@@ -153,7 +144,7 @@ non-nil."
 (set-display-table-slot standard-display-table
                         'selective-display (string-to-vector " ⮷ "))
 
-
+;; Display vertical line
 (use-package fill-column-indicator
   :if (display-graphic-p)
   :init (dolist (hook my/linum-modes)
@@ -216,6 +207,16 @@ all the buffers."
                         (fci-delete-unneeded)
                         (fci-make-overlay-strings)
                         (fci-update-all-windows t)))))))))
+
+;; Just like the previous package, this one is also subtle.
+;; It highlights characters that exceed a particular column margin. Very useful while coding.
+(use-package column-enforce-mode
+  :defer t
+  :commands column-enforce-mode
+  :diminish column-enforce-mode
+  :init (setq column-enforce-column 99)
+  :load-path (lambda () (expand-file-name "column-enforce-mode/" user-emacs-directory))
+  :config (add-hook 'prog-mode-hook #'column-enforce-mode))
 
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here

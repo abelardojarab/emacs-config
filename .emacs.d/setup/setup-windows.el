@@ -124,7 +124,10 @@
                                               "purpose-layouts"))
 
             (setq purpose-user-name-purposes
-                  '(("*ag*"                        . search)))
+                  '(("*ag*"                        . search)
+                    ("todo.org"                    . agenda)
+                    ("agenda.org"                  . agenda)
+                    ("notas.org"                   . agenda)))
 
             (setq purpose-user-regexp-purposes
                   '(("^\\*elfeed"                  . internet)
@@ -137,6 +140,7 @@
                     (c-mode                        . edit)
                     (c++-mode                      . edit)
                     (js2-mode                      . edit)
+                    (org-mode                      . org)
 
                     (python-mode                   . edit)
                     (inferior-python-mode          . interactive)
@@ -161,11 +165,16 @@
             ;; Load user preferences
             (purpose-compile-user-configuration)
             (purpose-mode t)
+            (define-purpose-prefix-overload purpose-switch-buffer-overload
+              '(ivy-switch-buffer
+                switch-buffer-without-purpose
+                purpose-switch-buffer-with-purpose))
 
             ;; Extensions for purpose
             (use-package window-purpose-x
               :after window-purpose
               :config (progn
+                        (purpose-x-golden-ratio-setup)
 
                         ;; Integration with perspective
                         ;; (purpose-x-persp-setup)
@@ -278,7 +287,7 @@
                                                           'left
                                                         'right))))))))
 
-            (setq split-window-right nil)
+            (setq split-window-right t)
             (setq-default split-height-threshold  80 ;; the reasonable limit for vertical splits
                           split-width-threshold   0)
 
@@ -286,9 +295,9 @@
                   shackle-lighter               ""
                   shackle-select-reused-windows nil
                   shackle-default-alignment     'right
-                  shackle-default-rule          '(:select t :autofit t :size 40)
-                  shackle-default-size           30
-                  shackle-default-ratio          0.4)  ;; default 0.5
+                  shackle-default-rule          '(:select t :autofit t :size 30)
+                  shackle-default-size           25
+                  shackle-default-ratio          0.3)  ;; default 0.5
 
             (setq shackle-rules
                   ;; CONDITION(:regexp)        :select     :inhibit-window-quit   :size+:align|:other     :same|:popup
