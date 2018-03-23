@@ -153,5 +153,69 @@ non-nil."
 (set-display-table-slot standard-display-table
                         'selective-display (string-to-vector " ⮷ "))
 
+
+(use-package fill-column-indicator
+  :if (display-graphic-p)
+  :init (dolist (hook my/linum-modes)
+          (add-hook hook (lambda ()
+                           (turn-on-fci-mode))))
+  :commands (fci-mode turn-on-fci-mode)
+  :config (progn
+            ;; Set global default value for the local var `fci-handle-truncate-lines'
+            (setq-default fci-handle-truncate-lines t)
+            (setq fci-rule-width 1)
+
+            (defun my/fci-enabled-p ()
+              (and (boundp 'fci-mode) fci-mode))
+
+            (defvar my/fci-mode-suppressed nil)
+
+            (defadvice popup-create (before suppress-fci-mode activate)
+              "Suspend fci-mode while popups are visible"
+              (let ((fci-enabled (my/fci-enabled-p)))
+                (when fci-enabled
+                  (set (make-local-variable 'my/fci-mode-suppressed) fci-enabled)
+                  (turn-off-fci-mode))))
+
+            (defadvice popup-delete (after restore-fci-mode activate)
+              "Restore fci-mode when all popups have closed"
+              (when (and my/fci-mode-suppressed
+                         (null popup-instances))
+                (setq my/fci-mode-suppressed nil)
+                (turn-on-fci-mode))
+
+              (defadvice enable-theme (after recompute-fci-face activate)
+                "Regenerate fci-mode line images after switching themes"
+                (dolist (buffer (buffer-list))
+                  (with-current-buffer buffer
+                    (turn-on-fci-mode))))
+
+              ;; `fci-mode' needs to be disabled/enabled around the
+              ;; `shell-command-on-region' command too.
+              (defun my/shell--fci-disable-temporarily (orig-fun &rest args)
+                "Disable `fci-mode' before calling ORIG-FUN; re-enable afterwards."
+                (let ((fci-was-initially-on (when fci-mode
+                                              (prog1
+                                                  fci-mode
+                                                (fci-mode -1)))))
+                  (prog1
+                      (apply orig-fun args)
+                    (when fci-was-initially-on
+                      (fci-mode 1)))))
+              (advice-add 'shell-command-on-region :around #'my/shell--fci-disable-temporarily)
+
+              (defun my/fci-redraw-frame-all-buffers ()
+                "Redraw the fill-column rule in all buffers on the selected frame.
+Running this function after changing themes updates the fci rule color in
+all the buffers."
+                (interactive)
+                (let ((bufs (delete-dups (buffer-list (selected-frame)))))
+                  (dolist (buf bufs)
+                    (with-current-buffer buf
+                      (when fci-mode
+                        (fci-delete-unneeded)
+                        (fci-make-overlay-strings)
+                        (fci-update-all-windows t)))))))))
+
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here
