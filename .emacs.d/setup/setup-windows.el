@@ -170,6 +170,27 @@
                 switch-buffer-without-purpose
                 purpose-switch-buffer-with-purpose))
 
+            (defadvice purpose-find-file-overload (after find-file-sudo activate)
+              "Find file as root if necessary."
+              (unless (and buffer-file-name
+                           (file-writable-p buffer-file-name))
+
+                (let* ((buffer-file (buffer-file-name))
+                       (coincidence (string-match-p "@" buffer-file))
+                       (hostname)
+                       (buffer-name))
+                  (if coincidence
+                      (progn
+                        (setq hostname (substring buffer-file (+ coincidence 1)
+                                                  (string-match-p ":" buffer-file      (+ coincidence 1))))
+                        (setq buffer-name
+                              (concat
+                               (substring buffer-file 0 coincidence) "@"
+                               (replace-regexp-in-string ":" (concat "|sudo:" hostname ":")
+                                                         buffer-file nil nil nil (+ coincidence 1))))
+                        (find-alternate-file buffer-name))
+                    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file))))))
+
             ;; Extensions for purpose
             (use-package window-purpose-x
               :after window-purpose
@@ -191,8 +212,18 @@
 (use-package helm-purpose
   :defer t
   :after (helm window-purpose)
-  :commands (helm-purpose-switch-buffer-with-purpose helm-purpose-switch-buffer-with-some-purpose)
+  :commands (helm-purpose-switch-buffer-with-purpose
+             helm-purpose-switch-buffer-with-some-purpose)
   :load-path (lambda () (expand-file-name "helm-purpose/" user-emacs-directory)))
+
+;; Ivy interface to purpose
+(use-package ivy-purpose
+  :defer t
+  :commands (ivy-purpose-switch-buffer-with-purpose
+             ivy-purpose-switch-buffer-with-some-purpose
+             ivy-purpose-switch-buffer-without-purpose)
+  :after (ivy window-purpose)
+  :config (ivy-purpose-setup))
 
 ;; Resize windows
 (use-package resize-window

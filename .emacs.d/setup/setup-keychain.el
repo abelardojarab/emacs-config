@@ -76,16 +76,23 @@
               (add-hook 'after-make-frame-functions #'my/fixup-gpg-agent)
               (add-hook 'focus-in-hook              #'my/fixup-gpg-agent))))
 
+;; Pinentry
+(use-package pinentry
+  :load-path (lambda () (expand-file-name "pinentry/" user-emacs-directory))
+  :commands pinentry-start)
+
 ;; Enable encryption/decryption of .gpg files
 (use-package epa-file
   :defer t
   :after epg
   :commands epa-file-enable
   :config  (progn
-             ;; 'silent to use symmetric encryption
-             ;; nil to ask for users unless specified
-             ;; t to always ask for a user
-             ;; (setq epa-file-select-keys t)
+             ;; ~/.gnupg/gpg-agent.conf should contain:
+             ;; allow-emacs-pinentry
+             ;; allow-loopback-pinentry
+             ;; Restart with:
+             ;; gpgconf --reload gpg-agent
+             (setq epa-pinentry-mode 'loopback)
 
              (setq epa-file-name-regexp "\\.\\(gpg\\|asc\\)$")
              (epa-file-name-regexp-update)))

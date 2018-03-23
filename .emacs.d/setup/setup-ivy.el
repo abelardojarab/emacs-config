@@ -92,7 +92,35 @@
          :map ivy-minibuffer-map
          ("M-y"                     . ivy-next-line)
          :map read-expression-map
-         ("C-r"                     . counsel-expression-history)))
+         ("C-r"                     . counsel-expression-history))
+  :config (progn
+
+            (defadvice counsel-find-file (after find-file-sudo activate)
+              "Find file as root if necessary."
+              (unless (and buffer-file-name
+                           (file-writable-p buffer-file-name))
+
+                (let* ((buffer-file (buffer-file-name))
+                       (coincidence (string-match-p "@" buffer-file))
+                       (hostname)
+                       (buffer-name))
+                  (if coincidence
+                      (progn
+                        (setq hostname (substring buffer-file (+ coincidence 1)
+                                                  (string-match-p ":" buffer-file      (+ coincidence 1))))
+                        (setq buffer-name
+                              (concat
+                               (substring buffer-file 0 coincidence) "@"
+                               (replace-regexp-in-string ":" (concat "|sudo:" hostname ":")
+                                                         buffer-file nil nil nil (+ coincidence 1))))
+                        (find-alternate-file buffer-name))
+                    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file))))))
+
+            (defadvice find-file (after find-file-sudo activate)
+              "Find file as root if necessary."
+              (unless (and buffer-file-name
+                           (file-writable-p buffer-file-name))
+                (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))))
 
 (use-package swiper-helm
   :defer t
