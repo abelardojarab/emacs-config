@@ -61,7 +61,7 @@
 (use-package org-agenda
   :defer t
   :after (org calendar)
-  :commands org-agenda
+  :commands (org-agenda org-archive-done-tasks)
   :bind (("C-c A" . org-agenda)
          :map org-mode-map
          ("C-c i" . my/org-add-line-item-task)
@@ -187,6 +187,15 @@
             ;; Enable filtering by effort estimates
             (add-to-list 'org-global-properties
                          '("Effort_ALL". "0:05 0:15 0:30 1:00 2:00 3:00 4:00"))
+
+            ;; Archive done tasks
+            (defun org-archive-done-tasks ()
+              (interactive)
+              (org-map-entries
+               (lambda ()
+                 (org-archive-subtree)
+                 (setq org-map-continue-from (outline-previous-heading)))
+               "/DONE" 'tree))
 
             ;; Modifying org agenda so that I can display a subset of tasks
             (defvar my/org-agenda-limit-items nil "Number of items to show in agenda to-do views; nil if unlimited.")

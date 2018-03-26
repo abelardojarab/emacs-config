@@ -91,6 +91,210 @@
                           (yas-minor-mode t)
                           (undo-tree-mode t))))
 
+            ;; Hide properties drawer in org mode
+            (defalias 'org-cycle-hide-drawers 'my/block-org-cycle-hide-drawers)
+
+            (defun my/block-org-cycle-hide-drawers (state)
+              "Re-hide all drawers, footnotes or html blocks after a visibility state change."
+              (when
+                  (and
+                   (derived-mode-p 'org-mode)
+                   (not (memq state '(overview folded contents))))
+                (save-excursion
+                  (let* (
+                         (globalp (memq state '(contents all)))
+                         (beg (if globalp (point-min) (point)))
+                         (end
+                          (cond
+                           (globalp
+                            (point-max))
+                           ((eq state 'children)
+                            (save-excursion (outline-next-heading) (point)))
+                           (t (org-end-of-subtree t)) )))
+                    (goto-char beg)
+                    (while
+                        (re-search-forward
+                         ".*\\[fn\\|^\\#\\+BEGIN_SRC.*$\\|^[ \t]*:PROPERTIES:[ \t]*$" end t)
+                      (my/org-flag t))))))
+
+            (defalias 'org-cycle-internal-local 'my/block-org-cycle-internal-local)
+
+            (defun my/block-org-cycle-internal-local ()
+              "Do the local cycling action."
+              (let ((goal-column 0) eoh eol eos has-children children-skipped struct)
+                (save-excursion
+                  (if (org-at-item-p)
+                      (progn
+                        (beginning-of-line)
+                        (setq struct (org-list-struct))
+                        (setq eoh (point-at-eol))
+                        (setq eos (org-list-get-item-end-before-blank (point) struct))
+                        (setq has-children (org-list-has-child-p (point) struct)))
+                    (org-back-to-heading)
+                    (setq eoh (save-excursion (outline-end-of-heading) (point)))
+                    (setq eos (save-excursion (1- (org-end-of-subtree t t))))
+                    (setq has-children
+                          (or
+                           (save-excursion
+                             (let ((level (funcall outline-level)))
+                               (outline-next-heading)
+                               (and
+                                (org-at-heading-p t)
+                                (> (funcall outline-level) level))))
+                           (save-excursion
+                             (org-list-search-forward (org-item-beginning-re) eos t)))))
+                  (beginning-of-line 2)
+                  (if (featurep 'xemacs)
+                      (while
+                          (and
+                           (not (eobp))
+                           (get-char-property (1- (point)) 'invisible))
+                        (beginning-of-line 2))
+                    (while
+                        (and
+                         (not (eobp))
+                         (get-char-property (1- (point)) 'invisible))
+                      (goto-char (next-single-char-property-change (point) 'invisible))
+                      (and
+                       (eolp)
+                       (beginning-of-line 2))))
+                  (setq eol (point)))
+                (cond
+                 ((= eos eoh)
+                  (unless (org-before-first-heading-p)
+                    (run-hook-with-args 'org-pre-cycle-hook 'empty))
+                  (org-unlogged-message "EMPTY ENTRY")
+                  (setq org-cycle-subtree-status nil)
+                  (save-excursion
+                    (goto-char eos)
+                    (outline-next-heading)
+                    (if (outline-invisible-p)
+                        (org-flag-heading nil))))
+                 ((and
+                   (or
+                    (>= eol eos)
+                    (not (string-match "\\S-" (buffer-substring eol eos))))
+                   (or
+                    has-children
+                    (not (setq children-skipped
+                               org-cycle-skip-children-state-if-no-children))))
+                  (unless (org-before-first-heading-p)
+                    (run-hook-with-args 'org-pre-cycle-hook 'children))
+                  (if (org-at-item-p)
+                      ;; then
+                      (org-list-set-item-visibility (point-at-bol) struct 'children)
+                    ;; else
+                    (org-show-entry)
+                    (org-with-limited-levels (show-children))
+                    (when (eq org-cycle-include-plain-lists 'integrate)
+                      (save-excursion
+                        (org-back-to-heading)
+                        (while (org-list-search-forward (org-item-beginning-re) eos t)
+                          (beginning-of-line 1)
+                          (let* (
+                                 (struct (org-list-struct))
+                                 (prevs (org-list-prevs-alist struct))
+                                 (end (org-list-get-bottom-point struct)))
+                            (mapc (lambda (e) (org-list-set-item-visibility e struct 'folded))
+                                  (org-list-get-all-items (point) struct prevs))
+                            (goto-char (if (< end eos) end eos)))))))
+                  (org-unlogged-message "CHILDREN")
+                  (save-excursion
+                    (goto-char eos)
+                    (outline-next-heading)
+                    (if (outline-invisible-p)
+                        (org-flag-heading nil)))
+                  (setq org-cycle-subtree-status 'children)
+                  (unless (org-before-first-heading-p)
+                    (run-hook-with-args 'org-cycle-hook 'children)))
+                 ((or
+                   children-skipped
+                   (and
+                    (eq last-command this-command)
+                    (eq org-cycle-subtree-status 'children)))
+                  (unless (org-before-first-heading-p)
+                    (run-hook-with-args 'org-pre-cycle-hook 'subtree))
+                  (outline-flag-region eoh eos nil)
+                  (org-unlogged-message
+                   (if children-skipped
+                       "SUBTREE (NO CHILDREN)"
+                     "SUBTREE"))
+                  (setq org-cycle-subtree-status 'subtree)
+                  (unless (org-before-first-heading-p)
+                    (run-hook-with-args 'org-cycle-hook 'subtree)))
+                 ((eq org-cycle-subtree-status 'subtree)
+                  (org-show-subtree)
+                  (message "ALL")
+                  (setq org-cycle-subtree-status 'all))
+                 (t
+                  (run-hook-with-args 'org-pre-cycle-hook 'folded)
+                  (outline-flag-region eoh eos t)
+                  (org-unlogged-message "FOLDED")
+                  (setq org-cycle-subtree-status 'folded)
+                  (unless (org-before-first-heading-p)
+                    (run-hook-with-args 'org-cycle-hook 'folded))))))
+
+            (defun my/org-flag (flag)
+              "When FLAG is non-nil, hide any of the following:  html code block;
+footnote; or, the properties drawer.  Otherwise make it visible."
+              (save-excursion
+                (beginning-of-line 1)
+                (cond
+                 ((looking-at ".*\\[fn")
+                  (let* (
+                         (begin (match-end 0))
+                         end-footnote)
+                    (if (re-search-forward "\\]"
+                                           (save-excursion (outline-next-heading) (point)) t)
+                        (progn
+                          (setq end-footnote (point))
+                          (outline-flag-region begin end-footnote flag))
+                      (user-error "Error beginning at point %s." begin))))
+                 ((looking-at "^\\#\\+BEGIN_SRC.*$\\|^[ \t]*:PROPERTIES:[ \t]*$")
+                  (let* ((begin (match-end 0)))
+                    (if (re-search-forward "^\\#\\+END_SRC.*$\\|^[ \t]*:END:"
+                                           (save-excursion (outline-next-heading) (point)) t)
+                        (outline-flag-region begin (point-at-eol) flag)
+                      (user-error "Error beginning at point %s." begin)))))))
+
+            (defun my/toggle-block-visibility ()
+              "For this function to work, the cursor must be on the same line as the regexp."
+              (interactive)
+              (if
+                  (save-excursion
+                    (beginning-of-line 1)
+                    (looking-at
+                     ".*\\[fn\\|^\\#\\+BEGIN_SRC.*$\\|^[ \t]*:PROPERTIES:[ \t]*$"))
+                  (my/org-flag (not (get-char-property (match-end 0) 'invisible)))
+                (message "Sorry, you are not on a line containing the beginning regexp.")))
+
+            ;; Only use bimodal org-cycle when a heading has a :BIMODAL-CYCLING: property value.
+            (advice-add 'org-cycle :around #'my/org-cycle)
+            (defun my/toggle-bimodal-cycling (&optional pos)
+              "Enable/disable bimodal cycling behavior for the current heading."
+              (interactive)
+              (let* ((enabled (org-entry-get pos "BIMODAL-CYCLING")))
+                (if enabled
+                    (org-entry-delete pos "BIMODAL-CYCLING")
+                  (org-entry-put pos "BIMODAL-CYCLING" "yes"))))
+
+            (defun my/org-cycle (fn &optional arg)
+              "Make org outline cycling bimodal (FOLDED and SUBTREE) rather than trimodal (FOLDED, CHILDREN, and SUBTREE) when a heading has a :BIMODAL-CYCLING: property value."
+              (interactive)
+              (if (and (org-at-heading-p)
+                       (org-entry-get nil "BIMODAL-CYCLING"))
+                  (my/toggle-subtree)
+                (funcall fn arg)))
+
+            (defun my/toggle-subtree ()
+              "Show or hide the current subtree depending on its current state."
+              (interactive)
+              (save-excursion
+                (outline-back-to-heading)
+                (if (not (outline-invisible-p (line-end-position)))
+                    (outline-hide-subtree)
+                  (outline-show-subtree))))
+
             ;; Ignore tex commands during flyspell
             (add-hook 'org-mode-hook (lambda () (setq ispell-parser 'tex)))
             (defun flyspell-ignore-tex ()
@@ -124,7 +328,7 @@
              ("C-c {"   . org-table-toggle-formula-debugger))
 
             ;; Miscellanenous settings
-            (setq org-startup-folded              nil
+            (setq org-startup-folded              t
                   org-startup-indented            t
                   org-cycle-separator-lines       1
                   org-cycle-include-plain-lists   'integrate
@@ -132,7 +336,7 @@
                   org-startup-truncated           t
                   org-use-speed-commands          t
                   org-completion-use-ido          t
-                  org-hide-leading-stars          t
+                  org-hide-leading-stars          nil
                   org-highlight-latex-and-related '(latex)
                   org-ellipsis                    " ••• "
 
