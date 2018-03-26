@@ -92,7 +92,7 @@
 
 ;; hideshow (hs-minor-mode)
 (use-package hideshow
-  :defer t
+  :demand t
   :diminish hs-minor-mode
   :commands (hs-toggle-hiding
              toggle-fold
@@ -171,7 +171,7 @@
 ;; Enable fold dwim (do what i mean)
 (use-package fold-dwim
   :defer t
-  :after (hideshow-org yafolding)
+  :after hideshow
   :bind ("C-c C-f" . my/fold-dwim)
   :config (progn
             (defun folding-marker-p (&optional pos)
@@ -229,7 +229,7 @@ If prefix argument is used, `set-selective-display' to the current column."
 (use-package hideshowvis
   :if (display-graphic-p)
   :defer t
-  :after (hideshow hideshow-org fold-dwim)
+  :after hideshow
   :commands (hideshowvis-minor-mode
              hideshowvis-enable)
   :init (progn
@@ -244,15 +244,9 @@ If prefix argument is used, `set-selective-display' to the current column."
             ;; Add the following to your .emacs and uncomment it in order to get a right arrow symbol
             (define-fringe-bitmap 'hs-marker [0 32 48 56 60 56 48 32])
 
-            ;; + bitmap
-            (define-fringe-bitmap 'hs-expand-bitmap [0   ; 0 0 0 0 0 0 0 0
-                                                     24  ; 0 0 0 ▮ ▮ 0 0 0
-                                                     24  ; 0 0 0 ▮ ▮ 0 0 0
-                                                     126 ; 0 ▮ ▮ ▮ ▮ ▮ ▮ 0
-                                                     126 ; 0 ▮ ▮ ▮ ▮ ▮ ▮ 0
-                                                     24  ; 0 0 0 ▮ ▮ 0 0 0
-                                                     24  ; 0 0 0 ▮ ▮ 0 0 0
-                                                     0]) ; 0 0 0 0 0 0 0 0
+            ;; Change -/+ to ▼/▶
+            (define-fringe-bitmap 'hideshowvis-hideable-marker [0 0 254 124 56 16 0 0])
+            (define-fringe-bitmap 'hs-marker [0 32 48 56 60 56 48 32])
 
             (defface my/hs-fringe-face
               '((t (:foreground "#888"

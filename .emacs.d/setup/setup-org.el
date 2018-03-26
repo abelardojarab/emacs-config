@@ -68,9 +68,9 @@
           (defun org-element-subscript-successor      (arg))
           (defun org-element-superscript-successor    (arg))
           (defun org-element-underline-successor      (arg))
-          (defun org-element-verbatim-successor       (arg))
-          (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode)))
+          (defun org-element-verbatim-successor       (arg)))
   :config (progn
+
             ;; Basic packages
             (use-package org-list)
             (use-package ox-org)
@@ -84,9 +84,9 @@
             (add-hook 'org-mode-hook
                       (lambda ()
                         (progn
-                          (linum-mode -1)
-                          (cua-mode t)
-                          (flyspell-mode t)
+                          (linum-mode     -1)
+                          (cua-mode       t)
+                          (flyspell-mode  t)
                           (writegood-mode t)
                           (yas-minor-mode t)
                           (undo-tree-mode t))))
@@ -417,14 +417,14 @@
   :init (add-hook 'org-mode-hook 'org-fancy-priorities-mode)
   :commands org-fancy-priorities-mode
   :config (setq org-fancy-priorities-list '((?A . "❗")
-                                              (?B . "⬆")
-                                              (?C . "⬇")
-                                              (?D . "☕")
-                                              (?1 . "⚡")
-                                              (?2 . "⮬")
-                                              (?3 . "⮮")
-                                              (?4 . "☕")
-                                              (?I . "Important"))))
+                                            (?B . "⬆")
+                                            (?C . "⬇")
+                                            (?D . "☕")
+                                            (?1 . "⚡")
+                                            (?2 . "⮬")
+                                            (?3 . "⮮")
+                                            (?4 . "☕")
+                                            (?I . "Important"))))
 
 (provide 'setup-org)
 ;;; setup-org.el ends here
