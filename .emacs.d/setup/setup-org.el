@@ -84,6 +84,7 @@
             (add-hook 'org-mode-hook
                       (lambda ()
                         (progn
+                          (set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
                           (linum-mode         -1)
                           (org-indent-mode    -1)
                           (cua-mode           t)
