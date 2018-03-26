@@ -326,34 +326,37 @@
                   shackle-lighter               ""
                   shackle-select-reused-windows nil
                   shackle-default-alignment     'right
-                  shackle-default-rule          '(:select t :autofit t :size 30)
-                  shackle-default-size           25
-                  shackle-default-ratio          0.3)  ;; default 0.5
+                  shackle-default-rule          '(:select t :autofit t :align right :size 0.4 :same t :inhibit-window-quit nil)
+                  shackle-default-size           0.4
+                  shackle-default-ratio          0.4)  ;; default 0.5
 
             (setq shackle-rules
-                  ;; CONDITION(:regexp)        :select     :inhibit-window-quit   :size+:align|:other     :same|:popup
-                  '((compilation-mode             :regexp nil :select nil :align t)
-                    (help-mode                    :regexp nil :select nil :align t)
-                    (apropos-mode                 :autokill t :autoclose t)
-                    (comint-mode                  :noesc  t)
+                  ;; CONDITION(:regexp)        :select|:noselect     :inhibit-window-quit   :size+:align|:other     :same|:popup
+                  '((compilation-mode             :regexp nil)
+                    (help-mode                    :regexp nil)
+                    (apropos-mode                 :autokill t)
+                    (comint-mode                  :noesc t)
                     (grep-mode                    :noselect t :autokill t)
                     (Buffer-menu-mode             :autokill t)
                     (tabulated-list-mode          :noesc t)
-                    ("*Warnings*"                 :noselect t :autofit t)
-                    ("\\*Org Src.*"               :regexp t   :select nil :align t)
-                    ("\\*Org todo.*"              :regexp t   :select nil :align t    :autofit t)
-                    ("*Flycheck errors*"          :regexp nil :select t   :autofit t)
-                    ("*undo-tree*"                :regexp nil :select t   :align t)
-                    ("*eshell*"                   :regexp nil :select t   :align t)
-                    ("*info*"                     :size 8     :select t   :autokill t)
-                    ("\\*Async Shell.*\\*"        :regexp t   :select nil :align t)
-                    ("*Help*"                     :select nil :autokill t)
+                    (magit-status-mode            :inhibit-window-quit t)
+                    (magit-log-mode               :inhibit-window-quit t)
+                    ("*Warnings*"                 :noselect t)
+                    ("*Python-Help*"              :regexp nil :noselect t)
+                    ("*Completions*"              :regexp nil :noselect t)
+                    ("*Calendar*"                 :regexp nil :noselect t)
+                    ("*Messages*"                 :regexp nil :noselect t)
+                    ("*undo-tree*"                :regexp nil)
+                    ("*eshell*"                   :regexp nil)
+                    ("*Flycheck errors*"          :regexp nil)
+                    ("*info*"                     :autokill t)
+                    ("*Help*"                     :noselect t :autokill t)
+                    ("\\magit:.*"                 :regexp t)
+                    ("\\*Org Src.*"               :regexp t)
+                    ("\\*Org todo.*"              :regexp t)
+                    ("\\*Async Shell.*\\*"        :regexp t)
                     ("^\\*.*Shell Command.*\\*$"  :regexp t   :noselect t :autokill t)
-                    ("*Python-Help*"              :regexp nil :select nil :autofit t  :inhibit-window-quit nil)
-                    ("*Completions*"              :regexp nil :select nil :align t)
-                    ("*Messages*"                 :regexp nil :select nil :align t)
-                    ("\\`\\*helm.*?\\*\\'"        :regexp t   :select t   :align t)
-                    ("*Calendar*"                 :regexp nil :select nil :align t)
+                    ("\\`\\*helm.*?\\*\\'"        :regexp t)
                     ("^ ?\\*"                     :regexp t   :noselect t :autokill t :autoclose t)))))
 
 (provide 'setup-windows)

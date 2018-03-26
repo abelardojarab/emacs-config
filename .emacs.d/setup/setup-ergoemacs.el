@@ -27,10 +27,10 @@
 ;; Ergoemacs
 (use-package ergoemacs-mode-fixed
   :defer t
-  :if (and (executable-find "gzip")
-           (display-graphic-p))
+  :if (executable-find "gzip")
   :load-path (lambda () (expand-file-name "ergoemacs-mode/" user-emacs-directory))
   :commands ergoemacs-mode
+  :init (ergoemacs-mode)
   :config (progn
             (ergoemacs-mode-after-init-emacs)
             (setq ergoemacs-theme              "standard"
