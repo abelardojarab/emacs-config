@@ -40,7 +40,7 @@
   :load-path (lambda () (expand-file-name "org-bullets/" user-emacs-directory))
   :init (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
   :commands org-bullets-mode
-  :config (setq org-bullets-bullet-list '("●" "•" "•" "•")))
+  :config (setq org-bullets-bullet-list '("◉" "○" "•" "•")))
 
 ;; Seek headlines or content inside org buffers
 (use-package org-seek

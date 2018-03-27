@@ -28,11 +28,10 @@
   :load-path (lambda () (expand-file-name "hydra/" user-emacs-directory))
   :config (progn
 
-            ;; Do not use lv it messes up window
+            ;; Do not use lv it messes up windows layout
             (setq-default hydra-lv nil)
 
-            (defhydra hydra-window (:color red
-                                           :hint nil)
+            (defhydra hydra-window (:color red :hint nil)
               "
  Split: _v_ert _x_:horz
 Delete: _o_nly  _da_ce  _dw_indow  _db_uffer  _df_rame
@@ -235,7 +234,16 @@ _q_: quit
               ("o" org-open-at-point)
               ("p" org-previous-link)
               ("s" org-store-link)
-              ("v" org-overview))))
+              ("v" org-overview))
+
+            (defhydra hydra-org-clock (:color blue :timeout 12 :columns 4)
+              "Org commands"
+              ("i" (lambda () (interactive) (org-clock-in '(4))) "Clock in")
+              ("o" org-clock-out "Clock out")
+              ("q" org-clock-cancel "Cancel a clock")
+              ("<f10>" org-clock-in-last "Clock in the last task")
+              ("j" (lambda () (interactive) (org-clock-goto '(4))) "Go to a clock")
+              ("m" make-this-message-into-an-org-todo-item "Flag and capture this message"))))
 
 (provide 'setup-hydra)
 ;;; setup-hydra.el ends here
