@@ -135,7 +135,7 @@
                 (toggle-read-only)))
             (ad-activate 'ibuffer-update-title-and-summary)
 
-            ;; Use human readable Size column instead of original one
+            ;; Use human readable size column instead of original one
             (define-ibuffer-column size-h
               (:name "Size" :inline t)
               (cond
