@@ -48,7 +48,8 @@
             (add-hook 'python-mode-hook
                       (function (lambda ()
                                   (progn
-				    (eldoc-mode -1) ;; disable annoying "Python-Help" buffer
+                                    ;; disable annoying "Python-Help" buffer
+                                    (eldoc-mode -1)
                                     (setq-default python-indent-offset 4
                                                   py-indent-offset     4)
                                     (my/tabs-setup nil 4)))))

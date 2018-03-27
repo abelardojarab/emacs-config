@@ -330,7 +330,7 @@ footnote; or, the properties drawer.  Otherwise make it visible."
              ("C-c {"   . org-table-toggle-formula-debugger))
 
             ;; Miscellanenous settings
-            (setq org-startup-folded              t
+            (setq org-startup-folded              'showall
                   org-startup-indented            t
                   org-cycle-separator-lines       1
                   org-cycle-include-plain-lists   'integrate
@@ -341,6 +341,9 @@ footnote; or, the properties drawer.  Otherwise make it visible."
                   org-hide-leading-stars          nil
                   org-highlight-latex-and-related '(latex)
                   org-ellipsis                    " ••• "
+
+                  ;; Avoid editting hidden regions
+                  org-catch-invisible-edits      'smart
 
                   ;; this causes problem in other modes
                   org-indent-mode                 nil
@@ -361,6 +364,13 @@ footnote; or, the properties drawer.  Otherwise make it visible."
                   ;; Right-align tags to an indent from the right margin
                   org-tags-column                120)
 
+            ;; Allow multiple line Org emphasis markup
+            (setcar (nthcdr 4 org-emphasis-regexp-components) 20) ;; Up to 20 lines, default is just 1
+
+            ;; Below is needed to apply the modified `org-emphasis-regexp-components'
+            ;; settings from above.
+            (org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components)
+
             ;; Allow quotes to be verbatim
             (add-hook 'org-mode-hook
                       (lambda ()
@@ -368,16 +378,6 @@ footnote; or, the properties drawer.  Otherwise make it visible."
                         (org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components)
                         (org-element--set-regexps)
                         (custom-set-variables `(org-emphasis-alist ',org-emphasis-alist))))
-
-            ;; Export options
-            (setq org-export-coding-system         'utf-8
-                  org-export-time-stamp-file       nil
-                  org-export-with-sub-superscripts '{}
-                  org-export-allow-bind-keywords   t
-                  org-export-async-debug           t
-
-                  ;; Turn ' and " into ‘posh’ “quotes”
-                  org-export-with-smart-quotes     t)
 
             ;; Enable mouse in Org
             (use-package org-mouse)
@@ -576,6 +576,67 @@ footnote; or, the properties drawer.  Otherwise make it visible."
 
             ;; Change .pdf association directly within the alist
             (setcdr (assoc "\\.pdf\\'" org-file-apps) "acroread %s")
+
+            ;; Org Export
+            (use-package ox
+              :config (progn
+
+                        ;; Export options
+                        (setq org-export-coding-system         'utf-8
+                              org-export-time-stamp-file       nil
+                              org-export-headline-levels       4
+
+                              ;; Require wrapping braces to interpret _ and ^ as sub/super-script
+                              org-export-with-sub-superscripts '{}      ;;  ;also #+options: ^:{}
+
+                              org-export-allow-bind-keywords   t
+                              org-export-async-debug           t
+
+                              ;; Turn ' and " into ‘posh’ “quotes”
+                              org-export-with-smart-quotes     t) ;; also #+options: ':t
+
+                        ;; Org Export Customization
+                        ;; Delete selected columns from Org tables before exporting
+                        (defun my/org-export-delete-commented-cols (back-end)
+                          "Delete columns $2 to $> marked as `<#>' on a row with `/' in $1.
+If you want a non-empty column $1 to be deleted make it $2 by
+inserting an empty column before and adding `/' in $1."
+                          (while (re-search-forward
+                                  "^[ \t]*| +/ +|\\(.*|\\)? +\\(<#>\\) *|" nil :noerror)
+                            (goto-char (match-beginning 2))
+                            (org-table-delete-column)
+                            (beginning-of-line)))
+                        (add-hook 'org-export-before-processing-hook
+                                  #'my/org-export-delete-commented-cols)
+
+                        ;; http://lists.gnu.org/archive/html/emacs-orgmode/2016-09/msg00168.html
+                        (defun my/filter-begin-only (type)
+                          "Remove BEGIN_ONLY %s blocks whose %s doesn't equal TYPE.
+For those that match, only remove the delimiters.
+On the flip side, for BEGIN_EXCEPT %s blocks, remove those if %s equals TYPE. "
+                          (goto-char (point-min))
+                          (while (re-search-forward " *#\\+BEGIN_\\(ONLY\\|EXCEPT\\) +\\([a-z]+\\)\n"
+                                                    nil :noerror)
+                            (let ((only-or-export (match-string-no-properties 1))
+                                  (block-type (match-string-no-properties 2))
+                                  (begin-from (match-beginning 0))
+                                  (begin-to (match-end 0)))
+                              (re-search-forward (format " *#\\+END_%s +%s\n"
+                                                         only-or-export block-type))
+                              (let ((end-from (match-beginning 0))
+                                    (end-to (match-end 0)))
+                                (if (or (and (string= "ONLY" only-or-export)
+                                             (string= type block-type))
+                                        (and (string= "EXCEPT" only-or-export)
+                                             (not (string= type block-type))))
+                                    (progn              ;Keep the block,
+                                        ;delete just the comment markers
+                                      (delete-region end-from end-to)
+                                      (delete-region begin-from begin-to))
+                                  ;; Delete the block
+                                  (message "Removing %s block" block-type)
+                                  (delete-region begin-from end-to))))))
+                        (add-hook 'org-export-before-processing-hook #'my/filter-begin-only)))
 
             ;; Beamer/ODT/Markdown exporters
             (use-package ox-beamer)

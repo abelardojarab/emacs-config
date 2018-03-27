@@ -77,7 +77,7 @@
                 ad-do-it))
 
             ;; Org log
-            (setq org-log-done                  t
+            (setq org-log-done                  'time ;; Insert only timestamp when closing an Org TODO item
                   org-enforce-todo-dependencies t)
 
             ;; Agenda settings

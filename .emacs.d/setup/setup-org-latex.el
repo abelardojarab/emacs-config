@@ -158,9 +158,24 @@
                              (funcall orig link info)
                              "\\end{center}"))))
 
-            ;; Add defaults packages to include when exporting.
+            ;; `hyperref' package setup
             (setq org-latex-hyperref-template
-                  "\\hypersetup{\n  pdfkeywords={%k},\n  pdfsubject={%d},\n  pdfcreator={%c},\n  citecolor=black,\n  filecolor=black,\n  colorlinks=true,\n  linkcolor=black,\n  urlcolor=black}\n")
+                  (concat "\\hypersetup{\n"
+                          "pdfauthor={%a},\n"
+                          "pdftitle={%t},\n"
+                          "pdfkeywords={%k},\n"
+                          "pdfsubject={%d},\n"
+                          "pdfcreator={%c},\n"
+                          "pdflang={%L},\n"
+                          ;; Get rid of the red boxes drawn around the links
+                          "colorlinks,\n"
+                          "citecolor=black,\n"
+                          "filecolor=black,\n"
+                          "linkcolor=blue,\n"
+                          "urlcolor=blue\n"
+                          "}"))
+
+            ;; Add defaults packages to include when exporting.
             (add-to-list 'org-latex-packages-alist '("" "graphicx"))
             (add-to-list 'org-latex-packages-alist '("" "geometry"))
             (add-to-list 'org-latex-packages-alist '("" "hyperref"))
