@@ -146,6 +146,7 @@ non-nil."
 
 ;; Display vertical line
 (use-package fill-column-indicator
+  :defer t
   :if (display-graphic-p)
   :init (dolist (hook my/linum-modes)
           (add-hook hook (lambda ()
@@ -173,40 +174,40 @@ non-nil."
               (when (and my/fci-mode-suppressed
                          (null popup-instances))
                 (setq my/fci-mode-suppressed nil)
-                (turn-on-fci-mode))
+                (turn-on-fci-mode)))
 
-              (defadvice enable-theme (after recompute-fci-face activate)
-                "Regenerate fci-mode line images after switching themes"
-                (dolist (buffer (buffer-list))
-                  (with-current-buffer buffer
-                    (turn-on-fci-mode))))
+            (defadvice enable-theme (after recompute-fci-face activate)
+              "Regenerate fci-mode line images after switching themes"
+              (dolist (buffer (buffer-list))
+                (with-current-buffer buffer
+                  (turn-on-fci-mode))))
 
-              ;; `fci-mode' needs to be disabled/enabled around the
-              ;; `shell-command-on-region' command too.
-              (defun my/shell--fci-disable-temporarily (orig-fun &rest args)
-                "Disable `fci-mode' before calling ORIG-FUN; re-enable afterwards."
-                (let ((fci-was-initially-on (when fci-mode
-                                              (prog1
-                                                  fci-mode
-                                                (fci-mode -1)))))
-                  (prog1
-                      (apply orig-fun args)
-                    (when fci-was-initially-on
-                      (fci-mode 1)))))
-              (advice-add 'shell-command-on-region :around #'my/shell--fci-disable-temporarily)
+            ;; `fci-mode' needs to be disabled/enabled around the
+            ;; `shell-command-on-region' command too.
+            (defun my/shell--fci-disable-temporarily (orig-fun &rest args)
+              "Disable `fci-mode' before calling ORIG-FUN; re-enable afterwards."
+              (let ((fci-was-initially-on (when fci-mode
+                                            (prog1
+                                                fci-mode
+                                              (fci-mode -1)))))
+                (prog1
+                    (apply orig-fun args)
+                  (when fci-was-initially-on
+                    (fci-mode 1)))))
+            (advice-add 'shell-command-on-region :around #'my/shell--fci-disable-temporarily)
 
-              (defun my/fci-redraw-frame-all-buffers ()
-                "Redraw the fill-column rule in all buffers on the selected frame.
+            (defun my/fci-redraw-frame-all-buffers ()
+              "Redraw the fill-column rule in all buffers on the selected frame.
 Running this function after changing themes updates the fci rule color in
 all the buffers."
-                (interactive)
-                (let ((bufs (delete-dups (buffer-list (selected-frame)))))
-                  (dolist (buf bufs)
-                    (with-current-buffer buf
-                      (when fci-mode
-                        (fci-delete-unneeded)
-                        (fci-make-overlay-strings)
-                        (fci-update-all-windows t)))))))))
+              (interactive)
+              (let ((bufs (delete-dups (buffer-list (selected-frame)))))
+                (dolist (buf bufs)
+                  (with-current-buffer buf
+                    (when fci-mode
+                      (fci-delete-unneeded)
+                      (fci-make-overlay-strings)
+                      (fci-update-all-windows t))))))))
 
 ;; Just like the previous package, this one is also subtle.
 ;; It highlights characters that exceed a particular column margin. Very useful while coding.

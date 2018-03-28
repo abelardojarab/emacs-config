@@ -103,7 +103,8 @@
 ;; Devhelp support
 (use-package devhelp
   :defer t
-  :commands (devhelp-word-at-point devhelp-toggle-automatic-assistant))
+  :commands (devhelp-word-at-point
+             devhelp-toggle-automatic-assistant))
 
 ;; Automatically insert prototype functions from .h
 (use-package member-functions
@@ -111,7 +112,9 @@
 
 ;; Basic C compile
 (use-package basic-c-compile
-  :commands (basic-c-compile-file basic-c-compile-run-c basic-c-compile-makefile)
+  :commands (basic-c-compile-file
+             basic-c-compile-run-c
+             basic-c-compile-makefile)
   :load-path (lambda () (expand-file-name "basic-c-compile/" user-emacs-directory))
   :config (setq basic-c-compiler "g++"
                 basic-c-compile-all-files nil
