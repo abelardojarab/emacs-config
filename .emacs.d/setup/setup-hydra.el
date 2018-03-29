@@ -299,6 +299,42 @@ _q_: quit
               ("q" quit-window "quit ibuffer" :color blue)
               ("." nil "toggle hydra" :color blue))
 
+            (defhydra hydra-org-template (:color blue
+                                                 :hint nil)
+              "
+org-template:  _c_enter        _s_rc          _e_xample           _v_erilog        _t_ext              _I_NCLUDE:
+               _l_atex         _h_tml         _V_erse             _m_atlab         _L_aTeX:            _H_TML:
+               _a_scii         _q_uote        _E_macs-lisp        _n_im            _i_ndex:            _A_SCII:
+               _o_rg           _S_hell        _p_ython            e_X_port         [_bd_] description  [_bn_] note
+"
+              ("s" (my/org-template-expand "<s")) ;#+begin_src ... #+end_src
+              ("E" (my/org-template-expand "<s" "emacs-lisp"))
+              ("v" (my/org-template-expand "<s" "systemverilog"))
+              ("m" (my/org-template-expand "<s" "matlab"))
+              ("n" (my/org-template-expand "<s" "nim"))
+              ("o" (my/org-template-expand "<s" "org"))
+              ("S" (my/org-template-expand "<s" "shell"))
+              ("p" (my/org-template-expand "<s" "python"))
+              ("t" (my/org-template-expand "<s" "text"))
+              ("bd" (my/org-template-expand "<bd")) ;#+begin_description ... #+end_description (Special block in `ox-hugo')
+              ("bn" (my/org-template-expand "<bn")) ;#+begin_note ... #+end_note (Special block in `ox-hugo')
+              ("e" (my/org-template-expand "<e")) ;#+begin_example ... #+end_example
+              ("x" (my/org-template-expand "<e")) ;#+begin_example ... #+end_example
+              ("q" (my/org-template-expand "<q")) ;#+begin_quote ... #+end_quote
+              ("V" (my/org-template-expand "<v")) ;#+begin_verse ... #+end_verse
+              ("c" (my/org-template-expand "<c")) ;#+begin_center ... #+end_center
+              ("X" (my/org-template-expand "<X")) ;#+begin_export ... #+end_export
+              ("l" (my/org-template-expand "<X" "latex")) ;#+begin_export latex ... #+end_export
+              ("h" (my/org-template-expand "<X" "html")) ;#+begin_export html ... #+end_export
+              ("a" (my/org-template-expand "<X" "ascii")) ;#+begin_export ascii ... #+end_export
+              ("L" (my/org-template-expand "<L")) ;#+latex:
+              ("H" (my/org-template-expand "<H")) ;#+html:
+              ("A" (my/org-template-expand "<A")) ;#+ascii:
+              ("i" (my/org-template-expand "<i")) ;#+index: line
+              ("I" (my/org-template-expand "<I")) ;#+include: line
+              ("<" self-insert-command "<")
+              ("Q" nil "quit"))
+
             (defhydra hydra-ibuffer-mark (:color teal :columns 5
                                                  :after-exit (hydra-ibuffer-main/body))
               "Mark"

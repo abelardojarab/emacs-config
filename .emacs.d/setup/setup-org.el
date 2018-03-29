@@ -398,25 +398,214 @@ footnote; or, the properties drawer.  Otherwise make it visible."
                              :underline "light grey" :foreground "#008ED1")))
               "Face used for the line delimiting the end of source blocks.")
 
-            ;; Org Templates
-            (setq org-structure-template-alist
-                  '(("s" "#+begin_src ?\n\n#+end_src" "<src lang=\"?\">\n\n</src>")
-                    ("e" "#+begin_example\n?\n#+end_example" "<example>\n?\n</example>")
-                    ("q" "#+begin_quote\n?\n#+end_quote" "<quote>\n?\n</quote>")
-                    ("v" "#+BEGIN_VERSE\n?\n#+END_VERSE" "<verse>\n?\n</verse>")
-                    ("c" "#+BEGIN_COMMENT\n?\n#+END_COMMENT")
-                    ("p" "#+BEGIN_PRACTICE\n?\n#+END_PRACTICE")
-                    ("l" "#+begin_src emacs-lisp\n?\n#+end_src" "<src lang=\"emacs-lisp\">\n?\n</src>")
-                    ("L" "#+latex: " "<literal style=\"latex\">?</literal>")
-                    ("h" "#+begin_html\n?\n#+end_html" "<literal style=\"html\">\n?\n</literal>")
-                    ("H" "#+html: " "<literal style=\"html\">?</literal>")
-                    ("E" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC\n")
-                    ("S" "#+BEGIN_SRC shell-script\n?\n#+END_SRC\n")
-                    ("L" "#+BEGIN_SRC latex\n\\begin{align*}\n?\\end{align*}\n#+END_SRC")
-                    ("a" "#+begin_ascii\n?\n#+end_ascii")
-                    ("A" "#+ascii: ")
-                    ("i" "#+index: ?" "#+index: ?")
-                    ("I" "#+include %file ?" "<include file=%file markup=\"?\">")))
+            ;; Easy Templates
+            ;; Copy of the old "Easy Templates" feature that was removed in
+            ;; https://code.orgmode.org/bzg/org-mode/commit/c04e357f3d5d93484277a7e439847b1233b872bd
+            (defconst org-easy-template-alist  ;; Old `org-structure-template-alist'
+              '(("s" "#+begin_src ?\n\n#+end_src")
+                ("bd" "#+begin_description\n?\n#+end_description") ;Special block in `ox-hugo'
+                ("bn" "#+begin_note\n?\n#+end_note") ;Special block in `ox-hugo'
+                ("e" "#+begin_example\n?\n#+end_example")
+                ("q" "#+begin_quote\n?\n#+end_quote")
+                ("v" "#+begin_verse\n?\n#+end_verse")
+                ("V" "#+begin_verbatim\n?\n#+end_verbatim")
+                ("c" "#+begin_center\n?\n#+end_center")
+                ("C" "#+begin_comment\n?\n#+end_comment")
+                ("X" "#+begin_export ?\n\n#+end_export")
+                ("l" "#+begin_export latex\n?\n#+end_export")
+                ("L" "#+latex: ")
+                ("h" "#+begin_export html\n?\n#+end_export")
+                ("H" "#+html: ")
+                ("a" "#+begin_export ascii\n?\n#+end_export")
+                ("A" "#+ascii: ")
+                ("i" "#+index: ?")
+                ("I" "#+include: %file ?"))
+              "Structure completion elements.
+This is a list of abbreviation keys and values.  The value gets
+inserted if you type `<' followed by one or more characters and
+then press the completion key, usually `TAB'.  %file will be
+replaced by a file name after prompting for the file using
+completion.  The cursor will be placed at the position of the `?'
+in the template.")
+
+            (defun org-try-structure-completion ()
+              "Try to complete a structure template before point.
+This looks for strings like \"<e\" on an otherwise empty line and
+expands them."
+              (let ((l (buffer-substring (point-at-bol) (point)))
+                    a)
+                (when (and (looking-at "[ \t]*$")
+                           (string-match "^[ \t]*<\\([a-zA-Z]+\\)$" l)
+                           (setq a (assoc (match-string 1 l) org-easy-template-alist)))
+                  (org-complete-expand-structure-template (+ -1 (point-at-bol)
+                                                             (match-beginning 1))
+                                                          a)
+                  t)))
+
+            (defun org-complete-expand-structure-template (start cell)
+              "Expand a structure template."
+              (let ((rpl (nth 1 cell))
+                    (ind ""))
+                (delete-region start (point))
+                (when (string-match "\\`[ \t]*#\\+" rpl)
+                  (cond
+                   ((bolp))
+                   ((not (string-match "\\S-" (buffer-substring (point-at-bol) (point))))
+                    (setq ind (buffer-substring (point-at-bol) (point))))
+                   (t (newline))))
+                (setq start (point))
+                (when (string-match "%file" rpl)
+                  (setq rpl (replace-match
+                             (concat
+                              "\""
+                              (save-match-data
+                                (abbreviate-file-name (read-file-name "Include file: ")))
+                              "\"")
+                             t t rpl)))
+                (setq rpl (mapconcat 'identity (split-string rpl "\n")
+                                     (concat "\n" ind)))
+                (insert rpl)
+                (when (re-search-backward "\\?" start t) (delete-char 1))))
+
+            (defun my/org-template-expand (str &optional arg)
+              "Expand Org template based on STR.
+STR is always prefixed with \"<\".  The string following that
+\"<\" must match with the `car' of one of the elements in
+`org-easy-template-alist' (examples: \"<e\", \"<s\").
+If no region is selected, this function simply runs
+`org-try-structure-completion' and does the template expansion
+based on `org-easy-template-alist'.  If a region is selected, the
+selected text is wrapped with that Org template.
+If the \"#+begin_src\" block is inserted and ARG is a string
+representing the source language, that source block is annotated
+with that ARG.  If ARG is nil, point is returned to the end of
+the \"#+begin_src\" line after the template insertion.
+If the \"#+begin_export\" block is inserted and ARG is a string
+representing the export backend, that export block is annotated
+with that ARG.  If ARG is nil, point is returned to the end of
+the \"#+begin_export\" line after the template insertion."
+              (let* ((is-region? (use-region-p))
+                     (beg (if is-region?
+                              (region-beginning)
+                            (point)))
+                     ;; Copy marker for end so that if characters are added/removed
+                     ;; before the `end', the reference end point is updated (because of
+                     ;; being a marker).
+                     (end (when is-region?
+                            (copy-marker (region-end) t)))
+                     content post-src-export column)
+
+                (goto-char beg)
+
+                ;; Save the indentation level of the content (if region is selected) or
+                ;; the point (if region is not selected).
+                (save-excursion
+                  (forward-line 0)            ;Go to BOL
+                  (when (looking-at "[[:blank:]]")
+                    (back-to-indentation)
+                    (setq column (current-indentation))))
+
+                (when is-region?
+                  ;; Update `beg' if needed..
+                  ;; If `beg' is at BOL, update `beg' to be at the indentation.
+                  (when (and (bolp)
+                             column)
+                    (back-to-indentation)
+                    (setq beg (point)))
+
+                  ;; Insert a newline if `beg' is *not* at BOL.
+                  ;; Example: You have ^abc$ where ^ is BOL and $ is EOL.
+                  ;;          "bc" is selected and pressing <e should result in:
+                  ;;            a
+                  ;;            #+begin_example
+                  ;;            bc
+                  ;;            #+end_example
+                  (unless (or (bolp)
+                              (looking-back "^[[:blank:]]*"))
+                    (insert "\n")
+                    (when column
+                      (indent-to column))
+                    (setq beg (point)))
+
+                  ;; Update `end' if needed ..
+                  (goto-char end)
+                  (cond
+                   ((bolp)                      ;`end' is at BOL
+                    (skip-chars-backward " \n\t")
+                    (set-marker end (point)))
+                   ((and (not (bolp))           ;`end' is neither at BOL nor at EOL
+                         (not (looking-at "[[:blank:]]*$")))
+                    ;; Insert a newline if `end' is neither at BOL nor EOL
+                    ;; Example: You have ^abc$ where ^ is bol and $ is eol.
+                    ;;          "a" is selected and pressing <e should result in:
+                    ;;            #+begin_example
+                    ;;            a
+                    ;;            #+end_example
+                    ;;            bc
+                    (insert "\n")
+                    (when column
+                      (indent-to column))
+                    (skip-chars-backward " \n\t")
+                    (set-marker end (point)))
+                   (t          ;`end' is either at EOL or looking at trailing whitespace
+                    ))
+                  ;; Now delete the content in the selected region and save it to
+                  ;; `content'.
+                  (setq content (delete-and-extract-region beg end))
+                  ;; Make the `end' marker point to nothing as its job is done.
+                  ;; http://lists.gnu.org/archive/html/emacs-orgmode/2017-09/msg00049.html
+                  ;; (elisp) Overview of Markers
+                  (set-marker end nil))
+
+                ;; Insert the `str' required for template expansion (example: "<e").
+                (insert str)
+                (org-try-structure-completion)
+                (when (let* ((case-fold-search t)) ;Ignore case
+                        (looking-back "^[[:blank:]]*#\\+begin_\\(src\\|export\\)[[:blank:]]+"))
+                  (cond
+                   ((stringp arg)
+                    (insert arg)
+                    (forward-line))
+                   ((and (null arg) ;If the language for the source block,
+                         content)   ;or the backend for the export block is not specified
+                    (setq post-src-export (point))
+                    (forward-line))
+                   (t
+                    )))
+                ;; At this point the cursor will be between the #+begin_.. and
+                ;; #+end_.. lines.  Now also indent the point forward if needed.
+                (when column
+                  (indent-to column))
+
+                ;; Now if a region was selected, and `content' was saved from that,
+                ;; paste it back in.
+                (when content
+                  ;; A special case for verbatim blocks.. need to escape "*" and "#+"
+                  ;; with commas -- (org) Literal examples.
+                  ;; http://lists.gnu.org/archive/html/emacs-orgmode/2017-10/msg00349.html
+                  (when (save-excursion
+                          (previous-line)
+                          (forward-line 0)
+                          (let* ((case-fold-search t)) ;Ignore case
+                            (looking-at-p (concat "^[[:blank:]]*#\\+BEGIN_"
+                                                  (regexp-opt '("EXAMPLE" "EXPORT" "SRC"))))))
+                    (setq content (org-escape-code-in-string content)))
+                  (insert content)
+                  (deactivate-mark)
+                  (when post-src-export ;Case where user needs to specify the #+begin_src language,
+                    (goto-char post-src-export))))) ;or the #+begin_export backend.
+
+            (defun my/org-template-maybe ()
+              "Insert org-template if point is at the beginning of the
+line, or if a region is selected.  Else call
+`self-insert-command'."
+              (interactive)
+              (let ((is-region? (use-region-p)))
+                (if (or is-region?
+                        (and (not is-region?)
+                             (looking-back "^[[:blank:]]*")))
+                    (hydra-org-template/body)
+                  (self-insert-command 1))))
 
             ;; Fix shift problem in Org mode
             (setq org-CUA-compatible t)
