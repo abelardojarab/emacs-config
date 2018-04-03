@@ -87,6 +87,12 @@
   :init (setq stack-trace-on-error t)
   :config (progn
 
+            (defadvice ecb-stealthy-updates (around bar activate)
+              (ignore-errors add-do-it))
+
+            (defadvice ecb-basic-buffer-sync (around bar activate)
+              (ignore-errors add-do-it))
+
             ;; Fix error with symboldef sync
             (defmacro ecb-with-readonly-buffer (buffer &rest body)
               "Make buffer BUFFER current but do not display it. Evaluate BODY in buffer

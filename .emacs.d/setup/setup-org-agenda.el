@@ -59,7 +59,7 @@
                             (if tod (appt-add tod event))))) entries)))))
 
 (use-package org-agenda
-  :defer t
+  :demand t
   :after (org calendar)
   :commands (org-agenda org-archive-done-tasks)
   :bind (("C-c A" . org-agenda)
@@ -547,7 +547,8 @@ Captured %<%Y-%m-%d %H:%M>
              org-jira-get-subtasks
              org-jira-update-comment
              org-jira-todo-to-jira)
-  :custom (jiralib-url "http://jaraberrocal.readmyblog.org:8080"))
+  :custom (jiralib-url "http://jaraberrocal.readmyblog.org:8080")
+  :config (setq org-jira-working-dir  (concat org-directory "/JIRA")))
 
 (provide 'setup-org-agenda)
 ;;; setup-org-agenda.el ends here

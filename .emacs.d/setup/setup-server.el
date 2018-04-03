@@ -99,12 +99,15 @@
             (defun quit-emacs ()
               (interactive)
               (ignore-errors
-        (if (bound-and-true-p ergoemacs-mode)
-            (ergoemacs-mode -1))
-        (setq my/really-kill-emacs t)
-        (kill-emacs)
-        (setq my/really-kill-emacs t)
-        (kill-emacs)))
+                (if (bound-and-true-p ergoemacs-mode)
+                    (ergoemacs-mode -1))
+                (setq my/really-kill-emacs t)
+                (kill-emacs)
+                (setq my/really-kill-emacs t)
+                (kill-emacs)
+                (setq my/really-kill-emacs t)
+                (kill-emacs)
+                ))
 
             ;; Detect presence of modified buffers
             (defun my/modified-buffers-exist()
