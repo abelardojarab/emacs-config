@@ -130,14 +130,14 @@
                 (setq org-default-notes-file  (concat org-directory "/notes.org")
                       org-default-refile-file (concat org-directory "/refile.org")
                       org-agenda-default-file (concat org-directory "/agenda.org")
-                      org-agenda-diary-file   (concat org-directory "/TODOAJB.org")
-                      org-agenda-todo-file    (concat org-directory "/TODOAJB.org")
+                      org-agenda-diary-file   (concat org-directory "/TODOS.org")
+                      org-agenda-todo-file    (concat org-directory "/TODOS.org")
                       org-mobile-file         (concat org-directory "/mobile.org")
                       org-mobile-directory    (concat org-directory "/mobile"))
                 (setq org-agenda-files (list
                                         (concat org-directory "/diary.org")
                                         (concat org-directory "/agenda.org")
-                                        (concat org-directory "/TODOAJB.org")
+                                        (concat org-directory "/TODOS.org")
                                         (concat org-directory "/notes.org")
                                         (concat org-directory "/mobile.org")
                                         (concat org-directory "/refile.org")
@@ -276,7 +276,7 @@ DEF-FLAG   is t when a double ++ or -- indicates shift relative to
                      ((org-agenda-files (list org-default-notes-file))))
                     ("b" todo "agenda.org"
                      ((org-agenda-files (list org-agenda-default-file))))
-                    ("w" todo "TODOAJB.org"
+                    ("w" todo "TODOS.org"
                      ((org-agenda-files (list org-agenda-todo-file))))
                     ("v" todo "Column View"
                      ((org-agenda-prefix-format "")
