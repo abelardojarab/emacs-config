@@ -548,7 +548,7 @@ Captured %<%Y-%m-%d %H:%M>
              org-jira-update-comment
              org-jira-todo-to-jira)
   :custom (jiralib-url "http://jaraberrocal.readmyblog.org:8080")
-  :config (setq org-jira-working-dir  (concat org-directory "/JIRA")))
+  :config (setq org-jira-working-dir org-directory))
 
 (provide 'setup-org-agenda)
 ;;; setup-org-agenda.el ends here
