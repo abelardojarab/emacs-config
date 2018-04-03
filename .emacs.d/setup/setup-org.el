@@ -24,6 +24,12 @@
 
 ;;; Code:
 
+;; Indentation, list bullets and checkboxes are displayed in monospace
+(use-package org-variable-pitch
+  :defer t
+  :commands org-variable-pitch-minor-mode
+  :init (add-hook 'org-mode-hook 'org-variable-pitch-minor-mode))
+
 ;; Org mode
 (use-package org
   :defer t
