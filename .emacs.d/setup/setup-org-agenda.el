@@ -104,9 +104,9 @@
             (setq org-columns-default-format "%50ITEM %12SCHEDULED %TODO %3PRIORITY %Effort{:} %TAGS")
 
             ;; Set up Org default files
-            (let ((todo_workspace "~/workspace/Documents/Org/TODOAJB.org")
-                  (todo_dropbox "~/Dropbox/Documents/Org/TODOAJB.org")
-                  (todo_googledrive "~/Google Drive/Documents/Org/TODOAJB.org"))
+            (let ((todo_workspace "~/workspace/Documents/Org/agenda.org")
+                  (todo_dropbox "~/Dropbox/Documents/Org/agenda.org")
+                  (todo_googledrive "~/Google Drive/Documents/Org/agenda.org"))
               (when (or (file-readable-p todo_workspace)
                         (file-readable-p todo_dropbox)
                         (file-readable-p todo_googledrive))
@@ -548,7 +548,7 @@ Captured %<%Y-%m-%d %H:%M>
              org-jira-update-comment
              org-jira-todo-to-jira)
   :custom (jiralib-url "http://jaraberrocal.readmyblog.org:8080")
-  :config (setq org-jira-working-dir org-directory))
+  :config (setq org-jira-working-dir "~/workspace/Documents/Org"))
 
 (provide 'setup-org-agenda)
 ;;; setup-org-agenda.el ends here

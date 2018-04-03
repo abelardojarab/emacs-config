@@ -9,6 +9,10 @@
 (setq debug-on-error t)
 (defvar debian-aspell-only-dictionary-alist nil)
 
+(defvar org-directory "~/workspace/Documents/Org")
+(if (not (file-exists-p org-directory))
+    (make-directory org-directory t))
+
 (defconst debian-emacs-flavor 'emacs25
   "A symbol representing the particular debian flavor of emacs running.
  Something like 'emacs20, 'xemacs20, etc.")
