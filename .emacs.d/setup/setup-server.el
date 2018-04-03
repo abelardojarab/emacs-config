@@ -50,7 +50,14 @@
               (make-directory server-auth-dir t)))
   :config (progn
 
-            ;; https://github.com/nilcons/emacs-use-package-fast/blob/master/errge-dot-emacs.el
+            ;; Automatically kill all spawned processes on exit
+            (defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
+              "Prevent annoying \"Active processes exist\" query when you quit Emacs."
+              (ignore-errors
+                (flet ((process-list ())) ad-do-it)))
+
+
+            ;; Remove socket directory on emacs exit
             (add-hook 'kill-emacs-hook #'(lambda () (ignore-errors (delete-directory server-socket-dir t))))
 
             ;; http://stackoverflow.com/questions/885793/emacs-error-when-calling-server-start
@@ -64,7 +71,6 @@
             ;; Keeping emacs running even when "exiting"
             (defun my/exit ()
               (interactive)
-              ;; message
               (message (format "There are currently %d client(s) and %d frame(s)."
                                (length server-clients)
                                (length (frame-list))))

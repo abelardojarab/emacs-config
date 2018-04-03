@@ -24,6 +24,18 @@
 
 ;;; Code:
 
+;; Replace expression with the value
+(defadvice eval-last-sexp (around replace-sexp (arg) activate)
+  "Replace sexp when called with a prefix argument."
+  (if arg
+      (let ((pos (point)))
+        ad-do-it
+        (goto-char pos)
+        (backward-kill-sexp)
+        (forward-sexp))
+    ad-do-it))
+
+;; Determine if Internet connection is available
 (defun internet-up-p (&optional host)
   (= 0 (call-process "ping" nil nil nil "-c" "1" "-W" "1"
                      (if host host "www.google.com"))))

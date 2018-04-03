@@ -529,5 +529,25 @@ Captured %<%Y-%m-%d %H:%M>
   :load-path (lambda () (expand-file-name "calfw/" user-emacs-directory))
   :config (use-package calfw-org))
 
+;; Org and Jira integration
+(use-package org-jira
+  :defer t
+  :commands (org-jira-get-projects
+             org-jira-browse-issue
+             org-jira-get-issues
+             org-jira-get-issues-headonly
+             org-jira-get-issues-from-filter-headonly
+             org-jira-get-issues-from-filter
+             org-jira-update-issue
+             org-jira-progress-issue
+             org-jira-refresh-issue
+             org-jira-create-issue
+             org-jira-copy-current-issue-key
+             org-jira-create-subtask
+             org-jira-get-subtasks
+             org-jira-update-comment
+             org-jira-todo-to-jira)
+  :custom (jiralib-url "http://jaraberrocal.readmyblog.org:8080"))
+
 (provide 'setup-org-agenda)
 ;;; setup-org-agenda.el ends here
