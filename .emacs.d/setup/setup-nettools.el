@@ -139,6 +139,16 @@
                   elfeed-search-filter          "@4-days-old +unread"
                   elfeed-search-title-max-width 100)
 
+            (if (fboundp 'org-add-link-type)
+                (with-no-warnings
+                  (org-add-link-type "elfeed" #'elfeed-link-open)
+                  (add-hook 'org-store-link-functions #'elfeed-link-store-link))
+              (with-no-warnings
+                (org-link-set-parameters
+                 "elfeed"
+                 :follow #'elfeed-link-open
+                 :store #'elfeed-link-store-link)))
+
             ;; URLs in no particular order
             (setq elfeed-feeds
                   '(;; News
