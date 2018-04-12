@@ -7,6 +7,10 @@
 
 (setq debug-on-quit t)
 (setq debug-on-error t)
+(add-hook 'after-init-hook (lambda ()
+                             (setq debug-on-quit nil)
+                             (setq debug-on-error nil)))
+
 (defvar debian-aspell-only-dictionary-alist nil)
 
 (defvar org-directory "~/workspace/Documents/Org")

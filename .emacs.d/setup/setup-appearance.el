@@ -148,11 +148,12 @@ non-nil."
 (use-package fill-column-indicator
   :defer t
   :if (display-graphic-p)
-  :init (dolist (hook my/linum-modes)
-          (add-hook hook (lambda ()
-                           (turn-on-fci-mode))))
   :commands (fci-mode turn-on-fci-mode)
   :config (progn
+            (dolist (hook my/linum-modes)
+                    (add-hook hook (lambda ()
+                                     (turn-on-fci-mode))))
+
             ;; Set global default value for the local var `fci-handle-truncate-lines'
             (setq-default fci-handle-truncate-lines t)
             (setq fci-rule-width 1)

@@ -1,6 +1,6 @@
 ;;; setup-server.el ---                      -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -56,7 +56,6 @@
               (ignore-errors
                 (flet ((process-list ())) ad-do-it)))
 
-
             ;; Remove socket directory on emacs exit
             (add-hook 'kill-emacs-hook #'(lambda () (ignore-errors (delete-directory server-socket-dir t))))
 
@@ -102,12 +101,7 @@
                 (if (bound-and-true-p ergoemacs-mode)
                     (ergoemacs-mode -1))
                 (setq my/really-kill-emacs t)
-                (kill-emacs)
-                (setq my/really-kill-emacs t)
-                (kill-emacs)
-                (setq my/really-kill-emacs t)
-                (kill-emacs)
-                ))
+                (kill-emacs)))
 
             ;; Detect presence of modified buffers
             (defun my/modified-buffers-exist()
