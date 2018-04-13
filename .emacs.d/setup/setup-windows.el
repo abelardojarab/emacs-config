@@ -318,7 +318,7 @@
                                                           'left
                                                         'right))))))))
 
-            (setq split-window-right t)
+            (setq split-window-right nil)
             (setq-default split-height-threshold  80 ;; the reasonable limit for vertical splits
                           split-width-threshold   0)
 
