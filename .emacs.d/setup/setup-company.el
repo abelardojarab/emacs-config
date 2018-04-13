@@ -257,5 +257,10 @@
                         (add-hook 'TeX-mode-hook #'my/latex-mode-setup)
                         (add-hook 'LaTeX-mode-hook #'company-auctex-init)))))
 
+(use-package company-box
+  :if (display-graphic-p)
+  :load-path (lambda () (expand-file-name "company-box/" user-emacs-directory))
+  :hook (company-mode . company-box-mode))
+
 (provide 'setup-company)
 ;;; setup-company.el ends here
