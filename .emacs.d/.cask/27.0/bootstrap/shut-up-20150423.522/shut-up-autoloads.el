@@ -1,13 +1,11 @@
 ;;; shut-up-autoloads.el --- automatically extracted autoloads
 ;;
 ;;; Code:
-
-(add-to-list 'load-path (directory-file-name
-                         (or (file-name-directory #$) (car load-path))))
-
+(add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil "shut-up" "shut-up.el" (0 0 0 0))
-;;; Generated autoloads from shut-up.el
+;;;### (autoloads nil "shut-up" "../../../../../../../.emacs.d/.cask/25.3/bootstrap/shut-up-20150423.522/shut-up.el"
+;;;;;;  "5f7aae8db0ff5a46e10318cc8ebf8ec3")
+;;; Generated autoloads from ../../../../../../../.emacs.d/.cask/25.3/bootstrap/shut-up-20150423.522/shut-up.el
 
 (autoload 'shut-up "shut-up" "\
 Evaluate BODY with silenced output.
@@ -40,7 +38,11 @@ call this function in `noninteractive' sessions.
 
 \(fn)" nil nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "shut-up" '("shut-up-" "inhibit-message")))
+;;;***
+
+;;;### (autoloads nil nil ("../../../../../../../.emacs.d/.cask/25.3/bootstrap/shut-up-20150423.522/shut-up-autoloads.el"
+;;;;;;  "../../../../../../../.emacs.d/.cask/25.3/bootstrap/shut-up-20150423.522/shut-up.el")
+;;;;;;  (23046 44768 639314 70000))
 
 ;;;***
 
@@ -48,6 +50,5 @@ call this function in `noninteractive' sessions.
 ;; version-control: never
 ;; no-byte-compile: t
 ;; no-update-autoloads: t
-;; coding: utf-8
 ;; End:
 ;;; shut-up-autoloads.el ends here

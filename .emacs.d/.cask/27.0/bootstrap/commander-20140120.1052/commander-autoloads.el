@@ -1,15 +1,11 @@
 ;;; commander-autoloads.el --- automatically extracted autoloads
 ;;
 ;;; Code:
-
-(add-to-list 'load-path (directory-file-name
-                         (or (file-name-directory #$) (car load-path))))
-
+(add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil "commander" "commander.el" (0 0 0 0))
-;;; Generated autoloads from commander.el
-
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "commander" '("commander")))
+;;;### (autoloads nil nil ("../../../../../../../.emacs.d/.cask/25.3/bootstrap/commander-20140120.1052/commander-autoloads.el"
+;;;;;;  "../../../../../../../.emacs.d/.cask/25.3/bootstrap/commander-20140120.1052/commander.el")
+;;;;;;  (23046 44767 527362 346000))
 
 ;;;***
 
@@ -17,6 +13,5 @@
 ;; version-control: never
 ;; no-byte-compile: t
 ;; no-update-autoloads: t
-;; coding: utf-8
 ;; End:
 ;;; commander-autoloads.el ends here
