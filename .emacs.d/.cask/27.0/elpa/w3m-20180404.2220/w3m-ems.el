@@ -1,6 +1,6 @@
 ;;; w3m-ems.el --- GNU Emacs stuff for emacs-w3m
 
-;; Copyright (C) 2001-2013, 2016, 2017 TSUCHIYA Masatoshi <tsuchiya@namazu.org>
+;; Copyright (C) 2001-2013, 2016-2018 TSUCHIYA Masatoshi <tsuchiya@namazu.org>
 
 ;; Authors: Yuuichi Teranishi  <teranisi@gohome.org>,
 ;;          TSUCHIYA Masatoshi <tsuchiya@namazu.org>,
@@ -66,6 +66,7 @@
   (defvar w3m-mode-map)
   (defvar w3m-modeline-process-status-on)
   (defvar w3m-new-session-in-background)
+  (defvar w3m-previous-session-buffer)
   (defvar w3m-process-queue)
   (defvar w3m-show-graphic-icons-in-header-line)
   (defvar w3m-show-graphic-icons-in-mode-line)
@@ -589,8 +590,9 @@ variable or both the value of this variable and the global value of
       (setq n (1- n)
 	    def (nth n defs))
       (define-key keymap (vector 'tool-bar (aref def 1))
-	(list 'menu-item (aref def 3) (aref def 1)
+	(list 'menu-item " " (aref def 1)
 	      :enable (aref def 2)
+	      :help (aref def 3)
 	      :image (symbol-value (aref def 0)))))))
 
 (defun w3m-find-image (name &optional directory)
@@ -872,7 +874,7 @@ Wobble the selected window to force redisplay of the header-line."
 
 (defun w3m-tab-drag-mouse-function (event buffer)
   (let ((window (posn-window (event-end event)))
-	mpos)
+	mpos prev)
     (when (framep window) ; dropped at outside of the frame.
       (setq window nil
 	    mpos (mouse-position))
@@ -886,15 +888,18 @@ Wobble the selected window to force redisplay of the header-line."
 	(when (one-window-p 'nomini)
 	  (split-window))
 	(setq window (next-window))))
-    (unless (eq (window-buffer window) buffer)
+    (unless (eq (setq prev (window-buffer window)) buffer)
       (select-window window)
       (switch-to-buffer buffer)
+      (setq w3m-previous-session-buffer prev)
       (w3m-force-window-update window))))
 
 (defun w3m-tab-click-mouse-function (event buffer)
-  (let ((window (posn-window (event-start event))))
+  (let* ((window (posn-window (event-start event)))
+	 (prev (window-buffer window)))
     (select-window window)
     (switch-to-buffer buffer)
+    (setq w3m-previous-session-buffer prev)
     (w3m-force-window-update window)))
 
 (defun w3m-tab-double-click-mouse1-function (event buffer)
