@@ -51,7 +51,7 @@
 
 (unless (fboundp 'set-default-font)
   (defun set-default-font (font frame)
-    (interactive "sFont Name-Size: ")
+    (interactive "Font Name-Size: ")
     (set-face-attribute 'default nil :font font)))
 
 ;; Prefer user choices
@@ -99,7 +99,7 @@
          (if (and (> (car (screen-size)) 1900)
                   (> (cadr (screen-size)) 1000))
              (progn ;; HD monitor in Linux
-               (setq my/main-programming-font-size "13")
+               (setq my/main-programming-font-size "12")
                (setq my/main-writing-font-size "13"))
            (progn
              (setq my/main-programming-font-size "12")
