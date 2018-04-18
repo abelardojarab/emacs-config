@@ -27,7 +27,6 @@
 ;; Speedbar
 (use-package sr-speedbar
   :demand t
-  :if (display-graphic-p)
   :defines (sr-speedbar-exist-p)
   :commands (sr-speedbar-open
              sr-speedbar-toggle
@@ -70,7 +69,6 @@
 ;; projectile and speedbar integration
 (use-package projectile-speedbar
   :defer t
-  :if (display-graphic-p)
   :after (sr-speedbar projectile)
   :load-path (lambda () (expand-file-name "projectile-speedbar/" user-emacs-directory))
   :commands projectile-speedbar-open-current-buffer-in-tree
@@ -347,9 +345,9 @@ more place."
 ;; Finally activate ecb on HD-monitors or above
 (add-hook 'after-init-hook
           (lambda ()
-            (if (or (and (> (car (screen-size)) 1900)
-                         (> (cadr (screen-size)) 1000))
-                    (not (display-graphic-p)))
+            (if (and (and (> (car (screen-size)) 1900)
+                          (> (cadr (screen-size)) 1000))
+                     (display-graphic-p))
                 (ecb-activate))))
 
 (provide 'setup-ecb)
