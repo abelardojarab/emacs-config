@@ -87,6 +87,7 @@
   :bind (:map ctl-x-map
               ("0"                       . ecb-redraw-layout))
   :init (setq stack-trace-on-error t)
+  :commands (ecb-activate ecb-redraw-layout)
   :config (progn
 
             (defadvice ecb-stealthy-updates (around bar activate)
@@ -341,15 +342,15 @@ more place."
                              ;; semantic idle mode refresh doesn't seem to work all that well.
                              (semantic-force-refresh)
                              (ecb-rebuild-methods-buffer)
-                             (ecb-window-sync)))))
+                             (ecb-window-sync)))))))
 
-            ;; Finally activate ecb on HD-monitors or above
-            (add-hook 'after-init-hook
-                      (lambda ()
-                        (if (or (and (> (car (screen-size)) 1900)
-                                     (> (cadr (screen-size)) 1000))
-                                (not (display-graphic-p)))
-                            (ecb-activate))))))
+;; Finally activate ecb on HD-monitors or above
+(add-hook 'after-init-hook
+          (lambda ()
+            (if (or (and (> (car (screen-size)) 1900)
+                         (> (cadr (screen-size)) 1000))
+                    (not (display-graphic-p)))
+                (ecb-activate))))
 
 (provide 'setup-ecb)
 ;;; setup-ecb.el ends here
