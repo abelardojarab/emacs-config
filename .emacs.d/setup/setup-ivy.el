@@ -76,6 +76,8 @@
 (use-package counsel
   :defer t
   :load-path (lambda () (expand-file-name "swiper/" user-emacs-directory))
+  :commands counsel-mode
+  :init (counsel-mode t)
   :bind (("M-x"                     . counsel-M-x)
          ("M-y"                     . counsel-yank-pop)
          ("C-o"                     . counsel-find-file)
@@ -93,6 +95,12 @@
          ("M-y"                     . ivy-next-line)
          :map read-expression-map
          ("C-r"                     . counsel-expression-history)))
+
+;; counsel-org-clock provides commands for displaying org clock entries
+(use-package counsel-org-clock
+  :defer t
+  :load-path (lambda () (expand-file-name "counsel-org-clock/" user-emacs-directory))
+  :commands counsel-org-clock-context counsel-org-clock-history)
 
 (use-package swiper-helm
   :defer t
