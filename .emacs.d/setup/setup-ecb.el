@@ -84,6 +84,8 @@
 ;; Code Browser
 (use-package ecb
   :load-path (lambda () (expand-file-name "ecb/" user-emacs-directory))
+  :bind (:map ctl-x-map
+              ("0"                       . ecb-redraw-layout))
   :init (setq stack-trace-on-error t)
   :config (progn
 
