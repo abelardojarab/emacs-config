@@ -1,10 +1,12 @@
 ;;; w3m-autoloads.el --- automatically extracted autoloads
 ;;
 ;;; Code:
-(add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
+
+(add-to-list 'load-path (directory-file-name
+                         (or (file-name-directory #$) (car load-path))))
+
 
-;;;### (autoloads nil "bookmark-w3m" "bookmark-w3m.el" (23192 29450
-;;;;;;  956012 978000))
+;;;### (autoloads nil "bookmark-w3m" "bookmark-w3m.el" (0 0 0 0))
 ;;; Generated autoloads from bookmark-w3m.el
 
 (autoload 'bookmark-w3m-bookmark-jump "bookmark-w3m" "\
@@ -12,10 +14,11 @@ Default bookmark handler for w3m buffers.
 
 \(fn BOOKMARK)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "bookmark-w3m" '("bookmark-w3m-")))
+
 ;;;***
 
-;;;### (autoloads nil "mime-w3m" "mime-w3m.el" (23192 29450 956012
-;;;;;;  978000))
+;;;### (autoloads nil "mime-w3m" "mime-w3m.el" (0 0 0 0))
 ;;; Generated autoloads from mime-w3m.el
 
 (autoload 'mime-w3m-preview-text/html "mime-w3m" "\
@@ -23,9 +26,11 @@ Default bookmark handler for w3m buffers.
 
 \(fn ENTITY SITUATION)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "mime-w3m" '("mime-w3m-")))
+
 ;;;***
 
-;;;### (autoloads nil "w3m" "w3m.el" (23192 29450 968012 978000))
+;;;### (autoloads nil "w3m" "w3m.el" (0 0 0 0))
 ;;; Generated autoloads from w3m.el
 
 (autoload 'w3m-retrieve "w3m" "\
@@ -184,10 +189,11 @@ See `w3m-region' for the optional arguments.
 
 \(fn &optional URL CHARSET)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3m" '("w3m-" "emacs-w3m-version")))
+
 ;;;***
 
-;;;### (autoloads nil "w3m-antenna" "w3m-antenna.el" (23192 29450
-;;;;;;  964012 978000))
+;;;### (autoloads nil "w3m-antenna" "w3m-antenna.el" (0 0 0 0))
 ;;; Generated autoloads from w3m-antenna.el
 
 (autoload 'w3m-about-antenna "w3m-antenna" "\
@@ -200,10 +206,11 @@ Report changes of WEB sites, which is specified in `w3m-antenna-sites'.
 
 \(fn &optional NO-CACHE)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3m-antenna" '("w3m-antenna-")))
+
 ;;;***
 
-;;;### (autoloads nil "w3m-bookmark" "w3m-bookmark.el" (23192 29450
-;;;;;;  968012 978000))
+;;;### (autoloads nil "w3m-bookmark" "w3m-bookmark.el" (0 0 0 0))
 ;;; Generated autoloads from w3m-bookmark.el
 
 (autoload 'w3m-bookmark-add-this-url "w3m-bookmark" "\
@@ -247,10 +254,25 @@ Setup w3m bookmark items in menubar.
 
 \(fn)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3m-bookmark" '("w3m-bookmark-")))
+
 ;;;***
 
-;;;### (autoloads nil "w3m-cookie" "w3m-cookie.el" (23192 29450 956012
-;;;;;;  978000))
+;;;### (autoloads nil "w3m-bug" "w3m-bug.el" (0 0 0 0))
+;;; Generated autoloads from w3m-bug.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3m-bug" '("report-emacs-w3m-bug")))
+
+;;;***
+
+;;;### (autoloads nil "w3m-ccl" "w3m-ccl.el" (0 0 0 0))
+;;; Generated autoloads from w3m-ccl.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3m-ccl" '("w3m-")))
+
+;;;***
+
+;;;### (autoloads nil "w3m-cookie" "w3m-cookie.el" (0 0 0 0))
 ;;; Generated autoloads from w3m-cookie.el
 
 (autoload 'w3m-cookie-shutdown "w3m-cookie" "\
@@ -294,10 +316,11 @@ string is case insensitive and allows a regular expression.
 
 \(fn URL &optional NO-DECODE NO-CACHE POST-DATA &rest ARGS)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3m-cookie" '("w3m-")))
+
 ;;;***
 
-;;;### (autoloads nil "w3m-dtree" "w3m-dtree.el" (23192 29450 964012
-;;;;;;  978000))
+;;;### (autoloads nil "w3m-dtree" "w3m-dtree.el" (0 0 0 0))
 ;;; Generated autoloads from w3m-dtree.el
 
 (autoload 'w3m-about-dtree "w3m-dtree" "\
@@ -311,9 +334,25 @@ If called with 'prefix argument', display all directorys and files.
 
 \(fn ALLFILES PATH)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3m-dtree" '("w3m-dtree-")))
+
 ;;;***
 
-;;;### (autoloads nil "w3m-fb" "w3m-fb.el" (23192 29450 956012 978000))
+;;;### (autoloads nil "w3m-ems" "w3m-ems.el" (0 0 0 0))
+;;; Generated autoloads from w3m-ems.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3m-ems" '("w3m-")))
+
+;;;***
+
+;;;### (autoloads nil "w3m-favicon" "w3m-favicon.el" (0 0 0 0))
+;;; Generated autoloads from w3m-favicon.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3m-favicon" '("w3m-")))
+
+;;;***
+
+;;;### (autoloads nil "w3m-fb" "w3m-fb.el" (0 0 0 0))
 ;;; Generated autoloads from w3m-fb.el
 
 (defvar w3m-fb-mode nil "\
@@ -332,10 +371,11 @@ This allows frame-local lists of buffers (tabs).
 
 \(fn &optional ARG)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3m-fb" '("w3m-fb-")))
+
 ;;;***
 
-;;;### (autoloads nil "w3m-filter" "w3m-filter.el" (23192 29450 956012
-;;;;;;  978000))
+;;;### (autoloads nil "w3m-filter" "w3m-filter.el" (0 0 0 0))
 ;;; Generated autoloads from w3m-filter.el
 
 (autoload 'w3m-filter "w3m-filter" "\
@@ -350,10 +390,11 @@ toggle with completion (a function toggled last will first appear).
 
 \(fn ARG)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3m-filter" '("w3m-filter-")))
+
 ;;;***
 
-;;;### (autoloads nil "w3m-form" "w3m-form.el" (23192 29450 964012
-;;;;;;  978000))
+;;;### (autoloads nil "w3m-form" "w3m-form.el" (0 0 0 0))
 ;;; Generated autoloads from w3m-form.el
 
 (autoload 'w3m-fontify-forms "w3m-form" "\
@@ -361,10 +402,25 @@ Process half-dumped data and fontify forms in this buffer.
 
 \(fn)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3m-form" '("w3m-fo")))
+
 ;;;***
 
-;;;### (autoloads nil "w3m-lnum" "w3m-lnum.el" (23192 29450 968012
-;;;;;;  978000))
+;;;### (autoloads nil "w3m-hist" "w3m-hist.el" (0 0 0 0))
+;;; Generated autoloads from w3m-hist.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3m-hist" '("w3m-history")))
+
+;;;***
+
+;;;### (autoloads nil "w3m-image" "w3m-image.el" (0 0 0 0))
+;;; Generated autoloads from w3m-image.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3m-image" '("w3m-")))
+
+;;;***
+
+;;;### (autoloads nil "w3m-lnum" "w3m-lnum.el" (0 0 0 0))
 ;;; Generated autoloads from w3m-lnum.el
 
 (autoload 'w3m-lnum-mode "w3m-lnum" "\
@@ -453,10 +509,18 @@ If no link under point, activate numbering and ask for one.
 
 \(fn)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3m-lnum" '("w3m-")))
+
 ;;;***
 
-;;;### (autoloads nil "w3m-namazu" "w3m-namazu.el" (23192 29450 964012
-;;;;;;  978000))
+;;;### (autoloads nil "w3m-mail" "w3m-mail.el" (0 0 0 0))
+;;; Generated autoloads from w3m-mail.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3m-mail" '("w3m-mail")))
+
+;;;***
+
+;;;### (autoloads nil "w3m-namazu" "w3m-namazu.el" (0 0 0 0))
 ;;; Generated autoloads from w3m-namazu.el
 
 (autoload 'w3m-about-namazu "w3m-namazu" "\
@@ -469,10 +533,11 @@ Search indexed files with Namazu.
 
 \(fn INDEX QUERY &optional RELOAD)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3m-namazu" '("w3m-namazu-")))
+
 ;;;***
 
-;;;### (autoloads nil "w3m-perldoc" "w3m-perldoc.el" (23192 29450
-;;;;;;  956012 978000))
+;;;### (autoloads nil "w3m-perldoc" "w3m-perldoc.el" (0 0 0 0))
 ;;; Generated autoloads from w3m-perldoc.el
 
 (autoload 'w3m-about-perldoc "w3m-perldoc" "\
@@ -485,10 +550,32 @@ View Perl documents.
 
 \(fn DOCNAME)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3m-perldoc" '("w3m-perldoc-")))
+
 ;;;***
 
-;;;### (autoloads nil "w3m-search" "w3m-search.el" (23192 29450 956012
-;;;;;;  978000))
+;;;### (autoloads nil "w3m-proc" "w3m-proc.el" (0 0 0 0))
+;;; Generated autoloads from w3m-proc.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3m-proc" '("w3m-process-")))
+
+;;;***
+
+;;;### (autoloads nil "w3m-rss" "w3m-rss.el" (0 0 0 0))
+;;; Generated autoloads from w3m-rss.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3m-rss" '("w3m-rss-")))
+
+;;;***
+
+;;;### (autoloads nil "w3m-save" "w3m-save.el" (0 0 0 0))
+;;; Generated autoloads from w3m-save.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3m-save" '("w3m-save-buffer")))
+
+;;;***
+
+;;;### (autoloads nil "w3m-search" "w3m-search.el" (0 0 0 0))
 ;;; Generated autoloads from w3m-search.el
 
 (autoload 'w3m-search "w3m-search" "\
@@ -514,10 +601,11 @@ Generate query string for ENGINE from URI matched by last search.
 
 \(fn URI ENGINE)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3m-search" '("w3m-search-")))
+
 ;;;***
 
-;;;### (autoloads nil "w3m-session" "w3m-session.el" (23192 29450
-;;;;;;  964012 978000))
+;;;### (autoloads nil "w3m-session" "w3m-session.el" (0 0 0 0))
 ;;; Generated autoloads from w3m-session.el
 
 (autoload 'w3m-session-save "w3m-session" "\
@@ -556,10 +644,11 @@ Setup w3m session items in menubar.
 
 \(fn)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3m-session" '("w3m-session-")))
+
 ;;;***
 
-;;;### (autoloads nil "w3m-symbol" "w3m-symbol.el" (23192 29450 964012
-;;;;;;  978000))
+;;;### (autoloads nil "w3m-symbol" "w3m-symbol.el" (0 0 0 0))
 ;;; Generated autoloads from w3m-symbol.el
 
 (autoload 'w3m-replace-symbol "w3m-symbol" "\
@@ -567,10 +656,32 @@ Setup w3m session items in menubar.
 
 \(fn)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3m-symbol" '("w3m-")))
+
 ;;;***
 
-;;;### (autoloads nil "w3m-weather" "w3m-weather.el" (23192 29450
-;;;;;;  964012 978000))
+;;;### (autoloads nil "w3m-tabmenu" "w3m-tabmenu.el" (0 0 0 0))
+;;; Generated autoloads from w3m-tabmenu.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3m-tabmenu" '("w3m-")))
+
+;;;***
+
+;;;### (autoloads nil "w3m-ucs" "w3m-ucs.el" (0 0 0 0))
+;;; Generated autoloads from w3m-ucs.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3m-ucs" '("w3m-")))
+
+;;;***
+
+;;;### (autoloads nil "w3m-util" "w3m-util.el" (0 0 0 0))
+;;; Generated autoloads from w3m-util.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3m-util" '("w3m-")))
+
+;;;***
+
+;;;### (autoloads nil "w3m-weather" "w3m-weather.el" (0 0 0 0))
 ;;; Generated autoloads from w3m-weather.el
 
 (autoload 'w3m-weather "w3m-weather" "\
@@ -583,13 +694,18 @@ Display weather report.
 
 \(fn URL NO-DECODE NO-CACHE POST-DATA REFERER HANDLER)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3m-weather" '("w3m-weather-")))
+
 ;;;***
 
-;;;### (autoloads nil nil ("w3m-bug.el" "w3m-ccl.el" "w3m-ems.el"
-;;;;;;  "w3m-favicon.el" "w3m-hist.el" "w3m-image.el" "w3m-mail.el"
-;;;;;;  "w3m-pkg.el" "w3m-proc.el" "w3m-rss.el" "w3m-save.el" "w3m-tabmenu.el"
-;;;;;;  "w3m-ucs.el" "w3m-util.el" "w3mhack.el") (23192 29450 968012
-;;;;;;  978000))
+;;;### (autoloads nil "w3mhack" "w3mhack.el" (0 0 0 0))
+;;; Generated autoloads from w3mhack.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "w3mhack" '("w3mhack-" "shimbun-module-directory")))
+
+;;;***
+
+;;;### (autoloads nil nil ("w3m-pkg.el") (0 0 0 0))
 
 ;;;***
 
@@ -597,5 +713,6 @@ Display weather report.
 ;; version-control: never
 ;; no-byte-compile: t
 ;; no-update-autoloads: t
+;; coding: utf-8
 ;; End:
 ;;; w3m-autoloads.el ends here
