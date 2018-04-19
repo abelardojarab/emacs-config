@@ -83,10 +83,18 @@
 (use-package ecb
   :load-path (lambda () (expand-file-name "ecb/" user-emacs-directory))
   :bind (:map ctl-x-map
-              ("0"                       . ecb-redraw-layout))
+              ("0" . my/ecb-activate))
   :init (setq stack-trace-on-error t)
-  :commands (ecb-activate ecb-redraw-layout)
+  :commands (my/ecb-activate
+             ecb-redraw-layout)
   :config (progn
+
+            (defun my/ecb-activate ()
+              (interactive)
+              (progn
+                (ecb-redraw-layout)
+                (ecb-activate)
+                (ecb-redraw-layout)))
 
             (defadvice ecb-stealthy-updates (around bar activate)
               (ignore-errors add-do-it))
@@ -341,14 +349,6 @@ more place."
                              (semantic-force-refresh)
                              (ecb-rebuild-methods-buffer)
                              (ecb-window-sync)))))))
-
-;; Finally activate ecb on HD-monitors or above
-(add-hook 'after-init-hook
-          (lambda ()
-            (if (and (and (> (car (screen-size)) 1900)
-                          (> (cadr (screen-size)) 1000))
-                     (display-graphic-p))
-                (ecb-activate))))
 
 (provide 'setup-ecb)
 ;;; setup-ecb.el ends here
