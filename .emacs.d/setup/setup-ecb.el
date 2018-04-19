@@ -24,61 +24,6 @@
 
 ;;; Code:
 
-;; Speedbar
-(use-package sr-speedbar
-  :demand t
-  :defines (sr-speedbar-exist-p)
-  :commands (sr-speedbar-open
-             sr-speedbar-toggle
-             sr-speedbar-refresh-turn-on)
-  :bind (:map speedbar-mode-map
-              ([S-up]  . speedbar-up-directory)
-              ([right] . speedbar-flush-expand-line)
-              ([left]  . speedbar-contract-line))
-  :config (progn
-            (speedbar-set-timer 0.2)
-            (setq speedbar-update-flag-disable          nil
-                  speedbar-update-flag                  t
-                  speedbar-hide-button-brackets-flag    t
-                  speedbar-show-unknown-files           t
-                  speedbar-smart-directory-expand-flag  t
-                  speedbar-directory-button-trim-method 'trim
-                  speedbar-use-images                   t
-                  speedbar-indentation-width            2
-                  speedbar-use-imenu-flag               t
-                  speedbar-file-unshown-regexp          "flycheck-.*"
-                  sr-speedbar-width                     40
-                  sr-speedbar-width-x                   40
-                  sr-speedbar-auto-refresh              t
-                  sr-speedbar-skip-other-window-p       t
-                  sr-speedbar-right-side                nil)
-
-            ;; Highlight the current line
-            (add-hook 'speedbar-mode-hook (lambda () (hl-line-mode 1)))
-
-            ;; Add Javascript
-            (speedbar-add-supported-extension ".js")
-            (add-to-list 'speedbar-fetch-etags-parse-list
-                         '("\\.js" . speedbar-parse-c-or-c++tag))
-            (speedbar-add-supported-extension ".il")
-            (speedbar-add-supported-extension ".ils")
-
-            ;; Enable speed-bar auto-refresh
-            (sr-speedbar-refresh-turn-on)))
-
-;; projectile and speedbar integration
-(use-package projectile-speedbar
-  :defer t
-  :after (sr-speedbar projectile)
-  :load-path (lambda () (expand-file-name "projectile-speedbar/" user-emacs-directory))
-  :commands projectile-speedbar-open-current-buffer-in-tree
-  :init (progn
-          (defadvice helm-projectile-find-file (after locate-file activate)
-            (if (sr-speedbar-exist-p)
-                (projectile-speedbar-open-current-buffer-in-tree)))
-          (defadvice speedbar-item-load (after speedbar-highlight-file activate)
-            (projectile-speedbar-open-current-buffer-in-tree))))
-
 ;; Code Browser
 (use-package ecb
   :load-path (lambda () (expand-file-name "ecb/" user-emacs-directory))
@@ -348,7 +293,62 @@ more place."
                              ;; semantic idle mode refresh doesn't seem to work all that well.
                              (semantic-force-refresh)
                              (ecb-rebuild-methods-buffer)
-                             (ecb-window-sync)))))))
+                             (ecb-window-sync)))))
+
+            ;; Speedbar
+            (use-package sr-speedbar
+              :demand t
+              :defines (sr-speedbar-exist-p)
+              :commands (sr-speedbar-open
+                         sr-speedbar-toggle
+                         sr-speedbar-refresh-turn-on)
+              :bind (:map speedbar-mode-map
+                          ([S-up]  . speedbar-up-directory)
+                          ([right] . speedbar-flush-expand-line)
+                          ([left]  . speedbar-contract-line))
+              :config (progn
+                        (speedbar-set-timer 0.2)
+                        (setq speedbar-update-flag-disable          nil
+                              speedbar-update-flag                  t
+                              speedbar-hide-button-brackets-flag    t
+                              speedbar-show-unknown-files           t
+                              speedbar-smart-directory-expand-flag  t
+                              speedbar-directory-button-trim-method 'trim
+                              speedbar-use-images                   t
+                              speedbar-indentation-width            2
+                              speedbar-use-imenu-flag               t
+                              speedbar-file-unshown-regexp          "flycheck-.*"
+                              sr-speedbar-width                     40
+                              sr-speedbar-width-x                   40
+                              sr-speedbar-auto-refresh              t
+                              sr-speedbar-skip-other-window-p       t
+                              sr-speedbar-right-side                nil)
+
+                        ;; Highlight the current line
+                        (add-hook 'speedbar-mode-hook (lambda () (hl-line-mode 1)))
+
+                        ;; Add Javascript
+                        (speedbar-add-supported-extension ".js")
+                        (add-to-list 'speedbar-fetch-etags-parse-list
+                                     '("\\.js" . speedbar-parse-c-or-c++tag))
+                        (speedbar-add-supported-extension ".il")
+                        (speedbar-add-supported-extension ".ils")
+
+                        ;; Enable speed-bar auto-refresh
+                        (sr-speedbar-refresh-turn-on)))
+
+            ;; projectile and speedbar integration
+            (use-package projectile-speedbar
+              :demand t
+              :after (sr-speedbar projectile)
+              :load-path (lambda () (expand-file-name "projectile-speedbar/" user-emacs-directory))
+              :commands projectile-speedbar-open-current-buffer-in-tree
+              :init (progn
+                      (defadvice helm-projectile-find-file (after locate-file activate)
+                        (if (sr-speedbar-exist-p)
+                            (projectile-speedbar-open-current-buffer-in-tree)))
+                      (defadvice speedbar-item-load (after speedbar-highlight-file activate)
+                        (projectile-speedbar-open-current-buffer-in-tree))))))
 
 (provide 'setup-ecb)
 ;;; setup-ecb.el ends here

@@ -24,6 +24,15 @@
 
 ;;; Code:
 
+(defun dframe-timer-fn ()
+  "Called due to the dframe timer.
+Evaluates all cached timer functions in sequence."
+  (let ((l dframe-client-functions))
+    (while (and l (sit-for 0))
+      (with-demoted-errors "DFRAME TIMER ERROR: %S"
+        (ignore-errors (funcall (car l))))
+      (setq l (cdr l)))))
+
 ;; Replace expression with the value
 (defadvice eval-last-sexp (around replace-sexp (arg) activate)
   "Replace sexp when called with a prefix argument."

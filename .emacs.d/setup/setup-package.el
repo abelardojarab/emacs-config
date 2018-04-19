@@ -73,6 +73,7 @@
   (cask-initialize)
 
   (use-package pallet
+    :commands pallet-mode
     :load-path (lambda () (expand-file-name "pallet/" user-emacs-directory))
     :config (pallet-mode t)))
 
