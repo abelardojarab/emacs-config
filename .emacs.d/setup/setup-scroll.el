@@ -24,14 +24,14 @@
 
 ;;; Code:
 
-(setq scroll-step                     1
-      scroll-margin                   1
-      scroll-conservatively           0
-      scroll-preserve-screen-position 'always
-      scroll-up-aggressively          0.01
-      scroll-down-aggressively        0.01
-      fast-but-imprecise-scrolling    t
-      auto-window-vscroll             nil)
+(setq-default scroll-step                     1
+              scroll-margin                   1
+              scroll-conservatively           2000
+              scroll-preserve-screen-position 'always
+              scroll-up-aggressively          0.01
+              scroll-down-aggressively        0.01
+              fast-but-imprecise-scrolling    t
+              auto-window-vscroll             nil)
 
 ;; Enable smooth scrolling package
 ;; Be careful it can ruin shift-select-mode
