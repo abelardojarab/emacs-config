@@ -269,18 +269,19 @@ specified interactively."
               (progn
                 (my/cmake-ide-set-build-dir)
                 (when (and (cmake-ide--locate-cmakelists)
-			   (file-exists-p (cmake-ide--locate-cmakelists)))
+               (file-exists-p (cmake-ide--locate-cmakelists)))
                   (cmake-ide-maybe-run-cmake)
                   (cmake-ide-maybe-start-rdm)
                   (cmake-project-mode 1))))
+
+            (use-package cmake-ide-backup
+              :demand t)
 
             ;; Define cmake-ide-build-dir under ~/cmake_builds
             (defun my/cmake-ide-set-build-dir ()
               "Modify cmake-build-dir and make it point to ~/cmake_builds"
               (interactive)
               (let (my/cmake-build-dir my/projectile-build-dir)
-                (when (not (fboundp 'cmake-ide--locate-cmakelists))
-                  (use-package cmake-ide-backup))
                 (if (cmake-ide--locate-cmakelists)
                     (progn
                       (if (and (file-exists-p "~/cmake_builds")

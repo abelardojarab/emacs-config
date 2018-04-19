@@ -232,14 +232,6 @@ If prefix argument is used, `set-selective-display' to the current column."
   :after hideshow
   :commands (hideshowvis-minor-mode
              hideshowvis-enable)
-  :init (progn
-          ;; enable `hs-minor-mode' and 'hideshowvis-minor-mode
-          (dolist (hook my/hideshow-modes)
-            (add-hook hook (lambda ()
-                             (progn
-                               (hs-minor-mode 1)
-                               (hs-org/minor-mode)
-                               (hideshowvis-enable))))))
   :config (progn
             ;; Add the following to your .emacs and uncomment it in order to get a right arrow symbol
             (define-fringe-bitmap 'hs-marker [0 32 48 56 60 56 48 32])
