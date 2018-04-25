@@ -160,6 +160,7 @@
   :load-path (lambda () (expand-file-name "cmake-ide/" user-emacs-directory))
   :init (add-hook 'c-mode-common-hook #'my/cmake-ide-enable)
   :config (progn
+
             ;; Asure cmake_build directory exists
             (if (not (file-exists-p "~/cmake_builds"))
                 (make-directory "~/cmake_builds"))
@@ -167,8 +168,7 @@
             ;; Overwrite get build dir function
             (defun cmake-ide--get-build-dir ()
               "Return the directory name to run CMake in."
-              ;; build the directory key for the project
-              (my/cmake-ide-set-build-dir)
+	      (interactive)
               (let ((build-dir
                      (expand-file-name (or (cmake-ide--build-dir-var)
                                            (cmake-ide--get-build-dir-from-hash))
@@ -176,14 +176,13 @@
                 (when (not (file-accessible-directory-p build-dir))
                   (cmake-ide--message "Making directory %s" build-dir)
                   (make-directory build-dir))
-                (setq cmake-ide-build-dir build-dir)
+		(cmake-ide--message "cmake build dir is set to %s" build-dir)
                 (file-name-as-directory build-dir)))
 
             ;; Overwrite run cmake function
             (defun cmake-ide--run-cmake-impl (project-dir cmake-dir)
               "Run the CMake process for PROJECT-DIR in CMAKE-DIR."
               (when project-dir
-                (my/cmake-ide-set-build-dir)
                 (let ((default-directory cmake-ide))
                   (cmake-ide--message "Running cmake for src path %s in build path %s" project-dir cmake-ide-build-dir)
                   (apply 'start-process (append (list "cmake" "*cmake*" cmake-ide-cmake-command)
@@ -198,24 +197,20 @@
                         (defun cmake-project-find-root-directory ()
                           "Find the top-level CMake directory."
                           (interactive)
-                          (file-name-as-directory
+			  (message "* cmake-project Source code directory set to: %s"
+				   (file-name-directory
+				    (cmake-ide--locate-cmakelists)))
+                          (file-name-directory
                            (cmake-ide--locate-cmakelists)))
 
                         (defun cmake-project-find-build-directory ()
                           "Find location where project will be built."
                           (interactive)
-                          (make-local-variable 'cmake-project-build-directory)
-                          (setq cmake-project-build-directory cmake-ide-build-dir)
-                          (message "* cmake-project Building directory set to: %s" cmake-project-build-directory)
+                          (message "* cmake-project Building directory set to: %s" cmake-ide-build-dir)
                           (file-name-as-directory cmake-ide-build-dir))
 
                         (defun cmake-project-configure-project (build-directory generator &optional flags)
-                          "Configure or reconfigure a CMake build tree.
-BUILD-DIRECTORY is the path to the build-tree directory.  If the
-directory does not already exist, it will be created.  The source
-directory is found automatically based on the current
-buffer. With a prefix argument additional CMake flags can be
-specified interactively."
+                          "Configure or reconfigure a CMake build tree."
                           (interactive
                            (let ((directory-parts
                                   (when cmake-project-build-directory (cmake-project--split-directory-path
@@ -232,22 +227,16 @@ specified interactively."
                           (let ((source-directory (cmake-project-find-root-directory))
                                 (build-directory (file-name-as-directory build-directory)))
                             (unless (file-exists-p build-directory) (make-directory build-directory))
-                            ;; Must force `default-directory' here as `compilation-start' has
-                            ;; a bug in it. It is supposed to notice the `cd` command and
-                            ;; adjust `default-directory' accordingly but it gets confused by
-                            ;; spaces in the directory path, even when properly quoted.
-                            ;;
-                            ;; TODO: this isn't actually the directory we want. It needs the
-                            ;; source directory.
                             (let ((default-directory build-directory))
+
+			      ;; Update the cmake-ide directories
+                              (make-local-variable 'cmake-ide-build-dir)
+                              (make-local-variable 'cmake-dir)
+                              (setq cmake-ide-build-dir build-directory)
+                              (setq cmake-dir build-directory)
+
                               (compilation-start
                                (concat
-                                ;; HACK: force compilation-start to cd to default-directory
-                                ;; by inserting dummy cd at front.  Without this, the old
-                                ;; broken version may pick up quoted path without spaces and
-                                ;; then assume the quotes are part of the path causing an
-                                ;; error (see
-                                ;; https://github.com/alamaison/emacs-cmake-project/issues/1)
                                 "cd . && "
                                 "cd " (shell-quote-argument (expand-file-name build-directory))
                                 " && cmake "
@@ -255,6 +244,8 @@ specified interactively."
                                 (shell-quote-argument
                                  (expand-file-name source-directory))
                                 " -DCMAKE_EXPORT_COMPILE_COMMANDS=ON "
+				cmake-ide-cmake-opts
+				" "
                                 (if (string= "" generator)
                                     ""
                                   ;; Set the user defined architecture on windows.
@@ -287,8 +278,10 @@ specified interactively."
                       (if (and (file-exists-p "~/cmake_builds")
                                (projectile-project-name))
                           (progn
+			    (make-local-variable 'cmake-project-build-directory)
                             (make-local-variable 'cmake-ide-build-dir)
                             (make-local-variable 'cmake-dir)
+			    (make-local-variable 'cmake-ide-cmake-opts)
 
                             ;; Define project build directory
                             (setq my/projectile-build-dir (concat
@@ -326,7 +319,11 @@ specified interactively."
                             (if (not (file-exists-p my/cmake-build-dir))
                                 (make-directory my/cmake-build-dir))
 
+			    ;; Use Debug as default build
+			    (setq cmake-ide-cmake-opts "-DCMAKE_BUILD_TYPE=Debug")
+
                             ;; Set cmake-ide-build-dir according to both top project and cmake project names
+			    (setq cmake-project-build-directory my/cmake-build-dir)
                             (setq cmake-ide-build-dir my/cmake-build-dir)
                             (setq cmake-dir my/cmake-build-dir)))))))))
 
