@@ -87,12 +87,13 @@
   :after epg
   :commands epa-file-enable
   :config  (progn
+	     ;; Unfortunately there is bug in gpg which disabled this
              ;; ~/.gnupg/gpg-agent.conf should contain:
              ;; allow-emacs-pinentry
              ;; allow-loopback-pinentry
              ;; Restart with:
              ;; gpgconf --reload gpg-agent
-             (setq epa-pinentry-mode 'loopback)
+             ;; (setq epa-pinentry-mode 'loopback)
 
              (setq epa-file-name-regexp "\\.\\(gpg\\|asc\\)$")
              (epa-file-name-regexp-update)))
@@ -101,9 +102,10 @@
 (use-package epa
   :demand t
   :after epa-file
+  :custom ((epa-popup-info-window nil)
+	   (epa-armor             t)
+	   (epa-pinentry-mode     nil))
   :config (progn
-            (setq epa-popup-info-window nil
-                  epa-armor             t)
 
             ;; https://github.com/jwiegley/dot-emacs/blob/master/dot-gnus.el
             (defun epa--key-widget-value-create (widget)

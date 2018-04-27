@@ -33,11 +33,25 @@
          ("C-c <left>"  . tabbar-backward)
          ("C-c <up>"    . tabbar-backward-group)
          ("C-c <down>"  . tabbar-forward-group))
+  :custom ((tabbar-auto-scroll-flag  t)
+           (tabbar-use-images        t)
+           (tabbar-cycle-scope       (quote tabs))
+           (table-time-before-update 0.1))
   :config (progn
-            (setq tabbar-auto-scroll-flag  nil
-                  tabbar-use-images        t
-                  tabbar-cycle-scope       (quote  tabs)
-                  table-time-before-update 0.1)
+
+	    ;; Sort tabbar buffers by name
+	    (defun tabbar-add-tab (tabset object &optional append_ignored)
+	      "Add to TABSET a tab with value OBJECT if there isn't one there yet.
+ If the tab is added, it is added at the beginning of the tab list,
+ unless the optional argument APPEND is non-nil, in which case it is
+ added at the end."
+	      (let ((tabs (tabbar-tabs tabset)))
+		(if (tabbar-get-tab object tabset)
+		    tabs
+		  (let ((tab (tabbar-make-tab object tabset)))
+		    (tabbar-set-template tabset nil)
+		    (set tabset (sort (cons tab tabs)
+				      (lambda (a b) (string< (buffer-name (car a)) (buffer-name (car b))))))))))
 
             ;; Reduce tabbar width to enable as many buffers as possible
             (defun tabbar-buffer-tab-label (tab)
