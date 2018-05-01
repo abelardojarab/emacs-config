@@ -2064,8 +2064,8 @@ using three `C-u' prefix arguments.
 
 ;;;***
 
-;;;### (autoloads nil "org-version" "org-version.el" (23266 64655
-;;;;;;  484328 142000))
+;;;### (autoloads nil "org-version" "org-version.el" (23270 23689
+;;;;;;  432004 48000))
 ;;; Generated autoloads from org-version.el
 
 (autoload 'org-release "org-version" "\
@@ -2085,7 +2085,7 @@ The location of ODT styles.")
 
 ;;;***
 
-;;;### (autoloads nil "org" "org.el" (23266 64622 660613 409000))
+;;;### (autoloads nil "org" "org.el" (23270 23683 896053 733000))
 ;;; Generated autoloads from org.el
 
 (autoload 'org-babel-do-load-languages "org" "\
