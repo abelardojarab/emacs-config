@@ -66,25 +66,16 @@
                                                           (org-redisplay-inline-images)
                                                         (error nil))) 'append)
 
-            ;; Enable multiple languages
-            (org-babel-do-load-languages
-             'org-babel-load-languages
-             '((latex . t)
-               (emacs-lisp . t)
-               (plantuml . t)
-               (ditaa . t)
-               (dot . t)
-               (gnuplot . t)
-               ;; sh was renamed to shell according to:
-               ;; http://comments.gmane.org/gmane.emacs.orgmode/102877
-               (shell . t)
-               (R . t)
-               (perl . t)
-               (ruby . t)
-               (python . t)
-               (js . t)
-               (C . t)
-               (haskell . t)))
+            ;; Avoid `org-babel-do-load-languages' since it does an eager require.
+            (dolist (mode my/babel-modes)
+              (eval
+               (car
+                (read-from-string
+                 (format
+                  "(use-package ob-%s
+                      :defer t
+                      :commands (org-babel-execute:%s))"
+                  mode mode)))))
 
             ;; for Tikz image in Org
             (setq org-babel-latex-htlatex "htlatex")

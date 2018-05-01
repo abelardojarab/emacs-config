@@ -107,6 +107,7 @@
 
 ;; Uniquify-buffers
 (use-package uniquify
+  :defer 2
   :config (setq
            uniquify-buffer-name-style 'post-forward
            uniquify-separator " • "
@@ -123,6 +124,9 @@
 
 ;; Browse kill ring
 (use-package browse-kill-ring
+  :defer t
+  :commands (browse-kill-ring
+             browse-kill-ring-mode)
   :load-path (lambda () (expand-file-name "browse-kill-ring/" user-emacs-directory)))
 
 ;; Unicode viewer (charmap)

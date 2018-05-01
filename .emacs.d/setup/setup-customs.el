@@ -231,6 +231,27 @@
   :group 'my/customs
   :type 'list)
 
+(defcustom my/babel-modes
+  '(python
+    shell
+    latex
+    emacs-lisp
+    plantuml
+    ditaa
+    dot
+    gnuplot
+    shell
+    R
+    perl
+    ruby
+    python
+    js
+    C
+    haskell)
+  "Modes where Org can utilize Babel"
+  :group 'my/customs
+  :type 'list)
+
 (defcustom my/abbrev-modes
   '(prog-mode-hook
     c-mode-common-hook
