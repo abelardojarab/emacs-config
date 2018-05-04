@@ -37,6 +37,10 @@
   :bind (("C-x C-m" . projectile-compile-project)
          ("C-x C-g" . projectile-find-file))
   :config (progn
+            (setq projectile-mode-line
+                  '(:eval (format " Projectile[%s]"
+                                  (projectile-project-name))))
+
             (add-to-list 'projectile-project-root-files "configure.ac")
             (add-to-list 'projectile-project-root-files ".clang_complete")
             (add-to-list 'projectile-project-root-files ".clang_complete.in")
