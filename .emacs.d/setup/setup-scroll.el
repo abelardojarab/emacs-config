@@ -33,7 +33,6 @@
               fast-but-imprecise-scrolling    t
               auto-window-vscroll             nil)
 
-;; Enable smooth scrolling package
 ;; Be careful it can ruin shift-select-mode
 (use-package smooth-scrolling
   :defer t

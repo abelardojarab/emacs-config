@@ -92,7 +92,7 @@
              htmlize-region-to-buffer)
   :config (progn
             (setq htmlize-html-major-mode 'web-mode)
-            (setq htmlize-output-type 'inline-css)
+            (setq htmlize-output-type     'inline-css)
 
             ;; It is required to disable `fci-mode' when `htmlize-buffer' is called;
             ;; otherwise the invisible fci characters show up as funky looking

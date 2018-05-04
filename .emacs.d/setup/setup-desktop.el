@@ -32,7 +32,7 @@
                              my/emacs-cache-dir)
                             "backups") t))
 (defvar my/backups-folder (concat (file-name-as-directory
-                                     my/emacs-cache-dir)
+                                   my/emacs-cache-dir)
                                   "backups")
   "Folder for backups")
 
@@ -163,6 +163,20 @@
                       (lambda ()
                         (toggle-truncate-lines t)
                         (setq truncate-lines t)))
+
+            ;; Set the title
+            (if (not (equal system-type 'windows-nt))
+                (setq dashboard-banner-logo-title (concat "GNU Emacs "
+                                                          emacs-version
+                                                          " kernel " (car (split-string (shell-command-to-string "uname -r") "-"))
+                                                          " x86_64")))
+
+            ;; Set the banner
+            (setq dashboard-startup-banner (concat user-emacs-directory
+                                                   "/emacs.png"))
+
+            (dashboard-setup-startup-hook)
+            (setq dashboard-page-separator "\n\f\f\n")
 
             (setq dashboard-items '((recents . 10) (projects . 10)))
             (dashboard-setup-startup-hook)))

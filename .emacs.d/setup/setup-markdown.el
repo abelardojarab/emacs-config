@@ -74,26 +74,26 @@
                       (lambda ()
                         ;; Do not wrap lines
                         ;; we will use autofill
-                        (visual-line-mode -1)
+                        (visual-line-mode      -1)
                         (toggle-truncate-lines t)
-                        (setq truncate-lines t)
+                        (setq                  truncate-lines t)
 
                         ;; Enable polymode minor mode
                         (polymode-minor-mode t)
 
                         ;; Org goodies; no longer needed
-                        (orgtbl-mode t)
-                        (orgstruct-mode t)
-                        (orgstruct++-mode t)
+                        (orgtbl-mode         t)
+                        (orgstruct-mode      t)
+                        (orgstruct++-mode    t)
 
                         ;; Extra modes
-                        (outline-minor-mode t)
-                        (footnote-mode t)
-                        (auto-fill-mode t)
+                        (outline-minor-mode  t)
+                        (footnote-mode       t)
+                        (auto-fill-mode      t)
 
                         ;; Style/syntax check
-                        (writegood-mode t)
-                        (flyspell-mode t)
+                        (writegood-mode      t)
+                        (flyspell-mode       t)
                         (if (or (executable-find "proselint")
                                 (executable-find "mmark"))
                             (flycheck-mode t))))
