@@ -235,6 +235,7 @@
 (depends-on "neotree")
 (depends-on "newsticker")
 (depends-on "nodejs-repl")
+(depends-on "nova-theme")
 (depends-on "nyan-mode")
 ;; (depends-on "org")
 (depends-on "org2blog")
