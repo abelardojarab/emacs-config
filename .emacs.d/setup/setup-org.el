@@ -841,6 +841,12 @@ On the flip side, for BEGIN_EXCEPT %s blocks, remove those if %s equals TYPE. "
             ;; HTML5 slide exporter
             (use-package ox-html5slide)))
 
+;; Org tables
+(use-package org-table
+  :defer t
+  :config (defconst org-table-border-regexp "^[ \t]*[^|]"
+              "Regexp matching any line outside an Org table."))
+
 ;; Setup Org Agenda
 (use-package setup-org-agenda)
 
