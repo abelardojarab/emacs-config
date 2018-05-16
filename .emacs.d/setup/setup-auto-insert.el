@@ -28,6 +28,7 @@
 (use-package autoinsert
   :defer t
   :after yasnippet
+  :init (auto-insert-mode t)
   :commands auto-insert-mode
   :config (progn
 
