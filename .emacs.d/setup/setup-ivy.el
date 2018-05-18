@@ -126,5 +126,9 @@
   :load-path (lambda () (expand-file-name "all-the-icons-ivy/" user-emacs-directory))
   :config (all-the-icons-ivy-setup))
 
+(use-package ivy-yasnippet
+  :defer t
+  :commands ivy-yasnippet)
+
 (provide 'setup-ivy)
 ;;; setup-swiper.el ends here

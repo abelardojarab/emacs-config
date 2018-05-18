@@ -350,5 +350,70 @@ dirs. Input is a string and output is a list of strings."
   "Return the path of the dir's parent directory"
   (file-name-directory (directory-file-name dir)))
 
+(defun insert-datestamp ()
+  "Produces and inserts a partial ISO 8601 format timestamp."
+  (interactive)
+  (insert (format-time-string "%F")))
+
+(defun insert-datestamp-us ()
+  "Produces and inserts a US datestamp."
+  (interactive)
+  (insert (format-time-string "%m/%d/%y")))
+
+(defun insert-datestamp-us-full-year-and-dashes ()
+  "Produces and inserts a US datestamp with full year and dashes."
+  (interactive)
+  (insert (format-time-string "%m-%d-%Y")))
+
+(defun insert-datestamp-us-full-year ()
+  "Produces and inserts a US datestamp with full year."
+  (interactive)
+  (insert (format-time-string "%m/%d/%Y")))
+
+(defun insert-datestamp-us-words ()
+  "Produces and inserts a US datestamp using words."
+  (interactive)
+  (insert (format-time-string "%A %B %d, %Y")))
+
+(defun insert-timestamp-no-colons ()
+  "Inserts a full ISO 8601 format timestamp with colons replaced by hyphens."
+  (interactive)
+  (insert (get-timestamp-no-colons)))
+
+(defun insert-datestamp ()
+  "Produces and inserts a partial ISO 8601 format timestamp."
+  (interactive)
+  (insert (format-time-string "%F")))
+
+(defun get-timestamp-no-colons ()
+  "Produces a full ISO 8601 format timestamp with colons replaced by hyphens."
+  (interactive)
+  (let* ((timestamp (get-timestamp))
+         (timestamp-no-colons (replace-regexp-in-string ":" "-" timestamp)))
+    timestamp-no-colons))
+
+(defun get-timestamp ()
+  "Produces a full ISO 8601 format timestamp."
+  (interactive)
+  (let* ((timestamp-without-timezone (format-time-string "%Y-%m-%dT%T"))
+         (timezone-name-in-numeric-form (format-time-string "%z"))
+         (timezone-utf-offset
+          (concat (substring timezone-name-in-numeric-form 0 3)
+                  ":"
+                  (substring timezone-name-in-numeric-form 3 5)))
+         (timestamp (concat timestamp-without-timezone
+                            timezone-utf-offset)))
+    timestamp))
+
+(defun insert-timestamp ()
+  "Inserts a full ISO 8601 format timestamp."
+  (interactive)
+  (insert (get-timestamp)))
+
+(defun org-time-stamp-with-seconds-now ()
+  (interactive)
+  (let ((current-prefix-arg '(16)))
+    (call-interactively 'org-time-stamp)))
+
 (provide 'setup-functions-deferred)
 ;;; setup-functions-deferred.el ends here

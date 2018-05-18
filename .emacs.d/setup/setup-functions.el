@@ -86,7 +86,12 @@
              my/directory-tree
              my/read-file-lines
              my/read-file-as-string
-             my/parent-directory))
+             my/parent-directory
+             insert-timestamp
+             insert-datestamp-us
+             insert-datestamp-us-full-year
+             insert-datestamp-us-full-year-and-dashes
+             org-time-stamp-with-seconds-now))
 
 ;; Needed later by CEDET
 (use-package eieio-core)

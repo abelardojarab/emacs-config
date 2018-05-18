@@ -31,6 +31,27 @@
             ;; Do not use lv it messes up windows layout
             (setq-default hydra-lv nil)
 
+            (defhydra hydra-timestamp (:color blue :hint nil)
+              "
+Timestamps: (_q_uit)
+  Date: _I_SO, _U_S, US With _Y_ear and _D_ashes, US In _W_ords
+   Date/Time: _N_o Colons or _w_ith
+    Org-Mode: _R_ight Now or _c_hoose
+"
+              ("q" nil)
+
+              ("I" insert-datestamp)
+              ("U" insert-datestamp-us)
+              ("Y" insert-datestamp-us-full-year)
+              ("D" insert-datestamp-us-full-year-and-dashes)
+              ("W" insert-datestamp-us-words)
+
+              ("N" insert-timestamp-no-colons)
+              ("w" insert-timestamp)
+
+              ("R" org-time-stamp-with-seconds-now)
+              ("c" org-time-stamp))
+
             (defhydra hydra-describe (:color blue
                                              :hint nil)
               "

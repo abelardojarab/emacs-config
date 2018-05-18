@@ -86,20 +86,19 @@
     (my/set-face-fringe)
     (my/set-face-tabbar)
     (my/set-face-ecb)
-    (setq-default mode-line-format '("%e" (:eval (spaceline-ml-custom))))
-    ))
+    (setq-default mode-line-format '("%e" (:eval (spaceline-ml-custom))))))
 (ad-activate 'load-theme)
 
 (if (file-exists-p custom-file-x)
     (add-hook 'after-init-hook (lambda ()
-				 (load custom-file-x :noerror :nomessage)
+                 (load custom-file-x :noerror :nomessage)
 
-				 ;; Add required faces
-				 (my/set-face-fringe)
-				 (my/set-face-tabbar)
-				 (my/set-face-ecb)
-				 (setq-default mode-line-format '("%e" (:eval (spaceline-ml-custom))))
-				 )))
+                 ;; Add required faces
+                 (my/set-face-fringe)
+                 (my/set-face-tabbar)
+                 (my/set-face-ecb)
+                 (setq-default mode-line-format '("%e" (:eval (spaceline-ml-custom))))
+                 )))
 
 (provide 'setup-post)
 ;;; setup-post.el ends here

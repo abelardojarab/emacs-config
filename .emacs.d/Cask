@@ -200,6 +200,7 @@
 (depends-on "ivy")
 (depends-on "ivy-purpose")
 (depends-on "ivy-rich")
+(depends-on "ivy-yasnippet")
 ;; (depends-on "jar")
 (depends-on "jedi")
 (depends-on "js2-mode")
