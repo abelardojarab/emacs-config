@@ -39,19 +39,19 @@
            (table-time-before-update 0.1))
   :config (progn
 
-	    ;; Sort tabbar buffers by name
-	    (defun tabbar-add-tab (tabset object &optional append_ignored)
-	      "Add to TABSET a tab with value OBJECT if there isn't one there yet.
+            ;; Sort tabbar buffers by name
+            (defun tabbar-add-tab (tabset object &optional append_ignored)
+              "Add to TABSET a tab with value OBJECT if there isn't one there yet.
  If the tab is added, it is added at the beginning of the tab list,
  unless the optional argument APPEND is non-nil, in which case it is
  added at the end."
-	      (let ((tabs (tabbar-tabs tabset)))
-		(if (tabbar-get-tab object tabset)
-		    tabs
-		  (let ((tab (tabbar-make-tab object tabset)))
-		    (tabbar-set-template tabset nil)
-		    (set tabset (sort (cons tab tabs)
-				      (lambda (a b) (string< (buffer-name (car a)) (buffer-name (car b))))))))))
+              (let ((tabs (tabbar-tabs tabset)))
+                (if (tabbar-get-tab object tabset)
+                    tabs
+                  (let ((tab (tabbar-make-tab object tabset)))
+                    (tabbar-set-template tabset nil)
+                    (set tabset (sort (cons tab tabs)
+                                      (lambda (a b) (string< (buffer-name (car a)) (buffer-name (car b))))))))))
 
             ;; Reduce tabbar width to enable as many buffers as possible
             (defun tabbar-buffer-tab-label (tab)
@@ -117,8 +117,6 @@ That is, a string used to represent it on the tab bar."
   :config (progn
             (setq tabbar-ruler-global-tabbar 't)
             (tabbar-install-faces)
-
-            ;; https://github.com/mattfidler/tabbar-ruler.el/issues/10
             (setq tabbar-ruler-movement-timer-delay 1000000)
 
             ;; Fix for tabbar under Emacs 24.4
@@ -134,18 +132,7 @@ That is, a string used to represent it on the tab bar."
                     (puthash (selected-frame) frame-cache tabbar-caches)
                     frame-cache)))
 
-            ;; necessary support function for buffer burial
-            (defun my/delete-these (delete-these from-this-list)
-              "Delete DELETE-THESE FROM-THIS-LIST."
-              (cond
-               ((car delete-these)
-                (if (member (car delete-these) from-this-list)
-                    (my/delete-these (cdr delete-these) (delete (car delete-these)
-                                                                from-this-list))
-                  (my/delete-these (cdr delete-these) from-this-list)))
-               (t from-this-list)))
-
-            ;; might as well use this for both
+            ;; explicitely delete some files from tabbar list
             (defun my/hated-buffers ()
               "List of buffers I never want to see, converted from names to buffers."
               (remove-if
@@ -159,36 +146,24 @@ That is, a string used to represent it on the tab bar."
                                       this-buffer))
                                 (buffer-list))))))
 
-            ;; bury buffer function
-            (defun my/bury-buffer (&optional n)
-              (interactive)
-              (unless n
-                (setq n 1))
-              (let ((my/buffer-list (my/delete-these (my/hated-buffers)
-                                                     (buffer-list (selected-frame)))))
-                (switch-to-buffer
-                 (if (< n 0)
-                     (nth (+ (length my/buffer-list) n)
-                          my/buffer-list)
-                   (bury-buffer)
-                   (nth n my/buffer-list)))))
-
+            ;; Add some regular expression from some buffers we do not want to see
             (setq tabbar-buffer-list-function
                   (lambda ()
                     (remove-if
                      (lambda (buffer)
-               (or
-            ;; Explicitely removed buffers
-            (and (not (eq (current-buffer) buffer))
-                 (or (cl-search "diff-hl"    (buffer-name buffer))
-                 (cl-search "tmp-status" (buffer-name buffer))))
+                       (or
+                        ;; Do not show these buffers in tabbar
+                        (and (not (eq (current-buffer) buffer))
+                             (or (cl-search "diff-hl"    (buffer-name buffer))
+                                 (cl-search "tmp-status" (buffer-name buffer))
+                                 (cl-search "magit"      (buffer-name buffer))))
 
-            ;; Always include the current buffer.
-            (and (not (eq (current-buffer) buffer))
-                 ;; remove buffer name in this list.
-                 (loop for name in (mapcar (lambda (x) (buffer-name x))
-                               (my/hated-buffers))
-                   thereis (cl-search name (buffer-name buffer))))))
+                        ;; Always include the current buffer.
+                        (and (not (eq (current-buffer) buffer))
+                             ;; remove buffer name in this list.
+                             (loop for name in (mapcar (lambda (x) (buffer-name x))
+                                                       (my/hated-buffers))
+                                   thereis (cl-search name (buffer-name buffer))))))
                      (buffer-list))))
 
             ;; Enable tabbar
