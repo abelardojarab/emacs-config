@@ -30,20 +30,17 @@
   :bind (:map ctl-x-map
               ("C-c" . my/exit))
   :init (progn
-
-          ;; Monkey patch the server to force it to use ipv4. This is a bug fix that will
-          ;; hopefully be in emacs 24: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=6781"
-          (defadvice make-network-process (before force-tcp-server-ipv4 activate)
-            (if (eq nil (plist-get (ad-get-args 0) :family))
-                (ad-set-args 0 (plist-put (ad-get-args 0) :family 'ipv4))))
+          ;; Ignore errors in message
+          (defadvice message (around bar activate)
+            (ignore-errors add-do-it))
 
           ;; Server configuration
-          (setq server-use-tcp nil)
-          (setq server-port 9999)
-          (setq server-auth-dir (concat (file-name-as-directory
+          (setq server-use-tcp t
+                server-port    9999
+                server-auth-dir (concat (file-name-as-directory
                                          my/emacs-cache-dir)
-                                        "server"))
-          (setq server-socket-dir (concat (file-name-as-directory
+                                        "server")
+                server-socket-dir (concat (file-name-as-directory
                                            my/emacs-cache-dir)
                                           "server"))
           (if (not (file-exists-p server-auth-dir))
@@ -55,9 +52,6 @@
               "Prevent annoying \"Active processes exist\" query when you quit Emacs."
               (ignore-errors
                 (flet ((process-list ())) ad-do-it)))
-
-            ;; Remove socket directory on emacs exit
-            (add-hook 'kill-emacs-hook #'(lambda () (ignore-errors (delete-directory server-socket-dir t))))
 
             ;; http://stackoverflow.com/questions/885793/emacs-error-when-calling-server-start
             (defun server-ensure-safe-dir (dir) "Noop" t)
@@ -92,6 +86,8 @@
                     (progn
                       (dolist (client server-clients)
                         (server-delete-client client))))
+                ;; Remove socket directory on emacs exit
+                (ignore-errors (delete-directory server-socket-dir t))
                 ad-do-it)
               (my/exit))
 
@@ -124,7 +120,7 @@ nil are ignored."
 
             ;; Launch the server
             (unless (server-running-p)
-              (if (not (eq 'windows-nt system-type))
+              (if (not (eq system-type 'windows-nt))
                   (server-start)))))
 
 ;; emacsclient support
