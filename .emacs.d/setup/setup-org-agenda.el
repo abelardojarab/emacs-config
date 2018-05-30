@@ -474,7 +474,7 @@ Captured %<%Y-%m-%d %H:%M>
                                            :created t        ;; properties
                                            :kill-buffer t)   ;; properties
 
-                                          )) ;; properties
+                                          ) ;; properties
 
             ;; Refiling options
             (setq org-refile-targets (quote ((org-agenda-files :maxlevel . 3)))

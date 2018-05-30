@@ -847,19 +847,19 @@ On the flip side, for BEGIN_EXCEPT %s blocks, remove those if %s equals TYPE. "
   :config (defconst org-table-border-regexp "^[ \t]*[^|]"
               "Regexp matching any line outside an Org table."))
 
-;; Setup Org Agenda
+;; setup Org Agenda
 (use-package setup-org-agenda)
 
-;; Setup Org (babel support)
+;; setup Org (babel support)
 (use-package setup-org-babel)
 
-;; Setup Org plugins
+;; setup Org plugins
 (use-package setup-org-plugins)
 
-;; Setup Org (latex support)
+;; setup Org (latex support)
 (use-package setup-org-latex)
 
-;; Setup Org (html support)
+;; setup Org (html support)
 (use-package setup-org-html)
 
 ;; Use footnotes as eldoc source
