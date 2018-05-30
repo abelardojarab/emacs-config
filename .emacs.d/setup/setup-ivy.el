@@ -79,7 +79,6 @@
   :commands counsel-mode
   :init (counsel-mode t)
   :bind (("M-x"                     . counsel-M-x)
-         ("M-y"                     . counsel-yank-pop)
          ("C-o"                     . counsel-find-file)
          ("C-c C-v"                 . counsel-yank-pop)
          ("C-c C-a"                 . counsel-git-grep)

@@ -46,9 +46,9 @@
                   undo-tree-auto-save                 t
                   undo-tree-auto-save-history         t
                   undo-tree-history-directory-alist   (list
-						       (cons "."
-							     (concat my/emacs-cache-dir
-								     "/undo-tree-hist/"))))))
+                                                       (cons "."
+                                                             (concat my/emacs-cache-dir
+                                                                     "/undo-tree-hist/"))))))
 
 (provide 'setup-undoandredo)
 ;;; setup-undoandredo.el ends here

@@ -46,7 +46,7 @@
 
 ;; Resize by pixels
 (setq frame-resize-pixelwise               t
-      ;; Size new windows proportionally wrt other windows
+      ;; resize windows to accommodate new ones
       window-combination-resize            t
       ;; prompt when trying to switch out of a dedicated window
       switch-to-buffer-in-dedicated-window 'prompt

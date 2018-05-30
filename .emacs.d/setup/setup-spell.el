@@ -178,6 +178,11 @@ Don't read buffer-local settings or word lists."
   :diminish writegood-mode
   :load-path (lambda () (expand-file-name "writegood-mode/" user-emacs-directory)))
 
+;; Synonyms search
+(use-package powerthesaurus
+  :defer t
+  :commands powerthesaurus-lookup-word)
+
 ;; Langtool
 (use-package langtool
   :if (executable-find "java")

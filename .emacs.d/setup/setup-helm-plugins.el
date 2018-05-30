@@ -62,6 +62,13 @@
                         (executable-find "pt"))
               (setq helm-ag-base-command "awk --nocolor --nogroup"))))
 
+;; helm line search with ag
+(use-package helm-lines
+  :defer t
+  :if (executable-find "ag")
+  :after helm
+  :commands helm-lines)
+
 ;; helm describe modes
 (use-package helm-describe-modes
   :defer t

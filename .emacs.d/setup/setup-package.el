@@ -57,7 +57,9 @@
 ;; Use Package
 (eval-when-compile
   (require 'use-package))
-(setq use-package-expand-minimally t)
+(setq use-package-expand-minimally   t
+      use-package-compute-statistics t
+      use-package-verbose            t)
 
 ;; Baseline packages
 (use-package cl)

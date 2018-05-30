@@ -59,31 +59,45 @@
               (ignore-errors add-do-it))
 
             ;; preferences
-            (setq helm-mode-handle-completion-in-region nil
-                  helm-always-two-windows               t
-                  helm-quick-update                     t
-                  helm-split-window-default-side        'right
-                  helm-split-window-in-side-p           t
-                  helm-echo-input-in-header-line        t
-                  helm-idle-delay                       0.0
-                  helm-input-idle-delay                 0.01
-                  helm-yas-display-key-on-candidate     t
-                  helm-M-x-requires-pattern             nil
-                  helm-candidate-number-limit           50
-                  helm-move-to-line-cycle-in-source     nil
-                  helm-scroll-amount                    8
-                  helm-ff-search-library-in-sexp        t
-                  helm-ff-skip-boring-files             t
-                  helm-ff-file-name-history-use-recentf t)
+            (setq helm-mode-handle-completion-in-region     nil
+                  helm-bookmark-show-location               t
+                  helm-buffer-max-length                    48
+                  helm-always-two-windows                   t
+                  helm-quick-update                         t
+                  helm-org-headings-fontify                 t
+                  helm-window-prefer-horizontal-split       t
+                  helm-split-window-default-side            'right
+                  helm-split-window-in-side-p               t
+                  helm-echo-input-in-header-line            t
+                  helm-idle-delay                           0.0
+                  helm-input-idle-delay                     0.01
+                  helm-yas-display-key-on-candidate         t
+                  helm-M-x-requires-pattern                 nil
+                  helm-candidate-number-limit               50
+                  helm-move-to-line-cycle-in-source         nil
+                  helm-scroll-amount                        8
+                  helm-truncate-lines                       nil
+                  helm-ff-auto-update-initial-value         nil
+                  helm-ff-search-library-in-sexp            t
+                  helm-ff-skip-boring-files                 t
+                  helm-ff-file-name-history-use-recentf     t
+                  helm-use-frame-when-more-than-two-windows nil
+
+                  helm-display-function                     #'helm-default-display-buffer
+                  helm-display-buffer-reuse-frame           t
+                  helm-display-buffer-width                 180
+                  helm-display-buffer-height                60
+                  helm-use-undecorated-frame-option         t)
 
             ;; use silver searcher when available
             (when (executable-find "ag-grep")
-              (setq helm-grep-default-command "ag-grep -Hn --no-group --no-color %e %p %f"
-                    helm-grep-default-recurse-command "ag-grep -H --no-group --no-color %e %p %f"))
+              (setq helm-grep-default-command              "ag-grep -Hn --no-group --no-color %e %p %f"
+                    helm-grep-default-recurse-command      "ag-grep -H --no-group --no-color %e %p %f"))
 
             ;; use curl when available
             (when (executable-find "curl")
-              (setq helm-google-suggest-use-curl-p t))
+              (setq helm-net-prefer-curl           t
+                    helm-google-suggest-use-curl-p t))
 
             ;; replace locate with spotlight on Mac
             (when (and (executable-find "mdfind")
@@ -112,6 +126,10 @@
             (defun helm-fonts ()
               (interactive)
               (helm :sources '(font-helm-source)))))
+
+;; Use helm for the kill ring too
+(use-package helm-ring
+  :bind (("M-y" . helm-show-kill-ring)))
 
 ;; Integrate helm with projectile
 (use-package helm-projectile

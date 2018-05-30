@@ -62,12 +62,23 @@
               (setq max-specpdl-size (* max-specpdl-size 40)
                     max-lisp-eval-depth (* max-lisp-eval-depth 30)))
 
-          ;; garbage collection
-          (setq-default gc-cons-threshold most-positive-fixnum
-                        gc-cons-percentage 0.5)
+          (defun my/disable-garbage-collection ()
+            "Disable garbage collection."
+            (setq gc-cons-threshold most-positive-fixnum
+                  gc-cons-percentage 0.6))
 
-          ;; Reset garbage collector after initialization is finished
-          (add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 64 1204 1204))))
+          (defun my/enable-garbage-collection ()
+            "Reset garbage collection to small-ish limit."
+            (setq gc-cons-threshold 16777216
+                  gc-cons-percentage 0.1))
+
+          ;; Helm runs with GC disabled
+          (add-hook 'minibuffer-setup-hook #'my/disable-garbage-collection)
+          (add-hook 'minibuffer-exit-hook  #'my/enable-garbage-collection)
+
+          ;; We disable GC during startup, we re-enable it afterwards.
+          (my/disable-garbage-collection)
+          (add-hook 'emacs-startup-hook #'my/enable-garbage-collection)
 
           ;; Features
           (put 'narrow-to-region 'disabled nil)
