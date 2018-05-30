@@ -30,16 +30,13 @@
   :bind (:map ctl-x-map
               ("C-c" . my/exit))
   :init (progn
-          ;; Ignore errors in message
-          (defadvice message (around bar activate)
-            (ignore-errors add-do-it))
 
           ;; Server configuration
-          (setq server-use-tcp t
-                server-port    9999
-                server-auth-dir (concat (file-name-as-directory
-                                         my/emacs-cache-dir)
-                                        "server")
+          (setq server-use-tcp    t
+                server-port       9999
+                server-auth-dir   (concat (file-name-as-directory
+                                           my/emacs-cache-dir)
+                                          "server")
                 server-socket-dir (concat (file-name-as-directory
                                            my/emacs-cache-dir)
                                           "server"))

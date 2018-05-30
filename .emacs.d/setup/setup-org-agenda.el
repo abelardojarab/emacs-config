@@ -158,28 +158,34 @@
 
             ;; define todo states: set time stamps one waiting, delegated and done
             (setq org-todo-keywords
-                  '((sequence "TODO(t!)" "|" "IN PROGRESS(p@/!)" "DONE(d!)" "CANCELLED(c@/!)" "HOLD(h!)")
-                    (sequence "TASK(t!)" "|" "DONE(d!)" "IN PROGRESS(p@/!)" "CANCELLED(c@/!)")
-                    (sequence "IDEA(i!)" "MAYBE(y!)" "STAGED(s!)" "WORKING(k!)" "|" "USED(u!/@)")))
+                  '((sequence "TODO(t!)" "|" "IN PROGRESS(p@/!)" "DONE(d!)" "CANCELLED(c@/!)" "HOLD(h!)")))
             (setq org-todo-keyword-faces
                   '(("IN PROGRESS" . 'warning)
                     ("HOLD"        . 'font-lock-keyword-face)
-                    ("TASK"        . 'font-lock-builtin-face)
+                    ("SOMEDAY"     . 'font-lock-builtin-face)
                     ("CANCELLED"   . 'font-lock-doc-face)))
 
             ;; Tag tasks with GTD-ish contexts
-            (setq org-tag-alist '(("@work"       . ?b)
+            ;; the org-tag-persistent-alist is *NOT* inherited in capture mode entry!
+            (setq org-tag-alist '((:startgroup   . nil)
+                                  ("@work"       . ?b)
                                   ("@home"       . ?h)
-                                  ("@place"      . ?p)
-                                  ("@writing"    . ?w)
-                                  ("@errands"    . ?e)
-                                  ("@family"     . ?f)
-                                  ("@coding"     . ?c)
-                                  ("@tasks"      . ?t)
+                                  ("@todos"      . ?t)
                                   ("@learning"   . ?l)
-                                  ("@reading"    . ?r)
-                                  ("quantified"  . ?q)
-                                  ("high-energy" . ?1)))
+                                  ("@research"   . ?r)
+                                  ("@note"       . ?n)
+                                  ("@code"       . ?o)
+                                  (:endgroup     . nil)
+                                  (:startgroup   . nil)
+                                  (".appt"       . ?a)
+                                  (".evt"        . ?e)
+                                  (".class"      . ?c)
+                                  (".meeting"    . ?m)
+                                  (".deadline"   . ?d)
+                                  (:endgroup     . nil)
+                                  ("quick"       . ?q)
+                                  ("noexport"    . ?n)
+                                  ("ignore"      . ?i)))
 
             ;; Projects
             (setq org-tags-exclude-from-inheritance '("PROJECT"))
@@ -261,11 +267,10 @@ DEF-FLAG   is t when a double ++ or -- indicates shift relative to
             ;; Org agenda custom commands
             (defvar my/org-agenda-contexts
               '((tags-todo "+@work/!-SOMEDAY")
-                (tags-todo "+@coding/!-SOMEDAY")
-                (tags-todo "+@writing/!-SOMEDAY")
-                (tags-todo "+@learning/!-SOMEDAY")
                 (tags-todo "+@home/!-SOMEDAY")
-                (tags-todo "+@errands/!-SOMEDAY"))
+                (tags-todo "+@todos/!-SOMEDAY")
+                (tags-todo "+@learning/!-SOMEDAY")
+                (tags-todo "+@research/!-SOMEDAY"))
               "Usual list of contexts.")
             (defun my/org-agenda-skip-scheduled ()
               (org-agenda-skip-entry-if 'scheduled 'deadline
@@ -290,13 +295,13 @@ DEF-FLAG   is t when a double ++ or -- indicates shift relative to
                     ("2" "Bi-weekly review" agenda "" ((org-agenda-span 14) (org-agenda-log-mode 1)))
                     ("gw" "Work" tags-todo "@work"
                      ((org-agenda-view-columns-initially t)))
-                    ("gt" "Tasks" tags-todo "@tasks"
+                    ("gt" "TODOs" tags-todo "@todos"
                      ((org-agenda-view-columns-initially t)))
-                    ("gc" "Coding" tags-todo "@coding"
+                    ("gr" "Research" tags-todo "@research"
                      ((org-agenda-view-columns-initially t)))
                     ("gh" "Home" tags-todo "@home"
                      ((org-agenda-view-columns-initially t)))
-                    ("ge" "Errands" tags-todo "@errands"
+                    ("gl" "Learning" tags-todo "@learning"
                      ((org-agenda-view-columns-initially t)))
                     ("0" "Top 3 by context"
                      ,my/org-agenda-contexts
@@ -368,7 +373,7 @@ DEF-FLAG   is t when a double ++ or -- indicates shift relative to
                                            "Meeting or Appointment"         ;; name
                                            entry                            ;; type
                                            (file+datetree ,org-agenda-default-file "Meeting")  ;; target
-                                           "* %^{Title} %(org-set-tags)  :@meeting:
+                                           "* %^{Title} %(org-set-tags)  :.meeting:
 :PROPERTIES:
 :Effort: %^{effort|1:00|0:05|0:15|0:30|2:00|4:00}
 :Created: %U
@@ -402,34 +407,12 @@ Captured %<%Y-%m-%d %H:%M>
                                            :created t        ;; properties
                                            :kill-buffer t)   ;; properties
 
-                                          ;; Ledger is a CLI accounting system
-                                          ("l"               ;; key
-                                           "Ledger"          ;; name
-                                           entry             ;; type
-                                           (file+datetree ,org-default-notes-file "Ledger")  ;; target
-                                           "* %^{expense} %(org-set-tags)  :@accounts:
-:PROPERTIES:
-:Created: %U
-:END:
-%i
-#+NAME: %\\1-%t
-\#+BEGIN_SRC ledger :noweb yes
-%^{Date of expense (yyyy/mm/dd)} %^{'*' if cleared, else blank} %\\1
-    %^{Account name}                                $%^{Amount}
-    %?
-\#+END_SRC
-"  ;; template
-                                           :prepend t        ;; properties
-                                           :empty-lines 1    ;; properties
-                                           :created t        ;; properties
-                                           :kill-buffer t)   ;; properties
-
                                           ;; For code snippets
                                           ("c"               ;; key
-                                           "Coding"          ;; name
+                                           "Code"            ;; name
                                            entry             ;; type
-                                           (file+headline ,org-default-notes-file "Coding")  ;; target
-                                           "* %^{TITLE} %(org-set-tags)  :@coding:
+                                           (file+headline ,org-default-notes-file "Code")  ;; target
+                                           "* %^{TITLE} %(org-set-tags)  :@code:
 :PROPERTIES:
 :Created: %U
 :END:
@@ -441,28 +424,12 @@ Captured %<%Y-%m-%d %H:%M>
                                            :created t        ;; properties
                                            :kill-buffer t)   ;; properties
 
-                                          ;; For capturing some things that are worth reading
-                                          ("r"               ;; key
-                                           "Reading"         ;; name
+                                          ;; For capturing some things that are worth learning
+                                          ("l"               ;; key
+                                           "Learning"        ;; name
                                            entry             ;; type
-                                           (file+headline ,org-default-notes-file "Reading")  ;; target
-                                           "* %^{Title} %(org-set-tags)  :@reading:
-:PROPERTIES:
-:Created: %U
-:END:
-%i
-%?"  ;; template
-                                           :prepend t        ;; properties
-                                           :empty-lines 1    ;; properties
-                                           :created t        ;; properties
-                                           :kill-buffer t)   ;; properties
-
-                                          ;; To capture ideas for writing
-                                          ("w"               ;; key
-                                           "Writing"            ;; name
-                                           entry             ;; type
-                                           (file+headline ,org-default-notes-file "Writing")  ;; target
-                                           "* %^{Title} %(org-set-tags)  :@writing:
+                                           (file+headline ,org-default-todo-file "Learning")  ;; target
+                                           "* %^{Title} %(org-set-tags)  :@learning:
 :PROPERTIES:
 :Created: %U
 :END:
@@ -474,11 +441,11 @@ Captured %<%Y-%m-%d %H:%M>
                                            :kill-buffer t)   ;; properties
 
                                           ;; To capture errands
-                                          ("e"               ;; key
-                                           "Errands"         ;; name
+                                          ("r"               ;; key
+                                           "Research"        ;; name
                                            entry             ;; type
-                                           (file+headline ,org-agenda-todo-file "Errands")  ;; target
-                                           "* TODO %^{Todo} %(org-set-tags)  :@errands:
+                                           (file+headline ,org-agenda-todo-file "Research")  ;; target
+                                           "* TODO %^{Todo} %(org-set-tags)  :@research:
 :PROPERTIES:
 :Created: %U
 :END:
@@ -510,7 +477,7 @@ Captured %<%Y-%m-%d %H:%M>
                                           )) ;; properties
 
             ;; Refiling options
-            (setq org-refile-targets (quote ((org-agenda-files :maxlevel . 9)))
+            (setq org-refile-targets (quote ((org-agenda-files :maxlevel . 3)))
                   org-refile-use-outline-path nil
                   ;; Stop using paths for refile targets - we file directly with helm
                   org-refile-use-outline-path nil
