@@ -129,6 +129,7 @@
                                                     "org-id-locations"))
                 (setq org-default-notes-file  (concat org-directory "/notes.org")
                       org-default-refile-file (concat org-directory "/refile.org")
+                      org-default-todo-file    (concat org-directory "/TODOS.org")
                       org-agenda-default-file (concat org-directory "/agenda.org")
                       org-agenda-diary-file   (concat org-directory "/TODOS.org")
                       org-agenda-todo-file    (concat org-directory "/TODOS.org")
@@ -428,7 +429,7 @@ Captured %<%Y-%m-%d %H:%M>
                                           ("l"               ;; key
                                            "Learning"        ;; name
                                            entry             ;; type
-                                           (file+headline ,org-default-todo-file "Learning")  ;; target
+                                           (file+headline ,org-agenda-todo-file "Learning")  ;; target
                                            "* %^{Title} %(org-set-tags)  :@learning:
 :PROPERTIES:
 :Created: %U
@@ -474,7 +475,7 @@ Captured %<%Y-%m-%d %H:%M>
                                            :created t        ;; properties
                                            :kill-buffer t)   ;; properties
 
-                                          ) ;; properties
+                                          )) ;; properties
 
             ;; Refiling options
             (setq org-refile-targets (quote ((org-agenda-files :maxlevel . 3)))
