@@ -68,6 +68,7 @@
 (use-package diminish)
 (use-package let-alist)
 (use-package color)
+(use-package ansi-color)
 
 ;; Use Cask to fetch packages
 (when (file-exists-p "~/.cask/cask.el")
