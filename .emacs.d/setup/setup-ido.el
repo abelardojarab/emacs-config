@@ -91,6 +91,13 @@
   :load-path (lambda () (expand-file-name "ido-ubiquitous/" user-emacs-directory))
   :config (ido-ubiquitous-mode 1))
 
+;; Ido vertical mode
+(use-package ido-vertical-mode
+  :disabled t
+  :demand t
+  :load-path (lambda () (expand-file-name "ido-vertical-mode/" user-emacs-directory))
+  :config (ido-vertical-mode 1))
+
 ;; Use ibuffer
 (use-package ibuffer
   :defer t

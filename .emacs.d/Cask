@@ -188,6 +188,7 @@
 (depends-on "icicles")
 (depends-on "ido-hacks")
 (depends-on "ido-ubiquitous")
+(depends-on "ido-vertical-mode")
 (depends-on "image+")
 (depends-on "imenu-anywhere")
 (depends-on "imenu-list")
