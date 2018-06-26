@@ -1,6 +1,6 @@
 ;;; setup-python-plugins.el ---                      -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -42,7 +42,6 @@
            (check-python-module "epc")
            (check-python-module "jedi"))
   :commands (jedi:setup)
-  :after auto-complete
   :load-path (lambda () (expand-file-name "jedi/" user-emacs-directory))
   :init (add-hook 'python-mode-hook #'jedi:setup)
   :config (progn
@@ -65,6 +64,11 @@
                           company-capf
                           company-files
                           company-abbrev))))))))
+
+(use-package anaconda-mode
+  :if (executable-find "python")
+  :init (add-hook 'python-mode-hook 'anaconda-mode)
+  :commands anaconda-mode)
 
 (provide 'setup-python-plugins)
 ;;; setup-python-plugins.el ends here

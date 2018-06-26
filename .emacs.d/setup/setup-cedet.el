@@ -1,6 +1,6 @@
 ;;; setup-cedet.el ---
 
-;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -45,13 +45,9 @@
                 (use-package semantic/bovine/gcc))
 
             ;; Enabled features
-            (setq semantic-default-submodes '(global-semantic-idle-scheduler-mode
-                                              global-semanticdb-minor-mode
-                                              global-semantic-idle-summary-mode
+            (setq semantic-default-submodes '(global-semanticdb-minor-mode
                                               global-semantic-mru-bookmark-mode
-                                              global-semantic-load-enable-code-helpers
-                                              global-semantic-load-enable-excessive-code-helpers
-                                              global-semantic-idle-completions-mode))
+                                              global-semantic-load-enable-code-helpers))
 
             ;; Assure .emacs.cache/semanticdb directory exists
             (if (not (file-exists-p (concat (file-name-as-directory

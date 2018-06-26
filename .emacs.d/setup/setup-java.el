@@ -1,6 +1,6 @@
 ;;; setup-java.el ---                                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -25,6 +25,7 @@
 ;;; Code:
 
 (use-package ajc-java-complete-config
+  :disabled t
   :after auto-complete
   :load-path (lambda () (expand-file-name "ajc-java-complete/" user-emacs-directory))
   :config (progn

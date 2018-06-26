@@ -37,19 +37,6 @@
             ;; Put c++-mode as default for *.h files (improves parsing)
             (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 
-            ;; Make C/C++ indentation reliable
-            ;; http://stackoverflow.com/questions/663588/emacs-c-mode-incorrect-indentation
-            (defun my/c-indent-offset-according-to-syntax-context (key val)
-              ;; remove the old element
-              (setq c-offsets-alist (delq (assoc key c-offsets-alist) c-offsets-alist))
-              ;; new value
-              (add-to-list 'c-offsets-alist '(key . val)))
-            (add-hook 'c-mode-common-hook
-                      (lambda ()
-                        (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
-                          ;; indent
-                          (my/c-indent-offset-according-to-syntax-context 'substatement-open 0))))
-
             ;; C/C++ style
             (defun my/c-mode-init ()
               (interactive)
@@ -69,7 +56,19 @@
               ;; ensure fill-paragraph takes doxygen @ markers as start of new
               ;; paragraphs properly
               (setq-default comment-multi-line t
-                            paragraph-start "^[ ]*\\(//+\\|\\**\\)[ ]*\\([ ]*$\\|@param\\)\\|^\f"))))
+                            paragraph-start "^[ ]*\\(//+\\|\\**\\)[ ]*\\([ ]*$\\|@param\\)\\|^\f"))
+
+            ;; Make C/C++ indentation reliable
+            (defun my/c-indent-offset-according-to-syntax-context (key val)
+              ;; remove the old element
+              (setq c-offsets-alist (delq (assoc key c-offsets-alist) c-offsets-alist))
+              ;; new value
+              (add-to-list 'c-offsets-alist '(key . val)))
+            (add-hook 'c-mode-common-hook
+                      (lambda ()
+                        (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+                          ;; indent
+                          (my/c-indent-offset-according-to-syntax-context 'substatement-open 0))))))
 
 ;; Show inline arguments hint for the C/C++ function at point
 (use-package function-args
