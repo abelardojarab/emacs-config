@@ -24,42 +24,32 @@
 
 ;;; Code:
 
-;; Assure backup directory exists
-(if (not (file-exists-p (concat (file-name-as-directory
-                                 my/emacs-cache-dir)
-                                "backups")))
-    (make-directory (concat (file-name-as-directory
-                             my/emacs-cache-dir)
-                            "backups") t))
-(defvar my/backups-folder (concat (file-name-as-directory
-                                   my/emacs-cache-dir)
-                                  "backups")
-  "Folder for backups")
+;; Keep .emacs.d clean
+(use-package no-littering
+  :demand t
+  :config (progn
+	    (require 'recentf)
+	    (add-to-list 'recentf-exclude no-littering-var-directory)
+	    (add-to-list 'recentf-exclude no-littering-etc-directory)
 
-;; Backups
-(setq backup-directory-alist `(("." . ,my/backups-folder))
-      make-backup-files      nil
-      backup-by-copying      t
-      version-control        t
-      kept-new-versions      2
-      kept-old-versions      1
-      delete-old-versions    t)
+	    (setq create-lockfiles    nil
+		  delete-old-versions t
+		  kept-new-versions   6
+		  kept-old-versions   2
+		  version-control     t
+		  backup-by-copying   t)
 
-;; Preserve the owner and group of the file you're editing
-(setq backup-by-copying-when-mismatch t)
+	    (setq auto-save-default   nil
+		  auto-save-interval  500)
 
-;; Autosave
-(setq auto-save-default nil)
-(setq auto-save-interval 500)
-(defvar my/auto-save-folder (concat (file-name-as-directory
-                                     my/emacs-cache-dir)
-                                    "auto-save")
-  "Folder for auto-saves")
-(setq auto-save-list-file-prefix (concat (file-name-as-directory
-                                          my/auto-save-folder)
-                                         ".saves-"))
-(setq auto-save-file-name-transforms `((".*" ,my/auto-save-folder t))) ;; location for all auto-save files
-(make-directory my/auto-save-folder t)
+	    ;; Preserve the owner and group of the file you're editing
+	    (setq backup-by-copying-when-mismatch t)
+
+	    (setq
+	     backup-directory-alist
+	     `((".*" . ,(no-littering-expand-var-file-name "backup/")))
+	     auto-save-file-name-transforms
+	     `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))))
 
 ;; Savehist: save some history
 (use-package savehist

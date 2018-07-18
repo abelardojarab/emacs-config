@@ -182,9 +182,10 @@ Exit the save between databases if there is user input."
                   which-func-maxout 1024
                   which-func-modes '(latex-mode
                                      markdown-mode
-                                     c-mode
-                                     emacs-lisp-mode
                                      org-mode
+                                     emacs-lisp-mode
+				     python-mode
+                                     c-mode
                                      c++-mode))))
 
 (provide 'setup-cedet)

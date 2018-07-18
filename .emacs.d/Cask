@@ -239,6 +239,7 @@
 (depends-on "neotree")
 (depends-on "newsticker")
 (depends-on "nodejs-repl")
+(depends-on "no-littering")
 (depends-on "nova-theme")
 (depends-on "nyan-mode")
 ;; (depends-on "org")
