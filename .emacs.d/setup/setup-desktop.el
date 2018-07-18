@@ -27,10 +27,9 @@
 ;; Keep .emacs.d clean
 (use-package no-littering
   :demand t
+  :init (setq no-littering-var-directory (expand-file-name "cache/var/" my/emacs-cache-dir)
+              no-littering-etc-directory (expand-file-name "cache/etc/" my/emacs-cache-dir)))
   :config (progn
-	    (require 'recentf)
-	    (add-to-list 'recentf-exclude no-littering-var-directory)
-	    (add-to-list 'recentf-exclude no-littering-etc-directory)
 
 	    (setq create-lockfiles    nil
 		  delete-old-versions t
@@ -49,7 +48,11 @@
 	     backup-directory-alist
 	     `((".*" . ,(no-littering-expand-var-file-name "backup/")))
 	     auto-save-file-name-transforms
-	     `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))))
+	     `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
+
+	    (setq-default semanticdb-default-save-directory (concat no-littering-var-directory "semanticdb")
+			  url-configuration-directory (concat no-littering-var-directory "url")
+			  eshell-directory-name (concat no-littering-var-directory "eshell" )))
 
 ;; Savehist: save some history
 (use-package savehist

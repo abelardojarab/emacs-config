@@ -171,9 +171,6 @@
     ;; Setup bookmarks
     (require 'setup-bookmarks)
 
-    ;; Setup recentf (causes crash?)
-    (require 'setup-recentf)
-
     ;; Setup versioning
     (require 'setup-versioning)
 
@@ -325,6 +322,9 @@
 
     ;; Setup desktop
     (require 'setup-desktop)
+
+    ;; Setup recentf (causes crash?)
+    (require 'setup-recentf)
 
     ) ;; let
   ) ;; with-no-warnings

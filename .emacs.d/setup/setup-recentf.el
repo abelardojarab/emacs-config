@@ -80,6 +80,9 @@ file to write to."
               (error
                (warn "recentf mode: %s" (error-message-string error)))))
 
+	  (add-to-list 'recentf-exclude no-littering-var-directory)
+	  (add-to-list 'recentf-exclude no-littering-etc-directory)
+
           (recentf-mode 1)))
 
 (provide 'setup-recentf)
