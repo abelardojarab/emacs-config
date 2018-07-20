@@ -137,6 +137,13 @@ Exit the save between databases if there is user input."
             (defadvice semantic-analyze-possible-completions-default (around bar activate)
               (ignore-errors add-do-it))
 
+            (defun semantic-force-refresh ()
+              "Force a full refresh of the current buffer's tags.
+Throw away all the old tags, and recreate the tag database."
+              (interactive)
+              (semantic-clear-toplevel-cache)
+              (semantic-fetch-tags))
+
             ;; Default semanticdb directory
             (setq-default semanticdb-default-save-directory (concat (file-name-as-directory
                                                                      my/emacs-cache-dir)
@@ -184,7 +191,7 @@ Exit the save between databases if there is user input."
                                      markdown-mode
                                      org-mode
                                      emacs-lisp-mode
-				     python-mode
+                     python-mode
                                      c-mode
                                      c++-mode))))
 
