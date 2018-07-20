@@ -26,13 +26,14 @@
 
 ;; Code Browser
 (use-package ecb
+  :defer t
   :load-path (lambda () (expand-file-name "ecb/" user-emacs-directory))
   :bind (:map ctl-x-map
               ("0" . my/ecb-activate))
-  :init (setq stack-trace-on-error t)
+  :init (progn (setq stack-trace-on-error t)
+               (add-hook 'after-init-hook #'my/ecb-activate))
+  :commands (ecb-redraw-layout my/ecb-activate)
   :config (progn
-
-            (add-hook 'switch-buffer-functions #'ecb-rebuild-methods-buffer)
 
             (defun my/ecb-activate ()
               (interactive)
@@ -230,7 +231,7 @@ little more place. "
    |              |                               |             |
    |              |                               |             |
    |              |                               |             |
-   |              |                               | Speedbar    |
+   |              |                               | Symboldefs  |
    |              |                               |             |
    |              |                               |             |
    --------------------------------------------------------------
