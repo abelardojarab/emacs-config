@@ -40,8 +40,10 @@
               (progn
                 (ecb-redraw-layout)
                 (ecb-activate)
-                (ecb-redraw-layout)
-                (idle-timer-ecb-methods-start)))
+                (ecb-redraw-layout)))
+
+            (add-hook 'prog-mode-hook     #'idle-timer-ecb-methods-start)
+            (add-hook 'markdown-mode-hook #'idle-timer-ecb-methods-start)
 
             (defadvice ecb-stealthy-updates (around bar activate)
               (ignore-errors add-do-it))
@@ -323,7 +325,7 @@ more place."
               (when (timerp idle-timer-ecb-methods-timer)
                 (cancel-timer idle-timer-ecb-methods-timer))
               (setq idle-timer-ecb-methods-timer
-                    (run-with-timer 1 5 #'idle-timer-ecb-methods-callback)))
+                    (run-with-timer 1 10 #'idle-timer-ecb-methods-callback)))
 
             ;; stop function
             (defun idle-timer-ecb-methods-stop ()
