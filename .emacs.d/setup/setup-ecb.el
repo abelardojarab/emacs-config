@@ -320,9 +320,8 @@ more place."
                 (cancel-timer idle-timer-ecb-methods-timer))
               (setq idle-timer-ecb-methods-timer nil))
 
-            (add-hook 'after-save-hook    #'idle-timer-ecb-methods-run-once)
             (add-hook 'after-save-hook    #'idle-timer-ecb-methods-callback)
-            (add-hook 'first-change-hook  #'idle-timer-ecb-methods-run-once)
+            (add-hook 'first-change-hook  #'idle-timer-ecb-methods-callback)
 
             ;; Speedbar
             (use-package sr-speedbar

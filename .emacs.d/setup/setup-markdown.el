@@ -127,10 +127,10 @@
             ;; Github markdown style
             (setq markdown-css-paths `(,(expand-file-name "styles/github-pandoc.css" user-emacs-directory)))
             (setq markdown-command
-                  (concat "pandoc --smart -c "
+                  (concat "pandoc -c "
                           (concat user-emacs-directory
                                   "/styles/panam-pandoc.css")
-                          " --from markdown_github -t html5 --mathjax --highlight-style pygments --standalone"))))
+                          " --from gfm -t html5 --mathjax --highlight-style pygments --standalone"))))
 
 (provide 'setup-markdown)
 ;;; setup-markdown.el ends here
