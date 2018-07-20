@@ -45,7 +45,7 @@
             ;; Do not fontify large files
             (defun my/find-file-check-make-large-file-read-only-hook ()
               "If a file is over a given size, make the buffer read only."
-              (when (> (buffer-size) (* 512 512))
+              (when (> (buffer-size) (* 1024 1024))
                 (read-only-mode nil)
                 (buffer-disable-undo)
                 (fundamental-mode)))

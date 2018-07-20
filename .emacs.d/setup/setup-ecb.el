@@ -30,8 +30,6 @@
   :bind (:map ctl-x-map
               ("0" . my/ecb-activate))
   :init (setq stack-trace-on-error t)
-  :commands (my/ecb-activate
-             ecb-redraw-layout)
   :config (progn
 
             (defun my/ecb-activate ()
@@ -271,7 +269,7 @@ little more place. "
 If you have not set a compilation-window in `ecb-compile-window-height' then the
 layout contains no persistent compilation window and the other windows get a little
 more place."
-              (ecb-set-speedbar-buffer)
+              (ecb-set-methods-buffer)
               (ecb-split-ver 0.5)
               (ecb-set-history-buffer)
               (select-window (next-window)))
@@ -297,6 +295,7 @@ more place."
 
             ;; Speedbar
             (use-package sr-speedbar
+              :disabled t
               :demand t
               :defines (sr-speedbar-exist-p)
               :commands (sr-speedbar-open
@@ -339,6 +338,7 @@ more place."
 
             ;; projectile and speedbar integration
             (use-package projectile-speedbar
+              :disabled t
               :demand t
               :after (sr-speedbar projectile)
               :load-path (lambda () (expand-file-name "projectile-speedbar/" user-emacs-directory))

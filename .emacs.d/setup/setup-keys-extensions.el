@@ -37,6 +37,7 @@
   :commands which-key-mode
   :load-path (lambda () (expand-file-name "which-key/" user-emacs-directory))
   :diminish which-key-mode
+  :init (add-hook 'after-init-hook #'which-key-mode)
   :config (progn
             (when (if (not (equal system-type 'windows-nt))
                       (display-graphic-p))
@@ -81,7 +82,7 @@
             ;; an orange D. Turn this off to avoid confusion.
             (setq-default which-key-special-keys nil)
 
-            (which-key-mode)))
+            (which-key-mode t)))
 
 ;; Get an instant cheat sheet for your current major mode
 ;; with C-h C-m.

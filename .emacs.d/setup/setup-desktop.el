@@ -36,10 +36,12 @@
 		  kept-new-versions   6
 		  kept-old-versions   2
 		  version-control     t
-		  backup-by-copying   t)
-
-	    (setq auto-save-default   nil
+		  backup-by-copying   t
 		  auto-save-interval  500)
+
+	    ;; Do not make backups or auto-save's
+	    (setq make-backup-files   nil
+		  auto-save-default   nil)
 
 	    ;; Preserve the owner and group of the file you're editing
 	    (setq backup-by-copying-when-mismatch t)
