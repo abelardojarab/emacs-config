@@ -32,7 +32,7 @@
               ("0" . my/ecb-activate))
   :init (progn (setq stack-trace-on-error t)
                (add-hook 'after-init-hook #'my/ecb-activate))
-  :commands (ecb-redraw-layout my/ecb-activate)
+  :commands (ecb-redraw-layout my/ecb-activate idle-timer-ecb-methods-start)
   :config (progn
 
             (defun my/ecb-activate ()
@@ -40,7 +40,8 @@
               (progn
                 (ecb-redraw-layout)
                 (ecb-activate)
-                (ecb-redraw-layout)))
+                (ecb-redraw-layout)
+                (idle-timer-ecb-methods-start)))
 
             (defadvice ecb-stealthy-updates (around bar activate)
               (ignore-errors add-do-it))
@@ -295,6 +296,41 @@ more place."
                              (semantic-force-refresh)
                              (ecb-rebuild-methods-buffer)
                              (ecb-window-sync)))))
+
+            ;; variable for the timer object
+            (defvar idle-timer-ecb-methods-timer nil)
+
+            ;; callback function
+            (defun idle-timer-ecb-methods-callback ()
+              (when (bound-and-true-p ecb-minor-mode)
+                (ignore-errors
+                  ;; this is to get the methods buffer to refresh correctly.
+                  ;; semantic idle mode refresh doesn't seem to work all that well.
+                  (semantic-force-refresh)
+                  (ecb-rebuild-methods-buffer)
+                  (ecb-window-sync))))
+
+            ;; start functions
+            (defun idle-timer-ecb-methods-run-once ()
+              (interactive)
+              (when (timerp idle-timer-ecb-methods-timer)
+                (cancel-timer idle-timer-ecb-methods-timer))
+              (setq idle-timer-ecb-methods-timer
+                    (run-with-idle-timer 5 nil #'idle-timer-ecb-methods-callback)))
+
+            (defun idle-timer-ecb-methods-start ()
+              (interactive)
+              (when (timerp idle-timer-ecb-methods-timer)
+                (cancel-timer idle-timer-ecb-methods-timer))
+              (setq idle-timer-ecb-methods-timer
+                    (run-with-timer 1 5 #'idle-timer-ecb-methods-callback)))
+
+            ;; stop function
+            (defun idle-timer-ecb-methods-stop ()
+              (interactive)
+              (when (timerp idle-timer-ecb-methods-timer)
+                (cancel-timer idle-timer-ecb-methods-timer))
+              (setq idle-timer-ecb-methods-timer nil))
 
             ;; Speedbar
             (use-package sr-speedbar
