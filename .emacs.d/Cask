@@ -327,6 +327,7 @@
 (depends-on "sudo-edit")
 ;; (depends-on "sunrise-commander")
 (depends-on "swiper")
+(depends-on "switch-buffer-functions")
 (depends-on "swiper-helm")
 (depends-on "switch-window")
 (depends-on "sx")

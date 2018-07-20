@@ -32,6 +32,8 @@
   :init (setq stack-trace-on-error t)
   :config (progn
 
+            (add-hook 'switch-buffer-functions #'ecb-rebuild-methods-buffer)
+
             (defun my/ecb-activate ()
               (interactive)
               (progn

@@ -231,5 +231,13 @@
               (align-regexp start end
                             "\\(\\s-*\\):" 1 0 t))))
 
+(use-package switch-buffer-functions
+  :demand t
+  :config (add-hook 'switch-buffer-functions
+                    (lambda(prev cur)
+                      (if (eval 'current-input-method)
+                          (set-cursor-color "magenta")
+                        (set-cursor-color "cyan")))))
+
 (provide 'setup-general)
 ;;; setup-general.el ends here
