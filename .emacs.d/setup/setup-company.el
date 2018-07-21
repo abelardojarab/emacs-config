@@ -26,23 +26,38 @@
   :demand t
   :diminish company-mode
   :load-path (lambda () (expand-file-name "company/" user-emacs-directory))
-  :bind (("C-;"                       . company-complete-common)
+  :custom ((company-begin-commands           '(self-insert-command
+                                              org-self-insert-command
+                                              c-electric-lt-gt
+                                              c-electric-colon
+                                              completion-separator-self-insert-command))
+           (company-transformers              '(company-sort-by-occurrence
+                                                company-sort-by-backend-importance))
+           (company-idle-delay                0)
+           (company-echo-delay                0)
+           (company-selection-wrap-around     t)
+           (company-minimum-prefix-length     2)
+           (company-show-numbers              t)
+           (company-tooltip-align-annotations t)
+           (company-tooltip-limit             10)
+           (company-dabbrev-downcase          nil)
+           (company-dabbrev-ignore-case       t)
+           (company-semantic-insert-arguments nil)
+           (company-gtags-insert-arguments    t)
+           (company-lighter-base              ""))
+  :bind (("C-;"                              . company-complete-common)
          :map company-mode-map
          ([remap completion-at-point]        . company-complete-common-or-cycle)
          ([remap complete-symbol]            . company-complete-common)
          ([remap indent-for-tab-command]     . company-indent-for-tab-command)
          :map company-active-map
-         ("C-n"                       . company-select-next)
-         ("C-p"                       . company-select-previous)
-         ("C-d"                       . company-show-doc-buffer)
-         ("TAB"                       . company-complete-selection)
-         ("<tab>"                     . company-complete-selection)
-         ("RET"                       . company-complete-selection))
+         ("C-n"                              . company-select-next)
+         ("C-p"                              . company-select-previous)
+         ("C-d"                              . company-show-doc-buffer)
+         ("TAB"                              . company-complete-selection)
+         ("<tab>"                            . company-complete-selection)
+         ("RET"                              . company-complete-selection))
   :config (progn
-            ;; set default lighter as nothing so in general it is not displayed
-            ;; but will still be shown when completion popup is active to show the
-            ;; backend which is in use
-            (setq company-lighter-base "")
 
             ;; Enable global-company mode
             (global-company-mode 1)
@@ -116,6 +131,8 @@
             ;; C-mode setup
             (add-hook 'c-mode-common-hook
                       (lambda ()
+                        (my/c-mode-init)
+
                         ;; make `company-backends' local is critical
                         ;; or else, you will have completion in every major mode, that's very annoying!
                         (make-local-variable 'company-backends)
@@ -142,26 +159,6 @@
                                 (setf (car company-backends)
                                       (append '(company-irony)
                                               (car company-backends)))))))))
-
-            ;; Company preferences
-            (setq company-begin-commands            '(self-insert-command
-                                                      org-self-insert-command
-                                                      c-electric-lt-gt
-                                                      c-electric-colon
-                                                      completion-separator-self-insert-command)
-                  company-transformers              '(company-sort-by-occurrence
-                                                      company-sort-by-backend-importance)
-                  company-idle-delay                0
-                  company-echo-delay                0
-                  company-selection-wrap-around     t
-                  company-minimum-prefix-length     2
-                  company-show-numbers              t
-                  company-tooltip-align-annotations t
-                  company-tooltip-limit             10
-                  company-dabbrev-downcase          nil
-                  company-dabbrev-ignore-case       t
-                  company-semantic-insert-arguments nil
-                  company-gtags-insert-arguments    t)
 
             ;; Enable company in minibufer
             (defun company-elisp-minibuffer (command &optional arg &rest ignored)
