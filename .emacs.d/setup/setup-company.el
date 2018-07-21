@@ -79,7 +79,6 @@
                      company-abbrev)))
 
             ;; Add yasnippet support for all company backends
-            ;; https://github.com/syl20bnr/spacemacs/pull/179
             (defvar company-mode/enable-yas t
               "Enable yasnippet for all backends.")
             (defun company-mode/backend-with-yas (backend)
@@ -90,7 +89,6 @@
             (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
 
             ;; Add company-ispell as backend for text-mode's only
-            ;; http://blog.binchen.org/posts/emacs-auto-completion-for-non-programmers.html
             (add-hook 'text-mode-hook
                       (lambda ()
                         ;; OPTIONAL, if `company-ispell-dictionary' is nil, `ispell-complete-word-dict' is used
@@ -204,10 +202,16 @@
 
             (add-hook 'minibuffer-setup-hook #'minibuffer-company)
 
-            ;; Documentation popups for Company
+            ;; Documentation popups for company
+            (use-package company-box
+              :disabled t
+              :if (display-graphic-p)
+              :diminish company-box-mode
+              :hook (company-mode . company-box-mode))
+
+            ;; Documentation popups for company
             (use-package company-quickhelp
-              :demand t
-              :load-path (lambda () (expand-file-name "company-quickhelp/" user-emacs-directory))
+              :disabled t
               :if (display-graphic-p)
               :config (progn
                         (setq company-quickhelp-delay                0.2
@@ -221,17 +225,14 @@
             (use-package company-bibtex
               :if (or (executable-find "bibtex")
                       (executable-find "biber"))
-              :load-path (lambda () (expand-file-name "company-bibtex/" user-emacs-directory))
               :config (setq company-bibtex-bibliography (list "~/workspace/Documents/Bibliography/biblio.bib")))
 
             ;; Company math
             (use-package company-math
-              :load-path (lambda () (expand-file-name "company-math/" user-emacs-directory))
               :after math-symbol-lists)
 
             ;; Company auctex
             (use-package company-auctex
-              :load-path (lambda () (expand-file-name "company-auctex/" user-emacs-directory))
               :after (auctex company-math)
               :config (progn
                         (defun company-auctex-labels (command &optional arg &rest ignored)
