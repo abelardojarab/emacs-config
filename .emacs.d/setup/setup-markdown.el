@@ -73,6 +73,7 @@
                   markdown-indent-on-enter           'indent-and-new-item)
 
             (use-package flycheck-mmark
+              :disabled t
               :if (executable-find "mmark")
               :init (add-hook 'flycheck-mode-hook #'flycheck-mmark-setup)
               :commands (flycheck-mmark-setup))
