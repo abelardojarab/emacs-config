@@ -99,9 +99,9 @@
                         (polymode-minor-mode t)
 
                         ;; Org goodies; no longer needed
-                        (orgtbl-mode         t)
-                        (orgstruct-mode      t)
-                        (orgstruct++-mode    t)
+                        ;; (orgtbl-mode         t)
+                        ;; (orgstruct-mode      t)
+                        ;; (orgstruct++-mode    t)
 
                         ;; Extra modes
                         (outline-minor-mode  t)
