@@ -283,7 +283,7 @@ more place."
             (add-hook 'ecb-activate-hook
                       '(lambda ()
                          (semantic-mode t)
-                         (setq global-semantic-idle-scheduler-mode nil)))
+                         (setq global-semantic-idle-scheduler-mode t)))
 
             ;; variable for the timer object
             (defvar idle-timer-ecb-methods-timer nil)

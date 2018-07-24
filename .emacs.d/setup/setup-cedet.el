@@ -40,10 +40,6 @@
             ;; The Semantic Database (SemanticDB) caches the results of parsing source code files.
             (use-package semantic/db)
 
-            ;; Find system header files, if using gcc
-            (if (executable-find "gcc")
-                (use-package semantic/bovine/gcc))
-
             ;; Enabled features
             (setq semantic-default-submodes '(global-semanticdb-minor-mode
                                               global-semantic-mru-bookmark-mode
@@ -63,13 +59,12 @@
             ;; Faster parsing
             (setq semantic-idle-work-parse-neighboring-files-flag nil
                   semantic-idle-work-update-headers-flag          nil
-                  semantic-idle-scheduler-idle-time               432000
-                  semantic-idle-scheduler-work-idle-time          1800 ;; default is 60
-                  semantic-idle-scheduler-max-buffer-size         1)
+                  semantic-idle-scheduler-idle-time               10
+                  semantic-idle-scheduler-work-idle-time          60)
 
             ;; Disable semantics for large files
             (add-hook 'semantic--before-fetch-tags-hook
-                      (lambda () (if (and (>= (point-max) 0)
+                      (lambda () (if (and (>= (point-max) 1000)
                                      (not (semantic-parse-tree-needs-rebuild-p)))
                                 nil
                               t)))
@@ -83,8 +78,10 @@
             ;; Enable decoration mode
             (global-semantic-decoration-mode t)
 
-            ;; for semantic-ia-fast-jump
-            (use-package semantic/analyze/refs)
+            ;; Define missing variable and disable mode
+            (defvar global-semantic-idle-summary-mode nil)
+            (setq global-semantic-idle-summary-mode nil)
+            (global-semantic-idle-summary-mode nil)
 
             ;; Fixing a bug in semantic, see #22287
             (defun semanticdb-save-all-db-idle ()
@@ -155,7 +152,8 @@ Throw away all the old tags, and recreate the tag database."
               (semanticdb-enable-gnu-global-databases 'c++-mode t))))
 
 ;; Load contrib library
-(use-package eassist)
+(use-package eassist
+  :disabled t)
 
 ;; EDE project managment, slows down Emacs
 (use-package ede

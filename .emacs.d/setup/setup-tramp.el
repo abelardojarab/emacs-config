@@ -92,13 +92,7 @@ information retrieved from files created by the keychain script."
                     (tramp-parse-shosts "~/.ssh/known_hosts")))
             (mapc (lambda (method)
                     (tramp-set-completion-function method my/tramp-ssh-completions))
-                  '("rsync" "scp" "scpc" "scpx" "sftp" "ssh" "plink"))
-
-            ;; have tramp save temps locally
-            (unless (string-equal system-type "windows-nt")
-              (setq auto-save-file-name-transforms
-                    `(("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" "/tmp/\\2" t)
-                      ("\\`/?\\([^/]*/\\)*\\([^/]*\\)\\'" my/auto-save-folder t))))))
+                  '("rsync" "scp" "scpc" "scpx" "sftp" "ssh" "plink"))))
 
 ;; End of line, needed by tramp
 (use-package eol-conversion
