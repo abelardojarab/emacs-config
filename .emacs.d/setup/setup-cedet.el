@@ -60,11 +60,12 @@
             (setq semantic-idle-work-parse-neighboring-files-flag nil
                   semantic-idle-work-update-headers-flag          nil
                   semantic-idle-scheduler-idle-time               10
-                  semantic-idle-scheduler-work-idle-time          60)
+                  semantic-idle-scheduler-work-idle-time          60
+                  semantic-idle-scheduler-max-buffer-size         1)
 
             ;; Disable semantics for large files
             (add-hook 'semantic--before-fetch-tags-hook
-                      (lambda () (if (and (>= (point-max) 1000)
+                      (lambda () (if (and (>= (point-max) 0)
                                      (not (semantic-parse-tree-needs-rebuild-p)))
                                 nil
                               t)))

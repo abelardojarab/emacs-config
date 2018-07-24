@@ -103,6 +103,10 @@
   :if (executable-find "git")
   :load-path (lambda () (expand-file-name "git-modes/" user-emacs-directory)))
 
+(use-package magit-git
+  :defer t
+  :commands magit-get-submodules)
+
 ;; magit
 (use-package magit
   :defer t
