@@ -1,6 +1,6 @@
 ;;; setup-javascript.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -25,8 +25,8 @@
 ;;; Code:
 
 (use-package js2-mode
-  :demand t
-  :load-path (lambda () (expand-file-name "js2-mode/" user-emacs-directory))
+  :defer t
+  :mode "\\.js\\'"
   :init (progn
           ;; Setup node.js path
           (setenv "NODE_PATH" (concat (concat (getenv "HOME")
@@ -44,11 +44,10 @@
   :commands (js2-mode js2-minor-mode)
   :config (progn
             (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
-
             (add-hook 'js2-mode-hook (lambda ()
                                        (flycheck-mode t)
                                        (skewer-mode   t)
-                                       (semantic-mode -1)))
+                                       (tern-mode     t)))
             (setq-default js2-global-externs '("module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval" "clearInterval" "location" "__dirname" "console" "JSON"))
 
             (setq-default js2-basic-offset                       4
@@ -76,14 +75,9 @@
            (or (check-npm-module "tern" t)
                (check-npm-module "tern")))
   :diminish tern-mode
+  :commands tern-mode
   :after js2-mode
-  :load-path (lambda () (expand-file-name "tern/emacs/" user-emacs-directory))
-  :init (add-hook 'js2-mode-hook #'tern-mode)
-  :config (progn
-            ;; When using auto-complete
-            (when (featurep 'auto-complete)
-              (require 'tern-auto-complete)
-              (tern-ac-setup))))
+  :init (add-hook 'js2-mode-hook #'tern-mode))
 
 ;; skewer mode
 (use-package skewer-mode
@@ -100,25 +94,18 @@
 (use-package js2-refactor
   :defer t
   :commands js2-refactor-mode
+  :functions (js2r-add-keybindings-with-prefix)
   :diminish js2-refactor-mode
-  :load-path (lambda () (expand-file-name "js2-refactor/" user-emacs-directory))
   :init (add-hook 'js2-mode-hook #'js2-refactor-mode)
+  :bind (:map js2-mode-map
+              ("C-k" . js2r-kill))
   :config (js2r-add-keybindings-with-prefix "C-c r"))
 
-;; ac-js2
-(use-package ac-js2
-  :disabled t
-  :after (auto-complete j2-mode)
-  :load-path (lambda () (expand-file-name "ac-js2/" user-emacs-directory))
-  :config (progn
-            (when (featurep 'auto-complete)
-              (add-hook 'js2-mode-hook #'ac-js2-mode)
-              (setq-default ac-js2-evaluate-calls t))))
-
+;; tern completions
 (use-package company-tern
-  :after (company tern)
-  :load-path (lambda () (expand-file-name "company-tern/" user-emacs-directory))
+  :after (company tern js2-mode)
   :config (progn
+            (add-to-list 'tern-command "--no-port-file" 'append)
             (add-hook 'js2-mode-hook (lambda ()
                                        (set (make-local-variable 'company-backends)
                                             '((company-yasnippet
@@ -130,6 +117,7 @@
 
 ;; json-reformat
 (use-package json-reformat
+  :after js2-mode
   :load-path (lambda () (expand-file-name "json-reformat/" user-emacs-directory)))
 
 ;; json-snatcher
@@ -143,6 +131,7 @@
 
 ;; json-mode
 (use-package json-mode
+  :defer t
   :mode "\\.json$"
   :commands json-mode
   :after (json-snatcher js2-mode)
@@ -153,6 +142,7 @@
 
 ;; Bring node.js to Emacs
 (use-package nodejs-repl
+  :defer t
   :commands (nodejs-repl
              nodejs-repl-send-buffer
              nodejs-repl-switch-to-repl

@@ -1,6 +1,6 @@
 ;;; setup-hydra.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -25,7 +25,25 @@
 ;;; Code:
 
 (use-package hydra
-  :load-path (lambda () (expand-file-name "hydra/" user-emacs-directory))
+  :defer t
+  :commands (hydra-timestamp/body
+             hydra-describe/body
+             hydra-window/body
+             hydra-magit/body
+             hydra-toggle/body
+             hydra-multiple-cursors/body
+             hydra-yasnippet/body
+             hydra-helm/body
+             hydra-yasnippet/body
+             hydra-projectile/body
+             hydra-org/body
+             hydra-org-clock/body
+             hydra-org-template/body
+             hydra-flycheck/body
+             hydra-ibuffer-main/body
+             hydra-ibuffer-action/body
+             hydra-ibuffer-filter/body
+             hydra-ibuffer-mark/body)
   :config (progn
 
             ;; Do not use lv it messes up windows layout
@@ -252,7 +270,7 @@ Frames: _f_rame new  _df_ delete
               ("w" helm-toggle-resplit-and-swap-windows)
               ("f" helm-follow-mode))
 
-            (defhydra hydra-toggle-map nil
+            (defhydra hydra-toggle nil
               "
 ^Toggle^
 ^^^^^^^^--------------------
@@ -347,35 +365,6 @@ _q_: quit
               ("j" (lambda () (interactive) (org-clock-goto '(4))) "Go to a clock")
               ("m" make-this-message-into-an-org-todo-item "Flag and capture this message"))
 
-            (defhydra hydra-ibuffer-main (:color pink :hint nil)
-              "
- ^Navigation^ | ^Mark^        | ^Actions^        | ^View^
--^----------^-+-^----^--------+-^-------^--------+-^----^-------
-  _k_:    ʌ   | _m_: mark     | _D_: delete      | _g_: refresh
- _RET_: visit | _u_: unmark   | _S_: save        | _s_: sort
-  _j_:    v   | _*_: specific | _a_: all actions | _/_: filter
--^----------^-+-^----^--------+-^-------^--------+-^----^-------
-"
-              ("j" ibuffer-forward-line)
-              ("RET" ibuffer-visit-buffer :color blue)
-              ("k" ibuffer-backward-line)
-
-              ("m" ibuffer-mark-forward)
-              ("u" ibuffer-unmark-forward)
-              ("*" hydra-ibuffer-mark/body :color blue)
-
-              ("D" ibuffer-do-delete)
-              ("S" ibuffer-do-save)
-              ("a" hydra-ibuffer-action/body :color blue)
-
-              ("g" ibuffer-update)
-              ("s" hydra-ibuffer-sort/body :color blue)
-              ("/" hydra-ibuffer-filter/body :color blue)
-
-              ("o" ibuffer-visit-buffer-other-window "other window" :color blue)
-              ("q" quit-window "quit ibuffer" :color blue)
-              ("." nil "toggle hydra" :color blue))
-
             (defhydra hydra-org-template (:color blue
                                                  :hint nil)
               "
@@ -411,6 +400,35 @@ org-template:  _c_enter        _s_rc          _e_xample           _v_erilog     
               ("I" (my/org-template-expand "<I")) ;#+include: line
               ("<" self-insert-command "<")
               ("Q" nil "quit"))
+
+            (defhydra hydra-ibuffer-main (:color pink :hint nil)
+              "
+ ^Navigation^ | ^Mark^        | ^Actions^        | ^View^
+-^----------^-+-^----^--------+-^-------^--------+-^----^-------
+  _k_:    ʌ   | _m_: mark     | _D_: delete      | _g_: refresh
+ _RET_: visit | _u_: unmark   | _S_: save        | _s_: sort
+  _j_:    v   | _*_: specific | _a_: all actions | _/_: filter
+-^----------^-+-^----^--------+-^-------^--------+-^----^-------
+"
+              ("j" ibuffer-forward-line)
+              ("RET" ibuffer-visit-buffer :color blue)
+              ("k" ibuffer-backward-line)
+
+              ("m" ibuffer-mark-forward)
+              ("u" ibuffer-unmark-forward)
+              ("*" hydra-ibuffer-mark/body :color blue)
+
+              ("D" ibuffer-do-delete)
+              ("S" ibuffer-do-save)
+              ("a" hydra-ibuffer-action/body :color blue)
+
+              ("g" ibuffer-update)
+              ("s" hydra-ibuffer-sort/body :color blue)
+              ("/" hydra-ibuffer-filter/body :color blue)
+
+              ("o" ibuffer-visit-buffer-other-window "other window" :color blue)
+              ("q" quit-window "quit ibuffer" :color blue)
+              ("." nil "toggle hydra" :color blue))
 
             (defhydra hydra-ibuffer-mark (:color teal :columns 5
                                                  :after-exit (hydra-ibuffer-main/body))

@@ -1,6 +1,6 @@
 ;;; setup-undoandredo.el ---                         -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -31,11 +31,11 @@
 ;; Better undo
 (use-package undo-tree
   :defer 10
-  :bind (("C-S-z" . undo-tree-redo)
-         ("C-z"   . undo-tree-undo)
-         ("<undo>" . undo-tree-undo)
+  :bind (("C-S-z"    . undo-tree-redo)
+         ("C-z"      . undo-tree-undo)
+         ("<undo>"   . undo-tree-undo)
          :map ctl-x-map
-         ("u"     . undo-tree-undo))
+         ("u"        . undo-tree-undo))
   :diminish undo-tree-mode
   :init (global-undo-tree-mode t)
   :commands global-undo-tree-mode

@@ -1,6 +1,6 @@
 ;;; setup-markdown.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -24,20 +24,6 @@
 
 ;;; Code:
 
-;; Polymode; syntax highlighting inside markdown
-(use-package polymode
-  :defer t
-  :after org
-  :diminish polymode-minor-mode
-  :commands polymode-minor-mode
-  :load-path (lambda () (expand-file-name "polymode/" user-emacs-directory))
-  :init (add-to-list 'load-path (expand-file-name "polymode/modes" user-emacs-directory))
-  :config (progn
-            (use-package poly-R)
-            (use-package poly-markdown)
-            (setq pm-weaver   "knitR-ESS" ;; Default weaver
-                  pm-exporter "pandoc")))
-
 ;; Markdown
 (use-package markdown-mode
   :defer t
@@ -48,19 +34,6 @@
   :commands (markdown-mode
              org-table-align)
   :config (progn
-
-            (defun markdown-table-at-point-p ()
-              "Return non-nil when point is inside a table."
-              (unless (orgtbl-mode)
-                (if (functionp markdown-table-at-point-p-function)
-                    (funcall markdown-table-at-point-p-function)
-                  (markdown--table-at-point-p))))
-
-            (defconst org-format-transports-properties-p
-              (let ((x "a"))
-                (add-text-properties 0 1 '(test t) x)
-                (get-text-property 0 'test (format "%s" x)))
-              "Does format transport text properties?")
 
             (setq markdown-asymmetric-header         t
                   markdown-header-scaling            t
@@ -78,42 +51,42 @@
               :init (add-hook 'flycheck-mode-hook #'flycheck-mmark-setup)
               :commands (flycheck-mmark-setup))
 
-            (defun my/markdown-ispell ()
-              "Configure `ispell-skip-region-alist' for `markdown-mode'."
+            (defun my/markdown-configure ()
               (make-local-variable 'ispell-skip-region-alist)
               (add-to-list 'ispell-skip-region-alist '("~" "~"))
-              (add-to-list 'ispell-skip-region-alist '("```" "```")))
-            (add-hook 'markdown-mode-hook #'my/markdown-ispell)
+              (add-to-list 'ispell-skip-region-alist '("```" "```"))
+              (setq orgstruct-heading-prefix-regexp "#\\+")
+              (pandoc-mode 1))
+            (add-hook 'markdown-mode-hook #'my/markdown-configure)
 
             ;; Markdown preferences
             (add-hook 'markdown-mode-hook
                       (lambda ()
+                        (toggle-truncate-lines     t)
+                        (setq truncate-lines       t)
+
                         ;; Do not wrap lines
                         ;; we will use autofill
-                        (visual-line-mode      -1)
-                        (abbrev-mode           -1)
-                        (toggle-truncate-lines t)
-                        (setq                  truncate-lines t)
+                        (visual-line-mode          -1)
+                        (abbrev-mode               -1)
+                        (adaptive-wrap-prefix-mode t)
 
-                        ;; Enable polymode minor mode
-                        (polymode-minor-mode t)
-
-                        ;; Org goodies; no longer needed
-                        (orgtbl-mode         t)
+                        ;; Org goodies
+                        (orgtbl-mode               t)
+                        (orgstruct++-mode          t)
 
                         ;; Extra modes
-                        (outline-minor-mode  t)
-                        (footnote-mode       t)
-                        (auto-fill-mode      t)
+                        (outline-minor-mode        t)
+                        (footnote-mode             t)
+                        (auto-fill-mode            t)
 
                         ;; Style/syntax check
-                        (writegood-mode      t)
-                        (flyspell-mode       t)
+                        (writegood-mode            t)
+                        (flyspell-mode             t)
                         (if (or (executable-find "proselint")
                                 (executable-find "mmark"))
                             (flycheck-mode t))))
 
-            ;; http://stackoverflow.com/questions/14275122/editing-markdown-pipe-tables-in-emacs
             (defun my/cleanup-org-tables ()
               (save-excursion
                 (goto-char (point-min))

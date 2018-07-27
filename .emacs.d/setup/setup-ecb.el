@@ -1,6 +1,6 @@
 ;;; setup-ecb.el ---                       -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -27,7 +27,6 @@
 ;; Code Browser
 (use-package ecb
   :defer t
-  :load-path (lambda () (expand-file-name "ecb/" user-emacs-directory))
   :bind (:map ctl-x-map
               ("0" . my/ecb-activate))
   :init (progn (setq stack-trace-on-error t)
@@ -63,21 +62,13 @@ buffer is current which was it before calling this macro."
                                       (setq buffer-read-only t)))
                                 (ecb-error "Try to set a not existing buffer."))))
 
-            ;; ECB setup
-            (if (ecb--semantic-active-p)
-                (ecb-update-methods-buffer--internal nil nil t)
-              (ecb-rebuild-methods-buffer-for-non-semantic))
-
-            (defconst initial-frame-width (frame-width)
-              "The width of frame will be changed ,remember the init value.")
-
             (setq-default ecb-source-path
                           (quote
                            (("~/workspace/Documents"    "Documents")
                             ("~/workspace"              "Local")
                             ("~/workspace_remote"       "Shared"))))
 
-            (setq ecb-tip-of-the-day nil
+            (setq ecb-truncate-lines t
                   ecb-show-sources-in-directories-buffer 'always
                   ecb-compile-window-height nil
                   ecb-compile-window-width 'edit-window
@@ -97,58 +88,17 @@ buffer is current which was it before calling this macro."
                                                     my/emacs-cache-dir)
                                                    "ecb-tip-of-day.el")
                   ecb-primary-secondary-mouse-buttons 'mouse-1--mouse-2
+                  ecb-source-file-regexps '( ;; In all folders:
+                                            (".*"
+                                             ;; Exclude
+                                             ("\\(^\\(\\.\\|#\\)\\|\\(~$\\|\\.\\(elc\\|obj\\|o\\|class\\|lib\\|dll\\|a\\|so\\|cache\\|pyc\\)$\\)\\)")
+                                             ;; Include
+                                             ("^\\.\\(emacs\\|gnus\\)$")))
                   semantic-decoration-styles (list
                                               '("semantic-decoration-on-protected-members" . t)
                                               '("semantic-decoration-on-private-members"   . t)
                                               '("semantic-decoration-on-includes"          . t)
                                               '("semantic-tag-boundary"                    . t)))
-
-            ;; Keep line truncation
-            (setq ecb-truncate-lines t)
-            (add-hook 'ecb-show-ecb-windows-before-hook
-                      'ecb-enlarge-frame-width-before-show)
-            (add-hook 'ecb-hide-ecb-windows-before-hook
-                      'ecb-shrink-frame-width-before-hide)
-            (add-hook 'ecb-deactivate-hook
-                      'ecb-shrink-frame-width-before-hide)
-            (add-hook 'ecb-activate-before-layout-draw-hook
-                      'ecb-enlarge-frame-width-before-activate)
-
-            (defun frame-horizontal-maximized-p ()
-              "Test current frame wheather be maxmized by test the frame width and height equal to the screen resolution"
-              (interactive)
-              (equal (frame-pixel-width) (display-pixel-width)))
-
-            (defun ecb-enlarge-frame-width-before-show ()
-              "Enlarge frame width before ecb shows layout."
-              (if (and (ecb-windows-all-hidden)
-                       (<= (+ (frame-pixel-width) (* (frame-char-width)
-                                                     (+ ecb-windows-width 2)))
-                           (display-pixel-width)))
-                  (set-frame-width (selected-frame) (+ (frame-width) (+ ecb-windows-width 2)))))
-            (defun ecb-shrink-frame-width-before-hide ()
-              "Shrink frame width before ecb hide layout."
-              (if (and (not (ecb-windows-all-hidden))
-
-                       (not (eq (frame-pixel-width)
-                                (display-pixel-width))))
-                  (if (< (- (frame-width) (+ ecb-windows-width 2)) initial-frame-width)
-                      (set-frame-width (selected-frame) initial-frame-width)
-                    (set-frame-width (selected-frame) (- (frame-width) (+ ecb-windows-width 2))))))
-            (defun ecb-enlarge-frame-width-before-activate ()
-              "Enlarge frame width when ecb active and need it to."
-              (let ((use-last-win-conf (and ecb-last-window-config-before-deactivation
-                                            (equal ecb-split-edit-window-after-start
-                                                   'before-deactivation)
-                                            (not (ecb-window-configuration-invalidp
-                                                  ecb-last-window-config-before-deactivation)))))
-                (unless (or (and use-last-win-conf
-                                 (eq (nth 5 ecb-last-window-config-before-deactivation)
-                                     ecb-windows-hidden-all-value))
-                            (> (+ (frame-pixel-width) (* (frame-char-width)
-                                                         (+ ecb-windows-width 2)))
-                               (display-pixel-width)))
-                  (set-frame-width (selected-frame) (+ (frame-width) (+ ecb-windows-width 2))))))
 
             ;; reference path-to-ecb/ecb-layout-defs.el
             (ecb-layout-define "leftright-sa-m" left-right
@@ -285,9 +235,6 @@ more place."
                          (semantic-mode t)
                          (setq global-semantic-idle-scheduler-mode t)))
 
-            ;; variable for the timer object
-            (defvar idle-timer-ecb-methods-timer nil)
-
             ;; callback function
             (defun idle-timer-ecb-methods-callback ()
               (when (bound-and-true-p ecb-minor-mode)
@@ -296,29 +243,10 @@ more place."
                   ;; semantic idle mode refresh doesn't seem to work all that well.
                   (semantic-force-refresh)
                   (ecb-rebuild-methods-buffer)
+                  (if (ecb--semantic-active-p)
+                      (ecb-update-methods-buffer--internal nil nil t)
+                    (ecb-rebuild-methods-buffer-for-non-semantic))
                   (ecb-window-sync))))
-
-            ;; start functions
-            (defun idle-timer-ecb-methods-run-once ()
-              (interactive)
-              (when (timerp idle-timer-ecb-methods-timer)
-                (cancel-timer idle-timer-ecb-methods-timer))
-              (setq idle-timer-ecb-methods-timer
-                    (run-with-idle-timer 1 nil #'idle-timer-ecb-methods-callback)))
-
-            (defun idle-timer-ecb-methods-start ()
-              (interactive)
-              (when (timerp idle-timer-ecb-methods-timer)
-                (cancel-timer idle-timer-ecb-methods-timer))
-              (setq idle-timer-ecb-methods-timer
-                    (run-with-timer 1 10 #'idle-timer-ecb-methods-callback)))
-
-            ;; stop function
-            (defun idle-timer-ecb-methods-stop ()
-              (interactive)
-              (when (timerp idle-timer-ecb-methods-timer)
-                (cancel-timer idle-timer-ecb-methods-timer))
-              (setq idle-timer-ecb-methods-timer nil))
 
             (add-hook 'after-save-hook    #'idle-timer-ecb-methods-callback)
             (add-hook 'first-change-hook  #'idle-timer-ecb-methods-callback)
