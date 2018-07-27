@@ -52,6 +52,9 @@
 ;; Disable blinking cursor
 (blink-cursor-mode 0)
 
+;; Make the cursor the full width of the character at point
+(setq x-stretch-cursor t)
+
 ;; Blinking cursor
 (use-package heartbeat-cursor
   :if (not (equal system-type 'windows-nt))

@@ -113,6 +113,7 @@
 (depends-on "exec-path-from-shell")
 (depends-on "f")
 ;; (depends-on "fence-edit")
+(depends-on "filladapt")
 (depends-on "fill-column-indicator")
 (depends-on "flim")
 (depends-on "flycheck")

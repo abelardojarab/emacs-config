@@ -1,6 +1,6 @@
 ;;; setup-recentf.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -80,8 +80,8 @@ file to write to."
               (error
                (warn "recentf mode: %s" (error-message-string error)))))
 
-	  (add-to-list 'recentf-exclude no-littering-var-directory)
-	  (add-to-list 'recentf-exclude no-littering-etc-directory)
+          (add-to-list 'recentf-exclude no-littering-var-directory)
+          (add-to-list 'recentf-exclude no-littering-etc-directory)
 
           (recentf-mode 1)))
 

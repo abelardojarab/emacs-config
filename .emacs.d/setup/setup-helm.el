@@ -34,7 +34,6 @@
          :map minibuffer-local-isearch-map
          ("C-."   . helm-occur-from-isearch)
          :map ctl-x-map
-         ("C-r"   . helm-recentf)
          ("C-b"   . helm-buffers-list)
          ("b"     . helm-buffers-list)
          ("p"     . helm-show-kill-ring)

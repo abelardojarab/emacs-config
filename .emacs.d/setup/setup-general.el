@@ -122,6 +122,15 @@
   :commands (unfill-region unfill-paragraph toggle-fill-unfill)
   :bind ([remap fill-paragraph] . toggle-fill-unfill))
 
+;; Filladapt
+(use-package filladapt
+  :defer t
+  :commands (filladapt-mode
+             turn-off-filladapt-mode)
+  :init (setq-default filladapt-mode t)
+  :hook ((text-mode . filladapt-mode)
+         (prog-mode . turn-off-filladapt-mode)))
+
 ;; Browse kill ring
 (use-package browse-kill-ring
   :defer t
