@@ -90,7 +90,6 @@
             (add-hook 'org-mode-hook
                       (lambda ()
                         (progn
-                          (set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
                           (linum-mode         -1)
                           (org-indent-mode    -1)
                           (cua-mode           t)
@@ -389,7 +388,8 @@ footnote; or, the properties drawer.  Otherwise make it visible."
             (use-package org-mouse)
 
             ;; Fonts
-            (add-hook 'org-mode-hook (lambda () (variable-pitch-mode t)))
+            (eval-after-load 'org-indent
+              '(set-face-attribute 'org-indent nil :inherit '(fixed-pitch org-hide)))
             (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
             (set-face-attribute 'org-code  nil :inherit 'fixed-pitch)
             (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
@@ -406,7 +406,6 @@ footnote; or, the properties drawer.  Otherwise make it visible."
 
             ;; Easy Templates
             ;; Copy of the old "Easy Templates" feature that was removed in
-            ;; https://code.orgmode.org/bzg/org-mode/commit/c04e357f3d5d93484277a7e439847b1233b872bd
             (defconst org-easy-template-alist  ;; Old `org-structure-template-alist'
               '(("s" "#+begin_src ?\n\n#+end_src")
                 ("bd" "#+begin_description\n?\n#+end_description") ;Special block in `ox-hugo'

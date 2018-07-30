@@ -47,7 +47,12 @@
                                     "-"
                                     my/main-writing-font-size)
                       :weight 'normal)
-  (add-hook 'text-mode-hook #'variable-pitch-mode))
+  (dolist (hook '(org-mode-hook
+                  markdown-mode-hook
+                  TeX-mode-hook
+                  message-mode-hook
+                  mu4e-view-mode-hook))
+    (add-hook hook 'variable-pitch-mode)))
 
 (unless (fboundp 'set-default-font)
   (defun set-default-font (font frame)

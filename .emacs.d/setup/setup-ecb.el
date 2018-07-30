@@ -29,8 +29,7 @@
   :defer t
   :bind (:map ctl-x-map
               ("0" . my/ecb-activate))
-  :init (progn (setq stack-trace-on-error t)
-               (add-hook 'after-init-hook #'my/ecb-activate))
+  :init (setq stack-trace-on-error t)
   :commands (ecb-redraw-layout my/ecb-activate idle-timer-ecb-methods-start)
   :config (progn
 
