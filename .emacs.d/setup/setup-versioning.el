@@ -137,12 +137,6 @@
   :load-path (lambda () (expand-file-name "magit/lisp" user-emacs-directory))
   :init (progn
           (setenv "GIT_PAGER" "")
-
-          (eval-after-load 'info
-            '(progn (info-initialize)
-                    (add-to-list 'Info-directory-list (expand-file-name "magit/Documentation" user-emacs-directory))))
-
-          ;; https://github.com/syl20bnr/spacemacs/issues/7225
           (setq with-editor-file-name-history-exclude '("1"))
 
           ;; Enable line highlight
@@ -152,7 +146,6 @@
           (delete 'Git vc-handled-backends)
 
           ;; make magit status go full-screen but remember previous window
-          ;; settings
           ;; from: http://whattheemacsd.com/setup-magit.el-01.html
           (defadvice magit-status (around magit-fullscreen activate)
             (window-configuration-to-register :magit-fullscreen)
@@ -500,10 +493,39 @@
 (use-package git-gutter
   :if (executable-find "git")
   :diminish git-gutter-mode
-  :after magit
   :load-path (lambda () (expand-file-name "git-gutter/" user-emacs-directory))
+  :init (global-git-gutter-mode t)
   :commands global-git-gutter-mode
   :config (progn
+
+            (defhydra hydra-git-gutter (:body-pre (git-gutter-mode 1)
+                                                  :hint nil)
+              "
+Git gutter:
+  _j_: next hunk        _s_tage hunk     _q_uit
+  _k_: previous hunk    _r_evert hunk    _Q_uit and deactivate git-gutter
+  ^ ^                   _p_opup hunk
+  _h_: first hunk
+  _l_: last hunk        set start _R_evision
+"
+              ("j" git-gutter:next-hunk)
+              ("k" git-gutter:previous-hunk)
+              ("h" (progn (goto-char (point-min))
+                          (git-gutter:next-hunk 1)))
+              ("l" (progn (goto-char (point-min))
+                          (git-gutter:previous-hunk 1)))
+              ("s" git-gutter:stage-hunk)
+              ("r" git-gutter:revert-hunk)
+              ("p" git-gutter:popup-hunk)
+              ("R" git-gutter:set-start-revision)
+              ("q" nil :color blue)
+              ("Q" (progn (git-gutter-mode -1)
+                          ;; git-gutter-fringe doesn't seem to
+                          ;; clear the markup right away
+                          (sit-for 0.1)
+                          (git-gutter:clear))
+               :color blue))
+
             ;; Use fringe instead of margin for git-gutter-plus
             (use-package git-gutter-fringe
               :demand t
@@ -572,21 +594,22 @@
   :if (executable-find "git")
   :commands (hydra-smerge/body smerge-mode)
   :init (progn
-    (defun my/enable-smerge-maybe ()
-      "Auto-enable `smerge-mode' when merge conflict is detected."
-      (save-excursion
-        (goto-char (point-min))
-        (when (re-search-forward "^<<<<<<< " nil :noerror)
-          (smerge-mode 1))))
-    (add-hook 'find-file-hook #'my/enable-smerge-maybe :append))
+          (defun my/enable-smerge-maybe ()
+            "Auto-enable `smerge-mode' when merge conflict is detected."
+            (save-excursion
+              (goto-char (point-min))
+              (when (re-search-forward "^<<<<<<< " nil :noerror)
+                (smerge-mode 1))))
+          (add-hook 'find-file-hook #'my/enable-smerge-maybe :append))
   :config (progn
-            (>=e "26.0"
-                 nil
-                 (defalias 'smerge-keep-upper 'smerge-keep-mine)
-                 (defalias 'smerge-keep-lower 'smerge-keep-other)
-                 (defalias 'smerge-diff-base-upper 'smerge-diff-base-mine)
-                 (defalias 'smerge-diff-upper-lower 'smerge-diff-mine-other)
-                 (defalias 'smerge-diff-base-lower 'smerge-diff-base-other))
+            (ignore-errors
+              (>=e "26.0"
+                   nil
+                   (defalias 'smerge-keep-upper 'smerge-keep-mine)
+                   (defalias 'smerge-keep-lower 'smerge-keep-other)
+                   (defalias 'smerge-diff-base-upper 'smerge-diff-base-mine)
+                   (defalias 'smerge-diff-upper-lower 'smerge-diff-mine-other)
+                   (defalias 'smerge-diff-base-lower 'smerge-diff-base-other)))
 
             (defhydra hydra-smerge (:color pink
                                            :hint nil

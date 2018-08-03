@@ -1,6 +1,6 @@
 ;;; setup-keys.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -117,6 +117,10 @@
 ;; Unindent (do what I mean version)
 (global-set-key (kbd "C-c C-<")  'unindent-dwim)
 (global-set-key (kbd "C-c C->")  (lambda () (interactive) (unindent-dwim -1)))
+
+;; Text scale
+(global-set-key [(control +)]    'text-scale-increase)
+(global-set-key [(control -)]    'text-scale-decrease)
 
 ;; Buffer navigation
 (global-set-key [(control n)]    'cua-scroll-down)
