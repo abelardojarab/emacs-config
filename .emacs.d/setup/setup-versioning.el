@@ -1,6 +1,6 @@
 ;;; setup-versioning.el ---                         -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -26,30 +26,13 @@
 
 ;; Follow symbolic links
 (use-package vc
-  :defer t
+  :demand t
   :config (progn
             (setq vc-follow-symlinks t)
 
             ;; Ignore errors in vc-exec-after
             (defadvice vc-exec-after (around bar activate)
               (ignore-errors add-do-it))))
-
-;; Designsync versioning control
-(use-package vc-sync
-  :disabled t
-  :after vc
-  :init (add-hook 'dired-after-readin-hook #'dired-sync-symlink-filter)
-  :commands dired-sync-symlink-filter
-  :config (defun dired-sync-symlink-filter ()
-            (save-excursion
-              ;; Goto the beginning of the buffer
-              (goto-char (point-min))
-              ;; For each matching symbolic link with sync_cache or sync/mirrors in the path name...
-              (while (re-search-forward "\\(-> .*/sync\\(_cache\\|/mirrors\\)/.*$\\)" nil t)
-                ;; Create an overlay that masks out everything between the -> and the end of line
-                (let ((o (make-overlay (match-beginning 1) (progn (end-of-line) (point)))))
-                  (overlay-put o 'invisible t)
-                  (overlay-put o 'evaporate t))))))
 
 ;; Display commit number that is associated with current line of code
 (use-package vc-msg
@@ -103,14 +86,17 @@
   :if (executable-find "git")
   :load-path (lambda () (expand-file-name "git-modes/" user-emacs-directory)))
 
+;; Get missing magit-get-submodules
 (use-package magit-git
-  :defer t
-  :commands magit-get-submodules)
+  :commands magit-get-submodules
+  :config (defun magit-get-submodules ()
+            (--mapcat (and (string-match "^160000 [0-9a-z]\\{40\\} 0\t\\(.+\\)$" it)
+                           (list (match-string 1 it)))
+                      (magit-git-items "ls-files" "-z" "--stage"))))
 
 ;; magit
 (use-package magit
   :defer t
-  :after vc
   :commands (magit-init
              magit-status
              magit-diff
@@ -142,11 +128,11 @@
              my/git-visit-diffs-prev
              my/git-visit-diffs-next)
   :bind (:map ctl-x-map
-              ("m" . magit-status)
+              ("m"        . magit-status)
               :map magit-mode-map
               (("C-c C-a" . magit-just-amend)
-               ("c" . magit-maybe-commit)
-               ("q" . magit-quit-session)))
+               ("c"       . magit-maybe-commit)
+               ("q"       . magit-quit-session)))
   :if (executable-find "git")
   :load-path (lambda () (expand-file-name "magit/lisp" user-emacs-directory))
   :init (progn
@@ -175,7 +161,6 @@
 
           ;; Make `magit-log' run alone in the frame, and then restore the old window
           ;; configuration when you quit out of magit.
-          ;; from: https://github.com/philippe-grenet/exordium/blob/master/modules/init-git.el
           (defadvice magit-log (around magit-fullscreen activate)
             (window-configuration-to-register :magit-fullscreen)
             ad-do-it
@@ -203,7 +188,6 @@
 
           ;; these two force a new line to be inserted into a commit window,
           ;; which stops the invalid style showing up.
-          ;; From: http://git.io/rPBE0Q
           (defun magit-commit-mode-init ()
             (when (looking-at "\n")
               (open-line 1)))
@@ -254,45 +238,6 @@
             ;; Face setup
             (set-face-foreground 'magit-hash (face-foreground 'font-lock-type-face))
 
-            ;; defaults for popups
-            (setq magit-branch-popup-show-variables nil)
-            (defconst magit-pull-request-remote "upstream"
-              "Where to find pull requests.")
-
-            ;; From https://github.com/tarsius/magit-rockstar
-            ;; Show worktree section if there are worktrees, avoid overhead if
-            ;; there aren't.
-            (defvar-local my/magit-want-worktrees t)
-            (put 'my/magit-want-worktrees 'permanent-local t)
-            (defun my/magit-maybe-add-worktrees ()
-              (if (and my/magit-want-worktrees
-                       (not (memq #'magit-insert-worktrees magit-status-sections-hook))
-                       (> (length (magit-list-worktrees)) 1))
-                  (magit-add-section-hook
-                   'magit-status-sections-hook #'magit-insert-worktrees
-                   'magit-insert-status-headers 'append 'local)
-                (setq-local my/magit-want-worktrees nil)))
-            (add-hook 'magit-status-mode-hook #'my/magit-maybe-add-worktrees)
-
-            ;; Show submodule section if there are submodules, avoid overhead if
-            ;; there aren't.
-            (defvar-local my/magit-want-submodules t)
-            (put 'my/magit-want-submodules 'permanent-local t)
-            (defun my/magit-maybe-add-submodules ()
-              (if (and my/magit-want-submodules
-                       (not (memq #'magit-insert-submodules magit-status-sections-hook))
-                       (magit-get-submodules))
-                  (dolist (inserter '(magit-insert-modules-unpulled-from-upstream
-                                      magit-insert-modules-unpulled-from-pushremote
-                                      magit-insert-modules-unpushed-to-upstream
-                                      magit-insert-modules-unpushed-to-pushremote
-                                      magit-insert-submodules))
-                    (magit-add-section-hook
-                     'magit-status-sections-hook inserter
-                     'magit-insert-unpulled-from-upstream nil 'local))
-                (setq-local my/magit-want-submodules nil)))
-            (add-hook 'magit-status-mode-hook #'my/magit-maybe-add-submodules)
-
             ;; restore previously hidden windows
             (defadvice magit-quit-window (around magit-restore-screen activate)
               (let ((current-mode major-mode))
@@ -310,7 +255,6 @@
                 (magit-commit)))
 
             ;; Prettify magit interface
-            ;; https://ekaschalk.github.io/post/pretty-magit
             (when (display-graphic-p)
               (defmacro pretty-magit (WORD ICON PROPS &optional NO-PROMPT?)
                 "Replace sanitized WORD with ICON, PROPS and by default add to prompts."
