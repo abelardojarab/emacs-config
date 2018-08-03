@@ -1,0 +1,2 @@
+;;; -*- no-byte-compile: t -*-
+(define-package "cmake-project" "20171121.1115" "Integrates CMake build process with Emacs" 'nil :commit "d3f408f226eff3f77f7e00dd519f4efc78fd292d" :keywords '("c" "cmake" "languages" "tools") :authors '(("Alexander Lamaison" . "alexander.lamaison@gmail")) :maintainer '("Alexander Lamaison" . "alexander.lamaison@gmail") :url "http://github.com/alamaison/emacs-cmake-project")

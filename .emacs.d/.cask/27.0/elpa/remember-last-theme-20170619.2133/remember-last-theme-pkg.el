@@ -1,0 +1,2 @@
+;;; -*- no-byte-compile: t -*-
+(define-package "remember-last-theme" "20170619.2133" "Remember the last used theme between sessions." '((emacs "24.4")) :commit "0973f1aa6b96355fa376fffe8b45733b6e963c51" :keywords '("convenience" "faces") :authors '(("Anler Hernández Peral" . "inbox+emacs@anler.me")) :maintainer '("Anler Hernández Peral" . "inbox+emacs@anler.me") :url "https://github.com/anler/remember-last-theme")
