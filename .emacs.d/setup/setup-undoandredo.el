@@ -36,6 +36,7 @@
          ("<undo>"   . undo-tree-undo)
          :map ctl-x-map
          ("u"        . undo-tree-undo))
+  :chords (("uu" . undo-tree-visualize))
   :diminish undo-tree-mode
   :init (global-undo-tree-mode t)
   :commands global-undo-tree-mode

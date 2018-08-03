@@ -1,6 +1,6 @@
 ;;; setup-bison.el ---                         -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -25,6 +25,7 @@
 ;;; Code:
 
 (use-package bison-mode
+  :defer t
   :commands bison-mode
   :mode ("\\.y\\'" "\\.l\\'" "\\.yacc\\'" "\\.lex\\'")
   :load-path (lambda () (expand-file-name "bison-mode/" user-emacs-directory)))

@@ -1,6 +1,6 @@
 ;;; setup-c++.el ---                                 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -111,6 +111,7 @@
 
 ;; Basic C compile
 (use-package basic-c-compile
+  :defer t
   :commands (basic-c-compile-file
              basic-c-compile-run-c
              basic-c-compile-makefile)

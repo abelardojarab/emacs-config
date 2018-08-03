@@ -1,6 +1,6 @@
 ;;; setup-dired.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -45,7 +45,6 @@
               (projectile-mode 1))
             (add-hook 'dired-mode-hook #'my/dired-mode-hook)
 
-            ;; https://fuco1.github.io/2017-05-01-Support-for-imenu-in-dired.html
             (defun my/dired-imenu-prev-index-position (&optional arg)
               "Go to the header line of previous directory."
               (interactive "p")
@@ -192,7 +191,7 @@
             ;; All the icons on dired
             (use-package all-the-icons-dired
               :if (display-graphic-p)
-              :after (dired all-the-icons)
+              :after dired
               :diminish all-the-icons-dired-mode
               :load-path (lambda () (expand-file-name "all-the-icons-dired/" user-emacs-directory))
               :commands all-the-icons-dired-mode
