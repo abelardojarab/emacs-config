@@ -27,7 +27,6 @@
 ;; Autoinsert skeletons and templates
 (use-package autoinsert
   :defer t
-  :after yasnippet
   :init (auto-insert-mode t)
   :commands auto-insert-mode
   :custom (auto-insert-query nil)) ;; turns off the prompt that auto-insert-mode asks
@@ -35,7 +34,6 @@
 ;; Automated auto-insert of yasnippet templates on new files
 (use-package yatemplate
   :defer t
-  :after (auto-insert-mode yasnippet)
   :load-path (lambda () (expand-file-name "yatemplate/" user-emacs-directory))
   :commands yatemplate-fill-alist
   :config (yatemplate-fill-alist))

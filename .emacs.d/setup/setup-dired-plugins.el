@@ -1,6 +1,6 @@
 ;;; setup-dired-plugins.el ---                       -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -27,7 +27,7 @@
 (use-package dired-sidebar
   :defer t
   :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))
-  :after (dired all-the-icons-dired)
+  :after dired
   :commands (dired-sidebar-toggle-sidebar)
   :config  (progn
              (if (display-graphic-p)

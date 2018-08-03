@@ -97,7 +97,8 @@
 ;; magit
 (use-package magit
   :defer t
-  :commands (magit-init
+  :commands (projectile-vc
+             magit-init
              magit-status
              magit-diff
              magit-log
@@ -122,11 +123,7 @@
              magit-display-buffer
              magit-git-wash
              magit-insert-section
-             projectile-vc
-             git-commit-setup-check-buffer
-             my/git-visit-diffs
-             my/git-visit-diffs-prev
-             my/git-visit-diffs-next)
+             git-commit-setup-check-buffer)
   :bind (:map ctl-x-map
               ("m"        . magit-status)
               :map magit-mode-map
@@ -356,42 +353,7 @@
                                                     (string-to-number (match-string 3)) )
                                               hunk-list))) )))
                       (signal 'git-error (buffer-substring-no-properties (buffer-end -1) (buffer-end 1)))))
-                  hunk-list)))
-
-            ;; Interactive functions
-            (defun my/git-visit-diffs-next ()
-              "Show next diff in narrowed buffer."
-              (interactive)
-              (if *git-visit-current-hunk-list*
-                  (let ((next-hunk (car *git-visit-current-hunk-list*)))
-                    (setq *git-visit-previous-hunk-list* (cons next-hunk *git-visit-previous-hunk-list*))
-                    (setq *git-visit-current-hunk-list* (cdr *git-visit-current-hunk-list*))
-                    (apply 'my/git-visit-visit-modified-region next-hunk))
-                (message "At end of hunk list")))
-
-            (defun my/git-visit-diffs-prev ()
-              "Show previous diff in narrowed buffer."
-              (interactive)
-              (if (and *git-visit-previous-hunk-list* (cdr *git-visit-previous-hunk-list*))
-                  (let ((next-hunk (cadr *git-visit-previous-hunk-list*)))
-                    (setq *git-visit-current-hunk-list* (cons (car *git-visit-previous-hunk-list*) *git-visit-current-hunk-list*))
-                    (setq *git-visit-previous-hunk-list* (cdr *git-visit-previous-hunk-list*))
-                    (apply 'my/git-visit-visit-modified-region next-hunk))
-                (message "At beginning of hunk list")))
-
-            (defun my/git-visit-diffs (ref)
-              "Finds the diffs between REF and working copy. Shows the first diff in a narrowed buffer."
-              (interactive "sref: ")
-              (let ((dir (ignore-errors
-                           (file-name-as-directory (car (process-lines "git" "rev-parse" "--show-toplevel"))))))
-                (if (not dir)
-                    (error (message "%s" "Cannot locate repository root"))
-                  (condition-case error
-                      (progn
-                        (setq *git-visit-current-hunk-list* (my/git-visit-get-hunk-list dir ref))
-                        (setq *git-visit-previous-hunk-list* nil)
-                        (my/git-visit-diffs-next))
-                    (git-error (message (cadr error)))))))))
+                  hunk-list)))))
 
 ;; magit integration with git flow
 (use-package magit-gitflow

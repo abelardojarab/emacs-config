@@ -145,7 +145,7 @@
 
             ;; Enable copying and pasting files
             (use-package dired-ranger
-              :after (dired dired-hacks-utils)
+              :after dired-hacks-utils
               :load-path (lambda () (expand-file-name "dired-ranger/" user-emacs-directory))
               :bind (:map dired-mode-map
                           ("W" . dired-ranger-copy)

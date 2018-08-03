@@ -115,7 +115,6 @@ non-nil."
 ;; Highlight line number
 (use-package hlinum
   :defer t
-  :after linum-ex
   :load-path (lambda () (expand-file-name "hlinum/" user-emacs-directory))
   :commands hlinum-activate)
 
