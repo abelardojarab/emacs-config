@@ -317,7 +317,7 @@
 (depends-on "smart-jump")
 (depends-on "smart-tab")
 (depends-on "smeargle")
-(depends-on "smerge")
+;; (depends-on "smerge")
 (depends-on "smex")
 (depends-on "smooth-scrolling")
 ;; (depends-on "snippets")
