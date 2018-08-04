@@ -1,6 +1,6 @@
 ;; setup-helm-plugins.el ---                        -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -165,8 +165,7 @@
 ;; helm yasnippet
 (use-package helm-c-yasnippet
   :defer t
-  :after (helm yasnippet)
-  :commands (helm-yas-complete)
+  :commands (helm-yas-complete helm-c-yas-complete)
   :load-path (lambda () (expand-file-name "helm-c-yasnippet/" user-emacs-directory))
   :bind (:map yas-minor-mode-map
               ([(shift tab)]     . helm-c-yas-complete)

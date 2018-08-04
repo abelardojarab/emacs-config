@@ -58,10 +58,7 @@
 
 ;; With-editor (emacsclient support)
 (use-package with-editor
-  :load-path (lambda () (expand-file-name "with-editor/" user-emacs-directory))
-  :init (progn
-          (add-hook 'shell-mode-hook  #'with-editor-export-editor)
-          (add-hook 'eshell-mode-hook #'with-editor-export-editor)))
+  :hook ((shell-mode eshell-mode term-exec) . with-editor-export-editor))
 
 ;; Pos-tip library
 (use-package pos-tip

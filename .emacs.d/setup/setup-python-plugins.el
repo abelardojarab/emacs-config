@@ -53,22 +53,32 @@
             (if (featurep 'auto-complete)
                 (ac-flyspell-workaround))
 
-        ;; Company backend for Python jedi
-        (use-package company-jedi
-          :after (company jedi)
-          :load-path (lambda () (expand-file-name "company-jedi/" user-emacs-directory))
-          :config (add-hook 'python-mode-hook
-                (lambda () (set (make-local-variable 'company-backends)
-                       '((company-yasnippet
-                          company-jedi
-                          company-capf
-                          company-files
-                          company-abbrev))))))))
-
+            ;; Company backend for Python jedi
+            (use-package company-jedi
+              :after (company jedi)
+              :load-path (lambda () (expand-file-name "company-jedi/" user-emacs-directory))
+              :config (add-hook 'python-mode-hook
+                                (lambda () (set (make-local-variable 'company-backends)
+                                           '((company-yasnippet
+                                              company-jedi
+                                              company-capf
+                                              company-files
+                                              company-abbrev))))))))
+;; Anaconda
 (use-package anaconda-mode
-  :if (executable-find "python")
-  :init (add-hook 'python-mode-hook 'anaconda-mode)
-  :commands anaconda-mode)
+  :bind (:map anaconda-mode-map
+              ("M-." . python-goto-sql-file-or-definition)
+              ("M-," . anaconda-mode-find-assignments))
+  :hook ((python-mode . anaconda-mode)
+         (python-mode . anaconda-eldoc-mode))
+  :config (defun python-goto-sql-file-or-definition (&optional arg)
+            "Call anaconda find-definitions or with prefix ARG find sql file."
+            (interactive "P")
+            (back-button-push-mark-local-and-global)
+            (if arg
+                (projectile-find-sql-file)
+              (anaconda-mode-find-definitions)
+              (recenter))))
 
 (provide 'setup-python-plugins)
 ;;; setup-python-plugins.el ends here

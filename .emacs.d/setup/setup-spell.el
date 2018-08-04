@@ -1,6 +1,6 @@
 ;;; setup-spell.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -169,8 +169,7 @@ Don't read buffer-local settings or word lists."
 (use-package flyspell-correct-popup
   :after flyspell
   :bind (:map flyspell-mode-map
-              ("C-c $" . flyspell-correct-word-generic))
-  :load-path (lambda () (expand-file-name "flyspell-correct/" user-emacs-directory)))
+              ("C-c $" . flyspell-correct-word-generic)))
 
 ;; write good mode
 (use-package writegood-mode

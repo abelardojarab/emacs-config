@@ -151,14 +151,11 @@
 
 (use-package bicycle
   :after outline
-  :bind (:map outline-minor-mode-map
-              ([C-tab]   . bicycle-cycle)
-              ([backtab] . bicycle-cycle-global)))
+  :command (bicycle-cycle bicycle-cycle-global))
 
 ;; org-style folding/unfolding in hideshow
 (use-package hideshow-org
   :defer t
-  :after hideshow
   :init (progn
           (setq hs-org/trigger-keys-block (list (kbd "C-c +")))
           (setq hs-org/trigger-keys-all (list (kbd "C-c &"))))
@@ -168,7 +165,6 @@
 ;; Yet Another Folding - folding code blocks based on indentation
 (use-package yafolding
   :defer t
-  :after hideshow
   :load-path (lambda () (expand-file-name "yafolding/" user-emacs-directory))
   :commands (yafolding-toggle-element
              yafolding-toggle-all

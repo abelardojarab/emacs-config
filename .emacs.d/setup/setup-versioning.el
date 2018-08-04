@@ -124,6 +124,7 @@
              magit-git-wash
              magit-insert-section
              git-commit-setup-check-buffer)
+  :defines (magit-ediff-dwim-show-on-hunks)
   :bind (:map ctl-x-map
               ("m"        . magit-status)
               :map magit-mode-map
@@ -361,7 +362,6 @@
   :commands (turn-on-magit-gitflow)
   :if (executable-find "git")
   :after magit
-  :load-path (lambda () (expand-file-name "magit-gitflow/" user-emacs-directory))
   :init (add-hook 'magit-mode-hook #'turn-on-magit-gitflow 'append))
 
 ;; flydiff
@@ -382,15 +382,11 @@
              diff-hl-flydiff-mode
              diff-hl-magit-post-refresh
              diff-hl-dired-mode)
-  :load-path (lambda () (expand-file-name "diff-hl/" user-emacs-directory))
-  :init (progn
-          ;; Integrate with Magit
-          (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh)
-
-          ;; Highlight changed files in the fringe of dired
-          (add-hook 'dired-mode-hook #'diff-hl-dired-mode))
+  :hook (((prog-mode conf-mode vc-dir-mode ledger-mode) . turn-on-diff-hl-mode)
+         (magit-post-refresh                            . diff-hl-magit-post-refresh))
   :config (progn
-            (use-package diff-hl-dired)
+            (use-package diff-hl-dired
+              :hook (dired-mode-hook    . diff-hl-dired-mode))
 
             (setq diff-hl-draw-borders t)
             (defadvice svn-sttus-update-modeline (after svn-update-diff-hl activate)
@@ -419,7 +415,6 @@
   :commands (my/git-timemachine-start
              git-timemachine-toggle
              git-timemachine-switch-branch)
-  :load-path (lambda () (expand-file-name "git-timemachine/" user-emacs-directory))
   :if (executable-find "git")
   :after magit
   :config (progn
