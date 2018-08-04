@@ -201,7 +201,7 @@
 (depends-on "imenu-list")
 (depends-on "imenus")
 ;; (depends-on "indent-hint")
-(depends-on "inline-docs")q
+(depends-on "inline-docs")
 (depends-on "intellij-theme")
 ;; (depends-on "irony-mode")
 (depends-on "isearch+")
