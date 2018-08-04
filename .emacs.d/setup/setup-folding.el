@@ -151,7 +151,7 @@
 
 (use-package bicycle
   :after outline
-  :command (bicycle-cycle bicycle-cycle-global))
+  :commands (bicycle-cycle bicycle-cycle-global))
 
 ;; org-style folding/unfolding in hideshow
 (use-package hideshow-org
