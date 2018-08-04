@@ -77,7 +77,7 @@
 ;; (depends-on "designsync-vc")
 ;; (depends-on "dictionaries")
 (depends-on "diff-hl")
-(depends-on "dimmer-mode")
+(depends-on "dimmer")
 (depends-on "diminish")
 (depends-on "dired-hacks-utils")
 (depends-on "dired-icon")
