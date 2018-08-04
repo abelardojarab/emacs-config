@@ -1,6 +1,6 @@
 ;;; setup-font-lock.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -98,6 +98,11 @@
   :config (mapc (lambda (mode)
                   (add-hook mode #'rainbow-mode))
                 my/rainbow-modes))
+
+;; Highlight and navigate TODO keywords
+(use-package hl-todo
+  :defer 2
+  :config (global-hl-todo-mode))
 
 (provide 'setup-font-lock)
 ;;; setup-font-lock.el ends here

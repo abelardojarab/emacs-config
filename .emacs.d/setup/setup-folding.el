@@ -1,6 +1,6 @@
 ;;; setup-folding.el ---                       -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -90,10 +90,11 @@
                 (setq my/fold-this--last-overlay o))
               (deactivate-mark))))
 
-;; hideshow (hs-minor-mode)
+;; Cycle code visibility
 (use-package hideshow
-  :demand t
+  :defer t
   :diminish hs-minor-mode
+  :hook (prog-mode  . hs-minor-mode)
   :commands (hs-toggle-hiding
              toggle-fold
              toggle-fold-all
@@ -142,6 +143,17 @@
               (if fold-fun
                   (call-interactively fold-fun)
                 (hs-toggle-hiding)))))
+
+;; Cycle outline
+(use-package outline
+  :diminish outline-minor-mode
+  :hook ((prog-mode message-mode markdown-mode) . outline-minor-mode))
+
+(use-package bicycle
+  :after outline
+  :bind (:map outline-minor-mode-map
+              ([C-tab]   . bicycle-cycle)
+              ([backtab] . bicycle-cycle-global)))
 
 ;; org-style folding/unfolding in hideshow
 (use-package hideshow-org

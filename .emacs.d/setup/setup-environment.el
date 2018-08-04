@@ -1,6 +1,6 @@
 ;;; setup-environment.el ---                 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -27,30 +27,29 @@
 ;; These were defined in C code, so use emacs pseudo-package to set them.
 (use-package emacs
   :demand t
-  :hook
-  (focus-out-hook                . garbage-collect)
-  (minibuffer-setup-hook         . my/minibuffer-setup)
-  (minibuffer-exit-hook          . my/minibuffer-exit)
-  (find-file-not-found-functions . make-parent-directory)
-  (after-init-hook               . my/show-init-time)
+  :hook ((focus-out-hook                . garbage-collect)
+         (minibuffer-setup-hook         . my/minibuffer-setup)
+         (minibuffer-exit-hook          . my/minibuffer-exit)
+         (find-file-not-found-functions . make-parent-directory)
+         (after-init-hook               . my/show-init-time))
   :commands (my/minibuffer-exit
              my/minibuffer-setup
              my/show-init-time)
-  :custom (byte-compile-warnings                 nil)
-  (load-prefer-newer                     nil)
-  (load-file-rep-suffixes                '(""))
-  (require-final-newline                 'query)
-  (inhibit-startup-message               t)
-  (large-file-warning-threshold          nil)
-  (enable-recursive-minibuffers          t)
-  (visible-bell                          t)
-  (ring-bell-function                    'ignore)
-  (save-interprogram-paste-before-kill   t)
-  (recenter-positions                    '(top middle bottom))
-  (line-move-visual                      t)
-  (next-line-add-newlines                nil)
-  (message-truncate-lines                nil)
-  (require-final-newline                 t)
+  :custom ((byte-compile-warnings                 nil)
+           (load-prefer-newer                     nil)
+           (load-file-rep-suffixes                '(""))
+           (require-final-newline                 'query)
+           (inhibit-startup-message               t)
+           (large-file-warning-threshold          nil)
+           (enable-recursive-minibuffers          t)
+           (visible-bell                          t)
+           (ring-bell-function                    'ignore)
+           (save-interprogram-paste-before-kill   t)
+           (recenter-positions                    '(top middle bottom))
+           (line-move-visual                      t)
+           (next-line-add-newlines                nil)
+           (message-truncate-lines                nil)
+           (require-final-newline                 t))
   :init (progn
 
           ;; Assure cache directory exists

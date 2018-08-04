@@ -27,15 +27,11 @@
 (use-package eldoc
   :demand t
   :diminish eldoc-mode
+  :hook (((prog-mode eval-expression-minibuffer-setup-hook) . eldoc-mode)
+         ((emacs-lisp-mode-hook lisp-interaction-mode-hook ielm-mode-hook) . turn-on-eldoc-mode))
+  :custom ((eldoc-idle-delay                0.8)
+           (eldoc-echo-area-use-multiline-p t))
   :init (progn
-          (add-hook 'emacs-lisp-mode-hook         #'turn-on-eldoc-mode)
-          (add-hook 'lisp-interaction-mode-hook   #'turn-on-eldoc-mode)
-          (add-hook 'ielm-mode-hook               #'turn-on-eldoc-mode)
-          (add-hook 'c-mode-common-hook           #'turn-on-eldoc-mode)
-          (setq eldoc-idle-delay                  0.8
-        eldoc-echo-area-use-multiline-p   t)
-
-          (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
 
           ;; Use gtags to show documentation
           (add-hook 'c-mode-common-hook

@@ -1,6 +1,6 @@
 ;;; setup-parenthesis.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara <abelardojarab@gmail.com>
 ;; Keywords:
@@ -105,17 +105,13 @@
 ;; Rainbow delimiters
 (use-package rainbow-delimiters
   :defer t
-  :load-path (lambda () (expand-file-name "rainbow-delimiters/" user-emacs-directory))
   :commands rainbow-delimiters-mode
-  :init (progn
-          (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
-          (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)))
+  :hook ((emacs-lisp-mode lisp-mode prog-mode-hook) . rainbow-delimiters-mode))
 
 ;; Legacy minor mode
 (use-package paredit
   :defer t
-  :commands paredit-mode
-  :load-path (lambda () (expand-file-name "paredit/" user-emacs-directory)))
+  :commands paredit-mode)
 
 (provide 'setup-parenthesis)
 ;;; setup-autopair.el ends here

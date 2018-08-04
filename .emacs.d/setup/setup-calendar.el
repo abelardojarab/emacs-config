@@ -1,6 +1,6 @@
 ;;; setup-calendar.el ---                            -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -27,6 +27,9 @@
 ;; Calendar and diary file
 (use-package calendar
   :demand t
+  :hook ((calendar-today-visible      . calendar-mark-today)
+         (diary-display-hook          . fancy-diary-display)
+         (today-visible-calendar-hook . calendar-mark-today))
   :config (progn
             ;; Set up Org default files
             (let ((todo_workspace "~/workspace/Documents/Org/todo.org")
@@ -59,9 +62,6 @@
                                            year "[^0-9]*[>]*")
                                          diary-date-forms))
 
-            (add-hook 'diary-display-hook          #'fancy-diary-display)
-            (add-hook 'today-visible-calendar-hook #'calendar-mark-today)
-
             (defun my/insert-current-date (&optional omit-day-of-week-p)
               "Insert today's date using the current locale.
   With a prefix argument, the date is inserted without the day of
@@ -70,7 +70,6 @@
               (insert (calendar-date-string (calendar-current-date) nil
                                             omit-day-of-week-p)))
 
-            ;; from https://github.com/larstvei/dot-emacs
             (defun calendar-show-week (arg)
               "Displaying week number in calendar-mode."
               (interactive "P")
