@@ -148,7 +148,6 @@
           (delete 'Git vc-handled-backends)
 
           ;; make magit status go full-screen but remember previous window
-          ;; from: http://whattheemacsd.com/setup-magit.el-01.html
           (defadvice magit-status (around magit-fullscreen activate)
             (window-configuration-to-register :magit-fullscreen)
             ad-do-it
@@ -165,7 +164,8 @@
             "Restores the previous window configuration and kills the magit buffer"
             (interactive)
             (kill-buffer)
-            (jump-to-register :magit-fullscreen))
+            (jump-to-register :magit-fullscreen)
+	    (git-gutter:update-all-windows))
 
           ;; Don't show "MRev" in the modeline
           (when (bound-and-true-p magit-auto-revert-mode)
@@ -244,7 +244,6 @@
             (defadvice magit-quit-window (around magit-restore-screen activate)
               (let ((current-mode major-mode))
                 ad-do-it
-		(git-gutter:update-all-windows)
                 ;; we only want to jump to register when the last seen buffer
                 ;; was a magit-status buffer.
                 (when (eq 'magit-status-mode current-mode)
