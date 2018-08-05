@@ -164,8 +164,7 @@
             "Restores the previous window configuration and kills the magit buffer"
             (interactive)
             (kill-buffer)
-            (jump-to-register :magit-fullscreen)
-	    (git-gutter:update-all-windows))
+            (jump-to-register :magit-fullscreen))
 
           ;; Don't show "MRev" in the modeline
           (when (bound-and-true-p magit-auto-revert-mode)
