@@ -1,6 +1,6 @@
 ;;; setup-functions.el ---                   -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -102,9 +102,13 @@
   :commands (string-trim-left
              string-trim-right
              string-trim-right
-             strim-truncate
+	     string-trim
+	     string-truncate
              string-suffix-p)
   :config (progn
+	    (put 'if-let   'byte-obsolete-info nil)
+	    (put 'when-let 'byte-obsolete-info nil)
+
             (unless (fboundp 'string-suffix-p)
               (defun string-suffix-p (suffix string  &optional ignore-case)
                 "Return non-nil if SUFFIX is a suffix of STRING.

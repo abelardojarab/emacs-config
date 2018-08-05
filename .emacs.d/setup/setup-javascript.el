@@ -155,12 +155,13 @@
                                                company-capf
                                                company-files
                                                company-abbrev)))))
-            (setq company-tern-meta-as-single-line t)))
+            (setq company-tern-meta-as-single-line t
+		  ;; don't show circles for properties
+		  company-tern-property-marker "")))
 
 ;; json-reformat
 (use-package json-reformat
-  :after js2-mode
-  :load-path (lambda () (expand-file-name "json-reformat/" user-emacs-directory)))
+  :after js2-mode)
 
 ;; json-snatcher
 (use-package json-snatcher
@@ -168,8 +169,7 @@
   :bind (:map js2-mode-map
               ("C-c C-j" . jsons-print-path)
               :map js2-minor-mode-map
-              ("C-c C-j" . jsons-print-path))
-  :load-path (lambda () (expand-file-name "json-snatcher/" user-emacs-directory)))
+              ("C-c C-j" . jsons-print-path)))
 
 ;; json-mode
 (use-package json-mode
@@ -177,7 +177,6 @@
   :mode "\\.json$"
   :commands json-mode
   :after (json-snatcher js2-mode)
-  :load-path (lambda () (expand-file-name "json-mode/" user-emacs-directory))
   :config (progn
             (add-hook 'json-mode-hook #'js2-minor-mode)
             (setq js-indent-level 4)))
