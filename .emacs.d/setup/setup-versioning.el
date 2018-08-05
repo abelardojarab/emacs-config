@@ -123,6 +123,7 @@
              magit-display-buffer
              magit-git-wash
              magit-insert-section
+	     magit-after-save-refresh-status
              git-commit-setup-check-buffer)
   :defines (magit-ediff-dwim-show-on-hunks)
   :bind (:map ctl-x-map
@@ -139,6 +140,9 @@
 
           ;; Enable line highlight
           (add-hook 'magit-mode-hook #'hl-line-mode)
+
+	  ;; Refresh status
+	  (add-hook 'after-save-hook 'magit-after-save-refresh-status t)
 
           ;; we no longer need vc-git
           (delete 'Git vc-handled-backends)
@@ -225,6 +229,13 @@
                (magit-log-mode "Magit Log")
                (magit-popup-mode "Magit Popup")
                (magit-status-mode "Magit Status")))
+
+	    ;; Show gravatars
+	    (setq magit-revision-show-gravatars '("^Author:     " . "^Commit:     "))
+
+	    ;; Always show recent/unpushed/unpulled commits
+	    (setq magit-section-initial-visibility-alist '((unpushed . show)
+							   (unpulled . show)))
 
             ;; Face setup
             (set-face-foreground 'magit-hash (face-foreground 'font-lock-type-face))
