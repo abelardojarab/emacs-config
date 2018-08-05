@@ -244,6 +244,7 @@
             (defadvice magit-quit-window (around magit-restore-screen activate)
               (let ((current-mode major-mode))
                 ad-do-it
+		(git-gutter:update-all-windows)
                 ;; we only want to jump to register when the last seen buffer
                 ;; was a magit-status buffer.
                 (when (eq 'magit-status-mode current-mode)
