@@ -123,7 +123,7 @@
              magit-display-buffer
              magit-git-wash
              magit-insert-section
-	     magit-after-save-refresh-status
+             magit-after-save-refresh-status
              git-commit-setup-check-buffer)
   :defines (magit-ediff-dwim-show-on-hunks)
   :bind (:map ctl-x-map
@@ -141,14 +141,13 @@
           ;; Enable line highlight
           (add-hook 'magit-mode-hook #'hl-line-mode)
 
-	  ;; Refresh status
-	  (add-hook 'after-save-hook 'magit-after-save-refresh-status t)
+          ;; Refresh status
+          (add-hook 'after-save-hook 'magit-after-save-refresh-status t)
 
           ;; we no longer need vc-git
           (delete 'Git vc-handled-backends)
 
           ;; make magit status go full-screen but remember previous window
-          ;; from: http://whattheemacsd.com/setup-magit.el-01.html
           (defadvice magit-status (around magit-fullscreen activate)
             (window-configuration-to-register :magit-fullscreen)
             ad-do-it
@@ -230,12 +229,12 @@
                (magit-popup-mode "Magit Popup")
                (magit-status-mode "Magit Status")))
 
-	    ;; Show gravatars
-	    (setq magit-revision-show-gravatars '("^Author:     " . "^Commit:     "))
+            ;; Show gravatars
+            (setq magit-revision-show-gravatars '("^Author:     " . "^Commit:     "))
 
-	    ;; Always show recent/unpushed/unpulled commits
-	    (setq magit-section-initial-visibility-alist '((unpushed . show)
-							   (unpulled . show)))
+            ;; Always show recent/unpushed/unpulled commits
+            (setq magit-section-initial-visibility-alist '((unpushed . show)
+                                                           (unpulled . show)))
 
             ;; Face setup
             (set-face-foreground 'magit-hash (face-foreground 'font-lock-type-face))
@@ -422,6 +421,7 @@
 
 ;; git-timemachine
 (use-package git-timemachine
+  :disabled t
   :defer t
   :commands (my/git-timemachine-start
              git-timemachine-toggle

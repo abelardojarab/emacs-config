@@ -144,7 +144,8 @@
                 (setq x-select-request-type     '(UTF8_STRING COMPOUND_TEXT TEXT STRING)
                       select-enable-clipboard   t
                       select-enable-primary     t)
-                (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
+                (when (functionp #'x-cut-buffer-or-selection-value)
+                  (setq interprogram-paste-function #'x-cut-buffer-or-selection-value))
 
                 (when (executable-find "xsel")
                   (defun xsel-cut-function (text &optional push)

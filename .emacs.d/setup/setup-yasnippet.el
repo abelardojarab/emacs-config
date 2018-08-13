@@ -1,6 +1,6 @@
 ;;; setup-yasnippet.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -26,6 +26,7 @@
 
 ;; Yasnippet (should be invoked before auto-complete)
 (use-package yasnippet
+  :defer t
   :diminish yas-minor-mode
   :load-path (lambda () (expand-file-name "yasnippet/" user-emacs-directory))
   :bind (:map yas-minor-mode-map
@@ -88,19 +89,7 @@
                       (lambda ()
                         (make-variable-buffer-local 'yas-trigger-key)
                         (setq yas-trigger-key [tab])
-                        (add-to-list 'org-tab-first-hook 'yas--org-very-safe-expand)))
-
-            ;; Auto-complete enhancement
-            (when (featurep 'auto-complete)
-              (defun yas/set-ac-modes ()
-                "Add modes in `yas-snippet-dirs' to `ac-modes'. Call (yas/set-ac-modes) BEFORE (global-auto-complete-mode 1) or (ac-config-default)."
-                (eval-after-load "auto-complete"
-                  '(setq ac-modes
-                         (append
-                          (apply 'append (mapcar (lambda (dir) (mapcar 'intern (directory-files dir nil "-mode$")))
-                                                 (yas-snippet-dirs)))
-                          ac-modes))))
-              (yas/set-ac-modes))))
+                        (add-to-list 'org-tab-first-hook 'yas--org-very-safe-expand)))))
 
 (provide 'setup-yasnippet)
 ;;; setup-yasnippet.el ends here

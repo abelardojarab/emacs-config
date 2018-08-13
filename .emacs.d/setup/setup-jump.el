@@ -1,6 +1,6 @@
 ;;; setup-jump.el ---                       -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -27,9 +27,11 @@
 (use-package dumb-jump
   :defer t
   :commands (dumb-jump-go
-             dumb-jump-back)
+             dumb-jump-back
+             dumb-jump-quick-look
+             dumb-jump-go-other-window)
   :config (setq dumb-jump-selector 'ivy
-                  dumb-jump-aggressive nil))
+                dumb-jump-aggressive nil))
 
 (use-package smart-jump
   :defer t

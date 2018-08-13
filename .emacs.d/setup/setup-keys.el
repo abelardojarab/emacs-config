@@ -139,7 +139,7 @@
 ;; Helm semantic (switch function)
 (global-set-key (kbd "<f4>")     'helm-semantic-or-imenu)
 
-;; Smex
+;; Compile
 (global-set-key (kbd "<f5>")     'recompile)
 
 ;; Flyspell
@@ -165,7 +165,6 @@
 
 ;; List buffers
 (global-set-key (kbd "<f12>")    'ivy-switch-buffer)
-(global-set-key (kbd "C-<f12>")  'neotree-toggle)
 
 ;; Escape key in minibuffer
 (define-key minibuffer-local-map            [escape] 'abort-recursive-edit)
