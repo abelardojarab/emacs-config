@@ -464,6 +464,7 @@
   :load-path (lambda () (expand-file-name "git-gutter/" user-emacs-directory))
   :init (global-git-gutter-mode t)
   :commands global-git-gutter-mode
+  :hook (magit-post-refresh . git-gutter:update-all-windows)
   :config (progn
 
             (add-hook 'git-gutter:update-hooks 'magit-after-revert-hook)
