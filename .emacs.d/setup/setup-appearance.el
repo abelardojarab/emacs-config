@@ -216,17 +216,15 @@ all the buffers."
   :commands column-enforce-mode
   :diminish column-enforce-mode
   :init (setq column-enforce-column 99)
-  :load-path (lambda () (expand-file-name "column-enforce-mode/" user-emacs-directory))
-  :config (add-hook 'prog-mode-hook #'column-enforce-mode))
+  :hook (prog-mode-hook . column-enforce-mode))
 
 ;; Visually highlight the selected buffer
 (use-package dimmer
   :unless noninteractive
   :defer 10
-  :config (progn
-            (setq dimmer-fraction 0.25)
-            ;;(setq dimmer-use-colorspace ':rgb)
-            (dimmer-mode)))
+  :custom (dimmer-fraction 0.25)
+  :commands dimmer-mode
+  :init (dimmer-mode t))
 
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here

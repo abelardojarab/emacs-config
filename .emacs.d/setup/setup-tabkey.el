@@ -1,6 +1,6 @@
 ;;; setup-tabkey.el ---                              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -28,10 +28,10 @@
 (use-package smart-tab
   :diminish smart-tab-mode
   :load-path (lambda () (expand-file-name "smart-tab/" user-emacs-directory))
-  :config (progn
-            (cons 'yas-hippie-try-expand 'hippie-expand-try-functions-list)
-            (setq smart-tab-using-hippie-expand t)
-            (global-smart-tab-mode)))
+  :commands global-smart-tab-mode
+  :custom (smart-tab-using-hippie-expand t)
+  :init (global-smart-tab-mode t)
+  :config (cons 'yas-hippie-try-expand 'hippie-expand-try-functions-list))
 
 (provide 'setup-tabkey)
 ;;; setup-tabkey.el ends here
