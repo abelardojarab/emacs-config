@@ -466,6 +466,9 @@
   :commands global-git-gutter-mode
   :config (progn
 
+            (add-hook 'git-gutter:update-hooks 'magit-after-revert-hook)
+            (add-hook 'git-gutter:update-hooks 'magit-not-reverted-hook)
+
             (defhydra hydra-git-gutter (:body-pre (git-gutter-mode 1)
                                                   :hint nil)
               "

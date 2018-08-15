@@ -1,6 +1,6 @@
 ;;; setup-ediff.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -66,7 +66,7 @@
                   ;; Ignore whitespace
                   ediff-diff-options          "-w")
 
-            ;; taken from http://kaushalmodi.github.io/2015/03/09/do-ediff-as-i-mean/
+            ;; Do ediff as I mean
             (defun my/ediff-dwim ()
               "Do ediff as I mean.
 If a region is active when command is called, call `ediff-regions-wordwise'.

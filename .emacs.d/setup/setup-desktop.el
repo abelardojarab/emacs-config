@@ -1,6 +1,6 @@
 ;;; setup-desktop.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -28,43 +28,44 @@
 (use-package no-littering
   :demand t
   :init (setq no-littering-var-directory (expand-file-name "cache/var/" my/emacs-cache-dir)
-              no-littering-etc-directory (expand-file-name "cache/etc/" my/emacs-cache-dir)))
+              no-littering-etc-directory (expand-file-name "cache/etc/" my/emacs-cache-dir))
   :config (progn
 
-	    (setq create-lockfiles    nil
-		  delete-old-versions t
-		  kept-new-versions   6
-		  kept-old-versions   2
-		  version-control     t
-		  backup-by-copying   t
-		  auto-save-interval  500)
+            (setq create-lockfiles    nil
+                  delete-old-versions t
+                  kept-new-versions   6
+                  kept-old-versions   2
+                  version-control     t
+                  backup-by-copying   t
+                  auto-save-interval  500)
 
-	    ;; Do not make backups or auto-save's
-	    (setq make-backup-files   nil
-		  auto-save-default   nil)
+            ;; Do not make backups or auto-save's
+            (setq make-backup-files   nil
+                  auto-save-default   nil)
 
-	    ;; Preserve the owner and group of the file you're editing
-	    (setq backup-by-copying-when-mismatch t)
+            ;; Preserve the owner and group of the file you're editing
+            (setq backup-by-copying-when-mismatch t)
 
-	    (setq
-	     backup-directory-alist
-	     `((".*" . ,(no-littering-expand-var-file-name "backup/")))
-	     auto-save-file-name-transforms
-	     `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
+            (setq
+             backup-directory-alist
+             `((".*" . ,(no-littering-expand-var-file-name "backup/")))
+             auto-save-file-name-transforms
+             `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 
-	    (setq-default semanticdb-default-save-directory (concat no-littering-var-directory "semanticdb")
-			  url-configuration-directory (concat no-littering-var-directory "url")
-			  eshell-directory-name (concat no-littering-var-directory "eshell" )))
+            (setq-default semanticdb-default-save-directory (concat no-littering-var-directory "semanticdb")
+                          url-configuration-directory (concat no-littering-var-directory "url")
+                          eshell-directory-name (concat no-littering-var-directory "eshell" ))))
 
 ;; Savehist: save some history
 (use-package savehist
-  :demand t
-  :init (setq savehist-additional-variables '(search ring regexp-search-ring)
-              savehist-autosave-interval    120
-              savehist-file                  (concat (file-name-as-directory
-                                                      my/emacs-cache-dir)
-                                                     "savehist"))
-  :config (savehist-mode t))
+  :defer t
+  :commands savehist-mode
+  :init (savehist-mode t)
+  :config (setq savehist-additional-variables '(search ring regexp-search-ring)
+                savehist-autosave-interval    120
+                savehist-file                  (concat (file-name-as-directory
+                                                        my/emacs-cache-dir)
+                                                       "savehist")))
 
 ;; Filecache
 (use-package file-cache

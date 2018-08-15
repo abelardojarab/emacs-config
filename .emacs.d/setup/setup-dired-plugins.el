@@ -29,7 +29,6 @@
   :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))
   :after dired
   :commands (dired-sidebar-toggle-sidebar)
-  :chords (("tt" . dired-sidebar-toggle-sidebar))
   :config  (progn
              (if (display-graphic-p)
                  (setq dired-sidebar-theme 'icons)

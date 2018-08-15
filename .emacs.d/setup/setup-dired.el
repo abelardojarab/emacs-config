@@ -27,6 +27,7 @@
 (use-package dired-x
   :defer t
   :commands (dired dired-jump)
+  :chords ("dd" . dired-jump)
   :bind (("C-x C-j"  . dired-jump)
          :map dired-mode-map
          (("u"       . dired-up-directory)
@@ -36,10 +37,16 @@
           ("C-c C-f" . dired-filter-by-file)))
   :config (progn
 
+            ;; toggle `dired-omit-mode' with C-x M-o
+            (setq dired-omit-verbose nil)
+            (add-to-list 'dired-omit-extensions ".DS_Store")
+            (setq dired-omit-files
+                  (concat dired-omit-files "\\|^.DS_STORE$\\|^.projectile$"))
+
             ;; extra hooks
             (defun my/dired-mode-hook ()
               (toggle-truncate-lines t)
-              (setq-local truncate-lines t)
+              (setq truncate-lines t)
               (dired-omit-mode 1)
               (dired-hide-details-mode t)
               (hl-line-mode 1)
@@ -80,21 +87,9 @@
                           'my/dired-imenu-create-index))
             (add-hook 'dired-mode-hook #'my/dired-imenu-init)
 
-            ;; Emacs 24.4 defaults to an ls -1 view, not ls -l, but I want
-            ;; details. This needs to be specified before requiring dired+
-            (setq diredp-hide-details-initially-flag nil)
-
             ;; "In Dired, visit this file or directory instead of the Dired buffer."
             ;; Prevents buffers littering up things when moving around in Dired
             (put 'dired-find-alternate-file 'disabled nil)
-
-            ;; toggle `dired-omit-mode' with C-x M-o
-            (setq dired-omit-verbose nil)
-            (setq-default dired-omit-mode t)
-            (add-hook 'dired-mode-hook #'dired-omit-mode)
-            (add-to-list 'dired-omit-extensions ".DS_Store")
-            (setq dired-omit-files
-                  (concat dired-omit-files "\\|^.DS_STORE$\\|^.projectile$"))
 
             (setq ls-lisp-dirs-first                  t
                   dired-listing-switches              "-alhF --group-directories-first"
@@ -138,6 +133,16 @@
                 ;; finally, switch to that window
                 (other-window 1)))
 
+            ;; Dired extensions
+            (use-package dired+
+              :after dired
+              :config (progn
+                        ;; Emacs 24.4 defaults to an ls -1 view, not ls -l
+                        (setq diredp-hide-details-initially-flag nil)
+
+                        ;; Reuse same directory buffer
+                        (diredp-toggle-find-file-reuse-dir 1)))
+
             ;; dired-ranger pre-requisite
             (use-package dired-hacks-utils
               :demand t
@@ -167,7 +172,6 @@
             ;; Display file icons in dired
             (use-package dired-icon
               :if (display-graphic-p)
-              :disabled t
               :after dired
               :commands dired-icon-mode
               :init (add-hook 'dired-mode-hook #'dired-icon-mode)
@@ -193,7 +197,6 @@
             ;; All the icons on dired
             (use-package all-the-icons-dired
               :if (display-graphic-p)
-              :disabled t
               :after dired
               :diminish all-the-icons-dired-mode
               :commands all-the-icons-dired-mode

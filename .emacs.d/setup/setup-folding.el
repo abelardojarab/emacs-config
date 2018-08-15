@@ -341,6 +341,7 @@ If prefix argument is used, `set-selective-display' to the current column."
              origami-toggle-node
              origami-toggle-all-nodes
              origami-recursively-toggle-node)
+  :chords (("tt" . origami-toggle-node))
   :init (global-origami-mode)
   :custom-face
   (origami-fold-replacement-face ((t (:inherit magit-diff-context-highlight))))
