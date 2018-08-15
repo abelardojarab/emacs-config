@@ -130,7 +130,6 @@
             ;; C-mode setup
             (add-hook 'c-mode-common-hook
                       (lambda ()
-                        (my/c-mode-init)
 
                         ;; make `company-backends' local is critical
                         ;; or else, you will have completion in every major mode, that's very annoying!
@@ -207,11 +206,11 @@
 
             ;; Documentation popups for company
             (use-package company-quickhelp
-	      :defer t
-	      :custom ((company-quickhelp-delay                0.2)
-		       (company-quickhelp-use-propertized-text t))
-	      :commands company-quickhelp-mode
-	      :init (company-quickhelp-mode t)
+              :defer t
+              :custom ((company-quickhelp-delay                0.2)
+                       (company-quickhelp-use-propertized-text t))
+              :commands company-quickhelp-mode
+              :init (company-quickhelp-mode t)
               :config (setq company-frontends (delq 'company-echo-metadata-frontend company-frontends)))
 
             ;; Company bibtex integration

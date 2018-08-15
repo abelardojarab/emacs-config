@@ -1,6 +1,6 @@
 ;;; setup-ergoemacs.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -28,7 +28,6 @@
 (use-package ergoemacs-mode-fixed
   :defer t
   :if (executable-find "gzip")
-  :load-path (lambda () (expand-file-name "ergoemacs-mode/" user-emacs-directory))
   :commands ergoemacs-mode
   :config (progn
             (ergoemacs-mode-after-init-emacs)

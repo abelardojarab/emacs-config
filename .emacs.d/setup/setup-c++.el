@@ -8,7 +8,7 @@
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
-;; (at your option) any later version.
+;; (at your option) any later version
 
 ;; This program is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -31,45 +31,43 @@
               ("C-c C-o" . ff-find-other-file)
               :map c++-mode-map
               ("C-c C-o" . ff-find-other-file))
-  :init (add-hook 'c-mode-common-hook #'my/c-mode-init)
-  :commands my/c-mode-init
+  :hook (c-mode-common . my/c-mode-init-indent)
+  :commands my/c-mode-init-indent
   :config (progn
             ;; Put c++-mode as default for *.h files (improves parsing)
             (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 
-            ;; C/C++ style
-            (defun my/c-mode-init ()
-              (interactive)
-              (c-set-style "Linux")
-              (c-set-offset 'substatement-open 0)
-              (c-set-offset 'innamespace 0)
-              (c-toggle-electric-state -1)
-
-              (setq-default c-default-style "Linux")
-              (my/tabs-setup t 8)
-
-              (make-local-variable 'c-basic-offset)
-              (setq c-basic-offset tab-width)
-              (make-local-variable 'c-indent-level)
-              (setq c-indent-level tab-width)
-
-              ;; ensure fill-paragraph takes doxygen @ markers as start of new
-              ;; paragraphs properly
-              (setq-default comment-multi-line t
-                            paragraph-start "^[ ]*\\(//+\\|\\**\\)[ ]*\\([ ]*$\\|@param\\)\\|^\f"))
-
-            ;; Make C/C++ indentation reliable
+	    ;; Make C/C++ indentation reliable
             (defun my/c-indent-offset-according-to-syntax-context (key val)
               ;; remove the old element
               (setq c-offsets-alist (delq (assoc key c-offsets-alist) c-offsets-alist))
               ;; new value
               (add-to-list 'c-offsets-alist '(key . val)))
-            (add-hook 'c-mode-common-hook
-                      (lambda ()
-                        (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
-			  (my/c-mode-init)
-                          ;; indent
-                          (my/c-indent-offset-according-to-syntax-context 'substatement-open 0))))))
+
+            ;; C/C++ style
+            (defun my/c-mode-init-indent ()
+              (interactive)
+              (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+
+		(c-set-style "Linux")
+		(c-set-offset 'substatement-open 0)
+		(c-set-offset 'innamespace 0)
+		(c-toggle-electric-state -1)
+
+		(setq-default c-default-style "Linux")
+		(my/tabs-setup t 8)
+
+		(make-local-variable 'c-basic-offset)
+		(setq c-basic-offset tab-width)
+		(make-local-variable 'c-indent-level)
+		(setq c-indent-level tab-width)
+
+		(my/c-indent-offset-according-to-syntax-context 'substatement-open 0)
+
+		;; ensure fill-paragraph takes doxygen @ markers as start of new
+		;; paragraphs properly
+		(setq-default comment-multi-line t
+                              paragraph-start "^[ ]*\\(//+\\|\\**\\)[ ]*\\([ ]*$\\|@param\\)\\|^\f")))))
 
 ;; Show inline arguments hint for the C/C++ function at point
 (use-package function-args
@@ -85,10 +83,9 @@
               ("C-c C-m" . moo-complete)
               :map c++-mode-map
               ("C-c C-m" . moo-complete))
-  :init (add-hook 'c-mode-common-hook #'function-args-mode)
-  :config (progn
-            (fa-config-default)
-            (setq moo-select-method 'ivy)))
+  :hook (c-mode-common . function-args-mode)
+  :custom (moo-select-method 'ivy)
+  :config (fa-config-default))
 
 ;; C/C++ refactoring tool based on Semantic parser framework
 (use-package srefactor
@@ -108,7 +105,7 @@
 
 ;; Automatically insert prototype functions from .h
 (use-package member-functions
-  :config (setq mf--source-file-extension "cpp"))
+  :custom (mf--source-file-extension "cpp"))
 
 ;; Basic C compile
 (use-package basic-c-compile

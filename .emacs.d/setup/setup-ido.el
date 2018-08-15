@@ -102,7 +102,7 @@
 (use-package ibuffer
   :defer t
   :commands ibuffer
-  :init (setq ibuffer-inline-columns t)
+  :custom (ibuffer-inline-columns t)
   :config (progn
             (setq ibuffer-saved-filter-groups
                   '(("Config" (or
@@ -168,21 +168,20 @@
   :after ibuffer
   :commands my/ibuffer-apply-filter-groups
   :load-path (lambda () (expand-file-name "ibuffer-vc/" user-emacs-directory))
-  :init (add-hook 'ibuffer-hook #'my/ibuffer-apply-filter-groups)
-  :config (progn
-            (defun my/ibuffer-apply-filter-groups ()
-              "Combine my saved ibuffer filter groups with those generated
+  :hook (ibuffer . my/ibuffer-apply-filter-groups)
+  :config (defun my/ibuffer-apply-filter-groups ()
+            "Combine my saved ibuffer filter groups with those generated
      by `ibuffer-vc-generate-filter-groups-by-vc-root'"
-              (interactive)
-              (setq ibuffer-filter-groups
-                    (append (ibuffer-vc-generate-filter-groups-by-vc-root)
-                            ibuffer-saved-filter-groups))
-              (message "ibuffer-vc: groups set")
-              (let ((ibuf (get-buffer "*Ibuffer*")))
-                (when ibuf
-                  (with-current-buffer ibuf
-                    (pop-to-buffer ibuf)
-                    (ibuffer-update nil t)))))))
+            (interactive)
+            (setq ibuffer-filter-groups
+                  (append (ibuffer-vc-generate-filter-groups-by-vc-root)
+                          ibuffer-saved-filter-groups))
+            (message "ibuffer-vc: groups set")
+            (let ((ibuf (get-buffer "*Ibuffer*")))
+              (when ibuf
+                (with-current-buffer ibuf
+                  (pop-to-buffer ibuf)
+                  (ibuffer-update nil t))))))
 
 (provide 'setup-ido)
 ;;; setup-ido.el ends here

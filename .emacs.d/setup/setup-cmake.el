@@ -1,6 +1,6 @@
 ;;; setup-cmake.el ---                            -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -89,7 +89,7 @@
   :bind (:map c++-mode-map
               ("C-c C-i" . rtags-print-symbol-info)
               ("C-c C-s" . rtags-find-symbol-at-point))
-  :hook (((c++-mode c-mode objc-mode) . rtags-start-process-unless-running))
+  :hook (((c++-mode c-mode objc-mode) . my/c-mode-init-rtags))
   :config (progn
             (use-package helm-rtags
               :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory)))
@@ -129,20 +129,21 @@
                       major-mode))))
 
             ;; Enable integration of rtags and eldoc
-            (add-hook 'c-mode-common-hook (lambda ()
-                                            (when (and (executable-find "rdm")
-                                                       (projectile-project-p)
-                                                       (not (file-exists-p (concat (projectile-project-root)
-                                                                                   "GTAGS"))))
-                                              (setq-local eldoc-documentation-function #'rtags-eldoc-function))))))
+            (defun my/c-mode-init-rtags ()
+              (interactive)
+              (when (and (executable-find "rdm")
+                         (projectile-project-p)
+                         (not (file-exists-p (concat (projectile-project-root)
+                                                     "GTAGS"))))
+		(rtags-start-process-unless-running)
+                (setq-local eldoc-documentation-function #'rtags-eldoc-function)))))
 
 ;; cmake syntax highlighting
 (use-package cmake-mode
   :defer t
   :commands cmake-mode
   :mode (("/CMakeLists\\.txt\\'" . cmake-mode)
-         ("\\.cmake\\'"          . cmake-mode))
-  :load-path (lambda () (expand-file-name "cmake-mode/" user-emacs-directory)))
+         ("\\.cmake\\'"          . cmake-mode)))
 
 ;; cmake-based IDE
 (use-package cmake-ide
@@ -155,8 +156,7 @@
              cmake-ide-run-cmake
              cmake-ide--locate-cmakelists)
   :if (executable-find "cmake")
-  :load-path (lambda () (expand-file-name "cmake-ide/" user-emacs-directory))
-  :init (add-hook 'c-mode-common-hook #'my/cmake-ide-enable)
+  :hook (c-mode-common . my/cmake-ide-enable)
   :config (progn
 
             ;; Asure cmake_build directory exists
@@ -166,7 +166,7 @@
             ;; Overwrite get build dir function
             (defun cmake-ide--get-build-dir ()
               "Return the directory name to run CMake in."
-          (interactive)
+              (interactive)
               (let ((build-dir
                      (expand-file-name (or (cmake-ide--build-dir-var)
                                            (cmake-ide--get-build-dir-from-hash))
@@ -174,7 +174,7 @@
                 (when (not (file-accessible-directory-p build-dir))
                   (cmake-ide--message "Making directory %s" build-dir)
                   (make-directory build-dir))
-        (cmake-ide--message "cmake build dir is set to %s" build-dir)
+		(cmake-ide--message "cmake build dir is set to %s" build-dir)
                 (file-name-as-directory build-dir)))
 
             ;; Overwrite run cmake function
@@ -195,9 +195,9 @@
                         (defun cmake-project-find-root-directory ()
                           "Find the top-level CMake directory."
                           (interactive)
-              (message "* cmake-project Source code directory set to: %s"
-                   (file-name-directory
-                    (cmake-ide--locate-cmakelists)))
+			  (message "* cmake-project Source code directory set to: %s"
+				   (file-name-directory
+				    (cmake-ide--locate-cmakelists)))
                           (file-name-directory
                            (cmake-ide--locate-cmakelists)))
 
@@ -227,7 +227,7 @@
                             (unless (file-exists-p build-directory) (make-directory build-directory))
                             (let ((default-directory build-directory))
 
-                  ;; Update the cmake-ide directories
+			      ;; Update the cmake-ide directories
                               (make-local-variable 'cmake-ide-build-dir)
                               (make-local-variable 'cmake-dir)
                               (setq cmake-ide-build-dir build-directory)
@@ -242,8 +242,8 @@
                                 (shell-quote-argument
                                  (expand-file-name source-directory))
                                 " -DCMAKE_EXPORT_COMPILE_COMMANDS=ON "
-                cmake-ide-cmake-opts
-                " "
+				cmake-ide-cmake-opts
+				" "
                                 (if (string= "" generator)
                                     ""
                                   ;; Set the user defined architecture on windows.
@@ -258,7 +258,7 @@
               (progn
                 (my/cmake-ide-set-build-dir)
                 (when (and (cmake-ide--locate-cmakelists)
-               (file-exists-p (cmake-ide--locate-cmakelists)))
+			   (file-exists-p (cmake-ide--locate-cmakelists)))
                   (cmake-ide-maybe-run-cmake)
                   (cmake-ide-maybe-start-rdm)
                   (cmake-project-mode 1))))
@@ -276,10 +276,10 @@
                       (if (and (file-exists-p "~/cmake_builds")
                                (projectile-project-name))
                           (progn
-                (make-local-variable 'cmake-project-build-directory)
+			    (make-local-variable 'cmake-project-build-directory)
                             (make-local-variable 'cmake-ide-build-dir)
                             (make-local-variable 'cmake-dir)
-                (make-local-variable 'cmake-ide-cmake-opts)
+			    (make-local-variable 'cmake-ide-cmake-opts)
 
                             ;; Define project build directory
                             (setq my/projectile-build-dir (concat
@@ -317,11 +317,11 @@
                             (if (not (file-exists-p my/cmake-build-dir))
                                 (make-directory my/cmake-build-dir))
 
-                ;; Use Debug as default build
-                (setq cmake-ide-cmake-opts "-DCMAKE_BUILD_TYPE=Debug")
+			    ;; Use Debug as default build
+			    (setq cmake-ide-cmake-opts "-DCMAKE_BUILD_TYPE=Debug")
 
                             ;; Set cmake-ide-build-dir according to both top project and cmake project names
-                (setq cmake-project-build-directory my/cmake-build-dir)
+			    (setq cmake-project-build-directory my/cmake-build-dir)
                             (setq cmake-ide-build-dir my/cmake-build-dir)
                             (setq cmake-dir my/cmake-build-dir)))))))))
 
