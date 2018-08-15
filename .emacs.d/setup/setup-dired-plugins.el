@@ -29,10 +29,18 @@
   :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))
   :after dired
   :commands (dired-sidebar-toggle-sidebar)
+  :chords (("tt" . dired-sidebar-toggle-sidebar))
   :config  (progn
              (if (display-graphic-p)
                  (setq dired-sidebar-theme 'icons)
                (setq dired-sidebar-theme 'nerd))
+
+             (defadvice dired-sidebar-point-at-file (around bar activate)
+               (ignore-errors add-do-it))
+
+             (defadvice dired-sidebar-refresh-buffer (around bar activate)
+               (ignore-errors add-do-it))
+
              (setq dired-sidebar-use-term-integration t
                    dired-sidebar-use-all-the-icons    t
                    dired-sidebar-use-custom-font      t)))
@@ -41,6 +49,7 @@
 (use-package neotree
   :defer t
   :commands (neotree-toggle)
+  :chords (("nn" . neotree-toggle))
   :bind (:map neotree-mode-map
               (("<C-return>" . neotree-change-root)
                ("C"          . neotree-change-root)

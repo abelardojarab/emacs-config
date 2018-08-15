@@ -148,16 +148,16 @@
               :after dired-hacks-utils
               :load-path (lambda () (expand-file-name "dired-ranger/" user-emacs-directory))
               :bind (:map dired-mode-map
-                          ("W" . dired-ranger-copy)
-                          ("X" . dired-ranger-move)
-                          ("Y" . dired-ranger-paste)))
+                          ("c" . dired-ranger-copy)
+                          ("m" . dired-ranger-move)
+                          ("v" . dired-ranger-paste)))
 
             ;; Highlight dired buffer with K-shell coloring
             (use-package dired-k
               :after dired
               :load-path (lambda () (expand-file-name "dired-k/" user-emacs-directory))
               :bind (:map dired-mode-map
-                          ("K" . dired-k))
+                          ("k" . dired-k))
               :commands (dired-k dired-k-no-revert)
               :init (progn
                       (add-hook 'dired-initial-position-hook #'dired-k)
@@ -169,7 +169,9 @@
               :load-path (lambda () (expand-file-name "dired-icon/" user-emacs-directory))
               :if (display-graphic-p)
               :commands dired-icon-mode
-              :init (add-hook 'dired-mode-hook #'dired-icon-mode))
+              :init (add-hook 'dired-mode-hook #'dired-icon-mode)
+              :config (defadvice dired-icon--display (around bar activate)
+                        (ignore-errors add-do-it)))
 
             ;; Facility to see images inside dired
             (use-package image-dired
@@ -186,7 +188,7 @@
               :after dired
               :load-path (lambda () (expand-file-name "peep-dired/" user-emacs-directory))
               :bind (:map dired-mode-map
-                          ("P" . peep-dired)))
+                          ("p" . peep-dired)))
 
             ;; All the icons on dired
             (use-package all-the-icons-dired

@@ -79,6 +79,7 @@
   :load-path (lambda () (expand-file-name "swiper/" user-emacs-directory))
   :commands counsel-mode
   :init (counsel-mode t)
+  :chords (("vv" . counsel-yank-pop))
   :bind (("M-x"                     . counsel-M-x)
          ("C-o"                     . counsel-find-file)
          ("C-c C-v"                 . counsel-yank-pop)
