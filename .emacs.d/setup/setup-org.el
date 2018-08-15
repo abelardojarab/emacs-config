@@ -1,6 +1,6 @@
 ;;; setup-org.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -28,7 +28,7 @@
 (use-package org-variable-pitch
   :defer t
   :commands org-variable-pitch-minor-mode
-  :init (add-hook 'org-mode-hook 'org-variable-pitch-minor-mode))
+  :hook (org-mode . org-variable-pitch-minor-mode))
 
 ;; Org mode
 (use-package org
@@ -844,7 +844,7 @@ On the flip side, for BEGIN_EXCEPT %s blocks, remove those if %s equals TYPE. "
 (use-package org-table
   :defer t
   :config (defconst org-table-border-regexp "^[ \t]*[^|]"
-              "Regexp matching any line outside an Org table."))
+            "Regexp matching any line outside an Org table."))
 
 ;; setup Org Agenda
 (use-package setup-org-agenda)
@@ -864,9 +864,8 @@ On the flip side, for BEGIN_EXCEPT %s blocks, remove those if %s equals TYPE. "
 ;; Use footnotes as eldoc source
 (use-package org-eldoc
   :defer t
-  :init (progn
-          (add-hook 'org-mode-hook #'org-eldoc-load)
-          (add-hook 'org-mode-hook #'eldoc-mode))
+  :hook ((org-mode . org-eldoc-load)
+         (org-mode . eldoc-mode))
   :commands org-eldoc-load
   :config (progn
             (defun my/org-eldoc-get-footnote ()
@@ -881,17 +880,17 @@ On the flip side, for BEGIN_EXCEPT %s blocks, remove those if %s equals TYPE. "
 ;; Use UTF8 symbols for Org Todo priorities
 (use-package org-fancy-priorities
   :defer t
-  :init (add-hook 'org-mode-hook 'org-fancy-priorities-mode)
+  :hook (org-mode . org-fancy-priorities-mode)
   :commands org-fancy-priorities-mode
-  :config (setq org-fancy-priorities-list '((?A . "❗")
-                                            (?B . "⬆")
-                                            (?C . "⬇")
-                                            (?D . "☕")
-                                            (?1 . "⚡")
-                                            (?2 . "⮬")
-                                            (?3 . "⮮")
-                                            (?4 . "☕")
-                                            (?I . "Important"))))
+  :custom (org-fancy-priorities-list '((?A . "❗")
+                                       (?B . "⬆")
+                                       (?C . "⬇")
+                                       (?D . "☕")
+                                       (?1 . "⚡")
+                                       (?2 . "⮬")
+                                       (?3 . "⮮")
+                                       (?4 . "☕")
+                                       (?I . "Important"))))
 
 (provide 'setup-org)
 ;;; setup-org.el ends here
