@@ -214,7 +214,7 @@ all the buffers."
   :commands column-enforce-mode
   :diminish column-enforce-mode
   :custom (column-enforce-column 99)
-  :hook (prog-mode-hook . column-enforce-mode))
+  :hook (prog-mode . column-enforce-mode))
 
 ;; Visually highlight the selected buffer
 (use-package dimmer

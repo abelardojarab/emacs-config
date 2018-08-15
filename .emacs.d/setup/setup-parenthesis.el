@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara <abelardojarab@gmail.com>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -106,7 +106,7 @@
 (use-package rainbow-delimiters
   :defer t
   :commands rainbow-delimiters-mode
-  :hook ((emacs-lisp-mode lisp-mode prog-mode-hook) . rainbow-delimiters-mode))
+  :hook ((emacs-lisp-mode lisp-mode prog-mode) . rainbow-delimiters-mode))
 
 ;; Legacy minor mode
 (use-package paredit

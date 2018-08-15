@@ -27,11 +27,10 @@
 ;; These were defined in C code, so use emacs pseudo-package to set them.
 (use-package emacs
   :demand t
-  :hook ((focus-out-hook                . garbage-collect)
-         (minibuffer-setup-hook         . my/minibuffer-setup)
-         (minibuffer-exit-hook          . my/minibuffer-exit)
-         (find-file-not-found-functions . make-parent-directory)
-         (after-init-hook               . my/show-init-time))
+  :hook ((focus-out                     . garbage-collect)
+         (minibuffer-setup              . my/minibuffer-setup)
+         (minibuffer-exit               . my/minibuffer-exit)
+         (find-file-not-found-functions . make-parent-directory))
   :commands (my/minibuffer-exit
              my/minibuffer-setup
              my/show-init-time)

@@ -200,12 +200,12 @@
               :after dired
               :diminish all-the-icons-dired-mode
               :commands all-the-icons-dired-mode
-              :hook (dired-mode-hook . all-the-icons-dired-mode))
+              :hook (dired-mode . all-the-icons-dired-mode))
 
             ;; async support for dired
             (use-package dired-async
               :commands dired-async-mode
-              :hook (dired-mode-hook . dired-async-mode))
+              :hook (dired-mode . dired-async-mode))
 
             ;; Simple directory explorer. It also works as a generic tree explore library
             (use-package direx

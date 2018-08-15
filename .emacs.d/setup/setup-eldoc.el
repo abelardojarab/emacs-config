@@ -27,8 +27,8 @@
 (use-package eldoc
   :demand t
   :diminish eldoc-mode
-  :hook (((prog-mode eval-expression-minibuffer-setup-hook) . eldoc-mode)
-         ((emacs-lisp-mode-hook lisp-interaction-mode-hook ielm-mode-hook) . turn-on-eldoc-mode))
+  :hook (((prog-mode eval-expression-minibuffer-setup) . eldoc-mode)
+         ((emacs-lisp-mode lisp-interaction-mode ielm-mode) . turn-on-eldoc-mode))
   :custom ((eldoc-idle-delay                0.8)
            (eldoc-echo-area-use-multiline-p t))
   :init (progn

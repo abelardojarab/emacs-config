@@ -396,7 +396,7 @@
          (magit-post-refresh                            . diff-hl-magit-post-refresh))
   :config (progn
             (use-package diff-hl-dired
-              :hook (dired-mode-hook    . diff-hl-dired-mode))
+              :hook (dired-mode . diff-hl-dired-mode))
 
             (setq diff-hl-draw-borders t)
             (defadvice svn-sttus-update-modeline (after svn-update-diff-hl activate)

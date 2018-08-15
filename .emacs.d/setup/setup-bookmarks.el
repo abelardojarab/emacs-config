@@ -44,12 +44,12 @@
          ("<left-margin> <mouse-4>" . bm-previous-mouse)
          ("<left-fringe> <mouse-1>" . bm-toggle-mouse)
          ("<left-margin> <mouse-1>" . bm-toggle-mouse))
-  :hook ((after-init-hook   . bm-repository-load)
-	 (find-file-hook    . bm-buffer-restore)
-	 (kill-buffer-hook  . bm-buffer-save))
-  :custom ((bm-highlight-style	           'bm-highlight-line-and-fringe)
-	   (bm-restore-repository-on-load  t)
-	   (bm-cycle-all-buffers	   t))
+  :hook ((after-init   . bm-repository-load)
+         (find-file    . bm-buffer-restore)
+         (kill-buffer  . bm-buffer-save))
+  :custom ((bm-highlight-style             'bm-highlight-line-and-fringe)
+       (bm-restore-repository-on-load  t)
+       (bm-cycle-all-buffers       t))
   :init (progn
 
           ;; bm-repository
