@@ -23,14 +23,15 @@
 
 ;;; Code:
 (use-package company
-  :demand t
+  :defer t
   :diminish company-mode
   :load-path (lambda () (expand-file-name "company/" user-emacs-directory))
+  :commands global-company-mode
   :custom ((company-begin-commands           '(self-insert-command
-                                              org-self-insert-command
-                                              c-electric-lt-gt
-                                              c-electric-colon
-                                              completion-separator-self-insert-command))
+                                               org-self-insert-command
+                                               c-electric-lt-gt
+                                               c-electric-colon
+                                               completion-separator-self-insert-command))
            (company-transformers              '(company-sort-by-occurrence
                                                 company-sort-by-backend-importance))
            (company-idle-delay                0)
@@ -57,10 +58,8 @@
          ("TAB"                              . company-complete-selection)
          ("<tab>"                            . company-complete-selection)
          ("RET"                              . company-complete-selection))
+  :init (global-company-mode t)
   :config (progn
-
-            ;; Enable global-company mode
-            (global-company-mode 1)
 
             ;; Use Emacs' built-in TAB completion hooks to trigger AC (Emacs >= 23.2)
             (setq tab-always-indent 'complete)
@@ -208,15 +207,12 @@
 
             ;; Documentation popups for company
             (use-package company-quickhelp
-              :disabled t
-              :if (display-graphic-p)
-              :config (progn
-                        (setq company-quickhelp-delay                0.2
-                              company-quickhelp-use-propertized-text t)
-                        (company-quickhelp-mode 1)
-
-                        ;; Update front-end tooltip
-                        (setq company-frontends (delq 'company-echo-metadata-frontend company-frontends))))
+	      :defer t
+	      :custom ((company-quickhelp-delay                0.2)
+		       (company-quickhelp-use-propertized-text t))
+	      :commands company-quickhelp-mode
+	      :init (company-quickhelp-mode t)
+              :config (setq company-frontends (delq 'company-echo-metadata-frontend company-frontends)))
 
             ;; Company bibtex integration
             (use-package company-bibtex

@@ -67,6 +67,7 @@
             (add-hook 'c-mode-common-hook
                       (lambda ()
                         (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+			  (my/c-mode-init)
                           ;; indent
                           (my/c-indent-offset-according-to-syntax-context 'substatement-open 0))))))
 
