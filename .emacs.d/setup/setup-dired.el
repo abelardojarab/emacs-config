@@ -38,6 +38,7 @@
 
             ;; extra hooks
             (defun my/dired-mode-hook ()
+              (toggle-truncate-lines t)
               (setq-local truncate-lines t)
               (dired-omit-mode 1)
               (dired-hide-details-mode t)
@@ -165,9 +166,9 @@
 
             ;; Display file icons in dired
             (use-package dired-icon
-              :after dired
-              :load-path (lambda () (expand-file-name "dired-icon/" user-emacs-directory))
               :if (display-graphic-p)
+              :disabled t
+              :after dired
               :commands dired-icon-mode
               :init (add-hook 'dired-mode-hook #'dired-icon-mode)
               :config (defadvice dired-icon--display (around bar activate)
@@ -186,24 +187,22 @@
             ;; Preview files in dired
             (use-package peep-dired
               :after dired
-              :load-path (lambda () (expand-file-name "peep-dired/" user-emacs-directory))
               :bind (:map dired-mode-map
                           ("p" . peep-dired)))
 
             ;; All the icons on dired
             (use-package all-the-icons-dired
               :if (display-graphic-p)
+              :disabled t
               :after dired
               :diminish all-the-icons-dired-mode
-              :load-path (lambda () (expand-file-name "all-the-icons-dired/" user-emacs-directory))
               :commands all-the-icons-dired-mode
-              :init (add-hook 'dired-mode-hook #'all-the-icons-dired-mode))
+              :hook (dired-mode-hook . all-the-icons-dired-mode))
 
             ;; async support for dired
             (use-package dired-async
               :commands dired-async-mode
-              :load-path (lambda () (expand-file-name "async/" user-emacs-directory))
-              :init (add-hook 'dired-mode-hook (lambda () (dired-async-mode 1))))
+              :hook (dired-mode-hook . dired-async-mode))
 
             ;; Simple directory explorer. It also works as a generic tree explore library
             (use-package direx

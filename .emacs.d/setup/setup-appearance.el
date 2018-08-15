@@ -105,12 +105,11 @@ non-nil."
                              (if (boundp 'display-line-numbers)
                                  (display-line-numbers-mode 1)
                                (linum-mode 1))))))
-  :config (progn
-            (defadvice linum-update-window (around linum-dynamic activate)
-              (let* ((w (length (number-to-string
-                                 (count-lines (point-min) (point-max)))))
-                     (linum-format (concat " %" (number-to-string w) "d ")))
-                ad-do-it))))
+  :config (defadvice linum-update-window (around linum-dynamic activate)
+            (let* ((w (length (number-to-string
+                               (count-lines (point-min) (point-max)))))
+                   (linum-format (concat " %" (number-to-string w) "d ")))
+              ad-do-it)))
 
 ;; Highlight line number
 (use-package hlinum
@@ -150,8 +149,8 @@ non-nil."
   :commands (fci-mode turn-on-fci-mode)
   :config (progn
             (dolist (hook my/linum-modes)
-                    (add-hook hook (lambda ()
-                                     (turn-on-fci-mode))))
+              (add-hook hook (lambda ()
+                               (turn-on-fci-mode))))
 
             ;; Set global default value for the local var `fci-handle-truncate-lines'
             (setq-default fci-handle-truncate-lines t)
@@ -210,12 +209,11 @@ all the buffers."
                       (fci-update-all-windows t))))))))
 
 ;; Just like the previous package, this one is also subtle.
-;; It highlights characters that exceed a particular column margin. Very useful while coding.
 (use-package column-enforce-mode
   :defer t
   :commands column-enforce-mode
   :diminish column-enforce-mode
-  :init (setq column-enforce-column 99)
+  :custom (column-enforce-column 99)
   :hook (prog-mode-hook . column-enforce-mode))
 
 ;; Visually highlight the selected buffer
