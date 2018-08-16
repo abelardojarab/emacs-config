@@ -1,6 +1,6 @@
 ;;; setup-html.el ---                            -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -26,6 +26,8 @@
 
 ;; XML mode
 (use-package nxml-mode
+  :defer t
+  :commands nxml-mode
   :after (hideshow smartparens)
   :init (progn
           (use-package sgml-mode)
@@ -38,66 +40,61 @@
                          "<!--"
                          sgml-skip-tag-forward
                          nil)))
-  :config (progn
-            (setq nxml-slash-auto-complete-flag t)
-
-            ;; don't try and complete tag end - breaks nxml completion etc
-            (sp-local-pair 'nxml-mode "<" ">" :actions '(:rem insert))))
+  :custom (nxml-slash-auto-complete-flag t)
+  :config (sp-local-pair 'nxml-mode "<" ">" :actions '(:rem insert)))
 
 ;; Required by web-mode
 (use-package web-completion-data
-  :load-path (lambda () (expand-file-name "web-completion-data/" user-emacs-directory)))
+  :defer t)
 
 ;; HTML mode
 (use-package web-mode
+  :defer t
   :mode ("\\.css?\\'" "\\.html?\\'")
   :after (nxml-mode web-completion-data)
-  :commands (web-mode htmlize-region-to-file)
-  :load-path (lambda () (expand-file-name "web-mode/" user-emacs-directory))
-  :config (progn
-
-            ;; use smartparens instead
-            (setq web-mode-enable-auto-pairing nil)
-
-            ;; extra settings
-            (setq web-mode-enable-css-colorization          t
-                  web-mode-enable-auto-quoting              t
-                  web-mode-enable-auto-closing              t
-                  web-mode-style-padding                    2
-                  web-mode-script-padding                   2
-                  web-mode-markup-indent-offset             2
-                  web-mode-code-indent-offset               2
-                  web-mode-enable-current-element-highlight t)))
+  :commands web-mode
+  :config (setq web-mode-enable-auto-pairing              nil
+                web-mode-enable-css-colorization          t
+                web-mode-enable-auto-quoting              t
+                web-mode-enable-auto-closing              t
+                web-mode-style-padding                    2
+                web-mode-script-padding                   2
+                web-mode-markup-indent-offset             2
+                web-mode-code-indent-offset               2
+                web-mode-enable-current-column-highlight  t
+                web-mode-enable-current-element-highlight t))
 
 ;; Company backend
 (use-package company-web
+  :defer t
   :after (company web-mode web-completion-data)
-  :load-path (lambda () (expand-file-name "company-web/" user-emacs-directory))
-  :config (add-hook 'web-mode-hook
-                    (lambda () (set (make-local-variable 'company-backends)
-                               '((company-web-html
-                                  company-capf
-                                  company-files
-                                  company-abbrev))))))
+  :commands my/company-web-setup
+  :hook (web-mode . my/company-web-setup)
+  :config (defun my/company-web-setup
+              (set (make-local-variable 'company-backends)
+                   '((company-web-html
+                      company-capf
+                      company-files
+                      company-abbrev)))))
 
 ;; htmlize, required to format source for wordpress (otherwise code blocks will appear empty)
 (use-package htmlize
-  :load-path (lambda () (expand-file-name "htmlize" user-emacs-directory))
+  :defer t
   :after (org web-mode)
   :commands (htmlize-faces-in-buffer
              htmlize-make-face-map
              htmlize-css-specs htmlize-region
              htmlize-region-for-paste
              htmlize-region-to-file
-             htmlize-region-to-buffer)
+             htmlize-region-to-buffer
+             htmlize-file)
+  :custom ((htmlize-html-major-mode 'web-mode)
+           (htmlize-output-type     'inline-css))
   :config (progn
-            (setq htmlize-html-major-mode 'web-mode)
-            (setq htmlize-output-type     'inline-css)
 
             ;; It is required to disable `fci-mode' when `htmlize-buffer' is called;
             ;; otherwise the invisible fci characters show up as funky looking
             ;; visible characters in the source code blocks in the html file.
-            ;; http://lists.gnu.org/archive/html/emacs-orgmode/2014-09/msg00777.html
             (with-eval-after-load 'fill-column-indicator
               (defvar my/htmlize-initial-fci-state nil
                 "Variable to store the state of `fci-mode' when `htmlize-buffer' is called.")
@@ -116,8 +113,6 @@
 
             ;; `flyspell-mode' also has to be disabled because depending on the
             ;; theme, the squiggly underlines can either show up in the html file
-            ;; or cause elisp errors like:
-            ;; (wrong-type-argument number-or-marker-p (nil . 100))
             (with-eval-after-load 'flyspell
               (defvar my/htmlize-initial-flyspell-state nil
                 "Variable to store the state of `flyspell-mode' when `htmlize-buffer' is called.")
@@ -150,16 +145,7 @@
                                               "/styles/github-pandoc.css"))
 
             (defun htmlize-region-to-file (option)
-              "Export the selected region to an html file. If a region is not
-selected, export the whole buffer.
-
-The output file is saved to `my/htmlize-output-directory' and its fontification
-is done using `my/htmlize-css-file'.
-
-If OPTION is non-nil (for example, using `\\[universal-argument]' prefix), copy
-the output file name to kill ring.
-If OPTION is \\='(16) (using `\\[universal-argument] \\[universal-argument]' prefix),
-do the above and also open the html file in the default browser."
+              "Export the selected region to an html file."
               (interactive "P")
               (let ((org-html-htmlize-output-type 'css)
                     (org-html-htmlize-font-prefix "org-")
@@ -203,7 +189,6 @@ do the above and also open the html file in the default browser."
                     (when (= 16 (car option))
                       (browse-url-of-file fname))))))
 
-            ;; From http://ruslanspivak.com/2007/08/18/htmlize-your-erlang-code-buffer/
             (defun htmlize-region-to-buffer (beg end)
               "Htmlize region and put into <pre> tag style that is left in <body> tag
 plus add font-size: 8pt"
@@ -231,8 +216,7 @@ plus add font-size: 8pt"
   :after (htmlize org)
   :commands ox-clip-formatted-copy
   :if (or (executable-find "xclip")
-          (executable-find "python"))
-  :load-path (lambda () (expand-file-name "ox-clip/" user-emacs-directory)))
+          (executable-find "python")))
 
 (provide 'setup-html)
 ;;; setup-org-html.el ends here
