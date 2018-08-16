@@ -1,6 +1,6 @@
 ;;; ergoemacs-mode.el --- Emacs mode based on common modern interface and ergonomics. -*- lexical-binding: t -*-
 
-;; Copyright © 2007-2010, 2012-2017  Free Software Foundation, Inc.
+;; Copyright © 2007-2018  Free Software Foundation, Inc.
 
 ;; Author: Xah Lee <xah@xahlee.org>
 ;;         David Capello <davidcapello@gmail.com>
@@ -33,8 +33,6 @@
 
 ;;; Code:
 
-(add-to-list 'load-path (expand-file-name "ergoemacs-mode/" user-emacs-directory))
-
 (defvar ergoemacs--load-time (current-time)
   "Amount of time it took for `ergoemacs-mode' to load.")
 
@@ -57,6 +55,7 @@
 (require 'package)
 (require 'kmacro)
 
+;; Disabled by Abelardo
 ;; (require 'printing)
 ;; (pr-update-menus)
 
@@ -183,9 +182,9 @@ Added beginning-of-buffer Alt+n (QWERTY notation) and end-of-buffer Alt+Shift+n"
 (defcustom ergoemacs-mode-line t
   "Determines when the ergoemacs-mode modeline indicator is shown."
   :type '(choice
-          (const :tag "Always Show Mode Line" t)
-          (const :tag "Do not show layout" no-layout)
-          (const :tag "Never Show Mode Line" nil))
+      (const :tag "Always Show Mode Line" t)
+      (const :tag "Do not show layout" no-layout)
+      (const :tag "Never Show Mode Line" nil))
   :group 'ergoemacs-mode)
 
 (defun ergoemacs-mode-line (&optional text)
@@ -302,7 +301,7 @@ The `execute-extended-command' is now \\[execute-extended-command].
   :after-hook (if (and (not noninteractive)
                        (not ergoemacs-mode--start-p))
                   (if ergoemacs-mode
-                      (progn (message "Ergoemacs will be started.")
+                      (progn (message "Ergoemacs will be started.") ;; Modified by Abelardo
                              (ergoemacs-mode-after-init-emacs))
                     (message "Ergoemacs startup canceled."))
                 (setq ergoemacs-map--hashkey nil)
@@ -318,6 +317,7 @@ The `execute-extended-command' is now \\[execute-extended-command].
                         (dolist (elt (reverse default-frame-alist))
                           (push elt ergoemacs-mode--default-frame-alist))
                         (run-hooks 'ergoemacs-mode-startup-hook)
+                        ;; Disabled by Abelardo
                         ;; (add-hook 'pre-command-hook #'ergoemacs-pre-command-hook)
                         ;; (add-hook 'post-command-hook #'ergoemacs-post-command-hook)
                         ;; (add-hook 'after-load-functions #'ergoemacs-after-load-functions)
@@ -461,7 +461,7 @@ This is structured by valid keyboard layouts for
       (if (not (setq val (gethash key ergoemacs-timing-hash)))
           (puthash key (vector 1 (setq val (float-time (time-subtract (current-time) entry-time)))
                                val val (or (and (setq file (assoc key ergoemacs-timing--locations)) (expand-file-name (cdr file) ergoemacs-dir))
-                                           load-file-name buffer-file-name)) ergoemacs-timing-hash)
+                       load-file-name buffer-file-name)) ergoemacs-timing-hash)
         (cl-incf (aref val 0))
         (cl-incf (aref val 1) (setq time (float-time (time-subtract (current-time) entry-time))))
         (setf (aref val 2) (min time (aref val 2)))
@@ -500,8 +500,8 @@ NO-MESSAGE doesn't tell anything about clearing the cache."
         (make-directory extras t))
     (dolist (ext '("svg" "png"))
       (dolist (file (file-expand-wildcards (expand-file-name (concat "*." ext) (expand-file-name "bindings" extras))))
-        (delete-file file)
-        (message "Remove %s, since keys may have changed." file))))
+    (delete-file file)
+    (message "Remove %s, since keys may have changed." file))))
 
   (unless no-message
     (message "Clear cache for next startup.")))
@@ -572,7 +572,8 @@ When STORE-P is non-nil, save the tables."
         (insert-file-contents (concat pcache-directory (ergoemacs-mode--pcache-repository)))
         (persistent-soft-location-destroy (ergoemacs-mode--pcache-repository))
         (goto-char (point-min))
-        (while (re-search-forward "+$" nil t)
+        (while (re-search-forward "
++$" nil t)
           (replace-match ""))
         (goto-char (point-min))
         ;; Add utf-8-emacs coding to the top.
@@ -587,7 +588,8 @@ When STORE-P is non-nil, save the tables."
 
 (ergoemacs-mode--setup-hash-tables)
 
-(dolist (pkg '(ergoemacs-command-loop
+(dolist (pkg '(
+               ;; ergoemacs-command-loop
                ergoemacs-advice
                ergoemacs-component
                ergoemacs-debug
@@ -1284,6 +1286,7 @@ also perform `outline-next-visible-heading'"
       (ergoemacs-mode ergoemacs-mode)
       (run-hooks 'ergoemacs-mode-init-hook)
       (add-hook 'after-load-functions #'ergoemacs-mode-after-startup-run-load-hooks))
+    ;; Modified by Abelardo
     (message "Ergoemacs has started."))
   (setq ergoemacs-mode-started-p t))
 
@@ -1292,6 +1295,7 @@ also perform `outline-next-visible-heading'"
   (ergoemacs-timing ergoemacs-themes
     (load "ergoemacs-themes")))
 
+;; Added by Abelardo
 ;; Fixed components
 (ergoemacs-component standard-fixed ()
   "Standard Fixed Shortcuts"
@@ -1358,15 +1362,6 @@ also perform `outline-next-visible-heading'"
 
   (global-set-key (kbd "<M-up>") 'ergoemacs-backward-block)
   (global-set-key (kbd "<M-down>") 'ergoemacs-forward-block)
-
-  ;; C-H is search and replace.
-
-  ;; C-1 to C-9 should be switch tab...  Same as in Google chrome.
-  ;; C-T should be new tab.
-
-  ;; Refresh should be <f5>; erogemacs uses <f5>.
-  ;; C-r also should be refresh
-  (global-set-key (kbd "<f5>") 'revert-buffer)
 
   (global-set-key (kbd "C-r") 'replace-string)
 

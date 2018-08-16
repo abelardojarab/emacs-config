@@ -28,7 +28,11 @@
 (use-package ergoemacs-mode-fixed
   :defer t
   :if (executable-find "gzip")
-  :commands ergoemacs-mode
+  :commands (ergoemacs-mode
+             ergoemacs-mode-after-init-emacs)
+  :hook (after-init . ergoemacs-mode)
+  :init (defun ergoemacs-command-loop--spinner-display (&optional string &rest args)
+          t)
   :config (progn
             (ergoemacs-mode-after-init-emacs)
             (setq ergoemacs-theme              "standard"

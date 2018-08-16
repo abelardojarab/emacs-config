@@ -37,7 +37,6 @@
   :load-path (lambda () (expand-file-name "swiper/" user-emacs-directory))
   :bind (("C-c C-r" . ivy-resume)
          :map ctl-x-map
-         ("C-r"     . ivy-recentf)
          ("s"       . swiper))
   :config (progn
 
@@ -92,6 +91,7 @@
          ([remap describe-function] . counsel-describe-function)
          :map ctl-x-map
          ("x"                       . counsel-M-x)
+         ("C-r"                     . counsel-recentf)
          :map ivy-minibuffer-map
          ("M-y"                     . ivy-next-line)
          :map read-expression-map
