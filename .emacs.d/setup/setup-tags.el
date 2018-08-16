@@ -191,7 +191,7 @@ tags table and its (recursively) included tags tables."
   :defer t
   ;; do not enable etags if global is present
   :if (and (executable-find "ctags")
-       (not (executable-find "global")))
+	   (not (executable-find "global")))
   :commands (ctags-create-or-update
              ctags-create-or-update-tags-table
              ctags-search)
@@ -231,14 +231,13 @@ tags table and its (recursively) included tags tables."
               ("C-c g c" . ggtags-create-tags)
               ("C-c g u" . ggtags-update-tags))
   :diminish ggtags-mode
-  :load-path (lambda () (expand-file-name "ggtags/" user-emacs-directory))
   :init (add-hook 'c-mode-common-hook
                   (lambda ()
                     (when (and (derived-mode-p 'c-mode 'c++-mode 'java-mode)
                                (projectile-project-p)
                                (file-exists-p (concat (projectile-project-root)
-                                                        "GTAGS")))
-                        (ggtags-mode 1))))
+                                                      "GTAGS")))
+                      (ggtags-mode 1))))
   :config (progn
             ;; Assure .gtags directory exists
             (if (not (file-exists-p "~/.gtags"))
@@ -251,15 +250,15 @@ tags table and its (recursively) included tags tables."
             ;; Use exhuberant ctags format
             (setenv "GTAGSLABEL" "exuberant-ctags")
 
-        ;; Eldoc integration
+            ;; Eldoc integration
             (add-hook 'c-mode-common-hook
                       (lambda ()
                         (when (and (derived-mode-p 'c-mode 'c++-mode 'java-mode)
                                    (projectile-project-p)
                                    (file-exists-p (concat (projectile-project-root)
                                                           "GTAGS")))
-                            (setq-local eldoc-documentation-function #'ggtags-eldoc-function)
-                            (setq-local imenu-create-index-function #'ggtags-build-imenu-index))))
+                          (setq-local eldoc-documentation-function #'ggtags-eldoc-function)
+                          (setq-local imenu-create-index-function #'ggtags-build-imenu-index))))
 
             (defun ggtags-global-output (buffer cmds callback &optional cutoff)
               "Asynchronously pipe the output of running CMDS to BUFFER.

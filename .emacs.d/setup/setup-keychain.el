@@ -1,6 +1,6 @@
 ;;; setup-keychain.el ---                            -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -41,7 +41,6 @@
 (use-package keychain-environment
   :demand t
   :after starttls
-  :load-path (lambda () (expand-file-name "keychain-environment/" user-emacs-directory))
   :config (keychain-refresh-environment))
 
 ;; Keeping Secrets in Emacs with GnuPG & EasyPG
@@ -87,7 +86,7 @@
   :after epg
   :commands epa-file-enable
   :config  (progn
-	     ;; Unfortunately there is bug in gpg which disabled this
+         ;; Unfortunately there is bug in gpg which disabled this
              ;; ~/.gnupg/gpg-agent.conf should contain:
              ;; allow-emacs-pinentry
              ;; allow-loopback-pinentry
@@ -103,8 +102,8 @@
   :demand t
   :after epa-file
   :custom ((epa-popup-info-window nil)
-	   (epa-armor             t)
-	   (epa-pinentry-mode     nil))
+       (epa-armor             t)
+       (epa-pinentry-mode     nil))
   :config (progn
 
             ;; https://github.com/jwiegley/dot-emacs/blob/master/dot-gnus.el

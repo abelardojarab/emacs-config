@@ -26,7 +26,6 @@
 
 ;; Yaml mode
 (use-package yaml-mode
-  :load-path (lambda () (expand-file-name "yaml-mode/" user-emacs-directory))
   :commands yaml-mode
   :mode "\\.ya?ml\'")
 

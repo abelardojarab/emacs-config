@@ -1,6 +1,6 @@
 ;;; setup-gdb.el ---                                 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -74,7 +74,6 @@
               "Center the current line in the source code window"
               (when (and gud-overlay-arrow-position gdb-source-window)
                 (with-selected-window gdb-source-window
-                                        ; (marker-buffer gud-overlay-arrow-position)
                   (save-restriction
                     ;; Compiler-happy equivalent to (goto-line (ad-get-arg 1))
                     (goto-char (point-min))

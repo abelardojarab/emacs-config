@@ -26,8 +26,7 @@
 
 ;; Test-case mode
 (use-package test-case-mode
-  :load-path (lambda () (expand-file-name "test-case-mode/" user-emacs-directory))
-  :init (add-hook 'find-file-hook #'enable-test-case-mode-if-test))
+  :hook (find-file . enable-test-case-mode-if-test))
 
 (provide 'setup-xunit)
 ;;; setup-xunit.el ends here

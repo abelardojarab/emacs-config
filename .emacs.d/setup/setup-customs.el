@@ -86,12 +86,12 @@
   :group 'my/customs
   :type 'string)
 
-(defcustom my/main-programming-font "Fira Mono"
+(defcustom my/main-programming-font "Source Code Pro for Powerline"
   "Preferred programming font"
   :type 'string
   :group 'my/customs)
 
-(defcustom my/main-programming-font-size "12"
+(defcustom my/main-programming-font-size "13"
   "Preferred programming font size"
   :type 'string
   :group 'my/customs)
@@ -101,13 +101,13 @@
   :type 'string
   :group 'my/customs)
 
-(defcustom my/main-writing-font-size "13"
+(defcustom my/main-writing-font-size "14"
   "Preferred writing font size"
   :type 'string
   :group 'my/customs)
 
 (defcustom my/emacs-theme
-  'zenburn
+  'material
   "Preferred Emacs theme"
   :group 'my/customs
   :type 'list)
