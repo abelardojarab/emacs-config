@@ -27,18 +27,16 @@
 ;; w3m
 (use-package w3m
   :if (executable-find "w3m")
-  :load-path (lambda () (expand-file-name "w3m/" user-emacs-directory))
   :commands (w3m w3m-find-file w3m-goto-url-new-session)
-  :init (progn
-          (setq w3m-init-file (concat (file-name-as-directory
-                                       my/emacs-cache-dir)
-                                      "w3m")
-                w3m-home-page "http://www.google.com"
-                w3m-use-cookies t
-                w3m-command-arguments '("-cookie" "-F")
-                w3m-show-graphic-icons-in-header-line t
-                w3m-show-graphic-icons-in-mode-line t
-                w3m-default-display-inline-images t)))
+  :init (setq w3m-init-file (concat (file-name-as-directory
+                                     my/emacs-cache-dir)
+                                    "w3m")
+              w3m-home-page "http://www.google.com"
+              w3m-use-cookies t
+              w3m-command-arguments '("-cookie" "-F")
+              w3m-show-graphic-icons-in-header-line t
+              w3m-show-graphic-icons-in-mode-line t
+              w3m-default-display-inline-images t))
 
 ;; eww
 (use-package eww
@@ -53,11 +51,11 @@
                                                   "cookies"))
 
             (ignore-errors (advice-add 'url-http-user-agent-string :around
-                        (lambda (ignored)
-                          "Pretend to be a mobile browser."
-                          (concat
-                           "User-Agent: "
-                           "Mozilla/5.0 (Linux; U; Android 4.0.3; ko-kr; LG-L160L Build/IML74K) AppleWebkit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"))))))
+                                       (lambda (ignored)
+                                         "Pretend to be a mobile browser."
+                                         (concat
+                                          "User-Agent: "
+                                          "Mozilla/5.0 (Linux; U; Android 4.0.3; ko-kr; LG-L160L Build/IML74K) AppleWebkit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"))))))
 
 (provide 'setup-web)
 ;;; setup-web.el ends here

@@ -70,7 +70,7 @@
   :after (company web-mode web-completion-data)
   :commands my/company-web-setup
   :hook (web-mode . my/company-web-setup)
-  :config (defun my/company-web-setup
+  :config (defun my/company-web-setup ()
               (set (make-local-variable 'company-backends)
                    '((company-web-html
                       company-capf
