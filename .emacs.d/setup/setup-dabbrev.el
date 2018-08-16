@@ -26,23 +26,24 @@
 
 ;; Abbrevs
 (use-package abbrev
-  :demand t
+  :defer t
+  :commands (abbrev-mode
+             write-abbrev-file
+             quietly-read-abbrev-file)
   :diminish abbrev-mode
+  :hook (kill-emacs . write-abbrev-file)
   :init (progn
           (setq abbrev-file-name (concat (file-name-as-directory
                                           my/emacs-cache-dir)
                                          "abbrev_defs"))
           (if (file-exists-p abbrev-file-name)
               (quietly-read-abbrev-file))
-          (add-hook 'kill-emacs-hook
-                    'write-abbrev-file))
-  :config (progn
-            ;; Activate template autocompletion
-            (abbrev-mode t)
-            (setq save-abbrevs 'silently)
-            (setq-default abbrev-mode t)
-            (dolist (mode my/abbrev-modes)
-              (add-hook mode (lambda () (abbrev-mode 1))))))
+          (abbrev-mode t)
+
+          ;; Activate template autocompletion
+          (dolist (mode my/abbrev-modes)
+            (add-hook mode (lambda () (abbrev-mode 1)))))
+  :custom (save-abbrevs 'silently))
 
 (provide 'setup-dabbrev)
 ;;; setup-dabbrev.el ends here

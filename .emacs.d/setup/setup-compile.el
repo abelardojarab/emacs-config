@@ -1,6 +1,6 @@
 ;;; setup-compile.el ---
 
-;; Copyright (C) 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -33,17 +33,12 @@
             (setenv "ANT_ARGS" "-emacs")
 
             ;; Compilation
-            ;; http://www.emacswiki.org/cgi-bin/wiki/ModeCompile
-            (setq compilation-context-lines 1
-                  compilation-context-lines 1
-                  compilation-scroll-output 'first-error      ;; scroll until first error
-                  compilation-read-command nil                ;; don't need enter
-                  compilation-window-height 12                ;; keep it readable
-                  compilation-auto-jump-to-first-error t      ;; jump to first error auto
-                  compilation-auto-jump-to-next-error t)      ;; jump to next error
-
-            ;; If the value is first-error, scrolling stops when the first error appears
-            (setq compilation-scroll-output 'first-error)))
+            (setq compilation-context-lines            1
+                  compilation-scroll-output            'first-error
+                  compilation-read-command             nil
+                  compilation-window-height            12
+                  compilation-auto-jump-to-first-error t
+                  compilation-auto-jump-to-next-error  t)))
 
 (provide 'setup-compile)
 ;;; setup-compile.el ends here

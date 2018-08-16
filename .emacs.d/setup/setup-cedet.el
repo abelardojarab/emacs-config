@@ -26,9 +26,8 @@
 
 (use-package semantic
   :demand t
+  :custom (format-args t)
   :config (progn
-
-            (setq format-args t)
 
             ;; To use additional features for names completion, and displaying of information for tags & classes,
             ;; you also need to load the semantic-ia package. Unfortunately, semantic makes Emacs slow

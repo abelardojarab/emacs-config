@@ -1,6 +1,6 @@
 ;;; setup-elscreen.el ---                            -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2017  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -27,10 +27,8 @@
 ;; helm elscreen
 (use-package elscreen
   :defer t
-  :load-path (lambda () (expand-file-name "elscreen/" user-emacs-directory))
-  :init (progn
-          ;; Do not set a prefix (conflicts with helm)
-          (setq elscreen-prefix-key (kbd "C-a")))
+  :init (setq elscreen-prefix-key (kbd "C-a"))
+  :commands elscreen-start
   :bind (:map ctl-x-map
               ("C-0" . elscreen-start)
               ("C-1" . elscreen-previous)

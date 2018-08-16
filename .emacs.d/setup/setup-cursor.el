@@ -59,9 +59,7 @@
 (use-package heartbeat-cursor
   :if (not (equal system-type 'windows-nt))
   :commands heartbeat-cursor-mode
-  :init (progn
-            (add-hook 'prog-mode-hook #'heartbeat-cursor-mode)
-            (add-hook 'org-mode-hook #'heartbeat-cursor-mode)))
+  :hook (((prog-mode text-mode) . heartbeat-cursor-mode)))
 
 ;; Multiple cursors
 (use-package multiple-cursors
@@ -71,8 +69,7 @@
          ("C-c n" . mc/mark-next-like-this)
          ("C-c p" . mc/mark-previous-like-this)
          ("C-c a" . mc/mark-all-like-this)
-         ("C-c m" . mc/mark-more-like-this))
-  :load-path (lambda () (expand-file-name "multiple-cursors/" user-emacs-directory)))
+         ("C-c m" . mc/mark-more-like-this)))
 
 (provide 'setup-cursor)
 ;;; setup-cursor.el ends here

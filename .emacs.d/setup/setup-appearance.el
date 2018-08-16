@@ -133,8 +133,7 @@ non-nil."
 (use-package all-the-icons
   :defer t
   :if (display-graphic-p)
-  :commands all-the-icons-insert
-  :load-path (lambda () (expand-file-name "all-the-icons/" user-emacs-directory)))
+  :commands all-the-icons-insert)
 
 ;; Better characters
 (unless standard-display-table
