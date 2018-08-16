@@ -45,11 +45,14 @@
   :if (display-graphic-p)
   :after powerline
   :load-path (lambda () (expand-file-name "spaceline/" user-emacs-directory))
+  :custom (powerline-default-separator 'slant)
   :config (progn
+            (spaceline-emacs-theme)
+            (spaceline-toggle-minor-modes-off)
+            (spaceline-toggle-buffer-size-off)
+
             ;; Configure the mode-line
-            (setq-default powerline-default-separator 'utf-8
-                          powerline-height (truncate (* 1.0 (frame-char-height)))
-                          spaceline-display-default-perspective t
+            (setq-default spaceline-display-default-perspective t
                           spaceline-highlight-face-func 'spaceline-highlight-face-modified
                           spaceline-flycheck-bullet "• %s"
                           spaceline-separator-dir-left '(left . left)

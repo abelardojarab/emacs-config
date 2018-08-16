@@ -34,6 +34,9 @@
                                                completion-separator-self-insert-command))
            (company-transformers              '(company-sort-by-occurrence
                                                 company-sort-by-backend-importance))
+           (company-frontends                 '(company-pseudo-tooltip-unless-just-one-frontend
+                                                company-preview-frontend
+                                                company-echo-metadata-frontend))
            (company-idle-delay                0)
            (company-echo-delay                0)
            (company-selection-wrap-around     t)
@@ -189,7 +192,8 @@
                   (setq-local company-col-offset 1)
                   (setq-local company-row-offset 1)
                   (setq-local company-frontends '(company-pseudo-tooltip-unless-just-one-frontend
-                                                  company-preview-if-just-one-frontend))
+                                                  company-preview-if-just-one-frontend
+                                                  company-echo-metadata-frontend))
 
                   (company-mode 1)
                   (when (eq this-command #'execute-extended-command)
