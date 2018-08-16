@@ -95,43 +95,31 @@
 
 ;; Whitespace-mode
 (use-package whitespace-mode
-             :defer        t
-             :config       (setq       whitespace-style
-             '(face        indentation tabs tab-mark spaces space-mark newline newline-mark
-             trailing      lines-tail)
-             whitespace-display-mappings
-             '((tab-mark   ?\t         [?›  ?\t])
-             (newline-mark ?\n         [?¬  ?\n])
-             (space-mark   ?\          [?·] [?.]))))
+  :defer t)
 
 ;; Auto-indent mode
 (use-package auto-indent-mode
   :pin manual
   :defer t
   :commands auto-indent-mode
-  :load-path (lambda () (expand-file-name "auto-indent-mode/" user-emacs-directory))
-  :init (progn
-          (setq auto-indent-indent-style              'conservative
-                auto-indent-on-visit-file             nil
-                auto-indent-blank-lines-on-move       nil
-                auto-indent-next-pair-timer-geo-mean  (quote ((default 0.0005 0)))
-                auto-indent-disabled-modes-list       (list (quote vhdl-mode)))))
+  :init (setq auto-indent-indent-style              'conservative
+              auto-indent-on-visit-file             nil
+              auto-indent-blank-lines-on-move       nil
+              auto-indent-next-pair-timer-geo-mean  (quote ((default 0.0005 0)))
+              auto-indent-disabled-modes-list       (list (quote vhdl-mode))))
 
 ;; Permanent indentation guide
 (use-package indent-hint
   :defer t
   :commands indent-hint-mode
-  :load-path (lambda () (expand-file-name "indent-hint/" user-emacs-directory))
-  :init (progn
-          (setq indent-hint-background-overlay t
-                indent-hint-bg                 nil)))
+  :custom ((indent-hint-background-overlay t)
+	   (indent-hint-bg                 nil)))
 
 ;; Transient indentation guide
 (use-package highlight-indent-guides
   :disabled t ;; this mode is super slow
   :defer t
   :commands highlight-indent-guides-mode
-  :load-path (lambda () (expand-file-name "highlight-indent-guides/" user-emacs-directory))
   :config (progn
 
             ;; Fix indent guide issue with popup
@@ -156,8 +144,7 @@
 ;; Highlight indentation levels
 (use-package highlight-indentation
   :defer t
-  :commands highlight-indentation-mode
-  :load-path (lambda () (expand-file-name "highlight-indentation/" user-emacs-directory)))
+  :commands highlight-indentation-mode)
 
 (provide 'setup-indent)
 
