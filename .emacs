@@ -57,6 +57,9 @@
     ;; Setup files
     (require 'setup-file)
 
+    ;; Setup hydra
+    (require 'setup-hydra)
+
     ;; Setup ediff
     (require 'setup-ediff)
 
@@ -137,9 +140,6 @@
 
     ;; Setup smex
     (require 'setup-smex)
-
-    ;; Setup hydra
-    (require 'setup-hydra)
 
     ;; Setup web support
     (require 'setup-web)

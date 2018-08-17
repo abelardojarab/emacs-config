@@ -26,21 +26,18 @@
 
 ;; Pandoc
 (use-package pandoc-mode
-  :load-path (lambda () (expand-file-name "pandoc-mode/" user-emacs-directory))
-  :config (progn
-            (setq pandoc-data-dir (file-name-as-directory
-                                   (concat (file-name-as-directory
-                                           my/emacs-cache-dir)
-                                          "pandoc")))
-            (add-hook 'pandoc-mode-hook   #'pandoc-load-default-settings)
-            (add-hook 'markdown-mode-hook #'pandoc-load-default-settings)
-            (add-hook 'org-mode-hook      #'pandoc-load-default-settings)
-            (add-hook 'pandoc-mode-hook   #'pandoc-load-default-settings)))
+  :defer t
+  :commands (pandoc-mode
+             pandoc-load-default-settings)
+  :hook ((pandoc-mode markdown-mode org-mode) . pandoc-load-default-settings)
+  :config (setq pandoc-data-dir (file-name-as-directory
+                                 (concat (file-name-as-directory
+                                          my/emacs-cache-dir)
+                                         "pandoc"))))
 
 ;; Org integration with pandoc
 (use-package ox-pandoc
   :if (executable-find "pandoc")
-  :load-path (lambda () (expand-file-name "ox-pandoc/" user-emacs-directory))
   :config (progn
 
             ;; Prefer xelatex

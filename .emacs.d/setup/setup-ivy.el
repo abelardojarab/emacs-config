@@ -34,12 +34,11 @@
              ivy-resume
              ivy-switch-buffer
              ivy-switch-buffer-other-window)
-  :load-path (lambda () (expand-file-name "swiper/" user-emacs-directory))
   :bind (("C-c C-r" . ivy-resume)
          :map ctl-x-map
          ("s"       . swiper)
          ("b"       . ivy-switch-buffer))
-  :chords (("bb" . ivy-switch-buffer))
+  :chords (("BB"    . ivy-switch-buffer))
   :config (progn
 
             (setq ivy-do-completion-in-region      nil
@@ -77,17 +76,16 @@
 
 (use-package counsel
   :defer t
-  :load-path (lambda () (expand-file-name "swiper/" user-emacs-directory))
   :commands counsel-mode
   :init (counsel-mode t)
-  :chords (("vv" . counsel-yank-pop))
+  :chords (("VV" . counsel-yank-pop))
   :bind (("M-x"                     . counsel-M-x)
          ("C-o"                     . counsel-find-file)
          ("C-c C-v"                 . counsel-yank-pop)
          ("C-c C-a"                 . counsel-git-grep)
          ("C-c C-g"                 . counsel-git-checkout)
-         ([remap bookmark-jump]     . counsel-bookmark) ;; Jump to book or set it if it doesn't exist, C-x r b
-         ([remap bookmark-set]      . counsel-bookmark)  ;; C-x r m
+         ([remap bookmark-jump]     . counsel-bookmark)
+         ([remap bookmark-set]      . counsel-bookmark)
          ([remap find-file]         . counsel-find-file)
          ([remap describe-variable] . counsel-describe-variable)
          ([remap describe-function] . counsel-describe-function)
@@ -102,32 +100,28 @@
 ;; counsel-org-clock provides commands for displaying org clock entries
 (use-package counsel-org-clock
   :defer t
-  :load-path (lambda () (expand-file-name "counsel-org-clock/" user-emacs-directory))
-  :commands counsel-org-clock-context counsel-org-clock-history)
+  :commands (counsel-org-clock-context
+             counsel-org-clock-history))
 
+;; Use helm for swiper
 (use-package swiper-helm
   :defer t
   :after (swiper helm)
-  :commands swiper-helm
-  :load-path (lambda () (expand-file-name "swiper-helm/" user-emacs-directory)))
+  :commands swiper-helm)
 
 (use-package ivy-rich
-  :demand t
+  :defer t
   :after swiper
   :commands ivy-switch-buffer
-  :load-path (lambda () (expand-file-name "ivy-rich/" user-emacs-directory))
-  :config (progn
-            (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)
-
-            ;; Do not align the virtual buffers, breaks ivy-rich
-            (setq ivy-rich-switch-buffer-align-virtual-buffer nil)))
+  :custom (ivy-rich-switch-buffer-align-virtual-buffer nil)
+  :config (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer))
 
 (use-package all-the-icons-ivy
-  :demand t
+  :defer t
   :if (display-grayscale-p)
+  :commands all-the-icons-ivy-setup
   :after swiper
-  :load-path (lambda () (expand-file-name "all-the-icons-ivy/" user-emacs-directory))
-  :config (all-the-icons-ivy-setup))
+  :hook (counsel-mode . all-the-icons-ivy-setup))
 
 (use-package ivy-yasnippet
   :defer t

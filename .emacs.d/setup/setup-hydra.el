@@ -26,7 +26,8 @@
 
 (use-package hydra
   :defer t
-  :commands (hydra-timestamp/body
+  :commands (defhydra
+             hydra-timestamp/body
              hydra-describe/body
              hydra-window/body
              hydra-magit/body

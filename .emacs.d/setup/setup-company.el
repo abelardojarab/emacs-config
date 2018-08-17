@@ -26,12 +26,18 @@
   :defer t
   :diminish company-mode
   :load-path (lambda () (expand-file-name "company/" user-emacs-directory))
-  :commands global-company-mode
+  :commands (global-company-mode
+             company-mode
+             add-pcomplete-to-capf
+             company-text-setup
+             company-c-setup
+             company-minibuffer-setup)
   :custom ((company-begin-commands           '(self-insert-command
                                                org-self-insert-command
                                                c-electric-lt-gt
                                                c-electric-colon
-                                               completion-separator-self-insert-command))
+                                               completion-separator-self-insert-command
+                                               outshine-self-insert-command))
            (company-transformers              '(company-sort-by-occurrence
                                                 company-sort-by-backend-importance))
            (company-frontends                 '(company-pseudo-tooltip-unless-just-one-frontend
@@ -62,11 +68,19 @@
          ("<tab>"                            . company-complete-selection)
          ("RET"                              . company-complete-selection))
   :init (global-company-mode t)
+  :hook ((org-mode          . add-pcomplete-to-capf)
+         (minibuffer-setup  . company-minibuffer-setup)
+         ((c-mode c++-mode) . company-c-setup)
+         (text-mode         . company-text-setup))
   :config (progn
 
             ;; Use Emacs' built-in TAB completion hooks to trigger AC (Emacs >= 23.2)
             (setq tab-always-indent 'complete)
             (add-to-list 'completion-styles 'initials t)
+
+            ;; Enable company in Org mode
+            (defun add-pcomplete-to-capf ()
+              (add-hook 'completion-at-point-functions #'pcomplete-completions-at-point nil t))
 
             (defvar completion-at-point-functions-saved nil)
             (defun company-indent-for-tab-command (&optional arg)
@@ -77,13 +91,6 @@
             (defun company-complete-common-wrapper ()
               (let ((completion-at-point-functions completion-at-point-functions-saved))
                 (company-complete-common)))
-
-            ;; Enable company in Org mode
-            (defun add-pcomplete-to-capf ()
-              (add-hook 'completion-at-point-functions #'pcomplete-completions-at-point nil t))
-            (add-hook 'org-mode-hook #'add-pcomplete-to-capf)
-
-            (add-to-list 'company-begin-commands 'outshine-self-insert-command)
 
             ;; Default company backends
             (setq company-backends
@@ -106,62 +113,58 @@
             (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
 
             ;; Add company-ispell as backend for text-mode's only
-            (add-hook 'text-mode-hook
-                      (lambda ()
-                        ;; OPTIONAL, if `company-ispell-dictionary' is nil, `ispell-complete-word-dict' is used
-                        ;;  but I prefer hard code the dictionary path. That's more portable.
-                        (setq company-ispell-dictionary (expand-file-name "dictionaries/words.txt" user-emacs-directory))
+            (defun company-text-setup ()
+              ;; OPTIONAL, if `company-ispell-dictionary' is nil, `ispell-complete-word-dict' is used
+              ;;  but I prefer hard code the dictionary path. That's more portable.
+              (setq company-ispell-dictionary (expand-file-name "dictionaries/words.txt" user-emacs-directory))
 
-                        ;; make `company-backends' local is critical
-                        ;; or else, you will have completion in every major mode, that's very annoying!
-                        (set (make-local-variable 'company-backends) '((company-capf
-                                                                        company-yasnippet
-                                                                        company-abbrev
-                                                                        company-files)))))
+              ;; make `company-backends' local is critical
+              ;; or else, you will have completion in every major mode, that's very annoying!
+              (set (make-local-variable 'company-backends) '((company-capf
+                                                              company-yasnippet
+                                                              company-abbrev
+                                                              company-files))))
 
             ;; Company integration with irony
             (use-package company-irony
-              :if (executable-find "irony-server")
-              :load-path (lambda () (expand-file-name "company-irony/" user-emacs-directory)))
+              :if (executable-find "irony-server"))
 
             ;; Company integration with rtags
             (use-package company-rtags
               :if (executable-find "rdm")
               :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory))
-              :config (setq rtags-completions-enabled t))
+              :custom (rtags-completions-enabled t))
 
             ;; C-mode setup
-            (add-hook 'c-mode-common-hook
-                      (lambda ()
+            (defun company-c-setup ()
+              ;; make `company-backends' local is critical
+              ;; or else, you will have completion in every major mode, that's very annoying!
+              (make-local-variable 'company-backends)
+              (setq company-backends (copy-tree company-backends))
 
-                        ;; make `company-backends' local is critical
-                        ;; or else, you will have completion in every major mode, that's very annoying!
-                        (make-local-variable 'company-backends)
-                        (setq company-backends (copy-tree company-backends))
+              ;; Prefer gtags
+              (if (and (executable-find "global")
+                       (projectile-project-p)
+                       (file-exists-p (concat (projectile-project-root)
+                                              "GTAGS")))
+                  (setf (car company-backends)
+                        (append '(company-gtags)
+                                (car company-backends)))
 
-                        ;; Prefer gtags
-                        (if (and (executable-find "global")
-                                 (projectile-project-p)
-                                 (file-exists-p (concat (projectile-project-root)
-                                                        "GTAGS")))
-                            (setf (car company-backends)
-                                  (append '(company-gtags)
-                                          (car company-backends)))
+                ;; Fallback to cmake/clang backends
+                (when (cmake-ide--locate-cmakelists)
+                  ;; Prefer rtags
+                  (if (executable-find "rdm")
+                      (setf (car company-backends)
+                            (append '(company-rtags)
+                                    (car company-backends)))
+                    ;; Fallback to irony
+                    (when (executable-find "irony-server")
+                      (setf (car company-backends)
+                            (append '(company-irony)
+                                    (car company-backends))))))))
 
-                          ;; Fallback to cmake/clang backends
-                          (when (cmake-ide--locate-cmakelists)
-                            ;; Prefer rtags
-                            (if (executable-find "rdm")
-                                (setf (car company-backends)
-                                      (append '(company-rtags)
-                                              (car company-backends)))
-                              ;; Fallback to irony
-                              (when (executable-find "irony-server")
-                                (setf (car company-backends)
-                                      (append '(company-irony)
-                                              (car company-backends)))))))))
-
-            ;; Enable company in minibufer
+            ;; Minibuffer setup
             (defun company-elisp-minibuffer (command &optional arg &rest ignored)
               "`company-mode' completion back-end for Emacs Lisp in the minibuffer."
               (interactive (list 'interactive))
@@ -175,7 +178,7 @@
                    ('execute-extended-command (all-completions arg obarray 'commandp))
                    (t nil)))))
 
-            (defun minibuffer-company ()
+            (defun company-minibuffer-setup ()
               (unless company-mode
                 (when (and global-company-mode (or (eq this-command #'execute-extended-command)
                                                    (eq this-command #'eval-expression)))
@@ -198,8 +201,6 @@
                   (company-mode 1)
                   (when (eq this-command #'execute-extended-command)
                     (company-complete)))))
-
-            (add-hook 'minibuffer-setup-hook #'minibuffer-company)
 
             ;; Documentation popups for company
             (use-package company-box
@@ -229,7 +230,12 @@
 
             ;; Company auctex
             (use-package company-auctex
+              :defer t
               :after (auctex company-math)
+              :commands (company-auctex-init
+                         my/latex-mode-setup)
+              :hook ((TeX-mode   . my/latex-mode-setup)
+                     (LaTeX-mode . company-auctex-init))
               :config (progn
                         (defun company-auctex-labels (command &optional arg &rest ignored)
                           "company-auctex-labels backend"
@@ -249,10 +255,7 @@
                                                 company-auctex-labels
                                                 company-auctex-bibs
                                                 company-bibtex)
-                                              company-backends)))
-
-                        (add-hook 'TeX-mode-hook #'my/latex-mode-setup)
-                        (add-hook 'LaTeX-mode-hook #'company-auctex-init)))))
+                                              company-backends)))))))
 
 (provide 'setup-company)
 ;;; setup-company.el ends here

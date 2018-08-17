@@ -26,7 +26,12 @@
 
 (use-package dired-x
   :defer t
-  :commands (dired dired-jump)
+  :commands (dired
+             dired-jump
+             my/dired-imenu-init
+             my/dired-mode-hook)
+  :hook ((dired-mode . my/dired-mode-hook)
+         (dired-mode . my/dired-imenu-init))
   :bind (("C-x C-j"  . dired-jump)
          :map dired-mode-map
          (("u"       . dired-up-directory)
@@ -50,7 +55,6 @@
               (dired-hide-details-mode t)
               (hl-line-mode 1)
               (projectile-mode 1))
-            (add-hook 'dired-mode-hook #'my/dired-mode-hook)
 
             (defun my/dired-imenu-prev-index-position (&optional arg)
               "Go to the header line of previous directory."
@@ -84,7 +88,6 @@
                           'my/dired-extract-index-name)
               (setq-local imenu-create-index-function
                           'my/dired-imenu-create-index))
-            (add-hook 'dired-mode-hook #'my/dired-imenu-init)
 
             ;; "In Dired, visit this file or directory instead of the Dired buffer."
             ;; Prevents buffers littering up things when moving around in Dired
@@ -173,7 +176,7 @@
               :if (display-graphic-p)
               :after dired
               :commands dired-icon-mode
-              :init (add-hook 'dired-mode-hook #'dired-icon-mode)
+              :hook (dired-mode . dired-icon-mode)
               :config (defadvice dired-icon--display (around bar activate)
                         (ignore-errors add-do-it)))
 

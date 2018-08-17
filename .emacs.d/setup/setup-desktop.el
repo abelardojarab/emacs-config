@@ -87,7 +87,10 @@
 ;; Automatically save and restore sessions
 (use-package desktop
   :defer t
-  :commands (desktop-save-mode desktop-read desktop-save)
+  :commands (desktop-save-mode
+             desktop-read
+             desktop-save
+             save-buffer-display-time)
   :init (progn
           ;; Save desktops a minute after Emacs was idle.
           (setq-default desktop-missing-file-warning nil)
