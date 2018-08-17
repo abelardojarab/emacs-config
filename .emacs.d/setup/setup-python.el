@@ -24,9 +24,40 @@
 
 ;;; Code:
 
+;; Built-in python package
+(use-package python
+  :demand t
+  :config (progn
+
+            ;; Update imenu
+            (defun python-reset-imenu ()
+              (interactive)
+              (if (fboundp 'setq-mode-local)
+                  (setq-mode-local python-mode
+                                   imenu-create-index-function 'python-imenu-create-index))
+              (setq imenu-create-index-function 'python-imenu-create-index))
+
+            ;; Stop cedet semantic-python-get-system-include-path to start the python interpreter
+            (defun python-shell-internal-send-string (string) "")
+
+            ;; Use ipython3 as default interpreter
+            (if (executable-find "ipython3")
+                (setq-default python-shell-interpreter "ipython3"
+                              python-shell-interpreter-args "--colors=Linux --profile=default"
+                              python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
+                              python-shell-prompt-regexp "In \\[[0-9]+\\]: "
+                              python-shell-completion-setup-code
+                              "from IPython.core.completerlib import module_completion"
+                              python-shell-completion-module-string-code
+                              "';'.join(module_completion('''%s'''))\n"
+                              python-shell-completion-string-code
+                              "';'.join(get_ipython().Completer.all_completions('''%s'''))\n"))
+
+            ;; Remove wisent, python becomes unusuable slow
+            (remove-hook 'python-mode-hook 'wisent-python-default-setup)))
+
 ;; by default, the function 'python-mode is associated with
 ;; the package python.el. The following changes that to python-mode.el:
-
 (use-package python-mode
   :defer t
   :mode ("\\.py\\'" . python-mode)
@@ -52,39 +83,12 @@
                                                   py-shell-name        "python3")
                                     (my/tabs-setup nil 4)))))
 
-            ;; Update imenu
-            (defun python-reset-imenu ()
-              (interactive)
-              (if (fboundp 'setq-mode-local)
-                  (setq-mode-local python-mode
-                                   imenu-create-index-function 'python-imenu-create-index))
-              (setq imenu-create-index-function 'python-imenu-create-index))
-
             ;; Python settings
             (setq py-shell-name                        "python3"
                   py-shell-switch-buffers-on-execute-p t
                   py-switch-buffers-on-execute-p       t
                   py-smart-indentation                 t
-                  py-split-windows-on-execute-function 'split-window-horizontally)
-
-            ;; Stop cedet semantic-python-get-system-include-path to start the python interpreter
-            (defun python-shell-internal-send-string (string) "")
-
-            ;; Use ipython3 as default interpreter
-            (if (executable-find "ipython3")
-                (setq-default python-shell-interpreter "ipython3"
-                              python-shell-interpreter-args "--colors=Linux --profile=default"
-                              python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
-                              python-shell-prompt-regexp "In \\[[0-9]+\\]: "
-                              python-shell-completion-setup-code
-                              "from IPython.core.completerlib import module_completion"
-                              python-shell-completion-module-string-code
-                              "';'.join(module_completion('''%s'''))\n"
-                              python-shell-completion-string-code
-                              "';'.join(get_ipython().Completer.all_completions('''%s'''))\n"))
-
-            ;; Remove wisent, python becomes unusuable slow
-            (remove-hook 'python-mode-hook 'wisent-python-default-setup)))
+                  py-split-windows-on-execute-function 'split-window-horizontally)))
 
 (provide 'setup-python)
 ;;; setup-python.el ends here

@@ -31,7 +31,7 @@
            (display-graphic-p))
   :commands (ergoemacs-mode
              ergoemacs-mode-after-init-emacs)
-  :hook (after-init . ergoemacs-mode)
+  ;; :hook (after-init . ergoemacs-mode)
   :init (progn
           (setq ergoemacs-command-loop--modal-stack nil)
           (defun ergoemacs-command-loop--spinner-display (&optional string &rest args)
