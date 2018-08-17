@@ -37,7 +37,9 @@
   :load-path (lambda () (expand-file-name "swiper/" user-emacs-directory))
   :bind (("C-c C-r" . ivy-resume)
          :map ctl-x-map
-         ("s"       . swiper))
+         ("s"       . swiper)
+         ("b"       . ivy-switch-buffer))
+  :chords (("bb" . ivy-switch-buffer))
   :config (progn
 
             (setq ivy-do-completion-in-region      nil
