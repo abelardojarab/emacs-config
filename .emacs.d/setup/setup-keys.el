@@ -185,6 +185,10 @@
 (global-set-key (kbd "C-x <home>")    'tabbar-backward-group)
 (global-set-key (kbd "C-x <end>")     'tabbar-forward-group)
 
+;; Splitting windows
+(global-set-key (kbd "C-x |")         'split-window-right)
+(global-set-key (kbd "C-x -")         'split-window-below)
+
 ;; Jump between windows
 (global-set-key (kbd "C-x <up>")      'windmove-up)
 (global-set-key (kbd "C-x <down>")    'windmove-down)
