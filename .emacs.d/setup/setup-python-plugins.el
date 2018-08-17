@@ -27,7 +27,6 @@
 ;; Jedi settings
 (use-package python-environment
   :defer t
-  :load-path (lambda () (expand-file-name "python-environment/" user-emacs-directory))
   :init (setq python-environment-directory (concat (file-name-as-directory
                                                     my/emacs-cache-dir)
                                                    "python-environments")))
@@ -91,6 +90,22 @@
                 (projectile-find-sql-file)
               (anaconda-mode-find-definitions)
               (recenter))))
+
+;; Jupyter notebook
+(use-package ein
+  :defer t
+  :if (file-exists-p "/opt/anaconda3/bin/jupyter")
+  :commands (ein:jupyter-server-start)
+  :config (progn
+            (setq ein:jupyter-default-notebook-directory "~/Workspace/jupyter")
+            (setq ein:jupyter-default-server-command "/opt/anaconda3/bin/jupyter")
+            (setq ein:jupyter-server-args (list "--no-browser"))))
+
+;; Automatic formatting according to Python's PEP8
+(use-package py-autopep8
+  :defer t
+  :commands py-autopep8-enable-on-save
+  :hook (python-mode . py-autopep8-enable-on-save))
 
 (provide 'setup-python-plugins)
 ;;; setup-python-plugins.el ends here

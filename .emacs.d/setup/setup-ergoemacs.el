@@ -28,17 +28,21 @@
 (use-package ergoemacs-mode-fixed
   :defer t
   :if (and (executable-find "gzip")
-	   (display-graphic-p))
+           (display-graphic-p))
   :commands (ergoemacs-mode
              ergoemacs-mode-after-init-emacs)
   :hook (after-init . ergoemacs-mode)
   :init (progn
-	  (defun ergoemacs-command-loop--spinner-display (&optional string &rest args)
+          (setq ergoemacs-command-loop--modal-stack nil)
+          (defun ergoemacs-command-loop--spinner-display (&optional string &rest args)
             t)
 
-	  (defun ergoemacs-command-loop--modal-p ()
-	    nil))
+          (defun ergoemacs-command-loop--modal-p ()
+            nil))
   :config (progn
+            (defadvice ergoemacs-map--lookup-map (around bar activate)
+              (ignore-errors add-do-it))
+
             (ergoemacs-mode-after-init-emacs)
             (setq ergoemacs-theme              "standard"
                   ergoemacs-keyboard-layout    "us"
