@@ -27,7 +27,6 @@
 (use-package dired-x
   :defer t
   :commands (dired dired-jump)
-  :chords ("jj" . dired-jump)
   :bind (("C-x C-j"  . dired-jump)
          :map dired-mode-map
          (("u"       . dired-up-directory)

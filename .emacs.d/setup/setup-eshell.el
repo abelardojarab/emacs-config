@@ -26,6 +26,7 @@
 
 (use-package ielm
   :defer t
+  :chords (("ii" . ielm-repl))
   :bind (("C-'"      . ielm-repl)
          ("C-c C-z"  . ielm-repl)
          :map ctl-x-map
@@ -54,6 +55,7 @@
 
 (use-package eshell
   :defer t
+  :chords (("ee" . eshell))
   :commands (eshell eshell-vertical eshell-horizontal)
   :bind (("C-c C-t"                 . eshell)
          :map ctl-x-map
