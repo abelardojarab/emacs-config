@@ -48,7 +48,7 @@
 (use-package neotree
   :defer t
   :commands (neotree-toggle)
-  :chords (("nn" . neotree-toggle))
+  :chords (("NN" . neotree-toggle))
   :bind (:map neotree-mode-map
               (("<C-return>" . neotree-change-root)
                ("C"          . neotree-change-root)
