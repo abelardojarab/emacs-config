@@ -55,7 +55,7 @@
 
 (use-package eshell
   :defer t
-  :chords (("SS" . eshell))
+  :chords (("SS" . eshell-vertical))
   :commands (eshell eshell-vertical eshell-horizontal)
   :bind (("C-c C-t"                 . eshell)
          :map ctl-x-map
