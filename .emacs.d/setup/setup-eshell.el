@@ -220,7 +220,6 @@
 ;; Emacs interaction with tmux
 (use-package emamux
   :defer t
-  :load-path (lambda () (expand-file-name "emamux/" user-emacs-directory))
   :commands (emamux:send-command
              emamux:run-command
              emamux:run-last-command

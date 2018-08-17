@@ -31,17 +31,14 @@
   :defer t
   :mode ("\\.py\\'" . python-mode)
   :commands python-mode
-  :interpreter ("python" . python-mode)
-  :load-path (lambda () (expand-file-name "python-mode/" user-emacs-directory))
+  :interpreter ("python3" . python-mode)
   :bind (:map python-mode-map
               ("TAB" . py-indent-line))
-  :init (progn
-          ;; Check for python module
-          (defun check-python-module (&optional module)
-            (and (executable-find "python")
-                 (= 0 (call-process "python"  nil nil nil "-c"
-                                    (concat "import "
-                                            (if module module "jedi")))))))
+  :init (defun check-python-module (&optional module)
+          (and (executable-find "python3")
+               (= 0 (call-process "python3"  nil nil nil "-c"
+                                  (concat "import "
+                                          (if module module "jedi"))))))
   :config (progn
 
             ;; Python hook
@@ -51,7 +48,8 @@
                                     ;; disable annoying "Python-Help" buffer
                                     (eldoc-mode -1)
                                     (setq-default python-indent-offset 4
-                                                  py-indent-offset     4)
+                                                  py-indent-offset     4
+                                                  py-shell-name        "python3")
                                     (my/tabs-setup nil 4)))))
 
             ;; Update imenu
@@ -62,13 +60,9 @@
                                    imenu-create-index-function 'python-imenu-create-index))
               (setq imenu-create-index-function 'python-imenu-create-index))
 
-            ;; Setup Python path
-            (setenv "PYTHONPATH" (concat (concat (getenv "HOME")
-                                                 "/workspace/pythonlibs/lib/python2.7/site-packages")
-                                         ":" (getenv "PYTHONPATH")))
-
             ;; Python settings
-            (setq py-shell-switch-buffers-on-execute-p t
+            (setq py-shell-name                        "python3"
+                  py-shell-switch-buffers-on-execute-p t
                   py-switch-buffers-on-execute-p       t
                   py-smart-indentation                 t
                   py-split-windows-on-execute-function 'split-window-horizontally)
@@ -76,9 +70,9 @@
             ;; Stop cedet semantic-python-get-system-include-path to start the python interpreter
             (defun python-shell-internal-send-string (string) "")
 
-            ;; Use ipython as default interpreter
-            (if (executable-find "ipython")
-                (setq-default python-shell-interpreter "ipython"
+            ;; Use ipython3 as default interpreter
+            (if (executable-find "ipython3")
+                (setq-default python-shell-interpreter "ipython3"
                               python-shell-interpreter-args "--colors=Linux --profile=default"
                               python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
                               python-shell-prompt-regexp "In \\[[0-9]+\\]: "

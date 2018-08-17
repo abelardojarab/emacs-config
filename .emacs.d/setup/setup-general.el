@@ -39,21 +39,16 @@
   :if (not (equal system-type 'windows-nt))
   :commands global-auto-revert-mode
   :diminish (auto-revert-mode . " Ⓐ")
-  :config (progn
-
-            (setq auto-revert-verbose nil
-                  global-auto-revert-non-file-buffers t)
-
-
-            (when (eq system-type 'darwin)
+  :init (global-auto-revert-mode t)
+  :custom ((auto-revert-verbose                 nil)
+           (global-auto-revert-non-file-buffers t))
+  :config (when (eq system-type 'darwin)
               ;; File notifications aren't supported on OS X
-              (setq auto-revert-use-notify nil))
-            (global-auto-revert-mode)))
+              (setq auto-revert-use-notify nil)))
 
 ;; Emacs startup profiler
 (use-package esup
   :defer t
-  :load-path (lambda () (expand-file-name "esup/" user-emacs-directory))
   :commands esup)
 
 ;; With-editor (emacsclient support)
@@ -63,7 +58,6 @@
 ;; Pos-tip library
 (use-package pos-tip
   :defer t
-  :load-path (lambda () (expand-file-name "pos-tip/" user-emacs-directory))
   :config (progn
             ;; pos-tip defaults
             (setq-default pos-tip-internal-border-width 6
@@ -98,9 +92,8 @@
 ;; Choose wrap prefix automatically
 (use-package adaptive-wrap
   :defer t
-  :load-path (lambda () (expand-file-name "adaptive-wrap/" user-emacs-directory))
   :commands adaptive-wrap-prefix-mode
-  :init (add-hook 'visual-line-mode-hook #'adaptive-wrap-prefix-mode))
+  :hook (visual-line-mode . adaptive-wrap-prefix-mode))
 
 ;; Uniquify-buffers
 (use-package uniquify
@@ -124,7 +117,7 @@
   :defer t
   :commands (filladapt-mode
              turn-off-filladapt-mode)
-  :init (setq-default filladapt-mode t)
+  :init (filladapt-mode t)
   :hook ((text-mode . filladapt-mode)
          (prog-mode . turn-off-filladapt-mode)))
 
@@ -132,56 +125,47 @@
 (use-package browse-kill-ring
   :defer t
   :commands (browse-kill-ring
-             browse-kill-ring-mode)
-  :load-path (lambda () (expand-file-name "browse-kill-ring/" user-emacs-directory)))
+             browse-kill-ring-mode))
 
 ;; Unicode viewer (charmap)
 (use-package charmap
   :defer t
   :commands charmap
-  :load-path (lambda () (expand-file-name "charmap/" user-emacs-directory))
-  :config (setq charmap-text-scale-adjust 2))
+  :custom (charmap-text-scale-adjust 2))
 
 ;; Page break lines
 (use-package page-break-lines
-  :defer t
-  :load-path (lambda () (expand-file-name "page-break-lines/" user-emacs-directory)))
+  :defer t)
 
 ;; Naive implementation of RFC4122 Universally Unique IDentifier generation
 (use-package uuidgen
-  :defer t
-  :load-path (lambda () (expand-file-name "uuidgen/" user-emacs-directory)))
+  :defer t)
 
 ;; This is a elisp library for websocket clients to talk to websocket servers,
 ;; and for websocket servers to accept connections from websocket clients.
 ;; This library is designed to be used by other library writers
 (use-package websocket
-  :defer t
-  :load-path (lambda () (expand-file-name "websocket/" user-emacs-directory)))
+  :defer t)
 
 ;; Simple HTTP requests
 (use-package request
-  :defer t
-  :load-path (lambda () (expand-file-name "request/" user-emacs-directory)))
+  :defer t)
 
-;; alert is a Growl-workalike for Emacs which uses a common notifications
+;; Alert is a Growl-workalike for Emacs which uses a common notifications
 (use-package alert
   :demand t
-  :load-path (lambda () (expand-file-name "alert/" user-emacs-directory))
   :config (when (eq system-type 'gnu/linux)
             (setq alert-default-style 'notifications)))
 
-;; intelligent code search for Emacs lisp.
+;; Intelligent code search for Emacs lisp.
 (use-package elisp-refs
   :defer t
-  :after (list-utils loop)
-  :load-path (lambda () (expand-file-name "elisp-refs/" user-emacs-directory)))
+  :after (list-utils loop))
 
 ;; Improved help system
 (use-package helpful
   :defer t
   :after elisp-refs
-  :load-path (lambda () (expand-file-name "helpful/" user-emacs-directory))
   :bind (("C-h f" . helpful-function)
          ("C-h c" . helpful-callable)
          ("C-h x" . helpful-command)
@@ -238,9 +222,9 @@
                             "\\(\\s-*\\):" 1 0 t))))
 
 (use-package switch-buffer-functions
-  :demand t
+  :defer t
   :config (add-hook 'switch-buffer-functions
-                    (lambda(prev cur)
+                    (lambda (prev cur)
                       (if (eval 'current-input-method)
                           (set-cursor-color "magenta")
                         (set-cursor-color "cyan")))))

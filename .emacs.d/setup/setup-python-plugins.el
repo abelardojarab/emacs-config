@@ -42,21 +42,16 @@
            (check-python-module "epc")
            (check-python-module "jedi"))
   :commands (jedi:setup)
-  :load-path (lambda () (expand-file-name "jedi/" user-emacs-directory))
-  :init (add-hook 'python-mode-hook #'jedi:setup)
+  :hook (python-mode . jedi:setup)
   :config (progn
             (setq jedi:setup-keys nil
                   jedi:complete-on-dot t
                   jedi:tooltip-method t
                   jedi:get-in-function-call-delay 0.2)
 
-            (if (featurep 'auto-complete)
-                (ac-flyspell-workaround))
-
             ;; Company backend for Python jedi
             (use-package company-jedi
               :after (company jedi)
-              :load-path (lambda () (expand-file-name "company-jedi/" user-emacs-directory))
               :config (add-hook 'python-mode-hook
                                 (lambda () (set (make-local-variable 'company-backends)
                                            '((company-yasnippet
@@ -64,6 +59,23 @@
                                               company-capf
                                               company-files
                                               company-abbrev))))))))
+
+;;; NOTE conda is needed to set anaconda virtual environment python process.
+;;; Elpy can set the anaconda virtual env, but not the process. conda uses
+;;; environment.yml (I think to find the process).
+(use-package conda
+  :defer t
+  :if (file-exists-p "/opt/anaconda3/bin/conda")
+  :init (setq conda-anaconda-home "/opt/anaconda3")
+  :hook (python-mode . conda-env-autoactivate-mode)
+  :commands (conda-env-activate
+             conda-env-autoactivate-mode)
+  :config (progn
+            ;; If you want interactive shell support, include:
+            (conda-env-initialize-interactive-shells)
+            ;; If you want eshell support, include:
+            (conda-env-initialize-eshell)))
+
 ;; Anaconda
 (use-package anaconda-mode
   :bind (:map anaconda-mode-map
