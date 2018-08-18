@@ -27,8 +27,7 @@
 ;; Verilog mode
 (use-package verilog-mode
   :mode ("\\.v\\'" . verilog-mode)
-  :load-path (lambda () (expand-file-name "verilog-mode/" user-emacs-directory))
-  :config (add-hook 'verilog-mode-hook #'font-lock-mode))
+  :hook (verilog-mode . font-lock-mode))
 
 (provide 'setup-verilog)
 ;;; setup-verilog.el ends here

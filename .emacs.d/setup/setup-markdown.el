@@ -32,7 +32,9 @@
          ("\\.markdown\\'" . markdown-mode))
   :after org
   :commands (markdown-mode
-             org-table-align)
+             org-table-align
+	     my/markdown-mode-init)
+  :hook (markdown-mode . my/markdown-configure)
   :config (progn
 
             (setq markdown-asymmetric-header         t
@@ -48,44 +50,41 @@
             (use-package flycheck-mmark
               :disabled t
               :if (executable-find "mmark")
-              :init (add-hook 'flycheck-mode-hook #'flycheck-mmark-setup)
+              :hook (flycheck-mode . flycheck-mmark-setup)
               :commands (flycheck-mmark-setup))
 
-            (defun my/markdown-configure ()
+	    ;; Markdown preferences
+            (defun my/markdown-mode-init ()
+              (toggle-truncate-lines     t)
+              (setq truncate-lines       t)
+
+              ;; Do not wrap lines
+              ;; we will use autofill
+              (visual-line-mode          -1)
+              (abbrev-mode               -1)
+              (adaptive-wrap-prefix-mode t)
+
+              ;; Org goodies
+              (orgtbl-mode               t)
+              (orgstruct++-mode          t)
+
+              ;; Extra modes
+              (outline-minor-mode        t)
+              (footnote-mode             t)
+              (auto-fill-mode            t)
+
+              ;; Style/syntax check
+              (writegood-mode            t)
+              (flyspell-mode             t)
+              (if (or (executable-find "proselint")
+                      (executable-find "mmark"))
+                  (flycheck-mode t))
+
               (make-local-variable 'ispell-skip-region-alist)
               (add-to-list 'ispell-skip-region-alist '("~" "~"))
               (add-to-list 'ispell-skip-region-alist '("```" "```"))
               (setq orgstruct-heading-prefix-regexp "#\\+")
               (pandoc-mode 1))
-            (add-hook 'markdown-mode-hook #'my/markdown-configure)
-
-            ;; Markdown preferences
-            (add-hook 'markdown-mode-hook
-                      (lambda ()
-                        (toggle-truncate-lines     t)
-                        (setq truncate-lines       t)
-
-                        ;; Do not wrap lines
-                        ;; we will use autofill
-                        (visual-line-mode          -1)
-                        (abbrev-mode               -1)
-                        (adaptive-wrap-prefix-mode t)
-
-                        ;; Org goodies
-                        (orgtbl-mode               t)
-                        (orgstruct++-mode          t)
-
-                        ;; Extra modes
-                        (outline-minor-mode        t)
-                        (footnote-mode             t)
-                        (auto-fill-mode            t)
-
-                        ;; Style/syntax check
-                        (writegood-mode            t)
-                        (flyspell-mode             t)
-                        (if (or (executable-find "proselint")
-                                (executable-find "mmark"))
-                            (flycheck-mode t))))
 
             (defun my/cleanup-org-tables ()
               (save-excursion
@@ -93,6 +92,7 @@
                 (while (search-forward "-+-" nil t) (replace-match "-|-")))
               (save-buffer)
               (set-buffer-modified-p nil))
+
             ;; no longer needed, markdown includes supports for tables now
             (add-hook 'markdown-mode-hook
                       (lambda () (add-hook 'after-save-hook 'my/cleanup-org-tables nil t)))

@@ -1,6 +1,6 @@
 ;;; setup-gnus.el ---                         -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -24,6 +24,11 @@
 
 ;;; Code:
 
+;; Mime support
+(use-package mime-w3m
+  :defer t
+  :custom (mime-edit-split-message nil))
+
 ;; Electric completions of email addresses and the like
 (use-package ecomplete)
 
@@ -44,14 +49,13 @@
 
 ;; Gnus
 (use-package gnus
-  :after (starttls nnir epa)
+  :defer t
   :commands (gnus compose-mail)
   :bind (("M-G" . gnus)
          :map ctl-x-map
          ("M"   . compose-mail))
   :config (progn
 
-            ;; http://sachachua.com/blog/2007/12/gnus-multi-pane-tricks-or-i-heart-planet-emacsen/
             (gnus-add-configuration
              '(article
                (horizontal 1.0
@@ -202,8 +206,7 @@
 
 ;; apel
 (use-package apel
-  :defer t
-  :load-path (lambda () (expand-file-name "apel/" user-emacs-directory)))
+  :defer t)
 
 ;; MIME language support
 (use-package mml
@@ -223,6 +226,8 @@
 ;; Message mode
 (use-package message
   :demand t
+  :commands my/message-mode-init
+  :hook (message-mode . my/message-mode-init)
   :config (progn
 
             ;; decode html
@@ -261,7 +266,6 @@
               "Copy buffer to kill ring."
               (interactive)
               (kill-ring-save (point-min) (point-max)))
-            (add-hook 'message-send-hook #'my/copy-buffer-to-kill-ring)
 
             ;; message preferences
             (setq message-generate-headers-first t
@@ -269,21 +273,20 @@
                   message-signature-file         ".signature")
 
             ;; message mode hooks
-            (add-hook 'message-mode-hook
-                      (lambda ()
-                        ;; Org goodies
-                        (orgtbl-mode      t)
-                        (orgstruct-mode   t)
-                        (orgstruct++-mode t)
+            (defun my/message-mode-init ()
+	      ;; Turn on PGP
+	      (epa-mail-mode t)
 
-                        ;; Extra modes
-                        (footnote-mode  t)
-                        (auto-fill-mode t)
-                        (writegood-mode t)
-                        (flyspell-mode  t)))
+              ;; Org goodies
+              (orgtbl-mode      t)
+              (orgstruct-mode   t)
+              (orgstruct++-mode t)
 
-            ;; Turn on PGP
-            (add-hook 'message-mode-hook #'epa-mail-mode)
+              ;; Extra modes
+              (footnote-mode  t)
+              (auto-fill-mode t)
+              (writegood-mode t)
+              (flyspell-mode  t))
 
             ;; Enable emacsclient in mutt
             (add-to-list 'auto-mode-alist '(".*mutt.*" . message-mode))
@@ -298,7 +301,7 @@
 ;; Enabling attaching files from dired
 (use-package gnus-dired
   :defer t
-  :init (add-hook 'dired-mode-hook #'turn-on-gnus-dired-mode)
+  :hook (dired-mode . turn-on-gnus-dired-mode)
   :commands turn-on-gnus-dired-mode
   :config (progn
 
@@ -317,16 +320,14 @@
 
 ;; Flim, wanderlust requirement
 (use-package std11
-  :defer t
-  :load-path (lambda () (expand-file-name "flim/" user-emacs-directory)))
+  :defer t)
 
 ;; All the icons, gnus plugin
 (use-package all-the-icons-gnus
   :if (display-graphic-p)
   :after (dired all-the-icons gnus)
-  :load-path (lambda () (expand-file-name "all-the-icons-gnus/" user-emacs-directory))
   :commands all-the-icons-gnus-setup
-  :init (add-hook 'gnus-group-mode-hook #'all-the-icons-gnus-setup))
+  :hook (gnus-group-mode . all-the-icons-gnus-setup))
 
 (provide 'setup-gnus)
 ;;; setup-gnus.el ends here

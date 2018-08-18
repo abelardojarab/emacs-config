@@ -194,7 +194,6 @@
              nodejs-repl-send-last-sexp
              nodejs-repl-execute
              nodejs-repl-load-file)
-  :if (executable-find "node")
-  :load-path (lambda () (expand-file-name "nodejs-repl/" user-emacs-directory)))
+  :if (executable-find "node"))
 
 (provide 'setup-javascript)

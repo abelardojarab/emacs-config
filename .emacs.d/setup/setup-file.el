@@ -1,6 +1,6 @@
 ;;; setup-file.el ---                                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -33,8 +33,7 @@
 (use-package aggressive-fill-paragraph
   :disabled t
   :defer t
-  :commands aggressive-fill-paragraph-mode
-  :load-path (lambda () (expand-file-name "aggressive-fill-paragraph/" user-emacs-directory)))
+  :commands aggressive-fill-paragraph-mode)
 
 ;; Autorevert buffer
 (setq after-find-file-from-revert-buffer t)
@@ -108,13 +107,11 @@
 ;; sudo edit
 (use-package sudo-edit
   :defer t
-  :commands (sudo-edit sudo-edit-current-file)
-  :load-path (lambda () (expand-file-name "sudo-edit/" user-emacs-directory)))
+  :commands (sudo-edit sudo-edit-current-file))
 
 ;; Assure consistency when opening files
 (use-package unify-opening
-  :demand t
-  :load-path (lambda () (expand-file-name "unify-opening/" user-emacs-directory)))
+  :demand t)
 
 (provide 'setup-file)
 ;;; setup-file.el ends here

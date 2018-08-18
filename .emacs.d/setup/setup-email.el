@@ -1,6 +1,6 @@
 ;;; setup-email.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -26,13 +26,11 @@
 
 ;; Wanderlust
 (use-package wl
-  :defer t
+  :disabled t
   :after std11
-  :init (progn
-          (add-to-list 'load-path (expand-file-name "wanderlust/elmo" user-emacs-directory))
-          (add-to-list 'load-path (expand-file-name "semi" user-emacs-directory)))
-  :commands (wl wl-draft wl-other-frame)
-  :load-path (lambda () (expand-file-name "wanderlust/wl/" user-emacs-directory))
+  :commands (wl
+	     wl-draft
+	     wl-other-frame)
   :config (progn
 
             ;; Location for custom scripts
@@ -106,10 +104,6 @@
             ;; File locations
             (setq wl-init-file (concat wl-root-dir "wl.el")
                   wl-folders-file (concat wl-root-dir "folders"))
-
-            ;; Mime support
-            (use-package mime-w3m
-              :config (setq mime-edit-split-message nil))
 
             ;; Look in zip files as if they are folders
             (setq elmo-archive-treat-file t)

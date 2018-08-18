@@ -28,25 +28,21 @@
 (use-package writeroom-mode
   :defer t
   :bind ("C-c w" . writeroom-mode)
-  :load-path (lambda () (expand-file-name "writeroom-mode/" user-emacs-directory))
-  :config (progn
-            (if (> (frame-width) 200)
-                (setq writeroom-width (- (frame-width) 80))
-              (setq writeroom-width 120))))
+  :config (if (> (frame-width) 200)
+              (setq writeroom-width (- (frame-width) 80))
+            (setq writeroom-width 120)))
 
 ;; Focus on a particular section
 (use-package focus
   :defer t
-  :commands focus-mode
-  :load-path (lambda () (expand-file-name "focus/" user-emacs-directory)))
+  :commands focus-mode)
 
 ;; Insert typographically useful unicode
 (use-package typo
   :defer t
   :diminish typo-mode
   :commands typo-mode
-  :load-path (lambda () (expand-file-name "typo/" user-emacs-directory))
-  :init (add-hook 'org-mode-hook #'typo-mode)
+  :hook (org-mode . typo-mode)
   :config (setq-default typo-language "English"))
 
 (provide 'setup-writeroom)

@@ -82,8 +82,8 @@
 ;; Autopair
 (use-package autopair
   :defer t
-  :load-path (lambda () (expand-file-name "autopair/" user-emacs-directory))
-  :commands (autopair-mode autopair-global-mode)
+  :commands (autopair-mode
+	     autopair-global-mode)
   :diminish autopair-mode
   :config (progn
             (autopair-global-mode) ;; enable autopair in all buffers

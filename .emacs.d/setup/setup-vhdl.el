@@ -28,7 +28,6 @@
 (use-package vhdl-mode
   :mode ("\\.vhdl?\\'" "\\.vho\\'")
   :commands vhdl-mode
-  :load-path (lambda () (expand-file-name "vhdl-mode/" user-emacs-directory))
   :config (progn
             ;; Compilation flag for ModelSim
             (defvar vhdl-compiler-options  "-work work")

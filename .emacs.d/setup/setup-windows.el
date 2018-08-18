@@ -1,6 +1,6 @@
 ;;; setup-windows.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -72,7 +72,6 @@
 (use-package perspective
   :defer t
   :commands persp-mode
-  :load-path (lambda () (expand-file-name "perspective/" user-emacs-directory))
   :config (progn
 
             ;; Assure .emacs.cache/perspective-configs directory exists
@@ -100,7 +99,6 @@
   :defer t
   :after helm
   :commands purpose-mode
-  :load-path (lambda () (expand-file-name "window-purpose/" user-emacs-directory))
   :init (purpose-mode)
   :config (progn
 
@@ -213,8 +211,7 @@
   :defer t
   :after (helm window-purpose)
   :commands (helm-purpose-switch-buffer-with-purpose
-             helm-purpose-switch-buffer-with-some-purpose)
-  :load-path (lambda () (expand-file-name "helm-purpose/" user-emacs-directory)))
+             helm-purpose-switch-buffer-with-some-purpose))
 
 ;; Ivy interface to purpose
 (use-package ivy-purpose
@@ -228,22 +225,19 @@
 ;; Resize windows
 (use-package resize-window
   :defer t
-  :commands resize-window
-  :load-path (lambda () (expand-file-name "resize-window/" user-emacs-directory)))
+  :commands resize-window)
 
 ;; Switch window
 (use-package switch-window
   :defer t
   :if (display-graphic-p)
-  :commands switch-window
-  :load-path (lambda () (expand-file-name "switch-window/" user-emacs-directory)))
+  :commands switch-window)
 
 ;; ace-window for switching windows, but we only call it as a subroutine from a hydra
 (use-package ace-window
   :defer t
   :bind (:map ctl-x-map
               ("o" . ace-window))
-  :load-path (lambda () (expand-file-name "ace-window/" user-emacs-directory))
   :config (progn
             ;; Customize font on ace-window leading char
             (if (display-graphic-p)
@@ -267,20 +261,17 @@
 ;; Change window sizes based on currently open buffers and focus
 (use-package golden-ratio
   :defer t
-  :commands golden-ratio-adjust
-  :load-path (lambda () (expand-file-name "golden-ratio/" user-emacs-directory)))
+  :commands golden-ratio-adjust)
 
 ;; Auto-dim unselected windows
 (use-package auto-dim-other-buffers
   :defer t
   :commands auto-dim-other-buffers-mode
-  :load-path (lambda () (expand-file-name "auto-dim-other-buffers/" user-emacs-directory))
   :config (auto-dim-other-buffers-mode 1))
 
 ;; Shackle windows (controls popup windows)
 (use-package shackle
   :defer t
-  :load-path (lambda () (expand-file-name "shackle/" user-emacs-directory))
   :commands shackle-mode
   :init (shackle-mode 1)
   :config (progn
