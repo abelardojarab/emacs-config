@@ -28,10 +28,11 @@
 (use-package ediff
   :defer t
   :commands (ediff-current-file
+             my/setup-ediff
              my/ediff-dwim
              my/update-modified-flag)
+  :hook (ediff-mode-hook . my/setup-ediff)
   :config (progn
-
             (defun my/update-modified-flag ()
               "Update the buffer modified flag."
               (interactive)
@@ -55,8 +56,7 @@
               (interactive)
               (ediff-setup-keymap)
               (define-key ediff-mode-map (kbd "<down>") #'ediff-next-difference)
-              (define-key ediff-mode-map (kbd "<up>")   #'ediff-previous-difference))
-            (add-hook 'ediff-mode-hook #'my/setup-ediff))
+              (define-key ediff-mode-map (kbd "<up>")   #'ediff-previous-difference)))
   :config (progn
             (setq ediff-window-setup-function 'ediff-setup-windows-plain
 

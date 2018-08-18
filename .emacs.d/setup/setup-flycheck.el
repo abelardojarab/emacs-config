@@ -28,7 +28,6 @@
 (use-package flycheck
   :defer t
   :if (not (equal system-type 'windows-nt))
-  :load-path (lambda () (expand-file-name "flycheck/" user-emacs-directory))
   :commands (flycheck-add-next-checker
              flycheck-mode)
   :init (mapc (lambda (mode)
@@ -118,9 +117,8 @@
                                    my/emacs-cache-dir)
                                   "irony-server/bin/irony-server"))
           (executable-find "irony-server"))
-  :load-path (lambda () (expand-file-name "flycheck-irony/" user-emacs-directory))
   :commands flycheck-irony-setup
-  :init (add-hook 'flycheck-mode-hook #'flycheck-irony-setup)
+  :hook (flycheck-mode . flycheck-irony-setup)
   :config (flycheck-add-next-checker 'irony '(warning . c/c++-cppcheck)))
 
 ;; Flycheck rtags
@@ -130,15 +128,14 @@
   :if (executable-find "rdm")
   :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory))
   :commands my/flycheck-rtags-setup
-  :init (add-hook 'c-mode-common-hook #'my/flycheck-rtags-setup)
+  :hook (c-mode-common . my/flycheck-rtags-setup)
   :config (defun my/flycheck-rtags-setup ()
             (flycheck-select-checker 'rtags)))
 
 ;; Tooltips
 (use-package flycheck-tip
   :after flycheck
-  :load-path (lambda () (expand-file-name "flycheck-tip/" user-emacs-directory))
-  :config (setq flycheck-tip-avoid-show-func nil))
+  :custom (flycheck-tip-avoid-show-func nil))
 
 ;; Another tooltip using pos-tip
 (use-package flycheck-pos-tip
@@ -146,8 +143,7 @@
   :if (display-graphic-p)
   :after flycheck
   :commands flycheck-pos-tip-mode
-  :load-path (lambda () (expand-file-name "flycheck-pos-tip/" user-emacs-directory))
-  :init (add-hook 'flycheck-mode-hook (lambda () (flycheck-pos-tip-mode t))))
+  :hook (flycheck-mode . flycheck-pos-tip-mode))
 
 (provide 'setup-flycheck)
 ;;; setup-flycheck.el ends here

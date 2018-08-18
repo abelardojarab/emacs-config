@@ -86,7 +86,6 @@
                  eshell-aliases-file              (concat user-emacs-directory ".eshell-aliases")
                  eshell-last-dir-ring-size        512))
   :config (progn
-            (add-hook 'eshell-mode-hook (lambda () (eshell/export "NODE_NO_READLINE=1")))
 
             ;; Vertical split eshell
             (defun eshell-vertical ()
@@ -118,16 +117,15 @@
 
             ;; Show fringe status for eshell
             (use-package eshell-fringe-status
+              :defer t
               :if (display-graphic-p)
-              :load-path (lambda () (expand-file-name "eshell-fringe-status/" user-emacs-directory))
               :commands eshell-fringe-status-mode
-              :init (add-hook 'eshell-mode-hook #'eshell-fringe-status-mode))
+              :hook (eshell-mode . eshell-fringe-status-mode))
 
             ;; Show git branches on the prompt
             (use-package eshell-prompt-extras
               :demand t
-              :load-path (lambda () (expand-file-name "eshell-prompt-extras/" user-emacs-directory))
-              :config (setq eshell-prompt-function 'epe-theme-lambda))))
+              :custom (eshell-prompt-function 'epe-theme-lambda)))
 
 ;; Get shell on current directory
 (use-package shell-pop
@@ -160,28 +158,25 @@
                       (lambda ()
                         (setq sh-indentation  2
                               sh-basic-offset 2)
-                        (electric-indent-mode -1)))
+                        (compilation-shell-minor-mode t)
+                        (ansi-color-for-comint-mode-on)
+                        (electric-indent-mode -1)))))
 
-            ;; When compiling from shell, display error result as in compilation
-            ;; buffer, with links to errors.
-            (add-hook 'sh-mode-hook #'compilation-shell-minor-mode)
-            (add-hook 'sh-mode-hook #'ansi-color-for-comint-mode-on))
+;; CShell mode - fix issues in csh indentation
+(use-package csh-mode
+  :demand t
+  :config (progn
+            (dolist (elt interpreter-mode-alist)
+              (when (member (car elt) (list "csh" "tcsh"))
+                (setcdr elt 'csh-mode)))
 
-  ;; CShell mode - fix issues in csh indentation
-  (use-package csh-mode
-    :demand t
-    :config (progn
-              (dolist (elt interpreter-mode-alist)
-                (when (member (car elt) (list "csh" "tcsh"))
-                  (setcdr elt 'csh-mode)))
-
-              (defun my/tcsh-set-indent-functions ()
-                (when (or (string-match ".*\\.alias" (buffer-file-name))
-                          (string-match "\\(.*\\)\\.csh$" (file-name-nondirectory (buffer-file-name))))
-                  (setq-local indent-line-function   #'csh-indent-line)
-                  (setq-local indent-region-function #'csh-indent-region)))
-              (add-hook 'sh-mode-hook      #'my/tcsh-set-indent-functions)
-              (add-hook 'sh-set-shell-hook #'my/tcsh-set-indent-functions))))
+            (defun my/tcsh-set-indent-functions ()
+              (when (or (string-match ".*\\.alias" (buffer-file-name))
+                        (string-match "\\(.*\\)\\.csh$" (file-name-nondirectory (buffer-file-name))))
+                (setq-local indent-line-function   #'csh-indent-line)
+                (setq-local indent-region-function #'csh-indent-region)))
+            (add-hook 'sh-mode-hook      #'my/tcsh-set-indent-functions)
+            (add-hook 'sh-set-shell-hook #'my/tcsh-set-indent-functions))))
 
 ;; Send expressions to a REPL line-by-line by hitting C-RET
 (use-package eval-in-repl
@@ -190,7 +185,6 @@
              eir-eval-in-shell
              eir-eval-in-python
              eir-eval-in-javascript)
-  :load-path (lambda () (expand-file-name "eval-in-repl/" user-emacs-directory))
   :config (progn
             (setq eir-jump-after-eval            nil
                   eir-always-split-script-window t

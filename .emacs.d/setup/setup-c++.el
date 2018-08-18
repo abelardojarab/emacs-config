@@ -26,18 +26,17 @@
 
 (use-package cc-mode
   :demand t
-  :load-path (lambda () (expand-file-name "cc-mode/" user-emacs-directory))
   :bind (:map c-mode-map
               ("C-c C-o" . ff-find-other-file)
               :map c++-mode-map
               ("C-c C-o" . ff-find-other-file))
-  :hook (c-mode-common . my/c-mode-init-indent)
-  :commands my/c-mode-init-indent
+  :hook (c-mode-common . my/c-mode-indent-init)
+  :commands my/c-mode-indent-init
   :config (progn
             ;; Put c++-mode as default for *.h files (improves parsing)
             (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 
-	    ;; Make C/C++ indentation reliable
+            ;; Make C/C++ indentation reliable
             (defun my/c-indent-offset-according-to-syntax-context (key val)
               ;; remove the old element
               (setq c-offsets-alist (delq (assoc key c-offsets-alist) c-offsets-alist))
@@ -45,28 +44,28 @@
               (add-to-list 'c-offsets-alist '(key . val)))
 
             ;; C/C++ style
-            (defun my/c-mode-init-indent ()
+            (defun my/c-mode-indent-init ()
               (interactive)
               (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
 
-		(c-set-style "Linux")
-		(c-set-offset 'substatement-open 0)
-		(c-set-offset 'innamespace 0)
-		(c-toggle-electric-state -1)
+                (c-set-style "Linux")
+                (c-set-offset 'substatement-open 0)
+                (c-set-offset 'innamespace 0)
+                (c-toggle-electric-state -1)
 
-		(setq-default c-default-style "Linux")
-		(my/tabs-setup t 8)
+                (setq-default c-default-style "Linux")
+                (my/tabs-setup t 8)
 
-		(make-local-variable 'c-basic-offset)
-		(setq c-basic-offset tab-width)
-		(make-local-variable 'c-indent-level)
-		(setq c-indent-level tab-width)
+                (make-local-variable 'c-basic-offset)
+                (setq c-basic-offset tab-width)
+                (make-local-variable 'c-indent-level)
+                (setq c-indent-level tab-width)
 
-		(my/c-indent-offset-according-to-syntax-context 'substatement-open 0)
+                (my/c-indent-offset-according-to-syntax-context 'substatement-open 0)
 
-		;; ensure fill-paragraph takes doxygen @ markers as start of new
-		;; paragraphs properly
-		(setq-default comment-multi-line t
+                ;; ensure fill-paragraph takes doxygen @ markers as start of new
+                ;; paragraphs properly
+                (setq-default comment-multi-line t
                               paragraph-start "^[ ]*\\(//+\\|\\**\\)[ ]*\\([ ]*$\\|@param\\)\\|^\f")))))
 
 ;; Show inline arguments hint for the C/C++ function at point
@@ -78,7 +77,6 @@
               :map c++-mode-map
               ("C-j" . moo-jump-directory))
   :commands (moo-complete moo-jump-local moo-jump-directory function-args-mode)
-  :load-path (lambda () (expand-file-name "function-args/" user-emacs-directory))
   :bind (:map c-mode-map
               ("C-c C-m" . moo-complete)
               :map c++-mode-map
@@ -91,7 +89,6 @@
 (use-package srefactor
   :defer t
   :commands srefactor-refactor-at-point
-  :load-path (lambda () (expand-file-name "srefactor/" user-emacs-directory))
   :bind (:map c-mode-map
               ("C-c C-r" . srefactor-refactor-at-point)
               :map c++-mode-map
@@ -105,6 +102,8 @@
 
 ;; Automatically insert prototype functions from .h
 (use-package member-functions
+  :defer t
+  :commands expand-member-functions
   :custom (mf--source-file-extension "cpp"))
 
 ;; Basic C compile
@@ -113,7 +112,6 @@
   :commands (basic-c-compile-file
              basic-c-compile-run-c
              basic-c-compile-makefile)
-  :load-path (lambda () (expand-file-name "basic-c-compile/" user-emacs-directory))
   :config (setq basic-c-compiler "g++"
                 basic-c-compile-all-files nil
                 basic-c-compile-compiler-flags "-Wall -Werror -std=c++11"

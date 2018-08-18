@@ -54,7 +54,7 @@
                               "';'.join(get_ipython().Completer.all_completions('''%s'''))\n"))
 
             (if (file-exists-p "/opt/anaconda3/bin/conda")
-                (setq python-shell-virtualenv-root "/opt/anaconda3/bin")
+                (setq python-shell-virtualenv-root "/opt/anaconda3")
               (setq python-shell-virtualenv-root nil))
 
             ;; Remove wisent, python becomes unusuable slow
