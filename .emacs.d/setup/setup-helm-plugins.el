@@ -31,7 +31,6 @@
   :commands (helm-grepint-grep)
   :bind (:map ctl-x-map
               ("a" . helm-grepint-grep))
-  :load-path (lambda () (expand-file-name "helm-grepint/" user-emacs-directory))
   :config (helm-grepint-set-default-config))
 
 ;; helm elscreen
@@ -140,12 +139,10 @@
              helm-gtags-dwim
              helm-gtags-mode)
   :if (executable-find "global")
-  :load-path (lambda () (expand-file-name "helm-gtags/" user-emacs-directory))
   :bind (("C-." . helm-gtags-dwim)
          :map ctl-x-map
          ("." . helm-gtags-dwim))
-  :init (add-hook 'c-mode-common-hook
-                  (lambda () (helm-gtags-mode t)))
+  :hook (c-mode-common . helm-gtags-mode)
   :config (setq
            helm-gtags-ignore-case t
            helm-gtags-auto-update t
@@ -159,14 +156,12 @@
   :after helm
   :if (and (executable-find "global")
            (boundp 'xref-backend-functions))
-  :load-path (lambda () (expand-file-name "helm-xref/" user-emacs-directory))
-  :config (setq xref-show-xrefs-function 'helm-xref-show-xrefs))
+  :custom (xref-show-xrefs-function 'helm-xref-show-xrefs))
 
 ;; helm yasnippet
 (use-package helm-c-yasnippet
   :defer t
   :commands (helm-yas-complete helm-c-yas-complete)
-  :load-path (lambda () (expand-file-name "helm-c-yasnippet/" user-emacs-directory))
   :bind (:map yas-minor-mode-map
               ([(shift tab)]     . helm-c-yas-complete)
               ([backtab]         . helm-c-yas-complete)
@@ -178,15 +173,13 @@
 (use-package helm-make
   :defer t
   :after helm
-  :commands (helm-make)
-  :load-path (lambda () (expand-file-name "helm-make/" user-emacs-directory)))
+  :commands (helm-make))
 
 ;; Biblio (helm-bibtex requirement)
 ;; extensible Emacs package for browsing and fetching references
 (use-package biblio
   :after helm
-  :defer t
-  :load-path (lambda () (expand-file-name "biblio/" user-emacs-directory)))
+  :defer t)
 
 ;; helm bibtex
 (use-package helm-bibtex
@@ -195,7 +188,6 @@
   :commands (helm-bibtex)
   :bind (:map ctl-x-map
               ("[" . helm-bibtex))
-  :load-path (lambda () (expand-file-name "helm-bibtex/" user-emacs-directory))
   :config (progn
 
             (setq helm-bibtex-bibliography my/bibtex-completion-bibliography
@@ -217,7 +209,6 @@
 ;; Org-Ref
 (use-package org-ref
   :after (helm async org)
-  :load-path (lambda () (expand-file-name "org-ref/" user-emacs-directory))
   :config (progn
             (setq org-ref-default-bibliography (list my/bibtex-completion-bibliography)
                   org-ref-bibliography-files (list my/bibtex-completion-bibliography)
@@ -231,16 +222,30 @@
 (use-package helm-themes
   :defer t
   :after helm
-  :commands (helm-themes)
-  :load-path (lambda () (expand-file-name "helm-themes/" user-emacs-directory)))
+  :commands (helm-themes))
 
 ;; helm dash
 (use-package helm-dash
   :defer t
   :after (helm dash)
   :if (executable-find "sqlite3")
-  :commands (helm-dash)
-  :load-path (lambda () (expand-file-name "helm-dash/" user-emacs-directory))
+  :commands (helm-dash
+	     dash-load-org
+	     dash-load-git
+	     dash-load-bash
+	     dash-load-c
+	     dash-load-c++
+	     dash-load-py
+	     dash-load-js
+	     dash-load-md)
+  :hook ((org-mode          . dash-load-org)
+	 (markdown-mode     . dash-load-md)
+	 (c-mode	    . dash-load-c)
+	 (sh-mode	    . dash-load-bash)
+	 (c++-mode	    . dash-load-c++)
+	 (js2-mode	    . dash-load-js)
+	 (ess-mode          . dash-load-r)
+	 (emacs-lisp-mode   . dash-load-elisp))
   :bind (:map ctl-x-map
               ("d" . helm-dash))
   :config (progn
@@ -258,56 +263,46 @@
             (defun dash-load-org ()
               (interactive)
               (setq-local helm-dash-docsets '("Org")))
-            (add-hook 'org-mode-hook #'dash-load-org)
 
             (defun dash-load-cmake ()
               (interactive)
               (setq-local helm-dash-docsets '("CMake")))
-            (add-hook 'cmake-mode-hook #'dash-load-cmake)
 
             (defun dash-load-elisp ()
               (interactive)
               (setq-local helm-dash-docsets '("Emacs_Lisp")))
-            (add-hook 'emacs-lisp-mode-hook #'dash-load-elisp)
 
             (defun dash-load-c ()
               (interactive)
               (setq-local helm-dash-docsets '("C")))
-            (add-hook 'c-mode-hook #'dash-load-c)
 
             (defun dash-load-c++ ()
               (interactive)
               (setq-local helm-dash-docsets '("C++"
                                               "GLib")))
-            (add-hook 'c++-mode-hook #'dash-load-c++)
 
             (defun dash-load-py ()
               (interactive)
               (setq-local helm-dash-docsets '("Python_2"
                                               "Pandas")))
-            (add-hook 'python-mode-hook #'dash-load-py)
 
             (defun dash-load-js ()
               (interactive)
               (setq-local helm-dash-docsets '("JavaScript"
                                               "NodeJS"
                                               "AngularJS")))
-            (add-hook 'js2-mode-hook #'dash-load-js)
 
             (defun dash-load-r ()
               (interactive)
               (setq-local helm-dash-docsets '("R")))
-            (add-hook 'ess-mode-hook #'dash-load-r)
 
             (defun dash-load-bash ()
               (interactive)
               (setq-local helm-dash-docsets '("Bash")))
-            (add-hook 'shell-mode-hook #'dash-load-bash)
 
             (defun dash-load-md ()
               (interactive)
-              (setq-local helm-dash-docsets '("Markdown")))
-            (add-hook 'markdown-mode-hook #'dash-load-md)))
+              (setq-local helm-dash-docsets '("Markdown")))))
 
 ;; helm company
 (use-package helm-company

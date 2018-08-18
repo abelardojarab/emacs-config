@@ -1,6 +1,6 @@
 ;;; setup-gnuplot.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -25,8 +25,7 @@
 ;;; Code:
 
 ;; for Gnuplot
-(use-package gnuplot
-  :load-path (lambda () (expand-file-name "gnuplot/" user-emacs-directory)))
+(use-package gnuplot)
 
 (provide 'setup-gnuplot)
 ;;; setup-gnuplot.el ends here
