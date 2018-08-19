@@ -132,9 +132,13 @@
 
 ;; Integrate helm with projectile
 (use-package helm-projectile
-  :demand t
+  :defer t
   :after (projectile helm-config)
-  :load-path (lambda () (expand-file-name "helm-projectile/" user-emacs-directory))
+  :commands (helm-projectile-on
+             helm-projectile-off
+             helm-projectile-toggle
+             my/helm-projectile-init)
+  :hook ((projectile-find-file projectile-mode) . my/helm-projectile-init)
   :config (progn
             (defun helm-projectile-on ()
               "Turn on helm-projectile key bindings."
@@ -146,13 +150,10 @@
               (interactive)
               (helm-projectile-toggle -1))
 
-            (defun my/projectile-setup ()
+            (defun my/helm-projectile-init ()
               (helm-projectile-on)
               (setq projectile-switch-project-action 'helm-projectile)
-              (setq projectile-completion-system 'helm))
-            (my/projectile-setup)
-            (add-hook 'projectile-find-file-hook #'my/projectile-setup)
-            (add-hook 'projectile-mode-hook      #'my/projectile-setup)))
+              (setq projectile-completion-system 'helm))))
 
 ;; Indent semantic entries
 (use-package helm-imenu

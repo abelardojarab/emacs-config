@@ -88,14 +88,12 @@
 (use-package ido-ubiquitous
   :disabled t
   :demand t
-  :load-path (lambda () (expand-file-name "ido-ubiquitous/" user-emacs-directory))
   :config (ido-ubiquitous-mode 1))
 
 ;; Ido vertical mode
 (use-package ido-vertical-mode
   :disabled t
   :demand t
-  :load-path (lambda () (expand-file-name "ido-vertical-mode/" user-emacs-directory))
   :config (ido-vertical-mode 1))
 
 ;; Use ibuffer
@@ -167,7 +165,6 @@
   :defer t
   :after ibuffer
   :commands my/ibuffer-apply-filter-groups
-  :load-path (lambda () (expand-file-name "ibuffer-vc/" user-emacs-directory))
   :hook (ibuffer . my/ibuffer-apply-filter-groups)
   :config (defun my/ibuffer-apply-filter-groups ()
             "Combine my saved ibuffer filter groups with those generated
