@@ -1,6 +1,6 @@
 ;;; setup-org-html.el ---                            -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -34,7 +34,6 @@
 
 ;; Org export compatible with Twitter Bootstrap
 (use-package ox-twbs
-  :load-path (lambda () (expand-file-name "ox-twbs/" user-emacs-directory))
   :after org
   :commands org-twbs-publish-to-html)
 
