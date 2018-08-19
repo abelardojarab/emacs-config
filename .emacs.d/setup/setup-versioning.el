@@ -27,12 +27,9 @@
 ;; Follow symbolic links
 (use-package vc
   :demand t
-  :config (progn
-            (setq vc-follow-symlinks t)
-
-            ;; Ignore errors in vc-exec-after
-            (defadvice vc-exec-after (around bar activate)
-              (ignore-errors add-do-it))))
+  :custom (vc-follow-symlinks t)
+  :config (defadvice vc-exec-after (around bar activate)
+            (ignore-errors add-do-it)))
 
 ;; Display commit number that is associated with current line of code
 (use-package vc-msg
@@ -78,7 +75,7 @@
                 svn-status-hide-unknown           t
                 svn-status-svn-file-coding-system 'utf-8))
 
-;; git-modes, not available in melpa
+;; git-modes (not available in melpa)
 (use-package git-modes
   :demand t
   :after vc
@@ -372,15 +369,13 @@
   :commands (turn-on-magit-gitflow)
   :if (executable-find "git")
   :after magit
-  :init (add-hook 'magit-mode-hook #'turn-on-magit-gitflow 'append))
+  :hook (magit-mode . turn-on-magit-gitflow))
 
-;; flydiff
-(use-package diff-hl-flydiff
-  :commands diff-hl-flydiff-mode)
 
 ;; diff-hl
 (use-package diff-hl
-  :after (diff-hl-flydiff magit)
+  :after magit
+  :if (executable-find "git")
   :commands (global-diff-hl-mode
              diff-hl-mode
              diff-hl-next-hunk
@@ -391,9 +386,12 @@
              diff-hl-flydiff-mode
              diff-hl-magit-post-refresh
              diff-hl-dired-mode)
-  :hook (((prog-mode conf-mode vc-dir-mode ledger-mode) . turn-on-diff-hl-mode)
+  :hook (((prog-mode conf-mode vc-dir-mode ledger-mode) . diff-hl-mode)
          (magit-post-refresh                            . diff-hl-magit-post-refresh))
   :config (progn
+            ;; flydiff
+            (use-package diff-hl-flydiff)
+
             (use-package diff-hl-dired
               :hook (dired-mode . diff-hl-dired-mode))
 
@@ -404,7 +402,7 @@
             ;; highlight in unsaved buffers as well
             (diff-hl-flydiff-mode 1)))
 
-;; git modeline and git utilities, not in melpa
+;; git modeline and git utilities (not available in melpa)
 (use-package git-emacs
   :if (executable-find "git")
   :load-path (lambda () (expand-file-name "git-emacs/" user-emacs-directory))
@@ -419,7 +417,6 @@
 
 ;; git-timemachine
 (use-package git-timemachine
-  :disabled t
   :defer t
   :commands (my/git-timemachine-start
              git-timemachine-toggle

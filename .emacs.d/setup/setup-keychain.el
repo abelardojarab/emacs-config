@@ -74,7 +74,7 @@
               (add-hook 'after-make-frame-functions #'my/fixup-gpg-agent)
               (add-hook 'focus-in-hook              #'my/fixup-gpg-agent))))
 
-;; Pinentry, not available in melpa
+;; Pinentry (not available in melpa)
 (use-package pinentry
   :load-path (lambda () (expand-file-name "pinentry/" user-emacs-directory))
   :commands pinentry-start)

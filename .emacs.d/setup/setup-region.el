@@ -73,8 +73,7 @@
               (deactivate-mark)
               (message "Mark deactivated"))))
 
-;; Fence edit, edit code blocks with proper fontification
-;; not available in melpa
+;; Fence edit, edit code blocks with proper fontification (not available in melpa)
 (use-package fence-edit
   :defer t
   :diminish fence-edit-mode
