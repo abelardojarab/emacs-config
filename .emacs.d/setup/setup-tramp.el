@@ -102,8 +102,7 @@ information retrieved from files created by the keychain script."
 ;; helm interface for tramp
 (use-package helm-tramp
   :defer t
-  :bind ("C-c s" . helm-tramp)
-  :load-path (lambda () (expand-file-name "helm-tramp/" user-emacs-directory)))
+  :bind ("C-c s" . helm-tramp))
 
 (provide 'setup-tramp)
 ;;; setup-tramp.el ends here

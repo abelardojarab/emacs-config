@@ -29,7 +29,6 @@
   :commands (newsticker-start newsticker-start-ticker)
   :if (and (not (equal system-type 'windows-nt))
            (internet-up-p))
-  :load-path (lambda () (expand-file-name "newsticker/" user-emacs-directory))
   :config (progn
             (use-package newsticker-notify)
 
@@ -65,7 +64,6 @@
   :if (and (not (equal system-type 'windows-nt))
            (internet-up-p))
   :defer t
-  :load-path (lambda () (expand-file-name "sx/" user-emacs-directory))
   :bind (("C-c a S a" . sx-ask)
          ("C-c a S s" . sx-tab-all-questions)
          ("C-c a S q" . sx-tab-all-questions)
@@ -80,11 +78,10 @@
 
 ;; Write questions/answers for Stack Exchange
 (use-package sx-compose
+  :defer t
   :if (and (not (equal system-type 'windows-nt))
            (internet-up-p))
   :after sx
-  :defer t
-  :load-path (lambda () (expand-file-name "sx/" user-emacs-directory))
   :config (progn
             ;; Don't fill in SX questions/answers, and use visual lines instead.  Plays
             ;; more nicely with the website.
@@ -97,11 +94,10 @@
 
 ;; Show Stack
 (use-package sx-question-mode
+  :defer t
   :if (and (not (equal system-type 'windows-nt))
            (internet-up-p))
   :after sx
-  :defer t
-  :load-path (lambda () (expand-file-name "sx/" user-emacs-directory))
   ;; Display questions in the same window
   :config (setq sx-question-mode-display-buffer-function #'switch-to-buffer))
 
@@ -110,7 +106,6 @@
   :if (and (not (equal system-type 'windows-nt))
            (internet-up-p))
   :commands (elfeed elfeed-update)
-  :load-path (lambda () (expand-file-name "elfeed/" user-emacs-directory))
   :bind (:map elfeed-search-mode-map
               ("a"        . elfeed-search-update--force)
               ("A"        . elfeed-update)

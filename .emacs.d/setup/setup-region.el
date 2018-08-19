@@ -35,14 +35,13 @@
 (use-package region-state
   :defer t
   :commands region-state-mode
-  :load-path (lambda () (expand-file-name "region-state/" user-emacs-directory))
   :config (region-state-mode))
 
 ;; Region bindings mode
 (use-package region-bindings-mode
-  :load-path (lambda () (expand-file-name "region-bindings-mode/" user-emacs-directory))
   :diminish region-bindings-mode
-  :commands (region-bindings-mode region-bindings-mode-enable)
+  :commands (region-bindings-mode
+             region-bindings-mode-enable)
   :bind (:map region-bindings-mode-map
               ;; shift select bindings
               ("<prior>"           . shift-mark-backward-page)
@@ -75,6 +74,7 @@
               (message "Mark deactivated"))))
 
 ;; Fence edit, edit code blocks with proper fontification
+;; not available in melpa
 (use-package fence-edit
   :defer t
   :diminish fence-edit-mode

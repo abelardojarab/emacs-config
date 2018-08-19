@@ -1,6 +1,6 @@
 ;;; setup-sqlite.el ---                              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -25,11 +25,12 @@
 ;;; Code:
 
 (use-package pcsv
-  :defer t
-  :load-path (lambda () (expand-file-name "pcsv/" user-emacs-directory)))
+  :defer t)
 
 (use-package esqlite
-  :load-path (lambda () (expand-file-name "esqlite/" user-emacs-directory)))
+  :defer t
+  :commands esqlite-sqlite
+  :if (executable-find "sqlite3"))
 
 (provide 'setup-sqlite)
 ;;; setup-sqlite.el ends here

@@ -51,7 +51,9 @@
 ;; Highlight the line
 (use-package hl-line
   :init (global-hl-line-mode t)
-  :commands global-hl-line-mode
+  :commands (global-hl-line-mode
+             my/hl-line-mode-off)
+  :hook (org-mode . my/hl-line-mode-off)
   :config (progn
 
             ;; Highlight the line only in the active window
@@ -72,14 +74,12 @@
             ;; hl-line overrides the background of hi-lock’ed text, this will provide a fix
             (defadvice hi-lock-set-pattern (around use-overlays activate)
               (let ((font-lock-fontified nil))
-                ad-do-it))
-            (add-hook 'org-mode-hook 'my/hl-line-mode-off)))
+                ad-do-it))))
 
 ;; Highlight symbol
 (use-package highlight-symbol
   :defer t
   :commands highlight-symbol-mode
-  :load-path (lambda () (expand-file-name "highlight-symbol/" user-emacs-directory))
   :diminish highlight-symbol-mode
   :config (progn
             ;; http://emacs.stackexchange.com/questions/931
@@ -105,13 +105,12 @@ create the new one."
 (use-package highlight-blocks
   :defer t
   :commands highlight-blocks-mode
-  :load-path (lambda () (expand-file-name "highlight-blocks/" user-emacs-directory))
   :diminish highlight-blocks-mode
   :config (mapc (lambda (mode)
                   (add-hook mode #'highlight-sexp-mode))
                 my/highlight-blocks-modes))
 
-;; Highlight s-exp
+;; Highlight s-exp (not available in melpa)
 (use-package highlight-sexp
   :defer t
   :commands highlight-sexp-mode
@@ -121,11 +120,10 @@ create the new one."
                   (add-hook mode #'highlight-sexp-mode))
                 my/highlight-sexp-modes))
 
-;; Highlight the latest changes in the buffer (like text inserted from: yank, undo, etc.) until the next command is run
+;; Highlight the latest changes in the buffer (like text inserted from: yank, undo, etc.)
 (use-package volatile-highlights
   :defer t
   :commands volatile-highlights-mode
-  :load-path (lambda () (expand-file-name "volatile-highlights/" user-emacs-directory))
   :diminish volatile-highlights-mode
   :config (volatile-highlights-mode t))
 

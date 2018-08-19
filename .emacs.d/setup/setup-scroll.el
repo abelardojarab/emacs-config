@@ -1,6 +1,6 @@
 ;;; setup-scroll.el ---                              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -36,7 +36,6 @@
 ;; Be careful it can ruin shift-select-mode
 (use-package smooth-scrolling
   :defer t
-  :load-path (lambda () (expand-file-name "smooth-scrolling/" user-emacs-directory))
   :commands smooth-scrolling-mode
   :config (smooth-scrolling-mode 1))
 

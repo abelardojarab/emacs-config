@@ -27,8 +27,7 @@
 ;; Spice mode
 (use-package spice-mode
   :mode ("\\.sp\\'" "\\.scs\\'")
-  :commands spice-mode
-  :load-path (lambda () (expand-file-name "spice-mode/" user-emacs-directory)))
+  :commands spice-mode)
 
 (provide 'setup-spice)
 ;;; setup-post.el ends here

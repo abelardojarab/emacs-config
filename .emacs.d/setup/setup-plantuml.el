@@ -27,7 +27,6 @@
 (use-package plantuml-mode
   :mode ("\\.puml\\'" "\\.plantuml\\'")
   :commands (plauntuml-mode plantuml-complete-symbol plantuml-render-buffer)
-  :load-path (lambda () (expand-file-name "plantuml-mode/" user-emacs-directory))
   :init (setq plantuml-jar-path (expand-file-name "jar/plantuml.jar" user-emacs-directory))
   :config (progn
             (defun plantuml-render-buffer ()
