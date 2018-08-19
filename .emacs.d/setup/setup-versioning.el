@@ -374,7 +374,7 @@
 
 ;; diff-hl
 (use-package diff-hl
-  :after magit
+  :defer t
   :if (executable-find "git")
   :commands (global-diff-hl-mode
              diff-hl-mode
@@ -384,23 +384,23 @@
              diff-hl-diff-goto-hunk
              diff-hl-revert-hunk
              diff-hl-flydiff-mode
+             diff-hl-dired-mode
              diff-hl-magit-post-refresh
              diff-hl-dired-mode)
-  :hook (((prog-mode conf-mode vc-dir-mode ledger-mode) . diff-hl-mode)
-         (magit-post-refresh                            . diff-hl-magit-post-refresh))
+  :hook (((prog-mode markdown-mode org-mode)               . diff-hl-flydiff-mode)
+         (dired-mode                                       . diff-hl-dired-mode)
+         (vc-dir-mode                                      . diff-hl-mode)
+         (magit-post-refresh                               . diff-hl-magit-post-refresh))
   :config (progn
             ;; flydiff
             (use-package diff-hl-flydiff)
 
-            (use-package diff-hl-dired
-              :hook (dired-mode . diff-hl-dired-mode))
+            ;; dired
+            (use-package diff-hl-dired)
 
             (setq diff-hl-draw-borders t)
             (defadvice svn-sttus-update-modeline (after svn-update-diff-hl activate)
-              (diff-hl-update))
-
-            ;; highlight in unsaved buffers as well
-            (diff-hl-flydiff-mode 1)))
+              (diff-hl-update))))
 
 ;; git modeline and git utilities (not available in melpa)
 (use-package git-emacs
