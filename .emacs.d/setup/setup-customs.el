@@ -1,6 +1,6 @@
 ;;; setup-customs.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2017, 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@ubuntu02>
 ;; Keywords:
@@ -327,6 +327,7 @@
     "stdbool.h"
     "stdio.h"
     "stdlib.h"
+    "string.h"
     "confname.h"
     "unistd.h"
     "pthread.h"
@@ -335,6 +336,9 @@
     ;; C++ header files
     "new"
     "cstdlib"
+    "cstdio"
+    "cstdint"
+    "cstdbool"
     "shared_ptr.h"
     "unique_ptr.h"
     "std_mutex"
