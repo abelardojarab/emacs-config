@@ -53,7 +53,7 @@
   :init (global-hl-line-mode t)
   :commands (global-hl-line-mode
              my/hl-line-mode-off)
-  :hook (org-mode . my/hl-line-mode-off)
+  :hook ((org-mode markdown-mode) . my/hl-line-mode-off)
   :config (progn
 
             ;; Highlight the line only in the active window
