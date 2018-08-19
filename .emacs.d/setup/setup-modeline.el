@@ -28,7 +28,6 @@
 (use-package nyan-mode
   :if (display-graphic-p)
   :commands nyan-mode
-  :load-path (lambda () (expand-file-name "nyan-mode/" user-emacs-directory))
   :config (progn
             (nyan-mode t)
             (nyan-start-animation)))
@@ -36,7 +35,6 @@
 ;; Powerline
 (use-package powerline
   :after projectile
-  :load-path (lambda () (expand-file-name "powerline/" user-emacs-directory))
   :config (unless (display-graphic-p)
             (powerline-default-theme)))
 
@@ -46,17 +44,11 @@
   :after powerline
   :load-path (lambda () (expand-file-name "spaceline/" user-emacs-directory))
   :custom (powerline-default-separator 'slant)
-  :config (progn
-            (spaceline-emacs-theme)
-            (spaceline-toggle-minor-modes-off)
-            (spaceline-toggle-buffer-size-off)
-
-            ;; Configure the mode-line
-            (setq-default spaceline-display-default-perspective t
-                          spaceline-highlight-face-func 'spaceline-highlight-face-modified
-                          spaceline-flycheck-bullet "• %s"
-                          spaceline-separator-dir-left '(left . left)
-                          spaceline-separator-dir-right '(right . right))))
+  :config (setq-default spaceline-display-default-perspective t
+                        spaceline-highlight-face-func 'spaceline-highlight-face-modified
+                        spaceline-flycheck-bullet "• %s"
+                        spaceline-separator-dir-left '(left . left)
+                        spaceline-separator-dir-right '(right . right)))
 
 ;; Spaceline configuration
 (use-package spaceline-config
@@ -67,7 +59,6 @@
 (use-package spaceline-all-the-icons
   :if (display-graphic-p)
   :after spaceline-config
-  :load-path (lambda () (expand-file-name "spaceline-all-the-icons/" user-emacs-directory))
   :config (progn
 
             ;; disable mode-line mouseovers
@@ -153,7 +144,6 @@
 
 ;; Customize Emacs lighters
 (use-package delight
-  :load-path (lambda () (expand-file-name "delight/" user-emacs-directory))
   :config (progn
             (defadvice powerline-major-mode (around delight-powerline-major-mode activate)
               (let ((inhibit-mode-name-delight nil)) ad-do-it))
