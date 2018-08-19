@@ -33,8 +33,8 @@
   :after org
   :commands (markdown-mode
              org-table-align
-	     my/markdown-mode-init)
-  :hook (markdown-mode . my/markdown-configure)
+             my/markdown-mode-init)
+  :hook (markdown-mode . my/markdown-mode-init)
   :config (progn
 
             (setq markdown-asymmetric-header         t
@@ -53,7 +53,7 @@
               :hook (flycheck-mode . flycheck-mmark-setup)
               :commands (flycheck-mmark-setup))
 
-	    ;; Markdown preferences
+            ;; Markdown preferences
             (defun my/markdown-mode-init ()
               (toggle-truncate-lines     t)
               (setq truncate-lines       t)
