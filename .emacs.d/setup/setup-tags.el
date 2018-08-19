@@ -136,7 +136,6 @@ tags table and its (recursively) included tags tables."
   :after xref
   :if (and (executable-find "global")
            (boundp 'xref-backend-functions))
-  :load-path (lambda () (expand-file-name "gxref/" user-emacs-directory))
   :config (add-to-list 'xref-backend-functions 'gxref-xref-backend))
 
 ;; Implementing my own copy of this function since it is required by
@@ -149,7 +148,6 @@ tags table and its (recursively) included tags tables."
   :if (not (executable-find "global"))
   :commands (etags-select-find-tag
              ido-find-tag)
-  :load-path (lambda () (expand-file-name "etags-select/" user-emacs-directory))
   :config (progn
             ;; Use ido to list tags, but then select via etags-select (best of both worlds!)
             (defun ido-find-tag ()
@@ -191,7 +189,7 @@ tags table and its (recursively) included tags tables."
   :defer t
   ;; do not enable etags if global is present
   :if (and (executable-find "ctags")
-	   (not (executable-find "global")))
+       (not (executable-find "global")))
   :commands (ctags-create-or-update
              ctags-create-or-update-tags-table
              ctags-search)

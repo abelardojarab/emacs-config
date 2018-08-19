@@ -34,7 +34,6 @@
 ;; Automated auto-insert of yasnippet templates on new files
 (use-package yatemplate
   :defer t
-  :load-path (lambda () (expand-file-name "yatemplate/" user-emacs-directory))
   :commands yatemplate-fill-alist
   :config (yatemplate-fill-alist))
 

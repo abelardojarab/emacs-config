@@ -1,6 +1,6 @@
 ;;; setup-org-plugins.el ---                         -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -28,8 +28,7 @@
 (use-package toc-org
   :defer t
   :after org
-  :load-path (lambda () (expand-file-name "toc-org/" user-emacs-directory))
-  :init (add-hook 'org-mode-hook #'toc-org-enable)
+  :hook (org-mode . toc-org-enable)
   :commands toc-org-enable)
 
 ;; Nice bulleted lists
@@ -37,8 +36,7 @@
   :defer t
   :if (display-graphic-p)
   :after org
-  :load-path (lambda () (expand-file-name "org-bullets/" user-emacs-directory))
-  :init (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+  :hook (org-mode . org-bullets-mode)
   :commands org-bullets-mode
   :config (setq org-bullets-bullet-list '("◉" "○" "•" "•")))
 
@@ -46,26 +44,22 @@
 (use-package org-seek
   :defer t
   :after org
-  :load-path (lambda () (expand-file-name "org-seek/" user-emacs-directory))
   :commands (org-seek-string org-seek-regexp org-seek-headlines))
 
 ;; Automated bulleting
 (use-package org-autolist
   :defer t
   :after org
-  :load-path (lambda () (expand-file-name "org-autolist/" user-emacs-directory))
-  :init (add-hook 'org-mode-hook (lambda () (org-autolist-mode 1)))
+  :hook (org-mode . org-autolist-mode)
   :commands org-autolist-mode)
 
 ;; ASCII doc exporter
 (use-package ox-asciidoc
-  :after org
-  :load-path (lambda () (expand-file-name "ox-asciidoc/" user-emacs-directory)))
+  :after org)
 
 ;; Export org-mode to Google I/O HTML5 slides
 (use-package ox-ioslide
   :after org
-  :load-path (lambda () (expand-file-name "ox-ioslide/" user-emacs-directory))
   :config (use-package ox-ioslide-helper))
 
 (provide 'setup-org-plugins)

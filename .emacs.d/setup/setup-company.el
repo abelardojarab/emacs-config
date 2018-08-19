@@ -25,7 +25,6 @@
 (use-package company
   :defer t
   :diminish company-mode
-  :load-path (lambda () (expand-file-name "company/" user-emacs-directory))
   :commands (global-company-mode
              company-mode
              add-pcomplete-to-capf

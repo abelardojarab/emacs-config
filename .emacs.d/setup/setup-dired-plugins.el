@@ -57,7 +57,6 @@
                ("d"          . neotree-delete-node)
                ("r"          . neotree-rename-node)
                ("q"          . kill-buffer-and-window)))
-  :load-path (lambda () (expand-file-name "neotree/" user-emacs-directory))
   :config (progn
 
             ;; Fix neotree to not collide with ecb

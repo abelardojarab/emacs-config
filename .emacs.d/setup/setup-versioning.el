@@ -39,7 +39,6 @@
   :defer t
   :after (vc popup)
   :commands vc-msg-show
-  :load-path (lambda () (expand-file-name "vc-msg/" user-emacs-directory))
   :config (progn
             (defun vc-msg-hook-setup (vcs-type commit-info)
               ;; copy commit id to clipboard
@@ -79,7 +78,7 @@
                 svn-status-hide-unknown           t
                 svn-status-svn-file-coding-system 'utf-8))
 
-;; git-modes
+;; git-modes, not available in melpa
 (use-package git-modes
   :demand t
   :after vc
@@ -124,6 +123,8 @@
              magit-git-wash
              magit-insert-section
              magit-after-save-refresh-status
+             magit-after-revert-hook
+             magit-not-reverted-hook
              git-commit-setup-check-buffer)
   :defines (magit-ediff-dwim-show-on-hunks)
   :bind (:map ctl-x-map
@@ -133,7 +134,6 @@
                ("c"       . magit-maybe-commit)
                ("q"       . magit-quit-session)))
   :if (executable-find "git")
-  :load-path (lambda () (expand-file-name "magit/lisp" user-emacs-directory))
   :init (progn
           (setenv "GIT_PAGER" "")
           (setq with-editor-file-name-history-exclude '("1"))
@@ -376,8 +376,7 @@
 
 ;; flydiff
 (use-package diff-hl-flydiff
-  :commands diff-hl-flydiff-mode
-  :load-path (lambda () (expand-file-name "diff-hl/" user-emacs-directory)))
+  :commands diff-hl-flydiff-mode)
 
 ;; diff-hl
 (use-package diff-hl
@@ -405,7 +404,7 @@
             ;; highlight in unsaved buffers as well
             (diff-hl-flydiff-mode 1)))
 
-;; git modeline and git utilities
+;; git modeline and git utilities, not in melpa
 (use-package git-emacs
   :if (executable-find "git")
   :load-path (lambda () (expand-file-name "git-emacs/" user-emacs-directory))
@@ -416,8 +415,7 @@
   :defer t
   :if (executable-find "git")
   :diminish gist-list
-  :commands (gist-list gist-region-or-buffer)
-  :load-path (lambda () (expand-file-name "gist/" user-emacs-directory)))
+  :commands (gist-list gist-region-or-buffer))
 
 ;; git-timemachine
 (use-package git-timemachine
@@ -452,16 +450,13 @@
 (use-package git-messenger
   :if (executable-find "git")
   :commands (git-messenger:popup-message)
-  :config (progn
-            (setq git-messenger:show-detail t)
-            (define-key git-messenger-map (kbd "RET") 'git-messenger:popup-close))
-  :load-path (lambda () (expand-file-name "git-messenger/" user-emacs-directory)))
+  :custom (git-messenger:show-detail t)
+  :config (define-key git-messenger-map (kbd "RET") 'git-messenger:popup-close))
 
 ;; Show git state for individual lines on the margin
 (use-package git-gutter
   :if (executable-find "git")
   :diminish git-gutter-mode
-  :load-path (lambda () (expand-file-name "git-gutter/" user-emacs-directory))
   :init (global-git-gutter-mode t)
   :commands global-git-gutter-mode
   :hook (magit-post-refresh . git-gutter:update-all-windows)
@@ -504,7 +499,6 @@ Git gutter:
               :if (and (executable-find "git")
                        (display-graphic-p))
               :after git-gutter
-              :load-path (lambda () (expand-file-name "git-gutter-fringe/" user-emacs-directory))
               :config (progn
 
                         ;; Please adjust fringe width if your own sign is too big.
@@ -557,8 +551,7 @@ Git gutter:
 (use-package smeargle
   :defer t
   :if (executable-find "git")
-  :commands (smeargle smeargle-commits smeargle-clear)
-  :load-path (lambda () (expand-file-name "smeargle/" user-emacs-directory)))
+  :commands (smeargle smeargle-commits smeargle-clear))
 
 ;; Smerge, resolve merge conflicts
 (use-package smerge-mode

@@ -54,7 +54,6 @@
 (use-package fold-this
   :defer t
   :after region-bindings-mode
-  :load-path (lambda () (expand-file-name "fold-this/" user-emacs-directory))
   :init (setq fold-this-persistent-folds-file  (concat (file-name-as-directory
                                                         my/emacs-cache-dir)
                                                        "folds-saved"))
@@ -159,13 +158,11 @@
   :init (progn
           (setq hs-org/trigger-keys-block (list (kbd "C-c +")))
           (setq hs-org/trigger-keys-all (list (kbd "C-c &"))))
-  :commands hs-org/minor-mode
-  :load-path (lambda () (expand-file-name "hideshow-org/" user-emacs-directory)))
+  :commands hs-org/minor-mode)
 
 ;; Yet Another Folding - folding code blocks based on indentation
 (use-package yafolding
   :defer t
-  :load-path (lambda () (expand-file-name "yafolding/" user-emacs-directory))
   :commands (yafolding-toggle-element
              yafolding-toggle-all
              yafolding-show-element
@@ -322,7 +319,6 @@ If prefix argument is used, `set-selective-display' to the current column."
               ("<tab>" . vimish-fold-unfold)
               :map vimish-fold-unfolded-keymap
               ("<tab>" . vimish-fold-refold))
-  :load-path (lambda () (expand-file-name "vimish-fold/" user-emacs-directory))
   :config (progn
             (setq-default
              vimish-fold-dir  (file-name-as-directory

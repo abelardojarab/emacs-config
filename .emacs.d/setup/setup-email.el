@@ -29,8 +29,8 @@
   :disabled t
   :after std11
   :commands (wl
-	     wl-draft
-	     wl-other-frame)
+         wl-draft
+         wl-other-frame)
   :config (progn
 
             ;; Location for custom scripts
@@ -392,8 +392,7 @@
               :if (executable-find "mu")
               :demand t
               :bind (:map mu4e-main-mode-map
-                          ("S" . helm-mu))
-              :load-path (lambda () (expand-file-name "helm-mu/" user-emacs-directory)))))
+                          ("S" . helm-mu)))))
 
 (provide 'setup-email)
 ;;; setup-email.el ends here

@@ -24,11 +24,15 @@
 
 ;;; Code:
 
+;; dont fetch from melpa
 (use-package auctex
   :defer t
   :load-path (lambda () (expand-file-name "auctex/" user-emacs-directory))
-  :commands (LaTeX-math-mode TeX-source-correlate-mode)
+  :commands (LaTeX-math-mode
+             TeX-source-correlate-mode
+             my/latex-mode-setup)
   :mode ("\\.tex\\'" . LaTeX-mode)
+  :hook (LaTeX-mode . my/latex-mode-setup)
   :init (progn
           (setq-default TeX-auto-save t
                         TeX-parse-self t
@@ -52,14 +56,12 @@
             ;; enable math mode in latex
             (LaTeX-preview-setup)
             ;; Enable reftex
-            (turn-on-reftex))
-
-          (add-hook 'LaTeX-mode-hook #'my/latex-mode-setup)))
+            (turn-on-reftex))))
 
 (use-package reftex
   :defer t
   :commands turn-on-reftex
-  :init (setq reftex-plug-into-AUCTeX t))
+  :custom (reftex-plug-into-AUCTeX t))
 
 (use-package bibtex
   :defer t
@@ -74,7 +76,6 @@
 
 (use-package ebib-handy
   :defer t
-  :load-path (lambda () (expand-file-name "ebib-handy/" user-emacs-directory))
   :bind ("C-c b" . ebib-handy)
   :config (progn
             (ebib-handy-enable)
@@ -87,19 +88,12 @@
 (use-package latex-pretty-symbols
   :defer t
   :commands latex-unicode-simplified
-  :load-path (lambda () (expand-file-name "latex-pretty-symbols/" user-emacs-directory))
-  :init (progn
-          ;;AUCTeX
-          (add-hook 'LaTeX-mode-hook #'latex-unicode-simplified)
-
-          ;;latex-mode
-          (add-hook 'latex-mode-hook #'latex-unicode-simplified)))
+  :hook ((LaTeX-mode latex-mode) . latex-unicode-simplified))
 
 (use-package magic-latex-buffer
   :defer t
   :commands magic-latex-buffer
-  :load-path (lambda () (expand-file-name "magic-latex-buffer/" user-emacs-directory))
-  :init (add-hook 'latex-mode-hook #'magic-latex-buffer)
+  :hook (latex-mode . magic-latex-buffer)
   :config (setq magic-latex-enable-block-highlight t
                 magic-latex-enable-suscript        t
                 magic-latex-enable-pretty-symbols  t
@@ -109,8 +103,7 @@
 
 ;; Fast input methods for LaTeX environments and math
 (use-package cdlatex
-  :defer t
-  :load-path (lambda () (expand-file-name "cdlatex/" user-emacs-directory)))
+  :defer t)
 
 (provide 'setup-latex)
 ;;; setup-latex.el ends here

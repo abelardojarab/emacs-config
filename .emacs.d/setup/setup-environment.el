@@ -301,7 +301,6 @@ LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
 ;; Exec path from shell in Mac OSX
 (use-package exec-path-from-shell
   :if (equal system-type 'darwin)
-  :load-path (lambda () (expand-file-name "exec-path-from-shell/" user-emacs-directory))
   :config (progn
             (setq exec-path-from-shell-check-startup-files nil)
             (exec-path-from-shell-initialize)))

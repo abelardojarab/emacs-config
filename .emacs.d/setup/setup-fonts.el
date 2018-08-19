@@ -175,8 +175,7 @@
 ;; Pretty mode
 (use-package pretty-mode
   :defer t
-  :commands pretty-mode
-  :load-path (lambda () (expand-file-name "pretty-mode/" user-emacs-directory)))
+  :commands pretty-mode)
 
 (provide 'setup-fonts)
 ;;; setup-fonts.el ends here

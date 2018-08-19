@@ -62,8 +62,7 @@
              psw-switch-projectile-files
              psw-navigate-files)
   :bind (:map ctl-x-map
-              ("/" . psw-switch-function))
-  :load-path (lambda () (expand-file-name "popup-switcher/" user-emacs-directory)))
+              ("/" . psw-switch-function)))
 
 ;; Native file opening
 (cond

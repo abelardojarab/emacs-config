@@ -38,7 +38,6 @@
 ;; Remember last theme
 (use-package remember-last-theme
   :if (display-graphic-p)
-  :load-path (lambda () (expand-file-name "remember-last-theme/" user-emacs-directory))
   :config (remember-last-theme-enable))
 
 (provide 'setup-themes)

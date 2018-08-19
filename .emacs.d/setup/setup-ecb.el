@@ -299,7 +299,6 @@ more place."
               :disabled t
               :demand t
               :after (sr-speedbar projectile)
-              :load-path (lambda () (expand-file-name "projectile-speedbar/" user-emacs-directory))
               :commands projectile-speedbar-open-current-buffer-in-tree
               :init (progn
                       (defadvice helm-projectile-find-file (after locate-file activate)

@@ -65,7 +65,6 @@
 (use-package popwin
   :defer t
   :commands popwin-mode
-  :load-path (lambda () (expand-file-name "popwin/" user-emacs-directory))
   :config (add-to-list popwin:special-display-config '(help-mode 0.5 :position below)))
 
 ;; Perspective

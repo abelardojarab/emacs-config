@@ -27,7 +27,6 @@
 ;; Tabbar mode
 (use-package tabbar
   :demand t
-  :load-path (lambda () (expand-file-name "tabbar/" user-emacs-directory))
   :commands tabbar-mode
   :bind (("C-c <right>" . tabbar-forward)
          ("C-c <left>"  . tabbar-backward)
@@ -105,15 +104,13 @@ That is, a string used to represent it on the tab bar."
 ;; Tabbar ruler pre-requisites
 (use-package mode-icons
   :demand t
-  :if (display-graphic-p)
-  :load-path (lambda () (expand-file-name "mode-icons/" user-emacs-directory)))
+  :if (display-graphic-p))
 
 ;; more tweaking to tabbar
 (use-package tabbar-ruler
   :demand t
   :if (display-graphic-p)
   :after (powerline tabbar mode-icons projectile)
-  :load-path (lambda () (expand-file-name "tabbar-ruler/" user-emacs-directory))
   :config (progn
             (setq tabbar-ruler-global-tabbar 't)
             (tabbar-install-faces)

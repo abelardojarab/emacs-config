@@ -26,18 +26,23 @@
 
 ;; org2blog pre-requisite
 (use-package metaweblog
-  :defer t
-  :load-path (lambda () (expand-file-name "metaweblog/" user-emacs-directory)))
+  :defer t)
 
 ;; org2blog
 (use-package org2blog
+  :defer t
   :after org
-  :load-path (lambda () (expand-file-name "org2blog/" user-emacs-directory))
+  :commands (org2blog/wp-login
+             org2blog/wp-logout
+             org2blog/wp-new-entry
+             org2blog/post-buffer
+             org2blog/post-buffer-as-page
+             org2blog/post-buffer-and-publish)
   :config (progn
             (let (credentials)
 
               ;; Autoloads
-              (require 'org2blog-autoloads)
+              (use-package org2blog-autoloads)
 
               ;; Fetch credentials
               (setq credentials (auth-source-user-and-password "personal-blog"))

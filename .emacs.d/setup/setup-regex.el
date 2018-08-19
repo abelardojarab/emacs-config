@@ -26,14 +26,12 @@
 
 ;; visual regexp replace
 (use-package visual-regexp
-  :load-path (lambda () (expand-file-name "visual-regexp/" user-emacs-directory))
   :bind (("C-c r" . vr/replace)
          ("C-c q" . vr/query-replace)
          ("C-c m" . vr/mc-mark)))
 
 ;; Convert regexps to RX and back
 (use-package pcre2el
-  :load-path (lambda () (expand-file-name "pcre2el/" user-emacs-directory))
   :diminish pcre-mode
   :config (progn
             (pcre-mode)
@@ -41,13 +39,10 @@
 
 ;; Combine it with Visual Regexp
 (use-package visual-regexp-steroids
-  :load-path (lambda () (expand-file-name "visual-regexp-steroids/" user-emacs-directory))
-  ;; to use visual-regexp-steroids's isearch instead of the built-in regexp isearch:
   :bind (:map esc-map
               (("M-f" . vr/isearch-backward) ;; Esc-M-f
                ("C-f" . vr/isearch-forward))) ;; Esc-C-f
-  :config (custom-set-variables
-   '(vr/engine (quote pcre2el))))
+  :custom (vr/engine 'pcre2el))
 
 (provide 'setup-regex)
 ;;; setup-regex.el ends here

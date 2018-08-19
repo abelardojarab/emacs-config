@@ -42,7 +42,6 @@
 (use-package spaceline
   :if (display-graphic-p)
   :after powerline
-  :load-path (lambda () (expand-file-name "spaceline/" user-emacs-directory))
   :custom (powerline-default-separator 'slant)
   :config (setq-default spaceline-display-default-perspective t
                         spaceline-highlight-face-func 'spaceline-highlight-face-modified

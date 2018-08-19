@@ -27,7 +27,6 @@
 ;; Smart tab
 (use-package smart-tab
   :diminish smart-tab-mode
-  :load-path (lambda () (expand-file-name "smart-tab/" user-emacs-directory))
   :commands global-smart-tab-mode
   :custom (smart-tab-using-hippie-expand t)
   :init (global-smart-tab-mode t)

@@ -148,13 +148,11 @@
             ;; dired-ranger pre-requisite
             (use-package dired-hacks-utils
               :demand t
-              :after dired
-              :load-path (lambda () (expand-file-name "dired-hacks-utils/" user-emacs-directory)))
+              :after dired)
 
             ;; Enable copying and pasting files
             (use-package dired-ranger
               :after dired-hacks-utils
-              :load-path (lambda () (expand-file-name "dired-ranger/" user-emacs-directory))
               :bind (:map dired-mode-map
                           ("c" . dired-ranger-copy)
                           ("m" . dired-ranger-move)
@@ -163,7 +161,6 @@
             ;; Highlight dired buffer with K-shell coloring
             (use-package dired-k
               :after dired
-              :load-path (lambda () (expand-file-name "dired-k/" user-emacs-directory))
               :bind (:map dired-mode-map
                           ("k" . dired-k))
               :commands (dired-k dired-k-no-revert)
@@ -213,7 +210,6 @@
             (use-package direx
               :demand t
               :after dired
-              :load-path (lambda () (expand-file-name "direx/" user-emacs-directory))
               :bind (:map dired-mode-map
                           ("b"       . direx:jump-to-directory)
                           :map direx:direx-mode-map
@@ -227,18 +223,14 @@
             ;; Integration with projectile
             (use-package direx-project
               :demand t
-              :after (direx projectile)
-              :load-path (lambda () (expand-file-name "direx/" user-emacs-directory)))
+              :after (direx projectile))
 
             ;; Choose starting dired directory
             (use-package helm-dired-history
               :after (dired savehist helm)
               :bind (:map dired-mode-map
                           ("," . helm-dired-history-view))
-              :load-path (lambda () (expand-file-name "helm-dired-history/" user-emacs-directory))
-              :config (progn
-                        (savehist-mode 1)
-                        (add-to-list 'savehist-additional-variables 'helm-dired-history-variable)))))
+              :config (add-to-list 'savehist-additional-variables 'helm-dired-history-variable))))
 
 (provide 'setup-dired)
 ;;; setup-dired.el ends here

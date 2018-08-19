@@ -51,7 +51,6 @@
 (use-package smartparens
   :defer t
   :diminish smartparens-mode
-  :load-path (lambda () (expand-file-name "smartparens/" user-emacs-directory))
   :commands (smartparens-global-mode
              smartparens-mode
              show-smartparens-global-mode
@@ -83,7 +82,7 @@
 (use-package autopair
   :defer t
   :commands (autopair-mode
-	     autopair-global-mode)
+         autopair-global-mode)
   :diminish autopair-mode
   :config (progn
             (autopair-global-mode) ;; enable autopair in all buffers

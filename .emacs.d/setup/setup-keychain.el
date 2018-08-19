@@ -46,7 +46,6 @@
 ;; Keeping Secrets in Emacs with GnuPG & EasyPG
 (use-package epg
   :demand t
-  :load-path (lambda () (expand-file-name "keychain-environment/" user-emacs-directory))
   :after keychain-environment
   :config (progn
             ;; https://www.masteringemacs.org/article/keeping-secrets-in-emacs-gnupg-auth-sources
@@ -75,7 +74,7 @@
               (add-hook 'after-make-frame-functions #'my/fixup-gpg-agent)
               (add-hook 'focus-in-hook              #'my/fixup-gpg-agent))))
 
-;; Pinentry
+;; Pinentry, not available in melpa
 (use-package pinentry
   :load-path (lambda () (expand-file-name "pinentry/" user-emacs-directory))
   :commands pinentry-start)
@@ -143,16 +142,14 @@
 (use-package password-store
   :demand t
   :if (and (equal system-type 'gnu/linux)
-           (executable-find "pass"))
-  :load-path (lambda () (expand-file-name "password-store/" user-emacs-directory)))
+           (executable-find "pass")))
 
 ;; major-mode to manage 'pass'
 (use-package pass
   :demand t
   :after password-store
   :if (and (equal system-type 'gnu/linux)
-           (executable-find "pass"))
-  :load-path (lambda () (expand-file-name "pass/" user-emacs-directory)))
+           (executable-find "pass")))
 
 ;; 'pass' interface to auth-source,
 ;; no longer need to store passwords in the .authinfo file
@@ -161,7 +158,6 @@
   :if (and (equal system-type 'gnu/linux)
            (executable-find "pass"))
   :after pass
-  :load-path (lambda () (expand-file-name "auth-password-store/" user-emacs-directory))
   :config (auth-pass-enable))
 
 ;; Secrets file

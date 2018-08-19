@@ -36,15 +36,13 @@
 ;; helm elscreen
 (use-package helm-elscreen
   :defer t
-  :after (helm elscreen)
-  :load-path (lambda () (expand-file-name "helm-elscreen/" user-emacs-directory)))
+  :after (helm elscreen))
 
 ;; helm git-grep
 (use-package helm-git-grep
   :defer t
   :after (helm helm-elscreen)
   :commands (helm-git-grep)
-  :load-path (lambda () (expand-file-name "helm-git-grep/" user-emacs-directory))
   :bind (:map ctl-x-map
               ("g" . helm-git-grep))
   :config (setq helm-git-grep-candidate-number-limit nil))
@@ -54,7 +52,6 @@
   :defer t
   :after helm
   :commands (helm-ag helm-do-ag helm-do-ag-this-file helm-do-ag-project-root)
-  :load-path (lambda () (expand-file-name "helm-ag/" user-emacs-directory))
   :config (progn
             ;; Fallback to ack if the silver searcher is not found
             (unless (or (executable-find "ag")
@@ -73,15 +70,13 @@
   :defer t
   :after helm
   :commands (helm-describe-modes)
-  :bind ([remap describe-mode] . helm-describe-modes)
-  :load-path (lambda () (expand-file-name "helm-describe-modes/" user-emacs-directory)))
+  :bind ([remap describe-mode] . helm-describe-modes))
 
 ;; helm desc-binds
 (use-package helm-descbinds
   :defer t
   :after helm
   :commands (helm-descbinds helm-descbinds-mode)
-  :load-path (lambda () (expand-file-name "helm-descbinds/" user-emacs-directory))
   :bind (:map ctl-x-map
               ("k" . helm-descbinds))
   :init (helm-descbinds-mode 1))
@@ -91,7 +86,6 @@
   :defer t
   :after (helm flycheck)
   :commands (helm-flycheck)
-  :load-path (lambda () (expand-file-name "helm-flycheck/" user-emacs-directory))
   :bind (:map ctl-x-map
               ("e" . helm-flycheck)))
 
@@ -100,7 +94,6 @@
   :defer t
   :after (helm flyspell)
   :commands (helm-flyspell-correct)
-  :load-path (lambda () (expand-file-name "helm-flyspell/" user-emacs-directory))
   :bind (([remap ispell-word] . helm-flyspell-correct)
          :map ctl-x-map
          (";" . helm-flyspell-correct)))
@@ -110,15 +103,13 @@
   :defer t
   :commands (helm-ls-git-ls helm-browse-project)
   :bind (:map ctl-x-map
-              ("C-d" . helm-browse-project))
-  :load-path (lambda () (expand-file-name "helm-ls-git/" user-emacs-directory)))
+              ("C-d" . helm-browse-project)))
 
 ;; helm bm support
 (use-package helm-bm
   :defer t
   :commands (helm-bm)
   :after (helm bm)
-  :load-path (lambda () (expand-file-name "helm-bm/" user-emacs-directory))
   :bind (:map ctl-x-map
               ("l" . helm-bm))
   :config (setq helm-bookmark-show-location t))
@@ -128,7 +119,6 @@
   :defer t
   :after (helm etags)
   :commands (helm-etags-select)
-  :load-path (lambda () (expand-file-name "helm-etags-plus/" user-emacs-directory))
   :bind ("M-." . helm-etags-select))
 
 ;; helm gtags
@@ -230,22 +220,22 @@
   :after (helm dash)
   :if (executable-find "sqlite3")
   :commands (helm-dash
-	     dash-load-org
-	     dash-load-git
-	     dash-load-bash
-	     dash-load-c
-	     dash-load-c++
-	     dash-load-py
-	     dash-load-js
-	     dash-load-md)
+         dash-load-org
+         dash-load-git
+         dash-load-bash
+         dash-load-c
+         dash-load-c++
+         dash-load-py
+         dash-load-js
+         dash-load-md)
   :hook ((org-mode          . dash-load-org)
-	 (markdown-mode     . dash-load-md)
-	 (c-mode	    . dash-load-c)
-	 (sh-mode	    . dash-load-bash)
-	 (c++-mode	    . dash-load-c++)
-	 (js2-mode	    . dash-load-js)
-	 (ess-mode          . dash-load-r)
-	 (emacs-lisp-mode   . dash-load-elisp))
+     (markdown-mode     . dash-load-md)
+     (c-mode        . dash-load-c)
+     (sh-mode       . dash-load-bash)
+     (c++-mode      . dash-load-c++)
+     (js2-mode      . dash-load-js)
+     (ess-mode          . dash-load-r)
+     (emacs-lisp-mode   . dash-load-elisp))
   :bind (:map ctl-x-map
               ("d" . helm-dash))
   :config (progn
@@ -312,16 +302,14 @@
               :map company-mode-map
               ("C-:" . helm-company))
   :after (helm company)
-  :commands (helm-company)
-  :load-path (lambda () (expand-file-name "helm-company/" user-emacs-directory)))
+  :commands (helm-company))
 
 ;; helm pages
 ;; Text is divided into pages delimited by the formfeed character (ASCII code 12, also denoted as ‘control-L’)
 (use-package helm-pages
   :defer t
   :after helm
-  :commands helm-pages
-  :load-path (lambda () (expand-file-name "helm-pages/" user-emacs-directory)))
+  :commands helm-pages)
 
 ;; helm integration with magit
 (use-package helm-magit
@@ -335,8 +323,7 @@
   :defer t
   :after (helm magit)
   :commands helm-gitignore
-  :after (helm git-modes request)
-  :load-path (lambda () (expand-file-name "helm-gitignore/" user-emacs-directory)))
+  :after (helm git-modes request))
 
 ;; helm hunks
 (use-package helm-hunks
@@ -345,8 +332,7 @@
          helm-hunks-current-buffer
          helm-hunks-staged
          helm-hunks-staged-current-buffer)
-  :after (helm git-modes request)
-  :load-path (lambda () (expand-file-name "helm-hunks/" user-emacs-directory)))
+  :after (helm git-modes request))
 
 ;; helm pass
 (use-package helm-pass
@@ -354,16 +340,14 @@
   :if (and (equal system-type 'gnu/linux)
            (executable-find "pass"))
   :commands (helm-pass)
-  :after (helm pass)
-  :load-path (lambda () (expand-file-name "helm-pass/" user-emacs-directory)))
+  :after (helm pass))
 
 ;; helm ctest
 (use-package helm-ctest
   :defer t
   :if (executable-find "ctest")
   :commands (helm-ctest)
-  :after helm
-  :load-path (lambda () (expand-file-name "helm-ctest/" user-emacs-directory)))
+  :after helm)
 
 (provide 'setup-helm-plugins)
 ;;; setup-helm-plugins.el ends here

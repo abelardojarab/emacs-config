@@ -29,7 +29,6 @@
   :defer t
   :if (and (executable-find "convert")
            (display-graphic-p))
-  :load-path (lambda () (expand-file-name "image+/" user-emacs-directory))
   :init (use-package image)
   :commands (imagex-global-sticky-mode
              imagex-auto-adjust-mode)

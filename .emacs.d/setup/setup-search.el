@@ -108,8 +108,7 @@
 ;; Simple search with avy
 (use-package avy
   :defer t
-  :load-path (lambda () (expand-file-name "avy/" user-emacs-directory))
-  :config (setq avy-background t))
+  :custom (avy-background t))
 
 (provide 'setup-search)
 ;;; setup-search.el ends here

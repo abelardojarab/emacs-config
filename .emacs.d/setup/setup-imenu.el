@@ -24,22 +24,20 @@
 
 ;;; Code:
 
-;; imenu
-(use-package imenu-anywhere
-  :load-path (lambda () (expand-file-name "imenu-anywhere/" user-emacs-directory)))
+;; imenu integration with helm/ivy
+(use-package imenu-anywhere)
 
 ;; imenu list
 (use-package imenu-list
-  :load-path (lambda () (expand-file-name "imenu-list/" user-emacs-directory))
-  :config (progn
-            (setq imenu-list-size 0.2)
-            (setq imenu-list-focus-after-activation t)
-            (setq imenu-list-auto-resize t)
-            (setq imenu-list-position 'right)))
+  :defer t
+  :commands imenu-list
+  :config (setq imenu-list-size                   0.2
+                imenu-list-focus-after-activation t
+                imenu-list-auto-resize            t
+                imenu-list-position               'right))
 
 ;; imenus
-(use-package imenus
-  :load-path (lambda () (expand-file-name "imenus/" user-emacs-directory)))
+(use-package imenus)
 
 (provide 'setup-imenu)
 ;;; setup-imenu.el ends here

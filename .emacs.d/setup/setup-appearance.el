@@ -84,7 +84,6 @@ non-nil."
 (use-package visual-fill-column
   :defer t
   :commands visual-fill-column-mode
-  :load-path (lambda () (expand-file-name "visual-fill-column/" user-emacs-directory))
   :config (setq-default visual-fill-column-center-text             t
                         visual-fill-column-fringes-outside-margins nil
                         visual-fill-column-width
@@ -114,7 +113,6 @@ non-nil."
 ;; Highlight line number
 (use-package hlinum
   :defer t
-  :load-path (lambda () (expand-file-name "hlinum/" user-emacs-directory))
   :commands hlinum-activate)
 
 ;; Adaptive scrollbar

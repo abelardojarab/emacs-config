@@ -32,8 +32,7 @@
                                                    "python-environments")))
 
 (use-package epc
-  :defer t
-  :load-path (lambda () (expand-file-name "epc/" user-emacs-directory)))
+  :defer t)
 
 ;; only use Jedi if python interpreter is present
 (use-package jedi

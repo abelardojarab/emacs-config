@@ -155,7 +155,6 @@
 ;; Dashboard startup screen
 (use-package dashboard
   :demand t
-  :load-path (lambda () (expand-file-name "dashboard/" user-emacs-directory))
   :if (display-graphic-p)
   :config (progn
             (add-hook 'dashboard-mode-hook

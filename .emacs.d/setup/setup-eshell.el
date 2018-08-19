@@ -193,22 +193,18 @@
 
             ;; ielm support (for emacs lisp)
             (use-package eval-in-repl-ielm
-              :load-path (lambda () (expand-file-name "eval-in-repl/" user-emacs-directory))
               :commands eir-eval-in-ielm)
 
             ;; Shell support
             (use-package eval-in-repl-shell
-              :load-path (lambda () (expand-file-name "eval-in-repl/" user-emacs-directory))
               :commands eir-eval-in-shell)
 
             ;; Python support
             (use-package eval-in-repl-python
-              :load-path (lambda () (expand-file-name "eval-in-repl/" user-emacs-directory))
               :commands eir-eval-in-python)
 
             ;; Javascript support
             (use-package eval-in-repl-javascript
-              :load-path (lambda () (expand-file-name "eval-in-repl/" user-emacs-directory))
               :commands eir-eval-in-javascript)))
 
 ;; Emacs interaction with tmux

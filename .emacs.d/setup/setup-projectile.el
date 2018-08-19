@@ -33,7 +33,6 @@
              projectile-compile-project
              projectile-find-file
              projectile-project-root)
-  :load-path (lambda () (expand-file-name "projectile/" user-emacs-directory))
   :bind (("C-x C-m" . projectile-compile-project)
          ("C-x C-g" . projectile-find-file))
   :config (progn
