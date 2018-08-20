@@ -189,7 +189,7 @@ Throw away all the old tags, and recreate the tag database."
                                      markdown-mode
                                      org-mode
                                      emacs-lisp-mode
-                     python-mode
+                                     python-mode
                                      c-mode
                                      c++-mode))))
 

@@ -31,7 +31,7 @@
              my/setup-ediff
              my/ediff-dwim
              my/update-modified-flag)
-  :hook (ediff-mode-hook . my/setup-ediff)
+  :hook (ediff-mode . my/setup-ediff)
   :config (progn
             (defun my/update-modified-flag ()
               "Update the buffer modified flag."

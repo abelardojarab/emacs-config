@@ -62,15 +62,15 @@
   (setq my/tabbar-back-color
         (color-lighten-name (face-background 'default) 12))
   (custom-set-faces
-   ;; tabbar background
-   `(tabbar-default ((t (:inherit fixed-pitch :background ,my/tabbar-back-color :foreground ,my/tabbar-foreground-color))))
-   `(tabbar-button ((t (:inherit tabbar-default :foreground ,my/tabbar-background-color))))
-   `(tabbar-button-highlight ((t (:inherit tabbar-default))))
-   `(tabbar-highlight ((t (:underline t))))
-   ;; selected tab
-   `(tabbar-selected ((t (:inherit tabbar-default :background ,my/tabbar-background-color))))
-   `(tabbar-separator ((t (:inherit tabbar-default :background ,my/tabbar-back-color))))
-   `(tabbar-unselected ((t (:inherit tabbar-default))))))
+   ;; tabbar background, with no boxes
+   `(tabbar-default ((t (:box nil :inherit fixed-pitch :background ,my/tabbar-back-color :foreground ,my/tabbar-foreground-color))))
+   `(tabbar-button ((t (:box nil :inherit tabbar-default :foreground ,my/tabbar-background-color))))
+   `(tabbar-button-highlight ((t (:box nil :inherit tabbar-default))))
+   `(tabbar-highlight ((t (:box nil :underline nil))))
+   ;; selected tab, with no boxes
+   `(tabbar-selected ((t (:box nil :inherit tabbar-default :background ,my/tabbar-background-color))))
+   `(tabbar-separator ((t (:box nil :inherit tabbar-default :background ,my/tabbar-back-color))))
+   `(tabbar-unselected ((t (:box nil :inherit tabbar-default))))))
 
 (add-hook 'after-init-hook #'my/set-face-fringe)
 (add-hook 'after-init-hook #'my/set-face-tabbar)
@@ -86,7 +86,11 @@
     (my/set-face-fringe)
     (my/set-face-tabbar)
     (my/set-face-ecb)
-    (setq-default mode-line-format '("%e" (:eval (spaceline-ml-custom))))))
+    (setq-default mode-line-format '("%e" (:eval (spaceline-ml-custom))))
+
+    ;; remove modeline boxes
+    (set-face-attribute 'mode-line nil :box nil)
+    (set-face-attribute 'mode-line-inactive nil :box nil)))
 (ad-activate 'load-theme)
 
 (if (file-exists-p custom-file-x)

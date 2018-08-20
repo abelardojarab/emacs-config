@@ -27,11 +27,15 @@
 ;; Tabbar mode
 (use-package tabbar
   :demand t
-  :commands tabbar-mode
+  :commands (tabbar-mode
+	     my/modification-state-change
+	     my/on-buffer-modification)
   :bind (("C-c <right>" . tabbar-forward)
          ("C-c <left>"  . tabbar-backward)
          ("C-c <up>"    . tabbar-backward-group)
          ("C-c <down>"  . tabbar-forward-group))
+  :hook ((after-save    . my/modification-state-change)
+	 (first-change  . my/on-buffer-modification))
   :custom ((tabbar-auto-scroll-flag  t)
            (tabbar-use-images        t)
            (tabbar-cycle-scope       (quote tabs))
@@ -86,8 +90,6 @@ That is, a string used to represent it on the tab bar."
             (defun my/on-buffer-modification ()
               (set-buffer-modified-p t)
               (my/modification-state-change))
-            (add-hook 'after-save-hook    #'my/modification-state-change)
-            (add-hook 'first-change-hook  #'my/on-buffer-modification)
 
             ;; Assure switching tabs uses switch-to-buffer
             (defun switch-tabbar (num)

@@ -164,9 +164,8 @@
               :bind (:map dired-mode-map
                           ("k" . dired-k))
               :commands (dired-k dired-k-no-revert)
-              :init (progn
-                      (add-hook 'dired-initial-position-hook #'dired-k)
-                      (add-hook 'dired-after-readin-hook     #'dired-k-no-revert)))
+	      :hook ((dired-initial-position . dired-k)
+                     (dired-after-readin     . dired-k-no-revert)))
 
             ;; Display file icons in dired
             (use-package dired-icon

@@ -35,16 +35,16 @@
 (use-package vc-msg
   :defer t
   :after (vc popup)
-  :commands vc-msg-show
-  :config (progn
-            (defun vc-msg-hook-setup (vcs-type commit-info)
-              ;; copy commit id to clipboard
-              (message (format "%s\n%s\n%s\n%s"
-                               (plist-get commit-info :id)
-                               (plist-get commit-info :author)
-                               (plist-get commit-info :author-time)
-                               (plist-get commit-info :author-summary))))
-            (add-hook 'vc-msg-hook #'vc-msg-hook-setup)))
+  :commands (vc-msg-show
+	     vc-msg-hook-setup)
+  :hook (vc-msg . vc-msg-hook-setup)
+  :config (defun vc-msg-hook-setup (vcs-type commit-info)
+            ;; copy commit id to clipboard
+            (message (format "%s\n%s\n%s\n%s"
+                             (plist-get commit-info :id)
+                             (plist-get commit-info :author)
+                             (plist-get commit-info :author-time)
+                             (plist-get commit-info :author-summary)))))
 
 ;; Annotate lines with author history
 (use-package vc-annotate
@@ -131,15 +131,14 @@
                ("c"       . magit-maybe-commit)
                ("q"       . magit-quit-session)))
   :if (executable-find "git")
+  :hook ((magit-mode           . hl-line-mode)
+	 (after-save           . magit-after-save-refresh-status)
+	 (git-commit-mode-hook . my/magit-commit-mode-init)
+	 (git-commit-setup     . my/magit-commit-prompt))
+  :custom ((with-editor-file-name-history-exclude '("1"))
+	   (magit-last-seen-setup-instructions    "1.4.0"))
   :init (progn
           (setenv "GIT_PAGER" "")
-          (setq with-editor-file-name-history-exclude '("1"))
-
-          ;; Enable line highlight
-          (add-hook 'magit-mode-hook #'hl-line-mode)
-
-          ;; Refresh status
-          (add-hook 'after-save-hook 'magit-after-save-refresh-status t)
 
           ;; we no longer need vc-git
           (delete 'Git vc-handled-backends)
@@ -167,9 +166,6 @@
           (when (bound-and-true-p magit-auto-revert-mode)
             (diminish 'magit-auto-revert-mode))
 
-          ;; Turn off the horrible warning about magit auto-revert of saved buffers
-          (setq magit-last-seen-setup-instructions "1.4.0")
-
           ;; Close popup when commiting
           (defadvice git-commit-commit (after delete-window activate)
             (delete-window))
@@ -179,11 +175,9 @@
 
           ;; these two force a new line to be inserted into a commit window,
           ;; which stops the invalid style showing up.
-          (defun magit-commit-mode-init ()
+          (defun my/magit-commit-mode-init ()
             (when (looking-at "\n")
-              (open-line 1)))
-
-          (add-hook 'git-commit-mode-hook #'magit-commit-mode-init))
+              (open-line 1))))
   :config (progn
 
             ;; don't put "origin-" in front of new branch names by default
@@ -306,7 +300,6 @@
                   (my/add-magit-faces)))
 
               (remove-hook 'git-commit-setup-hook 'with-editor-usage-message)
-              (add-hook 'git-commit-setup-hook #'my/magit-commit-prompt)
               (advice-add 'magit-commit :after 'my/use-magit-commit-prompt))
 
             ;; This extension finds all the changes ("hunks") between a working copy of a
@@ -554,15 +547,16 @@ Git gutter:
 (use-package smerge-mode
   :defer t
   :if (executable-find "git")
-  :commands (hydra-smerge/body smerge-mode)
-  :init (progn
-          (defun my/enable-smerge-maybe ()
+  :commands (hydra-smerge/body
+	     my/enable-smerge-maybe
+	     smerge-mode)
+  :init (defun my/enable-smerge-maybe ()
             "Auto-enable `smerge-mode' when merge conflict is detected."
             (save-excursion
               (goto-char (point-min))
               (when (re-search-forward "^<<<<<<< " nil :noerror)
                 (smerge-mode 1))))
-          (add-hook 'find-file-hook #'my/enable-smerge-maybe :append))
+  :hook (find-file . my/enable-smerge-maybe)
   :config (progn
             (ignore-errors
               (>=e "26.0"
