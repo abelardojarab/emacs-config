@@ -30,9 +30,9 @@
   :load-path (lambda () (expand-file-name "auctex/" user-emacs-directory))
   :commands (LaTeX-math-mode
              TeX-source-correlate-mode
-             my/latex-mode-setup)
+             my/latex-mode-init)
   :mode ("\\.tex\\'" . LaTeX-mode)
-  :hook (LaTeX-mode . my/latex-mode-setup)
+  :hook (LaTeX-mode . my/latex-mode-init)
   :init (progn
           (setq-default TeX-auto-save t
                         TeX-parse-self t
@@ -41,7 +41,7 @@
                         TeX-source-correlate-start-server t
                         TeX-master nil)
 
-          (defun my/latex-mode-setup ()
+          (defun my/latex-mode-init ()
             "Tweaks and customisations for LaTeX mode."
             ;; Auto-fill for LaTeX
             (turn-on-auto-fill)

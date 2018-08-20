@@ -34,24 +34,10 @@
           ("z"       . ielm-repl))
          :map ielm-map
          (("C-t"     . quit-window)))
-  :config (progn
-            (defun ielm-repl ()
-              (interactive)
-              (pop-to-buffer (get-buffer-create "*ielm*"))
-              (ielm))
-
-            ;; When using auto-complete
-            (when (featurep 'auto-complete)
-              (defun ielm-auto-complete ()
-                "Enables `auto-complete' support in \\[ielm]."
-                (setq ac-sources '(ac-source-functions
-                                   ac-source-variables
-                                   ac-source-features
-                                   ac-source-symbols
-                                   ac-source-words-in-same-mode-buffers))
-                (add-to-list 'ac-modes 'inferior-emacs-lisp-mode)
-                (auto-complete-mode 1))
-              (add-hook 'ielm-mode-hook #'ielm-auto-complete))))
+  :config (defun ielm-repl ()
+            (interactive)
+            (pop-to-buffer (get-buffer-create "*ielm*"))
+            (ielm)))
 
 (use-package eshell
   :defer t
@@ -127,56 +113,56 @@
               :demand t
               :custom (eshell-prompt-function 'epe-theme-lambda)))
 
-;; Get shell on current directory
-(use-package shell-pop
-  :defer t
-  :after eshell
-  :bind (("C-t" . shell-pop)
-         :map ctl-x-map
-         ("t"   . shell-pop))
-  :config (progn
-            (setq shell-pop-window-size 45)
-            (setq shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell)))))
-            (setq shell-pop-term-shell "/bin/bash")
-            ;; need to do this manually or not picked up by `shell-pop'
-            (shell-pop--set-shell-type 'shell-pop-shell-type shell-pop-shell-type)))
+  ;; Get shell on current directory
+  (use-package shell-pop
+    :defer t
+    :after eshell
+    :bind (("C-t" . shell-pop)
+           :map ctl-x-map
+           ("t"   . shell-pop))
+    :config (progn
+              (setq shell-pop-window-size 45)
+              (setq shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell)))))
+              (setq shell-pop-term-shell "/bin/bash")
+              ;; need to do this manually or not picked up by `shell-pop'
+              (shell-pop--set-shell-type 'shell-pop-shell-type shell-pop-shell-type)))
 
-;; Shell mode
-(use-package sh-script
-  :defer t
-  :commands sh-mode
-  :mode (("\\.sh$"         . sh-mode)
-         ("\\.zsh\\'"      . sh-mode)
-         ("\\.csh\\'"      . sh-mode)
-         ("\\.cshrc\\'"    . sh-mode))
-  :config (progn
-            ;; create keymap
-            (setq sh-mode-map (make-sparse-keymap))
+  ;; Shell mode
+  (use-package sh-script
+    :defer t
+    :commands sh-mode
+    :mode (("\\.sh$"         . sh-mode)
+           ("\\.zsh\\'"      . sh-mode)
+           ("\\.csh\\'"      . sh-mode)
+           ("\\.cshrc\\'"    . sh-mode))
+    :config (progn
+              ;; create keymap
+              (setq sh-mode-map (make-sparse-keymap))
 
-            ;; Configuration choices
-            (add-hook 'sh-mode-hook
-                      (lambda ()
-                        (setq sh-indentation  2
-                              sh-basic-offset 2)
-                        (compilation-shell-minor-mode t)
-                        (ansi-color-for-comint-mode-on)
-                        (electric-indent-mode -1)))))
+              ;; Configuration choices
+              (add-hook 'sh-mode-hook
+			(lambda ()
+                          (setq sh-indentation  2
+				sh-basic-offset 2)
+                          (compilation-shell-minor-mode t)
+                          (ansi-color-for-comint-mode-on)
+                          (electric-indent-mode -1)))))
 
-;; CShell mode - fix issues in csh indentation
-(use-package csh-mode
-  :demand t
-  :config (progn
-            (dolist (elt interpreter-mode-alist)
-              (when (member (car elt) (list "csh" "tcsh"))
-                (setcdr elt 'csh-mode)))
+  ;; CShell mode - fix issues in csh indentation
+  (use-package csh-mode
+    :demand t
+    :config (progn
+              (dolist (elt interpreter-mode-alist)
+		(when (member (car elt) (list "csh" "tcsh"))
+                  (setcdr elt 'csh-mode)))
 
-            (defun my/tcsh-set-indent-functions ()
-              (when (or (string-match ".*\\.alias" (buffer-file-name))
-                        (string-match "\\(.*\\)\\.csh$" (file-name-nondirectory (buffer-file-name))))
-                (setq-local indent-line-function   #'csh-indent-line)
-                (setq-local indent-region-function #'csh-indent-region)))
-            (add-hook 'sh-mode-hook      #'my/tcsh-set-indent-functions)
-            (add-hook 'sh-set-shell-hook #'my/tcsh-set-indent-functions))))
+              (defun my/tcsh-set-indent-functions ()
+		(when (or (string-match ".*\\.alias" (buffer-file-name))
+                          (string-match "\\(.*\\)\\.csh$" (file-name-nondirectory (buffer-file-name))))
+                  (setq-local indent-line-function   #'csh-indent-line)
+                  (setq-local indent-region-function #'csh-indent-region)))
+              (add-hook 'sh-mode-hook      #'my/tcsh-set-indent-functions)
+              (add-hook 'sh-set-shell-hook #'my/tcsh-set-indent-functions))))
 
 ;; Send expressions to a REPL line-by-line by hitting C-RET
 (use-package eval-in-repl

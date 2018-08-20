@@ -69,8 +69,8 @@
   :defer t
   :after (company web-mode web-completion-data)
   :commands my/company-web-setup
-  :hook (web-mode . my/company-web-setup)
-  :config (defun my/company-web-setup ()
+  :hook (web-mode . my/company-web-init)
+  :config (defun my/company-web-init ()
               (set (make-local-variable 'company-backends)
                    '((company-web-html
                       company-capf

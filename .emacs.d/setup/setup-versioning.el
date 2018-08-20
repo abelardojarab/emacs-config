@@ -36,9 +36,9 @@
   :defer t
   :after (vc popup)
   :commands (vc-msg-show
-	     vc-msg-hook-setup)
-  :hook (vc-msg . vc-msg-hook-setup)
-  :config (defun vc-msg-hook-setup (vcs-type commit-info)
+	     my/vc-msg-init)
+  :hook (vc-msg . my/vc-msg-init)
+  :config (defun my/vc-msg-init (vcs-type commit-info)
             ;; copy commit id to clipboard
             (message (format "%s\n%s\n%s\n%s"
                              (plist-get commit-info :id)
@@ -547,9 +547,9 @@ Git gutter:
 (use-package smerge-mode
   :defer t
   :if (executable-find "git")
-  :commands (hydra-smerge/body
-	     my/enable-smerge-maybe
-	     smerge-mode)
+  :commands (smerge-mode
+	     hydra-smerge/body
+	     my/enable-smerge-maybe)
   :init (defun my/enable-smerge-maybe ()
             "Auto-enable `smerge-mode' when merge conflict is detected."
             (save-excursion

@@ -232,8 +232,8 @@
               :defer t
               :after (auctex company-math)
               :commands (company-auctex-init
-                         my/latex-mode-setup)
-              :hook ((TeX-mode   . my/latex-mode-setup)
+                         my/latex-mode-init)
+              :hook ((TeX-mode   . my/latex-mode-init)
                      (LaTeX-mode . company-auctex-init))
               :config (progn
                         (defun company-auctex-labels (command &optional arg &rest ignored)
@@ -245,7 +245,7 @@
                             (candidates (company-auctex-label-candidates arg))))
 
                         ;; local configuration for TeX modes
-                        (defun my/latex-mode-setup ()
+                        (defun my/latex-mode-init ()
                           (setq-local company-backends
                                       (append '(company-auctex-macros
                                                 company-auctex-environments
