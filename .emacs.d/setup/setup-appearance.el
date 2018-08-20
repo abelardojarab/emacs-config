@@ -38,47 +38,51 @@
 ;; Do not redraw entire frame after suspending.
 (setq no-redraw-on-reenter t)
 
-;; Modify toggle truncate lines to avoid messages
-(defun toggle-truncate-lines (&optional arg)
-  "Toggle truncating of long lines for the current buffer.
+;; make the left fringe 14 pixels wide and the right 12
+(if (display-graphic-p)
+    (fringe-mode '(28 . 12)))
+
+;; Marker if the line goes beyond the end of the screen (arrows)
+(use-package simple
+  :demand t
+  :commands (global-visual-line-mode
+	     visual-line-mode
+	     toggle-truncate-lines)
+  :diminish visual-line-mode
+  :custom (visual-line-fringe-indicators '(nil right-curly-arrow))
+  :config (progn
+	    ;; Modify toggle truncate lines to avoid messages
+	    (defun toggle-truncate-lines (&optional arg)
+	      "Toggle truncating of long lines for the current buffer.
 When truncating is off, long lines are folded.
 With prefix argument ARG, truncate long lines if ARG is positive,
 otherwise fold them.  Note that in side-by-side windows, this
 command has no effect if `truncate-partial-width-windows' is
 non-nil."
-  (interactive "P")
-  (setq truncate-lines
-        (if (null arg)
-            (not truncate-lines)
-          (> (prefix-numeric-value arg) 0)))
-  (force-mode-line-update)
-  (unless truncate-lines
-    (let ((buffer (current-buffer)))
-      (walk-windows (lambda (window)
-                      (if (eq buffer (window-buffer window))
-                          (set-window-hscroll window 0)))
-                    nil t)))
-  t)
+	      (interactive "P")
+	      (setq truncate-lines
+		    (if (null arg)
+			(not truncate-lines)
+		      (> (prefix-numeric-value arg) 0)))
+	      (force-mode-line-update)
+	      (unless truncate-lines
+		(let ((buffer (current-buffer)))
+		  (walk-windows (lambda (window)
+				  (if (eq buffer (window-buffer window))
+				      (set-window-hscroll window 0)))
+				nil t)))
+	      t)
 
-;; Marker if the line goes beyond the end of the screen (arrows)
-(global-visual-line-mode 1)
-(diminish 'visual-line-mode)
-(add-hook 'text-mode-hook #'turn-on-visual-line-mode)
-(setq visual-line-fringe-indicators '(nil right-curly-arrow))
-(add-hook 'prog-mode-hook
-          (lambda ()
-            (visual-line-mode -1)
-            (toggle-truncate-lines t)
-            (setq truncate-lines t)))
-(add-hook 'text-mode-hook
-          (lambda ()
-            (visual-line-mode -1)
-            (toggle-truncate-lines t)
-            (setq truncate-lines t)))
-
-;; make the left fringe 14 pixels wide and the right 12
-(if (display-graphic-p)
-    (fringe-mode '(28 . 12)))
+	    (add-hook 'prog-mode-hook
+		      (lambda ()
+			(visual-line-mode -1)
+			(toggle-truncate-lines t)
+			(setq truncate-lines t)))
+	    (add-hook 'text-mode-hook
+		      (lambda ()
+			(visual-line-mode -1)
+			(toggle-truncate-lines t)
+			(setq truncate-lines t)))))
 
 ;; Get centered text when visual-line-mode is on
 (use-package visual-fill-column

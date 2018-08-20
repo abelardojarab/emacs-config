@@ -39,9 +39,8 @@
 ;; Shift mark package
 (use-package shift-mark
   :demand t
-  :init (progn
-          (transient-mark-mode t)
-          (setq shift-select-mode t))
+  :init (transient-mark-mode t)
+  :custom (shift-select-mode t)
   :bind (([S-prior] . shift-mark-backward-page)
          ([S-next]  . shift-mark-forward-page))
   :config (progn
