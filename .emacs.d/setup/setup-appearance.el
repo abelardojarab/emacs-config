@@ -110,6 +110,11 @@ non-nil."
                    (linum-format (concat " %" (number-to-string w) "d ")))
               ad-do-it)))
 
+;; Line number (alternative to linum-ex)
+(use-package nlinum
+  :defer t
+  :commands nlinum-mode)
+
 ;; Highlight line number
 (use-package hlinum
   :defer t

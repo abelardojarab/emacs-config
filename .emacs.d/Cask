@@ -240,6 +240,7 @@
 (depends-on "names")
 (depends-on "neotree")
 (depends-on "newsticker")
+(depends-on "nlinum")
 (depends-on "nodejs-repl")
 (depends-on "no-littering")
 (depends-on "nyan-mode")
