@@ -196,4 +196,10 @@
              nodejs-repl-load-file)
   :if (executable-find "node"))
 
+;; Elm mode
+(use-package elm-mode
+  :defer t
+  :mode "\\.elm\\'"
+  :custom (elm-format-on-save t))
+
 (provide 'setup-javascript)

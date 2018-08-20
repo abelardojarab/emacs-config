@@ -139,6 +139,7 @@ Don't read buffer-local settings or word lists."
   :diminish flyspell-mode
   :if (not (equal 'system-type 'windows-nt))
   :commands (flyspell-mode flyspell-check-next-highlighted-word)
+  :custom (flyspell-delay 1)
   :init (progn
           (dolist (hook my/flyspell-modes)
             (add-hook hook (lambda () (flyspell-mode 1))))

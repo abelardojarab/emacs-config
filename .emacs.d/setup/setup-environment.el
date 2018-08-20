@@ -48,7 +48,8 @@
            (line-move-visual                      t)
            (next-line-add-newlines                nil)
            (message-truncate-lines                nil)
-           (require-final-newline                 t))
+           (require-final-newline                 t)
+           (debug-on-quit                         nil))
   :init (progn
 
           ;; Assure cache directory exists

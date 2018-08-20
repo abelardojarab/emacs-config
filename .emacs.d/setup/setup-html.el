@@ -88,8 +88,10 @@
              htmlize-region-to-file
              htmlize-region-to-buffer
              htmlize-file)
-  :custom ((htmlize-html-major-mode 'web-mode)
-           (htmlize-output-type     'inline-css))
+  :custom ((htmlize-html-major-mode         'web-mode)
+           (htmlize-output-type             'inline-css)
+           (org-html-htmlize-output-type    'css)
+           (org-html-htmlize-font-prefix    "org-"))
   :config (progn
 
             ;; It is required to disable `fci-mode' when `htmlize-buffer' is called;

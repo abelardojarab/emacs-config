@@ -51,34 +51,37 @@
 ;; Fix pipe delay
 (setq w32-pipe-read-delay 0)
 
-;; Garantee utf8 as input-method
-(set-input-method nil)
-(setq read-quoted-char-radix 10)
-(if (equal system-type 'windows-nt)
-    (progn
-      (set-language-environment 'utf-8)
-      ;; (setq locale-coding-system 'utf-16-le) ;; bad, it can potentially undefine all fonts
-      (setq buffer-file-coding-system 'utf-8-unix)
-      (set-default-coding-systems 'utf-8-unix)
-      (set-terminal-coding-system 'utf-8)
-      (set-keyboard-coding-system 'utf-8)
-      (set-selection-coding-system 'utf-16-le)
-      (prefer-coding-system 'utf-8-unix)) ;; progn
-  (progn
-    (set-locale-environment "en_US.UTF-8")
-    (set-language-environment 'utf-8)
-    (setq locale-coding-system 'utf-8-unix)
-    (setq buffer-file-coding-system 'utf-8-unix)
-    (set-default-coding-systems 'utf-8-unix)
-    (set-terminal-coding-system 'utf-8-unix)
-    (set-keyboard-coding-system 'utf-8-unix)
-    (set-selection-coding-system 'utf-8-unix)
-    (prefer-coding-system 'utf-8-unix)))
+;; Guarantee utf8 as input-method
+(use-package mule
+  :demand t
+  :custom (setq read-quoted-char-radix 10)
+  :config (progn
+            (set-input-method nil)
+            (if (equal system-type 'windows-nt)
+                (progn
+                  (set-language-environment 'utf-8)
+                  ;; (setq locale-coding-system 'utf-16-le) ;; bad, it can potentially undefine all fonts
+                  (setq buffer-file-coding-system 'utf-8-unix)
+                  (set-default-coding-systems 'utf-8-unix)
+                  (set-terminal-coding-system 'utf-8)
+                  (set-keyboard-coding-system 'utf-8)
+                  (set-selection-coding-system 'utf-16-le)
+                  (prefer-coding-system 'utf-8-unix)) ;; progn
+              (progn
+                (set-locale-environment "en_US.UTF-8")
+                (set-language-environment 'utf-8)
+                (setq locale-coding-system 'utf-8-unix)
+                (setq buffer-file-coding-system 'utf-8-unix)
+                (set-default-coding-systems 'utf-8-unix)
+                (set-terminal-coding-system 'utf-8-unix)
+                (set-keyboard-coding-system 'utf-8-unix)
+                (set-selection-coding-system 'utf-8-unix)
+                (prefer-coding-system 'utf-8-unix)))
 
-;; ansi-term doesn’t obey usage of utf-8-unix
-(defadvice ansi-term (after advise-ansi-term-coding-system)
-  (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
-(ad-activate 'ansi-term)
+            ;; ansi-term doesn’t obey usage of utf-8-unix
+            (defadvice ansi-term (after advise-ansi-term-coding-system)
+              (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
+            (ad-activate 'ansi-term)))
 
 ;; update the copyright when present
 (add-hook 'before-save-hook #'copyright-update)

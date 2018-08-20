@@ -141,9 +141,9 @@
 
               ;; Configuration choices
               (add-hook 'sh-mode-hook
-			(lambda ()
+            (lambda ()
                           (setq sh-indentation  2
-				sh-basic-offset 2)
+                sh-basic-offset 2)
                           (compilation-shell-minor-mode t)
                           (ansi-color-for-comint-mode-on)
                           (electric-indent-mode -1)))))
@@ -153,11 +153,11 @@
     :demand t
     :config (progn
               (dolist (elt interpreter-mode-alist)
-		(when (member (car elt) (list "csh" "tcsh"))
+        (when (member (car elt) (list "csh" "tcsh"))
                   (setcdr elt 'csh-mode)))
 
               (defun my/tcsh-set-indent-functions ()
-		(when (or (string-match ".*\\.alias" (buffer-file-name))
+        (when (or (string-match ".*\\.alias" (buffer-file-name))
                           (string-match "\\(.*\\)\\.csh$" (file-name-nondirectory (buffer-file-name))))
                   (setq-local indent-line-function   #'csh-indent-line)
                   (setq-local indent-region-function #'csh-indent-region)))

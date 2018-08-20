@@ -27,9 +27,7 @@
 ;; CSS for the HTML
 (setq org-html-style-include-scripts nil
       org-html-style-include-default nil
-      org-html-htmlize-output-type 'css)
-
-(setq org-html-style
+      org-html-style
       "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://raw.githubusercontent.com/thi-ng/org-spec/master/css/style.css\"/>")
 
 ;; Org export compatible with Twitter Bootstrap
