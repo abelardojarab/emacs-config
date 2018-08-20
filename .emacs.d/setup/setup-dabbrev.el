@@ -38,7 +38,6 @@
                                          "abbrev_defs"))
           (if (file-exists-p abbrev-file-name)
               (quietly-read-abbrev-file))
-          (abbrev-mode t)
 
           ;; Activate template autocompletion
           (dolist (mode my/abbrev-modes)
