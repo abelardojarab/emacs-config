@@ -44,12 +44,14 @@
            (visible-bell                          t)
            (ring-bell-function                    'ignore)
            (save-interprogram-paste-before-kill   t)
-           (recenter-positions                    '(top middle bottom))
+           (recenter-positions                    '(middle top bottom))
            (line-move-visual                      t)
            (next-line-add-newlines                nil)
            (message-truncate-lines                nil)
            (require-final-newline                 t)
-           (debug-on-quit                         nil))
+           (debug-on-quit                         nil)
+           (bidi-display-reordering               nil)
+           (no-redraw-on-reenter                  t))
   :init (progn
 
           ;; Assure cache directory exists

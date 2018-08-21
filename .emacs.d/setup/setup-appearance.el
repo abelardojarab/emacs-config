@@ -32,12 +32,6 @@
   (when (fboundp 'horizontal-scroll-bar-mode)
     (horizontal-scroll-bar-mode 0)))
 
-;; Optimization
-(setq-default bidi-display-reordering nil)
-
-;; Do not redraw entire frame after suspending.
-(setq no-redraw-on-reenter t)
-
 ;; make the left fringe 14 pixels wide and the right 12
 (if (display-graphic-p)
     (fringe-mode '(28 . 12)))
@@ -47,10 +41,10 @@
   :defer t
   :if (display-graphic-p)
   :commands tooltip-mode
-  :init (tooltip-mode t)
+  :hook (prog-mode . tooltip-mode)
   :custom (tooltip-delay 1)
   :config (if (equal system-type 'gnu/linux)
-    (setq x-gtk-use-system-tooltips nil)))
+    (setq x-gtk-use-system-tooltips t)))
 
 ;; Marker if the line goes beyond the end of the screen (arrows)
 (use-package simple
