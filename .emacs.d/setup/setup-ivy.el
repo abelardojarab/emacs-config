@@ -109,6 +109,7 @@
   :after (swiper helm)
   :commands swiper-helm)
 
+;; Improve ivy-switch-buffer
 (use-package ivy-rich
   :defer t
   :after swiper
@@ -116,6 +117,7 @@
   :custom (ivy-rich-switch-buffer-align-virtual-buffer nil)
   :config (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer))
 
+;; Icons for ivy
 (use-package all-the-icons-ivy
   :defer t
   :if (display-grayscale-p)
@@ -123,9 +125,15 @@
   :after swiper
   :hook (counsel-mode . all-the-icons-ivy-setup))
 
+;; Ivy integration with yasnippet
 (use-package ivy-yasnippet
   :defer t
   :commands ivy-yasnippet)
+
+;; Ivy source for 'pass' tool
+(use-package ivy-pass
+  :custom (password-store-password-length 30)
+  :bind ("C-c p" . ivy-pass))
 
 (provide 'setup-ivy)
 ;;; setup-swiper.el ends here

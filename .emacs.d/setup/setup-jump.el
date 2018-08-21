@@ -26,12 +26,21 @@
 
 (use-package dumb-jump
   :defer t
+  :bind ("C-c j" . hydra-dumb-jump/body)
   :commands (dumb-jump-go
              dumb-jump-back
              dumb-jump-quick-look
-             dumb-jump-go-other-window)
-  :config (setq dumb-jump-selector 'ivy
-                dumb-jump-aggressive nil))
+             dumb-jump-go-other-window
+	     hydra-dumb-jump/body)
+  :custom ((dumb-jump-selector  'ivy)
+           (dumb-jump-aggressive nil))
+  :config (defhydra hydra-dumb-jump (:color blue)
+	    "Dumb Jump"
+	    ("g" dumb-jump-go "Jump to def")
+	    ("p" dumb-jump-back "Jump back")
+	    ("q" dumb-jump-quick-look "Quick look")
+	    ("o" dumb-jump-go-other-window "Jump in other window")
+	    ("q" nil "Quit")))
 
 (use-package smart-jump
   :defer t
@@ -40,9 +49,9 @@
              smart-jump-back
              smart-jump-references
              smart-jump-simple-find-references)
+  :custom (smart-jump-selector  'ivy)
   :config (progn
             (smart-jump-setup-default-registers)
-            (setq smart-jump-selector 'ivy)
 
             ;; Prefer rtags over ggtags
             (smart-jump-register :modes '(c-mode c++-mode)
