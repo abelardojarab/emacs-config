@@ -160,9 +160,6 @@
                   (setq interprogram-cut-function 'xsel-cut-function)
                   (setq interprogram-paste-function 'xsel-paste-function)))
 
-              ;; native tooltips
-              (setq x-gtk-use-system-tooltips nil)
-
               ;; Get back font antialiasing
               (push '(font-backend xft x) default-frame-alist)
 
@@ -301,21 +298,17 @@ LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
 
 ;; Exec path from shell in Mac OSX
 (use-package exec-path-from-shell
+  :defer t
   :if (equal system-type 'darwin)
-  :config (progn
-            (setq exec-path-from-shell-check-startup-files nil)
-            (exec-path-from-shell-initialize)))
+  :init (exec-path-from-shell-initialize)
+  :custom (exec-path-from-shell-check-startup-files nil))
 
-;; Enable tooltips
-(if (display-graphic-p)
-    (tooltip-mode t))
-
-;; display the time in the mode-line
+;; Display the time in the mode-line
 (use-package time
-  :custom
-  (display-time-default-load-average nil)
-  (display-time-24hr-format          t)
-  (display-time-use-mail-icon        t)
+  :demand t
+  :custom ((display-time-default-load-average nil)
+           (display-time-24hr-format          t)
+           (display-time-use-mail-icon        t))
   :config (display-time-mode t))
 
 (provide 'setup-environment)

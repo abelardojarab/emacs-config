@@ -27,11 +27,19 @@
 
 ;; Syntax coloring
 (use-package font-lock
-  :demand t
+  :defer t
+  :commands (global-font-lock-mode
+             font-lock-mode
+             my/add-watchwords
+             my/find-file-check-make-large-file-read-only
+             image-tooltip)
+  :init (global-font-lock-mode t)
+  :custom ((font-lock-maximum-decoration nil)
+           (font-lock-support-mode       'jit-lock-mode)
+           (font-lock-multiline          t))
+  :hook ((find-file . my/find-file-check-make-large-file-read-only-hook)
+         (prog-mode . my/add-watchwords))
   :config (progn
-            (global-font-lock-mode t)
-            (setq font-lock-maximum-decoration nil
-                  font-lock-support-mode       'jit-lock-mode)
             (setq jit-lock-defer-time          0.1
                   jit-lock-defer-contextually  nil
                   jit-lock-chunk-size          8000
@@ -39,17 +47,15 @@
                   jit-lock-stealth-time        0.02
                   jit-lock-stealth-nice        0.01
                   jit-lock-stealth-verbose     nil)
-            (setq-default font-lock-multiline  t)
             (defun global-font-lock-mode-check-buffers () nil)
 
             ;; Do not fontify large files
-            (defun my/find-file-check-make-large-file-read-only-hook ()
+            (defun my/find-file-check-make-large-file-read-only ()
               "If a file is over a given size, make the buffer read only."
               (when (> (buffer-size) (* 1024 1024))
                 (read-only-mode nil)
                 (buffer-disable-undo)
                 (fundamental-mode)))
-            (add-hook 'find-file-hook #'my/find-file-check-make-large-file-read-only-hook)
 
             ;; In programming modes, make sure things like FIXME and TODO are highlighted so they stand out:
             (defun my/add-watchwords ()
@@ -57,7 +63,6 @@
               (font-lock-add-keywords
                nil '(("\\<\\(FIXME:?\\|TODO:?\\|NOCOMMIT:?\\)\\>"
                       1 '((:foreground "#d7a3ad") (:weight bold)) t))))
-            (add-hook 'prog-mode-hook #'my/add-watchwords)
 
             ;; Displaying image tooltips in Emacs
             (defvar image-tooltip-re (concat  "\\(?3:'\\|\"\\)\\(?1:.*\\."
@@ -100,8 +105,9 @@
 
 ;; Highlight and navigate TODO keywords
 (use-package hl-todo
-  :defer 2
-  :config (global-hl-todo-mode))
+  :defer t
+  :commands global-hl-todo-mode
+  :init (global-hl-todo-mode))
 
 (provide 'setup-font-lock)
 ;;; setup-font-lock.el ends here

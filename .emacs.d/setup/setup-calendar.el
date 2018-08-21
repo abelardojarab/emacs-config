@@ -46,7 +46,7 @@
                       (setq org-directory "~/workspace/Documents/Org")
                     (setq org-directory "~/Google Drive/Documents/Org")))))
 
-            (setq diary-file (concat org-directory "/agenda.org")
+            (setq diary-file                         (concat org-directory "/agenda.org")
                   diary-date-forms                   diary-iso-date-forms
                   calendar-set-date-style            'iso
                   calendar-week-start-day            1
