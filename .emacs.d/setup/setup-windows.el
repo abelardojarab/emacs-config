@@ -61,6 +61,20 @@
       ;; maximum small window height
       max-mini-window-height               30)
 
+;; Restore old window configurations
+(use-package winner
+  :hook (after-init . winner-mode)
+  :custom (winner-boring-buffers '("*Completions*"
+                                   "*Compile-Log*"
+                                   "*inferior-lisp*"
+                                   "*Fuzzy Completions*"
+                                   "*Apropos*"
+                                   "*Help*"
+                                   "*cvs*"
+                                   "*Buffer List*"
+                                   "*Ibuffer*"
+                                   "*esh command on file*")))
+
 ;; Manage popup windows
 (use-package popwin
   :defer t

@@ -34,10 +34,16 @@
              ivy-resume
              ivy-switch-buffer
              ivy-switch-buffer-other-window)
+  :diminish ivy-mode
+  :hook (after-init . ivy-mode)
+  :defines (projectile-completion-system
+        magit-completing-read-function)
   :bind (("C-c C-r" . ivy-resume)
          :map ctl-x-map
          ("s"       . swiper)
-         ("b"       . ivy-switch-buffer))
+         ("b"       . ivy-switch-buffer)
+         :map ivy-minibuffer-map
+         ("C-v"     . ivy-yank-word))
   :chords (("BB"    . ivy-switch-buffer))
   :config (progn
 
@@ -77,7 +83,8 @@
 (use-package counsel
   :defer t
   :commands counsel-mode
-  :init (counsel-mode t)
+  :diminish counsel-mode
+  :hook (ivy-mode . counsel-mode)
   :chords (("VV" . counsel-yank-pop))
   :bind (("M-x"                     . counsel-M-x)
          ("C-o"                     . counsel-find-file)
@@ -103,17 +110,17 @@
                 (concat "\n\n"
                         (concat (apply 'concat (make-list 50 "---")) "\n"))))
 
-;; counsel-org-clock provides commands for displaying org clock entries
-(use-package counsel-org-clock
-  :defer t
-  :commands (counsel-org-clock-context
-             counsel-org-clock-history))
-
 ;; Use helm for swiper
 (use-package swiper-helm
   :defer t
   :after (swiper helm)
   :commands swiper-helm)
+
+;; Select from xref candidates with Ivy
+(use-package ivy-xref
+  :if (and (executable-find "global")
+           (boundp 'xref-backend-functions))
+  :custom (xref-show-xrefs-function 'ivy-xref-show-xrefs))
 
 ;; Improve ivy-switch-buffer
 (use-package ivy-rich
@@ -140,6 +147,23 @@
 (use-package ivy-pass
   :custom (password-store-password-length 30)
   :bind ("C-c p" . ivy-pass))
+
+;; counsel-org-clock provides commands for displaying org clock entries
+(use-package counsel-org-clock
+  :defer t
+  :commands (counsel-org-clock-context
+             counsel-org-clock-history))
+
+;; Ivy integration for Projectile
+(use-package counsel-projectile
+  :defer t
+  :commands counsel-projectile-mode
+  :hook (after-init . counsel-projectile-mode))
+
+;; Tramp ivy interface
+(use-package counsel-tramp
+  :defer t
+  :commands counsel-tramp)
 
 (provide 'setup-ivy)
 ;;; setup-swiper.el ends here
