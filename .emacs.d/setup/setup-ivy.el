@@ -89,13 +89,19 @@
          ([remap find-file]         . counsel-find-file)
          ([remap describe-variable] . counsel-describe-variable)
          ([remap describe-function] . counsel-describe-function)
+         :map org-mode-map
+         ("C-c C-j"                 . counsel-org-goto)
+         ("C-c C-t"                 . counsel-org-tag)
          :map ctl-x-map
          ("x"                       . counsel-M-x)
          ("C-r"                     . counsel-recentf)
          :map ivy-minibuffer-map
          ("M-y"                     . ivy-next-line)
          :map read-expression-map
-         ("C-r"                     . counsel-expression-history)))
+         ("C-r"                     . counsel-expression-history))
+  :config (setq counsel-yank-pop-separator
+                (concat "\n\n"
+                        (concat (apply 'concat (make-list 50 "---")) "\n"))))
 
 ;; counsel-org-clock provides commands for displaying org clock entries
 (use-package counsel-org-clock

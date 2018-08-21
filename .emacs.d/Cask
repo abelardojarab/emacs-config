@@ -210,6 +210,7 @@
 (depends-on "isearch+")
 (depends-on "isearch-prop")
 (depends-on "ivy")
+(depends-on "ivy-pass")
 (depends-on "ivy-purpose")
 (depends-on "ivy-rich")
 (depends-on "ivy-yasnippet")
