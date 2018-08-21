@@ -28,8 +28,12 @@
 (use-package bookmark+
   :demand t
   :custom (bookmark-save-flag 1)
-  :config (setq-default bookmark-default-file (concat (file-name-as-directory my/emacs-cache-dir)
-                                                      "bookmarks")))
+  :config (progn
+            (defadvice bookmark-load (around bar activate)
+              (ignore-errors add-do-it))
+
+            (setq-default bookmark-default-file (concat (file-name-as-directory my/emacs-cache-dir)
+                                                      "bookmarks"))))
 
 ;; Visible bookmarks
 (use-package bm
