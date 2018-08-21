@@ -1,8 +1,8 @@
-;;; setup-auto-insert.el ---                               -*- lexical-binding: t; -*-
+;;; setup-docker.el ---                            -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@gmail.com>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -24,20 +24,5 @@
 
 ;;; Code:
 
-;; Autoinsert skeletons and templates
-(use-package autoinsert
-  :defer t
-  :commands (auto-insert-mode
-             auto-insert)
-  :hook (((prog-mode markdown-mode org-mode) . auto-insert-mode)
-         (find-file . auto-insert))
-  :custom (auto-insert-query nil))
-
-;; Automated auto-insert of yasnippet templates on new files
-(use-package yatemplate
-  :defer t
-  :commands yatemplate-fill-alist
-  :config (yatemplate-fill-alist))
-
-(provide 'setup-auto-insert)
-;;; setup-auto-insert.el ends here
+(provide 'setup-docker)
+;;; setup-org-docker.el ends here

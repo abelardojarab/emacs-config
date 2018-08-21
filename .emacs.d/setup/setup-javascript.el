@@ -41,13 +41,16 @@
                                     (if local " " "-g")
                                     (if module module "tern"))))))
   :mode ("\\.js\\'" . js2-mode)
-  :commands (js2-mode js2-minor-mode)
+  :commands (js2-mode
+             js2-minor-mode
+             my/js2-mode-init)
+  :hook (js2-mode . my/js2-mode-init)
   :config (progn
             (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
-            (add-hook 'js2-mode-hook (lambda ()
-                                       (flycheck-mode t)
-                                       (skewer-mode   t)
-                                       (tern-mode     t)))
+            (defun my/js2-mode-init ()
+              (flycheck-mode t)
+              (skewer-mode   t)
+              (tern-mode     t))
             (setq-default js2-global-externs '("module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval" "clearInterval" "location" "__dirname" "console" "JSON"))
 
             (setq-default js2-basic-offset                       4
@@ -77,7 +80,8 @@
   :diminish tern-mode
   :commands tern-mode
   :after js2-mode
-  :hook (js2-mode . tern-mode))
+  :hook (js2-mode . tern-mode)
+  :config (add-to-list 'tern-command "--no-port-file" 'append))
 
 ;; skewer mode
 (use-package skewer-mode

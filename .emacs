@@ -228,6 +228,9 @@
     ;; Setup PlantUML
     (require 'setup-plantuml)
 
+    ;; Setup PlantUML
+    (require 'setup-docker)
+
     ;; Setup xUnit
     (require 'setup-xunit)
 

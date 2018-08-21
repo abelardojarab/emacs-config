@@ -29,9 +29,9 @@
 ;; If you want to create a file, visit that file with 【▤】【o】,
 ;; then enter the text in that file's own buffer.")
 
-;; Revert buffer
-(use-package files
-  :commands revert-buffer)
+;; Reporting Emacs bugs
+(use-package emacsbug
+  :custom (report-emacs-bug-no-explanations t))
 
 ;; Auto-revert buffers of changed files
 (use-package autorevert

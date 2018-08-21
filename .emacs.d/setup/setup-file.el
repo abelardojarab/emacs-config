@@ -25,9 +25,11 @@
 ;;; Code:
 
 ;; Automatic filling setup
-(setq-default fill-column 80)
-(add-hook 'text-mode-hook #'auto-fill-mode)
-(diminish 'auto-fill-function " Ⓕ")
+(use-package auto-fill
+  :defer t
+  :diminish (auto-fill-mode . "Ⓕ")
+  :custom (fill-column 80)
+  :hook (text-mode . auto-fill-mode))
 
 ;; aggressive fill on paragraphs
 (use-package aggressive-fill-paragraph
@@ -35,26 +37,53 @@
   :defer t
   :commands aggressive-fill-paragraph-mode)
 
-;; Autorevert buffer
-(setq after-find-file-from-revert-buffer t)
+;; Revert buffer
+(use-package files
+  :demand t
+  :custom ((after-find-file-from-revert-buffer    t)
+           (w32-get-true-file-attributes          nil)
+           (w32-pipe-read-delay                   0)
+           (delete-by-moving-to-trash             t)
+           (read-file-name-completion-ignore-case t))
+  :hook ((after-save-hook . executable-make-buffer-file-executable-if-script-p)
+         (find-file-hooks . goto-address-prog-mode))
+  :config (defadvice find-file-read-args (around find-file-read-args-always-use-dialog-box act)
+            "Simulate invoking menu item as if by the mouse; see `use-dialog-box'."
+            (let ((last-nonmenu-event nil)
+                  (use-dialog-box t))
+              ad-do-it)))
 
-;; Trick emacs when opening a file through menu-find-file-existing
-(defadvice find-file-read-args (around find-file-read-args-always-use-dialog-box act)
-  "Simulate invoking menu item as if by the mouse; see `use-dialog-box'."
-  (let ((last-nonmenu-event nil)
-        (use-dialog-box t))
-    ad-do-it))
+;; More exhaustive cleaning of white space
+(use-package whitespace
+  :defer t
+  :commands delete-trailing-whitespace
+  :hook (before-save . delete-trailing-whitespace))
 
-;; Try to improve slow performance on windows.
-(setq w32-get-true-file-attributes nil)
+;; Whitespace-mode
+(use-package whitespace-mode
+  :defer t
+  :commands whitespace-mode)
 
-;; Fix pipe delay
-(setq w32-pipe-read-delay 0)
+;; update the copyright whe present
+(use-package copyright
+  :defer t
+  :hook (before-save . copyright-update)
+  :custom (copyright-year-ranges t)
+  :config (setq copyright-names-regexp (regexp-quote user-full-name)))
+
+;; Time stamp
+(use-package time-stamp
+  :defer t
+  :custom ((time-stamp-active t)
+           (time-stamp-line-limit 20)
+           (time-stamp-format "%04y-%02m-%02d %02H:%02M:%02S (%u)"))
+  :commands time-stamp
+  :hook (before-save . time-stamp))
 
 ;; Guarantee utf8 as input-method
 (use-package mule
   :demand t
-  :custom (setq read-quoted-char-radix 10)
+  :custom (read-quoted-char-radix 10)
   :config (progn
             (set-input-method nil)
             (if (equal system-type 'windows-nt)
@@ -82,30 +111,6 @@
             (defadvice ansi-term (after advise-ansi-term-coding-system)
               (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
             (ad-activate 'ansi-term)))
-
-;; update the copyright when present
-(add-hook 'before-save-hook #'copyright-update)
-
-;; deleting files goes to OS's trash folder
-(setq delete-by-moving-to-trash t)
-
-;; Make URLs in comments/strings clickable, (emacs > v22)
-(add-hook 'find-file-hooks #'goto-address-prog-mode)
-
-;; Ignore case when looking for a file
-(setq read-file-name-completion-ignore-case t)
-
-;; Time stamp
-(setq time-stamp-active t          ;; do enable time-stamps
-      time-stamp-line-limit 20     ;; check first 10 buffer lines for Time-stamp:
-      time-stamp-format "%04y-%02m-%02d %02H:%02M:%02S (%u)") ;; date format
-(add-hook 'write-file-hooks 'time-stamp) ;; update when saving
-
-;; More exhaustive cleaning of white space
-(add-hook 'before-save-hook #'delete-trailing-whitespace)
-
-;; Make shell scrips executable on save. Good!
-(add-hook 'after-save-hook #'executable-make-buffer-file-executable-if-script-p)
 
 ;; sudo edit
 (use-package sudo-edit

@@ -136,7 +136,7 @@ Don't read buffer-local settings or word lists."
 
 ;; flyspell
 (use-package flyspell
-  :diminish flyspell-mode
+  :diminish (flyspell-mode . "ⓢ")
   :if (not (equal 'system-type 'windows-nt))
   :commands (flyspell-mode flyspell-check-next-highlighted-word)
   :custom (flyspell-delay 1)
@@ -146,6 +146,7 @@ Don't read buffer-local settings or word lists."
           (dolist (hook my/flyspell-modes-disabled)
             (add-hook hook (lambda () (flyspell-mode -1)))))
   :config (progn
+
             ;; Ignore message flags
             (setq flyspell-issue-message-flag nil
                   flyspell-issue-welcome-flag nil)

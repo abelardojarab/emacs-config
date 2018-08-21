@@ -93,10 +93,6 @@
 (if (featurep 'electric-indent-mode)
     (add-hook 'prog-mode-hook (lambda () (electric-indent-local-mode -1))))
 
-;; Whitespace-mode
-(use-package whitespace-mode
-  :defer t)
-
 ;; Auto-indent mode
 (use-package auto-indent-mode
   :pin manual
@@ -113,7 +109,7 @@
   :defer t
   :commands indent-hint-mode
   :custom ((indent-hint-background-overlay t)
-	   (indent-hint-bg                 nil)))
+       (indent-hint-bg                 nil)))
 
 ;; Transient indentation guide
 (use-package highlight-indent-guides

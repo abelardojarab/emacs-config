@@ -36,7 +36,7 @@
   :defer t
   :after (vc popup)
   :commands (vc-msg-show
-	     my/vc-msg-init)
+         my/vc-msg-init)
   :hook (vc-msg . my/vc-msg-init)
   :config (defun my/vc-msg-init (vcs-type commit-info)
             ;; copy commit id to clipboard
@@ -132,11 +132,11 @@
                ("q"       . magit-quit-session)))
   :if (executable-find "git")
   :hook ((magit-mode           . hl-line-mode)
-	 (after-save           . magit-after-save-refresh-status)
-	 (git-commit-mode-hook . my/magit-commit-mode-init)
-	 (git-commit-setup     . my/magit-commit-prompt))
+     (after-save           . magit-after-save-refresh-status)
+     (git-commit-mode-hook . my/magit-commit-mode-init)
+     (git-commit-setup     . my/magit-commit-prompt))
   :custom ((with-editor-file-name-history-exclude '("1"))
-	   (magit-last-seen-setup-instructions    "1.4.0"))
+       (magit-last-seen-setup-instructions    "1.4.0"))
   :init (progn
           (setenv "GIT_PAGER" "")
 
@@ -192,7 +192,7 @@
                   magit-set-upstream-on-push 'askifnotset
                   ;; highlight word/letter changes in hunk diffs
                   magit-diff-refine-hunk t
-                  ;; use ido to look for branches
+                  ;; use ivy to look for branches
                   magit-completing-read-function 'ivy-completing-read
                   ;; ask me if I want to include a revision when rewriting
                   magit-rewrite-inclusive 'ask
@@ -203,7 +203,6 @@
                   magit-refresh-file-buffer-hook nil ;; obsolete
                   magit-turn-on-auto-revert-mode nil ;; obsolete
                   magit-revert-buffers 'silent ;; obsolete
-                  ;; see https://github.com/magit/magit/pull/2091
                   magit-keep-region-overlay t
                   ;; attempt to disable magit-auto-revert-immediately
                   magit-auto-revert-immediately (null (and (boundp 'auto-revert-use-notify)
@@ -363,7 +362,6 @@
   :if (executable-find "git")
   :after magit
   :hook (magit-mode . turn-on-magit-gitflow))
-
 
 ;; diff-hl
 (use-package diff-hl
@@ -548,8 +546,8 @@ Git gutter:
   :defer t
   :if (executable-find "git")
   :commands (smerge-mode
-	     hydra-smerge/body
-	     my/enable-smerge-maybe)
+         hydra-smerge/body
+         my/enable-smerge-maybe)
   :init (defun my/enable-smerge-maybe ()
             "Auto-enable `smerge-mode' when merge conflict is detected."
             (save-excursion

@@ -28,6 +28,7 @@
 (use-package nxml-mode
   :defer t
   :commands nxml-mode
+  :mode ("\\.xml?\\'")
   :after (hideshow smartparens)
   :init (progn
           (use-package sgml-mode)
@@ -40,7 +41,8 @@
                          "<!--"
                          sgml-skip-tag-forward
                          nil)))
-  :custom (nxml-slash-auto-complete-flag t)
+  :custom ((nxml-slash-auto-complete-flag         t)
+           (nxml-auto-insert-xml-declaration-flag t))
   :config (sp-local-pair 'nxml-mode "<" ">" :actions '(:rem insert)))
 
 ;; Required by web-mode
