@@ -22,6 +22,25 @@
 
 ;;
 
+;; dockerfile-mode is pretty self explanatory
+(use-package dockerfile-mode
+  :mode "\\Dockerfile\\'")
+
+;; Allows TRAMP connections into running containers
+(use-package docker-tramp)
+
+;; Docker allows for interaction with the Docker distribution
+(use-package docker
+  :bind ("C-c d" . hydra-docker/body)
+  :config (defhydra hydra-docker (:columns 5 :color blue)
+	    "Docker"
+	    ("c" docker-containers "Containers")
+	    ("v" docker-volumes "Volumes")
+	    ("i" docker-images "Images")
+	    ("n" docker-networks "Networks")
+	    ("b" dockerfile-build-buffer "Build Buffer")
+	    ("q" nil "Quit")))
+
 ;;; Code:
 
 (provide 'setup-docker)
