@@ -82,13 +82,13 @@
   :commands (rtags-print-symbol-info
              rtags-find-symbol-at-point
              rtags-start-process-unless-running
-             rtags-eldoc-function)
+             rtags-eldoc-function
+	     my/c-mode-init-rtags)
   :if (executable-find "rdm")
   :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory))
   :bind (:map c++-mode-map
               ("C-c C-i" . rtags-print-symbol-info)
               ("C-c C-s" . rtags-find-symbol-at-point))
-  :hook (((c++-mode c-mode objc-mode) . my/c-mode-init-rtags))
   :config (progn
             (use-package helm-rtags
               :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory)))
@@ -135,7 +135,8 @@
                          (not (file-exists-p (concat (projectile-project-root)
                                                      "GTAGS"))))
 		(rtags-start-process-unless-running)
-                (setq-local eldoc-documentation-function #'rtags-eldoc-function)))))
+                (setq-local eldoc-documentation-function #'rtags-eldoc-function)
+		(eldoc-mode t)))))
 
 ;; cmake syntax highlighting
 (use-package cmake-mode
@@ -263,6 +264,7 @@
                   (cmake-ide-maybe-run-cmake)
                   (cmake-ide-maybe-start-rdm)
                   (cmake-project-mode 1)
+		  (my/c-mode-init-rtags)
 		  (eldoc-mode)
 		  (turn-on-eldoc-mode))))
 
