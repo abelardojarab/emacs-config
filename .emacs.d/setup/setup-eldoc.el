@@ -27,9 +27,12 @@
 (use-package eldoc
   :defer t
   :diminish eldoc-mode
-  :hook (((prog-mode eval-expression-minibuffer-setup)      . eldoc-mode)
-         ((emacs-lisp-mode lisp-interaction-mode ielm-mode) . turn-on-eldoc-mode)
-         (c-mode-common                                     . my/eldoc-c-mode-init))
+  :commands (eldoc-mode
+	     turn-on-eldoc-mode
+	     my/eldoc-c-mode-init)
+  :hook (((prog-mode c-mode c++-mode)                                     . eldoc-mode)
+         ((emacs-lisp-mode lisp-interaction-mode ielm-mode)               . turn-on-eldoc-mode)
+         (c-mode-common                                                   . my/eldoc-c-mode-init))
   :custom ((eldoc-idle-delay                0.8)
            (eldoc-echo-area-use-multiline-p t))
   :init (defun my/eldoc-c-mode-init ()
