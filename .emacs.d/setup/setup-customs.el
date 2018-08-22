@@ -86,7 +86,7 @@
   :group 'my/customs
   :type 'string)
 
-(defcustom my/main-programming-font "Source Code Pro for Powerline"
+(defcustom my/main-programming-font "Iosevka"
   "Preferred programming font"
   :type 'string
   :group 'my/customs)
