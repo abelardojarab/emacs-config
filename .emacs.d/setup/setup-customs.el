@@ -333,8 +333,12 @@
     "pthread.h"
     "fcntl.h"
     "cdefs.h"
+    "mman.h"
     ;; C++ header files
     "new"
+    "iostream"
+    "fstream"
+    "algorithm"
     "cstdlib"
     "cstdio"
     "cstdint"
