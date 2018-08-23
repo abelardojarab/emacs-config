@@ -65,34 +65,28 @@
                            (vertical 60 (group 1.0))
                            (vertical 1.0 (summary 1.0 point)))))
 
-            (setq my/gnus-local '((nntp "news.gwene.org")
+            (setq my/gnus-local '((nnmaildir "local"
+                                             (directory "~/Mail")
+                                             (directory-files nnheader-directory-files-safe)
+                                             (get-new-mail nil)
+                                             (nnir-search-engine notmuch))
+
+                                  ;; News servers
+                                  (nntp "news.gwene.org")
                                   (nntp "gmane"
                                         (nntp-address "news.gmane.org")
                                         (nntp-port-number 563)
                                         (nntp-open-connection-function nntp-open-tls-stream))
-                                  (nnmaildir "local"
-                                             (directory "~/Mail")
-                                             (directory-files nnheader-directory-files-safe)
-                                             ;; (get-new-mail nil)
-                                             (nnir-search-engine notmuch)
-                                             ))
+                                  (nntp "aioe"
+                                        (nntp-address "nntp.aioe.org")
+                                        (nntp-port-number 563)
+                                        (nntp-open-connection-function nntp-open-tls-stream)))
                   my/gnus-gmail '(nnimap "gmail"
                                          (nnimap-address "imap.gmail.com")
                                          (nnimap-server-port 993)
                                          (nnimap-stream tls)
                                          (nnimap-authenticator login)
                                          (nnimap-expunge-on-close 'ask)))
-
-            (setq my/gnus-gmane
-                  '(nntp "gmane"
-                         (nntp-address "news.gmane.org")
-                         (nntp-port-number 563)
-                         (nntp-open-connection-function nntp-open-tls-stream))
-                  my/gnus-aioe
-                  '(nntp "aioe"
-                         (nntp-address "nntp.aioe.org")
-                         (nntp-port-number 563)
-                         (nntp-open-connection-function nntp-open-tls-stream)))
 
             ;; You need this to be able to list all labels in gmail
             (setq gnus-ignored-newsgroups            "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]"
@@ -120,6 +114,7 @@
 
                   ;; Secondary sources
                   gnus-secondary-select-methods      my/gnus-local
+
                   ;; Archive methods
                   gnus-message-archive-method        gnus-select-method
 
@@ -140,30 +135,12 @@
                   ;; A gravatar is an image registered to an e-mail address
                   gnus-treat-from-gravatar           t)
 
-            ;; Show @ on email with attachments
-            (defun gnus-user-format-function-@ (header)
-              "Display @ for message with attachment in summary line.
-You need to add `Content-Type' to `nnmail-extra-headers' and
-`gnus-extra-headers', see Info node `(gnus)To From Newsgroups'."
-              (let ((case-fold-search t)
-                    (ctype (or (cdr (assq 'Content-Type (mail-header-extra header)))
-                               "text/plain"))
-                    indicator)
-                (when (string-match "^multipart/mixed" ctype)
-                  (setq indicator "@"))
-                (if indicator
-                    indicator
-                  " ")))
-
             ;; Missing faces
             (copy-face 'font-lock-constant-face 'gnus-face-8)
             (set-face-foreground 'gnus-face-8 "gray50")
             (setq gnus-face-8 'gnus-face-8)
             (setq gnus-face-9 'font-lock-warning-face)
             (setq gnus-face-10 'shadow)
-
-            ;; Add news servers
-            ;; (add-to-list 'gnus-secondary-select-methods my/gnus-gmane)
 
             ;; Use gnus for email
             (setq mail-user-agent             'gnus-user-agent)
