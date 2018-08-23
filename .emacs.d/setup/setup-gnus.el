@@ -34,18 +34,13 @@
 
 ;; To be able to search within your gmail/imap mail
 (use-package nnir
-  :config (progn
-            ;; Define email sources
-            (setq mail-sources '((maildir :path "~/Mail/INBOX" :subdirs ("cur" "new"))))
+  :config (setq nnmail-expiry-wait 30
+                nnmail-crosspost nil
+                nnmail-extra-headers (quote (To Cc Newsgroups))
+                nnmail-scan-directory-mail-source-once t
 
-            ;; mailbox settings
-            (setq nnmail-expiry-wait 30
-                  nnmail-crosspost nil
-                  nnmail-extra-headers (quote (To Cc Newsgroups))
-                  nnmail-scan-directory-mail-source-once t
-
-                  ;; Directory containing Unix mbox; defaults to message-directory
-                  nnfolder-directory "~/Mail")))
+                ;; Directory containing Unix mbox; defaults to message-directory
+                nnfolder-directory "~/Mail"))
 
 ;; Gnus
 (use-package gnus
@@ -70,15 +65,23 @@
                            (vertical 60 (group 1.0))
                            (vertical 1.0 (summary 1.0 point)))))
 
-            (setq my/gnus-local '(nnmaildir "local"
-                                            (directory "~/Mail")
-                                            (directory-files nnheader-directory-files-safe)
-                                            (get-new-mail nil)
-                                            (nnir-search-engine notmuch))
+            (setq my/gnus-local '((nntp "news.gwene.org")
+                                  (nntp "gmane"
+                                        (nntp-address "news.gmane.org")
+                                        (nntp-port-number 563)
+                                        (nntp-open-connection-function nntp-open-tls-stream))
+                                  (nnmaildir "local"
+                                             (directory "~/Mail")
+                                             (directory-files nnheader-directory-files-safe)
+                                             ;; (get-new-mail nil)
+                                             (nnir-search-engine notmuch)
+                                             ))
                   my/gnus-gmail '(nnimap "gmail"
                                          (nnimap-address "imap.gmail.com")
                                          (nnimap-server-port 993)
-                                         (nnimap-stream tls)))
+                                         (nnimap-stream tls)
+                                         (nnimap-authenticator login)
+                                         (nnimap-expunge-on-close 'ask)))
 
             (setq my/gnus-gmane
                   '(nntp "gmane"
@@ -96,6 +99,7 @@
 
                   ;; Asynchronous support
                   gnus-asynchronous                  t
+                  gnus-use-demon                     nil
 
                   ;; Default levels
                   gnus-activate-level                2
@@ -109,24 +113,19 @@
                   gnus-interactive-exit              nil
 
                   ;; Add Unix mbox'es (mbsync); in case we have local email
-                  gnus-select-method                 my/gnus-local
+                  gnus-select-method                 '(nnnil "") ;; my/gnus-local
 
                   ;; Show email INBOX
                   gnus-permanently-visible-groups    "local"
 
                   ;; Secondary sources
-                  gnus-secondary-select-methods  (quote
-                                                  ((nnmaildir "" (directory "~/Mail")
-                                                              (directory-files nnheader-directory-files-safe)
-                                                              (get-new-mail nil)
-                                                              (nnir-search-engine notmuch)
-                                                              )))
-
+                  gnus-secondary-select-methods      my/gnus-local
                   ;; Archive methods
-                  gnus-message-archive-method       gnus-select-method
+                  gnus-message-archive-method        gnus-select-method
 
                   ;; Display a button for MIME parts
-                  gnus-buttonized-mime-types        '("multipart/alternative")
+                  gnus-inhibit-mime-unbuttonizing    t
+                  gnus-buttonized-mime-types         '("multipart/alternative")
 
                   ;; Headers we wanna see:
                   gnus-visible-headers "^From:\\|^Subject:\\|^X-Mailer:\\|^X-Newsreader:\\|^Date:\\|^To:\\|^Cc:\\|^User-agent:\\|^Newsgroups:\\|^Comments:"
@@ -141,8 +140,30 @@
                   ;; A gravatar is an image registered to an e-mail address
                   gnus-treat-from-gravatar           t)
 
+            ;; Show @ on email with attachments
+            (defun gnus-user-format-function-@ (header)
+              "Display @ for message with attachment in summary line.
+You need to add `Content-Type' to `nnmail-extra-headers' and
+`gnus-extra-headers', see Info node `(gnus)To From Newsgroups'."
+              (let ((case-fold-search t)
+                    (ctype (or (cdr (assq 'Content-Type (mail-header-extra header)))
+                               "text/plain"))
+                    indicator)
+                (when (string-match "^multipart/mixed" ctype)
+                  (setq indicator "@"))
+                (if indicator
+                    indicator
+                  " ")))
+
+            ;; Missing faces
+            (copy-face 'font-lock-constant-face 'gnus-face-8)
+            (set-face-foreground 'gnus-face-8 "gray50")
+            (setq gnus-face-8 'gnus-face-8)
+            (setq gnus-face-9 'font-lock-warning-face)
+            (setq gnus-face-10 'shadow)
+
             ;; Add news servers
-            (add-to-list 'gnus-secondary-select-methods my/gnus-gmane)
+            ;; (add-to-list 'gnus-secondary-select-methods my/gnus-gmane)
 
             ;; Use gnus for email
             (setq mail-user-agent             'gnus-user-agent)
@@ -274,8 +295,8 @@
 
             ;; message mode hooks
             (defun my/message-mode-init ()
-	      ;; Turn on PGP
-	      (epa-mail-mode t)
+              ;; Turn on PGP
+              (epa-mail-mode t)
 
               ;; Org goodies
               (orgtbl-mode      t)
