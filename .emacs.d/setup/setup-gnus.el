@@ -37,7 +37,7 @@
   :config (setq nnmail-expiry-wait 30
                 nnmail-crosspost nil
                 nnmail-extra-headers (quote (To Cc Newsgroups))
-                nnmail-scan-directory-mail-source-once t
+                nnmail-scan-directory-mail-source-once tl
 
                 ;; Directory containing Unix mbox; defaults to message-directory
                 nnfolder-directory "~/Mail"))
@@ -75,10 +75,6 @@
                                   (nntp "news.gwene.org")
                                   (nntp "gmane"
                                         (nntp-address "news.gmane.org")
-                                        (nntp-port-number 563)
-                                        (nntp-open-connection-function nntp-open-tls-stream))
-                                  (nntp "aioe"
-                                        (nntp-address "nntp.aioe.org")
                                         (nntp-port-number 563)
                                         (nntp-open-connection-function nntp-open-tls-stream)))
                   my/gnus-gmail '(nnimap "gmail"
@@ -134,13 +130,6 @@
 
                   ;; A gravatar is an image registered to an e-mail address
                   gnus-treat-from-gravatar           t)
-
-            ;; Missing faces
-            (copy-face 'font-lock-constant-face 'gnus-face-8)
-            (set-face-foreground 'gnus-face-8 "gray50")
-            (setq gnus-face-8 'gnus-face-8)
-            (setq gnus-face-9 'font-lock-warning-face)
-            (setq gnus-face-10 'shadow)
 
             ;; Use gnus for email
             (setq mail-user-agent             'gnus-user-agent)
