@@ -37,7 +37,7 @@
   :config (setq nnmail-expiry-wait 30
                 nnmail-crosspost nil
                 nnmail-extra-headers (quote (To Cc Newsgroups))
-                nnmail-scan-directory-mail-source-once tl
+                nnmail-scan-directory-mail-source-once t
 
                 ;; Directory containing Unix mbox; defaults to message-directory
                 nnfolder-directory "~/Mail"))
