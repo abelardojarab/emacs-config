@@ -343,10 +343,14 @@
     "cstdio"
     "cstdint"
     "cstdbool"
+    "string"
+    "basic_string.h"
     "shared_ptr.h"
     "unique_ptr.h"
     "std_mutex"
-    "c++config.h")
+    "c++config.h"
+    "gtest.h"
+    "gmock.h")
   "List of buffers to be ignored on tabbar and when switching buffers"
   :group 'my/customs
   :type 'list)
