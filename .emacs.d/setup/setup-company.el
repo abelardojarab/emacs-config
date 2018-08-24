@@ -37,8 +37,7 @@
                                                c-electric-colon
                                                completion-separator-self-insert-command
                                                outshine-self-insert-command))
-           (company-transformers              '(company-sort-by-occurrence
-                                                company-sort-by-backend-importance))
+           (company-transformers              '(company-sort-by-backend-importance))
            (company-frontends                 '(company-pseudo-tooltip-unless-just-one-frontend
                                                 company-preview-frontend
                                                 company-echo-metadata-frontend))
