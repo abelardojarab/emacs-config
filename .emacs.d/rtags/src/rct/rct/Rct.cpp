@@ -383,6 +383,30 @@ uint64_t currentTimeMs()
     return (time.tv_sec * static_cast<uint64_t>(1000)) + (time.tv_usec / static_cast<uint64_t>(1000));
 }
 
+String currentTimeString()
+{
+    struct timeval tv;
+    struct timezone tz;
+    gettimeofday(&tv, &tz);
+    enum {
+        SEC_PER_MIN = 60,
+        SEC_PER_HOUR = SEC_PER_MIN * 60,
+        SEC_PER_DAY = SEC_PER_HOUR * 24
+    };
+
+    long hms = tv.tv_sec % SEC_PER_DAY;
+    hms += tz.tz_dsttime * SEC_PER_HOUR;
+    hms -= tz.tz_minuteswest * SEC_PER_MIN;
+    hms = (hms + SEC_PER_DAY) % SEC_PER_DAY;
+
+    int hour = hms / SEC_PER_HOUR;
+    int min = (hms % SEC_PER_HOUR) / SEC_PER_MIN;
+    int sec = (hms % SEC_PER_HOUR) % SEC_PER_MIN; // or hms % SEC_PER_MIN
+
+    return String::format<16>("%d:%02d:%02d.%03llu",
+                              hour, min, sec, tv.tv_usec / static_cast<unsigned long long>(1000));
+}
+
 String hostName()
 {
     String host(HOST_NAME_MAX, '\0');

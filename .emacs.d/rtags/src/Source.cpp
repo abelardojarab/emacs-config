@@ -113,7 +113,7 @@ static inline Source::Language guessLanguageFromSourceFile(const Path &sourceFil
 
 static bool isWrapper(const char *name)
 {
-    return (!strcmp(name, "gcc-rtags-wrapper.sh") || !strcmp(name, "icecc"));
+    return (!strcmp(name, "gcc-rtags-wrapper.sh") || !strcmp(name, "icecc") || !strcmp(name, "fiskc"));
 }
 
 static inline String trim(const char *start, int size)
@@ -279,7 +279,7 @@ static inline bool isCompiler(const Path &fullPath, const List<String> &environm
 {
     if (Server::instance()->options().compilerWrappers.contains(fullPath.fileName()))
         return true;
-    if (strcasestr(fullPath.fileName(), "emacs"))
+    if (String(fullPath.fileName()).contains("emacs", String::CaseInsensitive))
         return false;
     static Hash<Path, bool> sCache;
 
@@ -289,8 +289,8 @@ static inline bool isCompiler(const Path &fullPath, const List<String> &environm
         return ret;
 
     char path[PATH_MAX];
-    strcpy(path, "/tmp/rtags-compiler-check-XXXXXX.c");
-    const int fd = mkstemps(path, 2);
+    strcpy(path, "/tmp/rtags-compiler-check-XXXXXX");
+    const int fd = mkstemp(path);
     if (fd == -1) {
         error("Failed to make temporary file errno: %d", errno);
         return false;
@@ -330,7 +330,7 @@ enum Mode {
 };
 static std::pair<Path, bool> resolveCompiler(const Path &unresolved,
                                              const Path &cwd,
-                                             const List<String> environment,
+                                             const List<String>& environment,
                                              const List<Path> &pathEnvironment,
                                              SourceCache *cache)
 {
@@ -448,7 +448,41 @@ SourceList Source::parse(const String &cmdLine,
     assert(cwd.endsWith('/'));
     assert(!unresolvedInputLocations || unresolvedInputLocations->isEmpty());
     List<String> split = splitCommandLine(cmdLine);
+    if (split.isEmpty())
+        return SourceList();
+
     debug() << "Source::parse (" << cmdLine << ") => " << split << cwd;
+    size_t idx = 0;
+    if (split.size() > 1 && (split.at(0).endsWith("/ccache") || split.at(0) == "ccache"))
+        ++idx;
+    if (split.at(idx).endsWith("/fiskc") || split.at(idx) == "fiskc") {
+        String compiler;
+        split.removeAt(0);
+        size_t i=idx;
+        while (i < split.size()) {
+            String &str = split[i];
+            if (str.startsWith("--fisk-compiler")) {
+                if (str.contains("=")) {
+                    compiler = str.mid(16);
+                    split.removeAt(i);
+                } else if (i + 1 < split.size()) {
+                    compiler = std::move(split[i + 1]);
+                    split.remove(i, 2);
+                }
+            } else if (str.startsWith("--fisk-")) {
+                if (str.contains("=")) {
+                    split.removeAt(i);
+                } else {
+                    split.remove(i, 2);
+                }
+            } else {
+                ++i;
+            }
+        }
+        if (!compiler.isEmpty())
+            split.insert(idx, compiler);
+        debug() << "Postfisk Source::parse (" << split;
+    }
 
     for (size_t i=0; i<split.size(); ++i) {
         if (split.at(i) == "cd" || !resolveCompiler(split.at(i), cwd, environment, pathEnvironment, cache).first.isEmpty()) {
@@ -513,8 +547,11 @@ SourceList Source::parse(const String &cmdLine,
     const int s = split.size();
     String arg;
     Path extraCompiler;
+    bool verbose = testLog(LogLevel::Debug);
     for (int i=0; i<s; ++i) {
         arg = split.at(i);
+        if (verbose)
+            debug() << "parsing argument" << i << arg;
         if (arg.isEmpty())
             continue;
         if ((arg.startsWith('\'') && arg.endsWith('\'')) ||
@@ -651,6 +688,9 @@ SourceList Source::parse(const String &cmdLine,
                 } else {                                                \
                     p = Path::resolved(arg.mid(argLen), Path::MakeAbsolute, cwd); \
                 }                                                       \
+                if (testLog(LogLevel::Warning))                         \
+                    warning() << "Added include path" << p <<           \
+                    "type:" << #type << "for argument" << arg;          \
                 includePaths.append(Source::Include(Source::Include::type, p)); \
             }
 #include "IncludeTypesInternal.h"
@@ -716,11 +756,11 @@ SourceList Source::parse(const String &cmdLine,
             if (buildRoot.isDir())
                 buildRootId = Location::insertFile(buildRoot);
         }
-        const Flags<Server::Option> serverFlags = Server::instance() ? Server::instance()->options().options : NullFlags;
+        Flags<Server::Option> serverFlags = Server::instance() ? Server::instance()->options().options : NullFlags;
         includePathHash = ::hashIncludePaths(includePaths, buildRoot, serverFlags);
 
         ret.reserve(inputs.size());
-        for (const auto input : inputs) {
+        for (const auto& input : inputs) {
             unresolvedInputLocations->append(input.absolute);
             if (input.unmolested == "-")
                 continue;
@@ -780,7 +820,7 @@ static inline bool compareDefinesNoNDEBUG(const Set<Source::Define> &l, const Se
 
 static bool nextArg(List<String>::const_iterator &it,
                     const List<String>::const_iterator end,
-                    Flags<Server::Option> flags)
+                    const Flags<Server::Option> flags)
 {
     while (it != end) {
         if (isBlacklisted(*it)) {
@@ -900,10 +940,11 @@ List<String> Source::toCommandLine(Flags<CommandLineFlag> f, bool *usedPch) cons
     if (f & IncludeDefines) {
         for (const auto &def : defines)
             ret += def.toString(f);
-        if (!(f & ExcludeDefaultIncludePaths)) {
+        if (!(f & ExcludeDefaultDefines)) {
             assert(server);
             for (const auto &def : server->options().defines)
-                ret += def.toString(f);
+                if (!defines.contains(def))
+                    ret += def.toString(f);
         }
     }
     if (f & IncludeIncludePaths) {

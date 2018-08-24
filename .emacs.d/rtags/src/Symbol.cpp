@@ -36,13 +36,12 @@ static inline const char *linkageSpelling(CXLinkageKind kind)
 }
 
 String Symbol::toString(const std::shared_ptr<Project> &project,
-                        Flags<ToStringFlag> cursorInfoFlags,
+                        const Flags<ToStringFlag> cursorInfoFlags,
                         Flags<Location::ToStringFlag> locationToStringFlags,
                         const Set<String> &pieceFilters) const
 {
     auto filterPiece = [&pieceFilters](const char *name) { return pieceFilters.isEmpty() || pieceFilters.contains(name); };
-    auto properties = [this, &filterPiece]() -> String
-    {
+    auto properties = [this, &filterPiece]() -> String {
         List<String> ret;
         if (isDefinition() && filterPiece("definition"))
             ret << "Definition";
@@ -64,8 +63,6 @@ String Symbol::toString(const std::shared_ptr<Project> &project,
             ret << "Variadic";
         if (flags & Auto && filterPiece("auto"))
             ret << "Auto";
-        if (flags & AutoRef && filterPiece("autoref"))
-            ret << "AutoRef";
 
         if (flags & MacroExpansion && filterPiece("macroexpansion"))
             ret << "MacroExpansion";
@@ -376,8 +373,6 @@ Value Symbol::toValue(const std::shared_ptr<Project> &project,
                 ret["variadic"] = true;
             if (symbol.flags & Symbol::Auto && filterPiece("auto"))
                 ret["auto"] = true;
-            if (symbol.flags & Symbol::AutoRef && filterPiece("autoref"))
-                ret["autoref"] = true;
             if (symbol.flags & Symbol::MacroExpansion && filterPiece("macroexpansion"))
                 ret["macroexpansion"] = true;
             if (symbol.flags & Symbol::TemplateSpecialization && filterPiece("templatespecialization"))

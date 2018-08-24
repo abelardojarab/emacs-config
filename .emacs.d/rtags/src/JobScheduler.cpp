@@ -62,32 +62,6 @@ void JobScheduler::add(const std::shared_ptr<IndexerJob> &job)
         startJobs();
 }
 
-uint32_t JobScheduler::hasHeaderError(DependencyNode *node, Set<uint32_t> &seen) const
-{
-    assert(node);
-    for (auto dep : node->includes) {
-        if (!seen.insert(dep.first))
-            continue;
-
-        if (mHeaderErrors.contains(dep.first)) {
-            return dep.first;
-        }
-        if (uint32_t fileId = hasHeaderError(dep.second, seen)) {
-            return fileId;
-        }
-    }
-    return 0;
-}
-
-uint32_t JobScheduler::hasHeaderError(uint32_t file, const std::shared_ptr<Project> &project) const
-{
-    DependencyNode *node = project->dependencies().value(file);
-    if (!node)
-        return false;
-    Set<uint32_t> seen;
-    return hasHeaderError(node, seen);
-}
-
 void JobScheduler::startJobs()
 {
     Server *server = Server::instance();
@@ -148,7 +122,8 @@ void JobScheduler::startJobs()
             cont();
             continue;
         }
-        process->finished().connect([this, jobId](Process *proc) {
+        const int pid = process->pid();
+        process->finished().connect([this, jobId, options, pid](Process *proc) {
                 EventLoop::deleteLater(proc);
                 auto n = mActiveByProcess.take(proc);
                 assert(!n || n->process == proc);
@@ -157,6 +132,7 @@ void JobScheduler::startJobs()
                     error() << (n ? ("Output from " + n->job->sourceFile + ":") : String("Orphaned process:"))
                             << '\n' << stdErr << (n ? n->stdOut : String());
                 }
+                Path::rmdir(options.tempDir + String::number(pid));
 
                 if (n) {
                     assert(n->process == proc);
@@ -204,16 +180,6 @@ void JobScheduler::handleIndexDataMessage(const std::shared_ptr<IndexDataMessage
 
 void JobScheduler::jobFinished(const std::shared_ptr<IndexerJob> &job, const std::shared_ptr<IndexDataMessage> &message)
 {
-    bool headerErrorChanged = false;
-    for (const auto &it : message->files()) {
-        if (it.second & IndexDataMessage::HeaderError) {
-            if (mHeaderErrors.insert(it.first))
-                headerErrorChanged = true;
-        } else if (mHeaderErrors.remove(it.first)) {
-            headerErrorChanged = true;
-        }
-    }
-    // mHeaderErrors.unite(message->headerErrors());
     assert(!(job->flags & IndexerJob::Aborted));
     assert(job);
     assert(message);
@@ -242,8 +208,6 @@ void JobScheduler::jobFinished(const std::shared_ptr<IndexerJob> &job, const std
         debug() << "job crashed too many times" << job->id << job->fileId() << job.get();
     }
     project->onJobFinished(job, message);
-    if (headerErrorChanged)
-        sort();
 }
 
 void JobScheduler::dump(const std::shared_ptr<Connection> &conn)
@@ -251,9 +215,10 @@ void JobScheduler::dump(const std::shared_ptr<Connection> &conn)
     if (!mPendingJobs.isEmpty()) {
         conn->write("Pending:");
         for (const auto &node : mPendingJobs) {
-            conn->write<128>("%s: %s %s",
+            conn->write<128>("%s: %s %d %s",
                              node->job->sourceFile.constData(),
                              node->job->flags.toString().constData(),
+                             node->job->priority(),
                              IndexerJob::dumpFlags(node->job->flags).constData());
         }
     }
@@ -261,9 +226,10 @@ void JobScheduler::dump(const std::shared_ptr<Connection> &conn)
         conn->write("Active:");
         const unsigned long long now = Rct::monoMs();
         for (const auto &node : mActiveById) {
-            conn->write<128>("%s: %s %s %lldms",
+            conn->write<128>("%s: %s priority: %d %s %lldms",
                              node.second->job->sourceFile.constData(),
                              node.second->job->flags.toString().constData(),
+                             node.second->job->priority(),
                              IndexerJob::dumpFlags(node.second->job->flags).constData(),
                              now - node.second->started);
 
@@ -293,12 +259,6 @@ void JobScheduler::abort(const std::shared_ptr<IndexerJob> &job)
         node->process->kill();
         mActiveByProcess.remove(node->process);
     }
-}
-
-void JobScheduler::clearHeaderError(uint32_t file)
-{
-    if (mHeaderErrors.remove(file))
-        warning() << Location::path(file) << "was touched, starting jobs";
 }
 
 void JobScheduler::sort()

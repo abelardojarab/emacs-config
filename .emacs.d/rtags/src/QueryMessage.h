@@ -37,6 +37,7 @@ public:
         ClassHierarchy,
         ClearProjects,
         CodeCompleteAt,
+        DeadFunctions,
         DebugLocations,
         DeleteProject,
         Dependencies,
@@ -54,6 +55,7 @@ public:
         IsIndexed,
         IsIndexing,
         JobCount,
+        LastIndexed,
         ListSymbols,
         PreprocessFile,
         Project,
@@ -120,10 +122,11 @@ public:
         CodeCompleteIncludes = (1ull << 40),
         TokensIncludeSymbols = (1ull << 41),
         JSON = (1ull << 42),
-        CodeCompletionEnabled = (1ull << 43),
-        SynchronousDiagnostics = (1ull << 44),
-        CodeCompleteNoWait = (1ull << 45),
-        AllTargets = (1ull << 46)
+        JSONDiagnosticsIncludeSkipped = (1ull << 43),
+        CodeCompletionEnabled = (1ull << 44),
+        SynchronousDiagnostics = (1ull << 45),
+        CodeCompleteNoWait = (1ull << 46),
+        AllTargets = (1ull << 47)
     };
 
     QueryMessage(Type type = Invalid);

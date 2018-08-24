@@ -101,10 +101,10 @@ endif()
 if (OPENSSL_FOUND)
     set(RCT_DEFINITIONS ${RCT_DEFINITIONS} -DRCT_HAVE_OPENSSL)
     list(APPEND RCT_SOURCES ${CMAKE_CURRENT_LIST_DIR}/rct/AES256CBC.cpp ${CMAKE_CURRENT_LIST_DIR}/rct/SHA256.cpp)
-    if (${OPENSSL_INCLUDE_DIR})
+    if (OPENSSL_INCLUDE_DIR)
         list(APPEND RCT_INCLUDE_DIRS ${OPENSSL_INCLUDE_DIR})
     endif ()
-    if (${OPENSSL_INCLUDE_DIRS})
+    if (OPENSSL_INCLUDE_DIRS)
         list(APPEND RCT_INCLUDE_DIRS ${OPENSSL_INCLUDE_DIRS})
     endif ()
 else ()
@@ -273,18 +273,6 @@ if (NOT HAVE_CXX11)
 endif ()
 
 check_cxx_source_runs("
-  #include <unordered_map>
-
-  int main(int, char **)
-  {
-      std::unordered_map<int, int> a;
-      a.emplace(1, 1);
-      std::unordered_map<int, int> b = std::move(a);
-      a.emplace(1, 1);
-      return 0;
-  }" HAVE_UNORDERDED_MAP_WORKING_MOVE_CONSTRUCTOR)
-
-check_cxx_source_runs("
   #include <string>
 
   int main(int, char **)
@@ -296,6 +284,58 @@ check_cxx_source_runs("
 
 unset(CMAKE_REQUIRED_FLAGS)
 unset(CMAKE_REQUIRED_LIBRARIES)
+
+if (RCT_WITH_TESTS)
+    enable_testing()
+    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/tests)
+
+    if (${CMAKE_CXX_COMPILER} MATCHES "clang")
+        find_program(LLVM_COV_EXECUTABLE
+            NAMES
+            llvm-cov
+            llvm-cov35
+            llvm-cov36
+            llvm-cov37
+            )
+
+        add_custom_target(
+            gen_llvm_cov_wrapper_script
+            COMMAND echo ${LLVM_COV_EXECUTABLE} gcov $@ | tee llvm-cov.sh
+            COMMAND chmod a+x llvm-cov.sh
+            VERBATIM
+        )
+
+        set(GCOV_TOOL ./llvm-cov.sh)
+    else ()
+        find_program(GCOV_EXECUTABLE
+            NAMES
+            gcov47
+            gcov48
+        )
+
+        add_custom_target(
+            gen_llvm_cov_wrapper_script
+            COMMAND true
+            VERBATIM
+        )
+
+        set(GCOV_TOOL ${GCOV_EXECUTABLE})
+    endif ()
+
+    find_program(LCOV_EXECUTABLE NAMES lcov)
+    find_program(GENHTML_EXECUTABLE NAMES genhtml)
+
+    if (GCOV_TOOL AND LCOV_EXECUTABLE AND GENHTML_EXECUTABLE)
+        add_custom_target(
+            coverage
+            COMMAND ${LCOV_EXECUTABLE} --directory . --base-directory . --gcov-tool ${GCOV_TOOL} -capture -o cov.info
+            COMMAND ${GENHTML_EXECUTABLE} cov.info -o output
+            DEPENDS gen_llvm_cov_wrapper_script
+            VERBATIM
+        )
+    endif ()
+
+endif ()
 
 if (NOT RCT_NO_INSTALL)
   install(FILES
@@ -333,6 +373,7 @@ if (NOT RCT_NO_INSTALL)
     rct/SocketServer.h
     rct/StopWatch.h
     rct/String.h
+    rct/StringTokenizer.h
     rct/Thread.h
     rct/ThreadLocal.h
     rct/ThreadPool.h

@@ -68,39 +68,35 @@ int IndexerJob::priority() const
         Server *server = Server::instance();
         uint32_t fileId = sources.begin()->fileId;
         assert(server);
-        if (server->jobScheduler()->hasHeaderError(fileId)) {
-            ret = -1;
-        } else {
-            if (flags & Dirty) {
-                ++ret;
-            } else if (flags & Reindex) {
-                ret += 4;
-            }
-            std::shared_ptr<Project> p = server->project(project);
-            if (server->isActiveBuffer(fileId)) {
-                ret += 8;
-            } else if (p) {
-                if (DependencyNode *node = p->dependencyNode(fileId)) {
-                    Set<DependencyNode*> seen;
-                    seen.insert(node);
-                    std::function<bool(const DependencyNode *node)> func = [&seen, server, &func](const DependencyNode *n) {
-                        for (const auto &inc : n->includes) {
-                            if (seen.insert(inc.second)
-                                && !Location::path(n->fileId).isSystem()
-                                && (server->isActiveBuffer(n->fileId) || func(inc.second))) {
-                                return true;
-                            }
-                        }
-                        return false;
-                    };
-                    if (func(node))
-                        ret += 2;
-                }
-            }
-
-            if (p && server->currentProject() == p)
-                ++ret;
+        if (flags & Dirty) {
+            ++ret;
+        } else if (flags & Reindex) {
+            ret += 4;
         }
+        std::shared_ptr<Project> p = server->project(project);
+        if (server->isActiveBuffer(fileId)) {
+            ret += 8;
+        } else if (p) {
+            if (DependencyNode *node = p->dependencyNode(fileId)) {
+                Set<DependencyNode*> seen;
+                seen.insert(node);
+                std::function<bool(const DependencyNode *node)> func = [&seen, server, &func](const DependencyNode *n) {
+                    for (const auto &inc : n->includes) {
+                        if (seen.insert(inc.second)
+                            && !Location::path(n->fileId).isSystem()
+                            && (server->isActiveBuffer(n->fileId) || func(inc.second))) {
+                            return true;
+                        }
+                    }
+                    return false;
+                };
+                if (func(node))
+                    ret += 2;
+            }
+        }
+
+        if (p && server->currentProject() == p)
+            ++ret;
         mCachedPriority = ret;
     }
     return mCachedPriority;
@@ -142,25 +138,7 @@ String IndexerJob::encode() const
                 CompilerManager::applyToSource(copy, CompilerManager::IncludeIncludePaths);
             }
 
-            for (const String &blocked : options.blockedArguments) {
-                if (blocked.endsWith("=")) {
-                    size_t i = 0;
-                    while (i<copy.arguments.size()) {
-                        if (copy.arguments.at(i).startsWith(blocked)) {
-                            // error() << "Removing" << copy.arguments.at(i);
-                            copy.arguments.remove(i, 1);
-                        } else if (!strncmp(blocked.constData(), copy.arguments.at(i).constData(), blocked.size() - 1)) {
-                            const size_t count = (i + 1 < copy.arguments.size()) ? 2 : 1;
-                            // error() << "Removing" << copy.arguments.mid(i, count);
-                            copy.arguments.remove(i, count);
-                        } else {
-                            ++i;
-                        }
-                    }
-                } else {
-                    copy.arguments.remove(blocked);
-                }
-            }
+            Server::instance()->filterBlockedArguments(copy);
 
             for (const auto &inc : options.includePaths) {
                 copy.includePaths << inc;

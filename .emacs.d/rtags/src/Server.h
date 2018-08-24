@@ -36,7 +36,6 @@
 class Match;
 class CompletionThread;
 class Connection;
-class ErrorMessage;
 class IndexDataMessage;
 class QueryJob;
 class LogOutputMessage;
@@ -92,7 +91,7 @@ public:
     };
     struct Options {
         Options()
-            : jobCount(0), headerErrorJobCount(0), maxIncludeCompletionDepth(0),
+            : jobCount(0), maxIncludeCompletionDepth(0),
               rpVisitFileTimeout(0), rpIndexDataMessageTimeout(0), rpConnectTimeout(0),
               rpConnectAttempts(0), rpNiceValue(0), maxCrashCount(0),
               completionCacheSize(0), testTimeout(60 * 1000 * 5),
@@ -101,9 +100,9 @@ public:
         {
         }
 
-        Path socketFile, dataDir, argTransform, rp, sandboxRoot;
+        Path socketFile, dataDir, argTransform, rp, sandboxRoot, tempDir;
         Flags<Option> options;
-        size_t jobCount, headerErrorJobCount, maxIncludeCompletionDepth;
+        size_t jobCount, maxIncludeCompletionDepth;
         int rpVisitFileTimeout, rpIndexDataMessageTimeout,
             rpConnectTimeout, rpConnectAttempts, rpNiceValue, maxCrashCount,
             completionCacheSize, testTimeout, maxFileMapScopeCacheSize, errorLimit,
@@ -112,7 +111,7 @@ public:
         List<String> defaultArguments, excludeFilters;
         Set<String> blockedArguments;
         List<Source::Include> includePaths;
-        List<Source::Define> defines;
+        Set<Source::Define> defines;
         List<Path> tests;
         Set<Path> ignoredCompilers;
         Set<String> compilerWrappers;
@@ -128,6 +127,7 @@ public:
     void dumpJobs(const std::shared_ptr<Connection> &conn);
     std::shared_ptr<JobScheduler> jobScheduler() const { return mJobScheduler; }
     const Set<uint32_t> &activeBuffers() const { return mActiveBuffers; }
+    bool hadActiveBuffers() const { return mHadActiveBuffers; }
     bool isActiveBuffer(uint32_t fileId) const { return mActiveBuffers.contains(fileId); }
     int exitCode() const { return mExitCode; }
     std::shared_ptr<Project> currentProject() const { return mCurrentProject.lock(); }
@@ -141,8 +141,13 @@ public:
                SourceCache *cache = 0) const;
     enum FileIdsFileFlag {
         None = 0x0,
-        HasSandboxRoot = 0x1
+        HasSandboxRoot = 0x1,
+        HasNoRealPath = 0x2,
+        HasRealPath = 0x4
     };
+
+    void filterBlockedArguments(Source &source);
+    void sourceFileModified(const std::shared_ptr<Project> &project, uint32_t fileId);
 private:
     String guessArguments(const String &args, const Path &pwd, const Path &projectRootOverride) const;
     bool load();
@@ -156,13 +161,13 @@ private:
     void handleIndexMessage(const std::shared_ptr<IndexMessage> &message, const std::shared_ptr<Connection> &conn);
     void handleIndexDataMessage(const std::shared_ptr<IndexDataMessage> &message, const std::shared_ptr<Connection> &conn);
     void handleQueryMessage(const std::shared_ptr<QueryMessage> &message, const std::shared_ptr<Connection> &conn);
-    void handleErrorMessage(const std::shared_ptr<ErrorMessage> &message, const std::shared_ptr<Connection> &conn);
     void handleLogOutputMessage(const std::shared_ptr<LogOutputMessage> &message, const std::shared_ptr<Connection> &conn);
     void handleVisitFileMessage(const std::shared_ptr<VisitFileMessage> &message, const std::shared_ptr<Connection> &conn);
 
     // Queries
     void sendDiagnostics(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
     void clearProjects(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
+    void deadFunctions(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
     void codeCompleteAt(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
     void symbolInfo(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
     void dependencies(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
@@ -178,6 +183,7 @@ private:
     void includeFile(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
     void isIndexed(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
     void isIndexing(const std::shared_ptr<QueryMessage> &, const std::shared_ptr<Connection> &conn);
+    void lastIndexed(const std::shared_ptr<QueryMessage> &, const std::shared_ptr<Connection> &conn);
     void jobCount(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
     void listSymbols(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
     void preprocessFile(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
@@ -221,11 +227,11 @@ private:
     uint32_t mLastFileId;
     std::shared_ptr<JobScheduler> mJobScheduler;
     CompletionThread *mCompletionThread;
+    bool mHadActiveBuffers;
     Set<uint32_t> mActiveBuffers;
     Set<std::shared_ptr<Connection> > mConnections;
 
     Signal<std::function<void()> > mIndexDataMessageReceived;
-    friend void saveFileIds();
 };
 RCT_FLAGS(Server::Option);
 RCT_FLAGS(Server::FileIdsFileFlag);

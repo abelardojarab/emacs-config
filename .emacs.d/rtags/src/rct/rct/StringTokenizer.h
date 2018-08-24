@@ -1,18 +1,3 @@
-/* This file is part of RTags (http://rtags.net).
-
-   RTags is free software: you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
-
-   RTags is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with RTags.  If not, see <http://www.gnu.org/licenses/>. */
-
 #ifndef StringTokenizer_h
 #define StringTokenizer_h
 
@@ -22,7 +7,6 @@
 #include <algorithm>
 
 enum MatchResultType {
-    NO_MATCH,
     WORD_BOUNDARY_MATCH,
     PREFIX_MATCH_CASE_INSENSITIVE,
     PREFIX_MATCH_CASE_SENSITIVE,
@@ -32,8 +16,13 @@ enum MatchResultType {
 
 struct CompletionCandidate
 {
-    CompletionCandidate()
-        : priority(-1)
+    CompletionCandidate(String &&n = String())
+        : name(std::move(n)), priority(-1)
+    {
+    }
+
+    CompletionCandidate(const String &n)
+        : name(n), priority(-1)
     {
     }
 
@@ -90,15 +79,18 @@ struct MatchResultComparator
             const WordBoundaryMatchResult *wba = static_cast<WordBoundaryMatchResult *>(a.get());
             const WordBoundaryMatchResult *wbb = static_cast<WordBoundaryMatchResult *>(b.get());
 
-            for (size_t i = 0; i < wba->indices.size(); i++)
-                if (wba->indices[i] != wbb->indices[i])
-                    return wba->indices[i] > wbb->indices[i];
+            for (auto ita = wba->indices.constBegin(), itb = wbb->indices.constBegin();
+                 ita != wba->indices.constEnd() && itb != wbb->indices.constEnd();
+                 ++ita, ++itb) {
+                   if (*ita != *itb)
+                      return *ita > *itb;
+                 }
         }
 
         if (a->candidate->priority != b->candidate->priority)
             return a->candidate->priority < b->candidate->priority;
 
-        return a < b;
+        return a->candidate->name < b->candidate->name;
     }
 };
 

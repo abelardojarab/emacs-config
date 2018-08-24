@@ -92,7 +92,8 @@ static const List<Path> sSystemIncludePaths = {
 
 Server *Server::sInstance = 0;
 Server::Server()
-    : mSuspended(false), mEnvironment(Rct::environment()), mPollTimer(-1), mExitCode(0), mLastFileId(0), mCompletionThread(0)
+    : mSuspended(false), mEnvironment(Rct::environment()), mPollTimer(-1), mExitCode(0),
+      mLastFileId(0), mCompletionThread(0), mHadActiveBuffers(false)
 {
     assert(!sInstance);
     sInstance = this;
@@ -133,7 +134,7 @@ bool Server::init(const Options &options)
     if (!(options.options & NoNoUnknownWarningsOption))
         mOptions.defaultArguments.append("-Wno-unknown-warning-option");
 
-    mOptions.defines << Source::Define("RTAGS");
+    mOptions.defines << Source::Define("RTAGS", String(), Source::Define::NoValue);
 
     if (mOptions.options & EnableCompilerManager) {
 #ifndef OS_Darwin   // this causes problems on MacOS+clang
@@ -349,6 +350,9 @@ void Server::onNewConnection(SocketServer *server)
             break;
         }
         std::shared_ptr<Connection> conn = Connection::create(client, RClient::NumOptions);
+        if (mOptions.maxSocketWriteBufferSize) {
+            client->setMaxWriteBufferSize(mOptions.maxSocketWriteBufferSize);
+        }
         conn->setErrorHandler([](const SocketClient::SharedPtr &, Message::MessageError &&error) {
                 if (error.type == Message::Message_VersionError) {
                     ::error("Wrong version marker. You're probably using mismatched versions of rc and rdm");
@@ -417,7 +421,7 @@ String Server::guessArguments(const String &args, const Path &pwd, const Path &p
     Set<Path> includePaths;
     List<String> ret;
     bool hasInput = false;
-    Set<String> roots;
+    Set<Path> roots;
     if (!projectRootOverride.isEmpty())
         roots.insert(projectRootOverride.ensureTrailingSlash());
     ret << "/usr/bin/g++"; // this should be clang on mac
@@ -692,6 +696,9 @@ void Server::handleQueryMessage(const std::shared_ptr<QueryMessage> &message, co
     case QueryMessage::SendDiagnostics:
         sendDiagnostics(message, conn);
         break;
+    case QueryMessage::DeadFunctions:
+        deadFunctions(message, conn);
+        break;
     case QueryMessage::CodeCompleteAt:
         codeCompleteAt(message, conn);
         break;
@@ -700,6 +707,9 @@ void Server::handleQueryMessage(const std::shared_ptr<QueryMessage> &message, co
         break;
     case QueryMessage::IsIndexing:
         isIndexing(message, conn);
+        break;
+    case QueryMessage::LastIndexed:
+        lastIndexed(message, conn);
         break;
     case QueryMessage::RemoveFile:
         removeFile(message, conn);
@@ -850,6 +860,24 @@ void Server::followLocation(const std::shared_ptr<QueryMessage> &query, const st
     } else {
         conn->finish(RTags::GeneralFailure);
     }
+}
+
+void Server::lastIndexed(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn)
+{
+    // Path path = query->path();
+    const Match match = query->match();
+    std::shared_ptr<Project> project = projectForQuery(query);
+    if (!project)
+        project = currentProject();
+
+    if (!project) {
+        error("No project");
+        conn->finish();
+        return;
+    }
+
+    conn->write<128>("%ld", project->lastIdleTime());
+    conn->finish();
 }
 
 void Server::isIndexing(const std::shared_ptr<QueryMessage> &, const std::shared_ptr<Connection> &conn)
@@ -1024,7 +1052,7 @@ void Server::generateTest(const std::shared_ptr<QueryMessage> &query, const std:
         conn->finish();
         return;
     }
-    project->beginScope();
+    Project::FileMapScopeScope scope(project);
 
     const Source source = project->source(fileId, query->buildIndex());
     if (!source.isNull()) {
@@ -1074,7 +1102,6 @@ void Server::generateTest(const std::shared_ptr<QueryMessage> &query, const std:
         conn->write<256>("%s build: %d not found", query->query().constData(), query->buildIndex());
         conn->finish();
     }
-    project->endScope();
 }
 
 void Server::symbolInfo(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn)
@@ -1598,31 +1625,83 @@ void Server::jobCount(const std::shared_ptr<QueryMessage> &query, const std::sha
 {
     String q = query->query();
     if (q.isEmpty()) {
-        conn->write<128>("Running with %zu/%zu jobs", mOptions.jobCount, mOptions.headerErrorJobCount);
+        conn->write<128>("Running with %zu jobs", mOptions.jobCount);
     } else {
-        const bool header = q.startsWith('h');
-        if (header)
-            q.remove(0, 1);
-        size_t &jobs = header ? mOptions.headerErrorJobCount : mOptions.jobCount;
         int jobCount;
         bool ok;
         if (q == "default") {
             ok = true;
-            jobCount = header ? mOptions.jobCount : std::max(2, ThreadPool::idealThreadCount());
+            jobCount = std::max(2, ThreadPool::idealThreadCount());
         } else {
             jobCount = q.toLongLong(&ok);
         }
         if (!ok || jobCount < 0 || jobCount > 100) {
             conn->write<128>("Invalid job count %s (%d)", query->query().constData(), jobCount);
         } else {
-            if (mOptions.headerErrorJobCount == mOptions.jobCount) {
-                mOptions.headerErrorJobCount = mOptions.jobCount = jobCount;
-            } else {
-                jobs = jobCount;
-                mOptions.headerErrorJobCount = std::min(mOptions.headerErrorJobCount, mOptions.jobCount);
-            }
-            conn->write<128>("Changed jobs to %zu/%zu", mOptions.jobCount, mOptions.headerErrorJobCount);
+            mOptions.jobCount = jobCount;
+            conn->write<128>("Changed jobs to %zu", mOptions.jobCount);
         }
+    }
+    conn->finish();
+}
+
+void Server::deadFunctions(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn)
+{
+    std::shared_ptr<Project> project = projectForQuery(query);
+    if (!project)
+        project = currentProject();
+    if (project) {
+        class DeadFunctionsJob : public QueryJob
+        {
+        public:
+            DeadFunctionsJob(const std::shared_ptr<QueryMessage> &msg, const std::shared_ptr<Project> &project)
+                : QueryJob(msg, project)
+            {}
+            virtual int execute() override
+            {
+                const uint32_t fileId = Location::fileId(queryMessage()->query());
+                if (fileId)
+                    Server::instance()->prepareCompletion(queryMessage(), fileId, project());
+                bool raw = false;
+                if (!(queryFlags() & (QueryMessage::JSON|QueryMessage::Elisp))) {
+                    raw = true;
+                    setPieceFilters(std::move(Set<String>() << "location"));
+                }
+                bool failed = false;
+                const std::shared_ptr<Project> proj = project();
+                auto process = [this, proj, &failed](uint32_t file) {
+                    for (const Symbol &symbol : proj->findDeadFunctions(file)) {
+                        if (!failed && !write(symbol))
+                            failed = true;
+                    }
+                };
+                if (!fileId) {
+                    Set<uint32_t> all = proj->dependencies(0, Project::All);
+                    all.remove([](uint32_t file) { return Location::path(file).isSystem(); });
+                    size_t idx = 0;
+                    const Path projectPath = proj->path();
+                    for (uint32_t file : proj->dependencies(0, Project::All)) {
+                        if (raw) {
+                            Path p = Location::path(file);
+                            const char *ch = p.constData();
+                            if (!(queryFlags() & QueryMessage::AbsolutePath) && p.startsWith(projectPath))
+                                ch += projectPath.size();
+                            if (!write(String::format<256>("%zu/%zu %s", ++idx, all.size(), ch))) {
+                                failed = true;
+                                break;
+                            }
+                        }
+                        process(file);
+                        if (failed)
+                            break;
+                    }
+                } else {
+                    process(fileId);
+                }
+                return 0;
+            }
+        } job(query, project);
+        job.run(conn);
     }
     conn->finish();
 }
@@ -1656,6 +1735,7 @@ void Server::sources(const std::shared_ptr<QueryMessage> &query, const std::shar
                                                           |Source::ExcludeDefaultArguments
                                                           |Source::IncludeCompiler
                                                           |Source::IncludeSourceFile
+                                                          |Source::ExcludeDefaultDefines
                                                           |Source::ExcludeDefaultIncludePaths);
             ret += String::join(source.toCommandLine(flags), splitLine ? '\n' : ' ');
         } else if (splitLine) {
@@ -1719,7 +1799,11 @@ void Server::sources(const std::shared_ptr<QueryMessage> &query, const std::shar
     }
 
     if (std::shared_ptr<Project> project = currentProject()) {
-        project->indexParseData().write([&conn](const String &str) { return conn->write(str); });
+        if (query->flags() & (QueryMessage::CompilationFlagsOnly|QueryMessage::CompilationFlagsSplitLine|QueryMessage::CompilationFlagsPwd)) {
+            project->forEachSource([&conn, &format](const Source &source) { return conn->write(format(source)) ? Project::Continue : Project::Stop; });
+        } else {
+            project->indexParseData().write([&conn](const String &str) { return conn->write(str); });
+        }
     } else {
         conn->write("No project");
     }
@@ -1858,6 +1942,7 @@ void Server::setBuffers(const std::shared_ptr<QueryMessage> &query, const std::s
             conn->write(Location::path(fileId));
         }
     } else {
+        mHadActiveBuffers = true;
         Deserializer deserializer(encoded);
         int mode;
         deserializer >> mode;
@@ -2029,6 +2114,17 @@ bool Server::load()
             return false;
         }
 
+        if (flags & HasNoRealPath && !(mOptions.options & NoRealPath)) {
+            error() << ("This database was produced with --no-realpath and you're running rdm without --no-realpath. "
+                        "You must specify --no-realpath argument to use this db or start over by passing -C");
+            return false;
+
+        } else if (flags & HasRealPath && mOptions.options & NoRealPath) {
+            error() << ("This database was produced without --no-realpath and you're running rdm with --no-realpath. "
+                        "You must not specify --no-realpath argument to use this db or start over by passing -C");
+            return false;
+        }
+
         // SBROOT
         Hash<Path, uint32_t> pathsToIds;
         fileIdsFile >> pathsToIds;
@@ -2083,22 +2179,22 @@ bool Server::load()
         Hash<Path, IndexParseData> projects;
         mOptions.dataDir.visit([&projects](const Path &path) {
                 if (path.isDir()) {
-                    const char *fn = path.fileName();
-                    if (*fn == '_' || !strncmp(fn, "$_", 2))
-                        return Path::Recurse;
-                } else if (!strcmp("sources", path.fileName())) {
-                    Path filePath = path.parentDir().fileName();
-                    if (filePath.endsWith("/"))
-                        filePath.chop(1);
-                    RTags::decodePath(filePath);
-
-                    String err;
-                    IndexParseData data;
-                    if (!Project::readSources(path, data, &err)) {
-                        error("Sources restore error %s: %s", path.constData(), err.constData());
-                    } else {
-                        data.project = filePath;
-                        projects[filePath] = std::move(data);
+                    Path sources = path + "sources";
+                    if (sources.exists()) {
+                        Path filePath = path.fileName();
+                        if (filePath.endsWith("/"))
+                            filePath.chop(1);
+                        RTags::decodePath(filePath);
+                        if (!filePath.isEmpty()) {
+                            String err;
+                            IndexParseData data;
+                            if (!Project::readSources(sources, data, &err)) {
+                                error("Sources restore error %s: %s", path.constData(), err.constData());
+                            } else {
+                                data.project = filePath;
+                                projects[filePath] = std::move(data);
+                            }
+                        }
                     }
                 }
                 return Path::Continue;
@@ -2115,6 +2211,7 @@ bool Server::load()
                 p->save();
             }
         }
+        saveFileIds();
     }
     return true;
 }
@@ -2132,6 +2229,11 @@ bool Server::saveFileIds()
     Flags<FileIdsFileFlag> flags;
     if (Sandbox::hasRoot())
         flags |= HasSandboxRoot;
+    if (mOptions.options & NoRealPath) {
+        flags |= HasNoRealPath;
+    } else {
+        flags |= HasRealPath;
+    }
 
     fileIdsFile << flags << Sandbox::encoded(Location::pathsToIds());
 
@@ -2179,8 +2281,9 @@ void Server::codeCompleteAt(const std::shared_ptr<QueryMessage> &query, const st
     Source source = project->source(fileId, query->buildIndex());
     if (source.isNull()) {
         const Set<uint32_t> deps = project->dependencies(fileId, Project::DependsOnArg);
-        if (mCompletionThread)
+        if (mCompletionThread) {
             source = mCompletionThread->findSource(deps);
+        }
 
         if (source.isNull()) {
             for (uint32_t dep : deps) {
@@ -2440,6 +2543,15 @@ bool Server::runTests()
     return ret;
 }
 
+void Server::sourceFileModified(const std::shared_ptr<Project> &project, uint32_t fileId)
+{
+    // error() << Location::path(fileId) << "modified" << (mCompletionThread ? (mCompletionThread->isCached(project, fileId) ? 1 : 0) : -1);
+    if (mCompletionThread && mCompletionThread->isCached(project, fileId)) {
+        mCompletionThread->reparse(project, fileId);
+
+    }
+}
+
 void Server::prepareCompletion(const std::shared_ptr<QueryMessage> &query, uint32_t fileId, const std::shared_ptr<Project> &project)
 {
     if (query->flags() & QueryMessage::CodeCompletionEnabled && !mCompletionThread) {
@@ -2448,7 +2560,7 @@ void Server::prepareCompletion(const std::shared_ptr<QueryMessage> &query, uint3
     }
 
     if (mCompletionThread && fileId) {
-        if (!mCompletionThread->isCached(fileId, project)) {
+        if (!mCompletionThread->isCached(project, fileId)) {
             Source source = project->source(fileId, query->buildIndex());
             if (source.isNull()) {
                 for (const uint32_t dep : project->dependencies(fileId, Project::DependsOnArg)) {
@@ -2460,6 +2572,29 @@ void Server::prepareCompletion(const std::shared_ptr<QueryMessage> &query, uint3
 
             if (!source.isNull())
                 mCompletionThread->prepare(std::move(source), query->unsavedFiles().value(Location::path(fileId)));
+        }
+    }
+}
+
+void Server::filterBlockedArguments(Source &source)
+{
+    for (const String &blocked : mOptions.blockedArguments) {
+        if (blocked.endsWith("=")) {
+            size_t i = 0;
+            while (i<source.arguments.size()) {
+                if (source.arguments.at(i).startsWith(blocked)) {
+                    // error() << "Removing" << source.arguments.at(i);
+                    source.arguments.remove(i, 1);
+                } else if (!strncmp(blocked.constData(), source.arguments.at(i).constData(), blocked.size() - 1)) {
+                    const size_t count = (i + 1 < source.arguments.size()) ? 2 : 1;
+                    // error() << "Removing" << source.arguments.mid(i, count);
+                    source.arguments.remove(i, count);
+                } else {
+                    ++i;
+                }
+            }
+        } else {
+            source.arguments.remove(blocked);
         }
     }
 }

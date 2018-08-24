@@ -1,10 +1,12 @@
 cmake_minimum_required(VERSION 2.8.6)
 project(rtags)
 set(RTAGS_VERSION_MAJOR 2)
-set(RTAGS_VERSION_MINOR 15)
-set(RTAGS_VERSION_DATABASE 120)
-set(RTAGS_VERSION_SOURCES_FILE 13)
+set(RTAGS_VERSION_MINOR 19)
+set(RTAGS_VERSION_DATABASE 126)
+set(RTAGS_VERSION_SOURCES_FILE 14)
 set(RTAGS_VERSION ${RTAGS_VERSION_MAJOR}.${RTAGS_VERSION_MINOR}.${RTAGS_VERSION_DATABASE})
+
+set(RCT_WITH_TESTS ${BUILD_TESTING})
 
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 
@@ -71,18 +73,34 @@ if (RTAGS_ENABLE_DEV_OPTIONS)
     set(CPACK_SOURCE_GENERATOR ${CPACK_GENERATOR})
 
     set(CPACK_SOURCE_IGNORE_FILES
-      "~$"
-      "\\\\.gitignore$"
-      "\\\\.gitmodules$"
-      "^${PROJECT_SOURCE_DIR}/.git/"
-      "^${PROJECT_SOURCE_DIR}/build/"
-      )
+        "~$"
+        "\\\\.gitignore$"
+        "\\\\.gitmodules$"
+        "^${PROJECT_SOURCE_DIR}/.git/"
+        "^${PROJECT_SOURCE_DIR}/build/"
+        )
 
     include(CPack)
 endif ()
 
 include(CTest)
 
-add_test(SBRootTest perl "${CMAKE_SOURCE_DIR}/tests/sbroot/sbroot_test.pl" "${CMAKE_INSTALL_PREFIX}/bin")
+if (BUILD_TESTING)
+    find_package(Perl QUIET)
+    if(PERL_FOUND)
+        add_test(NAME SBRootTest COMMAND perl "${CMAKE_SOURCE_DIR}/tests/sbroot/sbroot_test.pl")
+        set_property(TEST SBRootTest PROPERTY ENVIRONMENT "RTAGS_BINARY_DIR=${CMAKE_BINARY_DIR}/bin")
+    else()
+        message(WARNING "Perl not found! Excluding sbroot test from tests.")
+    endif()
+
+    find_program(NOSETEST NAMES nosetests nosetests-2.7 PATHS "$ENV{HOME}/.local/bin")
+    if (NOSETEST)
+        add_test(NAME nosetests COMMAND ${NOSETEST} -w ${CMAKE_SOURCE_DIR}/tests/automated --no-byte-compile -v)
+        set_property(TEST nosetests PROPERTY ENVIRONMENT "RTAGS_BINARY_DIR=${CMAKE_BINARY_DIR}/bin")
+    else()
+        message(WARNING "Nosetests executable not found! Excluding automated_tests from tests.")
+    endif ()
+endif ()
 
 feature_summary(INCLUDE_QUIET_PACKAGES WHAT ALL)

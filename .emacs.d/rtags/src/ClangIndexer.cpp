@@ -1473,11 +1473,12 @@ void ClangIndexer::handleBaseClassSpecifier(const CXCursor &cursor)
 void ClangIndexer::extractArguments(List<Symbol::Argument> *arguments, const CXCursor &cursor)
 {
     assert(arguments);
-    const int count = std::max(0, clang_Cursor_getNumArguments(cursor));
+    List<CXCursor> args;
+    const int count = std::max(0, RTags::cursorArguments(cursor, &args));
     arguments->resize(count);
     for (int i=0; i<count; ++i) {
         auto &ref = (*arguments)[i];
-        CXCursor arg = clang_Cursor_getArgument(cursor, i);
+        CXCursor arg = args[i];
         CXSourceRange range = clang_getCursorExtent(arg);
         unsigned startOffset, endOffset;
 
@@ -1556,32 +1557,6 @@ CXChildVisitResult ClangIndexer::handleCursor(const CXCursor &cursor, CXCursorKi
                 c.flags |= Symbol::Auto;
                 if (resolvedAuto.type.kind != CXType_Invalid) {
                     setType(c, resolvedAuto.type);
-                    bool blocked = false;
-                    const Location loc = createLocation(clang_getCursorLocation(mLastCursor), &blocked);
-                    if (!blocked && loc.fileId()) {
-                        if (RTags::isValid(resolvedAuto.cursor) && clang_getCursorKind(resolvedAuto.cursor) != CXCursor_NoDeclFound) {
-                            Symbol *cptr = 0;
-                            if (handleReference(mLastCursor, CXCursor_TypeRef, loc, resolvedAuto.cursor, &cptr)) {
-                                cptr->symbolLength = 4;
-                                cptr->type = c.type;
-                                cptr->endLine = c.startLine;
-                                cptr->endColumn = c.startColumn + 4;
-                                cptr->flags |= Symbol::AutoRef;
-                            }
-                        } else { // built-in type probably
-                            Symbol &sym = unit(loc)->symbols[loc];
-                            if (sym.isNull()) {
-                                sym.kind = CXCursor_NoDeclFound;
-                                sym.type = c.type;
-                                sym.symbolLength = 4;
-                                sym.endLine = c.startLine;
-                                sym.endColumn = c.startColumn + 4;
-                                sym.flags |= Symbol::AutoRef;
-                                sym.symbolName = "auto";
-                                sym.location = loc;
-                            }
-                        }
-                    }
                 } else {
                     warning() << "Couldn't resolve auto for" << cursor;
                 }
@@ -1716,13 +1691,14 @@ CXChildVisitResult ClangIndexer::handleCursor(const CXCursor &cursor, CXCursorKi
 #if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 30)
         c.fieldOffset = std::max<int16_t>(-1, clang_Cursor_getOffsetOfField(cursor));
 #endif
-        // fall through
+        break;
     default:
         break;
     }
 
 #if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 35)
-    if (!(c.flags & (Symbol::Auto|Symbol::AutoRef))
+    if (!(c.flags & Symbol::Auto)
+        && kind != CXCursor_LambdaExpr
         && c.type != CXType_LValueReference
         && c.type != CXType_RValueReference
         && c.type != CXType_Auto
@@ -1798,8 +1774,7 @@ CXChildVisitResult ClangIndexer::handleCursor(const CXCursor &cursor, CXCursorKi
         default:
             break;
         }
-
-        // fall through
+        RCT_FALL_THROUGH;
     case CXCursor_FunctionDecl:
     case CXCursor_FunctionTemplate:
         if (c.kind == CXCursor_FunctionTemplate)
@@ -1820,7 +1795,7 @@ CXChildVisitResult ClangIndexer::handleCursor(const CXCursor &cursor, CXCursorKi
         break;
     case CXCursor_Constructor:
         extractArguments(&c.arguments, cursor);
-        // fall through
+        RCT_FALL_THROUGH;
     case CXCursor_Destructor: {
         CXCursor parent = clang_getCursorSemanticParent(cursor);
 

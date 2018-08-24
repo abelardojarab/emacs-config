@@ -19,19 +19,13 @@
 #include "rct/Connection.h"
 #include "rct/Log.h"
 #include "rct/String.h"
+#include "QueryMessage.h"
 
 class RTagsLogOutput : public LogOutput
 {
 public:
-    enum Flag {
-        None = 0x0,
-        Elisp = 0x1,
-        XML = 0x2,
-        JSON = 0x4,
-        NoSpellChecking = 0x8
-    };
-    RTagsLogOutput(LogLevel level, unsigned int flags, const std::shared_ptr<Connection> &conn = std::shared_ptr<Connection>())
-        : LogOutput(level), mFlags(flags), mConnection(conn)
+    RTagsLogOutput(LogLevel level, Flags<QueryMessage::Flag> flags, const std::shared_ptr<Connection> &conn = std::shared_ptr<Connection>())
+        : LogOutput(Custom, level), mQueryFlags(flags), mConnection(conn)
     {
         if (conn) {
             conn->disconnected().connect(std::bind(&RTagsLogOutput::remove, this));
@@ -39,11 +33,11 @@ public:
         }
     }
 
-    virtual unsigned int flags() const override { return mFlags; }
+    Flags<QueryMessage::Flag> queryFlags() const { return mQueryFlags; }
 
     virtual bool testLog(LogLevel level) const override
     {
-        if (level == RTags::DiagnosticsLevel && mFlags & NoSpellChecking)
+        if (level == RTags::DiagnosticsLevel && mQueryFlags & QueryMessage::NoSpellChecking)
             return false;
         if (logLevel() < LogLevel::Error || level < LogLevel::Error)
             return level == logLevel();
@@ -63,7 +57,7 @@ public:
     }
     std::shared_ptr<Connection> connection() const { return mConnection; }
 private:
-    const unsigned int mFlags;
+    const Flags<QueryMessage::Flag> mQueryFlags;
     std::shared_ptr<Connection> mConnection;
 };
 

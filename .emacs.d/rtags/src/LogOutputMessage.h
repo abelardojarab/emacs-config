@@ -17,19 +17,20 @@
 #define OutputMessage_h
 
 #include "RTagsMessage.h"
+#include "QueryMessage.h"
 
 class LogOutputMessage : public RTagsMessage
 {
 public:
     enum { MessageId = LogOutputId };
 
-    LogOutputMessage(LogLevel level = LogLevel::Error, unsigned int flags = 0)
+    LogOutputMessage(LogLevel level = LogLevel::Error, Flags<QueryMessage::Flag> flags = NullFlags)
         : RTagsMessage(MessageId), mLevel(level), mFlags(flags)
     {
     }
 
     LogLevel level() const { return mLevel; }
-    unsigned int flags() const { return mFlags; }
+    Flags<QueryMessage::Flag> flags() const { return mFlags; }
 
     void encode(Serializer &serializer) const
     {
@@ -42,7 +43,7 @@ public:
     }
 private:
     LogLevel mLevel;
-    unsigned int mFlags;
+    Flags<QueryMessage::Flag> mFlags;
 };
 
 #endif

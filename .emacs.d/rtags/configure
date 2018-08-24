@@ -12,6 +12,7 @@ function usage ()
     echo "  --debug                         Compile RTags in debug mode"
     echo "  --release                       Compile RTags in release mode (default)"
     echo "  --system-clang                  Don't build llvm/clang as part of RTags' build process (default)"
+    echo "  --build-tests                   Build tests"
     echo "  --build-clang                   Download and build llvm/clang as part of RTags' build process"
     echo "  --no-install                    Generate a build that isn't going to be installed"
     echo "  --prefix [arg]                  Set install prefix to arg"
@@ -62,6 +63,9 @@ while [ -n "$1" ]; do
             ;;
         --build-clang)
             BUILD=1
+            ;;
+        --without-tests)
+            CMAKE_ARGS="${CMAKE_ARGS} -DBUILD_TESTING=0"
             ;;
         --no-install)
             CMAKE_ARGS="${CMAKE_ARGS} -DRTAGS_NO_INSTALL=1"
@@ -124,4 +128,5 @@ done
 [ -n "$BUILD" ] && CMAKE_ARGS="${CMAKE_ARGS} -DRTAGS_BUILD_CLANG=1"
 
 echo -e "Running cmake:\n\"$CMAKE\" \"$(dirname ${BASH_SOURCE[0]})\" ${CMAKE_ARGS}\n"
+rm -f CMakeCache.txt
 eval "$CMAKE" "$(dirname ${BASH_SOURCE[0]})" ${CMAKE_ARGS}

@@ -6,11 +6,12 @@
 #include <string.h>
 #include <thread>
 
-
+#include "Rct.h"
 #include "EventLoop.h"
 #include "StackBuffer.h"
 #include "Log.h"
 #include "rct/rct-config.h"
+#include "Rct.h"
 
 class WatcherData : public std::enable_shared_from_this<WatcherData>
 {
@@ -305,7 +306,7 @@ bool FileSystemWatcher::watch(const Path &p)
     switch (type) {
     case Path::File:
         path = path.parentDir();
-        // fall through
+        RCT_FALL_THROUGH;
     case Path::Directory:
         break;
     default:

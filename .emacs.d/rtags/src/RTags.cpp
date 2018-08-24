@@ -46,22 +46,67 @@ String versionString()
     return String::format<64>("%d.%d.%d", MajorVersion, MinorVersion, DatabaseVersion);
 }
 
-void encodePath(Path &path)
+String encodeUrlComponent(const String &str)
 {
-    Sandbox::encode(path);
-    int size = path.size();
-    for (int i=0; i<size; ++i) {
-        char &ch = path[i];
-        switch (ch) {
-        case '/':
-            ch = '_';
-            break;
-        case '_':
-            path.insert(++i, '_');
-            ++size;
-            break;
+    String new_str = "";
+    char c;
+    int ic;
+    const char* chars = str.c_str();
+    char bufHex[10];
+    const size_t len = str.size();
+
+    for(size_t i=0; i<len; ++i){
+        c = chars[i];
+        ic = c;
+        // uncomment this if you want to encode spaces with +
+        if (c == ' ') {
+            new_str += '+';
+        } else if (isalnum(c) || c == '-' || c == '_' || c == '.' || c == '~') {
+            new_str += c;
+        } else {
+            sprintf(bufHex,"%X",c);
+            if (ic < 16) {
+                new_str += "%0";
+            } else {
+                new_str += "%";
+            }
+            new_str += bufHex;
         }
     }
+    return new_str;
+}
+
+String decodeUrlComponent(const String &str)
+{
+    String ret;
+    char ch;
+    const size_t len = str.length();
+
+    for (size_t i=0; i < len; ++i) {
+        if (str[i] != '%') {
+            if (str[i] == '+') {
+                ret += ' ';
+            } else {
+                ret += str[i];
+            }
+        } else {
+            int ii;
+            if (sscanf(str.mid(i + 1, 2).c_str(), "%x", &ii) != 1)
+                return String();
+            ch = static_cast<char>(ii);
+            ret += ch;
+            i = i + 2;
+        }
+    }
+    return ret;
+}
+
+void encodePath(Path &path)
+{
+    if (Sandbox::encode(path))
+        return;
+
+    path = encodeUrlComponent(path);
 }
 
 void decodePath(Path &path)
@@ -69,20 +114,7 @@ void decodePath(Path &path)
     if (Sandbox::decode(path))
         return;
 
-    int i = 0;
-    int size = path.size();
-    while (i < size) {
-        char &ch = path[i];
-        if (ch == '_') {
-            if (i + 1 < size && path.at(i + 1) == '_') {
-                path.remove(i + 1, 1);
-                --size;
-            } else {
-                ch = '/';
-            }
-        }
-        ++i;
-    }
+    path = decodeUrlComponent(path);
 }
 
 Path encodeSourceFilePath(const Path &dataDir, const Path &project, uint32_t fileId)
@@ -96,7 +128,7 @@ Path encodeSourceFilePath(const Path &dataDir, const Path &project, uint32_t fil
     return str;
 }
 
-Path findAncestor(Path path, const String &fn, Flags<FindAncestorFlag> flags, SourceCache *cache)
+Path findAncestor(const Path& path, const String &fn, Flags<FindAncestorFlag> flags, SourceCache *cache)
 {
     Path *cacheResult = 0;
     if (cache) {
@@ -174,7 +206,7 @@ Map<String, String> rtagsConfig(const Path &path, SourceCache *cache)
         if (cache) {
             auto it = cache->rtagsConfigCache.find(dir);
             if (it != cache->rtagsConfigCache.end()) {
-                for (const auto entry : it->second) {
+                for (const auto &entry : it->second) {
                     auto &ref = ret[entry.first];
                     if (ref.isEmpty())
                         ref = entry.second;
@@ -429,7 +461,7 @@ String eatString(CXString str)
     return ret;
 }
 
-String cursorToString(CXCursor cursor, Flags<CursorToStringFlags> flags)
+String cursorToString(CXCursor cursor, const Flags<CursorToStringFlags> flags)
 {
     const CXCursorKind kind = clang_getCursorKind(cursor);
     String ret;
@@ -483,6 +515,24 @@ String cursorToString(CXCursor cursor, Flags<CursorToStringFlags> flags)
             if (!usr.isEmpty()) {
                 ret += " " + usr;
             }
+        }
+    }
+
+    if (flags & IncludeStructSizeof && Symbol::isClass(kind)) {
+        const long long size = clang_Type_getSizeOf(clang_getCursorType(cursor));
+        switch (size) {
+        case CXTypeLayoutError_Invalid:
+            // ret += " (sizeof: invalid)";
+            break;
+        case CXTypeLayoutError_Incomplete:
+            ret += " (sizeof: incomplete)";
+            break;
+        case CXTypeLayoutError_Dependent:
+            ret += " (sizeof: dependent)";
+            break;
+        default:
+            ret += String::format(" (sizeof: %lld)", size);
+            break;
         }
     }
 
@@ -642,22 +692,6 @@ static inline Diagnostic::Flag convertDiagnosticType(CXDiagnosticSeverity sev)
     return type;
 }
 
-static inline bool compareFile(CXFile l, CXFile r)
-{
-    CXString fnl = clang_getFileName(l);
-    CXString fnr = clang_getFileName(r);
-    const char *cstrl = clang_getCString(fnl);
-    const char *cstrr = clang_getCString(fnr);
-    bool ret = false;
-    if (cstrl && cstrr && !strcmp(cstrl, cstrr)) {
-        ret = true;
-    }
-
-    clang_disposeString(fnl);
-    clang_disposeString(fnr);
-    return ret;
-}
-
 void DiagnosticsProvider::diagnose()
 {
     const uint32_t sourceFile = sourceFileId();
@@ -729,6 +763,12 @@ void DiagnosticsProvider::diagnose()
     IndexDataMessage &indexData = indexDataMessage();
 
     const size_t numUnits = unitCount();
+#if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 21)
+    List<Diagnostics> skipped;
+    if (numUnits > 1)
+        skipped.resize(numUnits);
+#endif
+
     for (size_t u=0; u<numUnits; ++u) {
         List<String> compilationErrors;
         const size_t diagCount = diagnosticCount(u);
@@ -743,7 +783,6 @@ void DiagnosticsProvider::diagnose()
                 //         << clang_getDiagnosticSeverity(diagnostic);
                 continue;
             }
-            const CXDiagnosticSeverity sev = clang_getDiagnosticSeverity(diag);
             // error() << "Got a dude" << clang_getCursor(tu, diagLoc) << fileId << mSource.fileId
             //         << sev << CXDiagnostic_Error;
             const CXCursor cursor = cursorAt(u, diagLoc);
@@ -753,16 +792,6 @@ void DiagnosticsProvider::diagnose()
                 indexData.setFlag(IndexDataMessage::InclusionError);
             assert(fileId);
             Flags<IndexDataMessage::FileFlag> &fileFlags = indexData.files()[fileId];
-            if (fileId != sourceFile && !inclusionError && sev >= CXDiagnostic_Error && !(fileFlags & IndexDataMessage::HeaderError)) {
-                // We don't treat inclusions or code inside a macro expansion as a
-                // header error
-                CXFile expFile, spellingFile;
-                unsigned expLine, expColumn, spellingLine, spellingColumn;
-                clang_getExpansionLocation(diagLoc, &expFile, &expLine, &expColumn, 0);
-                clang_getSpellingLocation(diagLoc, &spellingFile, &spellingLine, &spellingColumn, 0);
-                if (expLine == spellingLine && expColumn == spellingColumn && compareFile(expFile, spellingFile))
-                    fileFlags |= IndexDataMessage::HeaderError;
-            }
             bool templateOnly = false;
             {
                 Flags<Diagnostic::Flag> f = Diagnostic::DisplayCategory;
@@ -822,38 +851,60 @@ void DiagnosticsProvider::diagnose()
             clang_disposeDiagnostic(diag);
         }
 
+#if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 21)
+        Diagnostics &diags = numUnits > 1 ? skipped[u] : indexData.diagnostics();
         for (const auto &it : indexData.files()) {
             if (it.second & IndexDataMessage::Visited) {
                 const Location loc(it.first, 0, 0);
                 const Path path = loc.path();
                 CXFile file = getFile(u, path.constData());
                 if (file) {
-#if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 21)
-                    if (CXSourceRangeList *skipped = clang_getSkippedRanges(unit(u), file)) {
-                        const unsigned int count = skipped->count;
+                    CXSourceRangeList *s = clang_getSkippedRanges(unit(u), file);
+                    if (s) {
+                        const unsigned int count = s->count;
                         for (unsigned int j=0; j<count; ++j) {
-                            CXSourceLocation start = clang_getRangeStart(skipped->ranges[j]);
+                            CXSourceLocation start = clang_getRangeStart(s->ranges[j]);
 
                             unsigned int line, column, startOffset, endOffset;
                             clang_getSpellingLocation(start, 0, &line, &column, &startOffset);
-                            Diagnostic &entry = indexData.diagnostics()[Location(loc.fileId(), line, column)];
-                            if (entry.type() == Diagnostic::None) {
-                                entry.sourceFileId = sourceFile;
-                                CXSourceLocation end = clang_getRangeEnd(skipped->ranges[j]);
-                                clang_getSpellingLocation(end, 0, 0, 0, &endOffset);
-                                entry.flags = Diagnostic::Skipped;
-                                entry.length = endOffset - startOffset;
-                                // error() << line << column << startOffset << endOffset;
-                            }
+                            Diagnostic &entry = diags[Location(loc.fileId(), line, column)];
+                            entry.sourceFileId = sourceFile;
+                            CXSourceLocation end = clang_getRangeEnd(s->ranges[j]);
+                            clang_getSpellingLocation(end, 0, 0, 0, &endOffset);
+                            entry.flags = Diagnostic::Skipped;
+                            entry.length = endOffset - startOffset;
+                            // error() << line << column << startOffset << endOffset;
                         }
 
-                        clang_disposeSourceRangeList(skipped);
+                        clang_disposeSourceRangeList(s);
                     }
-#endif
                 }
             }
         }
+#endif
     }
+#if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 21)
+    if (numUnits > 1) {
+        Diagnostics &target = indexData.diagnostics();
+        for (auto it = skipped[0].begin(); it != skipped[0].end(); ++it) {
+            bool ok = true;
+            for (size_t u=1; u<numUnits; ++u) {
+                if (skipped[u].value(it->first) != it->second) {
+                    ok = false;
+                    break;
+                }
+            }
+            if (ok) {
+                Diagnostic &diag = target[it->first];
+                if (diag.type() == Diagnostic::None)
+                    diag = std::move(it->second);
+            }
+        }
+    }
+#endif
+
+
+
 #if 0
     for (const auto &it : indexData.files()) {
         if (it.second & IndexDataMessage::Visited) {
@@ -1159,4 +1210,42 @@ String toElisp(const Value &value)
 {
     return ElispFormatter().toString(value);
 }
+
+struct CursorArgumentsVisitor {
+    int numArgs;
+    List<CXCursor> *args;
+};
+static CXChildVisitResult cursorArgumentsVisitor(CXCursor cursor, CXCursor, CXClientData data)
+{
+    if (clang_getCursorKind(cursor) == CXCursor_ParmDecl) {
+        CursorArgumentsVisitor *u = static_cast<CursorArgumentsVisitor*>(data);
+        ++u->numArgs;
+        if (u->args)
+            u->args->push_back(cursor);
+    }
+    return CXChildVisit_Continue;
+}
+int cursorArguments(const CXCursor &cursor, List<CXCursor> *args)
+{
+    int numArgs = 0;
+    // A workaround for the following issues:
+    // + clang_Cursor_getNumArguments() returns -1 with FunctionTemplate
+    // + clang_Cursor_getArgument() doesn't work with FunctionTemplate
+    //
+    if (clang_getCursorKind(cursor) == CXCursor_FunctionTemplate) {
+        CursorArgumentsVisitor u = {0, args};
+        clang_visitChildren(cursor, cursorArgumentsVisitor, &u);
+        numArgs = u.numArgs;
+    } else {
+        numArgs = clang_Cursor_getNumArguments(cursor);
+        if (numArgs > 0 && args) {
+            args->resize(numArgs);
+            for (int i = 0; i < numArgs; i++) {
+                (*args)[i] = clang_Cursor_getArgument(cursor, i);
+            }
+        }
+    }
+    return numArgs;
+}
+
 }

@@ -108,7 +108,7 @@ public:
     }
 
 public:
-    Selector operator[](const char *name) const {
+    Selector operator[](const char *name) {
         return Selector(_l, *_registry, *_exception_handler, name);
     }
 

@@ -1,4 +1,4 @@
-0#!/usr/bin/perl
+#!/usr/bin/env perl
 # File: sbroot_test.pl
 # Abstract:
 #   Used to exercise rtags, specifically focusing on the the sandbox root
@@ -87,7 +87,8 @@ sub SetProjectRoot {
 
 
 sub Usage {
-    die("Usage: $0 [--no-cleanup] [--no-sandbox-root-check] RTAGS_BIN\n".
+    die("Usage: $0 [--no-cleanup] [--no-sandbox-root-check] [RTAGS_BIN]\n".
+        "RTAGS_BIN is mandatory if RTAGS_BINARY_DIR environment is not set.\n".
         "See sbroot_test_help.md\n");
 }
 
@@ -176,10 +177,11 @@ sub ProcessArgsAndSetupSandbox {
             last;
         }
     }
-    if (@ARGV != 1 || $ARGV[0] =~ /^-?-help$/) {
+
+    if ((@ARGV != 1 && ! defined $ENV{RTAGS_BINARY_DIR}) || $ARGV[0] =~ /^-?-help$/) {
         Usage();
     }
-    my ($rtagsBin) = @ARGV;
+    my ($rtagsBin) = $ENV{RTAGS_BINARY_DIR} || @ARGV;
     if (! -d $rtagsBin) {
         die "Directory, $rtagsBin, doesn't exist\n";
     }

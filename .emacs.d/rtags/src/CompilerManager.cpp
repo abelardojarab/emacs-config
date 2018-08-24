@@ -142,9 +142,9 @@ void applyToSource(Source &source, Flags<CompilerManager::Flag> flags)
                     // What's left in copy are the builtin paths
                     compiler.builtinPaths = copy;
                     // Set the includePaths exclusive of stdinc/builtin
-                    for (auto inc : compiler.stdincxxPaths)
+                    for (auto& inc : compiler.stdincxxPaths)
                         compiler.includePaths.remove(inc);
-                    for (auto inc : compiler.builtinPaths)
+                    for (auto& inc : compiler.builtinPaths)
                         compiler.includePaths.remove(inc);
                     break; // we're done
                 } else {

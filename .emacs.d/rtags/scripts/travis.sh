@@ -25,14 +25,12 @@
 #  - LUA_VERSION (default value is "5.3.2")
 #  - LUA_DISABLE (default value is "", set it to anything to disable lua
 #                 extension for that matrix)
-ASAN=${ASAN:-"1"}
-declare -a CMAKE_PARAMS=("-DASAN=$ASAN"
-                         "-DCMAKE_CXX_COMPILER=$CXX-$COMPILER_VERSION"
-                         "-DCMAKE_C_COMPILER=$CC-$COMPILER_VERSION"
-                         "-DRTAGS_NO_ELISP_BYTECOMPILE=1")
+declare -a CMAKE_PARAMS=("-DCMAKE_CXX_COMPILER=$CXX$COMPILER_VERSION"
+                         "-DBUILD_TESTING=1"
+                         "-DCMAKE_C_COMPILER=$CC$COMPILER_VERSION")
 
-if [ $TRAVIS_OS_NAME = osx ]; then
-    TRAVIS_OS_NAME=mac$TRAVIS_OS_NAME
+if [ "$ASAN" ]; then
+    CMAKE_PARAMS+=("-DASAN=address,undefined")
 fi
 
 LUA_DISABLE=${LUA_DISABLE:-""}
@@ -43,15 +41,54 @@ else
     echo "Running build without Lua extension."
 fi # end ! $LUA_DISABLE
 
-echo "Using compilers $CXX-$COMPILER_VERSION and $CC-$COMPILER_VERSION."
-mkdir build && pushd build > /dev/null
-cmake "${CMAKE_PARAMS[@]}" ..
-make VERBOSE=1 -j2
+function build()
+{
+    mkdir build && pushd build > /dev/null
+    cmake "${CMAKE_PARAMS[@]}" .. || cat CMakeFiles/CMakeError.log
+    make VERBOSE=1 -j2
+}
 
-if [ -z "$SKIP_TESTS" ]; then
+# All arguments will be passed on to ctest
+function run_tests()
+{
     PATH=$(pwd)/bin:$PATH
-    popd > /dev/null
-    nosetests --nocapture
+    ctest --output-on-failure --verbose $@
+}
+
+function osx()
+{
+    ## Step -- Setup
+    brew update
+    brew install llvm yarn cppunit
+    brew upgrade python3
+    python3 -m pip install --upgrade pip
+    pip3 install --user --upgrade nose PyHamcrest
+    # Add nosetest bin dir to the env path var
+    PATH=$PATH:/Users/travis/Library/Python/3.6/bin
+
+    ## Step -- Build
+    build
+
+    ## Step -- Test
+    run_tests
+}
+
+function gnu_linux()
+{
+    ## Step -- Setup
+    pip3 install --user --upgrade nose PyHamcrest
+
+    ## Step -- Build
+    build
+
+    ## Step -- Test
+    run_tests
+}
+
+if [ $TRAVIS_OS_NAME = osx ]; then
+    osx
 else
-    echo "Skipping tests for this platform."
+    gnu_linux
 fi
+
+exit 0

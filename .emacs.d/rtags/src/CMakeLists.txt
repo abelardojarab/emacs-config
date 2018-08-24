@@ -5,13 +5,14 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 include(ExternalProject)
 
 if (RTAGS_BUILD_CLANG)
+    set(LIBCLANG_VERSION_STRING "5.0.0")
     if (RTAGS_NO_INSTALL)
         set(CLANG_INSTALL_PATH ${CMAKE_CURRENT_BINARY_DIR}/llvmclang-prefix/install)
     else ()
         set(CLANG_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/rtags-llvmclang)
     endif ()
     ExternalProject_Add(llvmclang
-        DOWNLOAD_COMMAND ${PROJECT_SOURCE_DIR}/scripts/getclang.sh 3.8.1
+        DOWNLOAD_COMMAND ${PROJECT_SOURCE_DIR}/scripts/getclang.sh "${LIBCLANG_VERSION_STRING}"
         SOURCE_DIR llvmclang-prefix/src/llvm
         CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${CLANG_INSTALL_PATH} -DLLVM_BUILD_TOOLS=1
         LOG_DOWNLOAD 1            # Wrap download in script to log output
@@ -22,9 +23,14 @@ if (RTAGS_BUILD_CLANG)
         LOG_INSTALL 1             # Wrap install in script to log output
         )
     if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
+        set(CLANG_LIBRARY_NAME "libclang.dylib")
         add_definitions("-DCLANG_INCLUDE=${CLANG_INSTALL_PATH}/include/c++/v1") # add libcxx include
+    else ()
+        set(CLANG_LIBRARY_NAME "libclang.so")
     endif ()
-    set(LIBCLANG_LLVM_CONFIG_EXECUTABLE ${CLANG_INSTALL_PATH}/bin/llvm-config)
+    set(LIBCLANG_LIBRARIES ${CLANG_INSTALL_PATH}/lib/${CLANG_LIBRARY_NAME})
+    set(LIBCLANG_LIBDIR ${CLANG_INSTALL_PATH}/lib)
+    set(LIBCLANG_CXXFLAGS "-I${CLANG_INSTALL_PATH}/include")
 endif ()
 
 
@@ -75,17 +81,40 @@ int main()
 }
 ")
     include(CheckCXXSourceCompiles)
-    set(CMAKE_OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
-    set(CMAKE_OLD_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES})
     set(CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS} ${CMAKE_CXX_FLAGS} ${LIBCLANG_CXXFLAGS})
     set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${LIBCLANG_LIBRARIES})
     check_cxx_source_compiles("${LIBCLANG_COMPILE_TEST}" LIBCLANG_COMPILES)
     if (NOT LIBCLANG_COMPILES)
-        message(FATAL_ERROR "We can't seem to compile a small clang test app. Maybe you need to install the libclang dev package?")
+        message(FATAL_ERROR "Failed to compile small clang test app.\nIt's likely that the include file <clang-c/Index.h> could not be found!\nMaybe you need to install the clang development package?\nSee CMakeFiles/CMakeError.log for more info.")
     endif ()
-    set(CMAKE_REQUIRED_FLAGS ${CMAKE_OLD_REQUIRED_FLAGS})
-    set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_OLD_REQUIRED_LIBRARIES})
+    unset(CMAKE_REQUIRED_FLAGS)
+    unset(CMAKE_REQUIRED_LIBRARIES)
+    unset(LIBCLANG_COMPILES)
 endif ()
+
+set(CXX_11_EXTENDED_REGEX_TEST "
+#include <regex>
+
+int main()
+{
+  try {
+    std::regex rx(\"^(.*):([0-9]+):([0-9]+):?-:?([0-9]+):([0-9]+):?(@[A-Za-z,]+)?\", std::regex_constants::extended);
+  } catch (std::regex_error& e) {
+    return -1;
+  }
+
+  return 0;
+}
+")
+include(CheckCXXSourceRuns)
+set(CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS} "-std=c++11" ${CMAKE_CXX_FLAGS} ${LIBCLANG_CXXFLAGS})
+check_cxx_source_runs("${CXX_11_EXTENDED_REGEX_TEST}" CXX_11_EXTENDED_REGEX_SUPPORT)
+if (NOT CXX_11_EXTENDED_REGEX_SUPPORT)
+    message(FATAL_ERROR "Compiler with complete C++11 support required ( >= GCC 4.9 or >= Clang 3.3)")
+endif ()
+unset(CMAKE_REQUIRED_FLAGS)
+unset(CMAKE_REQUIRED_LIBRARIES)
+unset(CXX_11_EXTENDED_REGEX_SUPPORT)
 
 if (EXISTS ${CLANG_COMPILATION_INCLUDE})
     add_definitions(-DHAVE_CXCOMPILATIONDATABASE)
@@ -114,6 +143,7 @@ if (NOT CYGWIN)
 endif ()
 
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
+    add_compile_options("-Og")
     add_definitions("-DRTAGS_DEBUG")
     set(RCT_EVENTLOOP_CALLBACK_TIME_THRESHOLD 2000)
 endif ()
@@ -150,7 +180,6 @@ set(RTAGS_SOURCES
     ListSymbolsJob.cpp
     Location.cpp
     Preprocessor.cpp
-    ProcThread.cpp
     Project.cpp
     QueryJob.cpp
     QueryMessage.cpp
@@ -246,9 +275,11 @@ if (EMACS_EXECUTABLE)
         ERROR_QUIET)
     if (NOT EMACS_ERROR)
         string(REGEX MATCH "[0-9]+(\\.[0-9]+)*" EMACS_VERSION ${EMACS_VERSION_INFORMATION})
-        if ("${EMACS_VERSION}" LESS "23")
-            message(STATUS "Installed emacs version is to old, elisp files are not going to be installed, minimum required version is >=23!")
+        if ("${EMACS_VERSION}" LESS "24.3")
+            message(WARNING "Installed emacs version is to old, elisp files are not going to be installed, minimum required version is >=24.3!")
             set(RTAGS_NO_ELISP_FILES TRUE)
+        else()
+            message(STATUS "Found emacs version ${EMACS_VERSION}")
         endif ()
     else ()
         message(STATUS "Could not get emacs version (\"emacs --version\"), elisp files are not going to be installed")
@@ -317,6 +348,11 @@ install(TARGETS rdm rc rp RUNTIME DESTINATION bin COMPONENT rtags)
 install(FILES ../bin/gcc-rtags-wrapper.sh DESTINATION bin
     PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 install(FILES ../man/man7/rc.7 ../man/man7/rdm.7 DESTINATION share/man/man7/)
+
+if (UNIX AND NOT ${SKIP_CTEST})
+  install(CODE "execute_process(COMMAND ctest)")
+endif ()
+
 if (NOT RTAGS_NO_ELISP_FILES)
     install(FILES ${RTAGS_ELISP_SOURCES} DESTINATION ${RTAGS_ELISP_INSTALL_LOCATION})
 endif ()

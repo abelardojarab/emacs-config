@@ -10,7 +10,7 @@ symbolnames etc. There's also limited support for ObjC/ObjC++. It allows you
 to find symbols by name (including nested class and namespace scope). Most
 importantly we give you proper follow-symbol and find-references support. We
 also have neat little things like rename-symbol, integration with clang's
-"fixits" (http://clang.llvm.org/diagnostics.html). We also integrate with
+"fixits" (https://clang.llvm.org/diagnostics.html). We also integrate with
 flymake using clang's vastly superior errors and warnings. Since RTags
 constantly will reindex "dirty" files you get live updates of compiler errors
 and warnings. Since we already know how to compile your sources we have a way
@@ -21,7 +21,7 @@ While existing taggers like gnu global, cscope, etags, ctags etc do a decent
 job for C they often fall a little bit short for C++. With its incredible
 lexical complexity, parsing C++ is an incredibly hard task and we make no
 bones about the fact that the only reason we are able to improve on the
-current tools is because of clang (http://clang.llvm.org/). RTags is named
+current tools is because of clang (https://clang.llvm.org/). RTags is named
 RTags in recognition of Roberto Raggi on whose C++ parser we intended to base
 this project but he assured us clang was the way to go. The name stuck though.
 
@@ -59,7 +59,7 @@ Load =rtags.el=
 M-: (load-file "rtags.el") RET
 #+END_EXAMPLE
 
-Insure =rc= can be found
+Ensure =rc= can be found
 
 #+BEGIN_EXAMPLE
 M-x set-variable RET rtags-path RET "../bin" RET
@@ -85,7 +85,7 @@ There are a few prerequisites you need to have in order to build RTags
   features (such as RTags itself). Alternatively you can grab the sources from
   [[http://llvm.org/releases/download.html][llvm.org]] and build it yourself.
 
-- =GCC/Clang= >= 4.7/3.2
+- =GCC/Clang= >= 4.9/3.3
 
   A modern compiler to build RTags. RTags makes extensive use of C++11
   features such as variadic templates and threading utility classes from the
@@ -98,7 +98,7 @@ There are a few prerequisites you need to have in order to build RTags
 - =emacs= >= 24.3 is recommended
 
   RTags might very well work with much older =emacs= versions but the oldest
-  version we have tested with is 23.4.1. There's no particular effort made to
+  version we have tested with is 24.3. There's no particular effort made to
   support older versions, but patches that make it work are welcome. Having
   said that, completion ([[https://github.com/auto-complete/auto-complete][ac]], [[https://github.com/company-mode/company-mode][company]]) as well as [[https://github.com/flycheck/flycheck][Flycheck]] integration only
   works, and has been tested with =emacs= >= 24.3.
@@ -120,7 +120,7 @@ There are a few prerequisites you need to have in order to build RTags
 
   The default installation path is
   =CMAKE_INSTALL_PREFIX/share/bash-completion/completions=. You can adjust the
-  path with the =cmake= variable =BASH_COMPLETION_COMPLATIONSDIR=
+  path with the =cmake= variable =BASH_COMPLETION_COMPLETIONSDIR=
   variable. However, if the bash completions files are not installed in the
   default completion path, i.e. =/usr/share/bash-completion/completions= on
   GNU/Linux, you have to make sure the RTags bash completion file gets
@@ -191,11 +191,11 @@ sudo port install clang-3.5
 
   You can also download the sources from here:
 
-  https://andersbakken.github.io/rtags-releases/rtags-2.15.tar.bz2
+  https://andersbakken.github.io/rtags-releases/rtags-2.19.tar.bz2
 
   or
 
-  https://andersbakken.github.io/rtags-releases/rtags-2.15.tar.gz
+  https://andersbakken.github.io/rtags-releases/rtags-2.19.tar.gz
 
 - Building RTags
 
@@ -217,6 +217,15 @@ sudo port install clang-3.5
   Note that if you're trying to test RTags by indexing RTags' own
   source code you shouldn't build it in /tmp/ since RTags will refuse
   to index files in /tmp/
+
+  "make install" runs ctest by default. If you want to skip ctest during install,
+  you can pass -DSKIP_CTEST=True to cmake.
+
+  #+BEGIN_SRC sh
+  cmake .. -DSKIP_CTEST=True
+  make
+  make install
+  #+END_SRC
 
 - Elpa
 
@@ -331,9 +340,6 @@ In that case you need to do this:
 #+BEGIN_SRC sh
 ninja llvmclang && ninja && ninja install
 #+END_SRC
-
-RTags uses C++11 features, and requires a relatively new compiler. GCC
-version >= 4.8 or clang >= 3.2 should work.
 
 * Setup
 
@@ -580,6 +586,9 @@ also be socket acivated.
 
     =Systemd= will create the =rdm= socket automatically.
 
+    Note that user level systemd does not work on RHEL
+    derivatives. See here for more info: https://bugs.centos.org/view.php?id=8767
+
 If you prefer using SystemV something like this could be used:
 
 #+BEGIN_EXAMPLE
@@ -658,6 +667,8 @@ from your editor. There are projects that provide integration for other
 editors out there.
 
 Vim: https://github.com/lyuts/vim-rtags and https://github.com/shaneharper/vim-rtags
+
+Neovim: https://github.com/marxin/neo-rtags
 
 Sublime Text: https://github.com/rampage644/sublime-rtags
 
@@ -787,7 +798,7 @@ point
 (rtags-fixit)
 #+END_SRC
 Apply clang's automatic fixits in current file. If you pass a prefix arg use
-ediff to apply it. See (http://clang.llvm.org/diagnostics.html) for more info.
+ediff to apply it. See (https://clang.llvm.org/diagnostics.html) for more info.
 
 #+BEGIN_SRC emacs-lisp
 (rtags-imenu)
@@ -1123,6 +1134,9 @@ https://github.com/lyuts/vim-rtags
 https://github.com/shaneharper/vim-rtags
 https://github.com/mattn/vim-rtags
 
+Neovim:
+https://github.com/marxin/neo-rtags
+
 Note to those maintainers. If you need RTags to behave differently or add
 features to make these other integration's easier (like produce output in
 other formats etc), just drop us a note.
@@ -1134,7 +1148,7 @@ other formats etc), just drop us a note.
   We'd like contributions to adhere to our coding style.
 
   The coding style can kinda be deduced from this:
-  #+begin_src sh
+  #+begin_src cpp
     if (foo) {
         while (!done) {
             switch (value) {
@@ -1188,6 +1202,37 @@ other formats etc), just drop us a note.
 
 #+end_src
 
+* Unit tests
+  There are some tests available in ~tests~, and in
+  ~src/rct/tests~. The test target will be generated by default. You
+  can disable the generation of the test target by calling cmake like this:
+
+  #+begin_src sh
+  cmake -DBUILD_TESTING=0
+  #+end_src
+
+  To run the tests, call =make= with the target =test=.
+  #+begin_src sh
+  make all test                   # Build the binaries first
+  #+end_src
 * Disclaimer
 RTags is still under development and is not the most stable piece of software
 you'll ever find. We're constantly working to improve on it.
+* Release notes
+We won't go back and add release notes for previous versions but we'll
+try to do it from now.
+
+2.19:
+- Seemingly improved performance for completions due to better
+  handling of unsaved files. Apparently stdin and processes in emacs
+  are not our friends. Tempfiles on the other hand seem to be
+  significantly faster.
+- Make skipped ranges work again.
+- Add a new feature, rtags-find-dead-functions (Issue #1152)
+- Various contributions that improve code completion
+- Fix an issue when jumping to macro definition from a macro
+  expansion.
+- Fix issue #1214. Socket file doesn't need to be resolved.
+- Various other fixes, code cleanup and infrastructure work.
+
+

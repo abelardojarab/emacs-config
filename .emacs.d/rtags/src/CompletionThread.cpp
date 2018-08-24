@@ -24,7 +24,7 @@
 
 #include <sstream>
 #include <fstream>
-#include "StringTokenizer.h"
+#include "rct/StringTokenizer.h"
 #ifdef HAS_JSON_H
 #include "rct/json/json.hpp"
 using namespace nlohmann;
@@ -33,8 +33,10 @@ using namespace nlohmann;
 static uint64_t start = 0;
 #define LOG()                                                           \
     if (Server::instance()->options().options & Server::CompletionLogs) \
-        error() << "CODE COMPLETION" << String::format<16>("%gs", static_cast<double>(Rct::monoMs() - ::start) / 1000.0)
-
+        error() << "CODE COMPLETION"                                    \
+                << String::format<64>("%gs %s",                         \
+                                      static_cast<double>(Rct::monoMs() - ::start) / 1000.0, \
+                                      Rct::currentTimeString().constData())
 
 CompletionThread::CompletionThread(int cacheSize)
     : mShutdown(false), mCacheSize(cacheSize), mDump(0)
@@ -106,7 +108,8 @@ void CompletionThread::completeAt(Source &&source, Location location,
                                   const std::shared_ptr<Connection> &conn)
 {
     if (Server::instance()->options().options & Server::CompletionLogs)
-        error() << "CODE COMPLETION completeAt" << location << flags;
+        error() << "CODE COMPLETION completeAt" << Rct::currentTimeString() << location << flags;
+
     Request *request = new Request({ std::forward<Source>(source), location, flags, std::forward<String>(unsaved), prefix, conn});
     std::unique_lock<std::mutex> lock(mMutex);
     auto it = mPending.begin();
@@ -125,7 +128,7 @@ void CompletionThread::completeAt(Source &&source, Location location,
 void CompletionThread::prepare(Source &&source, String &&unsaved)
 {
     if (Server::instance()->options().options & Server::CompletionLogs)
-        error() << "CODE COMPLETION prepare" << source.sourceFile() << unsaved.size();
+        error() << "CODE COMPLETION prepare" << Rct::currentTimeString() << source.sourceFile() << unsaved.size();
     std::unique_lock<std::mutex> lock(mMutex);
     for (auto req : mPending) {
         if (req->source == source) {
@@ -133,6 +136,7 @@ void CompletionThread::prepare(Source &&source, String &&unsaved)
             return;
         }
     }
+
     Request *request = new Request({ std::forward<Source>(source), Location(), WarmUp, std::forward<String>(unsaved), String(), std::shared_ptr<Connection>() });
     mPending.push_back(request);
     mCondition.notify_one();
@@ -191,7 +195,9 @@ void CompletionThread::process(Request *request)
     SourceFile *&cache = mCacheMap[request->source.fileId];
 
     if (cache && cache->source != request->source) {
-        LOG() << "cached sourcefile doesn't match source, discarding" << request->source.sourceFile();
+        LOG() << "cached sourcefile doesn't match source, discarding" << request->source.sourceFile()
+              << cache->source << "vs" << request->source;
+        mCacheList.remove(cache);
         delete cache;
         cache = 0;
     }
@@ -212,10 +218,11 @@ void CompletionThread::process(Request *request)
 
     assert(!cache->translationUnit || cache->source == request->source);
     if (!cache->translationUnit) {
-        cache->source = request->source;
+        cache->source = std::move(request->source);
+        assert(!cache->source.defines.contains(Source::Define("RTAGS", String(), Source::Define::NoValue)));
     }
 
-    const Path sourceFile = request->source.sourceFile();
+    const Path sourceFile = cache->source.sourceFile();
     CXUnsavedFile unsaved = {
         sourceFile.constData(),
         request->unsaved.constData(),
@@ -238,7 +245,7 @@ void CompletionThread::process(Request *request)
             }
             request->conn.reset();
         }
-        LOG() << "No translationUnit for" << request->source.sourceFile() << "recreating";
+        LOG() << "No translationUnit for" << cache->source.sourceFile() << "recreating";
         sw.restart();
         Flags<CXTranslationUnit_Flags> flags = static_cast<CXTranslationUnit_Flags>(clang_defaultEditingTranslationUnitOptions());
         flags |= CXTranslationUnit_CacheCompletionResults;
@@ -249,28 +256,24 @@ void CompletionThread::process(Request *request)
 #if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 32)
         flags |= CXTranslationUnit_CreatePreambleOnFirstParse;
 #endif
-        for (const auto &inc : options.includePaths) {
-            request->source.includePaths << inc;
-        }
-        request->source.defines << options.defines;
 
         cache->translationUnit = RTags::TranslationUnit::create(sourceFile,
-                                                                request->source.toCommandLine(Source::Default|Source::ExcludeDefaultArguments),
+                                                                cache->source.toCommandLine(Source::Default|Source::ExcludeDefaultArguments),
                                                                 &unsaved, request->unsaved.size() ? 1 : 0, flags, true);
         // error() << "PARSING" << clangLine;
         parseTime = cache->parseTime = sw.elapsed();
         // with clang 3.8 it definitely seems like we have to reparse once to
         // generate the preamble. Even with CXTranslationUnit_CreatePreambleOnFirstParse
         if (!cache->translationUnit) {
-            LOG() << "Failed to parse translation unit" << request->source.sourceFile();
+            LOG() << "Failed to parse translation unit" << cache->source.sourceFile();
             return;
         }
         reparse = true;
     } else if (!request->unsaved.isEmpty()) {
-        reparse = request->unsaved == cache->unsaved;
+        reparse = request->unsaved != cache->unsaved;
         cache->lastModified = 0;
     } else {
-        const uint64_t lastModified = request->source.sourceFile().lastModifiedMs();
+        const uint64_t lastModified = cache->source.sourceFile().lastModifiedMs();
         if (lastModified != cache->lastModified) {
             cache->lastModified = lastModified;
             cache->unsaved.clear();
@@ -287,7 +290,7 @@ void CompletionThread::process(Request *request)
     if (reparse) {
         sw.restart();
         assert(cache->translationUnit);
-        LOG() << "reparsing translation unit" << request->source.sourceFile();
+        LOG() << "reparsing translation unit" << cache->source.sourceFile();
         cache->translationUnit->reparse(&unsaved, request->unsaved.size() ? 1 : 0);
         reparseTime = cache->reparseTime = sw.elapsed();
         cache->unsaved = std::move(request->unsaved);
@@ -295,7 +298,10 @@ void CompletionThread::process(Request *request)
 
 
     if (request->flags & WarmUp) {
-        LOG() << "Warmed up unit" << request->source.sourceFile();
+        LOG() << "Warmed up unit" << cache->source.sourceFile();
+        return;
+    } else if (request->flags & Diagnose) {
+        processDiagnostics(request, 0, cache->translationUnit->unit);
         return;
     }
 
@@ -305,7 +311,7 @@ void CompletionThread::process(Request *request)
         completionFlags |= CXCodeComplete_IncludeMacros;
 
     CXCodeCompleteResults *results = clang_codeCompleteAt(cache->translationUnit->unit, sourceFile.constData(),
-                                                          request->location.line(), request->location.column() - request->prefix.length(),
+                                                          request->location.line(), request->location.column(),
                                                           &unsaved, unsaved.Length ? 1 : 0, completionFlags);
     completeTime = cache->codeCompleteTime = sw.restart();
     LOG() << "Generated" << (results ? results->NumResults : 0) << "completions for" << request->location << (results ? "successfully" : "unsuccessfully") << "in" << completeTime << "ms";
@@ -399,7 +405,6 @@ void CompletionThread::process(Request *request)
         } else {
             LOG() << "No completions available for" << request->location;
             printCompletions(List<std::unique_ptr<MatchResult> >(), request);
-            error() << "No completion results available" << request->location;
         }
 
         processDiagnostics(request, results, cache->translationUnit->unit);
@@ -494,17 +499,20 @@ void CompletionThread::printCompletions(const List<std::unique_ptr<MatchResult> 
                 if (output->testLog(RTags::DiagnosticsLevel)) {
                     auto out = std::make_shared<Output>();
                     out->output = output;
-                    if (output->flags() & RTagsLogOutput::Elisp) {
-                        out->flags |= CompletionThread::Elisp;
-                        elisp = true;
-                    } else if (output->flags() & RTagsLogOutput::XML) {
-                        out->flags |= CompletionThread::XML;
-                        xml = true;
+                    if (output->type() == LogOutput::Custom) {
+                        const Flags<QueryMessage::Flag> queryFlags = std::static_pointer_cast<RTagsLogOutput>(output)->queryFlags();
+                        if (queryFlags & QueryMessage::Elisp) {
+                            out->flags |= CompletionThread::Elisp;
+                            elisp = true;
+                        } else if (queryFlags & QueryMessage::XML) {
+                            out->flags |= CompletionThread::XML;
+                            xml = true;
 #ifdef HAS_JSON_H
-                    } else if (output->flags() & RTagsLogOutput::JSON) {
-                        out->flags |= CompletionThread::JSON;
-                        send_json = true;
+                        } else if (queryFlags & QueryMessage::JSON) {
+                            out->flags |= CompletionThread::JSON;
+                            send_json = true;
 #endif
+                        }
                     } else {
                         raw = true;
                     }
@@ -585,24 +593,24 @@ void CompletionThread::printCompletions(const List<std::unique_ptr<MatchResult> 
                                                , jsonOut
 #endif
                                                   ]() {
-                for (auto &it : outputs) {
-                    if (it->flags & Elisp) {
-                        it->send(elispOut);
-                    } else if (it->flags & XML) {
-                        it->send(xmlOut);
+                                                  for (auto &it : outputs) {
+                                                      if (it->flags & Elisp) {
+                                                          it->send(elispOut);
+                                                      } else if (it->flags & XML) {
+                                                          it->send(xmlOut);
 #ifdef HAS_JSON_H
-                    } else if (it->flags & JSON) {
-                        it->send(jsonOut);
+                                                      } else if (it->flags & JSON) {
+                                                          it->send(jsonOut);
 #endif
-                    } else {
-                        it->send(rawOut);
-                    }
-                }
-            });
+                                                      } else {
+                                                          it->send(rawOut);
+                                                      }
+                                                  }
+                                              });
     }
 }
 
-bool CompletionThread::isCached(uint32_t fileId, const std::shared_ptr<Project> &project) const
+bool CompletionThread::isCached(const std::shared_ptr<Project> &project, uint32_t fileId) const
 {
     std::unique_lock<std::mutex> lock(mMutex);
     for (SourceFile *file : mCacheList) {
@@ -612,6 +620,32 @@ bool CompletionThread::isCached(uint32_t fileId, const std::shared_ptr<Project> 
     return false;
 }
 
+void CompletionThread::reparse(const std::shared_ptr<Project> &/*project*/, uint32_t fileId)
+{
+    std::unique_lock<std::mutex> lock(mMutex);
+    Source source;
+    for (SourceFile *file : mCacheList) {
+        if (file->source.fileId == fileId) { // || project->dependsOn(file->source.fileId, fileId)) {
+            source = file->source;
+            break;
+        }
+    }
+    if (!source.isValid())
+        return;
+
+    for (auto req : mPending) {
+        if (req->source == source) {
+            return;
+        }
+    }
+
+    if (Server::instance()->options().options & Server::CompletionLogs)
+        error() << "CODE COMPLETION reparse" << Rct::currentTimeString() << source.sourceFile();
+
+    Request *request = new Request({ std::forward<Source>(source), Location(), Diagnose, String(), String(), std::shared_ptr<Connection>() });
+    mPending.push_back(request);
+    mCondition.notify_one();
+}
 
 String CompletionThread::Request::toString() const
 {
@@ -675,6 +709,41 @@ Source CompletionThread::findSource(const Set<uint32_t> &deps) const
     return Source();
 }
 
+class TranslationUnitDiagnostics : public RTags::DiagnosticsProvider
+{
+public:
+    TranslationUnitDiagnostics(uint32_t sourceFileId, CXTranslationUnit unit)
+        : mSourceFileId(sourceFileId), mUnit(unit)
+    {
+        mIndexDataMessage.files()[sourceFileId] = IndexDataMessage::Visited;
+    }
+    virtual size_t unitCount() const override { return 1; }
+    virtual size_t diagnosticCount(size_t) const override { return clang_getNumDiagnostics(mUnit); }
+    virtual CXDiagnostic diagnostic(size_t, size_t idx) const override
+    {
+        return clang_getDiagnostic(mUnit, idx);
+    }
+    virtual Location createLocation(const Path &file, unsigned int line, unsigned int col, bool *blocked = 0) override
+    {
+        if (blocked)
+            *blocked = false;
+        return Location(Location::insertFile(Path::resolved(file, Path::RealPath)), line, col);
+    }
+    virtual uint32_t sourceFileId() const override
+    {
+        return mSourceFileId;
+    }
+    virtual IndexDataMessage &indexDataMessage() override
+    {
+        return mIndexDataMessage;
+    }
+    virtual CXTranslationUnit unit(size_t) const override { return mUnit; }
+private:
+    uint32_t mSourceFileId;
+    CXTranslationUnit mUnit;
+    IndexDataMessage mIndexDataMessage;
+};
+
 class CompletionDiagnostics : public RTags::DiagnosticsProvider
 {
 public:
@@ -682,6 +751,7 @@ public:
         : mSourceFileId(sourceFileId), mResults(results), mUnit(unit)
     {
         mIndexDataMessage.files()[completionFileId] = IndexDataMessage::Visited;
+        mIndexDataMessage.files()[sourceFileId] = IndexDataMessage::Visited;
     }
 
     virtual size_t unitCount() const override
@@ -703,7 +773,7 @@ public:
     {
         if (blocked)
             *blocked = false;
-        return Location(Location::insertFile(file), line, col);
+        return Location(Location::insertFile(file.resolved(Path::RealPath)), line, col);
     }
 
     virtual uint32_t sourceFileId() const override
@@ -727,6 +797,26 @@ public:
     IndexDataMessage mIndexDataMessage;
 };
 
+class DiagnosticsEvent : public Event
+{
+public:
+    DiagnosticsEvent(uint32_t sourceFileId, const std::shared_ptr<Project> &project, Diagnostics &diagnostics)
+        : mSourceFileId(sourceFileId), mProject(project), mDiagnostics(std::move(diagnostics))
+    {}
+
+    virtual void exec() override
+    {
+        if (std::shared_ptr<Project> project = mProject.lock()) {
+            Project::FileMapScopeScope scope(project.get());
+            project->updateDiagnostics(mSourceFileId, mDiagnostics);
+        }
+    }
+
+    const uint32_t mSourceFileId;
+    std::weak_ptr<Project> mProject;
+    Diagnostics mDiagnostics;
+};
+
 void CompletionThread::processDiagnostics(const Request *request, CXCodeCompleteResults *results, CXTranslationUnit unit)
 {
     assert(request);
@@ -738,10 +828,23 @@ void CompletionThread::processDiagnostics(const Request *request, CXCodeComplete
     if (!project->hasSource(sourceFileId)) {
         return;
     }
-    LOG() << "processing diagnostics" << clang_codeCompleteGetNumDiagnostics(results)
-          << clang_getNumDiagnostics(unit) << request->location << Location::path(request->source.fileId);
-    CompletionDiagnostics diag(sourceFileId, request->location.fileId(), results, unit);
-    diag.diagnose();
-    // error() << "got diagnostics" << diag.indexDataMessage().diagnostics().size();
-    project->updateDiagnostics(sourceFileId, diag.indexDataMessage().diagnostics());
+    Diagnostics diagnostics;
+    if (results && false) {
+        LOG() << "processing diagnostics" << clang_codeCompleteGetNumDiagnostics(results)
+              << clang_getNumDiagnostics(unit) << request->location << Location::path(request->source.fileId);
+        CompletionDiagnostics diag(sourceFileId, request->location.fileId(), results, unit);
+        diag.diagnose();
+        // error() << "got diagnostics" << diag.indexDataMessage().diagnostics().size();
+        diagnostics = std::move(diag.indexDataMessage().diagnostics());
+    } else {
+        TranslationUnitDiagnostics diag(sourceFileId, unit);
+        LOG() << "processing diagnostics from translation unit" << diag.diagnosticCount(0)
+              << Location::path(request->source.fileId);
+        diag.diagnose();
+        diagnostics = std::move(diag.indexDataMessage().diagnostics());
+    }
+
+    EventLoop::mainEventLoop()->post(new DiagnosticsEvent(sourceFileId, project, diagnostics));
+
 }
+

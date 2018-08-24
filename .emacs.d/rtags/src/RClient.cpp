@@ -75,6 +75,7 @@ std::initializer_list<CommandLineParser::Option<RClient::OptionType> > opts = {
     { RClient::Status, "status", 's', CommandLineParser::Optional, "Dump status of rdm. Arg can be symbols or symbolNames." },
     { RClient::Diagnose, "diagnose", 0, CommandLineParser::Required, "Resend diagnostics for file." },
     { RClient::DiagnoseAll, "diagnose-all", 0, CommandLineParser::NoValue, "Resend diagnostics for all files." },
+    { RClient::LastIndexed, "last-indexed", 0, CommandLineParser::NoValue, "Get timestamp of the last time indexing completed for the current project." },
     { RClient::IsIndexed, "is-indexed", 'T', CommandLineParser::Required, "Check if rtags knows about, and is ready to return information about, this source file." },
     { RClient::IsIndexing, "is-indexing", 0, CommandLineParser::NoValue, "Check if rtags is currently indexing files." },
     { RClient::HasFileManager, "has-filemanager", 0, CommandLineParser::Optional, "Check if rtags has info about files in this directory." },
@@ -114,6 +115,8 @@ std::initializer_list<CommandLineParser::Option<RClient::OptionType> > opts = {
 #endif
     { RClient::Validate, "validate", 0, CommandLineParser::NoValue, "Validate database files for current project." },
     { RClient::Tokens, "tokens", 0, CommandLineParser::Required, "Dump tokens for file. --tokens file.cpp:123-321 for range." },
+    { RClient::DeadFunctions, "find-dead-functions", 0, CommandLineParser::Optional, "Find functions declared/defined in the current file that are never in the project." },
+
     { RClient::None, String(), 0, CommandLineParser::NoValue, "" },
     { RClient::None, String(), 0, CommandLineParser::NoValue, "Command flags:" },
     { RClient::StripParen, "strip-paren", 'p', CommandLineParser::NoValue, "Strip parens in various contexts." },
@@ -132,6 +135,7 @@ std::initializer_list<CommandLineParser::Option<RClient::OptionType> > opts = {
     { RClient::AllTargets, "all-targets", 0, CommandLineParser::NoValue, "Print multiple targets for -f. Sorted by best match." },
     { RClient::Elisp, "elisp", 'Y', CommandLineParser::NoValue, "Output elisp: (list \"one\" \"two\" ...)." },
     { RClient::JSON, "json", 0, CommandLineParser::NoValue, "Output json." },
+    { RClient::JSONDiagnosticsIncludeSkipped, "json-diagnostics-include-skipped", 0, CommandLineParser::NoValue, "Output json diagnostics with skipped ranges." },
     { RClient::Diagnostics, "diagnostics", 'm', CommandLineParser::NoValue, "Receive async formatted diagnostics from rdm." },
     { RClient::MatchRegex, "match-regexp", 'Z', CommandLineParser::NoValue, "Treat various text patterns as regexps (-P, -i, -V, -F)." },
     { RClient::MatchCaseInsensitive, "match-icase", 'I', CommandLineParser::NoValue, "Match case insensitively" },
@@ -266,18 +270,11 @@ public:
     }
     virtual RTags::ExitCode exec(RClient *rc, const std::shared_ptr<Connection> &connection) override
     {
-        unsigned int flags = RTagsLogOutput::None;
-        if (rc->queryFlags() & QueryMessage::Elisp) {
-            flags |= RTagsLogOutput::Elisp;
-        } else if (rc->queryFlags() & QueryMessage::XML) {
-            flags |= RTagsLogOutput::XML;
-        } else if (rc->queryFlags() & QueryMessage::JSON) {
-            flags |= RTagsLogOutput::JSON;
-        } else if (rc->queryFlags() & QueryMessage::NoSpellChecking) {
-            flags |= RTagsLogOutput::NoSpellChecking;
-        }
-
         const LogLevel level = mLevel == Default ? rc->logLevel() : mLevel;
+        Flags<QueryMessage::Flag> flags = rc->queryFlags();
+        if (!(rc->queryFlags() & (QueryMessage::Elisp|QueryMessage::XML|QueryMessage::JSON)))
+            flags |= QueryMessage::XML;
+
         LogOutputMessage msg(level, flags);
         msg.setCommandLine(rc->commandLine());
         return connection->send(msg) ? RTags::Success : RTags::NetworkFailure;
@@ -430,12 +427,12 @@ void RClient::exec()
 CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
 {
     Rct::findExecutablePath(*argv);
-    const char * runtimeDir = getenv("XDG_RUNTIME_DIR");
-    if (runtimeDir == NULL) {
-         mSocketFile = Path::home() + ".rdm";
+    const char *runtimeDir = getenv("XDG_RUNTIME_DIR");
+    if (!runtimeDir) {
+        mSocketFile = Path::home() + ".rdm";
     } else {
-         mSocketFile = runtimeDir;
-         mSocketFile += "/rdm.socket";
+        mSocketFile = runtimeDir;
+        mSocketFile += "/rdm.socket";
     }
 
     List<std::shared_ptr<QueryCommand> > projectCommands;
@@ -446,7 +443,6 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
     if (!isatty(STDOUT_FILENO)) {
         mQueryFlags |= QueryMessage::NoColor;
     }
-
 
     std::function<CommandLineParser::ParseStatus(RClient::OptionType type,
                                                  String &&value,
@@ -473,17 +469,16 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             return { String(), CommandLineParser::Parse_Ok }; }
         case SocketFile: {
             mSocketFile = std::move(value);
-            mSocketFile.resolve();
             break; }
         case SocketAddress: {
             mTcpHost = std::move(value);
             const int colon = mTcpHost.lastIndexOf(':');
             if (colon == -1) {
-                return { String::format<1024>("invalid --socket-address %s\n", value.constData()), CommandLineParser::Parse_Error };
+                return { String::format<1024>("invalid --socket-address %s\n", mTcpHost.constData()), CommandLineParser::Parse_Error };
             }
-            mTcpPort = atoi(value.constData() + colon + 1);
+            mTcpPort = atoi(mTcpHost.constData() + colon + 1);
             if (!mTcpPort) {
-                return { String::format<1024>("invalid --socket-address %s", value.constData()), CommandLineParser::Parse_Error };
+                return { String::format<1024>("invalid --socket-address %s", mTcpHost.constData()), CommandLineParser::Parse_Error };
             }
             mTcpHost.truncate(colon);
             break; }
@@ -592,6 +587,9 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
         case JSON: {
             mQueryFlags |= QueryMessage::JSON;
             break; }
+        case JSONDiagnosticsIncludeSkipped: {
+            mQueryFlags |= QueryMessage::JSONDiagnosticsIncludeSkipped;
+            break; }
         case XML: {
             mQueryFlags |= QueryMessage::XML;
             break; }
@@ -610,7 +608,7 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
         case DependencyFilter: {
             Path p = std::move(value);
             if (!p.isFile()) {
-                return { String::format<1024>("%s doesn't seem to be a file", value.constData()), CommandLineParser::Parse_Error };
+                return { String::format<1024>("%s doesn't seem to be a file", p.constData()), CommandLineParser::Parse_Error };
             }
             mPathFilters.insert({ Path::resolved(p), QueryMessage::PathFilter::Dependency });
             break; }
@@ -705,32 +703,41 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             }
             break; }
         case UnsavedFile: {
-            const String arg(value);
-            const int colon = arg.lastIndexOf(':');
-            if (colon == -1) {
+            const size_t colon = value.lastIndexOf(':');
+            if (colon == String::npos || colon + 1 == value.size()) {
                 return { String::format<1024>("Can't parse -u [%s]", value.constData()), CommandLineParser::Parse_Error };
             }
-            const int bytes = atoi(arg.constData() + colon + 1);
-            if (!bytes) {
-                return { String::format<1024>("Can't parse -u [%s]", value.constData()), CommandLineParser::Parse_Error };
-            }
-            const Path path = arg.left(colon);
+            const Path path = value.left(colon);
             if (!path.isFile()) {
-                return {
-                    String::format<1024>("Can't open [%s] for reading", arg.left(colon).nullTerminated()),
-                    CommandLineParser::Parse_Error
-                    };
+                return { String::format<1024>("Can't open [%s] for reading", path.nullTerminated()), CommandLineParser::Parse_Error };
+            }
+
+            FILE *f;
+            Path unlinkFile;
+            int bytes;
+            if (std::isdigit(value.at(colon + 1))) {
+                bytes = atoi(value.constData() + colon + 1);
+                if (!bytes) {
+                    return { String::format<1024>("Can't parse -u [%s]", value.constData()), CommandLineParser::Parse_Error };
+                }
+                f = stdin;
+            } else {
+                unlinkFile = value.mid(colon + 1);
+                f = fopen(value.constData() + colon + 1, "r");
+                if (!f) {
+                    return { String::format<1024>("Can't open %s for reading", unlinkFile.constData()), CommandLineParser::Parse_Error };
+                }
+                bytes = Rct::fileSize(f);
             }
 
             String contents(bytes, '\0');
-            const int r = fread(contents.data(), 1, bytes, stdin);
+            const int r = fread(contents.data(), 1, bytes, f);
+            if (!unlinkFile.isEmpty())
+                Path::rm(unlinkFile);
             if (r != bytes) {
-                return {
-                    String::format<1024>("Read error %d (%s). Got %d, expected %d", errno, Rct::strerror(errno).constData(), r, bytes),
-                    CommandLineParser::Parse_Error
-                    };
+                return { String::format<1024>("Read error %d (%s). Got %d, expected %d", errno, Rct::strerror(errno).constData(), r, bytes), CommandLineParser::Parse_Error };
             }
-            mUnsavedFiles[path] = contents;
+            mUnsavedFiles[path] = std::move(contents);
             break; }
         case FollowLocation:
         case ClassHierarchy:
@@ -758,7 +765,7 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             break; }
         case SymbolInfo: {
             std::cmatch match;
-            std::regex rx("^(.*):([0-9]+):([0-9]+):?-:?([0-9]+):([0-9]+):?(@[A-Za-z,]+)?", std::regex_constants::basic);
+            std::regex rx("^(.*):([0-9]+):([0-9]+):?-:?([0-9]+):([0-9]+):?(@[A-Za-z,]+)?", std::regex_constants::extended);
             Path path;
             List<String> kinds;
             uint32_t line = 0, col = 0, line2 = 0, col2 = 0;
@@ -804,11 +811,11 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             break; }
         case DumpCompletions: {
             addQuery(QueryMessage::DumpCompletions);
-            break;
-        case DumpCompileCommands:
+            break; }
+        case DumpCompileCommands: {
             addQuery(QueryMessage::DumpCompileCommands);
-            break;
-        case Clear:
+            break; }
+        case Clear: {
             addQuery(QueryMessage::ClearProjects);
             break; }
         case RdmLog: {
@@ -1051,7 +1058,7 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             }
             p.resolve(Path::MakeAbsolute);
             if (!p.exists()) {
-                return { String::format<1024>("%s does not seem to exist", value.constData()), CommandLineParser::Parse_Error };
+                return { String::format<1024>("%s does not seem to exist", p.constData()), CommandLineParser::Parse_Error };
             }
             if (p.isDir() && !p.endsWith('/'))
                 p.append('/');
@@ -1060,7 +1067,7 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
         case ProjectRoot: {
             Path p = std::move(value);
             if (!p.isDir()) {
-                return { String::format<1024>("%s does not seem to be a directory", value.constData()), CommandLineParser::Parse_Error };
+                return { String::format<1024>("%s does not seem to be a directory", p.constData()), CommandLineParser::Parse_Error };
             }
 
             p.resolve(Path::MakeAbsolute);
@@ -1077,7 +1084,7 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             if (!p.isEmpty() && p != "clear" && p != "all") {
                 p.resolve(Path::MakeAbsolute);
                 if (!p.isFile()) {
-                    return { String::format<1024>("%s is not a file", value.constData()), CommandLineParser::Parse_Error };
+                    return { String::format<1024>("%s is not a file", p.constData()), CommandLineParser::Parse_Error };
                 }
                 if (idx + 1 < arguments.size()) {
                     if (arguments[idx + 1] == "on" || arguments[idx + 1] == "off") {
@@ -1135,6 +1142,9 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
         case IsIndexing: {
             addQuery(QueryMessage::IsIndexing);
             break; }
+        case LastIndexed: {
+            addQuery(QueryMessage::LastIndexed);
+            break; }
         case NoSortReferencesByInput: {
             mQueryFlags |= QueryMessage::NoSortReferencesByInput;
             break; }
@@ -1146,23 +1156,25 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
         case CheckIncludes:
         case GenerateTest:
         case Diagnose:
+        case DeadFunctions:
         case FixIts: {
             Path p = std::move(value);
-            if (!p.exists()) {
-                return { String::format<1024>("%s does not exist", value.constData()), CommandLineParser::Parse_Error };
+            if (!p.exists() && (!p.isEmpty() || type != DeadFunctions)) {
+                return { String::format<1024>("%s does not exist", p.constData()), CommandLineParser::Parse_Error };
             }
 
-            if (!p.isAbsolute())
+            if (!p.isAbsolute() && !p.isEmpty())
                 p.prepend(Path::pwd());
 
             if (p.isDir()) {
                 if (type != IsIndexed) {
-                    return { String::format<1024>("%s is not a file", value.constData()), CommandLineParser::Parse_Error };
+                    return { String::format<1024>("%s is not a file", p.constData()), CommandLineParser::Parse_Error };
                 } else if (!p.endsWith('/')) {
                     p.append('/');
                 }
             }
-            p.resolve();
+            if (!p.isEmpty())
+                p.resolve();
             Flags<QueryMessage::Flag> extraQueryFlags;
             QueryMessage::Type queryType = QueryMessage::Invalid;
             switch (type) {
@@ -1174,6 +1186,9 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
                 break;
             case DumpFile:
                 queryType = QueryMessage::DumpFile;
+                break;
+            case DeadFunctions:
+                queryType = QueryMessage::DeadFunctions;
                 break;
             case CheckIncludes:
                 queryType = QueryMessage::DumpFile;
@@ -1206,7 +1221,7 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
         case Dependencies: {
             Path p = std::move(value);
             if (!p.isFile()) {
-                return { String::format<1024>("%s is not a file", value.constData()), CommandLineParser::Parse_Error };
+                return { String::format<1024>("%s is not a file", p.constData()), CommandLineParser::Parse_Error };
             }
             p.resolve();
             List<String> args;
@@ -1253,7 +1268,7 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             Path p = std::move(value);
             p.resolve(Path::MakeAbsolute);
             if (!p.isFile()) {
-                return { String::format<1024>("%s is not a file", value.constData()), CommandLineParser::Parse_Error };
+                return { String::format<1024>("%s is not a file", p.constData()), CommandLineParser::Parse_Error };
             }
             addQuery(QueryMessage::PreprocessFile, std::move(p));
             break; }
@@ -1273,7 +1288,7 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             Path p = std::move(value);
             p.resolve(Path::MakeAbsolute);
             if (!p.isFile()) {
-                return { String::format<1024>("%s is not a file", value.constData()), CommandLineParser::Parse_Error };
+                return { String::format<1024>("%s is not a file", p.constData()), CommandLineParser::Parse_Error };
             }
             addQuery(QueryMessage::VisitAST, std::move(p));
 #endif
@@ -1360,5 +1375,6 @@ List<String> RClient::environment() const
     if (mEnvironment.isEmpty()) {
         mEnvironment = Rct::environment();
     }
+
     return mEnvironment;
 }

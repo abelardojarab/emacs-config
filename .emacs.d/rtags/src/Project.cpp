@@ -18,6 +18,7 @@
 #include <fnmatch.h>
 #include <memory>
 #include <regex>
+#include <utility>
 
 #include "Diagnostic.h"
 #include "FileManager.h"
@@ -258,7 +259,7 @@ static void saveDependencies(DataFile &file, const Dependencies &dependencies)
 
 Project::Project(const Path &path)
     : mPath(path), mProjectDataDir(RTags::encodeSourceFilePath(Server::instance()->options().dataDir, path)),
-      mJobCounter(0), mJobsStarted(0), mBytesWritten(0), mSaveDirty(false)
+      mJobCounter(0), mJobsStarted(0), mLastIdleTime(time(0)), mBytesWritten(0), mSaveDirty(false)
 {
     mProjectFilePath = mProjectDataDir + "project";
     mSourcesFilePath = mProjectDataDir + "sources";
@@ -529,18 +530,21 @@ static String formatDiagnostics(const Diagnostics &diagnostics, Flags<QueryMessa
     Diagnostics::const_iterator it;
     Diagnostics::const_iterator end;
     {
-        Set<uint32_t> active = Server::instance()->activeBuffers();
-        if (!active.isEmpty()) {
+        if (Server::instance()->hadActiveBuffers()) {
+            Set<uint32_t> active = Server::instance()->activeBuffers();
             if (filter.isEmpty()) {
                 filter = std::move(active);
             } else {
                 filter = filter.intersected(active);
             }
+            if (filter.isEmpty())
+                return String();
         }
     }
 
     const size_t filterSize = filter.size();
 
+    // bool debug = false;
     switch (filterSize) {
     case 0:
         it = diagnostics.begin();
@@ -550,6 +554,9 @@ static String formatDiagnostics(const Diagnostics &diagnostics, Flags<QueryMessa
         uint32_t fileId = *filter.begin();
         it = diagnostics.lower_bound(Location(fileId, 0, 0));
         end = diagnostics.lower_bound(Location(fileId + 1, 0, 0));
+        // debug = (Location::path(fileId) == "/home/abakken/temp/compl1/main.cpp");
+        // error() << "THESE ARE THE ITERATORS" << (it == diagnostics.end() ? "end" : it->first.toString().constData())
+        //         << (end == diagnostics.end() ? "end" : end->first.toString().constData()) << diagnostics.keys();
         break; }
     default: {
         it = diagnostics.lower_bound(Location(*filter.begin(), 0, 0));
@@ -560,7 +567,7 @@ static String formatDiagnostics(const Diagnostics &diagnostics, Flags<QueryMessa
     }
 
     if (flags & QueryMessage::JSON) {
-        std::function<Value(uint32_t, Location, const Diagnostic &)> toValue = [&toValue, flags](uint32_t file, Location loc, const Diagnostic &diagnostic) {
+        std::function<Value(uint32_t, Location, const Diagnostic &)> toValue = [&toValue](uint32_t file, Location loc, const Diagnostic &diagnostic) {
             Value value;
             if (loc.fileId() != file)
                 value["file"] = loc.path();
@@ -602,6 +609,8 @@ static String formatDiagnostics(const Diagnostics &diagnostics, Flags<QueryMessa
                 currentFile = &checkStyle[ref->first.path()];
                 lastFileId = f;
             }
+            if (!(flags & QueryMessage::JSONDiagnosticsIncludeSkipped) && ref->second.type() == Diagnostic::Skipped)
+                continue;
             currentFile->push_back(toValue(lastFileId, ref->first, ref->second));
         }
         for (uint32_t f : filter) {
@@ -716,14 +725,16 @@ static String formatDiagnostics(const Diagnostics &diagnostics, Flags<QueryMessa
     return ret;
 }
 
+static Flags<QueryMessage::Flag> queryFlags(const std::shared_ptr<LogOutput> &output)
+{
+    if (output->type() == LogOutput::Custom)
+        return std::static_pointer_cast<RTagsLogOutput>(output)->queryFlags();
+    return NullFlags;
+}
+
 void Project::onJobFinished(const std::shared_ptr<IndexerJob> &job, const std::shared_ptr<IndexDataMessage> &msg)
 {
-    struct Scope {
-        Scope(Project *p) : project(p) { project->beginScope(); }
-        ~Scope() { project->endScope(); }
-        Project *project;
-    } scope(this);
-
+    FileMapScopeScope scope(this, NoValidate);
     mBytesWritten += msg->bytesWritten();
     std::shared_ptr<IndexerJob> restart;
     const uint32_t fileId = job->fileId();
@@ -764,20 +775,16 @@ void Project::onJobFinished(const std::shared_ptr<IndexerJob> &job, const std::s
     updateDiagnostics(fileId, msg->diagnostics());
     if (options.options & Server::Progress) {
         log([&](const std::shared_ptr<LogOutput> &output) {
-                if (output->testLog(RTags::DiagnosticsLevel)) {
-                    QueryMessage::Flag format = QueryMessage::XML;
-                    if (output->flags() & RTagsLogOutput::Elisp) {
-                        // I know this is RTagsLogOutput because it returned
-                        // true for testLog(RTags::DiagnosticsLevel)
-                        format = QueryMessage::Elisp;
-                    }
-
-                    if (format == QueryMessage::XML) {
-                        output->vlog("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<progress index=\"%d\" total=\"%d\"></progress>",
-                                     idx, mJobCounter);
-                    } else {
+                if (output->type() == LogOutput::Custom && output->testLog(RTags::DiagnosticsLevel)) {
+                    const Flags<QueryMessage::Flag> queryFlags = ::queryFlags(output);
+                    if (queryFlags & QueryMessage::Elisp) {
                         std::shared_ptr<JobScheduler> scheduler = Server::instance()->jobScheduler();
                         output->vlog("(list 'progress %d %d %zu)", idx, mJobCounter, scheduler->activeJobCount() + scheduler->pendingJobCount());
+                    } else if (queryFlags & QueryMessage::XML) {
+                        output->vlog("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<progress index=\"%d\" total=\"%d\"></progress>",
+                                     idx, mJobCounter);
+                    } else if (queryFlags & QueryMessage::JSON) {
+                        output->vlog("{\"progress\":{\"index\":%d,\"total\":%d}}", idx, mJobCounter);
                     }
                 }
             });
@@ -812,6 +819,7 @@ void Project::onJobFinished(const std::shared_ptr<IndexerJob> &job, const std::s
     }
 
     if (mActiveJobs.isEmpty()) {
+        mLastIdleTime = time(0);
         save();
         double timerElapsed = (mTimer.elapsed() / 1000.0);
         const double averageJobTime = timerElapsed / mJobsStarted;
@@ -831,19 +839,10 @@ void Project::diagnose(uint32_t fileId)
 {
     log([&](const std::shared_ptr<LogOutput> &output) {
             if (output->testLog(RTags::DiagnosticsLevel)) {
-                QueryMessage::Flag format = QueryMessage::XML;
-                if (output->flags() & RTagsLogOutput::Elisp) {
-                    // I know this is RTagsLogOutput because it returned
-                    // true for testLog(RTags::DiagnosticsLevel)
-                    format = QueryMessage::Elisp;
-                } else if (output->flags() & RTagsLogOutput::JSON) {
-                    format = QueryMessage::JSON;
-                }
-
                 Set<uint32_t> filter;
                 if (fileId)
                     filter.insert(fileId);
-                const String log = formatDiagnostics(mDiagnostics, format, std::move(filter));
+                const String log = formatDiagnostics(mDiagnostics, queryFlags(output), std::move(filter));
                 if (!log.isEmpty())
                     output->log(log);
             }
@@ -854,16 +853,7 @@ void Project::diagnoseAll()
 {
     log([&](const std::shared_ptr<LogOutput> &output) {
             if (output->testLog(RTags::DiagnosticsLevel)) {
-                QueryMessage::Flag format = QueryMessage::XML;
-                if (output->flags() & RTagsLogOutput::Elisp) {
-                    // I know this is RTagsLogOutput because it returned
-                    // true for testLog(RTags::DiagnosticsLevel)
-                    format = QueryMessage::Elisp;
-                } else if (output->flags() & RTagsLogOutput::JSON) {
-                    format = QueryMessage::JSON;
-                }
-
-                const String log = formatDiagnostics(mDiagnostics, format);
+                const String log = formatDiagnostics(mDiagnostics, queryFlags(output));
                 if (!log.isEmpty())
                     output->log(log);
             }
@@ -951,22 +941,24 @@ void Project::index(const std::shared_ptr<IndexerJob> &job)
 
 void Project::onFileModified(const Path &path)
 {
-    debug() << path << "was modified";
-    onFileAddedOrModified(path);
+    const uint32_t fileId = Location::fileId(path);
+    debug() << path << fileId << "was modified";
+    if (fileId) {
+        onFileAddedOrModified(path, fileId);
+        Server::instance()->sourceFileModified(shared_from_this(), fileId);
+    }
 }
 
 void Project::onFileAdded(const Path &path)
 {
-    debug() << path << "was added";
-    onFileAddedOrModified(path);
+    const uint32_t fileId = Location::fileId(path);
+    debug() << path << fileId << "was added";
+    if (fileId)
+        onFileAddedOrModified(path, fileId);
 }
 
-void Project::onFileAddedOrModified(const Path &file)
+void Project::onFileAddedOrModified(const Path &file, uint32_t fileId)
 {
-    const uint32_t fileId = Location::fileId(file);
-    debug() << file << "was modified" << fileId;
-    if (!fileId)
-        return;
     // error() << file.fileName() << mCompileCommandsInfos.dir << file;
     if (mIndexParseData.compileCommands.contains(fileId)) {
         mReloadCompileCommandsTimer.restart(ReloadCompileCommandsTimeout, Timer::SingleShot);
@@ -977,7 +969,6 @@ void Project::onFileAddedOrModified(const Path &file)
         warning() << file << "is suspended. Ignoring modification";
         return;
     }
-    Server::instance()->jobScheduler()->clearHeaderError(fileId);
     if (mPendingDirtyFiles.insert(fileId)) {
         mDirtyTimer.restart(DirtyTimeout, Timer::SingleShot);
     }
@@ -995,8 +986,6 @@ void Project::onFileRemoved(const Path &file)
         return;
     }
     removeSource(fileId);
-
-    Server::instance()->jobScheduler()->clearHeaderError(fileId);
 
     if (Server::instance()->suspended() || mSuspendedFiles.contains(fileId)) {
         warning() << file << "is suspended. Ignoring modification";
@@ -1072,7 +1061,7 @@ bool Project::dependsOn(uint32_t source, uint32_t header) const
             return false;
         if (node->dependents.contains(source))
             return true;
-        for (const std::pair<uint32_t, DependencyNode*> &n : node->dependents) {
+        for (const auto &n : node->dependents) {
             if (dep(n.second))
                 return true;
         }
@@ -1324,6 +1313,10 @@ void Project::updateFixIts(const Set<uint32_t> &visited, FixIts &fixIts)
 
 void Project::updateDiagnostics(uint32_t fileId, const Diagnostics &diagnostics)
 {
+    // const bool debug = (Location::path(fileId) == "/home/abakken/temp/compl1/main.cpp");
+    // if (debug) {
+    //     error() << "GOT HERE" << diagnostics;
+    // }
     Set<uint32_t> files;
     {
         auto it = mDiagnostics.begin();
@@ -1348,6 +1341,8 @@ void Project::updateDiagnostics(uint32_t fileId, const Diagnostics &diagnostics)
 
     {
         uint32_t lastFileId = 0;
+        // if (debug)
+        //     error() << "gonna fucking do" << diagnostics.size();
         for (const auto &it : diagnostics) {
             // if (debug && it.second.flags & Diagnostic::TemplateOnly)
             //     error() << "checking for" << Location::path(fileId) << it.first;
@@ -1371,17 +1366,12 @@ void Project::updateDiagnostics(uint32_t fileId, const Diagnostics &diagnostics)
     }
 
     if (!files.isEmpty() || !diagnostics.isEmpty()) {
+        // if (debug) {
+        //     error() << "got stuff" << files.size() << diagnostics.size() << mDiagnostics.size();
+        // }
         log([&](const std::shared_ptr<LogOutput> &output) {
                 if (output->testLog(RTags::DiagnosticsLevel)) {
-                    QueryMessage::Flag format = QueryMessage::XML;
-                    if (output->flags() & RTagsLogOutput::Elisp) {
-                        // I know this is RTagsLogOutput because it returned
-                        // true for testLog(RTags::DiagnosticsLevel)
-                        format = QueryMessage::Elisp;
-                    } else if (output->flags() & RTagsLogOutput::JSON) {
-                        format = QueryMessage::JSON;
-                    }
-                    const String log = formatDiagnostics(mDiagnostics, format, Set<uint32_t>(files));
+                    const String log = formatDiagnostics(mDiagnostics, queryFlags(output), Set<uint32_t>(files));
                     if (!log.isEmpty()) {
                         output->log(log);
                     }
@@ -1677,7 +1667,7 @@ Set<Symbol> Project::findTargets(const Symbol &symbol)
 
             if (!ret.isEmpty() || (symbol.kind != CXCursor_VarDecl && symbol.kind != CXCursor_FieldDecl))
                 break; }
-            // fall through
+            RCT_FALL_THROUGH;
         default:
             if (symbol.flags & Symbol::TemplateReference) {
                 for (const String &usr : findTargetUsrs(symbol)) {
@@ -1799,7 +1789,7 @@ static Set<Symbol> findReferences(const Symbol &in,
             inputs = project->findVirtuals(s);
             break;
         }
-        // fall through
+        RCT_FALL_THROUGH;
     case CXCursor_FunctionTemplate:
     case CXCursor_FunctionDecl:
     case CXCursor_ClassTemplate:
@@ -1823,20 +1813,26 @@ static Set<Symbol> findReferences(const Symbol &in,
     }
     if (inputsPtr)
         *inputsPtr = inputs;
-    return findReferences(inputs, project, filter);
+    return findReferences(inputs, project, std::move(filter));
 }
 
-Set<Symbol> Project::findCallers(const Symbol &symbol)
+Set<Symbol> Project::findCallers(const Symbol &symbol, int max)
 {
     const bool isClazz = symbol.isClass();
-    return ::findReferences(symbol, shared_from_this(), [isClazz](const Symbol &input, const Symbol &ref) {
+    return ::findReferences(symbol, shared_from_this(), [isClazz, &max](const Symbol &input, const Symbol &ref) {
+            if (!max)
+                return false;
             if (isClazz && (ref.isConstructorOrDestructor() || ref.kind == CXCursor_CallExpr))
                 return false;
             if (ref.isReference()
                 || (input.kind == CXCursor_Constructor && (ref.kind == CXCursor_VarDecl || ref.kind == CXCursor_FieldDecl))) {
+                if (max != -1)
+                    --max;
                 return true;
             }
             if (input.kind == CXCursor_ClassTemplate && ref.flags & Symbol::TemplateSpecialization) {
+                if (max != -1)
+                    --max;
                 return true;
             }
             return false;
@@ -1959,10 +1955,10 @@ Set<Symbol> Project::findSubclasses(const Symbol &symbol)
     return ret;
 }
 
-void Project::beginScope()
+void Project::beginScope(Flags<ScopeFlag> flags)
 {
     assert(!mFileMapScope);
-    mFileMapScope.reset(new FileMapScope(shared_from_this(), Server::instance()->options().maxFileMapScopeCacheSize));
+    mFileMapScope.reset(new FileMapScope(shared_from_this(), Server::instance()->options().maxFileMapScopeCacheSize, flags));
 }
 
 void Project::endScope()
@@ -2081,7 +2077,7 @@ String Project::dumpDependencies(uint32_t fileId, const List<String> &args, Flag
                 assert(depNode);
                 if (!all.insert(depNode))
                     return;
-                for (const std::pair<uint32_t, DependencyNode*> &n : depNode->includes) {
+                for (const auto &n : depNode->includes) {
                     add(n.second);
                 }
             };
@@ -2116,7 +2112,7 @@ void Project::dirty(uint32_t fileId)
 
 bool Project::validate(uint32_t fileId, ValidateMode mode, String *err) const
 {
-    if (mode == Validate) {
+    if (mode == Validate || mode == ValidateSilent) {
         Path path;
         String error;
         const uint32_t opts = fileMapOptions();
@@ -2146,7 +2142,7 @@ bool Project::validate(uint32_t fileId, ValidateMode mode, String *err) const
         }
         return true;
   error:
-        if (err)
+        if (err && mode == Validate)
             Log(err) << "Error during validation:" << Location::path(fileId) << error << path;
         return false;
     } else {
@@ -2291,7 +2287,7 @@ static String formatTable(const String &name, const std::shared_ptr<FileMap<Key,
 
 void Project::dumpFileMaps(const std::shared_ptr<QueryMessage> &msg, const std::shared_ptr<Connection> &conn)
 {
-    beginScope();
+    FileMapScopeScope scope(this);
     String err;
 
     Path path;
@@ -2341,22 +2337,18 @@ void Project::dumpFileMaps(const std::shared_ptr<QueryMessage> &msg, const std::
             conn->write(err);
         }
     }
-
-
-    endScope();
 }
 
 void Project::prepare(uint32_t fileId)
 {
     if (fileId && isIndexed(fileId)) {
-        beginScope();
+        FileMapScopeScope scope(this);
         String err;
         openSymbolNames(fileId, &err);
         openSymbols(fileId, &err);
         openTargets(fileId, &err);
         openUsrs(fileId, &err);
         debug() << "Prepared" << Location::path(fileId);
-        endScope();
     }
 }
 
@@ -2705,6 +2697,9 @@ void Project::processParseData(IndexParseData &&data)
     }
     removeSources(removed);
 
+    for (const auto &info : mIndexParseData.compileCommands)
+        watch(Location::path(info.first), Watch_CompileCommands);
+
     for (uint32_t fileId : index) {
         reindex(fileId, IndexerJob::Compile);
     }
@@ -2739,7 +2734,7 @@ void Project::forEachSourceList(IndexParseData &data, std::function<VisitResult(
         });
 }
 
-void Project::forEachSourceList(Sources &sources, std::function<VisitResult(SourceList &source)> cb)
+void Project::forEachSourceList(Sources &sources, const std::function<VisitResult(SourceList &source)>& cb)
 {
     auto it = sources.begin();
     while (it != sources.end()) {
@@ -2754,7 +2749,7 @@ void Project::forEachSourceList(Sources &sources, std::function<VisitResult(Sour
     }
 }
 
-void Project::forEachSourceList(const Sources &sources, std::function<VisitResult(const SourceList &sourceList)> cb)
+void Project::forEachSourceList(const Sources &sources, const std::function<VisitResult(const SourceList &sourceList)>& cb)
 {
     auto it = sources.begin();
     while (it != sources.end()) {
@@ -2768,7 +2763,7 @@ void Project::forEachSourceList(const Sources &sources, std::function<VisitResul
     }
 }
 
-void Project::forEachSource(const Sources &sources, std::function<VisitResult(const Source &source)> cb)
+void Project::forEachSource(const Sources &sources, const std::function<VisitResult(const Source &source)>& cb)
 {
     for (auto &src : sources) {
         for (const Source &s : src.second) {
@@ -2780,7 +2775,7 @@ void Project::forEachSource(const Sources &sources, std::function<VisitResult(co
     }
 }
 
-void Project::forEachSource(Sources &sources, std::function<VisitResult(Source &source)> cb)
+void Project::forEachSource(Sources &sources, const std::function<VisitResult(Source &source)>& cb)
 {
     Sources::iterator sit = sources.begin();
     while (sit != sources.end()) {
@@ -2808,7 +2803,7 @@ void Project::forEachSource(Sources &sources, std::function<VisitResult(Source &
     }
 }
 
-void Project::forEachSources(const IndexParseData &data, std::function<VisitResult(const Sources &sources)> cb)
+void Project::forEachSources(const IndexParseData &data, const std::function<VisitResult(const Sources &sources)>& cb)
 {
     for (const auto &compileCommands : data.compileCommands) {
         const auto ret = cb(compileCommands.second.sources);
@@ -2821,7 +2816,7 @@ void Project::forEachSources(const IndexParseData &data, std::function<VisitResu
     assert(ret != Remove);
 }
 
-void Project::forEachSources(IndexParseData &data, std::function<VisitResult(Sources &sources)> cb)
+void Project::forEachSources(IndexParseData &data, const std::function<VisitResult(Sources &sources)>& cb)
 {
     auto it = data.compileCommands.begin();
     while (it != data.compileCommands.end()) {
@@ -2912,8 +2907,13 @@ void Project::validateAll()
 
 bool Project::isTemplateDiagnostic(const std::pair<Location, Diagnostic> &diagnostic)
 {
+    std::lock_guard<std::mutex> lock(mMutex);
     const uint32_t fileId = diagnostic.first.fileId();
-    auto symbols = openSymbols(fileId);
+    String err;
+    std::unique_ptr<FileMapScopeScope> scope;
+    if (!mFileMapScope)
+        scope.reset(new FileMapScopeScope(this));
+    auto symbols = openSymbols(fileId, &err);
     if (!symbols || !symbols->count()) {
         return true;
     }
@@ -2938,5 +2938,38 @@ bool Project::isTemplateDiagnostic(const std::pair<Location, Diagnostic> &diagno
             return true;
         }
     }
+
     return false;
+}
+
+Set<Symbol> Project::findDeadFunctions(uint32_t fileId)
+{
+    Set<Symbol> ret;
+    auto processFile = [this, &ret](uint32_t file, Set<String> *seen = 0) {
+        auto symbols = openSymbols(file);
+        if (!symbols)
+            return;
+
+        const int count = symbols->count();
+        for (int i=0; i<count; ++i) {
+            Symbol s = symbols->valueAt(i);
+            if (RTags::isFunction(s.kind)
+                && s.kind != CXCursor_Destructor
+                && s.kind != CXCursor_LambdaExpr
+                && !s.symbolName.startsWith("int main(")
+                && (!seen || seen->insert(s.usr))
+                && findCallers(s, 1).isEmpty()) {
+                ret.insert(std::move(s));
+            }
+        }
+    };
+    if (!fileId) {
+        Set<String> seenUsrs;
+        for (const auto &file : mVisitedFiles) {
+            processFile(file.first, &seenUsrs);
+        }
+    } else {
+        processFile(fileId);
+    }
+    return ret;
 }

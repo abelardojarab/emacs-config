@@ -137,7 +137,7 @@ enum OptionType {
     Weverything,
     Verbose,
     JobCount,
-    HeaderErrorJobCount,
+    TempDir,
     Test,
     TestTimeout,
     CleanSlate,
@@ -235,8 +235,17 @@ int main(int argc, char** argv)
     } else {
         serverOpts.socketFile = String::format<1024>("%s/rdm.socket", runtimeDir);
     }
+    const char *tempDir = 0;
+    for (const char *tmp : { "TMPDIR", "TMP", "TEMP", "TEMPDIR" }) {
+        if ((tempDir = getenv(tmp))) {
+            break;
+        }
+    }
+    if (!tempDir)
+        tempDir = "/tmp";
+
+    serverOpts.tempDir = tempDir;
     serverOpts.jobCount = std::max(2, ThreadPool::idealThreadCount());
-    serverOpts.headerErrorJobCount = -1;
     serverOpts.rpVisitFileTimeout = DEFAULT_RP_VISITFILE_TIMEOUT;
     serverOpts.rpIndexDataMessageTimeout = DEFAULT_RP_INDEXER_MESSAGE_TIMEOUT;
     serverOpts.rpConnectTimeout = DEFAULT_RP_CONNECT_TIMEOUT;
@@ -288,8 +297,8 @@ int main(int argc, char** argv)
         { Verbose, "verbose", 'v', CommandLineParser::NoValue, "Change verbosity, multiple -v's are allowed." },
         { JobCount, "job-count", 'j', CommandLineParser::Required, String::format("Spawn this many concurrent processes for indexing (default %d).",
                                                                                   std::max(2, ThreadPool::idealThreadCount())) },
-        { HeaderErrorJobCount, "header-error-job-count", 'H', CommandLineParser::Required, "Allow this many concurrent header error jobs (default std::max(1, --job-count / 2))." },
         { Test, "test", 't', CommandLineParser::Required, "Run this test." },
+        { TempDir, "tempdir", 0, CommandLineParser::Required, "Use this directory for temporary files. Clang generates a lot of these and rtags will periodically clean out this directory. Default is $TMPDIR/rtags/" },
         { TestTimeout, "test-timeout", 'z', CommandLineParser::Required, "Timeout for test to complete." },
         { CleanSlate, "clean-slate", 'C', CommandLineParser::NoValue, "Clear out all data." },
         { DisableSigHandler, "disable-sighandler", 'x', CommandLineParser::NoValue, "Disable signal handler to dump stack for crashes." },
@@ -349,7 +358,7 @@ int main(int argc, char** argv)
         { Daemon, "daemon", 0, CommandLineParser::NoValue, "Run as daemon (detach from terminal)." },
         { LogFileLogLevel, "log-file-log-level", 0, CommandLineParser::Required, "Log level for log file (default is error), options are: error, warning, debug or verbose-debug." },
         { WatchSourcesOnly, "watch-sources-only", 0, CommandLineParser::NoValue, "Only watch source files (not dependencies)." },
-        { DebugLocations, "debug-locations", 0, CommandLineParser::NoValue, "Set debug locations." },
+        { DebugLocations, "debug-locations", 0, CommandLineParser::Required, "Set debug locations." },
         { ValidateFileMaps, "validate-file-maps", 0, CommandLineParser::NoValue, "Spend some time validating project data on startup." },
         { TcpPort, "tcp-port", 0, CommandLineParser::Required, "Listen on this tcp socket (default none)." },
         { RpPath, "rp-path", 0, CommandLineParser::Required, String::format<256>("Path to rp (default %s).", defaultRP().constData()) },
@@ -390,7 +399,7 @@ int main(int argc, char** argv)
                 def.define = value.left(eq);
                 def.value = value.mid(eq + 1);
             }
-            serverOpts.defines.append(def);
+            serverOpts.defines.insert(def);
             break; }
         case DefaultArgument: {
             serverOpts.defaultArguments.append(std::move(value));
@@ -423,19 +432,15 @@ int main(int argc, char** argv)
                 return { String::format<1024>("Can't parse argument to -j %s. -j must be a positive integer.\n", value.constData()), CommandLineParser::Parse_Error };
             }
             break; }
-        case HeaderErrorJobCount: {
-            bool ok;
-            serverOpts.headerErrorJobCount = String(value).toULong(&ok);
-            if (!ok) {
-                return { String::format<1024>("Can't parse argument to -H %s. -H must be a positive integer.", value.constData()), CommandLineParser::Parse_Error };
-            }
-            break; }
         case Test: {
             Path test(value);
             if (!test.resolve() || !test.isFile()) {
                 return { String::format<1024>("%s doesn't seem to be a file", value.constData()), CommandLineParser::Parse_Error };
             }
             serverOpts.tests += test;
+            break; }
+        case TempDir: {
+            serverOpts.tempDir = value;
             break; }
         case TestTimeout: {
             serverOpts.testTimeout = atoi(value.constData());
@@ -463,7 +468,6 @@ int main(int argc, char** argv)
             break; }
         case SocketFile: {
             serverOpts.socketFile = std::move(value);
-            serverOpts.socketFile.resolve();
             break; }
         case DataDir: {
             serverOpts.dataDir = String::format<128>("%s", Path::resolved(value).constData());
@@ -675,11 +679,7 @@ int main(int argc, char** argv)
             serverOpts.options |= Server::WatchSourcesOnly;
             break; }
         case DebugLocations: {
-            if (value == "clear" || value == "none") {
-                serverOpts.debugLocations.clear();
-            } else {
-                serverOpts.debugLocations << value;
-            }
+            serverOpts.debugLocations << value;
             break; }
         case ValidateFileMaps: {
             serverOpts.options |= Server::ValidateFileMaps;
@@ -772,12 +772,10 @@ int main(int argc, char** argv)
     if (serverOpts.compilerWrappers.isEmpty())
         serverOpts.compilerWrappers = String(DEFAULT_COMPILER_WRAPPERS).split(';').toSet();
 
-    if (!serverOpts.headerErrorJobCount) {
-        serverOpts.headerErrorJobCount = std::max<size_t>(1, serverOpts.jobCount / 2);
-    } else {
-        serverOpts.headerErrorJobCount = std::min(serverOpts.headerErrorJobCount, serverOpts.jobCount);
-    }
-
+    serverOpts.tempDir = serverOpts.tempDir.ensureTrailingSlash() + "rdm/";
+    Path::rmdir(serverOpts.tempDir);
+    serverOpts.tempDir.mkdir(Path::Recursive);
+    ::setenv("TMPDIR", serverOpts.tempDir.c_str(), 1);
     if (sigHandler) {
         signal(SIGSEGV, signalHandler);
         signal(SIGBUS, signalHandler);
@@ -832,7 +830,6 @@ int main(int argc, char** argv)
         }
         close(fd);
         serverOpts.socketFile = buf;
-        serverOpts.socketFile.resolve();
     }
     serverOpts.dataDir = serverOpts.dataDir.ensureTrailingSlash();
 

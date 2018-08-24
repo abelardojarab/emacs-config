@@ -53,13 +53,28 @@ struct Diagnostic
     Diagnostics children;
     Flags<Flag> flags;
     bool isNull() const { return type() == None; }
+
+    bool operator==(const Diagnostic &other) const
+    {
+        return (message == other.message
+                && length == other.length
+                && sourceFileId == other.sourceFileId
+                && ranges == other.ranges
+                && children == other.children
+                && flags == other.flags);
+    }
+
+    bool operator!=(const Diagnostic &other) const
+    {
+        return !operator==(other);
+    }
 };
 
 RCT_FLAGS(Diagnostic::Flag);
 
 inline Diagnostic::Flag Diagnostic::type() const
 {
-    return (flags & Type_Mask).cast<Flag>();
+    return Flags<Flag>(flags & Type_Mask).cast<Flag>();
 }
 
 template <> inline Serializer &operator<<(Serializer &s, const Diagnostic &d)
@@ -80,5 +95,35 @@ template <> inline Deserializer &operator>>(Deserializer &s, Diagnostic &d)
     d.flags = static_cast<Diagnostic::Flag>(flags);
     return s;
 }
+
+static inline Log operator<<(Log dbg, const Diagnostic &diagnostic)
+{
+    const char *type;
+    switch (diagnostic.type()) {
+    case Diagnostic::None: type = "none"; break;
+    case Diagnostic::Warning: type = "warning"; break;
+    case Diagnostic::Error: type = "error"; break;
+    case Diagnostic::Fixit: type = "fixit"; break;
+    case Diagnostic::Note: type = "note"; break;
+    case Diagnostic::Skipped: type = "skipped"; break;
+    default:
+        assert(0 && "Impossible impossibility");
+        break;
+    }
+
+    dbg << String::format<1024>("Diagnostic(type: %s message: \"%s\" length: %d sourceFile: \"%s\"\nranges: ",
+                                type, diagnostic.message.constData(), diagnostic.length,
+                                Location::path(diagnostic.sourceFileId).constData());
+    for (const auto &range : diagnostic.ranges) {
+        dbg << String::format<1024>("%d:%d: %d chars", range.first.line(), range.first.column(), range.second);
+    }
+    if (diagnostic.flags & Diagnostic::TemplateOnly)
+        dbg << " TemplateOnly";
+    if (diagnostic.flags & Diagnostic::DisplayCategory)
+        dbg << " DisplayCategory";
+    dbg << ")";
+    return dbg;
+}
+
 
 #endif

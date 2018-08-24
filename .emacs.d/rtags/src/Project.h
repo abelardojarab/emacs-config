@@ -131,6 +131,7 @@ public:
         All
     };
 
+    Set<Symbol> findDeadFunctions(uint32_t fileId);
     Set<uint32_t> dependencies(uint32_t fileId, DependencyMode mode) const;
     bool dependsOn(uint32_t source, uint32_t header) const;
     String dumpDependencies(uint32_t fileId,
@@ -163,8 +164,8 @@ public:
     Symbol findTarget(const Symbol &symbol) { return RTags::bestTarget(findTargets(symbol)); }
     Set<Symbol> findAllReferences(Location location) { return findAllReferences(findSymbol(location)); }
     Set<Symbol> findAllReferences(const Symbol &symbol);
-    Set<Symbol> findCallers(Location location) { return findCallers(findSymbol(location)); }
-    Set<Symbol> findCallers(const Symbol &symbol);
+    Set<Symbol> findCallers(Location location, int max = -1) { return findCallers(findSymbol(location), max); }
+    Set<Symbol> findCallers(const Symbol &symbol, int max = -1);
     Set<Symbol> findVirtuals(Location location) { return findVirtuals(findSymbol(location)); }
     Set<Symbol> findVirtuals(const Symbol &symbol);
     Set<String> findTargetUsrs(const Symbol &symbol);
@@ -218,6 +219,7 @@ public:
     void clearWatch(Flags<WatchMode> mode);
     Hash<Path, Flags<WatchMode> > watchedPaths() const { return mWatchedPaths; }
 
+    time_t lastIdleTime() const { return mLastIdleTime; }
     bool isIndexing() const { return !mActiveJobs.isEmpty(); }
     void onFileAdded(const Path &path);
     void onFileModified(const Path &path);
@@ -236,7 +238,31 @@ public:
         serializer << mVisitedFiles;
     }
 
-    void beginScope();
+    enum ScopeFlag { None = 0x0, NoValidate = 0x1 };
+
+    class FileMapScopeScope
+    {
+    public:
+        FileMapScopeScope(Project *p, Flags<ScopeFlag> flags = NullFlags)
+            : mProject(p)
+        {
+            if (mProject)
+                mProject->beginScope(flags);
+        }
+        FileMapScopeScope(const std::shared_ptr<Project> &p)
+            : FileMapScopeScope(p.get())
+        {}
+
+        ~FileMapScopeScope()
+        {
+            if (mProject)
+                mProject->endScope();
+        }
+    private:
+        Project *mProject;
+    };
+
+    void beginScope(Flags<ScopeFlag> flags = NullFlags);
     void endScope();
     void dirty(uint32_t fileId);
     bool save();
@@ -255,20 +281,20 @@ public:
         Continue,
         Remove // not allowed for const calls
     };
-    static void forEachSources(const IndexParseData &data, std::function<VisitResult(const Sources &sources)> cb);
-    static void forEachSources(IndexParseData &data, std::function<VisitResult(Sources &sources)> cb);
+    static void forEachSources(const IndexParseData &data, const std::function<VisitResult(const Sources &sources)>& cb);
+    static void forEachSources(IndexParseData &data, const std::function<VisitResult(Sources &sources)>& cb);
     void forEachSources(std::function<VisitResult(const Sources &sources)> cb) const { forEachSources(mIndexParseData, cb); }
     void forEachSources(std::function<VisitResult(Sources &sources)> cb) { forEachSources(mIndexParseData, cb); }
 
     static void forEachSourceList(const IndexParseData &data, std::function<VisitResult(const SourceList &sources)> cb);
     static void forEachSourceList(IndexParseData &data, std::function<VisitResult(SourceList &sources)> cb);
-    static void forEachSourceList(Sources &sources, std::function<VisitResult(SourceList &source)> cb);
-    static void forEachSourceList(const Sources &sources, std::function<VisitResult(const SourceList &source)> cb);
+    static void forEachSourceList(Sources &sources, const std::function<VisitResult(SourceList &source)>& cb);
+    static void forEachSourceList(const Sources &sources, const std::function<VisitResult(const SourceList &source)>& cb);
     void forEachSourceList(std::function<VisitResult(const SourceList &sources)> cb) const { forEachSourceList(mIndexParseData, cb); }
     void forEachSourceList(std::function<VisitResult(SourceList &sources)> cb) { forEachSourceList(mIndexParseData, cb); }
 
-    static void forEachSource(Sources &sources, std::function<VisitResult(Source &source)> cb);
-    static void forEachSource(const Sources &sources, std::function<VisitResult(const Source &source)> cb);
+    static void forEachSource(Sources &sources, const std::function<VisitResult(Source &source)>& cb);
+    static void forEachSource(const Sources &sources, const std::function<VisitResult(const Source &source)>& cb);
     static void forEachSource(IndexParseData &data, std::function<VisitResult(Source &source)> cb);
     static void forEachSource(const IndexParseData &data, std::function<VisitResult(const Source &source)> cb);
     void forEachSource(std::function<VisitResult(const Source &source)> cb) const { forEachSource(mIndexParseData, cb); }
@@ -277,11 +303,12 @@ public:
     void updateDiagnostics(uint32_t fileId, const Diagnostics &diagnostics);
 private:
     void reloadCompileCommands();
-    void onFileAddedOrModified(const Path &path);
+    void onFileAddedOrModified(const Path &path, uint32_t fileId);
     void watchFile(uint32_t fileId);
     enum ValidateMode {
         StatOnly,
-        Validate
+        Validate,
+        ValidateSilent
     };
     bool validate(uint32_t fileId, ValidateMode mode, String *error = 0) const;
     void removeDependencies(uint32_t fileId);
@@ -296,13 +323,13 @@ private:
     bool isTemplateDiagnostic(const std::pair<Location, Diagnostic> &diagnostic);
 
     struct FileMapScope {
-        FileMapScope(const std::shared_ptr<Project> &proj, int m)
-            : project(proj), openedFiles(0), totalOpened(0), max(m), loadFailed(false)
+        FileMapScope(const std::shared_ptr<Project> &proj, int m, Flags<ScopeFlag> f)
+            : project(proj), openedFiles(0), totalOpened(0), max(m), loadFailed(false), flags(f)
         {}
         ~FileMapScope()
         {
             warning() << "Query opened" << totalOpened << "files for project" << project->path();
-            if (loadFailed)
+            if (loadFailed && !(flags & NoValidate))
                 project->validateAll();
         }
 
@@ -381,10 +408,12 @@ private:
                 }
                 assert(openedFiles <= max);
             } else {
-                if (errPtr) {
-                    *errPtr = "Failed to open: " + path + " " + Location::path(fileId) + ": " + err;
-                } else {
-                    error() << "Failed to open" << path << Location::path(fileId) << err;
+                if (!(flags & NoValidate)) {
+                    if (errPtr) {
+                        *errPtr = "Failed to open: " + path + " " + Location::path(fileId) + ": " + err;
+                    } else {
+                        error() << "Failed to open" << path << Location::path(fileId) << err;
+                    }
                 }
                 loadFailed = true;
                 fileMap.reset();
@@ -400,6 +429,7 @@ private:
         int openedFiles, totalOpened;
         const int max;
         bool loadFailed;
+        Flags<ScopeFlag> flags;
 
         EmbeddedLinkedList<std::shared_ptr<LRUEntry> > entryList;
         Map<LRUKey, std::shared_ptr<LRUEntry> > entryMap;
@@ -414,6 +444,8 @@ private:
 
     Hash<uint32_t, Path> mVisitedFiles;
     int mJobCounter, mJobsStarted;
+
+    time_t mLastIdleTime;
 
     Diagnostics mDiagnostics;
 
@@ -439,6 +471,7 @@ private:
 };
 
 RCT_FLAGS(Project::WatchMode);
+RCT_FLAGS(Project::ScopeFlag);
 
 inline bool Project::visitFile(uint32_t visitFileId, const Path &path, uint32_t id)
 {

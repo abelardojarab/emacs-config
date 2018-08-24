@@ -142,7 +142,8 @@ enum CursorToStringFlags {
     IncludeRange = 0x2,
     DefaultCursorToStringFlags = IncludeRange,
     IncludeSpecializedUsr = 0x4,
-    AllCursorToStringFlags = IncludeUSR|IncludeRange|IncludeSpecializedUsr
+    IncludeStructSizeof = 0x8,
+    AllCursorToStringFlags = IncludeUSR|IncludeRange|IncludeSpecializedUsr|IncludeStructSizeof
 };
 RCT_FLAGS(CursorToStringFlags);
 String cursorToString(CXCursor cursor, Flags<CursorToStringFlags> = DefaultCursorToStringFlags);
@@ -318,6 +319,8 @@ struct Auto {
 };
 bool resolveAuto(const CXCursor &cursor, Auto *a = 0);
 
+int cursorArguments(const CXCursor &cursor, List<CXCursor> *args = 0);
+
 struct Filter
 {
     enum Mode {
@@ -362,7 +365,7 @@ struct Filter
         }
         if (argumentCount != -1) {
 #if CLANG_VERSION_MINOR > 1
-            return clang_Cursor_getNumArguments(cursor) == argumentCount;
+            return RTags::getArguments(cursor) == argumentCount;
 #else
             return true;
 #endif
@@ -681,6 +684,8 @@ struct SortedSymbol
 };
 
 Path encodeSourceFilePath(const Path &dataDir, const Path &project, uint32_t fileId = 0);
+String encodeUrlComponent(const String &string);
+String decodeUrlComponent(const String &string);
 
 template <typename Container, typename Value>
 inline bool addTo(Container &container, const Value &value)
@@ -765,7 +770,7 @@ enum FindAncestorFlag {
     Authoritative = 0x4
 };
 RCT_FLAGS(FindAncestorFlag);
-Path findAncestor(Path path, const String &fn, Flags<FindAncestorFlag> flags, SourceCache *cache = 0);
+Path findAncestor(const Path& path, const String &fn, Flags<FindAncestorFlag> flags, SourceCache *cache = 0);
 Map<String, String> rtagsConfig(const Path &path, SourceCache *cache = 0);
 
 enum { DefinitionBit = 0x1000 };
@@ -805,10 +810,11 @@ inline int targetRank(CXCursorKind kind)
         // objects seem to come out as function templates
         return 4;
     case CXCursor_MacroDefinition:
-        return 5;
+        return 7;
     default:
-        return 2;
+        break;
     }
+    return 2;
 }
 inline Symbol bestTarget(const Set<Symbol> &targets)
 {
@@ -990,6 +996,19 @@ template <> struct hash<CXCursor> : public unary_function<CXCursor, size_t>
         return clang_hashCursor(value);
     }
 };
+}
+
+template <typename Container>
+inline String dumpFileIds(const Container &container)
+{
+    String ret;
+    {
+        Log l(&ret);
+        for (uint32_t fileId : container) {
+            l << Location::path(fileId);
+        }
+    }
+    return ret;
 }
 
 struct SourceCache
