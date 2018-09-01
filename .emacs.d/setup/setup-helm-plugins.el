@@ -134,11 +134,11 @@
          ("." . helm-gtags-dwim))
   :hook (c-mode-common . helm-gtags-mode)
   :config (setq helm-gtags-ignore-case            t
-		helm-gtags-auto-update            t
-		helm-gtags-use-input-at-cursor    t
-		helm-gtags-pulse-at-cursor        t
-		helm-gtags-prefix-key             "\C-cg"
-		helm-gtags-suggested-key-mapping  t))
+        helm-gtags-auto-update            t
+        helm-gtags-use-input-at-cursor    t
+        helm-gtags-pulse-at-cursor        t
+        helm-gtags-prefix-key             "\C-cg"
+        helm-gtags-suggested-key-mapping  t))
 
 ;; helm xref
 (use-package helm-xref
@@ -149,14 +149,9 @@
 
 ;; helm yasnippet
 (use-package helm-c-yasnippet
-  :defer t
+  :demand t
   :commands (helm-yas-complete helm-c-yas-complete)
-  :bind (:map yas-minor-mode-map
-              ([(shift tab)]     . helm-c-yas-complete)
-              ([backtab]         . helm-c-yas-complete)
-              ("<S-iso-lefttab>" . helm-c-yas-complete)
-              :map ctl-x-map
-              ("y"               . helm-c-yas-complete)))
+  :defines helm-c-yas-complete)
 
 ;; helm make support
 (use-package helm-make
@@ -228,13 +223,13 @@
              dash-load-js
              dash-load-md)
   :hook ((org-mode          . dash-load-org)
-	 (markdown-mode     . dash-load-md)
-	 (c-mode        . dash-load-c)
-	 (sh-mode       . dash-load-bash)
-	 (c++-mode      . dash-load-c++)
-	 (js2-mode      . dash-load-js)
-	 (ess-mode          . dash-load-r)
-	 (emacs-lisp-mode   . dash-load-elisp))
+     (markdown-mode     . dash-load-md)
+     (c-mode        . dash-load-c)
+     (sh-mode       . dash-load-bash)
+     (c++-mode      . dash-load-c++)
+     (js2-mode      . dash-load-js)
+     (ess-mode          . dash-load-r)
+     (emacs-lisp-mode   . dash-load-elisp))
   :bind (:map ctl-x-map
               ("d" . helm-dash))
   :config (progn
