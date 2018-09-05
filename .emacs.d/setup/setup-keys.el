@@ -30,27 +30,12 @@
 
 ;; Windows-like mouse/arrow movement & selection
 (use-package cua-base
-  ;; use CUA mode for rectangle selections etc but not copy/paste etc
+  :demand t
   :config (progn
             (global-set-key [remap scroll-up]   'cua-scroll-up)
             (global-set-key [remap scroll-down] 'cua-scroll-down)
-            (cua-selection-mode 1)))
-
-;; Shift mark package
-(use-package shift-mark
-  :demand t
-  :init (transient-mark-mode t)
-  :custom (shift-select-mode t)
-  :bind (([S-prior] . shift-mark-backward-page)
-         ([S-next]  . shift-mark-forward-page))
-  :config (progn
-            (defun shift-mark-forward-page ()
-              (interactive)
-              (shift-mark 'my/page-down))
-
-            (defun shift-mark-backward-page ()
-              (interactive)
-              (shift-mark 'my/page-up))))
+            (cua-selection-mode 1)
+            (transient-mark-mode t)))
 
 ;; popup-based buffer switcher
 (use-package popup-switcher
@@ -234,10 +219,6 @@
 (define-key my/keys-minor-mode-map [(control n)]            'cua-scroll-up)
 (define-key my/keys-minor-mode-map [(control o)]            'counsel-find-file)
 (define-key my/keys-minor-mode-map [(control b)]            'ivy-switch-buffer)
-
-;; key bindings for shift select
-(define-key my/keys-minor-mode-map [S-prior] 'shift-mark-backward-page)
-(define-key my/keys-minor-mode-map [S-next]  'shift-mark-forward-page)
 
 ;; Define custom key mode
 (define-minor-mode my/keys-minor-mode

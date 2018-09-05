@@ -43,12 +43,6 @@
   :commands (region-bindings-mode
              region-bindings-mode-enable)
   :bind (:map region-bindings-mode-map
-              ;; shift select bindings
-              ("<prior>"           . shift-mark-backward-page)
-              ("<next>"            . shift-mark-forward-page)
-              ("<left>"            . shift-mark-backward-char)
-              ("<right>"           . shift-mark-forward-char)
-
               ;; movement bindings
               ([(meta shift up)]   . move-text-up)
               ([(meta shift down)] . move-text-down)

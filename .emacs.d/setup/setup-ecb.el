@@ -26,7 +26,7 @@
 
 ;; Code Browser
 (use-package ecb
-  :defer t
+  :demand t
   :bind (:map ctl-x-map
               ("0" . my/ecb-activate))
   :chords (("EE" . ecb-redraw-layout))
@@ -293,6 +293,9 @@ more place."
 
                         ;; Enable speed-bar auto-refresh
                         (sr-speedbar-refresh-turn-on)))
+
+            ;; Enable ECB
+            (my/ecb-activate)
 
             ;; projectile and speedbar integration
             (use-package projectile-speedbar

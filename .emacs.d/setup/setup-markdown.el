@@ -55,9 +55,6 @@
 
             ;; Markdown preferences
             (defun my/markdown-mode-init ()
-              (toggle-truncate-lines     t)
-              (setq truncate-lines       t)
-
               ;; Do not wrap lines
               ;; we will use autofill
               (visual-line-mode          -1)
@@ -76,6 +73,9 @@
               ;; Style/syntax check
               (writegood-mode            t)
               (flyspell-mode             t)
+
+              (toggle-truncate-lines     t)
+              (setq truncate-lines       t)
               (if (or (executable-find "proselint")
                       (executable-find "mmark"))
                   (flycheck-mode t))
