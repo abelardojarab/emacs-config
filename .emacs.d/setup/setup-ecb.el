@@ -26,7 +26,7 @@
 
 ;; Code Browser
 (use-package ecb
-  :demand t
+  :defer t
   :bind (:map ctl-x-map
               ("0" . my/ecb-activate))
   :chords (("EE" . ecb-redraw-layout))
