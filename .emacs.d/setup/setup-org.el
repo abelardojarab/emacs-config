@@ -92,11 +92,8 @@
                         (progn
                           (linum-mode         -1)
                           (org-indent-mode    -1)
-                          (cua-mode           t)
                           (flyspell-mode      t)
-                          (writegood-mode     t)
-                          (yas-minor-mode     t)
-                          (undo-tree-mode     t))))
+                          (writegood-mode     t))))
 
             ;; Hide properties drawer in org mode
             (defalias 'org-cycle-hide-drawers 'my/block-org-cycle-hide-drawers)

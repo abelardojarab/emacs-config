@@ -293,10 +293,7 @@ LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
 
              (defun my/show-init-time ()
                (message "Emacs startup completed in: %.2fms"
-                        (my/time-subtract-millis after-init-time before-init-time)))
-
-             )))
-
+                        (my/time-subtract-millis after-init-time before-init-time))))))
 
 ;; Exec path from shell in Mac OSX
 (use-package exec-path-from-shell
