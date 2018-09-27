@@ -28,19 +28,17 @@
 (use-package ox-latex
   :defer 5
   :after org
+  :hook (org-mode . turn-on-org-cdlatex)
+  :custom ((org-latex-listings                t)
+           (org-latex-default-figure-position "!htb")
+           (org-latex-table-caption-above     nil))
   :config (progn
 
             ;; Enable bibtex support
             (use-package ox-bibtex)
 
-            (setq org-latex-listings t)
             (setq org-export-latex-quotes
                   '(("en" ("\\(\\s-\\|[[(]\\)\"" . "\\enquote{") ("\\(\\S-\\)\"" . "}") ("\\(\\s-\\|(\\)'" . "`"))))
-
-            ;; CDLaTeX is “is a minor mode that is normally used in combination with a
-            ;; major LaTeX mode like AUCTeX in order to speed-up insertion of environments
-            ;; and math templates”
-            (add-hook 'org-mode-hook #'turn-on-org-cdlatex)
 
             ;; Preview LaTeX equations in buffers by showing images (C-c C-x C-l)
             (if (executable-find "convert")
@@ -64,90 +62,6 @@
                                                     :html-foreground "Black" :html-background "Transparent"
                                                     :html-scale 1.0
                                                     :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")))
-
-            ;; Toggle previsualization of LaTeX equations in Org-mode
-            (when (display-graphic-p)
-              (defvar org-latex-fragment-last nil
-                "Holds last fragment/environment you were on.")
-
-              (defun org-latex-fragment-toggle ()
-                "Toggle a latex fragment image "
-                (and (eq 'org-mode major-mode)
-                     (let* ((el (org-element-context))
-                            (el-type (car el)))
-                       (cond
-                        ;; were on a fragment and now on a new fragment
-                        ((and
-                          ;; fragment we were on
-                          org-latex-fragment-last
-                          ;; and are on a fragment now
-                          (or
-                           (eq 'latex-fragment el-type)
-                           (eq 'latex-environment el-type))
-                          ;; but not on the last one this is a little tricky. as you edit the
-                          ;; fragment, it is not equal to the last one. We use the begin
-                          ;; property which is less likely to change for the comparison.
-                          (not (= (org-element-property :begin el)
-                                  (org-element-property :begin org-latex-fragment-last))))
-                         ;; go back to last one and put image back
-                         (save-excursion
-                           (goto-char (org-element-property :begin org-latex-fragment-last))
-                           (org-preview-latex-fragment))
-                         ;; now remove current image
-                         (goto-char (org-element-property :begin el))
-                         (let ((ov (loop for ov in (org--list-latex-overlays)
-                                         if
-                                         (and
-                                          (<= (overlay-start ov) (point))
-                                          (>= (overlay-end ov) (point)))
-                                         return ov)))
-                           (when ov
-                             (delete-overlay ov)))
-                         ;; and save new fragment
-                         (setq org-latex-fragment-last el))
-
-                        ;; were on a fragment and now are not on a fragment
-                        ((and
-                          ;; not on a fragment now
-                          (not (or
-                                (eq 'latex-fragment el-type)
-                                (eq 'latex-environment el-type)))
-                          ;; but we were on one
-                          org-latex-fragment-last)
-                         ;; put image back on
-                         (save-excursion
-                           (goto-char (org-element-property :begin org-latex-fragment-last))
-                           (org-preview-latex-fragment))
-                         ;; unset last fragment
-                         (setq org-latex-fragment-last nil))
-
-                        ;; were not on a fragment, and now are
-                        ((and
-                          ;; we were not one one
-                          (not org-latex-fragment-last)
-                          ;; but now we are
-                          (or
-                           (eq 'latex-fragment el-type)
-                           (eq 'latex-environment el-type)))
-                         (goto-char (org-element-property :begin el))
-                         ;; remove image
-                         (let ((ov (loop for ov in (org--list-latex-overlays)
-                                         if
-                                         (and
-                                          (<= (overlay-start ov) (point))
-                                          (>= (overlay-end ov) (point)))
-                                         return ov)))
-                           (when ov
-                             (delete-overlay ov)))
-                         (setq org-latex-fragment-last el))))))
-
-              (add-hook 'post-command-hook #'org-latex-fragment-toggle))
-
-            ;; Force figure position
-            (setq org-latex-default-figure-position "!htb")
-
-            ;; Place table caption below table
-            (setq org-latex-table-caption-above nil)
 
             ;; Use centered images
             (ignore-errors
@@ -499,18 +413,19 @@
 
 ;; Reftex
 (use-package reftex-cite
+  :defer t
   :bind (:map org-mode-map
               ("C-c )" . reftex-citation)
               ("C-c (" . org-mode-reftex-search))
+  :commands org-mode-reftex-setup
+  :hook (org-mode . org-mode-reftex-setup)
+  :custom ((reftex-enable-partial-scans	          t)
+	   (reftex-save-parse-info	          t)
+	   (reftex-use-multiple-selection-buffers t)
+	   (reftex-plug-into-AUCTeX	          t)
+	   (reftex-cite-prompt-optional-args      nil)
+	   (reftex-cite-cleanup-optional-args     t))
   :config (progn
-
-            ;; Make RefTeX faster
-            (setq reftex-enable-partial-scans t)
-            (setq reftex-save-parse-info t)
-            (setq reftex-use-multiple-selection-buffers t)
-            (setq reftex-plug-into-AUCTeX t)
-            (setq reftex-cite-prompt-optional-args nil)
-            (setq reftex-cite-cleanup-optional-args t)
 
             ;; Enable RefTeX in Org-mode to find bibliography
             (setq reftex-default-bibliography (list my/bibtex-completion-bibliography))
@@ -540,7 +455,6 @@
                         (?x . "[]{%l}")
                         (?X . "{%l}")
                         )))))
-            (add-hook 'org-mode-hook #'org-mode-reftex-setup)
 
             ;; Add cite link
             (org-add-link-type "cite" 'ebib
