@@ -24,12 +24,6 @@
 
 ;;; Code:
 
-;; Indentation, list bullets and checkboxes are displayed in monospace
-(use-package org-variable-pitch
-  :defer t
-  :commands org-variable-pitch-minor-mode
-  :hook (org-mode . org-variable-pitch-minor-mode))
-
 ;; Org mode
 (use-package org
   :defer t
@@ -62,6 +56,26 @@
              orgstruct-mode
              orgstruct++-mode
              org-agenda)
+  :custom ((org-startup-folded              'showall)
+           (org-startup-indented            t)
+           (org-cycle-separator-lines       1)
+           (org-cycle-include-plain-lists   'integrate)
+           (org-startup-with-inline-images  nil)
+           (org-startup-truncated           t)
+           (org-use-speed-commands          t)
+           (org-completion-use-ido          t)
+           (org-hide-leading-stars          nil)
+           (org-highlight-latex-and-related '(latex))
+           (org-ellipsis                    " ••• ")
+           (org-catch-invisible-edits       'smart)
+           (org-indent-mode                 nil)
+           (org-use-sub-superscripts        nil)
+           (org-hide-emphasis-markers       t)
+           (org-pretty-entities             t)
+           (org-list-allow-alphabetical     t)
+           (org-tags-column                 120)
+           (org-CUA-compatible              t)
+           (org-support-shift-select        'always))
   :init (progn
           (setq load-path (cons (expand-file-name "org/contrib/lisp" user-emacs-directory) load-path))
           (defvar org-list-allow-alphabetical t)
@@ -331,43 +345,8 @@ footnote; or, the properties drawer.  Otherwise make it visible."
              ("C-c }"   . org-table-toggle-coordinate-overlays)
              ("C-c {"   . org-table-toggle-formula-debugger))
 
-            ;; Miscellanenous settings
-            (setq org-startup-folded              'showall
-                  org-startup-indented            t
-                  org-cycle-separator-lines       1
-                  org-cycle-include-plain-lists   'integrate
-                  org-startup-with-inline-images  nil
-                  org-startup-truncated           t
-                  org-use-speed-commands          t
-                  org-completion-use-ido          t
-                  org-hide-leading-stars          nil
-                  org-highlight-latex-and-related '(latex)
-                  org-ellipsis                    " ••• "
-
-                  ;; Avoid editting hidden regions
-                  org-catch-invisible-edits      'smart
-
-                  ;; this causes problem in other modes
-                  org-indent-mode                 nil
-
-                  ;; Enable sub and super script only when enclosed by {}
-                  ;; Also improves readability when exponent/subscript is composed of multiple words
-                  org-use-sub-superscripts        nil
-
-                  ;; Hide the /italics/ and *bold* markers
-                  org-hide-emphasis-markers      t
-
-                  ;; org-entities displays \alpha etc. as Unicode characters.
-                  org-pretty-entities            t
-
-                  ;; Allow a) b) c) lists
-                  org-list-allow-alphabetical    t
-
-                  ;; Right-align tags to an indent from the right margin
-                  org-tags-column                120)
-
             ;; Allow multiple line Org emphasis markup
-            (setcar (nthcdr 4 org-emphasis-regexp-components) 20) ;; Up to 20 lines, default is just 1
+            (setcar (nthcdr 4 org-emphasis-regexp-components) 20) ;; Up to 20 lines
 
             ;; Below is needed to apply the modified `org-emphasis-regexp-components'
             ;; settings from above.
@@ -502,7 +481,7 @@ the \"#+begin_export\" line after the template insertion."
                 ;; Save the indentation level of the content (if region is selected) or
                 ;; the point (if region is not selected).
                 (save-excursion
-                  (forward-line 0)            ;Go to BOL
+                  (forward-line 0) ;; Go to BOL
                   (when (looking-at "[[:blank:]]")
                     (back-to-indentation)
                     (setq column (current-indentation))))
@@ -535,7 +514,7 @@ the \"#+begin_export\" line after the template insertion."
                    ((bolp)                      ;`end' is at BOL
                     (skip-chars-backward " \n\t")
                     (set-marker end (point)))
-                   ((and (not (bolp))           ;`end' is neither at BOL nor at EOL
+                   ((and (not (bolp)) ;; `end' is neither at BOL nor at EOL
                          (not (looking-at "[[:blank:]]*$")))
                     ;; Insert a newline if `end' is neither at BOL nor EOL
                     ;; Example: You have ^abc$ where ^ is bol and $ is eol.
@@ -549,7 +528,7 @@ the \"#+begin_export\" line after the template insertion."
                       (indent-to column))
                     (skip-chars-backward " \n\t")
                     (set-marker end (point)))
-                   (t          ;`end' is either at EOL or looking at trailing whitespace
+                   (t ;; `end' is either at EOL or looking at trailing whitespace
                     ))
                   ;; Now delete the content in the selected region and save it to
                   ;; `content'.
@@ -568,8 +547,8 @@ the \"#+begin_export\" line after the template insertion."
                    ((stringp arg)
                     (insert arg)
                     (forward-line))
-                   ((and (null arg) ;If the language for the source block,
-                         content)   ;or the backend for the export block is not specified
+                   ((and (null arg) ;; If the language for the source block,
+                         content)   ;; or the backend for the export block is not specified
                     (setq post-src-export (point))
                     (forward-line))
                    (t
@@ -610,17 +589,11 @@ line, or if a region is selected.  Else call
                   (self-insert-command 1))))
 
             ;; Fix shift problem in Org mode
-            (setq org-CUA-compatible t)
-            (setq org-support-shift-select 'always)
-            (eval-after-load "org"
-              '(progn
-                 (eval-after-load "cua-base"
-                   '(progn
-                      (defadvice org-call-for-shift-select (before org-call-for-shift-select-cua activate)
-                        (if (and cua-mode
-                                 org-support-shift-select
-                                 (not (use-region-p)))
-                            (cua-set-mark)))))))
+            (defadvice org-call-for-shift-select (before org-call-for-shift-select-cua activate)
+              (if (and cua-mode
+                       org-support-shift-select
+                       (not (use-region-p)))
+                  (cua-set-mark)))
 
             ;; Make org do not open other frames
             (setq org-link-frame-setup (quote ((vm      . vm-visit-folder-other-frame)
@@ -837,6 +810,12 @@ On the flip side, for BEGIN_EXCEPT %s blocks, remove those if %s equals TYPE. "
             ;; HTML5 slide exporter
             (use-package ox-html5slide)))
 
+;; Indentation, list bullets and checkboxes using monospace
+(use-package org-variable-pitch
+  :defer t
+  :commands org-variable-pitch-minor-mode
+  :hook (org-mode . org-variable-pitch-minor-mode))
+
 ;; Org tables
 (use-package org-table
   :defer t
@@ -887,7 +866,7 @@ On the flip side, for BEGIN_EXCEPT %s blocks, remove those if %s equals TYPE. "
                                        (?2 . "⮬")
                                        (?3 . "⮮")
                                        (?4 . "☕")
-                                       (?I . "Important"))))
+                                       (?I . "❗"))))
 
 (provide 'setup-org)
 ;;; setup-org.el ends here
