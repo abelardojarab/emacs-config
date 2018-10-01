@@ -74,7 +74,6 @@
            (org-pretty-entities             t)
            (org-list-allow-alphabetical     t)
            (org-tags-column                 120)
-           (org-CUA-compatible              t)
            (org-support-shift-select        'always))
   :init (progn
           (setq load-path (cons (expand-file-name "org/contrib/lisp" user-emacs-directory) load-path))
@@ -808,7 +807,23 @@ On the flip side, for BEGIN_EXCEPT %s blocks, remove those if %s equals TYPE. "
             (use-package ox-md)
 
             ;; HTML5 slide exporter
-            (use-package ox-html5slide)))
+            (use-package ox-html5slide)
+
+            ;; ASCII doc exporter
+            (use-package ox-asciidoc)
+
+            ;; Export org-mode to Google I/O HTML5 slides
+            (use-package ox-ioslide
+              :config (use-package ox-ioslide-helper))
+
+            ;; setup Org (babel support)
+            (use-package setup-org-babel)
+
+            ;; setup Org (latex support)
+            (use-package setup-org-latex)
+
+            ;; setup Org (html support)
+            (use-package setup-org-html)))
 
 ;; Indentation, list bullets and checkboxes using monospace
 (use-package org-variable-pitch
@@ -825,17 +840,8 @@ On the flip side, for BEGIN_EXCEPT %s blocks, remove those if %s equals TYPE. "
 ;; setup Org Agenda
 (use-package setup-org-agenda)
 
-;; setup Org (babel support)
-(use-package setup-org-babel)
-
 ;; setup Org plugins
 (use-package setup-org-plugins)
-
-;; setup Org (latex support)
-(use-package setup-org-latex)
-
-;; setup Org (html support)
-(use-package setup-org-html)
 
 ;; Use footnotes as eldoc source
 (use-package org-eldoc

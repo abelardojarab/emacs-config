@@ -53,14 +53,5 @@
   :hook (org-mode . org-autolist-mode)
   :commands org-autolist-mode)
 
-;; ASCII doc exporter
-(use-package ox-asciidoc
-  :after org)
-
-;; Export org-mode to Google I/O HTML5 slides
-(use-package ox-ioslide
-  :after org
-  :config (use-package ox-ioslide-helper))
-
 (provide 'setup-org-plugins)
 ;;; setup-org-plugins.el ends here
