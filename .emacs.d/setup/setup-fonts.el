@@ -114,9 +114,13 @@
                                                     my/main-writing-font-size)
                                       :weight 'normal))
 
-                ;; Use Symbola font on Unicode mathematical symbols
-                (if (find-font (font-spec :name "Symbola"))
-                    (set-fontset-font t nil "Symbola"))))
+                ;; Use e mathematical symbols
+                (when (and (display-graphic-p)
+                           (find-font (font-spec :name "Fira Code")))
+                  (let ((utf8-font "Fira Code"))
+                    (set-fontset-font "fontset-startup" '(#x000000 . #x3FFFFF) utf8-font)
+                    (set-fontset-font "fontset-default" '(#x000000 . #x3FFFFF) utf8-font)
+                    (set-fontset-font "fontset-standard" '(#x000000 . #x3FFFFF) utf8-font)))))
 
             ;; Fontify frame only for graphical mode
             (when (display-graphic-p)

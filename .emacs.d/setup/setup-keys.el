@@ -98,8 +98,8 @@
 (global-set-key (kbd "C-c C-b")  'beautify-buffer)
 
 ;; Unindent (do what I mean version)
-(global-set-key (kbd "C-c C-<")  'unindent-dwim)
-(global-set-key (kbd "C-c C->")  (lambda () (interactive) (unindent-dwim -1)))
+(global-set-key (kbd "C-<")  'unindent-dwim)
+(global-set-key (kbd "C->")  (lambda () (interactive) (unindent-dwim -1)))
 
 ;; Text scale
 (global-set-key [(control +)]    'text-scale-increase)

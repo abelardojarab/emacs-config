@@ -66,7 +66,6 @@
            (org-completion-use-ido          t)
            (org-hide-leading-stars          nil)
            (org-highlight-latex-and-related '(latex))
-           (org-ellipsis                    " ••• ")
            (org-catch-invisible-edits       'smart)
            (org-indent-mode                 nil)
            (org-use-sub-superscripts        nil)
@@ -98,6 +97,11 @@
             ;; Avoid error when inserting '_'
             (defadvice org-backward-paragraph (around bar activate)
               (ignore-errors add-do-it))
+
+            ;; Fancy ellipsis
+            (if (display-graphic-p)
+                (setq org-ellipsis "⤵")
+              (setq org-ellipsis "..."))
 
             ;; Tweaks
             (add-hook 'org-mode-hook
