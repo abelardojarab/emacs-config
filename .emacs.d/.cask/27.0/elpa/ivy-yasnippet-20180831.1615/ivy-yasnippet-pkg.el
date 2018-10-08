@@ -1,2 +1,0 @@
-;;; -*- no-byte-compile: t -*-
-(define-package "ivy-yasnippet" "20180831.1615" "Preview yasnippets with ivy" '((emacs "24") (ivy "0.10.0") (yasnippet "0.12.2") (dash "2.14.1") (cl-lib "0")) :commit "1d4ac765f5376263fa25b595b9cd7dcfb999cc52" :keywords '("convenience") :authors '(("Michał Kondraciuk" . "k.michal@zoho.com")) :maintainer '("Michał Kondraciuk" . "k.michal@zoho.com") :url "https://github.com/mkcms/ivy-yasnippet")
