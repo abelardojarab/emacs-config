@@ -36,6 +36,28 @@
             ;; Put c++-mode as default for *.h files (improves parsing)
             (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 
+	    (setq my/cc-style
+	      '("cc-mode"
+		(c-offsets-alist . ((func-decl-cont . ++)
+				    (member-init-intro . +)
+				    (inher-intro . ++)
+				    (comment-intro . 0)
+				    (arglist-close . c-lineup-arglist)
+				    (topmost-intro . 0)
+				    (block-open . 0)
+				    (inline-open . 0)
+				    (substatement-open . 0)
+				    (label . /)
+				    (case-label . +)
+				    (statement-case-open . +)
+				    (statement-case-intro . +) ; case w/o {
+				    (access-label . /)
+				    (innamespace . -)
+				    (label . 0)
+				    (case-label . +)
+				    (inextern-lang . 0)
+				    ))))
+
             ;; Make C/C++ indentation reliable
             (defun my/c-indent-offset-according-to-syntax-context (key val)
               ;; remove the old element
@@ -51,9 +73,11 @@
                 (c-set-style "Linux")
                 (c-set-offset 'substatement-open 0)
                 (c-set-offset 'innamespace 0)
+		(c-set-offset 'inextern-lang 0)
                 (c-toggle-electric-state -1)
 
                 (setq-default c-default-style "Linux")
+		(c-add-style "Linux" my/cc-style)
                 (my/tabs-setup t 8)
 
                 (make-local-variable 'c-basic-offset)
