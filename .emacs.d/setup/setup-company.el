@@ -92,13 +92,10 @@
 
             ;; Default company backends
             (setq company-backends
-                  '((;;company-semantic
-                     company-capf
-                     company-yasnippet
+                  '((company-capf
                      company-keywords
-                     company-dabbrev-code)
-                    (company-dabbrev
-                     company-abbrev)))
+                     company-dabbrev-code
+		     :with company-yasnippet)))
 
             ;; Add yasnippet support for all company backends
             (defvar company-mode/enable-yas t
@@ -119,9 +116,8 @@
               ;; make `company-backends' local is critical
               ;; or else, you will have completion in every major mode, that's very annoying!
               (set (make-local-variable 'company-backends) '((company-capf
-                                                              company-yasnippet
-                                                              company-abbrev
-                                                              company-files))))
+                                                              company-files
+							      :with company-yasnippet))))
 
             ;; Company integration with irony
             (use-package company-irony
