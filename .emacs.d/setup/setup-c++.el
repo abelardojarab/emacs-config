@@ -142,5 +142,8 @@
                 basic-c-compile-outfile-extension nil
                 basic-c-compile-make-clean "find . -type f -executable -delete"))
 
+;; C/C++ dissassemble
+(use-package rmsbolt)
+
 (provide 'setup-c++)
 ;;; setup-c++.el ends here

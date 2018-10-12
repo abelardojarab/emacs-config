@@ -41,22 +41,18 @@
            (check-python-module "jedi"))
   :commands (jedi:setup)
   :hook (python-mode . jedi:setup)
-  :config (progn
-            (setq jedi:setup-keys nil
-                  jedi:complete-on-dot t
-                  jedi:tooltip-method t
-                  jedi:get-in-function-call-delay 0.2)
-
-            ;; Company backend for Python jedi
-            (use-package company-jedi
-              :after (company jedi)
-              :config (add-hook 'python-mode-hook
-                                (lambda () (set (make-local-variable 'company-backends)
-                                           '((company-yasnippet
-                                              company-jedi
-                                              company-capf
-                                              company-files
-                                              company-abbrev))))))))
+  :custom ((jedi:setup-keys nil)
+	   (jedi:complete-on-dot t)
+	   (jedi:tooltip-method t)
+	   (jedi:get-in-function-call-delay 0.2))
+  :config (use-package company-jedi
+            :config (add-hook 'python-mode-hook
+                              (lambda () (set (make-local-variable 'company-backends)
+                                              '((company-jedi
+						 company-capf
+						 company-files
+						 :with company-abbrev
+						 :with company-yasnippet)))))))
 
 ;;; NOTE conda is needed to set anaconda virtual environment python process.
 ;;; Elpy can set the anaconda virtual env, but not the process. conda uses

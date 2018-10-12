@@ -26,6 +26,7 @@
 
 ;; Disable tool-bar and scroll-bar
 (when (display-graphic-p)
+  (setq-default line-spacing 2)
   (tool-bar-mode -1)
   (set-scroll-bar-mode 'right)
   (scroll-bar-mode -1)

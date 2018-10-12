@@ -95,7 +95,11 @@
                   '((company-capf
                      company-keywords
                      company-dabbrev-code
-		     :with company-yasnippet)))
+             :with company-yasnippet)))
+
+            ;; Ignore errors
+            (defadvice company-capf (around bar activate)
+              (ignore-errors add-do-it))
 
             ;; Add yasnippet support for all company backends
             (defvar company-mode/enable-yas t
@@ -117,7 +121,7 @@
               ;; or else, you will have completion in every major mode, that's very annoying!
               (set (make-local-variable 'company-backends) '((company-capf
                                                               company-files
-							      :with company-yasnippet))))
+                                  :with company-yasnippet))))
 
             ;; Company integration with irony
             (use-package company-irony

@@ -311,6 +311,7 @@
 (depends-on "resize-window")
 (depends-on "restclient")
 (depends-on "rich-minority")
+(depends-on "rmsbolt")
 ;; (depends-on "rtags")
 (depends-on "s")
 (depends-on "srefactor")
