@@ -434,7 +434,7 @@
               (interactive)
               (git-timemachine--start #'my/git-timemachine-show-selected-revision))))
 
-;; Show blame for current lines
+;; Show blame for current line
 (use-package git-messenger
   :if (executable-find "git")
   :commands (git-messenger:popup-message)
@@ -446,7 +446,10 @@
   :if (executable-find "git")
   :diminish git-gutter-mode
   :init (global-git-gutter-mode t)
-  :commands global-git-gutter-mode
+  :commands (global-git-gutter-mode
+	     git-gutter:stage-hunk
+	     git-gutter:next-hunk
+	     git-gutter:previous-hunk)
   :hook (magit-post-refresh . git-gutter:update-all-windows)
   :config (progn
 
