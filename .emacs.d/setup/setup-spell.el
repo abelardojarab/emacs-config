@@ -139,17 +139,15 @@ Don't read buffer-local settings or word lists."
   :diminish (flyspell-mode . "ⓢ")
   :if (not (equal 'system-type 'windows-nt))
   :commands (flyspell-mode flyspell-check-next-highlighted-word)
-  :custom (flyspell-delay 1)
+  :custom ((flyspell-delay 1)
+           (flyspell-issue-message-flag nil)
+           (flyspell-issue-welcome-flag nil))
   :init (progn
           (dolist (hook my/flyspell-modes)
             (add-hook hook (lambda () (flyspell-mode 1))))
           (dolist (hook my/flyspell-modes-disabled)
             (add-hook hook (lambda () (flyspell-mode -1)))))
   :config (progn
-
-            ;; Ignore message flags
-            (setq flyspell-issue-message-flag nil
-                  flyspell-issue-welcome-flag nil)
 
             (defun flyspell-ajust-cursor-point (save cursor-location old-max)
               (when (not (looking-at "\\b"))
@@ -167,8 +165,9 @@ Don't read buffer-local settings or word lists."
                 (define-key flyspell-mouse-map [down-mouse-3] #'flyspell-correct-word)
                 (define-key flyspell-mouse-map [mouse-3] #'undefined)))))
 
-;; flyspell popup correction
-(use-package flyspell-correct-popup
+;; flyspell ivy correction
+(use-package flyspell-correct-ivy
+  :defer t
   :after flyspell
   :bind (:map flyspell-mode-map
               ("C-c $" . flyspell-correct-word-generic)))
