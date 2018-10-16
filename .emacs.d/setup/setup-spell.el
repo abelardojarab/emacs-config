@@ -26,15 +26,11 @@
 
 ;; Enable ispell at the end
 (use-package ispell
+  :custom ((ispell-highlight-face             'flyspell-incorrect)
+           (ispell-silently-savep             t)
+           (ispell-choices-win-default-height 5))
   :config (progn
-            ;; General configuration
-            (setq ispell-highlight-face 'flyspell-incorrect
-                  ispell-silently-savep t ;; Don't ask when saving the private dict
-                  ;; Increase the height of the choices window
-                  ispell-choices-win-default-height 5)
-            (add-to-list 'ispell-skip-region-alist '("[^\000-\377]+"))
-
-            ;; find aspell and hunspell automatically
+            ;; Find aspell and hunspell automatically
             (cond
              ;; try hunspell at first
              ((executable-find "hunspell")

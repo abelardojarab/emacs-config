@@ -29,13 +29,18 @@
   :defer t
   :if (not (equal system-type 'windows-nt))
   :commands (flycheck-add-next-checker
-             flycheck-mode)
+             flycheck-mode
+             my/flycheck-adjust-syntax-eagerness)
   :init (mapc (lambda (mode)
                 (add-hook mode (lambda () (flycheck-mode t))))
               my/flycheck-modes)
+  :hook ((flycheck-after-syntax-check . my/flycheck-adjust-syntax-eagerness))
+  :custom ((flycheck-shellcheck-follow-sources nil)
+           (flycheck-disabled-checkers         '(html-tidy emacs-lisp-checkdoc))
+           (flycheck-highlighting-mode         'lines))
   :config (progn
 
-            (defun my/adjust-flycheck-automatic-syntax-eagerness ()
+            (defun my/flycheck-adjust-syntax-eagerness ()
               "Adjust how often we check for errors based on if there are any.
 This lets us fix any errors as quickly as possible, but in a
 clean buffer we're an order of magnitude laxer about checking."
@@ -46,9 +51,6 @@ clean buffer we're an order of magnitude laxer about checking."
             ;; buffer-sensitive adjustment above.
             (make-variable-buffer-local 'flycheck-idle-change-delay)
 
-            (add-hook 'flycheck-after-syntax-check-hook
-                      'my/adjust-flycheck-automatic-syntax-eagerness)
-
             ;; Remove newline checks, since they would trigger an immediate check
             ;; when we want the idle-change-delay to be in effect while editing.
             (setq flycheck-check-syntax-automatically '(save
@@ -56,24 +58,10 @@ clean buffer we're an order of magnitude laxer about checking."
                                                         mode-enabled))
 
             (defun flycheck-handle-idle-change ()
-              "Handle an expired idle time since the last change.
-This is an overwritten version of the original
-flycheck-handle-idle-change, which removes the forced deferred.
-Timers should only trigger inbetween commands in a single
-threaded system and the forced deferred makes errors never show
-up before you execute another command."
+              "This is an overwritten version of the original
+flycheck-handle-idle-change, which removes the forced deferred."
               (flycheck-clear-idle-change-timer)
               (flycheck-buffer-automatically 'idle-change))
-
-            ;; Ubuntu 16.04 shellcheck is too old to understand this
-            ;; command-line option
-            (setq flycheck-shellcheck-follow-sources nil)
-
-            ;; Configuration
-            (setq-default flycheck-disabled-checkers '(html-tidy emacs-lisp-checkdoc))
-
-            ;; Highlight whole line with error
-            (setq flycheck-highlighting-mode 'lines)
 
             ;; proselint support
             (when (executable-find "proselint")

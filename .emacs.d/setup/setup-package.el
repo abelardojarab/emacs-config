@@ -54,6 +54,15 @@
 (add-to-list 'load-path my/vendor-dir)
 (my/add-subfolders-to-load-path my/vendor-dir)
 
+(defun my/byte-recompile-elpa ()
+  "Force byte-compile every `.el' file in `my/vendor-dir'.
+The `.el' files are re-compiled even if the corresponding `.elc' files exist,
+in all the sub-directories under `my/vendor-dir'.
+If the `.elc' file does not exist, this function *does not* compile the
+corresponding `.el' file."
+  (interactive)
+  (byte-recompile-directory my/vendor-dir nil :force))
+
 ;; Use Package
 (eval-when-compile
   (require 'use-package))
