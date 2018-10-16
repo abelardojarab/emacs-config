@@ -163,10 +163,11 @@
 (global-set-key [C-end]               'tabbar-forward-group)
 
 ;; Tabbar, now using ctl-x-map
-(global-set-key (kbd "C-x <prior>")   'tabbar-backward-tab)
-(global-set-key (kbd "C-x <next>")    'tabbar-forward-tab)
-(global-set-key (kbd "C-x <home>")    'tabbar-backward-group)
-(global-set-key (kbd "C-x <end>")     'tabbar-forward-group)
+(bind-keys :map ctl-x-map
+           ((kbd "<prior>")  . tabbar-backward-tab)
+           ((kbd "<next>")   . tabbar-forward-tab)
+           ((kbd "<home>")   . tabbar-backward-group)
+           ((kbd "<end>")    . tabbar-forward-group))
 
 ;; Splitting windows
 (global-set-key (kbd "C-x |")         'split-window-right)
@@ -203,22 +204,23 @@
 
 ;; Overwrite other modes
 (defvar my/keys-minor-mode-map (make-keymap) "my/keys-minor-mode keymap.")
-(define-key my/keys-minor-mode-map (kbd "<mouse-3>")        'mouse3-popup-menu)
-(define-key my/keys-minor-mode-map [C-tab]                  'comment-or-uncomment-region)
-(define-key my/keys-minor-mode-map (kbd "C-x z")            'ielm-repl)
-(define-key my/keys-minor-mode-map (kbd "M-.")              'helm-etags-select)
-(define-key my/keys-minor-mode-map (kbd "C-.")              'helm-gtags-dwim)
-(define-key my/keys-minor-mode-map (kbd "<f2>")             'bm-next)
-(define-key my/keys-minor-mode-map (kbd "<C-f2>")           'bm-toggle)
-(define-key my/keys-minor-mode-map (kbd "<left-fringe> <double-mouse-1>") 'bm-toggle)
-(define-key my/keys-minor-mode-map (kbd "<f4>")             'helm-semantic-or-imenu)
-(define-key my/keys-minor-mode-map (kbd "C-`")              'helm-semantic-or-imenu)
-(define-key my/keys-minor-mode-map (kbd "<f12>")            'ivy-switch-buffer)
-(define-key my/keys-minor-mode-map (kbd "<f5>")             'recompile)
-(define-key my/keys-minor-mode-map [(control p)]            'cua-scroll-down)
-(define-key my/keys-minor-mode-map [(control n)]            'cua-scroll-up)
-(define-key my/keys-minor-mode-map [(control o)]            'counsel-find-file)
-(define-key my/keys-minor-mode-map [(control b)]            'ivy-switch-buffer)
+(bind-keys :map my/keys-minor-mode-map
+           ((kbd "<mouse-3>")                       .       'mouse3-popup-menu)
+           ([C-tab]                                 .       'comment-or-uncomment-region)
+           ((kbd "C-x z")                           .       'ielm-repl)
+           ((kbd "M-.")                             .       'helm-etags-select)
+           ((kbd "C-.")                             .       'helm-gtags-dwim)
+           ((kbd "<f2>")                            .       'bm-next)
+           ((kbd "<C-f2>")                          .       'bm-toggle)
+           ((kbd "<left-fringe> <double-mouse-1>")  .       'bm-toggle)
+           ((kbd "<f4>")                            .       'helm-semantic-or-imenu)
+           ((kbd "C-`")                             .       'helm-semantic-or-imenu)
+           ((kbd "<f12>")                           .       'ivy-switch-buffer)
+           ((kbd "<f5>")                            .       'recompile)
+           ([(control p)]                           .       'cua-scroll-down)
+           ([(control n)]                           .       'cua-scroll-up)
+           ([(control o)]                           .       'counsel-find-file)
+           ([(control b)]                           .       'ivy-switch-buffer))
 
 ;; Define custom key mode
 (define-minor-mode my/keys-minor-mode
