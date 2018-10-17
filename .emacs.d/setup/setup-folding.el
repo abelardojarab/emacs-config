@@ -173,7 +173,7 @@ Do this if `my/outshine-allow-space-before-heading' is non-nil."
 ;; Fast Emacs navigation and control
 (use-package navi-mode
   :after outshine
-  :bind ("M-s s" . navi-search-and-switch)
+  :commands (navi-search-and-switch)
   :config (setf (cdr (assoc :ALL (cdr (assoc "emacs-lisp" navi-keywords))))
         "^[[:space:]]*(\\(use-package\\|\\(cl-\\)\\{0,1\\}def[a-z]+\\)\\*? "))
 
