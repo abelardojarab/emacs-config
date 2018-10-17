@@ -29,7 +29,8 @@
   :defer t
   :if (display-graphic-p)
   :load-path (lambda () (expand-file-name "dadams/" user-emacs-directory))
-  :commands (showkey-tooltip-mode showkey-log-mode))
+  :commands (showkey-tooltip-mode
+             showkey-log-mode))
 
 ;; visual feedback when pressing keys
 (use-package which-key
@@ -37,66 +38,62 @@
   :commands which-key-mode
   :diminish which-key-mode
   :hook (after-init . which-key-mode)
+  :if (and (not (equal system-type 'windows-nt))
+           (display-graphic-p))
+  :init (which-key-mode t)
+  :custom ((which-key-sort-order            #'which-key-prefix-then-key-order)
+           (which-key-sort-uppercase-first  nil)
+           (which-key-add-column-padding    1)
+           (which-key-max-display-columns   nil)
+           (which-key-min-display-lines     5)
+           (which-key-idle-delay            2.0)
+           (which-key-popup-type            'minibuffer)
+           (which-key-side-window-location  'right)
+           (which-key-side-window-max-width 0.33)
+           (which-key-special-keys          nil))
   :config (progn
-            (when (if (not (equal system-type 'windows-nt))
-                      (display-graphic-p))
-              (setq which-key-sort-order            #'which-key-prefix-then-key-order
-                    which-key-sort-uppercase-first  nil
-                    which-key-add-column-padding    1
-                    which-key-max-display-columns   nil
-                    which-key-min-display-lines     5
-                    which-key-idle-delay            2.0
-                    which-key-popup-type            'minibuffer
-                    which-key-side-window-location  'right
-                    which-key-side-window-max-width 0.33
-                    which-key-key-replacement-alist
-                    '(("<\\([[:alnum:]-]+\\)>" . "\\1")
-                      ("TAB"                   . "↹")
-                      ("RET"                   . "⏎")
-                      ("SPC"                   . "␣")
-                      ("up"                    . "↑")
-                      ("right"                 . "→")
-                      ("down"                  . "↓")
-                      ("left"                  . "←")
-                      ("DEL"                   . "⇤")
-                      ("deletechar"            . "⌫")
-                      ("RET"                   . "⏎"))
-                    which-key-description-replacement-alist
-                    '(("Prefix Command" . "prefix")
-                      ;; Lambdas
-                      ("\\`\\?\\?\\'"   . "λ")
-                      ;; Prettify hydra entry points
-                      ("/body\\'"       . "|=")
-                      ;; Drop/shorten package prefixes
-                      ("\\`lunaryorn-"  . "")
-                      ("projectile-"    . "proj-")
-                      ("magit-"         . "ma-")))
+            (setq which-key-key-replacement-alist
+                  '(("<\\([[:alnum:]-]+\\)>" . "\\1")
+                    ("TAB"                   . "↹")
+                    ("RET"                   . "⏎")
+                    ("SPC"                   . "␣")
+                    ("up"                    . "↑")
+                    ("right"                 . "→")
+                    ("down"                  . "↓")
+                    ("left"                  . "←")
+                    ("DEL"                   . "⇤")
+                    ("deletechar"            . "⌫")
+                    ("RET"                   . "⏎"))
+                  which-key-description-replacement-alist
+                  '(("Prefix Command" . "prefix")
+                    ;; Lambdas
+                    ("\\`\\?\\?\\'"   . "λ")
+                    ;; Prettify hydra entry points
+                    ("/body\\'"       . "|=")
+                    ;; Drop/shorten package prefixes
+                    ("\\`lunaryorn-"  . "")
+                    ("projectile-"    . "proj-")
+                    ("magit-"         . "ma-")))
 
-              (add-to-list 'which-key-key-replacement-alist '("TAB" . "↹"))
-              (add-to-list 'which-key-key-replacement-alist '("RET" . "⏎"))
-              (add-to-list 'which-key-key-replacement-alist '("DEL" . "⇤"))
-              (add-to-list 'which-key-key-replacement-alist '("SPC" . "␣")))
-
-            ;; which-key will truncate special keys by default, eg. SPC turns into
-            ;; an orange D. Turn this off to avoid confusion.
-            (setq-default which-key-special-keys nil)
-
-            (which-key-mode t)))
+            (add-to-list 'which-key-key-replacement-alist '("TAB" . "↹"))
+            (add-to-list 'which-key-key-replacement-alist '("RET" . "⏎"))
+            (add-to-list 'which-key-key-replacement-alist '("DEL" . "⇤"))
+            (add-to-list 'which-key-key-replacement-alist '("SPC" . "␣"))))
 
 ;; Get an instant cheat sheet for your current major mode
 ;; with C-h C-m.
 (use-package discover-my-major
   :defer t
   :commands (discover-my-major
-	     discover-my-mode)
+             discover-my-mode)
   :bind ("C-h C-m" . discover-my-major))
 
 ;; Mac OS X extensions
 (use-package mac-key-mode
   :commands (mac-key-mode
-	     mac-key-speak-region
-	     mac-key-speak-buffer
-	     mac-key-quick-look)
+             mac-key-speak-region
+             mac-key-speak-buffer
+             mac-key-quick-look)
   :if (equal system-type 'darwin))
 
 (provide 'setup-keys-extensions)

@@ -149,78 +149,79 @@
 ;; List buffers
 (global-set-key (kbd "<f12>")    'ivy-switch-buffer)
 
-;; Escape key in minibuffer
-(define-key minibuffer-local-map            [escape] 'abort-recursive-edit)
-(define-key minibuffer-local-ns-map         [escape] 'abort-recursive-edit)
-(define-key minibuffer-local-completion-map [escape] 'abort-recursive-edit)
-(define-key minibuffer-local-must-match-map [escape] 'abort-recursive-edit)
-(define-key minibuffer-local-isearch-map    [escape] 'abort-recursive-edit)
-
 ;; Tabbar
-(global-set-key [C-prior]             'tabbar-backward-tab)
-(global-set-key [C-next]              'tabbar-forward-tab)
-(global-set-key [C-home]              'tabbar-backward-group)
-(global-set-key [C-end]               'tabbar-forward-group)
+(global-set-key [C-prior]         'tabbar-backward-tab)
+(global-set-key [C-next]          'tabbar-forward-tab)
+(global-set-key [C-home]          'tabbar-backward-group)
+(global-set-key [C-end]           'tabbar-forward-group)
+
+;; Escape key in minibuffer
+(bind-keys :map minibuffer-local-map
+           ([escape] . abort-recursive-edit)
+           :map minibuffer-local-ns-map
+           ([escape] . abort-recursive-edit)
+           :map minibuffer-local-completion-map
+           ([escape] . abort-recursive-edit)
+           :map minibuffer-local-isearch-map
+           ([escape] . abort-recursive-edit))
 
 ;; Tabbar, now using ctl-x-map
 (bind-keys :map ctl-x-map
-           ((kbd "<prior>")  . tabbar-backward-tab)
-           ((kbd "<next>")   . tabbar-forward-tab)
-           ((kbd "<home>")   . tabbar-backward-group)
-           ((kbd "<end>")    . tabbar-forward-group))
+           ((kbd "<prior>")   . tabbar-backward-tab)
+           ((kbd "<next>")    . tabbar-forward-tab)
+           ((kbd "<home>")    . tabbar-backward-group)
+           ((kbd "<end>")     . tabbar-forward-group))
 
 ;; Splitting windows
-(global-set-key (kbd "C-x |")         'split-window-right)
-(global-set-key (kbd "C-x -")         'split-window-below)
+(bind-keys :map ctl-x-map
+           ((kbd "|")         . split-window-right)
+           ((kbd "-")         . split-window-below))
 
 ;; Jump between windows
-(global-set-key (kbd "C-x <up>")      'windmove-up)
-(global-set-key (kbd "C-x <down>")    'windmove-down)
-(global-set-key (kbd "C-x <left>")    'windmove-left)
-(global-set-key (kbd "C-x <right>")   'windmove-right)
+(bind-keys :map ctl-x-map
+           ((kbd "<up>")      . windmove-up)
+           ((kbd "<down>")    . windmove-down)
+           ((kbd "<left>")    . windmove-left)
+           ((kbd "<right>")   . windmove-right))
 
 ;; Extra Ctrl-x mappings
-(define-key ctl-x-map (kbd "SPC")     (lambda () (interactive) (push-mark nil nil 1)))
-(define-key ctl-x-map (kbd ">")       'increase-left-margin)
-(define-key ctl-x-map (kbd "<")       'decrease-left-margin)
-(define-key ctl-x-map (kbd "F")       'toggle-frame-fullscreen)
-(define-key ctl-x-map (kbd "T")       'toggle-truncate-lines)
+(bind-keys :map ctl-x-map
+           ((kbd "SPC")       . my/disable-rbm-deactivate-mark)
+           ((kbd ">")         . increase-left-margin)
+           ((kbd "<")         . decrease-left-margin)
+           ((kbd "F")         . toggle-frame-fullscreen)
+           ((kbd "T")         . toggle-truncate-lines))
 
 ;; Extra Ctrl-x mappings for navigation
-(define-key ctl-x-map (kbd "<up>")    'windmove-up)
-(define-key ctl-x-map (kbd "<down>")  'windmove-down)
-(define-key ctl-x-map (kbd "<left>")  'windmove-left)
-(define-key ctl-x-map (kbd "<right>") 'windmove-right)
-(define-key ctl-x-map (kbd "<prior>") 'tabbar-backward-tab)
-(define-key ctl-x-map (kbd "<next>")  'tabbar-forward-tab)
-(define-key ctl-x-map (kbd "<home>")  'tabbar-backward-group)
-(define-key ctl-x-map (kbd "<end>")   'tabbar-forward-group)
+(bind-keys :map ctl-x-map
+           ((kbd "<prior>")   . tabbar-backward-tab)
+           ((kbd "<next>")    . tabbar-forward-tab)
+           ((kbd "<home>")    . tabbar-backward-group)
+           ((kbd "<end>")     . tabbar-forward-group))
 
 ;; Cua mode helpers
-(define-key ctl-x-map (kbd "C-s")     'save-buffer)
-(define-key ctl-x-map (kbd "C-a")     'mark-whole-buffer)
-(define-key ctl-x-map (kbd "C-v")     'clipboard-yank)
-(define-key ctl-x-map (kbd "C-z")     'undo)
+(bind-keys :map ctl-x-map
+           ((kbd "C-s")       . save-buffer)
+           ((kbd "C-a")       . mark-whole-buffer)
+           ((kbd "C-v")       . clipboard-yank)
+           ((kbd "C-z")       . undo))
 
 ;; Overwrite other modes
 (defvar my/keys-minor-mode-map (make-keymap) "my/keys-minor-mode keymap.")
 (bind-keys :map my/keys-minor-mode-map
-           ((kbd "<mouse-3>")                       .       'mouse3-popup-menu)
-           ([C-tab]                                 .       'comment-or-uncomment-region)
-           ((kbd "C-x z")                           .       'ielm-repl)
-           ((kbd "M-.")                             .       'helm-etags-select)
-           ((kbd "C-.")                             .       'helm-gtags-dwim)
-           ((kbd "<f2>")                            .       'bm-next)
-           ((kbd "<C-f2>")                          .       'bm-toggle)
-           ((kbd "<left-fringe> <double-mouse-1>")  .       'bm-toggle)
-           ((kbd "<f4>")                            .       'helm-semantic-or-imenu)
-           ((kbd "C-`")                             .       'helm-semantic-or-imenu)
-           ((kbd "<f12>")                           .       'ivy-switch-buffer)
-           ((kbd "<f5>")                            .       'recompile)
-           ([(control p)]                           .       'cua-scroll-down)
-           ([(control n)]                           .       'cua-scroll-up)
-           ([(control o)]                           .       'counsel-find-file)
-           ([(control b)]                           .       'ivy-switch-buffer))
+           ((kbd "<mouse-3>")                       .   mouse3-popup-menu)
+           ([C-tab]                                 .   comment-or-uncomment-region)
+           ((kbd "M-.")                             .   helm-etags-select)
+           ((kbd "C-.")                             .   helm-gtags-dwim)
+           ((kbd "<f2>")                            .   bm-next)
+           ((kbd "<C-f2>")                          .   bm-toggle)
+           ((kbd "<left-fringe> <double-mouse-1>")  .   bm-toggle)
+           ((kbd "<f4>")                            .   helm-semantic-or-imenu)
+           ((kbd "C-`")                             .   helm-semantic-or-imenu)
+           ((kbd "<f12>")                           .   ivy-switch-buffer)
+           ((kbd "<f5>")                            .   recompile)
+           ((kbd "C-o")                             .   counsel-find-file)
+           ((kbd "C-b")                             .   ivy-switch-buffer))
 
 ;; Define custom key mode
 (define-minor-mode my/keys-minor-mode

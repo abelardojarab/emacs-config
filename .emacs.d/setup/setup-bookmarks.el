@@ -25,7 +25,7 @@
 ;;; Code:
 
 ;; Bookmark Plus
-(use-package bookmark+
+(use-package bookmark
   :demand t
   :custom (bookmark-save-flag 1)
   :config (progn
