@@ -170,6 +170,18 @@ Do this if `my/outshine-allow-space-before-heading' is non-nil."
         ret))
     (advice-add 'outshine-calc-outline-regexp :filter-return #'my/outshine-calc-outline-regexp)))
 
+;; Fast Emacs navigation and control
+(use-package navi-mode
+  :after outshine
+  :bind ("M-s s" . navi-search-and-switch)
+  :config (setf (cdr (assoc :ALL (cdr (assoc "emacs-lisp" navi-keywords))))
+        "^[[:space:]]*(\\(use-package\\|\\(cl-\\)\\{0,1\\}def[a-z]+\\)\\*? "))
+
+;; Outline navigation, similar to outshine-navi
+(use-package helm-navi
+  :after (helm navi-mode)
+  :commands helm-navi)
+
 ;; Cycle visibility on outline-minor-mode
 (use-package bicycle
   :after outline
