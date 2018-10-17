@@ -37,7 +37,7 @@
   :diminish ivy-mode
   :hook (after-init . ivy-mode)
   :defines (projectile-completion-system
-        magit-completing-read-function)
+            magit-completing-read-function)
   :bind (("C-c C-r" . ivy-resume)
          :map ctl-x-map
          ("s"       . swiper)
@@ -141,7 +141,13 @@
 ;; Ivy integration with yasnippet
 (use-package ivy-yasnippet
   :defer t
-  :commands ivy-yasnippet)
+  :after (swiper yasnippet)
+  :commands ivy-yasnippet
+  :bind (:map yas-minor-mode-map
+              (([(shift tab)] . ivy-yasnippet)
+               ([backtab]     . ivy-yasnippet))
+              :map ctl-x-map
+              ("y"           . ivy-yasnippet)))
 
 ;; Ivy source for 'pass' tool
 (use-package ivy-pass

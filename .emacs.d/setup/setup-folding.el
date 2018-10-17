@@ -148,9 +148,35 @@
   :diminish outline-minor-mode
   :hook ((prog-mode message-mode markdown-mode) . outline-minor-mode))
 
+;; Bring org cycle extensions to outline-minor-mode
+(use-package outshine
+  :defer t
+  :bind (:map outline-minor-mode-map
+              ([S-tab] . outshine-cycle-buffer))
+  :custom ((outshine-use-speed-commands                t)
+           (outshine-org-style-global-cycling-at-bob-p t))
+  :config (progn
+    (defvar-local my/outshine-allow-space-before-heading nil
+      "When non-nil, allow outshine heading to begin with whitespace.
+For example, when non-nil, do not require the \"// *\" style
+comments used by `outshine' to start at column 0 in `verilog-mode.'")
+
+    (defun my/outshine-calc-outline-regexp (orig-ret)
+      "Prefix the outline regexp with whitespace regexp, may be.
+Do this if `my/outshine-allow-space-before-heading' is non-nil."
+      (let ((ret orig-ret))
+        (when my/outshine-allow-space-before-heading
+          (setq ret (concat "[[:blank:]]*" orig-ret)))
+        ret))
+    (advice-add 'outshine-calc-outline-regexp :filter-return #'my/outshine-calc-outline-regexp)))
+
+;; Cycle visibility on outline-minor-mode
 (use-package bicycle
   :after outline
-  :commands (bicycle-cycle bicycle-cycle-global))
+  :bind (:map outline-minor-mode-map
+              ([C-tab] . bicycle-cycle))
+  :commands (bicycle-cycle
+             bicycle-cycle-global))
 
 ;; org-style folding/unfolding in hideshow
 (use-package hideshow-org
@@ -169,9 +195,8 @@
              yafolding-show-all
              yafolding-hide-element
              yafolding-hide-all)
-  :config (progn
-            (setq yafolding-ellipsis-content " ... ")
-            (set-face-attribute 'yafolding-ellipsis-face nil :inherit 'my/fold-face)))
+  :custom (yafolding-ellipsis-content " ... ")
+  :config (set-face-attribute 'yafolding-ellipsis-face nil :inherit 'my/fold-face))
 
 ;; Enable fold dwim (do what i mean)
 (use-package fold-dwim

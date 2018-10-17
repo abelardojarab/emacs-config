@@ -30,8 +30,6 @@
   :diminish yas-minor-mode
   :bind (:map yas-minor-mode-map
               ;; Remove Yasnippet's default tab key binding (avoid collision with auto-complete)
-              ([(shift tab)] . ivy-yasnippet)
-              ([backtab]     . ivy-yasnippet)
               ("C-c r"       . yas-prev-field)
               ("C-c t"       . yas-next-field-or-maybe-expand)
               ;; Simplify navigation of yasnippet fields
@@ -40,12 +38,8 @@
               :map yas-keymap
               ([tab]         . yas-next-field-or-maybe-expand)
               ([?\t]         . yas-next-field-or-maybe-expand)
-              ([(shift tab)] . ivy-yasnippet)
-              ([backtab]     . ivy-yasnippet)
               ("C-c r"       . yas-prev-field)
-              ("C-c t"       . yas-next-field-or-maybe-expand)
-              :map ctl-x-map
-              ("y"           . ivy-yasnippet))
+              ("C-c t"       . yas-next-field-or-maybe-expand))
   :defines (yas-initialize)
   :commands (yas-global-mode
              yas-minor-mode

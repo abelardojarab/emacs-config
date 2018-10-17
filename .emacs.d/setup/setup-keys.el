@@ -76,7 +76,6 @@
 ;; Commands to make my programming environment nice
 (global-set-key (kbd "RET")      'newline-and-indent)
 (global-set-key (kbd "")         'other-window)
-(global-set-key [C-tab]          'comment-or-uncomment-region)
 (global-set-key [kp-prior]       'cua-scroll-down)
 (global-set-key [prior]          'cua-scroll-down)
 (global-set-key [kp-next]        'cua-scroll-up)
@@ -94,6 +93,7 @@
 (global-set-key [(control r)]    'replace-string)
 (global-set-key [(control a)]    'mark-whole-buffer)
 (global-set-key [(control v)]    'yank)
+(global-set-key (kbd "C-c C-c")  'comment-or-uncomment-region)
 (global-set-key (kbd "C-c C-v")  'counsel-yank-pop)
 (global-set-key (kbd "C-c C-b")  'beautify-buffer)
 
@@ -210,7 +210,7 @@
 (defvar my/keys-minor-mode-map (make-keymap) "my/keys-minor-mode keymap.")
 (bind-keys :map my/keys-minor-mode-map
            ((kbd "<mouse-3>")                       .   mouse3-popup-menu)
-           ([C-tab]                                 .   comment-or-uncomment-region)
+           ((kbd "C-c C-c")                           .   comment-or-uncomment-region)
            ((kbd "M-.")                             .   helm-etags-select)
            ((kbd "C-.")                             .   helm-gtags-dwim)
            ((kbd "<f2>")                            .   bm-next)
