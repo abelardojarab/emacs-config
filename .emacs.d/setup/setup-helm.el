@@ -80,7 +80,6 @@
                   helm-ff-skip-boring-files                 t
                   helm-ff-file-name-history-use-recentf     t
                   helm-use-frame-when-more-than-two-windows nil
-
                   helm-display-function                     #'helm-default-display-buffer
                   helm-display-buffer-reuse-frame           t
                   helm-display-buffer-width                 180

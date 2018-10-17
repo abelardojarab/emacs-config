@@ -265,6 +265,7 @@
 (depends-on "org-seek")
 (depends-on "orgtbl-ascii-plot")
 (depends-on "origami")
+(depends-on "outshine")
 (depends-on "ox-asciidoc")
 (depends-on "ox-clip")
 (depends-on "ox-html5slide")
