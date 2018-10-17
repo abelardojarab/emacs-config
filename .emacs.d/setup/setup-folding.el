@@ -152,7 +152,7 @@
 (use-package outshine
   :defer t
   :bind (:map outline-minor-mode-map
-              ([S-tab] . outshine-cycle-buffer))
+              ("C-c TAB" . outshine-cycle-buffer))
   :custom ((outshine-use-speed-commands                t)
            (outshine-org-style-global-cycling-at-bob-p t))
   :config (progn
