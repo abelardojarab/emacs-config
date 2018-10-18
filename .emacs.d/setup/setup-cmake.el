@@ -89,20 +89,20 @@
   :bind (:map c++-mode-map
               ("C-c C-i" . rtags-print-symbol-info)
               ("C-c C-s" . rtags-find-symbol-at-point))
+  :custom ((rtags-autostart-diagnostics      t)
+           (rtags-completions-enabled        t)
+           (rtags-display-summary-as-tooltip t)
+           (rtags-tooltips-enabled           t)
+           (rtags-use-helm                   t)
+           (rtags-display-result-backend     'helm)
+           (rtags-periodic-reparse-timeout   10)
+           (rtags-timeout                    2))
+  :hook (kill-emacs . rtags-quit-rdm)
   :config (progn
             (use-package helm-rtags
               :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory)))
-            (setq rtags-autostart-diagnostics      t
-                  rtags-completions-enabled        t
-                  rtags-display-summary-as-tooltip t
-                  rtags-tooltips-enabled           t
-                  rtags-use-helm                   t
-                  rtags-display-result-backend     'helm)
             (rtags-enable-standard-keybindings)
-            (rtags-set-periodic-reparse-timeout 2)
-
-            ;; Kill rdm on Emacs exit
-            (add-hook 'kill-emacs-hook #'rtags-quit-rdm)
+            (rtags-set-periodic-reparse-timeout 10)
 
             ;; Integrating rtags with eldoc
             (defun fontify-string (str mode)
@@ -136,7 +136,10 @@
                                                      "GTAGS"))))
                 (rtags-start-process-unless-running)
                 (setq-local eldoc-documentation-function #'rtags-eldoc-function)
-                (eldoc-mode t)))))
+                (eldoc-mode t)
+
+                ;; Other preferences
+                (my/c-mode-indent-init)))))
 
 ;; cmake syntax highlighting
 (use-package cmake-mode
