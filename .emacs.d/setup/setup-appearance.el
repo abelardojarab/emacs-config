@@ -147,8 +147,9 @@ non-nil."
 ;; Better characters
 (unless standard-display-table
   (setq standard-display-table (make-display-table)))
-(set-display-table-slot standard-display-table
-                        'selective-display (string-to-vector " ⮷ "))
+(if (display-graphic-p)
+    (set-display-table-slot standard-display-table
+                            'selective-display (string-to-vector " ⮷ ")))
 
 ;; Display vertical line
 (use-package fill-column-indicator

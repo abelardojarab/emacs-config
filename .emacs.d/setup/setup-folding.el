@@ -207,7 +207,7 @@ Do this if `my/outshine-allow-space-before-heading' is non-nil."
              yafolding-show-all
              yafolding-hide-element
              yafolding-hide-all)
-  :custom (yafolding-ellipsis-content " ... ")
+  :custom (yafolding-ellipsis-content " ⮷ ")
   :config (set-face-attribute 'yafolding-ellipsis-face nil :inherit 'my/fold-face))
 
 ;; Enable fold dwim (do what i mean)
@@ -293,7 +293,7 @@ If prefix argument is used, `set-selective-display' to the current column."
               (when (eq 'code (overlay-get ov 'hs))
                 (let* ((marker-string "*fringe-dummy*")
                        (marker-length (length marker-string))
-                       (display-string (format " ... %s <%d> ... "
+                       (display-string (format " ... %s <%d> ⮷ "
                                                (replace-regexp-in-string
                                                 "\n" ""
                                                 (replace-regexp-in-string
@@ -329,7 +329,7 @@ If prefix argument is used, `set-selective-display' to the current column."
                       (search-forward "\r")
                       (forward-char -1)
                       (let* ((ov (make-overlay (point) end))
-                             (display-string (format " ... %s <%d> ... "
+                             (display-string (format " ... %s <%d> ⮷ "
                                                      (replace-regexp-in-string
                                                       "\n" ""
                                                       (replace-regexp-in-string

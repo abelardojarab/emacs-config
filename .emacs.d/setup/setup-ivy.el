@@ -44,7 +44,6 @@
          ("b"       . ivy-switch-buffer)
          :map ivy-minibuffer-map
          ("C-v"     . ivy-yank-word))
-  :chords (("BB"    . ivy-switch-buffer))
   :config (progn
 
             (setq ivy-do-completion-in-region      nil
@@ -85,7 +84,6 @@
   :commands counsel-mode
   :diminish counsel-mode
   :hook (ivy-mode . counsel-mode)
-  :chords (("VV" . counsel-yank-pop))
   :bind (("M-x"                     . counsel-M-x)
          ("C-o"                     . counsel-find-file)
          ("C-c C-v"                 . counsel-yank-pop)
