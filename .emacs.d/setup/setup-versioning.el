@@ -142,11 +142,6 @@
            (magit-last-seen-setup-instructions    "1.4.0"))
   :init (progn
           (setenv "GIT_PAGER" "")
-          (magit-add-section-hook 'magit-status-sections-hook
-                                  'magit-insert-modules
-                                  'magit-insert-unpulled-from-upstream)
-          (magit-define-popup-action 'magit-commit-popup
-            ?x "Absorb" #'magit-commit-absorb-popup)
 
           ;; we no longer need vc-git
           (delete 'Git vc-handled-backends)
