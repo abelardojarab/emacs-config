@@ -158,8 +158,7 @@
   :if (and (equal system-type 'gnu/linux)
            (executable-find "pass"))
   :after (password-store auth-source)
-  :config ((auth-source-pass-enable)
-           (setq auth-sources '(password-store))))
+  :config (setq auth-sources '(password-store)))
 
 ;; Secrets file
 (let ((secrets-file (concat (file-name-as-directory
