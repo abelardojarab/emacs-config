@@ -152,13 +152,14 @@
            (executable-find "pass")))
 
 ;; 'pass' interface to auth-source,
-;; no longer need to store passwords in the .authinfo file
+;; no need to store passwords in the .authinfo file
 (use-package auth-source-pass
   :demand t
   :if (and (equal system-type 'gnu/linux)
            (executable-find "pass"))
-  :after pass
-  :config (auth-source-pass-enable))
+  :after (password-store auth-source)
+  :config ((auth-source-pass-enable)
+           (setq auth-sources '(password-store))))
 
 ;; Secrets file
 (let ((secrets-file (concat (file-name-as-directory

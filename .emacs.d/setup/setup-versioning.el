@@ -36,7 +36,7 @@
   :defer t
   :after (vc popup)
   :commands (vc-msg-show
-         my/vc-msg-init)
+             my/vc-msg-init)
   :hook (vc-msg . my/vc-msg-init)
   :config (defun my/vc-msg-init (vcs-type commit-info)
             ;; copy commit id to clipboard
@@ -122,23 +122,31 @@
              magit-after-save-refresh-status
              magit-after-revert-hook
              magit-not-reverted-hook
+             magit-dispatch-popup
              git-commit-setup-check-buffer)
   :defines (magit-ediff-dwim-show-on-hunks)
   :bind (:map ctl-x-map
               ("m"        . magit-status)
+              ("C-m"      . magit-dispatch-popup)
               :map magit-mode-map
               (("C-c C-a" . magit-just-amend)
                ("c"       . magit-maybe-commit)
-               ("q"       . magit-quit-session)))
+               ("q"       . magit-quit-session)
+               ("C" .     magit-commit-add-log)))
   :if (executable-find "git")
   :hook ((magit-mode           . hl-line-mode)
-     (after-save           . magit-after-save-refresh-status)
-     (git-commit-mode-hook . my/magit-commit-mode-init)
-     (git-commit-setup     . my/magit-commit-prompt))
+         (after-save           . magit-after-save-refresh-status)
+         (git-commit-mode-hook . my/magit-commit-mode-init)
+         (git-commit-setup     . my/magit-commit-prompt))
   :custom ((with-editor-file-name-history-exclude '("1"))
-       (magit-last-seen-setup-instructions    "1.4.0"))
+           (magit-last-seen-setup-instructions    "1.4.0"))
   :init (progn
           (setenv "GIT_PAGER" "")
+          (magit-add-section-hook 'magit-status-sections-hook
+                                  'magit-insert-modules
+                                  'magit-insert-unpulled-from-upstream)
+          (magit-define-popup-action 'magit-commit-popup
+            ?x "Absorb" #'magit-commit-absorb-popup)
 
           ;; we no longer need vc-git
           (delete 'Git vc-handled-backends)
@@ -214,10 +222,10 @@
 
             ;; Customize lighters
             (delight
-             '((magit-diff-mode "Magit Diff")
-               (magit-log-mode "Magit Log")
-               (magit-popup-mode "Magit Popup")
-               (magit-status-mode "Magit Status")))
+             '((magit-diff-mode    "Magit Diff")
+               (magit-log-mode     "Magit Log")
+               (magit-popup-mode   "Magit Popup")
+               (magit-status-mode  "Magit Status")))
 
             ;; Show gravatars
             (setq magit-revision-show-gravatars '("^Author:     " . "^Commit:     "))
@@ -447,9 +455,9 @@
   :diminish git-gutter-mode
   :init (global-git-gutter-mode t)
   :commands (global-git-gutter-mode
-	     git-gutter:stage-hunk
-	     git-gutter:next-hunk
-	     git-gutter:previous-hunk)
+             git-gutter:stage-hunk
+             git-gutter:next-hunk
+             git-gutter:previous-hunk)
   :hook (magit-post-refresh . git-gutter:update-all-windows)
   :config (progn
 
@@ -549,14 +557,14 @@ Git gutter:
   :defer t
   :if (executable-find "git")
   :commands (smerge-mode
-         hydra-smerge/body
-         my/enable-smerge-maybe)
+             hydra-smerge/body
+             my/enable-smerge-maybe)
   :init (defun my/enable-smerge-maybe ()
-            "Auto-enable `smerge-mode' when merge conflict is detected."
-            (save-excursion
-              (goto-char (point-min))
-              (when (re-search-forward "^<<<<<<< " nil :noerror)
-                (smerge-mode 1))))
+          "Auto-enable `smerge-mode' when merge conflict is detected."
+          (save-excursion
+            (goto-char (point-min))
+            (when (re-search-forward "^<<<<<<< " nil :noerror)
+              (smerge-mode 1))))
   :hook (find-file . my/enable-smerge-maybe)
   :config (progn
             (ignore-errors

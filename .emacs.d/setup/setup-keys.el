@@ -93,7 +93,7 @@
 (global-set-key [(control r)]    'replace-string)
 (global-set-key [(control a)]    'mark-whole-buffer)
 (global-set-key [(control v)]    'yank)
-(global-set-key (kbd "C-tab")    'comment-or-uncomment-region)
+(global-set-key [(control tab)]  'comment-or-uncomment-region)
 (global-set-key (kbd "C-c C-v")  'counsel-yank-pop)
 (global-set-key (kbd "C-c C-b")  'beautify-buffer)
 
@@ -210,7 +210,7 @@
 (defvar my/keys-minor-mode-map (make-keymap) "my/keys-minor-mode keymap.")
 (bind-keys :map my/keys-minor-mode-map
            ((kbd "<mouse-3>")                       .   mouse3-popup-menu)
-           ((kbd "C-tab")                           .   comment-or-uncomment-region)
+           ((kbd "<C-tab>")                         .   comment-or-uncomment-region)
            ((kbd "M-.")                             .   helm-etags-select)
            ((kbd "C-.")                             .   helm-gtags-dwim)
            ((kbd "<f2>")                            .   bm-next)
