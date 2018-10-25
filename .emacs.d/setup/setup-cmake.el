@@ -153,6 +153,7 @@
   :if (not (equal system-type 'windows-nt))
   :defer t
   :after (rtags irony)
+  :custom ((cmake-ide-header-search-other-file nil))
   :commands (my/cmake-ide-init
              cmake-ide-compile
              cmake-ide-setup
@@ -268,6 +269,7 @@
                   (cmake-ide-maybe-start-rdm)
                   (cmake-project-mode 1)
                   (my/c-mode-init-rtags)
+		  (my/c-mode-indent-init)
                   (eldoc-mode)
                   (turn-on-eldoc-mode))))
 
