@@ -186,7 +186,7 @@ Do this if `my/outshine-allow-space-before-heading' is non-nil."
 (use-package bicycle
   :after outline
   :bind (:map outline-minor-mode-map
-              ([C-tab] . bicycle-cycle))
+              ("C-c C-c" . bicycle-cycle))
   :commands (bicycle-cycle
              bicycle-cycle-global))
 
