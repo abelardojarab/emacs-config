@@ -63,7 +63,10 @@
 
 ;; Restore old window configurations
 (use-package winner
+  :defer t
   :hook (after-init . winner-mode)
+  :commands (winner-mode
+             winner-undo)
   :custom (winner-boring-buffers '("*Completions*"
                                    "*Compile-Log*"
                                    "*inferior-lisp*"

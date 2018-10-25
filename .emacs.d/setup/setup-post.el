@@ -76,6 +76,14 @@
 (add-hook 'after-init-hook #'my/set-face-tabbar)
 (add-hook 'after-init-hook #'my/set-face-ecb)
 
+(defun set-selected-frame-dark ()
+  (interactive)
+  (let ((frame-name (cdr (assq 'name (frame-parameters (selected-frame))))))
+    (call-process-shell-command
+     (format
+      "xprop -f _GTK_THEME_VARIANT 8u -set _GTK_THEME_VARIANT 'dark' -name '%s'"
+      frame-name))))
+
 ;; Advice the load theme function
 (defadvice load-theme (around load-theme-around)
   (let ()
@@ -83,6 +91,9 @@
     ad-do-it
 
     ;; Add required faces
+    (ignore-errors
+      (if (executable-find "xprop")
+          (set-selected-frame-dark)))
     (my/set-face-fringe)
     (my/set-face-tabbar)
     (my/set-face-ecb)
@@ -95,14 +106,14 @@
 
 (if (file-exists-p custom-file-x)
     (add-hook 'after-init-hook (lambda ()
-                 (load custom-file-x :noerror :nomessage)
+                                 (load custom-file-x :noerror :nomessage)
 
-                 ;; Add required faces
-                 (my/set-face-fringe)
-                 (my/set-face-tabbar)
-                 (my/set-face-ecb)
-                 (setq-default mode-line-format '("%e" (:eval (spaceline-ml-custom))))
-                 )))
+                                 ;; Add required faces
+                                 (my/set-face-fringe)
+                                 (my/set-face-tabbar)
+                                 (my/set-face-ecb)
+                                 (setq-default mode-line-format '("%e" (:eval (spaceline-ml-custom))))
+                                 )))
 
 (provide 'setup-post)
 ;;; setup-post.el ends here
