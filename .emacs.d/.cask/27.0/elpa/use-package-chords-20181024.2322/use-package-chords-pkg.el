@@ -1,0 +1,2 @@
+;;; -*- no-byte-compile: t -*-
+(define-package "use-package-chords" "20181024.2322" "key-chord keyword for use-package" '((use-package "2.1") (bind-key "1.0") (bind-chord "0.2") (key-chord "0.6")) :commit "23c5c431f2d238f2c0fb2509687bb94d6c375889" :keywords '("convenience" "tools" "extensions") :authors '(("Justin Talbott" . "justin@waymondo.com")) :maintainer '("Justin Talbott" . "justin@waymondo.com") :url "https://github.com/waymondo/use-package-chords")

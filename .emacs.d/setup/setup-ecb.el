@@ -309,5 +309,9 @@ more place."
                       (defadvice speedbar-item-load (after speedbar-highlight-file activate)
                         (projectile-speedbar-open-current-buffer-in-tree))))))
 
+;; Activate ECB in graphical mode
+(if (display-graphic-p)
+    (my/ecb-activate))
+
 (provide 'setup-ecb)
 ;;; setup-ecb.el ends here
