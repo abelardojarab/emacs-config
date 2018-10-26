@@ -234,8 +234,9 @@ more place."
                          (semantic-mode t)
                          (setq global-semantic-idle-scheduler-mode t)))
 
-            ;; callback function
+            ;; Reparse files on 'first change' and 'after saving'
             (defun idle-timer-ecb-methods-callback ()
+	      (interactive)
               (when (bound-and-true-p ecb-minor-mode)
                 (ignore-errors
                   ;; this is to get the methods buffer to refresh correctly.
@@ -249,6 +250,13 @@ more place."
 
             (add-hook 'after-save-hook    #'idle-timer-ecb-methods-callback)
             (add-hook 'first-change-hook  #'idle-timer-ecb-methods-callback)
+
+	    ;; Also reparse files on tabbar change
+            (defadvice tabbar-forward-tab (after recompute-semantic activate)
+              (idle-timer-ecb-methods-callback))
+
+            (defadvice tabbar-backward-tab (after recompute-semantic activate)
+              (idle-timer-ecb-methods-callback))
 
             ;; Speedbar
             (use-package sr-speedbar

@@ -90,7 +90,14 @@
                 ;; ensure fill-paragraph takes doxygen @ markers as start of new
                 ;; paragraphs properly
                 (setq-default comment-multi-line t
-                              paragraph-start "^[ ]*\\(//+\\|\\**\\)[ ]*\\([ ]*$\\|@param\\)\\|^\f")))))
+                              paragraph-start "^[ ]*\\(//+\\|\\**\\)[ ]*\\([ ]*$\\|@param\\)\\|^\f")))
+
+	    (add-hook 'find-file-hook 'my/c-files-hook)
+	    (defun my/c-files-hook ()
+	      (when (or (string= (file-name-extension buffer-file-name) "c")
+			(string= (file-name-extension buffer-file-name) "h"))
+		(my/c-mode-indent-init)
+		))))
 
 ;; Show inline arguments hint for the C/C++ function at point
 (use-package function-args
