@@ -333,6 +333,7 @@
     "pthread.h"
     "fcntl.h"
     "cdefs.h"
+    "features.h"
     "mman.h"
     ;; C++ header files
     "new"

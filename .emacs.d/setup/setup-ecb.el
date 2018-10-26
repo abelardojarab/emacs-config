@@ -194,8 +194,8 @@ the layout contains no persistent compilation window and the other windows get a
 little more place. "
               (ecb-set-methods-buffer)
               (select-window (next-window (next-window)))
-              (ecb-set-history-buffer)
-              (ecb-split-ver 0.4)
+              (ecb-set-symboldef-buffer)
+              (ecb-split-ver 0.5)
               (ecb-set-analyse-buffer)
               (select-window (previous-window (selected-window) 0)))
 
