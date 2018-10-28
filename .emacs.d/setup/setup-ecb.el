@@ -48,6 +48,9 @@
 	   (ecb-tip-of-the-day			       nil))
   :config (progn
 
+            (defadvice semanticdb-deep-find-tags-by-name-method (around bar activate)
+              (ignore-errors add-do-it))
+
             (defun my/ecb-activate ()
               (interactive)
               (progn
@@ -57,10 +60,7 @@
 
             ;; Fix error with symboldef sync
             (defmacro ecb-with-readonly-buffer (buffer &rest body)
-              "Make buffer BUFFER current but do not display it. Evaluate BODY in buffer
-BUFFER \(not read-only an evaluation-time of BODY) and make afterwards BUFFER
-read-only. Note: All this is done with `save-excursion' so after BODY that
-buffer is current which was it before calling this macro."
+              "Make buffer BUFFER current but do not display it."
               `(ignore-errors (if (buffer-live-p ,buffer)
                                   (with-current-buffer ,buffer
                                     (unwind-protect
@@ -221,14 +221,6 @@ more place."
               (ecb-split-ver 0.5)
               (ecb-set-history-buffer)
               (select-window (next-window)))
-
-            ;; disable global semantic idle scheduler.
-            ;; it doesn't really seem to work all that well in automatically
-            ;; reparsing buffers and it's actually intrusive when i'm typing:
-            (add-hook 'ecb-activate-hook
-                      '(lambda ()
-                         (semantic-mode t)
-                         (setq global-semantic-idle-scheduler-mode t)))
 
             ;; Reparse files on 'first change' and 'after saving'
             (defun idle-timer-ecb-methods-callback ()
