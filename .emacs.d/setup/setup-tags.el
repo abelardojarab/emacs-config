@@ -24,12 +24,13 @@
 
 ;;; Code:
 (use-package etags
-  :defer t
-  ;; do not enable etags if global is present
-  :if (not (executable-find "global"))
+  :demand t
   :commands (etags-create-or-update
              etags-tags-completion-table
              tags-completion-table)
+  :custom ((tags-revert-without-query t)
+	   (tags-always-build-completion-table t)
+	   (tags-add-tables t))
   :init (progn
 
           ;; Assure .gtags directory exists
@@ -42,8 +43,7 @@
             (with-temp-buffer (write-file "~/.gtags/TAGS")))
 
           (setq tags-file-name "~/.gtags/TAGS")
-          (setq tags-table-list (list tags-file-name))
-          (setq tags-add-tables t))
+          (setq tags-table-list (list tags-file-name)))
   :config (progn
             (unless (fboundp 'push-tag-mark)
               (defun push-tag-mark ()
@@ -51,11 +51,6 @@
                 \\[pop-tag-mark] can be used to come back to current position."
                 (interactive)
                 (ring-insert find-tag-marker-ring (point-marker))))
-
-            ;; Increase the warning threshold to be more than normal TAGS file sizes
-            (setq large-file-warning-threshold nil) ;; disable warnings
-            (setq tags-revert-without-query t)
-            (setq tags-always-build-completion-table t)
 
             ;; etags creation
             (defun etags-create-or-update (dir-name)
@@ -144,8 +139,6 @@ tags table and its (recursively) included tags tables."
 (use-package etags-select
   :defer t
   :after etags
-  ;; do not enable etags if global is present
-  :if (not (executable-find "global"))
   :commands (etags-select-find-tag
              ido-find-tag)
   :config (progn
@@ -164,16 +157,13 @@ tags table and its (recursively) included tags tables."
 (use-package etags-table
   :defer t
   :after (projectile etags)
-  :if (not (executable-find "global"))
+  :custom ((etags-table-search-up-depth 2))
   :commands etags-create-or-update-table-tags-table
   :config (progn
             (setq etags-table-alist
                   (list
                    ;; For jumping to standard headers:
                    '(".*\\.\\([ch]\\|cpp\\)" "~/.gtags/TAGS")))
-
-            ;; Max depth to search up for a tags file. nil means don't search.
-            (setq etags-table-search-up-depth 2)
 
             ;; Below function comes useful when you change the project-root
             ;; symbol to a different value (when switching projects)
@@ -187,9 +177,7 @@ tags table and its (recursively) included tags tables."
 ;; Ctags
 (use-package ctags
   :defer t
-  ;; do not enable etags if global is present
-  :if (and (executable-find "ctags")
-       (not (executable-find "global")))
+  :if (executable-find "ctags")
   :commands (ctags-create-or-update
              ctags-create-or-update-tags-table
              ctags-search)
