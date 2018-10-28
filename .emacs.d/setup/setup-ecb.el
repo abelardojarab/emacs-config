@@ -30,7 +30,22 @@
   :bind (:map ctl-x-map
               ("0" . my/ecb-activate))
   :init (setq stack-trace-on-error t)
-  :commands (ecb-redraw-layout my/ecb-activate idle-timer-ecb-methods-start)
+  :commands (ecb-redraw-layout
+	     my/ecb-activate
+	     idle-timer-ecb-methods-start)
+  :custom ((ecb-truncate-lines			      t)
+	   (ecb-show-sources-in-directories-buffer    'always)
+	   (ecb-compile-window-height		      nil)
+	   (ecb-compile-window-width		      'edit-window)
+	   (ecb-compile-window-temporally-enlarge      nil)
+	   (ecb-eshell-fit-window-to-command-output    nil)
+	   (ecb-windows-width			       35)
+	   (ecb-fix-window-size			       'width)
+	   (ecb-layout-name			       my/ecb-layout-theme)
+	   (ecb-history-make-buckets		       'mode)
+	   (ecb-highlight-tag-with-point-delay	       180)
+	   (ecb-kill-buffer-clears-history	       'auto)
+	   (ecb-tip-of-the-day			       nil))
   :config (progn
 
             (defun my/ecb-activate ()
@@ -39,12 +54,6 @@
                 (ecb-redraw-layout)
                 (ecb-activate)
                 (ecb-redraw-layout)))
-
-            (defadvice ecb-stealthy-updates (around bar activate)
-              (ignore-errors add-do-it))
-
-            (defadvice ecb-basic-buffer-sync (around bar activate)
-              (ignore-errors add-do-it))
 
             ;; Fix error with symboldef sync
             (defmacro ecb-with-readonly-buffer (buffer &rest body)
@@ -67,22 +76,9 @@ buffer is current which was it before calling this macro."
                             ("~/workspace"              "Local")
                             ("~/workspace_remote"       "Shared"))))
 
-            (setq ecb-truncate-lines t
-                  ecb-show-sources-in-directories-buffer 'always
-                  ecb-compile-window-height nil
-                  ecb-compile-window-width 'edit-window
-                  ecb-compile-window-temporally-enlarge nil
-                  ecb-eshell-fit-window-to-command-output nil
-                  ecb-create-layout-file  (concat (file-name-as-directory
+            (setq ecb-create-layout-file  (concat (file-name-as-directory
                                                    my/emacs-cache-dir)
                                                   "ecb-user-layouts.el")
-                  ecb-windows-width 35
-                  ecb-fix-window-size 'width
-                  ecb-layout-name my/ecb-layout-theme
-                  ecb-history-make-buckets 'mode
-                  ecb-highlight-tag-with-point-delay 180
-                  ecb-kill-buffer-clears-history 'auto
-                  ecb-tip-of-the-day nil
                   ecb-tip-of-the-day-file  (concat (file-name-as-directory
                                                     my/emacs-cache-dir)
                                                    "ecb-tip-of-day.el")
@@ -256,6 +252,9 @@ more place."
               (idle-timer-ecb-methods-callback))
 
             (defadvice tabbar-backward-tab (after recompute-semantic activate)
+              (idle-timer-ecb-methods-callback))
+
+	    (defadvice tabbar-select-tab-callback (after recompute-semantic activate)
               (idle-timer-ecb-methods-callback))
 
             ;; Speedbar
