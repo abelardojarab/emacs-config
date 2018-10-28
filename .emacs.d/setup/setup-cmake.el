@@ -136,10 +136,7 @@
                                                      "GTAGS"))))
                 (rtags-start-process-unless-running)
                 (setq-local eldoc-documentation-function #'rtags-eldoc-function)
-                (eldoc-mode t)
-
-                ;; Other preferences
-                (my/c-mode-indent-init)))))
+                (eldoc-mode t)))))
 
 ;; cmake syntax highlighting
 (use-package cmake-mode
@@ -153,7 +150,6 @@
   :if (not (equal system-type 'windows-nt))
   :defer t
   :after (rtags irony)
-  :custom ((cmake-ide-header-search-other-file nil))
   :commands (my/cmake-ide-init
              cmake-ide-compile
              cmake-ide-setup
