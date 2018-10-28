@@ -42,7 +42,8 @@
             ;; Enabled features
             (setq semantic-default-submodes '(global-semanticdb-minor-mode
                                               global-semantic-mru-bookmark-mode
-                                              global-semantic-load-enable-code-helpers))
+                                              global-semantic-load-enable-code-helpers
+					      global-semantic-idle-scheduler-mode))
 
             ;; Assure .emacs.cache/semanticdb directory exists
             (if (not (file-exists-p (concat (file-name-as-directory
@@ -51,9 +52,6 @@
                 (make-directory (concat (file-name-as-directory
                                          my/emacs-cache-dir)
                                         "semanticdb") t))
-
-            ;; Enable case-insensitive searching
-            (set-default 'semantic-case-fold t)
 
             ;; Faster parsing
             (setq semantic-idle-work-parse-neighboring-files-flag nil
