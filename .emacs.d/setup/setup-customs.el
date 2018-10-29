@@ -456,8 +456,8 @@
   :group 'my/customs)
 
 ;; User-specific configuration file
-(setq-default custom-file-x (concat (file-name-as-directory
-                                     my/emacs-cache-dir) "custom.el"))
+(defvar custom-file-x (concat (file-name-as-directory
+                               my/emacs-cache-dir) "custom.el"))
 
 (ignore-errors
   (if (file-exists-p custom-file-x)
