@@ -482,6 +482,7 @@
 	      (dolist (buff (buffer-list))
 		(with-current-buffer buff
 		  (when (and git-gutter-mode (get-buffer-window buff))
+		    (git-gutter-mode -1)
 		    (git-gutter-mode t)))))
 
 	    (add-hook 'my/magit-after-unstage-hooks
