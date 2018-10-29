@@ -146,6 +146,9 @@
           ;; we no longer need vc-git
           (delete 'Git vc-handled-backends)
 
+          (defadvice magit-wip-commit-worktree (around bar activate)
+            (ignore-errors add-do-it))
+
           ;; make magit status go full-screen but remember previous window
           (defadvice magit-status (around magit-fullscreen activate)
             (window-configuration-to-register :magit-fullscreen)
