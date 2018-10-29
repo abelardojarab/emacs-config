@@ -146,6 +146,7 @@
           ;; we no longer need vc-git
           (delete 'Git vc-handled-backends)
 
+	  ;; Ignore magit error
           (defadvice magit-wip-commit-worktree (around bar activate)
             (ignore-errors add-do-it))
 
