@@ -461,6 +461,7 @@
   :hook (magit-post-refresh . git-gutter:update-all-windows)
   :config (progn
 
+	    ;; Update git-gutter when staging/unstaging changes
 	    (defvar my/magit-after-stage-hooks nil
 	      "Hooks to be run after staging one item in magit.")
 
@@ -490,6 +491,7 @@
 	    (add-hook 'my/magit-after-stage-hooks
 		      'my/refresh-visible-git-gutter-buffers)
 
+	    ;; Hydra binding for git-gutter
             (defhydra hydra-git-gutter (:body-pre (git-gutter-mode 1)
                                                   :hint nil)
               "
