@@ -91,7 +91,7 @@
 
             ;; Basic packages
             (use-package org-list)
-	    (use-package org-indent)
+            (use-package org-indent)
 
             ;; Avoid error when inserting '_'
             (defadvice org-backward-paragraph (around bar activate)
@@ -129,20 +129,6 @@
              ("C-#"     . org-table-rotate-recalc-marks)
              ("C-c }"   . org-table-toggle-coordinate-overlays)
              ("C-c {"   . org-table-toggle-formula-debugger))
-
-            ;; Allow multiple line Org emphasis markup
-            (setcar (nthcdr 4 org-emphasis-regexp-components) 20) ;; Up to 20 lines
-
-            ;; Below is needed to apply the modified `org-emphasis-regexp-components'
-            (org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components)
-
-            ;; Allow quotes to be verbatim
-            (add-hook 'org-mode-hook
-                      (lambda ()
-                        (setcar (nthcdr 2 org-emphasis-regexp-components) " \t\n,'")
-                        (org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components)
-                        (org-element--set-regexps)
-                        (custom-set-variables `(org-emphasis-alist ',org-emphasis-alist))))
 
             ;; Enable mouse in Org
             (use-package org-mouse)
@@ -202,14 +188,6 @@
                    (split-string
                     "xclip -verbose -i /tmp/org.html -t text/html -selection clipboard" " ")))))
 
-            ;; Footnote definitions
-            (setq org-footnote-definition-re (org-re "^\\[\\(fn:[-_[:word:]]+\\)\\]")
-                  org-footnote-re (concat "\\[\\(?:"
-                                          ;; Match inline footnotes.
-                                          (org-re "fn:\\([-_[:word:]]+\\)?:\\|")
-                                          (org-re "\\(fn:[-_[:word:]]+\\)")
-                                          "\\)"))
-
             ;; .txt files aren't in the list initially, but in case that changes
             ;; in a future version of org, use if to avoid errors
             (if (assoc "\\.txt\\'" org-file-apps)
@@ -221,32 +199,32 @@
 
             ;; Org Export
             (use-package ox
-	      :custom ((org-export-coding-system         'utf-8)
-		       (org-export-time-stamp-file       nil)
-		       (org-export-headline-levels       4)
-		       (org-export-with-sub-superscripts '{})
-		       (org-export-allow-bind-keywords   t)
-		       (org-export-async-debug           t)
-		       (org-export-with-smart-quotes     t))
-	      :config (progn
-			;; Default export
-			(use-package ox-org)
-			(use-package ox-extra)
+              :custom ((org-export-coding-system         'utf-8)
+                       (org-export-time-stamp-file       nil)
+                       (org-export-headline-levels       4)
+                       (org-export-with-sub-superscripts '{})
+                       (org-export-allow-bind-keywords   t)
+                       (org-export-async-debug           t)
+                       (org-export-with-smart-quotes     t))
+              :config (progn
+                        ;; Default export
+                        (use-package ox-org)
+                        (use-package ox-extra)
 
-			;; Beamer/ODT/Markdown exporters
-			(use-package ox-beamer)
-			(use-package ox-odt)
-			(use-package ox-md)
+                        ;; Beamer/ODT/Markdown exporters
+                        (use-package ox-beamer)
+                        (use-package ox-odt)
+                        (use-package ox-md)
 
-			;; HTML5 slide exporter
-			(use-package ox-html5slide)
+                        ;; HTML5 slide exporter
+                        (use-package ox-html5slide)
 
-			;; ASCII doc exporter
-			(use-package ox-asciidoc)
+                        ;; ASCII doc exporter
+                        (use-package ox-asciidoc)
 
-			;; Export org-mode to Google I/O HTML5 slides
-			(use-package ox-ioslide-helper)
-			(use-package ox-ioslide)))
+                        ;; Export org-mode to Google I/O HTML5 slides
+                        (use-package ox-ioslide-helper)
+                        (use-package ox-ioslide)))
 
             ;; setup Org (babel support)
             (use-package setup-org-babel)
@@ -255,55 +233,13 @@
             (use-package setup-org-latex)
 
             ;; setup Org (html support)
-            (use-package setup-org-html)))
+            (use-package setup-org-html)
 
-;; Indentation, list bullets and checkboxes using monospace
-(use-package org-variable-pitch
-  :defer t
-  :commands org-variable-pitch-minor-mode
-  :hook (org-mode . org-variable-pitch-minor-mode))
+            ;; setup Org Agenda
+            (use-package setup-org-agenda)))
 
-;; Org tables
-(use-package org-table
-  :defer t
-  :config (defconst org-table-border-regexp "^[ \t]*[^|]"
-            "Regexp matching any line outside an Org table."))
-
-;; setup Org Agenda
-(use-package setup-org-agenda)
-
-;; setup Org plugins
+;; Setup Org plugins
 (use-package setup-org-plugins)
-
-;; Use footnotes as eldoc source
-(use-package org-eldoc
-  :defer t
-  :hook ((org-mode . org-eldoc-load)
-         (org-mode . eldoc-mode))
-  :commands org-eldoc-load
-  :config (defun my/org-eldoc-get-footnote ()
-            (save-excursion
-              (let ((fn (org-between-regexps-p "\\[fn:" "\\]")))
-                (when fn
-                  (save-match-data
-                    (nth 3 (org-footnote-get-definition (buffer-substring (+ 1 (car fn)) (- (cdr fn) 1)))))))))
-  (advice-add 'org-eldoc-documentation-function
-              :before-until #'my/org-eldoc-get-footnote))
-
-;; Use UTF8 symbols for Org Todo priorities
-(use-package org-fancy-priorities
-  :defer t
-  :hook (org-mode . org-fancy-priorities-mode)
-  :commands org-fancy-priorities-mode
-  :custom (org-fancy-priorities-list '((?A . "❗")
-                                       (?B . "⬆")
-                                       (?C . "⬇")
-                                       (?D . "☕")
-                                       (?1 . "⚡")
-                                       (?2 . "⮬")
-                                       (?3 . "⮮")
-                                       (?4 . "☕")
-                                       (?I . "❗"))))
 
 (provide 'setup-org)
 ;;; setup-org.el ends here

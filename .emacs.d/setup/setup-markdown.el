@@ -35,17 +35,16 @@
              org-table-align
              my/markdown-mode-init)
   :hook (markdown-mode . my/markdown-mode-init)
+  :custom ((markdown-asymmetric-header         t)
+           (markdown-header-scaling            t)
+           (markdown-enable-wiki-links         t)
+           (markdown-list-indent-width         2)
+           (markdown-enable-wiki-links         t)
+           (markdown-footnote-location         'immediately)
+           (markdown-wiki-link-fontify-missing t)
+           (markdown-wiki-link-alias-first     nil)
+           (markdown-indent-on-enter           'indent-and-new-item))
   :config (progn
-
-            (setq markdown-asymmetric-header         t
-                  markdown-header-scaling            t
-                  markdown-enable-wiki-links         t
-                  markdown-list-indent-width         2
-                  markdown-enable-wiki-links         t
-                  markdown-footnote-location         'immediately
-                  markdown-wiki-link-fontify-missing t
-                  markdown-wiki-link-alias-first     nil
-                  markdown-indent-on-enter           'indent-and-new-item)
 
             (use-package flycheck-mmark
               :disabled t

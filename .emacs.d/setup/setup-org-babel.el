@@ -26,38 +26,28 @@
 
 (use-package ob
   :after org
+  :custom ((org-src-tab-acts-natively    t)
+           (org-src-fontify-natively     t)
+           (org-src-tab-acts-natively    t)
+           (org-src-window-setup         'current-window)
+           (org-src-preserve-indentation t)
+           (org-confirm-babel-evaluate   nil)
+           (org-export-babel-evaluate    t))
   :config (progn
 
-        ;; Assure you can execute org code
-        (use-package ob-org)
+            ;; Assure you can execute org code
+            (use-package ob-org)
 
-            ;; Settings
-            (setq org-src-tab-acts-natively t
-                  org-src-fontify-natively t
-                  org-src-tab-acts-natively t
-                  org-src-window-setup 'current-window
-
-                  ;; Preserve indentation when tangling source blocks (important for makefiles)
-                  org-src-preserve-indentation t
-
-                  ;; Don't ask for confirmation on every =C-c C-c= code-block compile.
-                  org-confirm-babel-evaluate nil
-
-                  ;; Re-enable org-export babel evaluate
-                  org-export-babel-evaluate t
-
-                  ;; Rendering ditaa
-                  org-ditaa-jar-path (expand-file-name "jar/ditaa.jar" user-emacs-directory)
+            ;; Rendering ditaa
+            (setq org-ditaa-jar-path (expand-file-name "jar/ditaa.jar" user-emacs-directory)
 
                   ;; Rendering plantuml
                   org-plantuml-jar-path (expand-file-name "jar/plantuml.jar" user-emacs-directory))
 
             ;; A progress indicator for code blocks in org-mode courtesy of John Kitchin
             (defadvice org-babel-execute-src-block (around progress nil activate)
-              ;; (set-face-attribute
               (message "Running your code block")
               ad-do-it
-              ;; (set-face-attribute 'org-block-background nil :background "gray")
               (message "Done with code block"))
 
             ;; Automatically refresh inline images that are generated from Babel blocks

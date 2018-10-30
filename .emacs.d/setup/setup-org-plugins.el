@@ -24,6 +24,48 @@
 
 ;;; Code:
 
+;; Indentation, list bullets and checkboxes using monospace
+(use-package org-variable-pitch
+  :defer t
+  :commands org-variable-pitch-minor-mode
+  :hook (org-mode . org-variable-pitch-minor-mode))
+
+;; Org tables
+(use-package org-table
+  :defer t
+  :config (defconst org-table-border-regexp "^[ \t]*[^|]"
+            "Regexp matching any line outside an Org table."))
+
+;; Use footnotes as eldoc source
+(use-package org-eldoc
+  :defer t
+  :hook ((org-mode . org-eldoc-load)
+         (org-mode . eldoc-mode))
+  :commands org-eldoc-load
+  :config (defun my/org-eldoc-get-footnote ()
+            (save-excursion
+              (let ((fn (org-between-regexps-p "\\[fn:" "\\]")))
+                (when fn
+                  (save-match-data
+                    (nth 3 (org-footnote-get-definition (buffer-substring (+ 1 (car fn)) (- (cdr fn) 1)))))))))
+  (advice-add 'org-eldoc-documentation-function
+              :before-until #'my/org-eldoc-get-footnote))
+
+;; Use UTF8 symbols for Org Todo priorities
+(use-package org-fancy-priorities
+  :defer t
+  :hook (org-mode . org-fancy-priorities-mode)
+  :commands org-fancy-priorities-mode
+  :custom (org-fancy-priorities-list '((?A . "❗")
+                                       (?B . "⬆")
+                                       (?C . "⬇")
+                                       (?D . "☕")
+                                       (?1 . "⚡")
+                                       (?2 . "⮬")
+                                       (?3 . "⮮")
+                                       (?4 . "☕")
+                                       (?I . "❗"))))
+
 ;; Org Table of Contents
 (use-package toc-org
   :defer t

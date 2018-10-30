@@ -419,12 +419,12 @@
               ("C-c (" . org-mode-reftex-search))
   :commands org-mode-reftex-setup
   :hook (org-mode . org-mode-reftex-setup)
-  :custom ((reftex-enable-partial-scans	          t)
-	   (reftex-save-parse-info	          t)
-	   (reftex-use-multiple-selection-buffers t)
-	   (reftex-plug-into-AUCTeX	          t)
-	   (reftex-cite-prompt-optional-args      nil)
-	   (reftex-cite-cleanup-optional-args     t))
+  :custom ((reftex-enable-partial-scans           t)
+           (reftex-save-parse-info            t)
+           (reftex-use-multiple-selection-buffers t)
+           (reftex-plug-into-AUCTeX           t)
+           (reftex-cite-prompt-optional-args      nil)
+           (reftex-cite-cleanup-optional-args     t))
   :config (progn
 
             ;; Enable RefTeX in Org-mode to find bibliography

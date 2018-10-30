@@ -30,6 +30,17 @@
            (ispell-silently-savep             t)
            (ispell-choices-win-default-height 5))
   :config (progn
+            (defun my/org-ispell ()
+              "Configure `ispell-skip-region-alist' for `org-mode'."
+              (make-local-variable 'ispell-skip-region-alist)
+              (add-to-list 'ispell-skip-region-alist '(org-property-drawer-re))
+              (add-to-list 'ispell-skip-region-alist '("~" "~"))
+              (add-to-list 'ispell-skip-region-alist '("=" "="))
+              (add-to-list 'ispell-skip-region-alist '("```" "```"))
+              (add-to-list 'ispell-skip-region-alist '("^#\\+BEGIN_SRC" . "^#\\+END_SRC")))
+            (add-hook 'org-mode-hook #'my/org-ispell)
+            (add-hook 'markdown-mode-hook #'my/org-ispell)
+
             ;; Find aspell and hunspell automatically
             (cond
              ;; try hunspell at first

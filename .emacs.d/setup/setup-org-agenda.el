@@ -28,13 +28,13 @@
 (use-package appt
   :defer t
   :commands (appt-activate org-agenda-to-appt)
+  :custom ((appt-message-warning-time        30)
+           (appt-display-interval            15)
+           (appt-display-mode-line           t)
+           (calendar-mark-diary-entries-flag t)
+           (appt-display-diary               nil)
+           (appt-display-format              'window))
   :config (progn
-            (setq appt-message-warning-time        30
-                  appt-display-interval            15
-                  appt-display-mode-line           t
-                  calendar-mark-diary-entries-flag t
-                  appt-display-diary               nil
-                  appt-display-format              'window)
 
             ;; Make appt aware of appointments from the agenda
             (defun org-agenda-to-appt ()
@@ -70,32 +70,30 @@
          ("x"     . my/org-agenda-done)
          ("X"     . my/org-agenda-mark-done-and-add-followup)
          ("N"     . my/org-agenda-new))
+  :custom ((org-log-done                                    'time)
+           (org-enforce-todo-dependencies                   t)
+           (org-agenda-inhibit-startup                       t)
+           (org-agenda-dim-blocked-tasks                     t)
+           (org-agenda-default-appointment-duration          60)
+           (org-agenda-skip-deadline-prewarning-if-scheduled t)
+           (org-agenda-window-setup                          'current-window)
+           (org-agenda-sticky                                t)
+           (org-agenda-compact-blocks                        t)
+           (org-agenda-span                                  14)
+           (org-agenda-start-on-weekday                      nil)
+           (org-agenda-show-log                              t)
+           (org-agenda-show-all-dates                        t)
+           (org-agenda-skip-scheduled-if-done                t)
+           (org-agenda-skip-deadline-if-done                 t)
+           (org-deadline-warning-days                        7))
   :config (progn
 
             (defadvice org-agenda (around split-vertically activate)
               (let ((split-width-threshold 100)) ;; or whatever width makes sense for you
                 ad-do-it))
 
-            ;; Org log
-            (setq org-log-done                  'time ;; Insert only timestamp when closing an Org TODO item
-                  org-enforce-todo-dependencies t)
-
             ;; Agenda settings
-            (setq org-agenda-inhibit-startup                       t
-                  org-agenda-dim-blocked-tasks                     t
-                  org-agenda-default-appointment-duration          60
-                  org-agenda-skip-deadline-prewarning-if-scheduled t
-                  org-agenda-window-setup                          'current-window
-                  org-agenda-sticky                                t
-                  org-agenda-compact-blocks                        t
-                  org-agenda-span                                  14
-                  org-agenda-start-on-weekday                      nil
-                  org-agenda-show-log                              t
-                  org-agenda-show-all-dates                        t
-                  org-agenda-skip-scheduled-if-done                t
-                  org-agenda-skip-deadline-if-done                 t
-                  org-deadline-warning-days                        7
-                  org-agenda-time-grid
+            (setq org-agenda-time-grid
                   '((daily today require-timed)
                     "----------------"
                     (800 1000 1200 1400 1600 1800)))
