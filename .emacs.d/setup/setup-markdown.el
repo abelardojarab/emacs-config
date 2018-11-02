@@ -62,7 +62,7 @@
 
               ;; Org goodies
               (orgtbl-mode               t)
-              (orgstruct++-mode          t)
+              ;; (orgstruct++-mode          t)
 
               ;; Extra modes
               (outline-minor-mode        t)

@@ -31,21 +31,21 @@
               ("0" . my/ecb-activate))
   :init (setq stack-trace-on-error t)
   :commands (ecb-redraw-layout
-	     my/ecb-activate
-	     idle-timer-ecb-methods-start)
-  :custom ((ecb-truncate-lines			      t)
-	   (ecb-show-sources-in-directories-buffer    'always)
-	   (ecb-compile-window-height		      nil)
-	   (ecb-compile-window-width		      'edit-window)
-	   (ecb-compile-window-temporally-enlarge      nil)
-	   (ecb-eshell-fit-window-to-command-output    nil)
-	   (ecb-windows-width			       35)
-	   (ecb-fix-window-size			       'width)
-	   (ecb-layout-name			       my/ecb-layout-theme)
-	   (ecb-history-make-buckets		       'mode)
-	   (ecb-highlight-tag-with-point-delay	       180)
-	   (ecb-kill-buffer-clears-history	       'auto)
-	   (ecb-tip-of-the-day			       nil))
+             my/ecb-activate
+             idle-timer-ecb-methods-start)
+  :custom ((ecb-truncate-lines                      t)
+	   (ecb-show-sources-in-directories-buffer  'always)
+	   (ecb-compile-window-height               nil)
+	   (ecb-compile-window-width                'edit-window)
+	   (ecb-compile-window-temporally-enlarge   nil)
+	   (ecb-eshell-fit-window-to-command-output nil)
+	   (ecb-windows-width			    35)
+	   (ecb-fix-window-size			    'width)
+	   (ecb-layout-name			    my/ecb-layout-theme)
+	   (ecb-history-make-buckets		    'mode)
+	   (ecb-highlight-tag-with-point-delay      180)
+	   (ecb-kill-buffer-clears-history	    'auto)
+	   (ecb-tip-of-the-day			    nil))
   :config (progn
 
             (defadvice semanticdb-deep-find-tags-by-name-method (around bar activate)
@@ -95,136 +95,46 @@
                                               '("semantic-decoration-on-includes"          . t)
                                               '("semantic-tag-boundary"                    . t)))
 
-            ;; reference path-to-ecb/ecb-layout-defs.el
-            (ecb-layout-define "leftright-sa-m" left-right
-              "This function creates the following layout:
-
+	    (ecb-layout-define "leftright-analyse-x" left-right
+	      "This function creates the following layout:
    --------------------------------------------------------------
    |              |                               |             |
+   |  Directories |                               |  Methods    |
    |              |                               |             |
    |              |                               |             |
-   |  Sources     |                               |  Methods    |
    |              |                               |             |
    |              |                               |             |
    |              |                               |             |
    |--------------|             Edit              |-------------|
    |              |                               |             |
+   |  Sources     |                               |             |
    |              |                               |             |
-   |  Analyse     |                               |             |
-   |              |                               | Symbol Defs |
+   |--------------|                               |  Analyse    |
    |              |                               |             |
+   |  History     |                               |             |
    |              |                               |             |
    --------------------------------------------------------------
    |                                                            |
    |                    Compilation                             |
    |                                                            |
    --------------------------------------------------------------
-
 If you have not set a compilation-window in `ecb-compile-window-height' then
 the layout contains no persistent compilation window and the other windows get a
 little more place."
-              (ecb-set-history-buffer)
-              (ecb-split-ver 0.5)
-              (ecb-set-analyse-buffer)
-              (select-window (next-window (next-window)))
-              (ecb-set-methods-buffer)
-              (select-window (previous-window (previous-window (selected-window) 0) 0)))
-
-            (ecb-layout-define "left-speedbar" left
-              "This function creates the following layout:
-
-   -------------------------------------------------------
-   |              |                                      |
-   |              |                                      |
-   |              |                                      |
-   |              |                                      |
-   |              |                                      |
-   |              |                                      |
-   |              |                                      |
-   |   Speedbar   |                 Edit                 |
-   |              |                                      |
-   |              |                                      |
-   |              |                                      |
-   |              |                                      |
-   |              |                                      |
-   |              |                                      |
-   |              |                                      |
-   -------------------------------------------------------
-   |                                                     |
-   |                    Compilation                      |
-   |                                                     |
-   -------------------------------------------------------
-
-If you have not set a compilation-window in `ecb-compile-window-height' then
-the layout contains no persistent compilation window and the other windows get a
-little more place. "
-              (ecb-set-speedbar-buffer)
-              (select-window (next-window)))
-
-            (ecb-layout-define "left-speedbar-right" left-right
-              "This function creates the following layout:
-
-   --------------------------------------------------------------
-   |              |                               |             |
-   |              |                               |             |
-   |              |                               |             |
-   |              |                               |  History    |
-   |              |                               |             |
-   |              |                               |             |
-   |  Methods     |                               |             |
-   |              |             Edit              |-------------|
-   |              |                               |             |
-   |              |                               |             |
-   |              |                               |             |
-   |              |                               | Symboldefs  |
-   |              |                               |             |
-   |              |                               |             |
-   --------------------------------------------------------------
-   |                                                            |
-   |                    Compilation                             |
-   |                                                            |
-   --------------------------------------------------------------
-
-If you have not set a compilation-window in `ecb-compile-window-height' then
-the layout contains no persistent compilation window and the other windows get a
-little more place. "
-              (ecb-set-methods-buffer)
-              (select-window (next-window (next-window)))
-              (ecb-set-symboldef-buffer)
-              (ecb-split-ver 0.5)
-              (ecb-set-analyse-buffer)
-              (select-window (previous-window (selected-window) 0)))
-
-            (ecb-layout-define "bodil" left
-              "This function creates the following layout:
-   -------------------------------------------------------
-   |              |                                      |
-   |              |                                      |
-   |              |                                      |
-   |  History     |                 Edit                 |
-   |              |                                      |
-   |              |                                      |
-   |--------------|                                      |
-   |              |                                      |
-   |              |                                      |
-   |  Sources     |                                      |
-   |              |                                      |
-   -------------------------------------------------------
-   |                                                     |
-   |                    Compilation                      |
-   |                                                     |
-   -------------------------------------------------------
-If you have not set a compilation-window in `ecb-compile-window-height' then the
-layout contains no persistent compilation window and the other windows get a little
-more place."
-              (ecb-set-methods-buffer)
-              (ecb-split-ver 0.5)
-              (ecb-set-history-buffer)
-              (select-window (next-window)))
+	      (ecb-set-history-buffer)
+	      (ecb-split-ver 0.3)
+	      (ecb-set-sources-buffer)
+	      (ecb-split-ver 0.5)
+	      (ecb-set-symboldef-buffer)
+	      (select-window (next-window (next-window)))
+	      (ecb-set-methods-buffer)
+	      (ecb-split-ver 0.5)
+	      (ecb-set-analyse-buffer)
+	      (select-window (previous-window (previous-window (selected-window) 0) 0)))
 
             ;; Reparse files on 'first change' and 'after saving'
             (defun idle-timer-ecb-methods-callback ()
-	      (interactive)
+              (interactive)
               (when (bound-and-true-p ecb-minor-mode)
                 (ignore-errors
                   ;; this is to get the methods buffer to refresh correctly.
@@ -239,14 +149,14 @@ more place."
             (add-hook 'after-save-hook    #'idle-timer-ecb-methods-callback)
             (add-hook 'first-change-hook  #'idle-timer-ecb-methods-callback)
 
-	    ;; Also reparse files on tabbar change
+            ;; Also reparse files on tabbar change
             (defadvice tabbar-forward-tab (after recompute-semantic activate)
               (idle-timer-ecb-methods-callback))
 
             (defadvice tabbar-backward-tab (after recompute-semantic activate)
               (idle-timer-ecb-methods-callback))
 
-	    (defadvice tabbar-select-tab-callback (after recompute-semantic activate)
+            (defadvice tabbar-select-tab-callback (after recompute-semantic activate)
               (idle-timer-ecb-methods-callback))
 
             ;; Speedbar
