@@ -147,5 +147,12 @@
   :defer t
   :commands pretty-mode)
 
+(defun set-icon-fonts (CODE-FONT-ALIST)
+  "Utility to associate many unicode points with specified fonts."
+  (--each CODE-FONT-ALIST
+    (-let (((font . codes) it))
+      (--each codes
+        (set-fontset-font t `(,it . ,it) font)))))
+
 (provide 'setup-fonts)
 ;;; setup-fonts.el ends here
