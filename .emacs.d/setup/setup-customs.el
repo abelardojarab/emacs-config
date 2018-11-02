@@ -118,7 +118,7 @@
   :group 'my/customs
   :type 'list)
 
-(defcustom my/ecb-layout-theme "leftright-analyse-x"
+(defcustom my/ecb-layout-theme "leftright-analyse-y"
   "Preferred ECB layout name"
   :group 'my/customs
   :type 'string)

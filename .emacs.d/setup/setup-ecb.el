@@ -95,7 +95,7 @@
                                               '("semantic-decoration-on-includes"          . t)
                                               '("semantic-tag-boundary"                    . t)))
 
-	    (ecb-layout-define "leftright-analyse-x" left-right
+	    (ecb-layout-define "leftright-analyse-y" left-right
 	      "This function creates the following layout:
    --------------------------------------------------------------
    |              |                               |             |
