@@ -79,7 +79,7 @@
     (require 'setup-fonts)
 
     ;; ;; Setup font lock
-    ;; (require 'setup-font-lock)
+    (require 'setup-font-lock)
 
     ;; Setup region
     (require 'setup-region)
