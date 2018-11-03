@@ -22,22 +22,6 @@
 
 ;;
 
-;;; Code:
-;; Do not fontify large files
-(defun my/find-file-check-make-large-file-read-only ()
-  "If a file is over a given size, make the buffer read only."
-  (when (> (buffer-size) (* 1024 1024))
-    (read-only-mode nil)
-    (buffer-disable-undo)
-    (fundamental-mode)))
-
-;; In programming modes, make sure things like FIXME and TODO are highlighted so they stand out:
-(defun my/add-watchwords ()
-  "Highlight FIXME, TODO, and NOCOMMIT in code TODO"
-  (font-lock-add-keywords
-   nil '(("\\<\\(FIXME:?\\|TODO:?\\|NOCOMMIT:?\\)\\>"
-          1 '((:foreground "#d7a3ad") (:weight bold)) t))))
-
 ;; Syntax coloring
 (use-package font-lock
   :defer t
@@ -46,17 +30,15 @@
   :init (global-font-lock-mode t)
   :custom ((font-lock-maximum-decoration nil)
            (font-lock-support-mode       'jit-lock-mode)
-           (font-lock-multiline          t))
-  :hook ((find-file . my/find-file-check-make-large-file-read-only-hook)
-         (prog-mode . my/add-watchwords))
+           (font-lock-multiline          t)
+           (jit-lock-defer-time          0.1)
+           (jit-lock-defer-contextually  nil)
+           (jit-lock-chunk-size          8000)
+           (jit-lock-stealth-load        10)
+           (jit-lock-stealth-time        0.02)
+           (jit-lock-stealth-nice        0.01)
+           (jit-lock-stealth-verbose     nil))
   :config (progn
-            (setq jit-lock-defer-time          0.1
-                  jit-lock-defer-contextually  nil
-                  jit-lock-chunk-size          8000
-                  jit-lock-stealth-load        10
-                  jit-lock-stealth-time        0.02
-                  jit-lock-stealth-nice        0.01
-                  jit-lock-stealth-verbose     nil)
             (defun global-font-lock-mode-check-buffers () nil)
 
             ;; Displaying image tooltips in Emacs
