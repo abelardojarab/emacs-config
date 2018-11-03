@@ -26,6 +26,7 @@
 
 ;; Smart tab
 (use-package smart-tab
+  :disabled t
   :diminish smart-tab-mode
   :commands global-smart-tab-mode
   :custom (smart-tab-using-hippie-expand t)
