@@ -92,12 +92,12 @@
                 (setq-default comment-multi-line t
                               paragraph-start "^[ ]*\\(//+\\|\\**\\)[ ]*\\([ ]*$\\|@param\\)\\|^\f")))
 
-	    (add-hook 'find-file-hook 'my/c-files-hook)
-	    (defun my/c-files-hook ()
-	      (when (or (string= (file-name-extension buffer-file-name) "c")
-			(string= (file-name-extension buffer-file-name) "h"))
-		(my/c-mode-indent-init)
-		))))
+        (add-hook 'find-file-hook 'my/c-files-hook)
+        (defun my/c-files-hook ()
+          (when (or (string= (file-name-extension buffer-file-name) "c")
+            (string= (file-name-extension buffer-file-name) "h"))
+        (my/c-mode-indent-init)
+        ))))
 
 ;; Show inline arguments hint for the C/C++ function at point
 (use-package function-args
@@ -143,11 +143,11 @@
   :commands (basic-c-compile-file
              basic-c-compile-run-c
              basic-c-compile-makefile)
-  :config (setq basic-c-compiler "g++"
-                basic-c-compile-all-files nil
-                basic-c-compile-compiler-flags "-Wall -Werror -std=c++11"
-                basic-c-compile-outfile-extension nil
-                basic-c-compile-make-clean "find . -type f -executable -delete"))
+  :custom ((basic-c-compiler                  "g++")
+           (basic-c-compile-all-files         nil)
+           (basic-c-compile-compiler-flags    "-Wall -Werror -std=c++11")
+           (basic-c-compile-outfile-extension nil)
+           (basic-c-compile-make-clean        "find . -type f -executable -delete")))
 
 ;; C/C++ dissassemble
 (use-package rmsbolt)
