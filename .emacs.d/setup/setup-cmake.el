@@ -265,7 +265,6 @@
                   (cmake-ide-maybe-start-rdm)
                   (cmake-project-mode 1)
                   (my/c-mode-init-rtags)
-		  (my/c-mode-indent-init)
                   (eldoc-mode)
                   (turn-on-eldoc-mode))))
 
