@@ -223,7 +223,7 @@
             (use-package company-bibtex
               :if (or (executable-find "bibtex")
                       (executable-find "biber"))
-              :config (setq company-bibtex-bibliography (list "~/workspace/Documents/Bibliography/biblio.bib")))
+              :custom (company-bibtex-bibliography '("~/workspace/Documents/Bibliography/biblio.bib")))
 
             ;; Company math
             (use-package company-math
@@ -237,7 +237,7 @@
                          my/latex-mode-init)
               :hook ((TeX-mode   . my/latex-mode-init)
                      (LaTeX-mode . company-auctex-init))
-              :config (progn
+              :init (progn
                         (defun company-auctex-labels (command &optional arg &rest ignored)
                           "company-auctex-labels backend"
                           (interactive (list 'interactive))
