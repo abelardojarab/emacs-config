@@ -242,7 +242,8 @@
   :defer t
   :commands (clang-format
              clang-format-buffer
-             clang-format-region))
+             clang-format-region)
+  :custom (clang-format-style "llvm"))
 
 (provide 'setup-general)
 ;;; setup-general.el ends here
