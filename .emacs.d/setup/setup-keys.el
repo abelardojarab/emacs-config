@@ -97,10 +97,6 @@
 (global-set-key (kbd "C-c C-v")  'counsel-yank-pop)
 (global-set-key (kbd "C-c C-b")  'beautify-buffer)
 
-;; Unindent (do what I mean version)
-(global-set-key (kbd "C-<")  'unindent-dwim)
-(global-set-key (kbd "C->")  (lambda () (interactive) (unindent-dwim -1)))
-
 ;; Text scale
 (global-set-key [(control +)]    'text-scale-increase)
 (global-set-key [(control -)]    'text-scale-decrease)
@@ -132,10 +128,6 @@
 ;; Flycheck
 (global-set-key (kbd "<f7>")     'flycheck-next-error)
 (global-set-key (kbd "C-<f7>")   'helm-flycheck)
-
-;; Code folding
-(global-set-key (kbd "<f8>")     'hs-toggle-hiding-all)
-(global-set-key (kbd "C-<f8>")   'fold-dwim-toggle)
 
 ;; Refresh file
 (global-set-key (kbd "<f9>")     'refresh-file)
