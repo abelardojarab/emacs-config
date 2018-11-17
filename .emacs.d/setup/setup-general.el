@@ -229,5 +229,20 @@
                           (set-cursor-color "magenta")
                         (set-cursor-color "cyan")))))
 
+;; Cross-editor style configuration
+(use-package editorconfig
+  :defer t
+  :hook ((prog-mode . editorconfig-mode)
+         (text-mode . editorconfig-mode))
+  :diminish editorconfig-mode
+  :commands editorconfig-mode)
+
+;; C-code formatting using clang-format
+(use-package clang-format
+  :defer t
+  :commands (clang-format
+             clang-format-buffer
+             clang-format-region))
+
 (provide 'setup-general)
 ;;; setup-general.el ends here
