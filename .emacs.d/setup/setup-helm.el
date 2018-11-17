@@ -48,43 +48,45 @@
          ("C-i"   . helm-execute-persistent-action)
          ;; list actions using C-z
          ("C-z"   . helm-select-action))
+  :custom ((helm-mode-handle-completion-in-region     nil)
+           (helm-bookmark-show-location               t)
+           (helm-buffer-max-length                    48)
+           (helm-always-two-windows                   t)
+           (helm-quick-update                         t)
+           (helm-org-headings-fontify                 t)
+           (helm-window-prefer-horizontal-split       t)
+           (helm-split-window-default-side            'right)
+           (helm-split-window-in-side-p               t)
+           (helm-echo-input-in-header-line            t)
+           (helm-idle-delay                           0.0)
+           (helm-input-idle-delay                     0.01)
+           (helm-yas-display-key-on-candidate         t)
+           (helm-M-x-requires-pattern                 nil)
+           (helm-candidate-number-limit               50)
+           (helm-move-to-line-cycle-in-source         nil)
+           (helm-scroll-amount                        8)
+           (helm-truncate-lines                       nil)
+	   (helm-grep-truncate-lines                  t)
+           (helm-ff-auto-update-initial-value         nil)
+           (helm-ff-search-library-in-sexp            t)
+           (helm-ff-skip-boring-files                 t)
+           (helm-ff-file-name-history-use-recentf     t)
+           (helm-use-frame-when-more-than-two-windows nil)
+           (helm-display-function                     'helm-default-display-buffer)
+           (helm-display-buffer-reuse-frame           t)
+           (helm-display-buffer-width                 180)
+           (helm-display-buffer-height                60)
+           (helm-use-undecorated-frame-option         t))
   :config (progn
+
+	    (if (display-graphic-p)
+		(setq helm-buffers-end-truncated-string "…"))
 
             (defadvice helm-buffers-sort-transformer (around ignore activate)
               (setq ad-return-value (ad-get-arg 0)))
 
             (defadvice helm-execute-persistent-action (around bar activate)
               (ignore-errors add-do-it))
-
-            ;; preferences
-            (setq helm-mode-handle-completion-in-region     nil
-                  helm-bookmark-show-location               t
-                  helm-buffer-max-length                    48
-                  helm-always-two-windows                   t
-                  helm-quick-update                         t
-                  helm-org-headings-fontify                 t
-                  helm-window-prefer-horizontal-split       t
-                  helm-split-window-default-side            'right
-                  helm-split-window-in-side-p               t
-                  helm-echo-input-in-header-line            t
-                  helm-idle-delay                           0.0
-                  helm-input-idle-delay                     0.01
-                  helm-yas-display-key-on-candidate         t
-                  helm-M-x-requires-pattern                 nil
-                  helm-candidate-number-limit               50
-                  helm-move-to-line-cycle-in-source         nil
-                  helm-scroll-amount                        8
-                  helm-truncate-lines                       nil
-                  helm-ff-auto-update-initial-value         nil
-                  helm-ff-search-library-in-sexp            t
-                  helm-ff-skip-boring-files                 t
-                  helm-ff-file-name-history-use-recentf     t
-                  helm-use-frame-when-more-than-two-windows nil
-                  helm-display-function                     #'helm-default-display-buffer
-                  helm-display-buffer-reuse-frame           t
-                  helm-display-buffer-width                 180
-                  helm-display-buffer-height                60
-                  helm-use-undecorated-frame-option         t)
 
             ;; use silver searcher when available
             (when (executable-find "ag-grep")
@@ -116,9 +118,9 @@
                   `((name . "Fonts")
                     (candidates . ,(font-family-list))
                     (action . (lambda (candidate) (progn
-                                               (setq my/main-programming-font candidate)
-                                               (set-face-attribute 'default nil :family candidate)
-                                               (fontify-frame (selected-frame)))))))
+						    (setq my/main-programming-font candidate)
+						    (set-face-attribute 'default nil :family candidate)
+						    (fontify-frame (selected-frame)))))))
 
             (defun helm-fonts ()
               (interactive)

@@ -33,23 +33,21 @@
   :commands (ecb-redraw-layout
              my/ecb-activate
              idle-timer-ecb-methods-start)
-  :custom ((ecb-truncate-lines                      t)
-       (ecb-show-sources-in-directories-buffer  'always)
-       (ecb-compile-window-height               nil)
-       (ecb-compile-window-width                'edit-window)
-       (ecb-compile-window-temporally-enlarge   nil)
-       (ecb-eshell-fit-window-to-command-output nil)
-       (ecb-windows-width               35)
-       (ecb-fix-window-size             'width)
-       (ecb-layout-name             my/ecb-layout-theme)
-       (ecb-history-make-buckets            'mode)
-       (ecb-highlight-tag-with-point-delay      180)
-       (ecb-kill-buffer-clears-history      'auto)
-       (ecb-tip-of-the-day              nil))
+  :custom ((ecb-truncate-lines                         t)
+	   (ecb-auto-save-before-etags-methods-rebuild nil)
+	   (ecb-show-sources-in-directories-buffer     'always)
+	   (ecb-compile-window-height		       nil)
+	   (ecb-compile-window-width		       'edit-window)
+	   (ecb-compile-window-temporally-enlarge      nil)
+	   (ecb-eshell-fit-window-to-command-output    nil)
+	   (ecb-windows-width			       35)
+	   (ecb-fix-window-size			       'width)
+	   (ecb-layout-name			       my/ecb-layout-theme)
+	   (ecb-history-make-buckets		       'mode)
+	   (ecb-highlight-tag-with-point-delay	       180)
+	   (ecb-kill-buffer-clears-history	       'auto)
+	   (ecb-tip-of-the-day			       nil))
   :config (progn
-
-            (defun ecb-auto-save-before-etags-methods-rebuild ()
-              nil)
 
             (defadvice semanticdb-deep-find-tags-by-name-method (around bar activate)
               (ignore-errors add-do-it))
@@ -98,8 +96,8 @@
                                               '("semantic-decoration-on-includes"          . t)
                                               '("semantic-tag-boundary"                    . t)))
 
-        (ecb-layout-define "leftright-analyse-y" left-right
-          "This function creates the following layout:
+            (ecb-layout-define "leftright-analyse-y" left-right
+              "This function creates the following layout:
    --------------------------------------------------------------
    |              |                               |             |
    |  Directories |                               |  Methods    |
@@ -124,16 +122,16 @@
 If you have not set a compilation-window in `ecb-compile-window-height' then
 the layout contains no persistent compilation window and the other windows get a
 little more place."
-          (ecb-set-history-buffer)
-          (ecb-split-ver 0.3)
-          (ecb-set-sources-buffer)
-          (ecb-split-ver 0.5)
-          (ecb-set-symboldef-buffer)
-          (select-window (next-window (next-window)))
-          (ecb-set-methods-buffer)
-          (ecb-split-ver 0.5)
-          (ecb-set-analyse-buffer)
-          (select-window (previous-window (previous-window (selected-window) 0) 0)))
+              (ecb-set-history-buffer)
+              (ecb-split-ver 0.3)
+              (ecb-set-sources-buffer)
+              (ecb-split-ver 0.5)
+              (ecb-set-symboldef-buffer)
+              (select-window (next-window (next-window)))
+              (ecb-set-methods-buffer)
+              (ecb-split-ver 0.5)
+              (ecb-set-analyse-buffer)
+              (select-window (previous-window (previous-window (selected-window) 0) 0)))
 
             ;; Reparse files on 'first change' and 'after saving'
             (defun idle-timer-ecb-methods-callback ()
