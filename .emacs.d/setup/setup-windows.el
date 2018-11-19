@@ -24,42 +24,38 @@
 
 ;;; Code:
 
-;; Removes *Completions* from buffer after you've opened a file.
-(add-hook 'minibuffer-exit-hook
-          '(lambda ()
-             (let ((buffer "*Completions*"))
-               (and (get-buffer buffer)
-                    (kill-buffer buffer)))))
+(use-package frame
+  :demand t
+  :custom ((window-divider-default-places 'right-only)
+	   (window-divider-default-right-width 1)
+	   (window-combination-resize            t)
+	   (frame-resize-pixelwise               t)
+	   (frame-inhibit-implied-resize         t)
+	   (same-window-regexps                  '("."))
+	   (highlight-nonselected-windows        nil)
+	   (switch-to-buffer-in-dedicated-window 'prompt)
+	   (resize-mini-windows                  'grow-only)
+	   (max-mini-window-height               30))
+  :config (progn
+	    ;; default to maximised windows
+	    (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-;; Put a nice title to the window, including filename
-(add-hook 'window-configuration-change-hook
-          (lambda ()
-            (setq frame-title-format
-                  (concat
-                   invocation-name "@" system-name ": "
-                   (replace-regexp-in-string
-                    (concat "/home/" user-login-name) "~"
-                    (or buffer-file-name "%b"))))))
+	    ;; Removes *Completions* from buffer after you've opened a file.
+	    (add-hook 'minibuffer-exit-hook
+		      '(lambda ()
+			 (let ((buffer "*Completions*"))
+			   (and (get-buffer buffer)
+				(kill-buffer buffer)))))
 
-;; default to maximised windows
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
-
-;; Resize by pixels
-(setq frame-resize-pixelwise               t
-      ;; resize windows to accommodate new ones
-      window-combination-resize            t
-      ;; prompt when trying to switch out of a dedicated window
-      switch-to-buffer-in-dedicated-window 'prompt
-      ;; Treat all windows as same
-      same-window-regexps                  '(".")
-      ;; Resize frames implicitely
-      frame-inhibit-implied-resize         t
-      ;; Minibuffer resizing
-      resize-mini-windows                  'grow-only
-      ;; do not highlight region on non-selected windows
-      highlight-nonselected-windows        nil
-      ;; maximum small window height
-      max-mini-window-height               30)
+	    ;; Put a nice title to the window, including filename
+	    (add-hook 'window-configuration-change-hook
+		      (lambda ()
+			(setq frame-title-format
+			      (concat
+			       invocation-name "@" system-name ": "
+			       (replace-regexp-in-string
+				(concat "/home/" user-login-name) "~"
+				(or buffer-file-name "%b"))))))))
 
 ;; Restore old window configurations
 (use-package winner
@@ -135,7 +131,7 @@
                                         "purpose-layouts") t))
 
             (setq purpose-layout-dirs (concat (file-name-as-directory my/emacs-cache-dir)
-                                              "purpose-layouts"))
+					      "purpose-layouts"))
 
             (setq purpose-user-name-purposes
                   '(("*ag*"                        . search)
@@ -180,35 +176,35 @@
             (purpose-compile-user-configuration)
             (purpose-mode t)
             (define-purpose-prefix-overload purpose-switch-buffer-overload
-              '(ivy-switch-buffer
+	      '(ivy-switch-buffer
                 switch-buffer-without-purpose
                 purpose-switch-buffer-with-purpose))
 
             (defadvice purpose-find-file-overload (after find-file-sudo activate)
-              "Find file as root if necessary."
-              (unless (and buffer-file-name
+	      "Find file as root if necessary."
+	      (unless (and buffer-file-name
                            (file-writable-p buffer-file-name))
 
                 (let* ((buffer-file (buffer-file-name))
-                       (coincidence (string-match-p "@" buffer-file))
-                       (hostname)
-                       (buffer-name))
+		       (coincidence (string-match-p "@" buffer-file))
+		       (hostname)
+		       (buffer-name))
                   (if coincidence
-                      (progn
+		      (progn
                         (setq hostname (substring buffer-file (+ coincidence 1)
                                                   (string-match-p ":" buffer-file      (+ coincidence 1))))
                         (setq buffer-name
-                              (concat
-                               (substring buffer-file 0 coincidence) "@"
-                               (replace-regexp-in-string ":" (concat "|sudo:" hostname ":")
+			      (concat
+			       (substring buffer-file 0 coincidence) "@"
+			       (replace-regexp-in-string ":" (concat "|sudo:" hostname ":")
                                                          buffer-file nil nil nil (+ coincidence 1))))
                         (find-alternate-file buffer-name))
                     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file))))))
 
             ;; Extensions for purpose
             (use-package window-purpose-x
-              :after window-purpose
-              :config (progn
+	      :after window-purpose
+	      :config (progn
                         (purpose-x-golden-ratio-setup)
 
                         ;; Integration with perspective
@@ -253,7 +249,7 @@
 (use-package ace-window
   :defer t
   :bind (:map ctl-x-map
-              ("o" . ace-window))
+	      ("o" . ace-window))
   :config (progn
             ;; Customize font on ace-window leading char
             (if (display-graphic-p)
@@ -293,18 +289,18 @@
   :config (progn
 
             (with-eval-after-load "window"
-              (defcustom split-window-below nil
+	      (defcustom split-window-below nil
                 "If non-nil, vertical splits produce new windows below."
                 :group 'windows
                 :type 'boolean)
 
-              (defcustom split-window-right nil
+	      (defcustom split-window-right nil
                 "If non-nil, horizontal splits produce new windows to the right."
                 :group 'windows
                 :type 'boolean)
 
-              (fmakunbound #'split-window-sensibly)
-              (defun split-window-sensibly
+	      (fmakunbound #'split-window-sensibly)
+	      (defun split-window-sensibly
                   (&optional window)
                 "Split WINDOW in a way suitable for `display-buffer'."
                 (setq window (or window (selected-window)))

@@ -28,9 +28,9 @@
   :commands (etags-create-or-update
              etags-tags-completion-table
              tags-completion-table)
-  :custom ((tags-revert-without-query t)
+  :custom ((tags-revert-without-query          t)
 	   (tags-always-build-completion-table t)
-	   (tags-add-tables t))
+	   (tags-add-tables                    t))
   :init (progn
 
           ;; Assure .gtags directory exists
@@ -39,7 +39,7 @@
 
           (if (file-exists-p "~/.gtags/TAGS")
               (ignore-errors
-                (visit-tags-table "~/.gtags/TAGS"))
+                (visit-tags-table "~/.gtags/TAGS" t))
             (with-temp-buffer (write-file "~/.gtags/TAGS")))
 
           (setq tags-file-name "~/.gtags/TAGS")
@@ -53,13 +53,18 @@
                 (ring-insert find-tag-marker-ring (point-marker))))
 
             ;; etags creation
-            (defun etags-create-or-update (dir-name)
+	    (defun ctags-create-or-update (dir-name)
               "Create tags file."
-              (interactive "Directory: ")
-              (eshell-command
-               (format "find %s -follow -type f -name \"*.[ch][ px][ px]\" | etags - -o %s/TAGS"
-                       (projectile-project-root)
-                       (projectile-project-root))))
+              (interactive
+               (let ((olddir default-directory)
+                     (default-directory
+                       (read-directory-name
+			"ctags: top of source tree:" (projectile-project-root))))
+		 (shell-command
+		  (format "find %s -follow -type f -name \"*.[ch][ px][ px]\" | etags - -o %s/TAGS"
+			  default-directory
+			  default-directory))
+		 (message "Created tagfile"))))
 
             ;; Fix etags bugs (https://groups.google.com/forum/#!msg/gnu.emacs.help/Ew0sTxk0C-g/YsTPVEKTBAAJ)
             (defvar etags--table-line-limit 10)
@@ -141,23 +146,21 @@ tags table and its (recursively) included tags tables."
   :after etags
   :commands (etags-select-find-tag
              ido-find-tag)
-  :config (progn
-            ;; Use ido to list tags, but then select via etags-select (best of both worlds!)
-            (defun ido-find-tag ()
-              "Find a tag using ido"
-              (interactive)
-              (tags-completion-table)
-              (let (tag-names)
-                (mapatoms (lambda (x)
-                            (push (prin1-to-string x t) tag-names))
-                          tags-completion-table)
-                (find-tag (replace-regexp-in-string "\\\\" "" (ido-completing-read "Tag: " tag-names)))))))
+  :config (defun ido-find-tag ()
+            "Find a tag using ido"
+            (interactive)
+            (tags-completion-table)
+            (let (tag-names)
+              (mapatoms (lambda (x)
+                          (push (prin1-to-string x t) tag-names))
+                        tags-completion-table)
+              (find-tag (replace-regexp-in-string "\\\\" "" (ido-completing-read "Tag: " tag-names))))))
 
 ;; Etags table
 (use-package etags-table
   :defer t
   :after (projectile etags)
-  :custom ((etags-table-search-up-depth 2))
+  :custom (etags-table-search-up-depth 2)
   :commands etags-create-or-update-table-tags-table
   :config (progn
             (setq etags-table-alist
@@ -177,25 +180,23 @@ tags table and its (recursively) included tags tables."
 ;; Ctags
 (use-package ctags
   :defer t
-  :if (executable-find "ctags")
+  :if (executable-find "ctags-exuberant")
   :commands (ctags-create-or-update
              ctags-create-or-update-tags-table
              ctags-search)
   :after projectile
-  :config (progn
-            ;; Helper functions for etags/ctags
-            (defun ctags-create-or-update (dir-name)
-              "Create tags file."
-              (interactive
-               (let ((olddir default-directory)
-                     (default-directory
-                       (read-directory-name
-                        "ctags: top of source tree:" (projectile-project-root))))
-                 (shell-command
-                  (format "ctags -e -f %s -R %s > /dev/null"
-                          (concat default-directory "TAGS")
-                          default-directory))
-                 (message "Created tagfile"))))))
+  :init (defun ctags-create-or-update (dir-name)
+          "Create tags file."
+          (interactive
+           (let ((olddir default-directory)
+                 (default-directory
+                   (read-directory-name
+                    "ctags: top of source tree:" (projectile-project-root))))
+             (shell-command
+              (format "ctags-exuberant -e -f %s -R %s > /dev/null"
+                      (concat default-directory "TAGS")
+                      default-directory))
+             (message "Created tagfile")))))
 
 ;; Gtags
 (use-package ggtags

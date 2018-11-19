@@ -42,33 +42,27 @@
                                     (if module module "tern"))))))
   :mode ("\\.js\\'" . js2-mode)
   :commands (js2-mode
-             js2-minor-mode
-             my/js2-mode-init)
-  :hook (js2-mode . my/js2-mode-init)
+             js2-minor-mode)
+  :hook (js2-mode . flycheck-mode)
+  :custom ((js2-basic-offset                       4)
+           (js2-allow-rhino-new-expr-initializer   nil)
+           (js2-auto-indent-p                      nil)
+           (js2-enter-indents-newline              nil)
+           (js2-idle-timer-delay                   0.1)
+           (js2-indent-on-enter-key                nil)
+           (js2-mirror-mode                        nil)
+           (js2-strict-inconsistent-return-warning nil)
+           (js2-auto-indent-p                      t  )
+           (js2-include-rhino-externs              nil)
+           (js2-include-gears-externs              nil)
+           (js2-concat-multiline-strings           'eol)
+           (js2-rebind-eol-bol-keys                nil)
+           (js2-show-parse-errors                  nil)
+           (js2-strict-missing-semi-warning        nil)
+           (js2-strict-trailing-comma-warning      t))
   :config (progn
             (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
-            (defun my/js2-mode-init ()
-              (flycheck-mode t)
-              (skewer-mode   t)
-              (tern-mode     t))
-            (setq-default js2-global-externs '("module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval" "clearInterval" "location" "__dirname" "console" "JSON"))
-
-            (setq-default js2-basic-offset                       4
-                          js2-allow-rhino-new-expr-initializer   nil
-                          js2-auto-indent-p                      nil
-                          js2-enter-indents-newline              nil
-                          js2-idle-timer-delay                   0.1
-                          js2-indent-on-enter-key                nil
-                          js2-mirror-mode                        nil
-                          js2-strict-inconsistent-return-warning nil
-                          js2-auto-indent-p                      t
-                          js2-include-rhino-externs              nil
-                          js2-include-gears-externs              nil
-                          js2-concat-multiline-strings           'eol
-                          js2-rebind-eol-bol-keys                nil
-                          js2-show-parse-errors                  nil
-                          js2-strict-missing-semi-warning        nil
-                          js2-strict-trailing-comma-warning      t)))
+            (setq-default js2-global-externs '("module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval" "clearInterval" "location" "__dirname" "console" "JSON"))))
 
 ;; tern
 (use-package tern
