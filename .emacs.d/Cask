@@ -424,3 +424,5 @@
 (depends-on "panda-theme")
 (depends-on "poet-theme")
 (depends-on "sourcerer-theme")
+(depends-on "flucui-themes")
+(depends-on "lab-themes")
