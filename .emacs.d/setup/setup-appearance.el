@@ -45,46 +45,41 @@
   :hook (prog-mode . tooltip-mode)
   :custom (tooltip-delay 1)
   :config (if (equal system-type 'gnu/linux)
-    (setq x-gtk-use-system-tooltips t)))
+              (setq x-gtk-use-system-tooltips t)))
 
 ;; Marker if the line goes beyond the end of the screen (arrows)
 (use-package simple
   :demand t
   :commands (global-visual-line-mode
              visual-line-mode
-             toggle-truncate-lines
-             my/enable-truncate-lines)
+             toggle-truncate-lines)
   :diminish visual-line-mode
   :custom (visual-line-fringe-indicators '(nil right-curly-arrow))
   :hook ((prog-mode text-mode) . my/enable-truncate-lines)
-  :config (progn
-            ;; Modify toggle truncate lines to avoid messages
-            (defun toggle-truncate-lines (&optional arg)
-              "Toggle truncating of long lines for the current buffer.
+  :init (defun my/enable-truncate-lines ()
+          (visual-line-mode -1)
+          (toggle-truncate-lines t)
+          (setq truncate-lines t))
+  :config (defun toggle-truncate-lines (&optional arg)
+            "Toggle truncating of long lines for the current buffer.
 When truncating is off, long lines are folded.
 With prefix argument ARG, truncate long lines if ARG is positive,
 otherwise fold them.  Note that in side-by-side windows, this
 command has no effect if `truncate-partial-width-windows' is
 non-nil."
-              (interactive "P")
-              (setq truncate-lines
-                    (if (null arg)
-                        (not truncate-lines)
-                      (> (prefix-numeric-value arg) 0)))
-              (force-mode-line-update)
-              (unless truncate-lines
-                (let ((buffer (current-buffer)))
-                  (walk-windows (lambda (window)
-                                  (if (eq buffer (window-buffer window))
-                                      (set-window-hscroll window 0)))
-                                nil t)))
-              t)
-
-            ;; Enable line truncation
-            (defun my/enable-truncate-lines ()
-              (visual-line-mode -1)
-              (toggle-truncate-lines t)
-              (setq truncate-lines t))))
+            (interactive "P")
+            (setq truncate-lines
+                  (if (null arg)
+                      (not truncate-lines)
+                    (> (prefix-numeric-value arg) 0)))
+            (force-mode-line-update)
+            (unless truncate-lines
+              (let ((buffer (current-buffer)))
+                (walk-windows (lambda (window)
+                                (if (eq buffer (window-buffer window))
+                                    (set-window-hscroll window 0)))
+                              nil t)))
+            t))
 
 ;; Get centered text when visual-line-mode is on
 (use-package visual-fill-column
