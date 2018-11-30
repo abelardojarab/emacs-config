@@ -42,12 +42,12 @@
 (use-package spaceline
   :if (display-graphic-p)
   :after powerline
-  :custom (powerline-default-separator 'slant)
-  :config (setq-default spaceline-display-default-perspective t
-                        spaceline-highlight-face-func 'spaceline-highlight-face-modified
-                        spaceline-flycheck-bullet "• %s"
-                        spaceline-separator-dir-left '(left . left)
-                        spaceline-separator-dir-right '(right . right)))
+  :custom ((powerline-default-separator 'slant)
+           (spaceline-display-default-perspective t)
+           (spaceline-highlight-face-func 'spaceline-highlight-face-modified)
+           (spaceline-flycheck-bullet "• %s")
+           (spaceline-separator-dir-left '(left . left))
+           (spaceline-separator-dir-right '(right . right))))
 
 ;; Spaceline configuration
 (use-package spaceline-config
@@ -57,89 +57,7 @@
 
 (use-package spaceline-all-the-icons
   :if (display-graphic-p)
-  :after spaceline-config
-  :config (progn
-
-            ;; disable mode-line mouseovers
-            (setq-default mode-line-default-help-echo nil)
-
-            ;; Build a segment for the version control branch
-            (spaceline-define-segment my/version-control
-              (when vc-mode
-                (substring vc-mode (+ 2 (length (symbol-name (vc-backend buffer-file-name)))))))
-
-            ;; Build a segment for helm-follow-mode
-            (spaceline-define-segment my/helm-follow
-              (when (and (bound-and-true-p helm-alive-p)
-                         spaceline--helm-current-source
-                         (eq 1 (cdr (assq 'follow spaceline--helm-current-source))))
-                (propertize "⌫" 'face 'success)))
-
-            ;; Build a segment for the active region
-            (spaceline-define-segment my/selection-info
-              (when mark-active
-                (let* ((lines (count-lines (region-beginning) (min (1+ (region-end)) (point-max))))
-                       (chars (- (1+ (region-end)) (region-beginning)))
-                       (cols (1+ (abs (- (spaceline--column-number-at-pos (region-end))
-                                         (spaceline--column-number-at-pos (region-beginning))))))
-                       (rect (bound-and-true-p rectangle-mark-mode))
-                       (multi-line (> lines 1)))
-                  (cond
-                   (rect (format "%d × %d" (1- cols) lines))
-                   (multi-line (format "%d lines" (if (eq (current-column) 0) (1- lines) lines)))
-                   (t (format "%d chars" (1- chars)))))))
-
-            ;; Build the mode-lines
-            (spaceline-compile
-             "custom"
-             `( ;; All the icons segments
-               (all-the-icons-anzu
-                :face mode-line
-                :skip-alternate t)
-
-               (((major-mode :face default-face)
-                 all-the-icons-modified
-                 all-the-icons-bookmark
-                 all-the-icons-dedicated
-                 all-the-icons-window-number
-                 all-the-icons-buffer-size) :face default-face :skip-alternate t)
-
-               (all-the-icons-projectile :face default-face)
-               ((all-the-icons-vc-status) "" :separator "")
-
-               ((remote-host
-                 all-the-icons-buffer-path
-                 all-the-icons-buffer-id)
-                :separator "")
-               (all-the-icons-which-function :face powerline-active2))
-
-             `((my/selection-info)
-               ;; All the icons segments
-               ((all-the-icons-process
-                 all-the-icons-position
-                 all-the-icons-region-info
-                 all-the-icons-fullscreen
-                 all-the-icons-text-scale)
-                :face highlight-face
-                :separator (spaceline-all-the-icons--separator "|" " "))
-
-               (("" all-the-icons-flycheck-status)
-                :face default-face)
-               ;; (all-the-icons-time) ;; display time is nicer
-
-               (global :face highlight-face)))
-
-            (spaceline-install
-             'helm
-             '((helm-buffer-id :face spaceline-read-only)
-               (helm-number)
-               (my/helm-follow :fallback "⌫")
-               helm-prefix-argument)
-             '((helm-help)
-               (global :face spaceline-read-only)))
-
-            ;; Enable modeline
-            (setq-default mode-line-format '("%e" (:eval (spaceline-ml-custom))))))
+  :after spaceline-config)
 
 ;; Customize Emacs lighters
 (use-package delight
@@ -148,6 +66,12 @@
               (let ((inhibit-mode-name-delight nil)) ad-do-it))
             (defadvice powerline-minor-modes (around delight-powerline-minor-modes activate)
               (let ((inhibit-mode-name-delight nil)) ad-do-it))))
+
+;; Doom modeline
+(use-package doom-modeline
+  :defer t
+  :commands doom-modeline-init
+  :hook (after-init . doom-modeline-init))
 
 (provide 'setup-modeline)
 ;;; setup-modeline.el ends here

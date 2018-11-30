@@ -92,22 +92,22 @@
 
     (set-icon-fonts
      '(("fontawesome"
-	;;                         
-	#xf07c #xf0c9 #xf0c4 #xf0cb #xf017 #xf101)
+        ;;                         
+        #xf07c #xf0c9 #xf0c4 #xf0cb #xf017 #xf101)
 
        ("all-the-icons"
-	;;    
-	#xe907 #xe928)
+        ;;    
+        #xe907 #xe928)
 
        ("github-octicons"
-	;;                        
-	#xf091 #xf059 #xf076 #xf075 #xf016 #xf00a)
+        ;;                        
+        #xf091 #xf059 #xf076 #xf075 #xf016 #xf00a)
 
        ("Symbola"
-	;; 𝕊    ⨂      ∅      ⟻    ⟼     ⊙      𝕋       𝔽
-	#x1d54a #x2a02 #x2205 #x27fb #x27fc #x2299 #x1d54b #x1d53d
-	;; 𝔹    𝔇       𝔗
-	#x1d539 #x1d507 #x1d517)))
+        ;; 𝕊    ⨂      ∅      ⟻    ⟼     ⊙      𝕋       𝔽
+        #x1d54a #x2a02 #x2205 #x27fb #x27fc #x2299 #x1d54b #x1d53d
+        ;; 𝔹    𝔇       𝔗
+        #x1d539 #x1d507 #x1d517)))
 
     ;; Add required faces
     (ignore-errors
@@ -116,7 +116,7 @@
     (my/set-face-fringe)
     (my/set-face-tabbar)
     (my/set-face-ecb)
-    (setq-default mode-line-format '("%e" (:eval (spaceline-ml-custom))))
+    (doom-modeline-init)
 
     ;; remove modeline boxes
     (set-face-attribute 'mode-line nil :box nil)
@@ -131,7 +131,9 @@
                                  (my/set-face-fringe)
                                  (my/set-face-tabbar)
                                  (my/set-face-ecb)
-                                 (setq-default mode-line-format '("%e" (:eval (spaceline-ml-custom))))
+
+                                 ;; Set the modeline
+                                 (doom-modeline-init)
                                  )))
 
 (provide 'setup-post)
