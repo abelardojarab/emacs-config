@@ -33,15 +33,13 @@
              my/latex-mode-init)
   :mode ("\\.tex\\'" . LaTeX-mode)
   :hook (LaTeX-mode . my/latex-mode-init)
-  :init (progn
-          (setq-default TeX-auto-save t
-                        TeX-parse-self t
-                        TeX-save-query nil
-                        TeX-PDF-mode t
-                        TeX-source-correlate-start-server t
-                        TeX-master nil)
-
-          (defun my/latex-mode-init ()
+  :custom ((TeX-auto-save t)
+           (TeX-parse-self t)
+           (TeX-save-query nil)
+           (TeX-PDF-mode t)
+           (TeX-source-correlate-start-server t)
+           (TeX-master nil))
+  :init (defun my/latex-mode-init ()
             "Tweaks and customisations for LaTeX mode."
             ;; Auto-fill for LaTeX
             (turn-on-auto-fill)
@@ -56,7 +54,7 @@
             ;; enable math mode in latex
             (LaTeX-preview-setup)
             ;; Enable reftex
-            (turn-on-reftex))))
+            (turn-on-reftex)))
 
 (use-package reftex
   :defer t
@@ -71,8 +69,7 @@
                 bibtex-completion-library-path my/bibtex-completion-library-path
                 bibtex-completion-notes-path my/bibtex-completion-notes)
 
-          (setq bibtex-align-at-equal-sign t)
-          (add-hook 'bibtex-mode-hook (lambda () (set-fill-column 120)))))
+          (setq bibtex-align-at-equal-sign t)))
 
 (use-package ebib-handy
   :defer t
@@ -94,12 +91,12 @@
   :defer t
   :commands magic-latex-buffer
   :hook (latex-mode . magic-latex-buffer)
-  :config (setq magic-latex-enable-block-highlight t
-                magic-latex-enable-suscript        t
-                magic-latex-enable-pretty-symbols  t
-                magic-latex-enable-block-align     nil
-                magic-latex-enable-inline-image    nil
-                magic-latex-enable-minibuffer-echo t))
+  :custom ((magic-latex-enable-block-highlight t)
+           (magic-latex-enable-suscript        t)
+           (magic-latex-enable-pretty-symbols  t)
+           (magic-latex-enable-block-align     nil)
+           (magic-latex-enable-inline-image    nil)
+           (magic-latex-enable-minibuffer-echo t)))
 
 ;; Fast input methods for LaTeX environments and math
 (use-package cdlatex

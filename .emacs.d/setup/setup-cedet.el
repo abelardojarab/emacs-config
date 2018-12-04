@@ -43,7 +43,7 @@
             (setq semantic-default-submodes '(global-semanticdb-minor-mode
                                               global-semantic-mru-bookmark-mode
                                               global-semantic-load-enable-code-helpers
-					      global-semantic-idle-scheduler-mode))
+                          global-semantic-idle-scheduler-mode))
 
             ;; Assure .emacs.cache/semanticdb directory exists
             (if (not (file-exists-p (concat (file-name-as-directory
@@ -174,22 +174,20 @@ Throw away all the old tags, and recreate the tag database."
 (use-package which-func
   :demand t
   :commands which-function-mode
+  :custom ((which-func-unknown "⊥")
+           (which-func-maxout 1024)
+           (which-func-modes '(latex-mode
+                              markdown-mode
+                              org-mode
+                              emacs-lisp-mode
+                              python-mode
+                              c-mode
+                              c++-mode)))
   :config (progn
             (which-function-mode -1)
             (ignore-errors
               (defun which-func-update () nil)
-              (cancel-function-timers 'which-func-update))
-
-            ;; Enable which-function-mode for selected major modes
-            (setq which-func-unknown "⊥"
-                  which-func-maxout 1024
-                  which-func-modes '(latex-mode
-                                     markdown-mode
-                                     org-mode
-                                     emacs-lisp-mode
-                                     python-mode
-                                     c-mode
-                                     c++-mode))))
+              (cancel-function-timers 'which-func-update))))
 
 (provide 'setup-cedet)
 ;;; setup-cedet.el ends here

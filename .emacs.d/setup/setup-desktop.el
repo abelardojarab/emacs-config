@@ -29,18 +29,17 @@
   :demand t
   :init (setq no-littering-var-directory (expand-file-name "cache/var/" my/emacs-cache-dir)
               no-littering-etc-directory (expand-file-name "cache/etc/" my/emacs-cache-dir))
+  :custom ((create-lockfiles                  nil)
+           (delete-old-versions               t)
+           (kept-new-versions                 6)
+           (kept-old-versions                 2)
+           (version-control                   t)
+           (make-backup-files                 nil)
+           (backup-by-copying                 t)
+           (backup-by-copying-when-mismatch   t)
+           (auto-save-interval                500)
+           (auto-save-default                 nil))
   :config (progn
-
-            (setq create-lockfiles                  nil
-                  delete-old-versions               t
-                  kept-new-versions                 6
-                  kept-old-versions                 2
-                  version-control                   t
-		  make-backup-files                 nil
-                  backup-by-copying                 t
-		  backup-by-copying-when-mismatch   t
-                  auto-save-interval                500
-                  auto-save-default                 nil)
 
             (setq
              backup-directory-alist
@@ -57,11 +56,11 @@
   :defer t
   :commands savehist-mode
   :init (savehist-mode t)
-  :config (setq savehist-additional-variables '(search ring regexp-search-ring)
-                savehist-autosave-interval    120
-                savehist-file                  (concat (file-name-as-directory
-                                                        my/emacs-cache-dir)
-                                                       "savehist")))
+  :custom ((savehist-additional-variables '(search ring regexp-search-ring))
+           (savehist-autosave-interval    120))
+  :config (setq savehist-file (concat (file-name-as-directory
+                                       my/emacs-cache-dir)
+                                      "savehist")))
 
 ;; Filecache
 (use-package file-cache
@@ -74,11 +73,10 @@
 ;; Remember the position where we closed a file
 (use-package saveplace
   :demand t
-  :init (progn
-          (setq save-place-file  (concat (file-name-as-directory
-                                          my/emacs-cache-dir)
-                                         "emacs.saveplace"))
-          (setq-default save-place t)))
+  :custom (save-place t)
+  :init (setq save-place-file  (concat (file-name-as-directory
+                                        my/emacs-cache-dir)
+                                       "emacs.saveplace")))
 
 ;; Automatically save and restore sessions
 (use-package desktop

@@ -85,9 +85,9 @@ non-nil."
 (use-package visual-fill-column
   :defer t
   :commands visual-fill-column-mode
-  :config (setq-default visual-fill-column-center-text             t
-                        visual-fill-column-fringes-outside-margins nil
-                        visual-fill-column-width
+  :custom ((visual-fill-column-center-text             t)
+           (visual-fill-column-fringes-outside-margins nil))
+  :config (setq-default visual-fill-column-width
                         ;; take Emacs 26 line numbers into account
                         (+ (if (boundp 'display-line-numbers) 6 0)
                            fill-column)))
