@@ -34,19 +34,19 @@
              my/ecb-activate
              idle-timer-ecb-methods-start)
   :custom ((ecb-truncate-lines                         t)
-       (ecb-auto-save-before-etags-methods-rebuild nil)
-       (ecb-show-sources-in-directories-buffer     'always)
-       (ecb-compile-window-height              nil)
-       (ecb-compile-window-width               'edit-window)
-       (ecb-compile-window-temporally-enlarge      nil)
-       (ecb-eshell-fit-window-to-command-output    nil)
-       (ecb-windows-width                  35)
-       (ecb-fix-window-size                'width)
-       (ecb-layout-name                my/ecb-layout-theme)
-       (ecb-history-make-buckets               'mode)
-       (ecb-highlight-tag-with-point-delay         180)
-       (ecb-kill-buffer-clears-history         'auto)
-       (ecb-tip-of-the-day                 nil))
+	   (ecb-auto-save-before-etags-methods-rebuild nil)
+	   (ecb-show-sources-in-directories-buffer     'always)
+	   (ecb-compile-window-height		     nil)
+	   (ecb-compile-window-width		     'edit-window)
+	   (ecb-compile-window-temporally-enlarge      nil)
+	   (ecb-eshell-fit-window-to-command-output    nil)
+	   (ecb-windows-width			     35)
+	   (ecb-fix-window-size			     'width)
+	   (ecb-layout-name			     my/ecb-layout-theme)
+	   (ecb-history-make-buckets		     'mode)
+	   (ecb-highlight-tag-with-point-delay         180)
+	   (ecb-kill-buffer-clears-history	     'auto)
+	   (ecb-tip-of-the-day			     nil))
   :config (progn
 
             (defadvice semanticdb-deep-find-tags-by-name-method (around bar activate)
@@ -172,26 +172,24 @@ little more place."
                           ([S-up]  . speedbar-up-directory)
                           ([right] . speedbar-flush-expand-line)
                           ([left]  . speedbar-contract-line))
+	      :hook (speedbar-mode hl-line-mode)
+	      :custom ((speedbar-update-flag-disable          nil)
+		       (speedbar-update-flag                  t)
+		       (speedbar-hide-button-brackets-flag    t)
+		       (speedbar-show-unknown-files           t)
+		       (speedbar-smart-directory-expand-flag  t)
+		       (speedbar-directory-button-trim-method 'trim)
+		       (speedbar-use-images                   t)
+		       (speedbar-indentation-width            2)
+		       (speedbar-use-imenu-flag               t)
+		       (speedbar-file-unshown-regexp          "flycheck-.*")
+		       (sr-speedbar-width                     40)
+		       (sr-speedbar-width-x                   40)
+		       (sr-speedbar-auto-refresh              t)
+		       (sr-speedbar-skip-other-window-p       t)
+		       (sr-speedbar-right-side                nil))
               :config (progn
                         (speedbar-set-timer 0.2)
-                        (setq speedbar-update-flag-disable          nil
-                              speedbar-update-flag                  t
-                              speedbar-hide-button-brackets-flag    t
-                              speedbar-show-unknown-files           t
-                              speedbar-smart-directory-expand-flag  t
-                              speedbar-directory-button-trim-method 'trim
-                              speedbar-use-images                   t
-                              speedbar-indentation-width            2
-                              speedbar-use-imenu-flag               t
-                              speedbar-file-unshown-regexp          "flycheck-.*"
-                              sr-speedbar-width                     40
-                              sr-speedbar-width-x                   40
-                              sr-speedbar-auto-refresh              t
-                              sr-speedbar-skip-other-window-p       t
-                              sr-speedbar-right-side                nil)
-
-                        ;; Highlight the current line
-                        (add-hook 'speedbar-mode-hook (lambda () (hl-line-mode 1)))
 
                         ;; Add Javascript
                         (speedbar-add-supported-extension ".js")

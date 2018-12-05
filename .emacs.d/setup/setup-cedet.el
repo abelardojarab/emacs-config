@@ -26,7 +26,13 @@
 
 (use-package semantic
   :demand t
-  :custom (format-args t)
+  :custom ((format-args                                     t)
+           (semantic-idle-work-parse-neighboring-files-flag nil)
+           (semantic-idle-work-update-headers-flag          nil)
+           (semantic-idle-scheduler-idle-time               10)
+           (semantic-idle-scheduler-work-idle-time          60)
+           (semantic-idle-scheduler-max-buffer-size         1)
+	   (semanticdb-search-system-databases              t))
   :config (progn
 
             ;; To use additional features for names completion, and displaying of information for tags & classes,
@@ -43,7 +49,7 @@
             (setq semantic-default-submodes '(global-semanticdb-minor-mode
                                               global-semantic-mru-bookmark-mode
                                               global-semantic-load-enable-code-helpers
-                          global-semantic-idle-scheduler-mode))
+					      global-semantic-idle-scheduler-mode))
 
             ;; Assure .emacs.cache/semanticdb directory exists
             (if (not (file-exists-p (concat (file-name-as-directory
@@ -53,19 +59,12 @@
                                          my/emacs-cache-dir)
                                         "semanticdb") t))
 
-            ;; Faster parsing
-            (setq semantic-idle-work-parse-neighboring-files-flag nil
-                  semantic-idle-work-update-headers-flag          nil
-                  semantic-idle-scheduler-idle-time               10
-                  semantic-idle-scheduler-work-idle-time          60
-                  semantic-idle-scheduler-max-buffer-size         1)
-
             ;; Disable semantics for large files
             (add-hook 'semantic--before-fetch-tags-hook
                       (lambda () (if (and (>= (point-max) 0)
-                                     (not (semantic-parse-tree-needs-rebuild-p)))
-                                nil
-                              t)))
+					  (not (semantic-parse-tree-needs-rebuild-p)))
+                                     nil
+				   t)))
 
             ;; Don't use information from system include files, by removing system
             (setq-mode-local c-mode semanticdb-find-default-throttle
@@ -91,11 +90,11 @@ Exit the save between databases if there is user input."
                   (semantic-safe "Auto-DB Save: %S"
                     ;; FIXME: Use `while-no-input'?
                     (save-mark-and-excursion ;; <-- added line
-                     (semantic-exit-on-input 'semanticdb-idle-save
-                       (mapc (lambda (db)
-                               (semantic-throw-on-input 'semanticdb-idle-save)
-                               (semanticdb-save-db db t))
-                             semanticdb-database-list))))
+                      (semantic-exit-on-input 'semanticdb-idle-save
+			(mapc (lambda (db)
+				(semantic-throw-on-input 'semanticdb-idle-save)
+				(semanticdb-save-db db t))
+                              semanticdb-database-list))))
                 (if (fboundp 'save-excursion)
                     (save-excursion ;; <-- added line
                       (semantic-exit-on-input 'semanticdb-idle-save
@@ -106,18 +105,12 @@ Exit the save between databases if there is user input."
 
             ;; Disable semanticdb, slows down Emacs
             (global-semanticdb-minor-mode nil)
-            (setq semanticdb-search-system-databases t)
             (add-hook 'c-mode-common-hook
                       (lambda ()
                         (setq semanticdb-project-system-databases
                               (list (semanticdb-create-database
                                      semanticdb-new-database-class
                                      "/usr/include")))))
-
-            ;; Set project roots to start from /
-            (setq semanticdb-project-roots
-                  (list
-                   (expand-file-name "/")))
 
             ;; This prevents Emacs to become uresponsive
             (defun semanticdb-kill-hook ()
@@ -177,12 +170,12 @@ Throw away all the old tags, and recreate the tag database."
   :custom ((which-func-unknown "⊥")
            (which-func-maxout 1024)
            (which-func-modes '(latex-mode
-                              markdown-mode
-                              org-mode
-                              emacs-lisp-mode
-                              python-mode
-                              c-mode
-                              c++-mode)))
+                               markdown-mode
+                               org-mode
+                               emacs-lisp-mode
+                               python-mode
+                               c-mode
+                               c++-mode)))
   :config (progn
             (which-function-mode -1)
             (ignore-errors
