@@ -32,10 +32,11 @@
               ("C-c C-o" . ff-find-other-file))
   :hook ((c-mode-common  . my/c-mode-indent-init)
          (find-file-hook . my/c-files-hook))
+  :mode (("\\.h\\'"  . c++-mode)
+	 ("\\.c\\'"  . c-mode))
   :init (progn
-          ;; Put c++-mode as default for *.h files (improves parsing)
-          (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 
+	  ;; Default C-style
           (setq my/cc-style
                 '("cc-mode"
                   (c-offsets-alist . ((func-decl-cont . ++)
@@ -68,29 +69,28 @@
           ;; C/C++ style
           (defun my/c-mode-indent-init ()
             (interactive)
-            (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
 
-              (c-set-style "Linux")
-              (c-set-offset 'substatement-open 0)
-              (c-set-offset 'innamespace 0)
-              (c-set-offset 'inextern-lang 0)
-              (c-toggle-electric-state -1)
+            (c-set-style "Linux")
+            (c-set-offset 'substatement-open 0)
+            (c-set-offset 'innamespace 0)
+            (c-set-offset 'inextern-lang 0)
+            (c-toggle-electric-state -1)
 
-              (setq-default c-default-style "Linux")
-              (c-add-style "Linux" my/cc-style)
-              (my/tabs-setup t 8)
+            (setq-default c-default-style "Linux")
+            (c-add-style "Linux" my/cc-style)
+            (my/tabs-setup t 8)
 
-              (make-local-variable 'c-basic-offset)
-              (setq c-basic-offset tab-width)
-              (make-local-variable 'c-indent-level)
-              (setq c-indent-level tab-width)
+            (make-local-variable 'c-basic-offset)
+            (setq c-basic-offset tab-width)
+            (make-local-variable 'c-indent-level)
+            (setq c-indent-level tab-width)
 
-              (my/c-indent-offset-according-to-syntax-context 'substatement-open 0)
+            (my/c-indent-offset-according-to-syntax-context 'substatement-open 0)
 
-              ;; ensure fill-paragraph takes doxygen @ markers as start of new
-              ;; paragraphs properly
-              (setq-default comment-multi-line t
-                            paragraph-start "^[ ]*\\(//+\\|\\**\\)[ ]*\\([ ]*$\\|@param\\)\\|^\f")))
+            ;; ensure fill-paragraph takes doxygen @ markers as start of new
+            ;; paragraphs properly
+            (setq-default comment-multi-line t
+                          paragraph-start "^[ ]*\\(//+\\|\\**\\)[ ]*\\([ ]*$\\|@param\\)\\|^\f"))
 
           (defun my/c-files-hook ()
             (when (or (string= (file-name-extension buffer-file-name) "c")
