@@ -26,16 +26,12 @@
 
 ;; Secure sockets layer support
 (use-package starttls
+  :if (executable-find "gnutls-cli")
   :demand t
-  :config (progn
-            ;; Options
-            (if (executable-find "gnutls-cli")
-                (setq starttls-use-gnutls      t
-                      starttls-gnutls-program  "gnutls-cli"
-                      starttls-extra-arguments nil))
-
-            ;; Make gnutls a bit safer
-            (setq gnutls-min-prime-bits 4096)))
+  :custom ((starttls-use-gnutls      t)
+           (starttls-gnutls-program  "gnutls-cli")
+           (starttls-extra-arguments nil)
+           (gnutls-min-prime-bits 4096)))
 
 ;; Keychain access
 (use-package keychain-environment
@@ -46,7 +42,6 @@
 ;; Keeping Secrets in Emacs with GnuPG & EasyPG
 (use-package epg
   :demand t
-  :after keychain-environment
   :config (progn
             ;; https://www.masteringemacs.org/article/keeping-secrets-in-emacs-gnupg-auth-sources
             (if (executable-find "gpg2")
@@ -73,6 +68,13 @@
             (when (getenv "DISPLAY")
               (add-hook 'after-make-frame-functions #'my/fixup-gpg-agent)
               (add-hook 'focus-in-hook              #'my/fixup-gpg-agent))))
+
+;; Prefer gpg
+(use-package epg-config
+  :demand t
+  :custom ((epa-file-cache-passphrase-for-symmetric-encryption t)
+           (setq epg--configurations nil))
+  :config (add-to-list 'epg-config--program-alist `(OpenPGP epg-gpg-program ("gpg" . ,epg-gpg-minimum-version))))
 
 ;; Pinentry (not available in melpa)
 (use-package pinentry
