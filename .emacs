@@ -165,6 +165,9 @@
     ;; Setup Auto-Insert
     (require 'setup-auto-insert)
 
+    ;; Setup lsp
+    (require 'setup-lsp)
+
     ;; Setup Company
     (require 'setup-company)
 

@@ -47,7 +47,7 @@
   :defines inline-docs-overlay)
 
 (use-package quick-peek
-  :defer t)
+  :demand t)
 
 (use-package eldoc-overlay-mode
   :defer t
