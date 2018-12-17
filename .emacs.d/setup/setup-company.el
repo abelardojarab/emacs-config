@@ -128,8 +128,6 @@
 
 	    ;; company-lsp: Company completion backend for lsp-mode.
 	    (use-package company-lsp
-	      :if (executable-find "clangd")
-	      :config (add-to-list 'company-backends 'company-lsp)
 	      :custom (company-lsp-async t))
 
             ;; Company integration with irony
