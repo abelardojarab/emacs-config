@@ -87,7 +87,8 @@ public:
         Separate32BitAnd64Bit = (1ull << 31),
         SourceIgnoreIncludePathDifferencesInUsr = (1ull << 32),
         NoLibClangIncludePath = (1ull << 33),
-        TranslationUnitCache = (1ull << 34)
+        TranslationUnitCache = (1ull << 34),
+        CompletionDiagnostics = (1ull << 35)
     };
     struct Options {
         Options()
@@ -131,6 +132,7 @@ public:
     bool isActiveBuffer(uint32_t fileId) const { return mActiveBuffers.contains(fileId); }
     int exitCode() const { return mExitCode; }
     std::shared_ptr<Project> currentProject() const { return mCurrentProject.lock(); }
+    Hash<Path, std::shared_ptr<Project> > projects() const { return mProjects; }
     void onNewMessage(const std::shared_ptr<Message> &message, const std::shared_ptr<Connection> &conn);
     bool saveFileIds();
     bool loadCompileCommands(IndexParseData &data, const Path &compileCommands, const List<String> &environment, SourceCache *cache) const;

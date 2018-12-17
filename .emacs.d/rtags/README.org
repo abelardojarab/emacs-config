@@ -189,13 +189,11 @@ sudo port install clang-3.5
   git clone --recursive https://github.com/Andersbakken/rtags.git
   #+END_SRC
 
-  You can also download the sources from here:
+  RTags releases are available for download under the [[https://github.com/Andersbakken/rtags/releases][releases]] page.
 
-  https://andersbakken.github.io/rtags-releases/rtags-2.19.tar.bz2
-
-  or
-
-  https://andersbakken.github.io/rtags-releases/rtags-2.19.tar.gz
+  The *Source code (zip)* and *Source code (tar.gz)* contain just the bare
+  bone RTags source code. You need to download the *rtags-VERSION.tar.bz2* or
+  *rtags-VERSION.tar.gz* archive, to be able to build RTags.
 
 - Building RTags
 
@@ -982,18 +980,6 @@ if RTags doesn't have a certain project indexed:
 * Code Completion in Emacs:
 To enable code completion in Emacs with company mode do the following:
 
-- Enable rtags-diagnostics. The easiest way is to:
-
-#+BEGIN_SRC emacs-lisp
-(setq rtags-autostart-diagnostics t)
-#+END_SRC
-
-but you can also explicitly start it with
-
-#+BEGIN_EXAMPLE
-M-x rtags-diagnostics <RET>
-#+END_EXAMPLE
-
 - Enable completions in RTags:
 
 #+BEGIN_SRC emacs-lisp
@@ -1021,8 +1007,6 @@ This minimal init.el configuration should be enough to get completion to work.
 (require 'rtags)
 (require 'company)
 
-(setq rtags-autostart-diagnostics t)
-(rtags-diagnostics)
 (setq rtags-completions-enabled t)
 (push 'company-rtags company-backends)
 (global-company-mode)
@@ -1057,6 +1041,7 @@ To turn off the automatic Flycheck syntax checking, set the variable
 =flycheck-check-syntax-automatically= locally to =nil=.
 
 #+BEGIN_SRC emacs-lisp
+(setq rtags-autostart-diagnostics t)
 (defun my-flycheck-rtags-setup ()
   (flycheck-select-checker 'rtags)
   (setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
@@ -1128,6 +1113,7 @@ There are several other projects integrating RTags with other editors.
 
 Sublime Text:
 https://github.com/rampage644/sublime-rtags
+https://github.com/tillt/RTagsComplete
 
 Vim:
 https://github.com/lyuts/vim-rtags
@@ -1215,24 +1201,7 @@ other formats etc), just drop us a note.
   #+begin_src sh
   make all test                   # Build the binaries first
   #+end_src
+
 * Disclaimer
 RTags is still under development and is not the most stable piece of software
 you'll ever find. We're constantly working to improve on it.
-* Release notes
-We won't go back and add release notes for previous versions but we'll
-try to do it from now.
-
-2.19:
-- Seemingly improved performance for completions due to better
-  handling of unsaved files. Apparently stdin and processes in emacs
-  are not our friends. Tempfiles on the other hand seem to be
-  significantly faster.
-- Make skipped ranges work again.
-- Add a new feature, rtags-find-dead-functions (Issue #1152)
-- Various contributions that improve code completion
-- Fix an issue when jumping to macro definition from a macro
-  expansion.
-- Fix issue #1214. Socket file doesn't need to be resolved.
-- Various other fixes, code cleanup and infrastructure work.
-
-

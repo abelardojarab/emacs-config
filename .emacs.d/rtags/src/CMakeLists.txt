@@ -110,7 +110,7 @@ include(CheckCXXSourceRuns)
 set(CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS} "-std=c++11" ${CMAKE_CXX_FLAGS} ${LIBCLANG_CXXFLAGS})
 check_cxx_source_runs("${CXX_11_EXTENDED_REGEX_TEST}" CXX_11_EXTENDED_REGEX_SUPPORT)
 if (NOT CXX_11_EXTENDED_REGEX_SUPPORT)
-    message(FATAL_ERROR "Compiler with complete C++11 support required ( >= GCC 4.9 or >= Clang 3.3)")
+    message(FATAL_ERROR "The compiler uses a libstdc++ without c++11 regex support.")
 endif ()
 unset(CMAKE_REQUIRED_FLAGS)
 unset(CMAKE_REQUIRED_LIBRARIES)
@@ -197,6 +197,11 @@ set(RTAGS_SOURCES
     Token.cpp
     TokensJob.cpp
     ${RCT_SOURCES})
+
+if (RP_USE_THREAD)
+    list(APPEND RTAGS_SOURCES RPThread.cpp)
+    add_definitions(-DRP_USE_THREAD=1)
+endif ()
 
 if (LUA_ENABLED)
     list(APPEND RTAGS_SOURCES AST.cpp)

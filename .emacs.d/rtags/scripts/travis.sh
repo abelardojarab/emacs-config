@@ -44,6 +44,7 @@ fi # end ! $LUA_DISABLE
 function build()
 {
     mkdir build && pushd build > /dev/null
+    emacs --version
     cmake "${CMAKE_PARAMS[@]}" .. || cat CMakeFiles/CMakeError.log
     make VERBOSE=1 -j2
 }
@@ -55,6 +56,13 @@ function run_tests()
     ctest --output-on-failure --verbose $@
 }
 
+function add_cmake_params()
+{
+    for param in $@; do
+        CMAKE_PARAMS[${#CMAKE_PARAMS[@]}]="$param"
+    done
+}
+
 function osx()
 {
     ## Step -- Setup
@@ -63,10 +71,16 @@ function osx()
     brew upgrade python3
     python3 -m pip install --upgrade pip
     pip3 install --user --upgrade nose PyHamcrest
-    # Add nosetest bin dir to the env path var
-    PATH=$PATH:/Users/travis/Library/Python/3.6/bin
 
     ## Step -- Build
+    mkdir -p ~/.local/bin
+    ln -s /usr/local/Cellar/numpy/*/libexec/nose/bin/nosetests-3.7 \
+       ~/.local/bin/nosetests
+    export PYTHONPATH=/usr/local/lib/python3.7/site-packages
+    export LIBCLANG_LLVM_CONFIG_EXECUTABLE=$(find /usr/local/Cellar/llvm/*/bin -name llvm-config 2>/dev/null)
+    # Help cmake to find openssl includes/library
+    add_cmake_params "-DOPENSSL_ROOT_DIR=/usr/local/opt/openssl"
+
     build
 
     ## Step -- Test

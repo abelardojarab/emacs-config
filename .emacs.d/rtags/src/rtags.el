@@ -5,7 +5,7 @@
 ;; Author: Jan Erik Hanssen <jhanssen@gmail.com>
 ;;         Anders Bakken <agbakken@gmail.com>
 ;; URL: http://rtags.net
-;; Version: 2.10
+;; Version: 2.21
 
 ;; This file is not part of GNU Emacs.
 
@@ -35,10 +35,12 @@
   :group 'tools
   :link '(url-link :tag "Website" "http://rtags.net"))
 
-(if (version< emacs-version "24.3")
+(if (version< emacs-version "25")
     (eval-when-compile
       (require 'cl))
   (require 'cl-lib)
+  (require 'cl-seq)
+  (require 'cl-extra)
   (defalias 'defun* 'cl-defun))
 (require 'bookmark)
 (require 'cc-mode)
@@ -71,7 +73,7 @@
 ;; Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defconst rtags-protocol-version 127)
-(defconst rtags-package-version "2.19")
+(defconst rtags-package-version "2.21")
 (defconst rtags-popup-available (require 'popup nil t))
 (defconst rtags-supported-major-modes '(c-mode c++-mode objc-mode) "Major modes RTags supports.")
 (defconst rtags-verbose-results-delimiter "------------------------------------------")
@@ -109,6 +111,10 @@
 (defvar rtags-buffer-bookmarks 0)
 (defvar rtags-diagnostics-process nil)
 (defvar rtags-diagnostics-starting nil)
+(defvar rtags-last-update-current-project-buffer nil)
+(defvar rtags-results-buffer-type nil)
+(make-variable-buffer-local 'rtags-results-buffer-type)
+(put 'rtags-results-buffer-type 'permanent-local t)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -120,6 +126,7 @@
   :type 'boolean
   :safe 'booleanp)
 
+(defvar rtags-suspend-during-compilation nil)
 (defun rtags-set-suspend-during-compilation-enabled ()
   (if rtags-suspend-during-compilation
       (progn
@@ -129,7 +136,6 @@
     (setq compilation-finish-functions (cl-remove-if (lambda (item)
                                                        (eq item 'rtags-clear-suspended-files))
                                                      compilation-finish-functions))))
-
 (defcustom rtags-suspend-during-compilation nil
   "Suspend during compilation."
   :group 'rtags
@@ -138,6 +144,7 @@
   :set (lambda (var val)
          (set var val)
          (rtags-set-suspend-during-compilation-enabled)))
+
 
 (defcustom rtags-use-mark-as-current-symbol nil
   "Use mark, when visible as default for rtags-find-symbol."
@@ -254,6 +261,8 @@ If you're running Emacs in cygwin you might have to set this to nil."
         ((fboundp 'set-temporary-overlay-map) (set-temporary-overlay-map map))
         (t)))
 
+
+(defvar rtags-periodic-reparse-timeout nil)
 (defvar rtags-periodic-reparse-timer nil)
 (defun rtags--update-periodic-reparse-timer ()
   "Update periodic reparse timer."
@@ -535,6 +544,18 @@ return t if RTags is allowed to modify this file."
   :group 'rtags
   :type '(choice (const :tag "Unset" nil) integer)
   :safe 'integerp)
+
+(defcustom rtags-rc-binary-name "rc"
+  "Name of rc binary file."
+  :group 'rtags
+  :type 'string
+  :risky t)
+
+(defcustom rtags-rdm-binary-name "rdm"
+  "Name of rdm binary file."
+  :group 'rtags
+  :type 'string
+  :risky t)
 
 (defcustom rtags-path nil
   "Path to RTags executables."
@@ -1151,11 +1172,11 @@ to case differences."
 
 (defun rtags-remove-keyword-params (seq)
   (when seq
-    (let ((head (car seq))
-          (tail (cdr seq)))
-      (if (keywordp head)
-          (rtags-remove-keyword-params (cdr tail))
-        (cons head (rtags-remove-keyword-params tail))))))
+    (cl-reduce (lambda (left right)
+                 (cond ((and left (keywordp (car left))) (cdr left)) ; If we've remembered a keyword, ignore next
+                       ((keywordp right) (cons right left)) ; Remember keywords we encounter.
+                       (t (append left (list right))))) ; else build the list
+               seq :initial-value '())))
 
 (defun rtags-combine-strings (list)
   (mapconcat (lambda (str)
@@ -1235,26 +1256,31 @@ Function based on org-babel-tramp-handle-call-process-region"
     (apply 'call-process-region
            start end program delete buffer display args)))
 
+(defun rtags--alter-path-in-tramp-location (tramp-location new-location)
+  "Set path part of TRAMP-LOCATION to NEW-LOCATION."
+
+  ;; From helm-files.el
+  ;; `tramp-dissect-file-name' returns a list in emacs-26
+  ;; whereas in 24.5 it returns a vector, thus the car is a
+  ;; symbol (`tramp-file-name') which is not needed as argument
+  ;; for `tramp-make-tramp-file-name' so transform the cdr in
+  ;; vector, and for 24.5 use directly the returned value.
+  (let ((location-vec
+          (cl-loop with v = (rtags--tramp-cons-or-vector
+                             (tramp-dissect-file-name tramp-location))
+                   for i across v collect i)))
+    (setf (nth (if (= (length location-vec) 5) 3 5) location-vec) new-location)
+    (apply #'tramp-make-tramp-file-name location-vec)))
+
 (defun rtags-trampify (absolute-location)
-  "if absolute-location is tramped, then return it.
-Otherwise if default-directory is tramp one, then uses it to convert
-absolute-location to remote. absolute-location can of course be a path"
+  "If ABSOLUTE-LOCATION is a tramp location return it unmodified.
+Otherwise if `default-directory' is a remote location, then use it to convert
+ABSOLUTE-LOCATION to a remote location."
   (if (or (not rtags-tramp-enabled)
           (not (tramp-tramp-file-p default-directory))
           (tramp-tramp-file-p absolute-location))
       absolute-location
-    ;; From helm-files.el
-    ;; `tramp-dissect-file-name' returns a list in emacs-26
-    ;; whereas in 24.5 it returns a vector, thus the car is a
-    ;; symbol (`tramp-file-name') which is not needed as argument
-    ;; for `tramp-make-tramp-file-name' so transform the cdr in
-    ;; vector, and for 24.5 use directly the returned value.
-    (let ((location-vec
-           (cl-loop with v = (rtags--tramp-cons-or-vector
-                              (tramp-dissect-file-name default-directory))
-              for i across v collect i)))
-      (setf (nth (if (= (length location-vec)) 5 3 5) location-vec) absolute-location)
-      (apply #'tramp-make-tramp-file-name location-vec))))
+    (rtags--alter-path-in-tramp-location default-directory absolute-location)))
 
 (defun rtags--tramp-cons-or-vector (vector-or-cons)
   "Return VECTOR-OR-CONS as a vector."
@@ -1307,7 +1333,7 @@ to only call this when `rtags-socket-file' is defined.
                              silent-query
                              &allow-other-keys)
   (save-excursion
-    (let ((rc (rtags-executable-find "rc"))
+    (let ((rc (rtags-executable-find rtags-rc-binary-name))
           (tempfile))
       (if (not rc)
           (unless noerror (rtags--error 'rtags-cannot-find-rc))
@@ -1319,7 +1345,7 @@ to only call this when `rtags-socket-file' is defined.
         (setq arguments (mapcar 'rtags-untrampify arguments))
         ;; other way to ignore colors would IMHO be to configure tramp,
         ;; but: do we need colors from rc?
-        (push (format "--verify-version=%d" rtags-protocol-version) arguments)
+        (push (format "-t%d" rtags-protocol-version) arguments)
         (push "-z" arguments)
         (setq path (rtags-untrampify path))
         (when path-filter
@@ -1363,7 +1389,7 @@ to only call this when `rtags-socket-file' is defined.
         (when rtags-rc-log-enabled
           (rtags-log (concat rc " " (rtags-combine-strings arguments))))
         (if async
-            (let ((proc (apply #'start-file-process "rc" (current-buffer) rc arguments)))
+            (let ((proc (apply #'start-file-process rtags-rc-binary-name (current-buffer) rc arguments)))
               (set-process-query-on-exit-flag proc nil)
               (when (car async)
                 (set-process-filter proc (car async)))
@@ -1393,7 +1419,7 @@ to only call this when `rtags-socket-file' is defined.
                      (erase-buffer)
                      (setq rtags-last-request-not-indexed t))
                     ((equal result "Aborted")
-                     (rtags--error 'rtags-program-exited-abnormal "rc" result))
+                     (rtags--error 'rtags-program-exited-abnormal rtags-rc-binary-name result))
                     (t))) ;; other error
             (and (> (point-max) (point-min)) (equal result rtags-exit-code-success))))))))
 
@@ -1662,6 +1688,8 @@ instead of file from `current-buffer'.
   (let ((dead-functions-buffer (rtags-get-buffer)))
     (rtags-delete-rtags-windows)
     (rtags-location-stack-push)
+    (unless buffer
+      (setq buffer (current-buffer)))
     (rtags-switch-to-buffer dead-functions-buffer)
     (if prefix
         (rtags-call-rc "--find-dead-functions" (unless rtags-print-filenames-relative "-K"))
@@ -2097,6 +2125,7 @@ instead of file from `current-buffer'.
                 (forward-char)))
             (nreverse cfs)))))
 
+
 ;;;###autoload
 (defun rtags-references-tree ()
   (interactive)
@@ -2378,42 +2407,53 @@ instead of file from `current-buffer'.
   ;; (message (format "rtags-goto-location \"%s\"" location))
   (setq location (rtags-absolutify location skip-trampification))
 
-  (when (> (length location) 0)
-    (cond ((string-match "\\(.*\\) includes /.*" location)
-           (rtags-find-file-or-buffer (match-string-no-properties 1 location) other-window))
-          ((and (string-match "[^ ]* should include /" location)
-                (string= (buffer-substring-no-properties (point-at-bol) (+ (point-at-bol) (length location)))
+  (let* ((is-location-remote (tramp-tramp-file-p location))
+         (path-segment (if is-location-remote
+                           (tramp-file-name-localname (tramp-dissect-file-name location))
                          location))
-           (save-excursion
-             (if (search-backward-regexp "[ (]" (point-at-bol) t)
-                 (forward-char 1)
-               (goto-char (point-at-bol)))
-             (let ((pos (point)))
-               (search-forward-regexp " ")
-               (rtags-goto-location (buffer-substring-no-properties pos (1- (point))) nobookmark other-window))))
-          ((string-match "\\(.*?\\):\\([0-9]+\\):\\([0-9]+\\):?" location)
-           (let ((line (string-to-number (match-string-no-properties 2 location)))
-                 (column (string-to-number (match-string-no-properties 3 location))))
-             (rtags-find-file-or-buffer (match-string-no-properties 1 location) other-window)
-             (push-mark nil t)
-             (rtags-goto-line-col line column)))
-          ((string-match "\\(.*?\\):\\([0-9]+\\):?" location)
-           (let ((line (string-to-number (match-string-no-properties 2 location))))
-             (rtags-find-file-or-buffer (match-string-no-properties 1 location) other-window)
-             (push-mark nil t)
-             (goto-char (point-min))
-             (forward-line (1- line))))
-          ((string-match "\\(.*?\\),\\([0-9]+\\)" location)
-           (let ((offset (string-to-number (match-string-no-properties 2 location))))
-             (rtags-find-file-or-buffer (match-string-no-properties 1 location) other-window)
-             (push-mark nil t)
-             (rtags-goto-offset offset)))
-          (t
-           (when (string-match "^[ \t]+\\(.*\\)$" location)
-             (setq location (match-string-no-properties 1 location)))
-           (rtags-find-file-or-buffer location other-window)))
-    (unless nobookmark (rtags-location-stack-push))
-    (run-hooks 'rtags-after-find-file-hook)))
+         (visit-location (lambda (is-location-remote location path-segment submatch other-window)
+                           (setq path-segment (match-string-no-properties submatch path-segment))
+                           (rtags-find-file-or-buffer
+                            (if is-location-remote
+                                (rtags--alter-path-in-tramp-location location path-segment)
+                              path-segment)
+                            other-window))))
+    (when (> (length path-segment) 0)
+      (cond ((string-match "\\(.*\\) includes /.*" path-segment)
+             (rtags-find-file-or-buffer (match-string-no-properties 1 path-segment) other-window))
+            ((and (string-match "[^ ]* should include /" path-segment)
+                  (string= (buffer-substring-no-properties (point-at-bol) (+ (point-at-bol) (length path-segment)))
+                           path-segment))
+             (save-excursion
+               (if (search-backward-regexp "[ (]" (point-at-bol) t)
+                   (forward-char 1)
+                 (goto-char (point-at-bol)))
+               (let ((pos (point)))
+                 (search-forward-regexp " ")
+                 (rtags-goto-location (buffer-substring-no-properties pos (1- (point))) nobookmark other-window))))
+            ((string-match "\\(.*?\\):\\([0-9]+\\):\\([0-9]+\\):?" path-segment)
+             (let ((line (string-to-number (match-string-no-properties 2 path-segment)))
+                   (column (string-to-number (match-string-no-properties 3 path-segment))))
+               (funcall visit-location is-location-remote location path-segment 1 other-window)
+               (push-mark nil t)
+               (rtags-goto-line-col line column)))
+            ((string-match "\\(.*?\\):\\([0-9]+\\):?" path-segment)
+             (let ((line (string-to-number (match-string-no-properties 2 path-segment))))
+               (funcall visit-location is-location-remote location path-segment 1 other-window)
+               (push-mark nil t)
+               (goto-char (point-min))
+               (forward-line (1- line))))
+            ((string-match "\\(.*?\\),\\([0-9]+\\)" path-segment)
+             (let ((offset (string-to-number (match-string-no-properties 2 path-segment))))
+               (funcall visit-location is-location-remote location path-segment 1 other-window)
+               (push-mark nil t)
+               (rtags-goto-offset offset)))
+            (t
+             (when (string-match "^[ \t]+\\(.*\\)$" path-segment)
+               (setq path-segment (match-string-no-properties 1 path-segment)))
+             (rtags-find-file-or-buffer location other-window)))
+      (unless nobookmark (rtags-location-stack-push))
+      (run-hooks 'rtags-after-find-file-hook))))
 
 (defvar rtags-location-stack-index 0)
 (defvar rtags-location-stack nil)
@@ -3567,7 +3607,7 @@ of diagnostics count"
 (defun rtags-diagnostics (&optional restart nodirty)
   (interactive "P")
   (when rtags-enabled
-    (let ((rc (rtags-executable-find "rc")))
+    (let ((rc (rtags-executable-find rtags-rc-binary-name)))
       (when rc
         (when restart
           (rtags-stop-diagnostics))
@@ -3701,10 +3741,6 @@ of diagnostics count"
     (rtags-mode)
     (when startpos
       (goto-char startpos))))
-
-(defvar rtags-results-buffer-type nil)
-(make-variable-buffer-local 'rtags-results-buffer-type)
-(put 'rtags-results-buffer-type 'permanent-local t)
 
 (defun rtags-handle-results-buffer (&optional token noautojump quiet path other-window type nobookmarks)
   "Handle results from RTags. Should be called with the results buffer
@@ -4010,6 +4046,59 @@ other window instead of the current one."
           (rtags-goto-location (with-temp-buffer (rtags-call-rc :path-filter fn :path fn "-F" match "--no-context" "--absolute-path") (buffer-string)))
         (message "RTags: No symbols")))))
 
+;;;###autoload
+(defun rtags-flatten-max-depth-one (unflattened)
+  (cl-reduce (lambda (x y)
+               (cond ((and (listp x) (listp y)) (append x y))
+                     ((listp x) (append x (list y)))
+                     ((listp y) (append (list x) y))
+                     (t (append (list x) (list y))))) unflattened :initial-value '()))
+
+;;;###autoload
+(defun rtags-create-index-function ()
+  (interactive)
+  (when (or (not (rtags-called-interactively-p)) (rtags-sandbox-id-matches))
+    (rtags-delete-rtags-windows)
+    (let* ((fn (rtags-buffer-file-name))
+           (alternatives (with-temp-buffer
+                           (rtags-call-rc :path fn :path-filter fn
+                                          "--kind-filter" rtags-imenu-kind-filter
+                                          (when rtags-wildcard-symbol-names "--wildcard-symbol-names")
+                                          "--list-symbols"
+                                          "--elisp")
+                           (eval (read (buffer-string)))))
+           (arguments (rtags-flatten-max-depth-one (mapcar (lambda (x) (list "-F" x)) alternatives)))
+           ;; RDB won't return the queries in a correlated order, so we ask for display-names
+           (rdblists (with-temp-buffer (apply 'rtags-call-rc
+                                              (rtags-flatten-max-depth-one (list :path-filter fn
+                                                                                 :path fn  "--no-context"
+                                                                                 "--display-name"
+                                                                                 "--absolute-path" arguments)))
+                                       ;; Break into pairs of name and location
+                                       (mapcar (lambda (x) (split-string x "\t" t))
+                                               (split-string (buffer-string) "\n" t))))
+           ;; Break up the locations so we can sort on line numbers
+           (sortable (mapcar (lambda (x) (cons (cadr x)
+                                               (split-string (car x) ":" t)))
+                             rdblists))
+           (sorted (sort sortable (lambda (x y)
+                                    (cond ((= (string-to-number (caddr x)) (string-to-number (caddr y)))
+                                           (< (string-to-number (cadddr x)) (string-to-number (cadddr y))))
+                                          (t (< (string-to-number (caddr x)) (string-to-number (caddr y))))))))
+           ;; Combine location pieces back into a string
+           (alists (mapcar (lambda (x) (cons (car x) (mapconcat 'identity (cdr x) ":"))) sorted)))
+      ;; Return the sorted pairs of name and location.
+      alists)))
+
+;;;###autoload
+(defun rtags-activate-imenu ()
+  "Overrides imenu index generation function for the current function."
+  (interactive)
+  (setq-local imenu-create-index-function 'rtags-create-index-function)
+  (setq-local imenu-default-goto-function (lambda (_name position &rest unused)
+                                            (when (or (not unused) unused)
+                                              (rtags-goto-location position)))))
+
 (defun rtags-append (txt)
   (goto-char (point-min))
   (while (< (point-at-eol) (point-max))
@@ -4256,7 +4345,6 @@ which can be overridden by specifying DEFAULT-FILE"
       (setq rtags-other-window-window nil))
     ret))
 
-(defvar rtags-last-update-current-project-buffer nil)
 ;;;###autoload
 (defun rtags-update-current-project ()
   (interactive)
@@ -4266,7 +4354,7 @@ which can be overridden by specifying DEFAULT-FILE"
              (not (and (tramp-tramp-file-p default-directory) (not rtags-tramp-enabled)))
              (file-directory-p default-directory))
     (setq rtags-last-update-current-project-buffer (current-buffer))
-    (let* ((rc (rtags-executable-find "rc"))
+    (let* ((rc (rtags-executable-find rtags-rc-binary-name))
            (path (rtags-untrampify (or (rtags-buffer-file-name) default-directory)))
            (arguments (list "-T" path "--diagnose" path "--silent-query")))
       (when (and rtags-completions-enabled
@@ -4495,7 +4583,7 @@ definition."
 (defun rtags-quit-rdm ()
   "Quit the RTags process (rdm)."
   (interactive)
-  (let ((rc (rtags-executable-find "rc")))
+  (let ((rc (rtags-executable-find rtags-rc-binary-name)))
     (when rc
       (process-file rc nil nil nil "--quit-rdm"))))
 
@@ -4508,7 +4596,7 @@ definition."
 (defun rtags-command ()
   "Shell command used to start the `rtags-server' process."
   (format "%s %s %s"
-          (rtags-executable-find "rdm")
+          (rtags-executable-find rtags-rdm-binary-name)
           (rtags-rdm-includes)
           rtags-process-flags))
 
@@ -4530,7 +4618,7 @@ definition."
 (defun rtags-start-process-unless-running ()
   "Launch the RTags process (rdm) if it's not already started."
   (interactive)
-  (let ((rtags-server-executable (rtags-executable-find "rdm")))
+  (let ((rtags-server-executable (rtags-executable-find rtags-rdm-binary-name)))
     (cond
      ;; Already started, nothing need to be done
      ((or (and (processp rtags-rdm-process)
@@ -4541,7 +4629,7 @@ definition."
                    (pname (cdr (assoc 'comm attrs)))
                    (uid (cdr (assoc 'euid attrs))))
               (when (and (eq uid (user-uid))
-                         (or (string-equal pname "rdm")
+                         (or (string-equal pname rtags-rdm-binary-name)
                              (string-equal pname "rdm.exe")))
                 (return t))))))
 
@@ -5062,7 +5150,7 @@ the class.
   (interactive)
   (when (or (not (rtags-called-interactively-p)) (rtags-sandbox-id-matches))
     (let ((filename (rtags-untrampify (rtags-buffer-file-name)))
-          (rc (rtags-executable-find "rc"))
+          (rc (rtags-executable-find rtags-rc-binary-name))
           (rtags-buffer-name "*RTags check includes*")
           (arguments))
       (setq arguments (mapcar (lambda (a) (concat a filename)) '("--current-file=" "--check-includes=")))
@@ -5122,7 +5210,7 @@ the class.
                (erase-buffer)
                (let ((proc (start-process "RTags Tokens Async"
                                           buf
-                                          (rtags-executable-find "rc")
+                                          (rtags-executable-find rtags-rc-binary-name)
                                           "--elisp"
                                           "--tokens-include-symbols"
                                           "--tokens" (cond ((and from to) (format "%s:%d-%d" path from to))
@@ -5266,36 +5354,36 @@ the user enter missing field manually."
       (with-temp-buffer
         (insert "#!/bin/bash -x\n"
                 (format "FILE=\"rtags-%s.tar.bz2\"\n" rtags-package-version)
-                "URL=\"https://andersbakken.github.io/rtags-releases/$FILE\"\n"
+                (format "URL=\"https://github.com/Andersbakken/rtags/releases/download/v%s/$FILE\"\n" rtags-package-version)
                 "ARGS=\"--progress -L -o $FILE\"\n"
                 "CMAKEARGS=" (combine-and-quote-strings (append (and rtags-install-cmake-args (list rtags-install-cmake-args))
                                                                 (if (listp cmakeargs) cmakeargs (list cmakeargs)))) "\n"
-                                                                "[ -e \"$FILE\" ] && ARGS=\"$ARGS -C -\"\n"
-                                                                "ARGS=\"$ARGS $URL\"\n"
-                                                                "echo \"Downloading rtags from $URL\"\n"
-                                                                "if ! curl $ARGS; then\n"
-                                                                "    echo \"Failed to download $FILE from $URL\" >&2\n"
-                                                                "    exit 1\n"
-                                                                "fi\n"
-                                                                "\n"
-                                                                "if ! tar xfj \"$FILE\"; then\n"
-                                                                "    echo \"Failed to untar $FILE\" >&2\n"
-                                                                "    rm \"$FILE\"\n"
-                                                                "    exit 2\n"
-                                                                "fi\n"
-                                                                "\n"
-                                                                "cd \"`echo $FILE | sed -e 's,\.tar.bz2,,'`\"\n"
-                                                                "if ! cmake . ${CMAKEARGS}; then\n"
-                                                                "    echo Failed to cmake\n"
-                                                                "    rm -rf CMakeCache.txt\n"
-                                                                "    exit 3\n"
-                                                                "fi\n"
-                                                                "make\n"
-                                                                "exit $?\n")
+                "[ -e \"$FILE\" ] && ARGS=\"$ARGS -C -\"\n"
+                "ARGS=\"$ARGS $URL\"\n"
+                "echo \"Downloading rtags from $URL\"\n"
+                "if ! curl $ARGS; then\n"
+                "    echo \"Failed to download $FILE from $URL\" >&2\n"
+                "    exit 1\n"
+                "fi\n"
+                "\n"
+                "if ! tar xfj \"$FILE\"; then\n"
+                "    echo \"Failed to untar $FILE\" >&2\n"
+                "    rm \"$FILE\"\n"
+                "    exit 2\n"
+                "fi\n"
+                "\n"
+                "cd \"`echo $FILE | sed -e 's,\.tar.bz2,,'`\"\n"
+                "if ! cmake . ${CMAKEARGS}; then\n"
+                "    echo Failed to cmake\n"
+                "    rm -rf CMakeCache.txt\n"
+                "    exit 3\n"
+                "fi\n"
+                "make\n"
+                "exit $?\n")
         (rtags--write-region (point-min) (point-max) "install-rtags.sh"))
-      (switch-to-buffer (rtags-get-buffer "*RTags install*"))
+      (switch-to-buffer (rtags-get-buffer rtags-install-buffer-name))
       (setq buffer-read-only t)
-      (setq rtags-install-process (start-process "*RTags install*" (current-buffer) "bash" (concat dir "/install-rtags.sh")))
+      (setq rtags-install-process (start-file-process rtags-install-buffer-name (current-buffer) "bash" (rtags-untrampify (concat dir "/install-rtags.sh"))))
       (set-process-sentinel rtags-install-process 'rtags-install-process-sentinel)
       (set-process-filter rtags-install-process 'rtags-install-process-filter))))
 
@@ -5332,7 +5420,7 @@ customize the messages"
         ((eq type 'rtags-socket-file-does-not-exist)
          "RTags: socket file, %S, does not exist")
         ((eq type 'rtags-cannot-find-rc)
-         "RTags: Can't find rc")
+         (concat "RTags: Can't find " rtags-rc-binary-name))
         ((eq type 'rtags-no-file-chosen)
          "RTags: No file chosen")
         ((eq type 'rtags-no-file-here)
@@ -5350,7 +5438,7 @@ customize the messages"
         ((eq type 'rtags-cannot-start-process)
          (concat
           "RTags: Can't start the process `%s'. "
-          "Please check the value of the variable `rtags-path'."))
+          "Please check the value of the variables `rtags-path' and `rtags-rdm-binary-name'."))
         ((eq type 'rtags-malines-doesnt-work-with-location-length)
          "RTags: maxlines doesn't work with location/length")
         ((eq type 'rtags-buffer-is-not-visiting-a-file)

@@ -4,7 +4,8 @@
 #include <assert.h>
 
 #include "rct/rct-config.h"
-#if defined (OS_FreeBSD) || defined (OS_NetBSD) || defined (OS_OpenBSD)
+#if defined (OS_FreeBSD) || defined (OS_NetBSD) || defined (OS_OpenBSD) || \
+        defined(OS_DragonFly)
 #   include <sys/sysctl.h>
 #   include <sys/types.h>
 #elif defined (OS_Linux)
@@ -181,6 +182,26 @@ void ThreadPool::start(const std::shared_ptr<Job> &job, int priority)
     mCond.notify_one();
 }
 
+class FunctionJob : public ThreadPool::Job
+{
+public:
+    FunctionJob(const std::function<void()> func)
+        : mFunction(func)
+    {}
+
+    virtual void run() override
+    {
+        mFunction();
+    }
+private:
+    std::function<void()> mFunction;
+};
+
+void ThreadPool::start(const std::function<void()> &func, int priority)
+{
+    start(std::make_shared<FunctionJob>(func), priority);
+}
+
 bool ThreadPool::remove(const std::shared_ptr<Job> &job)
 {
     std::lock_guard<std::mutex> lock(mMutex);
@@ -193,7 +214,8 @@ bool ThreadPool::remove(const std::shared_ptr<Job> &job)
 
 int ThreadPool::idealThreadCount()
 {
-#if defined (OS_FreeBSD) || defined (OS_NetBSD) || defined (OS_OpenBSD)
+#if defined (OS_FreeBSD) || defined (OS_NetBSD) || defined (OS_OpenBSD) || \
+        defined(OS_DragonFly)
     int cores;
     size_t len = sizeof(cores);
     int mib[2];

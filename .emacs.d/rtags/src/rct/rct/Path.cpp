@@ -187,7 +187,8 @@ size_t Path::canonicalize(bool *changed)
     ref = false;
     for (size_t i=0; i<len - 1; ++i) {
         if (path[i] == '/') {
-            if (i + 3 < len && path[i + 1] == '.' && path[i + 2] == '.' && path[i + 3] == '/') {
+          if ((i + 3 < len && path[i + 1] == '.' && path[i + 2] == '.' && path[i + 3] == '/') ||
+              (i + 3 == len && path[i + 1] == '.' && path[i + 2] == '.')) {
                 for (int j=i - 1; j>=0; --j) {
                     if (path[j] == '/') {
                         memmove(path + j, path + i + 3, len - (i + 2));
@@ -198,13 +199,26 @@ size_t Path::canonicalize(bool *changed)
                         break;
                     }
                 }
+          } else if ((i + 2 < len && path[i + 1] == '.' && path[i + 2] == '/') ||
+                     (i + 2 == len && path[i + 1] == '.')) {
+                // skip over /./
+                memmove(path + i, path + i + 2, len - (i + 1));
+                ref = true;
+                len -= 2;
+                i -= 2;
             } else if (path[i + 1] == '/') {
-                memmove(path + i, path + i + 1, len - (i + 1));
+                memmove(path + i, path + i + 1, len - i);
                 ref = true;
                 --i;
                 --len;
             }
         }
+    }
+    // Remove trailing slash
+    if (path[len - 1] == '/') {
+        path[len - 1] = '\0';
+        ref = true;
+        --len;
     }
 
     if (len != size())
@@ -390,7 +404,7 @@ bool Path::isHeader(const char *ext)
 bool Path::isSystem(const char *path)
 {
     if (!strncmp("/usr/", path, 5)) {
-#ifdef OS_FreeBSD
+#if defined(OS_FreeBSD) || defined(OS_DragonFly)
         if (!strncmp("home/", path + 5, 5))
             return false;
 #endif
@@ -462,7 +476,13 @@ bool Path::mkdir(const Path &path, MkDirMode mkdirMode, mode_t permissions)
 #else
             const int r = ::mkdir(buf, permissions);
 #endif
-            if (r && errno != EEXIST && errno != EISDIR)
+            if (r && errno != EEXIST && errno != EISDIR
+#ifdef OS_CYGWIN
+            		// on cygwin/msys2 we may try to create something like (/cygdrive)/c/some/path/
+            		// an mkdir() attempt to create /c/ will fail with EACCESS so we need to catch it here
+            		&& errno != EACCES
+#endif
+					)
                 return false;
             buf[i] = '/';
         }

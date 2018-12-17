@@ -44,7 +44,7 @@ QueryJob::QueryJob(const std::shared_ptr<QueryMessage> &query,
                     if (f && mProject)
                         mFilters.append(std::make_shared<DependencyFilter>(f, mProject));
                 } else if (query->flags() & QueryMessage::MatchRegex) {
-                    mFilters.append(std::make_shared<RegexFilter>(filter.pattern));
+                    mFilters.append(std::make_shared<RegexFilter>(filter.pattern, query->flags() & QueryMessage::MatchCaseInsensitive));
                 } else {
                     mFilters.append(std::make_shared<PathFilter>(filter.pattern));
                 }
@@ -136,7 +136,9 @@ bool QueryJob::locationToString(Location location,
         int idx;
         Symbol symbol = project()->findSymbol(location, &idx);
         if (symbol.isNull()) {
-            error() << "Somehow can't find" << location << "in symbols";
+            if (!(symbol.flags & Symbol::FileSymbol)) {
+                error() << "Somehow can't find" << location << "in symbols";
+            }
         } else {
             if (!mKindFilters.filter(symbol))
                 return false;
