@@ -127,8 +127,7 @@
                                   :with company-yasnippet))))
 
 	    ;; company-lsp: Company completion backend for lsp-mode.
-	    (use-package company-lsp
-	      :config (push 'company-lsp company-backends))
+	    (use-package company-lsp)
 
             ;; Company integration with irony
             (use-package company-irony
