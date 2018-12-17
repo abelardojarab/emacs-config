@@ -43,7 +43,14 @@
   :hook (lsp-mode . lsp-ui-mode)
   :config (progn
 	    (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
-	    (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)))
+	    (define-key lsp-ui-mode-map [remap xref-find-references]  #'lsp-ui-peek-find-references)))
+
+;; Integration with clangd
+(use-package lsp-clangd
+  :if (executable-find "clangd")
+  :defer t
+  :commands lsp-clangd-c++-enable
+  :hook (c-mode-common . lsp-clangd-c++-enable))
 
 (provide 'setup-lsp)
 ;;; setup-lsp.el ends here
