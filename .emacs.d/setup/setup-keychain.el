@@ -42,6 +42,7 @@
 ;; Keeping Secrets in Emacs with GnuPG & EasyPG
 (use-package epg
   :demand t
+  :after keychain-environment
   :config (progn
             ;; https://www.masteringemacs.org/article/keeping-secrets-in-emacs-gnupg-auth-sources
             (if (executable-find "gpg2")

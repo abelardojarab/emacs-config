@@ -32,6 +32,9 @@
              my/ediff-dwim
              my/update-modified-flag)
   :hook (ediff-mode . my/setup-ediff)
+  :custom ((ediff-window-setup-function 'ediff-setup-windows-plain)
+           (ediff-split-window-function 'split-window-horizontally)
+           (ediff-diff-options          "-w"))
   :config (progn
             (defun my/update-modified-flag ()
               "Update the buffer modified flag."
@@ -57,14 +60,6 @@
               (ediff-setup-keymap)
               (define-key ediff-mode-map (kbd "<down>") #'ediff-next-difference)
               (define-key ediff-mode-map (kbd "<up>")   #'ediff-previous-difference)))
-  :config (progn
-            (setq ediff-window-setup-function 'ediff-setup-windows-plain
-
-                  ;; Always split nicely for wide screens
-                  ediff-split-window-function 'split-window-horizontally
-
-                  ;; Ignore whitespace
-                  ediff-diff-options          "-w")
 
             ;; Do ediff as I mean
             (defun my/ediff-dwim ()
@@ -97,7 +92,7 @@ Otherwise call `ediff-buffers' interactively."
                         (progn
                           (message "Running (ediff-files \"%s\" \"%s\") .." filea fileb)
                           (ediff-files filea fileb))))
-                  (call-interactively 'ediff-buffers))))))
+                  (call-interactively 'ediff-buffers)))))
 
 (provide 'setup-ediff)
 ;;; setup-ediff.el ends here
