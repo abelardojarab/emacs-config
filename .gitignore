@@ -85,6 +85,6 @@ cscope.files
 cscope.out
 cscope.in.out
 cscope.po.out
-
+.lsp*
 
 # End of https://www.gitignore.io/api/tags,emacs
