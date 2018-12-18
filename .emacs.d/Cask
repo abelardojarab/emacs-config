@@ -75,6 +75,7 @@
 (depends-on "counsel-projectile")
 (depends-on "counsel-tramp")
 ;; (depends-on "cpp-auto-include")
+(depends-on "cquery")
 (depends-on "ctable")
 (depends-on "ctags-update")
 (depends-on "cygwin-mount")
