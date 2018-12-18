@@ -29,7 +29,7 @@
   :demand t
   :commands lsp)
 
-(use lsp-clients
+(use-package lsp-clients
   :demmand t
   :after lsp
   :commands lsp-define-stdio-client)
