@@ -33,10 +33,10 @@
   :hook ((c-mode-common  . my/c-mode-indent-init)
          (find-file-hook . my/c-files-hook))
   :mode (("\\.h\\'"  . c++-mode)
-	 ("\\.c\\'"  . c-mode))
+     ("\\.c\\'"  . c-mode))
   :init (progn
 
-	  ;; Default C-style
+      ;; Default C-style
           (setq my/cc-style
                 '("cc-mode"
                   (c-offsets-alist . ((func-decl-cont . ++)
@@ -98,6 +98,15 @@
               (my/c-mode-indent-init)
               ))))
 
+;; C/C++ refactoring tool based on Semantic parser framework
+(use-package srefactor
+  :defer t
+  :commands srefactor-refactor-at-point
+  :bind (:map c-mode-map
+              ("C-c C-r" . srefactor-refactor-at-point)
+              :map c++-mode-map
+              ("C-c C-r" . srefactor-refactor-at-point)))
+
 ;; Show inline arguments hint for the C/C++ function at point
 (use-package function-args
   :defer t
@@ -115,26 +124,27 @@
   :custom (moo-select-method 'ivy)
   :config (fa-config-default))
 
-;; C/C++ refactoring tool based on Semantic parser framework
-(use-package srefactor
+;; Automatically insert prototype functions from .h
+(use-package member-functions
   :defer t
-  :commands srefactor-refactor-at-point
-  :bind (:map c-mode-map
-              ("C-c C-r" . srefactor-refactor-at-point)
-              :map c++-mode-map
-              ("C-c C-r" . srefactor-refactor-at-point)))
+  :commands expand-member-functions
+  :custom (mf--source-file-extension "cpp"))
+
+;; cquery language server
+(use-package cquery
+  :defer t
+  :if (executable-find "cquery")
+  :commands cquery-enable
+  :init (defun cquery-enable ()
+      (interactive)
+          (condition-case nil (lsp) (user-error nil)))
+  :config (setq cquery-extra-init-params '(:index (:comments 2) :cacheFormat "msgpack" :completion (:detailedLabel t))))
 
 ;; Devhelp support
 (use-package devhelp
   :defer t
   :commands (devhelp-word-at-point
              devhelp-toggle-automatic-assistant))
-
-;; Automatically insert prototype functions from .h
-(use-package member-functions
-  :defer t
-  :commands expand-member-functions
-  :custom (mf--source-file-extension "cpp"))
 
 ;; Basic C compile
 (use-package basic-c-compile

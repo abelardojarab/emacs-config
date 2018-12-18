@@ -108,6 +108,9 @@
     ;; Setup CEDET
     (require 'setup-cedet)
 
+    ;; Setup Language Server Protocol
+    (require 'setup-lsp)
+
     ;; Setup C++
     (require 'setup-c++)
 
@@ -164,9 +167,6 @@
 
     ;; Setup Auto-Insert
     (require 'setup-auto-insert)
-
-    ;; Setup lsp
-    (require 'setup-lsp)
 
     ;; Setup Company
     (require 'setup-company)

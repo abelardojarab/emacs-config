@@ -26,8 +26,13 @@
 
 ;; lsp-mode:  Emacs client/library for the Language Server Protocol
 (use-package lsp-mode
-  :commands lsp
-  :config (use-package lsp-clients))
+  :demand t
+  :commands lsp)
+
+(use lsp-clients
+  :demmand t
+  :after lsp
+  :commands lsp-define-stdio-client)
 
 ;; make sure we have lsp-imenu everywhere we have LSP
 (use-package lsp-imenu
