@@ -30,7 +30,7 @@
   :commands lsp)
 
 (use-package lsp-clients
-  :demmand t
+  :demand t
   :after lsp
   :commands lsp-define-stdio-client)
 
