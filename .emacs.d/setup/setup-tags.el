@@ -26,8 +26,7 @@
 (use-package etags
   :demand t
   :commands (etags-create-or-update
-             etags-tags-completion-table
-             tags-completion-table)
+             etags-tags-completion-table)
   :custom ((tags-revert-without-query          t)
 	   (tags-always-build-completion-table t)
 	   (tags-add-tables                    t))
@@ -96,34 +95,7 @@
                                        (goto-char (match-end 0))))
                               (progress-reporter-update progress-reporter (point)))
                             table))))
-                table))
-
-            (defun tags-completion-table ()
-              "Build `tags-completion-table' on demand.
-The tags included in the completion table are those in the current
-tags table and its (recursively) included tags tables."
-              (or tags-completion-table
-                  ;; No cached value for this buffer.
-                  (condition-case ()
-                      (let (current-table combined-table)
-                        (message "Making tags completion table for %s..." buffer-file-name)
-                        (save-excursion
-                          ;; Iterate over the current list of tags tables.
-                          (while (visit-tags-table-buffer (and combined-table t))
-                            ;; Find possible completions in this table.
-                            (setq current-table (funcall tags-completion-table-function))
-                            ;; Merge this buffer's completions into the combined table.
-                            (if combined-table
-                                (mapatoms
-                                 (lambda (sym) (intern (symbol-name sym) combined-table))
-                                 current-table)
-                              (setq combined-table current-table))))
-                        (message "Making tags completion table for %s...done"
-                                 buffer-file-name)
-                        ;; Cache the result in a buffer-local variable.
-                        (setq tags-completion-table combined-table))
-                    (quit (message "Tags completion table construction cancelled")
-                          (setq tags-completion-table nil)))))))
+                table))))
 
 ;; Emacs 25-above xref
 (use-package xref
@@ -144,17 +116,7 @@ tags table and its (recursively) included tags tables."
 (use-package etags-select
   :defer t
   :after etags
-  :commands (etags-select-find-tag
-             ido-find-tag)
-  :config (defun ido-find-tag ()
-            "Find a tag using ido"
-            (interactive)
-            (tags-completion-table)
-            (let (tag-names)
-              (mapatoms (lambda (x)
-                          (push (prin1-to-string x t) tag-names))
-                        tags-completion-table)
-              (find-tag (replace-regexp-in-string "\\\\" "" (ido-completing-read "Tag: " tag-names))))))
+  :commands etags-select-find-tag)
 
 ;; Etags table
 (use-package etags-table

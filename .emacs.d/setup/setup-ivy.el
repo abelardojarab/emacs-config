@@ -187,6 +187,7 @@
 
 ;; Select from xref candidates with Ivy
 (use-package ivy-xref
+  :disabled t ;; prefer helm-xref
   :if (and (executable-find "global")
            (boundp 'xref-backend-functions))
   :custom (xref-show-xrefs-function 'ivy-xref-show-xrefs))
