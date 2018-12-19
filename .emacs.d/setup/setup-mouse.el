@@ -32,6 +32,10 @@
             (defun track-mouse (e))
             (setq mouse-sel-mode t)))
 
+(use-package pixel-scroll
+  :if (fboundp 'pixel-scroll-mode)
+  :config (pixel-scroll-mode 1))
+
 ;; Do not copy region use mouse dragging
 (setq mouse-drag-copy-region nil)
 

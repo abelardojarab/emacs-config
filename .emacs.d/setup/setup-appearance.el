@@ -56,10 +56,10 @@
   :diminish visual-line-mode
   :custom (visual-line-fringe-indicators '(nil right-curly-arrow))
   :hook ((prog-mode text-mode) . my/enable-truncate-lines)
-  :init (defun my/enable-truncate-lines ()
-          (visual-line-mode -1)
-          (toggle-truncate-lines t)
-          (setq truncate-lines t))
+  :preface (defun my/enable-truncate-lines ()
+             (visual-line-mode -1)
+             (toggle-truncate-lines t)
+             (setq truncate-lines t))
   :config (defun toggle-truncate-lines (&optional arg)
             "Toggle truncating of long lines for the current buffer.
 When truncating is off, long lines are folded.
@@ -223,7 +223,7 @@ all the buffers."
   :defer 10
   :custom (dimmer-fraction 0.25)
   :commands dimmer-mode
-  :init (dimmer-mode t))
+  :config (dimmer-mode t))
 
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here

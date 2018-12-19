@@ -40,15 +40,19 @@
 
 ;; lsp-ui: This contains all the higher level UI modules of lsp-mode, like flycheck support and code lenses.
 (use-package lsp-ui
-  :custom ((lsp-ui-sideline-enable           nil)
-       (lsp-ui-doc-enable                nil)
-       (lsp-ui-flycheck-enable           t)
-       (lsp-ui-imenu-enable              t)
-       (lsp-ui-sideline-ignore-duplicate t))
+  :custom ((lsp-ui-sideline-enable               nil)
+	   (lsp-ui-doc-enable                    nil)
+	   (lsp-ui-flycheck-enable               t)
+	   (lsp-ui-imenu-enable                  t)
+	   (lsp-ui-sideline-ignore-duplicate     t )
+	   (lsp-ui-sideline-show-symbol          nil))
   :hook (lsp-mode . lsp-ui-mode)
   :config (progn
-        (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
-        (define-key lsp-ui-mode-map [remap xref-find-references]  #'lsp-ui-peek-find-references)))
+	    (if (display-graphic-p)
+		(setq lsp-ui-sideline-code-actions-prefix "ℹ "))
+
+            (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
+            (define-key lsp-ui-mode-map [remap xref-find-references]  #'lsp-ui-peek-find-references)))
 
 (provide 'setup-lsp)
 ;;; setup-lsp.el ends here

@@ -69,30 +69,25 @@
   :interpreter ("python3" . python-mode)
   :bind (:map python-mode-map
               ("TAB" . py-indent-line))
-  :init (defun check-python-module (&optional module)
-          (and (executable-find "python3")
-               (= 0 (call-process "python3"  nil nil nil "-c"
-                                  (concat "import "
-                                          (if module module "jedi"))))))
-  :config (progn
-
-            ;; Python hook
-            (add-hook 'python-mode-hook
-                      (function (lambda ()
-                                  (progn
-                                    ;; disable annoying "Python-Help" buffer
-                                    (eldoc-mode -1)
-                                    (setq-default python-indent-offset 4
-                                                  py-indent-offset     4
-                                                  py-shell-name        "python3")
-                                    (my/tabs-setup nil 4)))))
-
-            ;; Python settings
-            (setq py-shell-name                        "python3"
-                  py-shell-switch-buffers-on-execute-p t
-                  py-switch-buffers-on-execute-p       t
-                  py-smart-indentation                 t
-                  py-split-windows-on-execute-function 'split-window-horizontally)))
+  :preface (defun check-python-module (&optional module)
+             (and (executable-find "python3")
+		  (= 0 (call-process "python3"  nil nil nil "-c"
+                                     (concat "import "
+                                             (if module module "jedi"))))))
+  :custom ((py-shell-name                        "python3")
+           (py-shell-switch-buffers-on-execute-p t)
+           (py-switch-buffers-on-execute-p       t)
+           (py-smart-indentation                 t)
+           (py-split-windows-on-execute-function 'split-window-horizontally))
+  :config (add-hook 'python-mode-hook
+                    (function (lambda ()
+                                (progn
+                                  ;; disable annoying "Python-Help" buffer
+                                  (eldoc-mode -1)
+                                  (setq-default python-indent-offset 4
+                                                py-indent-offset     4
+                                                py-shell-name        "python3")
+                                  (my/tabs-setup nil 4))))))
 
 (provide 'setup-python)
 ;;; setup-python.el ends here

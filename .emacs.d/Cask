@@ -74,6 +74,7 @@
 (depends-on "counsel-gtags")
 (depends-on "counsel-projectile")
 (depends-on "counsel-tramp")
+(depends-on "cov")
 ;; (depends-on "cpp-auto-include")
 (depends-on "cquery")
 (depends-on "ctable")

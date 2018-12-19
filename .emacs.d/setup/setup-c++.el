@@ -33,70 +33,70 @@
   :hook ((c-mode-common  . my/c-mode-indent-init)
          (find-file-hook . my/c-files-hook))
   :mode (("\\.h\\'"  . c++-mode)
-     ("\\.c\\'"  . c-mode))
-  :init (progn
+	 ("\\.c\\'"  . c-mode))
+  :preface (progn
 
-      ;; Default C-style
-          (setq my/cc-style
-                '("cc-mode"
-                  (c-offsets-alist . ((func-decl-cont . ++)
-                                      (member-init-intro . +)
-                                      (inher-intro . ++)
-                                      (comment-intro . 0)
-                                      (arglist-close . c-lineup-arglist)
-                                      (topmost-intro . 0)
-                                      (block-open . 0)
-                                      (inline-open . 0)
-                                      (substatement-open . 0)
-                                      (label . /)
-                                      (case-label . +)
-                                      (statement-case-open . +)
-                                      (statement-case-intro . +) ; case w/o {
-                                      (access-label . /)
-                                      (innamespace . -)
-                                      (label . 0)
-                                      (case-label . +)
-                                      (inextern-lang . 0)
-                                      ))))
+	     ;; Default C-style
+             (setq my/cc-style
+                   '("cc-mode"
+                     (c-offsets-alist . ((func-decl-cont . ++)
+					 (member-init-intro . +)
+					 (inher-intro . ++)
+					 (comment-intro . 0)
+					 (arglist-close . c-lineup-arglist)
+					 (topmost-intro . 0)
+					 (block-open . 0)
+					 (inline-open . 0)
+					 (substatement-open . 0)
+					 (label . /)
+					 (case-label . +)
+					 (statement-case-open . +)
+					 (statement-case-intro . +)
+					 (access-label . /)
+					 (innamespace . -)
+					 (label . 0)
+					 (case-label . +)
+					 (inextern-lang . 0)
+					 ))))
 
-          ;; Make C/C++ indentation reliable
-          (defun my/c-indent-offset-according-to-syntax-context (key val)
-            ;; remove the old element
-            (setq c-offsets-alist (delq (assoc key c-offsets-alist) c-offsets-alist))
-            ;; new value
-            (add-to-list 'c-offsets-alist '(key . val)))
+             ;; Make C/C++ indentation reliable
+             (defun my/c-indent-offset-according-to-syntax-context (key val)
+               ;; remove the old element
+               (setq c-offsets-alist (delq (assoc key c-offsets-alist) c-offsets-alist))
+               ;; new value
+               (add-to-list 'c-offsets-alist '(key . val)))
 
-          ;; C/C++ style
-          (defun my/c-mode-indent-init ()
-            (interactive)
+             ;; C/C++ style
+             (defun my/c-mode-indent-init ()
+               (interactive)
 
-            (c-set-style "Linux")
-            (c-set-offset 'substatement-open 0)
-            (c-set-offset 'innamespace 0)
-            (c-set-offset 'inextern-lang 0)
-            (c-toggle-electric-state -1)
+               (c-set-style "Linux")
+               (c-set-offset 'substatement-open 0)
+               (c-set-offset 'innamespace 0)
+               (c-set-offset 'inextern-lang 0)
+               (c-toggle-electric-state -1)
 
-            (setq-default c-default-style "Linux")
-            (c-add-style "Linux" my/cc-style)
-            (my/tabs-setup t 8)
+               (setq-default c-default-style "Linux")
+               (c-add-style "Linux" my/cc-style)
+               (my/tabs-setup t 8)
 
-            (make-local-variable 'c-basic-offset)
-            (setq c-basic-offset tab-width)
-            (make-local-variable 'c-indent-level)
-            (setq c-indent-level tab-width)
+               (make-local-variable 'c-basic-offset)
+               (setq c-basic-offset tab-width)
+               (make-local-variable 'c-indent-level)
+               (setq c-indent-level tab-width)
 
-            (my/c-indent-offset-according-to-syntax-context 'substatement-open 0)
+               (my/c-indent-offset-according-to-syntax-context 'substatement-open 0)
 
-            ;; ensure fill-paragraph takes doxygen @ markers as start of new
-            ;; paragraphs properly
-            (setq-default comment-multi-line t
-                          paragraph-start "^[ ]*\\(//+\\|\\**\\)[ ]*\\([ ]*$\\|@param\\)\\|^\f"))
+               ;; ensure fill-paragraph takes doxygen @ markers as start of new
+               ;; paragraphs properly
+               (setq-default comment-multi-line t
+                             paragraph-start "^[ ]*\\(//+\\|\\**\\)[ ]*\\([ ]*$\\|@param\\)\\|^\f"))
 
-          (defun my/c-files-hook ()
-            (when (or (string= (file-name-extension buffer-file-name) "c")
-                      (string= (file-name-extension buffer-file-name) "h"))
-              (my/c-mode-indent-init)
-              ))))
+             (defun my/c-files-hook ()
+               (when (or (string= (file-name-extension buffer-file-name) "c")
+			 (string= (file-name-extension buffer-file-name) "h"))
+		 (my/c-mode-indent-init)
+		 ))))
 
 ;; C/C++ refactoring tool based on Semantic parser framework
 (use-package srefactor
@@ -135,10 +135,25 @@
   :defer t
   :if (executable-find "cquery")
   :commands cquery-enable
-  :init (defun cquery-enable ()
-      (interactive)
-          (condition-case nil (lsp) (user-error nil)))
-  :config (setq cquery-extra-init-params '(:index (:comments 2) :cacheFormat "msgpack" :completion (:detailedLabel t))))
+  :preface (defun cquery-enable ()
+	     (interactive)
+             (condition-case nil (lsp) (user-error nil)))
+  :config (progn
+	    (setq cquery-extra-init-params '(:index (:comments 2) :cacheFormat "msgpack" :completion (:detailedLabel t)))
+
+	    ;; use consolidated cache dir so we don't pollute project trees
+	    (setq cquery-cache-dir-function #'cquery-cache-dir-consolidated)
+	    (setq cquery-cache-dir-consolidated-path (expand-file-name "cquery-cache.d" "~/.cache/"))))
+
+;; Coverage reports
+(use-package cov
+  :defer t
+  :diminish cov-mode
+  :preface (defun my/cov-mode-setup ()
+	     "Setup cov-mode."
+	     (make-local-variable 'cov-coverage-file-paths))
+  :hook ((c-mode-common . cov-mode)
+         (cov-mode      . my/cov-mode-setup)))
 
 ;; Devhelp support
 (use-package devhelp

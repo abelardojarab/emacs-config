@@ -147,6 +147,16 @@
   :defer t
   :commands pretty-mode)
 
+;; Prettier symbols
+(use-package prog-mode
+  :if (fboundp 'global-prettify-symbols-mode)
+  :config (progn
+            (when (boundp 'prettify-symbols-unprettify-at-point)
+              ;; show original text when point is over a prettified symbol
+              (setq prettify-symbols-unprettify-at-point 'right-edge))
+            ;; prettify symbols (turn lambda -> λ)
+            (global-prettify-symbols-mode 1)))
+
 (defun set-icon-fonts (CODE-FONT-ALIST)
   "Utility to associate many unicode points with specified fonts."
   (--each CODE-FONT-ALIST

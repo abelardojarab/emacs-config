@@ -39,22 +39,22 @@
            (TeX-PDF-mode t)
            (TeX-source-correlate-start-server t)
            (TeX-master nil))
-  :init (defun my/latex-mode-init ()
-            "Tweaks and customisations for LaTeX mode."
-            ;; Auto-fill for LaTeX
-            (turn-on-auto-fill)
-            (set-fill-column 80)
-            (setq default-justification 'left)
-            ;; enable spell checking
-            (flyspell-mode 1)
-            ;; enable source-correlate for Control-click forward/reverse search.
-            (TeX-source-correlate-mode 1)
-            ;; enable math mode in latex
-            (LaTeX-math-mode 1)
-            ;; enable math mode in latex
-            (LaTeX-preview-setup)
-            ;; Enable reftex
-            (turn-on-reftex)))
+  :preface (defun my/latex-mode-init ()
+             "Tweaks and customisations for LaTeX mode."
+             ;; Auto-fill for LaTeX
+             (turn-on-auto-fill)
+             (set-fill-column 80)
+             (setq default-justification 'left)
+             ;; enable spell checking
+             (flyspell-mode 1)
+             ;; enable source-correlate for Control-click forward/reverse search.
+             (TeX-source-correlate-mode 1)
+             ;; enable math mode in latex
+             (LaTeX-math-mode 1)
+             ;; enable math mode in latex
+             (LaTeX-preview-setup)
+             ;; Enable reftex
+             (turn-on-reftex)))
 
 (use-package reftex
   :defer t

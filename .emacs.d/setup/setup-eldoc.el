@@ -35,12 +35,12 @@
          (c-mode-common                                                   . my/eldoc-c-mode-init))
   :custom ((eldoc-idle-delay                0.8)
            (eldoc-echo-area-use-multiline-p t))
-  :init (defun my/eldoc-c-mode-init ()
-          (when (and (executable-find "global")
-                     (projectile-project-p)
-                     (file-exists-p (concat (projectile-project-root)
-                                            "GTAGS")))
-            (setq-local eldoc-documentation-function #'ggtags-eldoc-function))))
+  :preface (defun my/eldoc-c-mode-init ()
+             (when (and (executable-find "global")
+			(projectile-project-p)
+			(file-exists-p (concat (projectile-project-root)
+                                               "GTAGS")))
+               (setq-local eldoc-documentation-function #'ggtags-eldoc-function))))
 
 (use-package inline-docs
   :defer t
