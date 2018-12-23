@@ -335,6 +335,7 @@
     "cdefs.h"
     "features.h"
     "mman.h"
+    "mman-linux.h"
     ;; C++ header files
     "new"
     "iostream"
