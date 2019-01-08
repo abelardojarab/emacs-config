@@ -1,0 +1,2 @@
+;;; -*- no-byte-compile: t -*-
+(define-package "flycheck-mmark" "20190101.657" "Flycheck checker for the MMark markdown processor" '((emacs "24.4") (flycheck "0.29")) :commit "a11563dcb9ed48f71274e0c6eb9e76b65d44bf40" :keywords '("convenience" "text") :authors '(("Mark Karpov" . "markkarpov92@gmail.com")) :maintainer '("Mark Karpov" . "markkarpov92@gmail.com") :url "https://github.com/mmark-md/flycheck-mmark")
