@@ -98,7 +98,7 @@
                   '((company-capf
                      company-keywords
                      company-dabbrev-code
-             :with company-yasnippet)))
+		     :with company-yasnippet)))
 
             ;; Ignore errors
             (defadvice company-capf (around bar activate)
@@ -124,7 +124,7 @@
               ;; or else, you will have completion in every major mode, that's very annoying!
               (set (make-local-variable 'company-backends) '((company-capf
                                                               company-files
-                                  :with company-yasnippet))))
+							      :with company-yasnippet))))
 
 	    ;; company-lsp: Company completion backend for lsp-mode.
 	    (use-package company-lsp
@@ -156,18 +156,25 @@
                         (append '(company-gtags)
                                 (car company-backends)))
 
-                ;; Fallback to cmake/clang backends
-                (when (cmake-ide--locate-cmakelists)
-                  ;; Prefer rtags
-                  (if (executable-find "rdm")
-                      (setf (car company-backends)
-                            (append '(company-rtags)
-                                    (car company-backends)))
-                    ;; Fallback to irony
-                    (when (executable-find "irony-server")
-                      (setf (car company-backends)
-                            (append '(company-irony)
-                                    (car company-backends))))))))
+		(if (or (executable-find "cquery")
+			(executable-find "clangd"))
+		    (setf (car company-backends)
+                          (append '(company-lsp)
+                                  (car company-backends)))
+
+                  ;; Fallback to cmake/clang backends
+                  (when (cmake-ide--locate-cmakelists)
+                    ;; Prefer rtags
+                    (if (executable-find "rdm")
+			(setf (car company-backends)
+                              (append '(company-rtags)
+                                      (car company-backends)))
+                      ;; Fallback to irony
+                      (when (executable-find "irony-server")
+			(setf (car company-backends)
+                              (append '(company-irony)
+                                      (car company-backends)))))))
+		))
 
             ;; Minibuffer setup
             (defun company-elisp-minibuffer (command &optional arg &rest ignored)
@@ -242,25 +249,25 @@
               :hook ((TeX-mode   . my/latex-mode-init)
                      (LaTeX-mode . company-auctex-init))
               :init (progn
-                        (defun company-auctex-labels (command &optional arg &rest ignored)
-                          "company-auctex-labels backend"
-                          (interactive (list 'interactive))
-                          (case command
-                            (interactive (company-begin-backend 'company-auctex-labels))
-                            (prefix (company-auctex-prefix "\\\\.*ref{\\([^}]*\\)\\="))
-                            (candidates (company-auctex-label-candidates arg))))
+                      (defun company-auctex-labels (command &optional arg &rest ignored)
+                        "company-auctex-labels backend"
+                        (interactive (list 'interactive))
+                        (case command
+                          (interactive (company-begin-backend 'company-auctex-labels))
+                          (prefix (company-auctex-prefix "\\\\.*ref{\\([^}]*\\)\\="))
+                          (candidates (company-auctex-label-candidates arg))))
 
-                        ;; local configuration for TeX modes
-                        (defun my/latex-mode-init ()
-                          (setq-local company-backends
-                                      (append '(company-auctex-macros
-                                                company-auctex-environments
-                                                company-math-symbols-unicode
-                                                company-math-symbols-latex
-                                                company-auctex-labels
-                                                company-auctex-bibs
-                                                company-bibtex)
-                                              company-backends)))))))
+                      ;; local configuration for TeX modes
+                      (defun my/latex-mode-init ()
+                        (setq-local company-backends
+                                    (append '(company-auctex-macros
+                                              company-auctex-environments
+                                              company-math-symbols-unicode
+                                              company-math-symbols-latex
+                                              company-auctex-labels
+                                              company-auctex-bibs
+                                              company-bibtex)
+                                            company-backends)))))))
 
 (provide 'setup-company)
 ;;; setup-company.el ends here
