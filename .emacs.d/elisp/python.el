@@ -2672,7 +2672,7 @@ be added to `python-mode-abbrev-table'."
               (format "Insert %s statement." name))
          ,@skel))))
 
-(defmacro python-define-auxiliary-skeleton (name doc &optional &rest skel)
+(defmacro python-define-auxiliary-skeleton (name doc &optional val &rest skel)
   "Define a `python-mode' auxiliary skeleton using NAME DOC and SKEL.
 The skeleton will be bound to python-skeleton-NAME."
   (declare (indent 2))
