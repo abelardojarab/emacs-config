@@ -26,7 +26,7 @@
 
 ;; Org mode
 (use-package org
-  :defer t
+  :demand t
   :mode (("\\.org$" . org-mode))
   :load-path (lambda () (expand-file-name "org/lisp" user-emacs-directory))
   :bind (("C-c C"        . org-capture)
