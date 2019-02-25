@@ -1,2 +1,0 @@
-;;; -*- no-byte-compile: t -*-
-(define-package "conda" "20181107.1951" "Work with your conda environments" '((emacs "24.4") (pythonic "0.1.0") (dash "2.13.0") (s "1.11.0") (f "0.18.2")) :commit "94e9ece8c90f234b3fafd0fb82a1c24e3473c78e" :keywords '("python" "environment" "conda") :authors '(("Rami Chowdhury" . "rami.chowdhury@gmail.com")) :maintainer '("Rami Chowdhury" . "rami.chowdhury@gmail.com") :url "http://github.com/necaris/conda.el")
