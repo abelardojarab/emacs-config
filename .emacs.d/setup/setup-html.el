@@ -24,6 +24,10 @@
 
 ;;; Code:
 
+(use-package nginx-mode
+  :defer t
+  :command nginx-mode)
+
 ;; XML mode
 (use-package nxml-mode
   :defer t

@@ -263,7 +263,7 @@
 (depends-on "names")
 (depends-on "navi-mode")
 (depends-on "neotree")
-(depends-on "newsticker")
+(depends-on "nginx-mode")
 (depends-on "nlinum")
 (depends-on "nodejs-repl")
 (depends-on "no-littering")
