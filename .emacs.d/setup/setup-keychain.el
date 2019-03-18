@@ -31,7 +31,7 @@
   :custom ((starttls-use-gnutls      t)
            (starttls-gnutls-program  "gnutls-cli")
            (starttls-extra-arguments nil)
-           (gnutls-min-prime-bits 4096)))
+           (gnutls-min-prime-bits    4096)))
 
 ;; Keychain access
 (use-package keychain-environment
@@ -39,7 +39,7 @@
   :after starttls
   :config (keychain-refresh-environment))
 
-;; Keeping Secrets in Emacs with GnuPG & EasyPG
+;; Keeping secrets in Emacs with GnuPG & EasyPG
 (use-package epg
   :demand t
   :after keychain-environment
@@ -79,6 +79,7 @@
 
 ;; Pinentry (not available in melpa)
 (use-package pinentry
+  :defer t
   :load-path (lambda () (expand-file-name "pinentry/" user-emacs-directory))
   :commands pinentry-start)
 
@@ -88,7 +89,7 @@
   :after epg
   :commands epa-file-enable
   :config  (progn
-         ;; Unfortunately there is bug in gpg which disabled this
+             ;; Unfortunately there is bug in gpg which disabled this
              ;; ~/.gnupg/gpg-agent.conf should contain:
              ;; allow-emacs-pinentry
              ;; allow-loopback-pinentry
@@ -104,8 +105,8 @@
   :demand t
   :after epa-file
   :custom ((epa-popup-info-window nil)
-       (epa-armor             t)
-       (epa-pinentry-mode     nil))
+           (epa-armor             t)
+           (epa-pinentry-mode     nil))
   :config (progn
 
             ;; https://github.com/jwiegley/dot-emacs/blob/master/dot-gnus.el
@@ -135,6 +136,7 @@
 (use-package auth-source
   :demand t
   :config (progn
+            (use-package secrets)
             (if (file-exists-p "~/.authinfo.gpg")
                 (add-to-list 'auth-sources "~/.authinfo.gpg"))
 
@@ -157,16 +159,18 @@
 ;; 'pass' interface to auth-source,
 ;; no need to store passwords in the .authinfo file
 (use-package auth-source-pass
-  :demand t
+  :defer t
   :if (and (equal system-type 'gnu/linux)
            (executable-find "pass"))
   :after (password-store auth-source)
-  :config (setq auth-sources '(password-store)))
+  :commands (auth-source-pass-enable)
+  :config (setq auth-sources '(password-store))
+  :init (auth-source-pass-enable))
 
 ;; Secrets file
 (let ((secrets-file (concat (file-name-as-directory
-                              my/emacs-cache-dir)
-                             ".secret.el")))
+                             my/emacs-cache-dir)
+                            ".secret.el")))
   (when (file-exists-p secrets-file)
     (load secrets-file)))
 

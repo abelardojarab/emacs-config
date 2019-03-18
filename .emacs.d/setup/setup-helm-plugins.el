@@ -133,12 +133,12 @@
          :map ctl-x-map
          ("." . helm-gtags-dwim))
   :hook (c-mode-common . helm-gtags-mode)
-  :config (setq helm-gtags-ignore-case            t
-        helm-gtags-auto-update            t
-        helm-gtags-use-input-at-cursor    t
-        helm-gtags-pulse-at-cursor        t
-        helm-gtags-prefix-key             "\C-cg"
-        helm-gtags-suggested-key-mapping  t))
+  :custom ((helm-gtags-ignore-case            t)
+           (helm-gtags-auto-update            t)
+           (helm-gtags-use-input-at-cursor    t)
+           (helm-gtags-pulse-at-cursor        t)
+           (helm-gtags-prefix-key             "\C-cg")
+           (helm-gtags-suggested-key-mapping  t)))
 
 ;; helm xref
 (use-package helm-xref
@@ -195,14 +195,12 @@
   :defer t
   :commands (org-ref-insert-cite-key)
   :after (helm async org)
-  :config (progn
-            (setq org-ref-default-bibliography (list my/bibtex-completion-bibliography)
+  :custom ((org-ref-insert-cite-key "C-c [")
+           (org-ref-default-citation-link "autocite"))
+  :config (setq org-ref-default-bibliography (list my/bibtex-completion-bibliography)
                   org-ref-bibliography-files (list my/bibtex-completion-bibliography)
                   org-ref-pdf-directory my/bibtex-completion-library-path
-                  org-ref-bibliography-notes my/bibtex-completion-notes)
-
-            (setq org-ref-insert-cite-key "C-c [")
-            (setq org-ref-default-citation-link "autocite")))
+                  org-ref-bibliography-notes my/bibtex-completion-notes))
 
 ;; helm themes
 (use-package helm-themes

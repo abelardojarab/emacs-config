@@ -31,6 +31,9 @@
     ;; CEDET
     (byte-compile-warnings nil))
 
+    ;; Disable needless warnings
+    (setq warning-minimum-level :error)
+
     ;; Basics
     (add-to-list 'load-path (expand-file-name "elisp/" user-emacs-directory))
     (add-to-list 'load-path (expand-file-name "setup/" user-emacs-directory))
