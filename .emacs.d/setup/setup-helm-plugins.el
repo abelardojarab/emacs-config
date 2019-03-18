@@ -192,6 +192,8 @@
 
 ;; Org-Ref
 (use-package org-ref
+  :defer t
+  :commands (org-ref-insert-cite-key)
   :after (helm async org)
   :config (progn
             (setq org-ref-default-bibliography (list my/bibtex-completion-bibliography)

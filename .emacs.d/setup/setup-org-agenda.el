@@ -59,7 +59,7 @@
                             (if tod (appt-add tod event))))) entries)))))
 
 (use-package org-agenda
-  :demand t
+  :defer t
   :after (org calendar)
   :commands (org-agenda org-archive-done-tasks)
   :bind (("C-c A" . org-agenda)
