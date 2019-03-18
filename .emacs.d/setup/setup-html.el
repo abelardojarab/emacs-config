@@ -26,7 +26,14 @@
 
 (use-package nginx-mode
   :defer t
-  :command nginx-mode)
+  :mode ("nginx.conf$" "/etc/nginx/.*")
+  :commands nginx-mode)
+
+(use-package apache-mode
+  :mode (("apache\\.conf\\'" . apache-mode)
+         ("\\.htaccess\\'" . apache-mode)
+         ("httpd\\.conf\\'" . apache-mode)
+         ("sites-\\(available\\|enabled\\)/" . apache-mode)))
 
 ;; XML mode
 (use-package nxml-mode

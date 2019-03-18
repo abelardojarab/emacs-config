@@ -1,0 +1,2 @@
+;;; -*- no-byte-compile: t -*-
+(define-package "helm-dash" "20190316.2009" "Offline documentation browser for +150 APIs using Dash docsets." '((helm "1.9.2") (cl-lib "0.5")) :commit "192b862185df661439a06de644791171e899348a" :keywords '("docs") :authors '(("Raimon Grau" . "raimonster@gmail.com") ("Toni Reina " . "areina0@gmail.com")) :maintainer '("Raimon Grau" . "raimonster@gmail.com") :url "http://github.com/areina/helm-dash")
