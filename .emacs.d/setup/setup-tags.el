@@ -28,8 +28,8 @@
   :commands (etags-create-or-update
              etags-tags-completion-table)
   :custom ((tags-revert-without-query          t)
-	   (tags-always-build-completion-table t)
-	   (tags-add-tables                    t))
+           (tags-always-build-completion-table t)
+           (tags-add-tables                    t))
   :init (progn
 
           ;; Assure .gtags directory exists
@@ -52,18 +52,18 @@
                 (ring-insert find-tag-marker-ring (point-marker))))
 
             ;; etags creation
-	    (defun ctags-create-or-update (dir-name)
+            (defun ctags-create-or-update (dir-name)
               "Create tags file."
               (interactive
                (let ((olddir default-directory)
                      (default-directory
                        (read-directory-name
-			"ctags: top of source tree:" (projectile-project-root))))
-		 (shell-command
-		  (format "find %s -follow -type f -name \"*.[ch][ px][ px]\" | etags - -o %s/TAGS"
-			  default-directory
-			  default-directory))
-		 (message "Created tagfile"))))
+                        "ctags: top of source tree:" (projectile-project-root))))
+                 (shell-command
+                  (format "find %s -follow -type f -name \"*.[ch][ px][ px]\" | etags - -o %s/TAGS"
+                          default-directory
+                          default-directory))
+                 (message "Created tagfile"))))
 
             ;; Fix etags bugs (https://groups.google.com/forum/#!msg/gnu.emacs.help/Ew0sTxk0C-g/YsTPVEKTBAAJ)
             (defvar etags--table-line-limit 10)
@@ -154,11 +154,11 @@
                     (default-directory
                       (read-directory-name
                        "ctags: top of source tree:" (projectile-project-root))))
-		(shell-command
-		 (format "ctags-exuberant -e -f %s -R %s > /dev/null"
-			 (concat default-directory "TAGS")
-			 default-directory))
-		(message "Created tagfile")))))
+                (shell-command
+                 (format "ctags-exuberant -e -f %s -R %s > /dev/null"
+                         (concat default-directory "TAGS")
+                         default-directory))
+                (message "Created tagfile")))))
 
 ;; Gtags
 (use-package ggtags
@@ -222,12 +222,12 @@ When finished invoke CALLBACK in BUFFER with process exit status."
                (let* ((program (car cmds))
                       (args (cdr cmds))
                       (cutoff (and cutoff (+ cutoff (if (get-buffer buffer)
-							(with-current-buffer buffer
+                                                        (with-current-buffer buffer
                                                           (line-number-at-pos (point-max)))
                                                       0))))
                       (proc (apply #'start-file-process program buffer program args))
                       (filter (lambda (proc string)
-				(and (buffer-live-p (process-buffer proc))
+                                (and (buffer-live-p (process-buffer proc))
                                      (with-current-buffer (process-buffer proc)
                                        (goto-char (process-mark proc))
                                        (insert string)
@@ -238,8 +238,8 @@ When finished invoke CALLBACK in BUFFER with process exit status."
                                   (when (memq (process-status proc) '(exit signal))
                                     (ignore-errors
                                       (with-current-buffer (process-buffer proc)
-					(set-process-buffer proc nil)
-					(funcall callback (process-exit-status proc))))))))
+                                        (set-process-buffer proc nil)
+                                        (funcall callback (process-exit-status proc))))))))
                  (set-process-query-on-exit-flag proc nil)
                  (and cutoff (set-process-filter proc filter))
                  (set-process-sentinel proc sentinel)
@@ -261,9 +261,9 @@ When finished invoke CALLBACK in BUFFER with process exit status."
                    (setq ggtags-project-root
                          (or (ignore-errors
                                (file-name-as-directory
-				(concat (file-remote-p (projectile-project-root))
-					;; Resolves symbolic links
-					(ggtags-process-string "global" "-pr"))))
+                                (concat (file-remote-p (projectile-project-root))
+                                        ;; Resolves symbolic links
+                                        (ggtags-process-string "global" "-pr"))))
                              ;; 'global -pr' resolves symlinks before checking the
                              ;; GTAGS file which could cause issues such as
                              ;; https://github.com/leoliu/ggtags/issues/22, so
@@ -284,7 +284,7 @@ When finished invoke CALLBACK in BUFFER with process exit status."
              (defun ggtags-create-or-update ()
                "Create or update the GNU-Global tag file"
                (interactive
-		(if (zerop (call-process "global" nil nil nil "-p"))
+                (if (zerop (call-process "global" nil nil nil "-p"))
                     ;; case 1: tag file exists: update
                     (progn
                       (shell-command "global -u -q 2> /dev/null")

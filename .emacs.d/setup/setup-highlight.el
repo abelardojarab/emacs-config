@@ -26,8 +26,10 @@
 
 ;; highlight phrases or regular expressions
 (use-package hi-lock
+  :defer t
   :commands global-hi-lock-mode
-  :init (global-hi-lock-mode 1))
+  ;; :init (global-hi-lock-mode 1)
+  )
 
 ;; higlight changes in documents
 (use-package hilit-chg

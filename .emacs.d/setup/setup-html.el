@@ -31,9 +31,9 @@
 
 (use-package apache-mode
   :mode (("apache\\.conf\\'" . apache-mode)
-         ("\\.htaccess\\'" . apache-mode)
-         ("httpd\\.conf\\'" . apache-mode)
-         ("sites-\\(available\\|enabled\\)/" . apache-mode)))
+         ("\\.htaccess\\'"   . apache-mode)
+         ("httpd\\.conf\\'"  . apache-mode)
+         ("/etc/apache2/sites-\\(available\\|enabled\\)/" . apache-mode)))
 
 ;; XML mode
 (use-package nxml-mode

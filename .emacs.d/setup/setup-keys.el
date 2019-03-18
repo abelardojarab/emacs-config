@@ -31,10 +31,12 @@
 ;; Windows-like mouse/arrow movement & selection
 (use-package cua-base
   :demand t
+  :init (defun cua-mode-disable () (cua-mode -1))
+  :hook ((prog-mode text-mode c-mode-common) . cua-mode-disable)
   :config (progn
             (global-set-key [remap scroll-up]   'cua-scroll-up)
             (global-set-key [remap scroll-down] 'cua-scroll-down)
-            (cua-selection-mode 1)
+            ;; (cua-selection-mode 1)
             (transient-mark-mode t)))
 
 ;; popup-based buffer switcher
@@ -106,8 +108,8 @@
 (global-set-key [(control p)]    'cua-scroll-up)
 
 ;; Bookmarks
-(global-set-key (kbd "<f2>")     'bm-next)
-(global-set-key (kbd "<C-f2>")   'bm-toggle)
+;; (global-set-key (kbd "<f2>")     'bm-next)
+;; (global-set-key (kbd "<C-f2>")   'bm-toggle)
 
 ;; Highlight symbol at point
 (global-set-key [f3]             'highlight-symbol-at-point)
@@ -205,9 +207,9 @@
            ((kbd "<C-tab>")                         .   comment-or-uncomment-region)
            ((kbd "M-.")                             .   helm-etags-select)
            ((kbd "C-.")                             .   helm-gtags-dwim)
-           ((kbd "<f2>")                            .   bm-next)
-           ((kbd "<C-f2>")                          .   bm-toggle)
-           ((kbd "<left-fringe> <double-mouse-1>")  .   bm-toggle)
+;;           ((kbd "<f2>")                            .   bm-next)
+;;           ((kbd "<C-f2>")                          .   bm-toggle)
+;;           ((kbd "<left-fringe> <double-mouse-1>")  .   bm-toggle)
            ((kbd "<f4>")                            .   helm-semantic-or-imenu)
            ((kbd "C-`")                             .   helm-semantic-or-imenu)
            ((kbd "<f12>")                           .   ivy-switch-buffer)

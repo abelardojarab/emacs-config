@@ -70,25 +70,6 @@
               (insert (calendar-date-string (calendar-current-date) nil
                                             omit-day-of-week-p)))
 
-            (defun calendar-show-week (arg)
-              "Displaying week number in calendar-mode."
-              (interactive "P")
-              (copy-face font-lock-constant-face 'calendar-iso-week-face)
-              (set-face-attribute
-               'calendar-iso-week-face nil :height 0.7)
-              (setq calendar-intermonth-text
-                    (and arg
-                         '(propertize
-                           (format
-                            "%2d"
-                            (car (calendar-iso-from-absolute
-                                  (calendar-absolute-from-gregorian
-                                   (list month day year)))))
-                           'font-lock-face 'calendar-iso-week-face))))
-
-            ;; Evaluate function
-            (calendar-show-week t)
-
             ;; Enable diary file in Org mode
             (setq org-agenda-include-diary (file-exists-p diary-file))))
 
