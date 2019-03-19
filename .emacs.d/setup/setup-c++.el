@@ -30,12 +30,13 @@
               ("C-c C-o" . ff-find-other-file)
               :map c++-mode-map
               ("C-c C-o" . ff-find-other-file))
-  :hook ((c-mode-common   . my/c-mode-indent-init)
-         (c++-mode-common . my/c++-mode-indent-init)
+  :hook ((c++-mode-common . my/c++-mode-indent-init)
          (find-file-hook . my/c-files-hook))
   :mode (("\\.h\\'"  . c++-mode)
          ("\\.c\\'"  . c-mode))
   :preface (progn
+
+             (setq-default c-basic-offset 4)
 
              ;; Default C++ style
              (use-package google-c-style)
@@ -48,13 +49,16 @@
                    (setq counter (1+ counter)))
                  (set (make-local-variable 'tab-stop-list) (nreverse ls))))
              (defun my/c++-mode-indent-init ()
-               (c-set-style "google")
+               (interactive)
+               (setq-default c-default-style "k&r")
+               (c-add-style "Linux" google-c-style)
                (setq tab-width 4) ;; change this to taste, this is what K&R uses <img draggable="false" class="emoji" alt="🙂" src="https://s.w.org/images/core/emoji/11.2.0/svg/1f642.svg">
                (my/build-tab-stop-list tab-width)
                (setq c-basic-offset tab-width)
                (setq indent-tabs-mode nil) ;; force only spaces for indentation
                (c-set-offset 'substatement-open 0)
-               (c-set-offset 'arglist-intro c-lineup-arglist-intro-after-paren))
+               ;; (c-set-offset 'arglist-intro c-lineup-arglist-intro-after-paren)
+               )
 
              ;; Default C-style
              (setq my/cc-style
@@ -203,7 +207,7 @@
              clang-format-region
              clang-format-buffer-smart)
   :custom (clang-format-style "file")
-  :hook (c++-mode . clang-format-buffer-smart-on-save)
+  ;; :hook (c++-mode . clang-format-buffer-smart-on-save)
   :init (progn
           (defun clang-format-buffer-smart ()
             "Reformat buffer if .clang-format exists in the projectile root."
