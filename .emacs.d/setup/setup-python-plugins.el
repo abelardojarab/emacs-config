@@ -31,6 +31,7 @@
                                                     my/emacs-cache-dir)
                                                    "python-environments")))
 
+;; Inter-process communication
 (use-package epc
   :defer t)
 
@@ -42,19 +43,19 @@
   :commands (jedi:setup)
   :hook (python-mode . jedi:setup)
   :custom ((jedi:setup-keys nil)
-	   (jedi:complete-on-dot t)
-	   (jedi:tooltip-method t)
-	   (jedi:get-in-function-call-delay 0.2))
+           (jedi:complete-on-dot t)
+           (jedi:tooltip-method t)
+           (jedi:get-in-function-call-delay 0.2))
   :config (use-package company-jedi
+            :demand t
             :config (add-hook 'python-mode-hook
                               (lambda () (set (make-local-variable 'company-backends)
-                                              '((company-jedi
-						 company-capf
-						 company-files
-						 :with company-abbrev
-						 :with company-yasnippet)))))))
+                                         '((company-jedi
+                                            company-files
+                                            :with company-yasnippet
+                                            :with company-capf)))))))
 
-;;; NOTE conda is needed to set anaconda virtual environment python process.
+;;; conda is needed to set anaconda virtual environment python process.
 ;;; Elpy can set the anaconda virtual env, but not the process. conda uses
 ;;; environment.yml (I think to find the process).
 (use-package conda

@@ -54,7 +54,7 @@
            (company-gtags-insert-arguments    t)
            (company-lighter-base              ""))
   :bind (("C-;"                              . company-complete-common)
-	 :map outline-minor-mode-map
+         :map outline-minor-mode-map
          ("TAB"                              . company-indent-for-tab-command)
          ("<tab>"                            . company-indent-for-tab-command)
          :map company-mode-map
@@ -70,7 +70,7 @@
          ("RET"                              . company-complete-selection))
   :init (global-company-mode t)
   :hook ((org-mode          . add-pcomplete-to-capf)
-         (minibuffer-setup  . company-minibuffer-setup)
+         ;; (minibuffer-setup  . company-minibuffer-setup)
          ((c-mode c++-mode) . company-c-setup)
          (text-mode         . company-text-setup))
   :config (progn
@@ -95,24 +95,14 @@
 
             ;; Default company backends
             (setq company-backends
-                  '((company-capf
-                     company-keywords
+                  '((company-keywords
                      company-dabbrev-code
-		     :with company-yasnippet)))
+                     :with company-yasnippet
+                     :with company-capf)))
 
             ;; Ignore errors
             (defadvice company-capf (around bar activate)
               (ignore-errors add-do-it))
-
-            ;; Add yasnippet support for all company backends
-            (defvar company-mode/enable-yas t
-              "Enable yasnippet for all backends.")
-            (defun company-mode/backend-with-yas (backend)
-              (if (or (not company-mode/enable-yas) (and (listp backend) (member 'company-yasnippet backend)))
-                  backend
-                (append (if (consp backend) backend (list backend))
-                        '(:with company-yasnippet))))
-            (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
 
             ;; Add company-ispell as backend for text-mode's only
             (defun company-text-setup ()
@@ -122,13 +112,14 @@
 
               ;; make `company-backends' local is critical
               ;; or else, you will have completion in every major mode, that's very annoying!
-              (set (make-local-variable 'company-backends) '((company-capf
+              (set (make-local-variable 'company-backends) '((company-dabbrev
                                                               company-files
-							      :with company-yasnippet))))
+                                                              :with company-yasnippet
+                                                              :with company-capf))))
 
-	    ;; company-lsp: Company completion backend for lsp-mode.
-	    (use-package company-lsp
-	      :custom (company-lsp-async t))
+            ;; company-lsp: Company completion backend for lsp-mode.
+            (use-package company-lsp
+              :custom (company-lsp-async t))
 
             ;; Company integration with irony
             (use-package company-irony
@@ -156,9 +147,9 @@
                         (append '(company-gtags)
                                 (car company-backends)))
 
-		(if (or (executable-find "cquery")
-			(executable-find "clangd"))
-		    (setf (car company-backends)
+                (if (or (executable-find "cquery")
+                        (executable-find "clangd"))
+                    (setf (car company-backends)
                           (append '(company-lsp)
                                   (car company-backends)))
 
@@ -166,53 +157,15 @@
                   (when (cmake-ide--locate-cmakelists)
                     ;; Prefer rtags
                     (if (executable-find "rdm")
-			(setf (car company-backends)
+                        (setf (car company-backends)
                               (append '(company-rtags)
                                       (car company-backends)))
                       ;; Fallback to irony
                       (when (executable-find "irony-server")
-			(setf (car company-backends)
+                        (setf (car company-backends)
                               (append '(company-irony)
                                       (car company-backends)))))))
-		))
-
-            ;; Minibuffer setup
-            (defun company-elisp-minibuffer (command &optional arg &rest ignored)
-              "`company-mode' completion back-end for Emacs Lisp in the minibuffer."
-              (interactive (list 'interactive))
-              (case command
-                ('prefix (and (minibufferp)
-                              (case company-minibuffer-mode
-                                ('execute-extended-command (company-grab-symbol))
-                                (t (company-capf `prefix)))))
-                ('candidates
-                 (case company-minibuffer-mode
-                   ('execute-extended-command (all-completions arg obarray 'commandp))
-                   (t nil)))))
-
-            (defun company-minibuffer-setup ()
-              (unless company-mode
-                (when (and global-company-mode (or (eq this-command #'execute-extended-command)
-                                                   (eq this-command #'eval-expression)))
-
-                  (setq-local company-minibuffer-mode this-command)
-                  (setq-local completion-at-point-functions
-                              (list (if (fboundp 'elisp-completion-at-point)
-                                        #'elisp-completion-at-point
-                                      #'lisp-completion-at-point) t))
-
-                  (setq-local company-show-numbers nil)
-                  (setq-local company-backends '((company-elisp-minibuffer company-capf)))
-                  (setq-local company-tooltip-limit 8)
-                  (setq-local company-col-offset 1)
-                  (setq-local company-row-offset 1)
-                  (setq-local company-frontends '(company-pseudo-tooltip-unless-just-one-frontend
-                                                  company-preview-if-just-one-frontend
-                                                  company-echo-metadata-frontend))
-
-                  (company-mode 1)
-                  (when (eq this-command #'execute-extended-command)
-                    (company-complete)))))
+                ))
 
             ;; Documentation popups for company
             (use-package company-box

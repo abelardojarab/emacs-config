@@ -75,7 +75,23 @@
   :commands tern-mode
   :after js2-mode
   :hook (js2-mode . tern-mode)
-  :config (add-to-list 'tern-command "--no-port-file" 'append))
+  :config (progn
+            (add-to-list 'tern-command "--no-port-file" 'append)
+
+            ;; tern completions
+            (use-package company-tern
+              :demand t
+              :after (company js2-mode)
+              :custom ((company-tern-meta-as-single-line t)
+                       (company-tern-property-marker     ""))
+              :config (progn
+                        (add-to-list 'tern-command "--no-port-file" 'append)
+                        (add-hook 'js2-mode-hook (lambda ()
+                                                   (set (make-local-variable 'company-backends)
+                                                        '((company-tern
+                                                           company-files
+                                                           :with company-yasnippet
+                                                           :with company-capf)))))))))
 
 ;; skewer mode
 (use-package skewer-mode
@@ -140,22 +156,6 @@
               ("k" js2r-kill)
               ("q" nil)
               )))
-
-;; tern completions
-(use-package company-tern
-  :after (company tern js2-mode)
-  :config (progn
-            (add-to-list 'tern-command "--no-port-file" 'append)
-            (add-hook 'js2-mode-hook (lambda ()
-                                       (set (make-local-variable 'company-backends)
-                                            '((company-yasnippet
-                                               company-tern
-                                               company-capf
-                                               company-files
-                                               company-abbrev)))))
-            (setq company-tern-meta-as-single-line t
-                  ;; don't show circles for properties
-                  company-tern-property-marker "")))
 
 ;; json-snatcher
 (use-package json-snatcher
