@@ -66,10 +66,13 @@ corresponding `.el' file."
 ;; Use Package
 (eval-when-compile
   (require 'use-package))
-(setq use-package-expand-minimally     t
-      use-package-compute-statistics   t
-      use-package-verbose              t
-      use-package-enable-imenu-support t)
+
+(use-package use-package
+  :demand t
+  :custom ((use-package-expand-minimally     t)
+           (use-package-compute-statistics   t)
+           (use-package-verbose              t)
+           (use-package-enable-imenu-support t)))
 
 ;; Baseline packages
 (use-package cl)
@@ -150,15 +153,15 @@ corresponding `.el' file."
 (use-package auto-compile
   :demand t
   :custom ((auto-compile-display-buffer               nil)
-	   (auto-compile-mode-line-counter            t)
-	   (auto-compile-source-recreate-deletes-dest t)
-	   (auto-compile-toggle-deletes-nonlib-dest   t)
-	   (auto-compile-update-autoloads             t))
+           (auto-compile-mode-line-counter            t)
+           (auto-compile-source-recreate-deletes-dest t)
+           (auto-compile-toggle-deletes-nonlib-dest   t)
+           (auto-compile-update-autoloads             t))
   :config (progn
-	    (auto-compile-on-load-mode)
-	    (auto-compile-on-save-mode)
-	    (add-hook 'auto-compile-inhibit-compile-hook
-		      'auto-compile-inhibit-compile-detached-git-head)))
+            (auto-compile-on-load-mode)
+            (auto-compile-on-save-mode)
+            (add-hook 'auto-compile-inhibit-compile-hook
+                      'auto-compile-inhibit-compile-detached-git-head)))
 
 (provide 'setup-package)
 ;;; setup-package.el ends here

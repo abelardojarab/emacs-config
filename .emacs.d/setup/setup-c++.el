@@ -30,34 +30,54 @@
               ("C-c C-o" . ff-find-other-file)
               :map c++-mode-map
               ("C-c C-o" . ff-find-other-file))
-  :hook ((c-mode-common  . my/c-mode-indent-init)
+  :hook ((c-mode-common   . my/c-mode-indent-init)
+         (c++-mode-common . my/c++-mode-indent-init)
          (find-file-hook . my/c-files-hook))
   :mode (("\\.h\\'"  . c++-mode)
-	 ("\\.c\\'"  . c-mode))
+         ("\\.c\\'"  . c-mode))
   :preface (progn
 
-	     ;; Default C-style
+             ;; Default C++ style
+             (use-package google-c-style)
+             (defun my/build-tab-stop-list (width)
+               (let ((num-tab-stops (/ 80 width))
+                     (counter 1)
+                     (ls nil))
+                 (while (<= counter num-tab-stops)
+                   (setq ls (cons (* width counter) ls))
+                   (setq counter (1+ counter)))
+                 (set (make-local-variable 'tab-stop-list) (nreverse ls))))
+             (defun my/c++-mode-indent-init ()
+               (c-set-style "google")
+               (setq tab-width 4) ;; change this to taste, this is what K&R uses <img draggable="false" class="emoji" alt="🙂" src="https://s.w.org/images/core/emoji/11.2.0/svg/1f642.svg">
+               (my/build-tab-stop-list tab-width)
+               (setq c-basic-offset tab-width)
+               (setq indent-tabs-mode nil) ;; force only spaces for indentation
+               (c-set-offset 'substatement-open 0)
+               (c-set-offset 'arglist-intro c-lineup-arglist-intro-after-paren))
+
+             ;; Default C-style
              (setq my/cc-style
                    '("cc-mode"
                      (c-offsets-alist . ((func-decl-cont . ++)
-					 (member-init-intro . +)
-					 (inher-intro . ++)
-					 (comment-intro . 0)
-					 (arglist-close . c-lineup-arglist)
-					 (topmost-intro . 0)
-					 (block-open . 0)
-					 (inline-open . 0)
-					 (substatement-open . 0)
-					 (label . /)
-					 (case-label . +)
-					 (statement-case-open . +)
-					 (statement-case-intro . +)
-					 (access-label . /)
-					 (innamespace . -)
-					 (label . 0)
-					 (case-label . +)
-					 (inextern-lang . 0)
-					 ))))
+                                         (member-init-intro . +)
+                                         (inher-intro . ++)
+                                         (comment-intro . 0)
+                                         (arglist-close . c-lineup-arglist)
+                                         (topmost-intro . 0)
+                                         (block-open . 0)
+                                         (inline-open . 0)
+                                         (substatement-open . 0)
+                                         (label . /)
+                                         (case-label . +)
+                                         (statement-case-open . +)
+                                         (statement-case-intro . +)
+                                         (access-label . /)
+                                         (innamespace . -)
+                                         (label . 0)
+                                         (case-label . +)
+                                         (inextern-lang . 0)
+                                         ))))
 
              ;; Make C/C++ indentation reliable
              (defun my/c-indent-offset-according-to-syntax-context (key val)
@@ -66,7 +86,7 @@
                ;; new value
                (add-to-list 'c-offsets-alist '(key . val)))
 
-             ;; C/C++ style
+             ;; Default C-style
              (defun my/c-mode-indent-init ()
                (interactive)
 
@@ -93,10 +113,9 @@
                              paragraph-start "^[ ]*\\(//+\\|\\**\\)[ ]*\\([ ]*$\\|@param\\)\\|^\f"))
 
              (defun my/c-files-hook ()
-               (when (or (string= (file-name-extension buffer-file-name) "c")
-			 (string= (file-name-extension buffer-file-name) "h"))
-		 (my/c-mode-indent-init)
-		 ))))
+               (when(string= (file-name-extension buffer-file-name) "c")
+                 (my/c-mode-indent-init)
+                 ))))
 
 ;; C/C++ refactoring tool based on Semantic parser framework
 (use-package srefactor
@@ -136,22 +155,22 @@
   :if (executable-find "cquery")
   :commands cquery-enable
   :preface (defun cquery-enable ()
-	     (interactive)
+             (interactive)
              (condition-case nil (lsp) (user-error nil)))
   :config (progn
-	    (setq cquery-extra-init-params '(:index (:comments 2) :cacheFormat "msgpack" :completion (:detailedLabel t)))
+            (setq cquery-extra-init-params '(:index (:comments 2) :cacheFormat "msgpack" :completion (:detailedLabel t)))
 
-	    ;; use consolidated cache dir so we don't pollute project trees
-	    (setq cquery-cache-dir-function #'cquery-cache-dir-consolidated)
-	    (setq cquery-cache-dir-consolidated-path (expand-file-name "cquery-cache.d" "~/.cache/"))))
+            ;; use consolidated cache dir so we don't pollute project trees
+            (setq cquery-cache-dir-function #'cquery-cache-dir-consolidated)
+            (setq cquery-cache-dir-consolidated-path (expand-file-name "cquery-cache.d" "~/.cache/"))))
 
 ;; Coverage reports
 (use-package cov
   :defer t
   :diminish cov-mode
   :preface (defun my/cov-mode-setup ()
-	     "Setup cov-mode."
-	     (make-local-variable 'cov-coverage-file-paths))
+             "Setup cov-mode."
+             (make-local-variable 'cov-coverage-file-paths))
   :hook ((c-mode-common . cov-mode)
          (cov-mode      . my/cov-mode-setup)))
 
@@ -175,6 +194,25 @@
 
 ;; C/C++ dissassemble
 (use-package rmsbolt)
+
+;; C-code formatting using clang-format
+(use-package clang-format
+  :defer t
+  :commands (clang-format
+             clang-format-buffer
+             clang-format-region
+             clang-format-buffer-smart)
+  :custom (clang-format-style "file")
+  :hook (c++-mode . clang-format-buffer-smart-on-save)
+  :init (progn
+          (defun clang-format-buffer-smart ()
+            "Reformat buffer if .clang-format exists in the projectile root."
+            (when (f-exists? (expand-file-name ".clang-format" (projectile-project-root)))
+              (clang-format-buffer)))
+
+          (defun clang-format-buffer-smart-on-save ()
+            "Add auto-save hook for clang-format-buffer-smart."
+            (add-hook 'before-save-hook 'clang-format-buffer-smart nil t))))
 
 (provide 'setup-c++)
 ;;; setup-c++.el ends here

@@ -26,14 +26,14 @@
 
 ;; Jedi settings
 (use-package python-environment
-  :defer t
+  :demand t
   :init (setq python-environment-directory (concat (file-name-as-directory
                                                     my/emacs-cache-dir)
                                                    "python-environments")))
 
 ;; Inter-process communication
 (use-package epc
-  :defer t)
+  :demand t)
 
 ;; only use Jedi if python interpreter is present
 (use-package jedi
@@ -47,13 +47,13 @@
            (jedi:tooltip-method t)
            (jedi:get-in-function-call-delay 0.2))
   :config (use-package company-jedi
-            :demand t
-            :config (add-hook 'python-mode-hook
-                              (lambda () (set (make-local-variable 'company-backends)
-                                         '((company-jedi
-                                            company-files
-                                            :with company-yasnippet
-                                            :with company-capf)))))))
+            :hook (python-mode . company-jedi-setup)
+            :init (defun company-jedi-setup ()
+                    "Add company-anaconda to company-backends buffer-locally."
+                    (add-to-list (make-local-variable 'company-backends)
+                                 '(company-jedi
+                                   :with company-yasnippet
+                                   :with company-capf)))))
 
 ;;; conda is needed to set anaconda virtual environment python process.
 ;;; Elpy can set the anaconda virtual env, but not the process. conda uses
@@ -87,15 +87,50 @@
               (anaconda-mode-find-definitions)
               (recenter))))
 
+;;;  company-anaconda
+(use-package company-anaconda
+  :commands (company-anaconda-setup)
+  :hook (python-mode . company-anaconda-setup)
+  :init (defun company-anaconda-setup ()
+          "Add company-anaconda to company-backends buffer-locally."
+          (add-to-list (make-local-variable 'company-backends)
+                       '(company-anaconda
+                         :with company-yasnippet
+                         :with company-capf))))
+
 ;; Jupyter notebook
+;; Usage
+;; M-x shell
+;; $ conda env list
+;; $ source activate someenvironmentname
+;; M-x ein:notebooklist-login (enter the token as the password)
+;; M-x ein:notebooklist-open
 (use-package ein
   :defer t
   :if (file-exists-p "/opt/anaconda3/bin/jupyter")
-  :commands (ein:jupyter-server-start)
+  :commands (;; Start the jupyter notebook server at the given path.
+             ;; This only works if jupyter is in the default conda env.
+             ein:jupyter-server-start
+             ;; Log in and open a notebooklist buffer for a running jupyter notebook server.
+             ein:jupyter-server-login-and-open
+             ;; Log on to a jupyterhub server using PAM authentication.
+             ;; Requires jupyterhub version 0.8 or greater.
+             ein:jupyterhub-connect
+             ;; Login to IPython notebook server.
+             ;; Use the server token as a password.
+             ein:notebooklist-login
+             ;; Open notebook list buffer.
+             ein:notebooklist-open)
   :config (progn
-            (setq ein:jupyter-default-notebook-directory "~/Workspace/jupyter")
-            (setq ein:jupyter-default-server-command "/opt/anaconda3/bin/jupyter")
-            (setq ein:jupyter-server-args (list "--no-browser"))))
+            (use-package ein-loaddefs)
+            (use-package ein-notebook
+              :custom (ein:notebook-autosave-frequency 10))
+            (use-package ein-subpackages)
+            (use-package ein-jupyter
+              :custom ((ein:jupyter-server-buffer-name "*ein:jupyter-server*")
+                       (ein:jupyter-default-notebook-directory "~/Workspace/jupyter")
+                       (ein:jupyter-default-server-command "/opt/anaconda3/bin/jupyter")
+                       (ein:jupyter-server-args (list "--no-browser"))))))
 
 ;; Automatic formatting according to Python's PEP8
 (use-package py-autopep8

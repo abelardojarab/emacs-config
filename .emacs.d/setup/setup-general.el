@@ -43,8 +43,8 @@
   :custom ((auto-revert-verbose                 nil)
            (global-auto-revert-non-file-buffers t))
   :config (when (eq system-type 'darwin)
-              ;; File notifications aren't supported on OS X
-              (setq auto-revert-use-notify nil)))
+            ;; File notifications aren't supported on OS X
+            (setq auto-revert-use-notify nil)))
 
 ;; Emacs startup profiler
 (use-package esup
@@ -236,14 +236,6 @@
          (text-mode . editorconfig-mode))
   :diminish editorconfig-mode
   :commands editorconfig-mode)
-
-;; C-code formatting using clang-format
-(use-package clang-format
-  :defer t
-  :commands (clang-format
-             clang-format-buffer
-             clang-format-region)
-  :custom (clang-format-style "llvm"))
 
 (provide 'setup-general)
 ;;; setup-general.el ends here

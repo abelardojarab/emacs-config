@@ -198,9 +198,9 @@
   :custom ((org-ref-insert-cite-key "C-c [")
            (org-ref-default-citation-link "autocite"))
   :config (setq org-ref-default-bibliography (list my/bibtex-completion-bibliography)
-                  org-ref-bibliography-files (list my/bibtex-completion-bibliography)
-                  org-ref-pdf-directory my/bibtex-completion-library-path
-                  org-ref-bibliography-notes my/bibtex-completion-notes))
+                org-ref-bibliography-files (list my/bibtex-completion-bibliography)
+                org-ref-pdf-directory my/bibtex-completion-library-path
+                org-ref-bibliography-notes my/bibtex-completion-notes))
 
 ;; helm themes
 (use-package helm-themes
@@ -223,13 +223,13 @@
              dash-load-js
              dash-load-md)
   :hook ((org-mode          . dash-load-org)
-     (markdown-mode     . dash-load-md)
-     (c-mode        . dash-load-c)
-     (sh-mode       . dash-load-bash)
-     (c++-mode      . dash-load-c++)
-     (js2-mode      . dash-load-js)
-     (ess-mode          . dash-load-r)
-     (emacs-lisp-mode   . dash-load-elisp))
+         (markdown-mode     . dash-load-md)
+         (c-mode        . dash-load-c)
+         (sh-mode       . dash-load-bash)
+         (c++-mode      . dash-load-c++)
+         (js2-mode      . dash-load-js)
+         (ess-mode          . dash-load-r)
+         (emacs-lisp-mode   . dash-load-elisp))
   :bind (:map ctl-x-map
               ("d" . helm-dash))
   :config (progn

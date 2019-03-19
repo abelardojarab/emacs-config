@@ -31,7 +31,16 @@
   :custom ((starttls-use-gnutls      t)
            (starttls-gnutls-program  "gnutls-cli")
            (starttls-extra-arguments nil)
-           (gnutls-min-prime-bits    4096)))
+           (gnutls-min-prime-bits    4096)
+           (gnutls-verify-error      t)
+           (tls-checktrust           t))
+  :config (let ((trustfile (replace-regexp-in-string
+                            "\\\\" "/" (replace-regexp-in-string
+                                        "\n" "" (shell-command-to-string "python -m certifi")))))
+            (setq tls-program (list
+                               (format "gnutls-cli%s --x509cafile %s -p %%p %%h"
+                                       (if (eq window-system 'w32) ".exe" "") trustfile))
+                  gnutls-trustfiles (list trustfile))))
 
 ;; Keychain access
 (use-package keychain-environment
