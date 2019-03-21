@@ -115,6 +115,7 @@ Suitable for inclusion in `c-offsets-alist'."
                         (block-open . 0)
                         (inline-open . 0)
                         (substatement-open . 0)
+                        (cpp-macro . -)
                         (statement-cont
                          .
                          (,(when (fboundp 'c-no-indent-after-java-annotations)
@@ -127,7 +128,7 @@ Suitable for inclusion in `c-offsets-alist'."
                         (statement-case-open . +)
                         (statement-case-intro . +) ; case w/o {
                         (access-label . /)
-                        (innamespace . 0))))
+                        (innamespace . -))))
   "Google C/C++ Programming Style.")
 
 ;;;###autoload

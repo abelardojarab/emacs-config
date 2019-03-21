@@ -24,6 +24,9 @@
 
 ;;; Code:
 
+(use-package google-c-style
+  :commands google-c-style)
+
 (use-package cc-mode
   :demand t
   :bind (:map c-mode-map
@@ -39,7 +42,6 @@
              (setq-default c-basic-offset 4)
 
              ;; Default C++ style
-             (use-package google-c-style)
              (defun my/build-tab-stop-list (width)
                (let ((num-tab-stops (/ 80 width))
                      (counter 1)
@@ -51,13 +53,14 @@
              (defun my/c++-mode-indent-init ()
                (interactive)
                (setq-default c-default-style "k&r")
-               (c-add-style "Linux" google-c-style)
-               (setq tab-width 4) ;; change this to taste, this is what K&R uses <img draggable="false" class="emoji" alt="🙂" src="https://s.w.org/images/core/emoji/11.2.0/svg/1f642.svg">
-               (my/build-tab-stop-list tab-width)
+               (c-add-style "k&r" google-c-style)
+               (google-set-c-style)
+               (setq tab-width 4) ;; change this to taste, this is what K&R uses
+               (make-local-variable 'c-basic-offset)
                (setq c-basic-offset tab-width)
+               (make-local-variable 'c-indent-level)
+               (setq c-indent-level tab-width)
                (setq indent-tabs-mode nil) ;; force only spaces for indentation
-               (c-set-offset 'substatement-open 0)
-               ;; (c-set-offset 'arglist-intro c-lineup-arglist-intro-after-paren)
                )
 
              ;; Default C-style
