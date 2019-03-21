@@ -25,7 +25,7 @@
 ;;; Code:
 
 (use-package google-c-style
-  :commands google-c-style)
+  :commands google-set-c-style)
 
 (use-package cc-mode
   :demand t
@@ -52,16 +52,13 @@
                  (set (make-local-variable 'tab-stop-list) (nreverse ls))))
              (defun my/c++-mode-indent-init ()
                (interactive)
-               (setq-default c-default-style "k&r")
-               (c-add-style "k&r" google-c-style)
                (google-set-c-style)
                (setq tab-width 4) ;; change this to taste, this is what K&R uses
                (make-local-variable 'c-basic-offset)
                (setq c-basic-offset tab-width)
                (make-local-variable 'c-indent-level)
                (setq c-indent-level tab-width)
-               (setq indent-tabs-mode nil) ;; force only spaces for indentation
-               )
+               (setq indent-tabs-mode nil))
 
              ;; Default C-style
              (setq my/cc-style
