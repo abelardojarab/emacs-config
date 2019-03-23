@@ -34,12 +34,12 @@
               :map c++-mode-map
               ("C-c C-o" . ff-find-other-file))
   :hook ((c++-mode-common . my/c++-mode-indent-init)
-         (find-file-hook . my/c-files-hook))
-  :mode (("\\.h\\'"  . c++-mode)
-         ("\\.c\\'"  . c-mode))
+         (find-file-hook  .  my/c-files-hook))
+  :mode (("\\.h\\'"    . c++-mode)
+         ("\\.c\\'"    . c-mode)
+         ("\\.cpp\\'"  . c++-mode))
+  :custom (c-basic-offset 4)
   :preface (progn
-
-             (setq-default c-basic-offset 4)
 
              ;; Default C++ style
              (defun my/build-tab-stop-list (width)
@@ -50,6 +50,7 @@
                    (setq ls (cons (* width counter) ls))
                    (setq counter (1+ counter)))
                  (set (make-local-variable 'tab-stop-list) (nreverse ls))))
+
              (defun my/c++-mode-indent-init ()
                (interactive)
                (google-set-c-style)
@@ -117,9 +118,15 @@
                              paragraph-start "^[ ]*\\(//+\\|\\**\\)[ ]*\\([ ]*$\\|@param\\)\\|^\f"))
 
              (defun my/c-files-hook ()
-               (when(string= (file-name-extension buffer-file-name) "c")
-                 (my/c-mode-indent-init)
-                 ))))
+               (when (string= (file-name-extension buffer-file-name) "c")
+                 (my/c-mode-indent-init))
+
+               (when (string= (file-name-extension buffer-file-name) "cpp")
+                 (my/c++-mode-indent-init))
+
+               (when (string= (file-name-extension buffer-file-name) "h")
+                 (my/c++-mode-indent-init))
+               )))
 
 ;; C/C++ refactoring tool based on Semantic parser framework
 (use-package srefactor
