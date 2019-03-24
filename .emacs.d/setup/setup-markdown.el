@@ -32,7 +32,6 @@
          ("\\.markdown\\'" . markdown-mode))
   :after org
   :commands (markdown-mode
-             org-table-align
              my/markdown-mode-init)
   :hook (markdown-mode . my/markdown-mode-init)
   :custom ((markdown-asymmetric-header         t)
@@ -45,6 +44,10 @@
            (markdown-wiki-link-alias-first     nil)
            (markdown-indent-on-enter           'indent-and-new-item))
   :config (progn
+
+            ;; This function is buggy and deletes text
+            (defun markdown-table-align ()
+              nil)
 
             (use-package flycheck-mmark
               :disabled t
@@ -61,8 +64,8 @@
               (adaptive-wrap-prefix-mode t)
 
               ;; Org goodies
-              (orgtbl-mode               t)
-              ;; (orgstruct++-mode          t)
+              ;; (orgtbl-mode               t)
+              (orgstruct++-mode          t)
 
               ;; Extra modes
               (outline-minor-mode        t)

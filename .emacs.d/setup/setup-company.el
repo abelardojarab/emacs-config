@@ -113,7 +113,7 @@
               ;; make `company-backends' local is critical
               ;; or else, you will have completion in every major mode, that's very annoying!
               (set (make-local-variable 'company-backends) '((company-dabbrev
-                                                              company-files
+                                                              company-keywords
                                                               :with company-yasnippet
                                                               :with company-capf))))
 
@@ -176,7 +176,7 @@
 
             ;; Documentation popups for company
             (use-package company-quickhelp
-              :defer t
+              :disabled t
               :custom ((company-quickhelp-delay                0.2)
                        (company-quickhelp-use-propertized-text t))
               :commands company-quickhelp-mode
