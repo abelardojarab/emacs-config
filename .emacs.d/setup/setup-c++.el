@@ -33,8 +33,8 @@
               ("C-c C-o" . ff-find-other-file)
               :map c++-mode-map
               ("C-c C-o" . ff-find-other-file))
-  :hook ((c++-mode-common . my/c++-mode-indent-init)
-         (find-file-hook  .  my/c-files-hook))
+  :hook ((c++-mode        . my/c++-mode-indent-init)
+         (find-file-hook  . my/c-files-hook))
   :mode (("\\.h\\'"    . c++-mode)
          ("\\.c\\'"    . c-mode)
          ("\\.cpp\\'"  . c++-mode))

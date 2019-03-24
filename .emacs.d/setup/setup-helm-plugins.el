@@ -173,7 +173,6 @@
   :bind (:map ctl-x-map
               ("[" . helm-bibtex))
   :config (progn
-
             (setq helm-bibtex-bibliography my/bibtex-completion-bibliography
                   helm-bibtex-library-path my/bibtex-completion-library-path
                   helm-bibtex-notes-path my/bibtex-completion-notes)
@@ -224,10 +223,10 @@
              dash-load-md)
   :hook ((org-mode          . dash-load-org)
          (markdown-mode     . dash-load-md)
-         (c-mode        . dash-load-c)
-         (sh-mode       . dash-load-bash)
-         (c++-mode      . dash-load-c++)
-         (js2-mode      . dash-load-js)
+         (c-mode            . dash-load-c)
+         (sh-mode           . dash-load-bash)
+         (c++-mode          . dash-load-c++)
+         (js2-mode          . dash-load-js)
          (ess-mode          . dash-load-r)
          (emacs-lisp-mode   . dash-load-elisp))
   :bind (:map ctl-x-map
