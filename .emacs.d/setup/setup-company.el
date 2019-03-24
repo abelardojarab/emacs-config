@@ -112,8 +112,7 @@
 
               ;; make `company-backends' local is critical
               ;; or else, you will have completion in every major mode, that's very annoying!
-              (set (make-local-variable 'company-backends) '((company-dabbrev
-                                                              company-keywords
+              (set (make-local-variable 'company-backends) '((company-keywords
                                                               :with company-yasnippet
                                                               :with company-capf))))
 

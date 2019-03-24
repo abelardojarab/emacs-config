@@ -28,15 +28,15 @@
 (use-package w3m
   :if (executable-find "w3m")
   :commands (w3m w3m-find-file w3m-goto-url-new-session)
+  :custom ((w3m-home-page                          "http://www.google.com")
+           (w3m-use-cookies                        t)
+           (w3m-command-arguments                  '("-cookie" "-F"))
+           (w3m-show-graphic-icons-in-header-line  t)
+           (w3m-show-graphic-icons-in-mode-line    t)
+           (w3m-default-display-inline-images      t))
   :init (setq w3m-init-file (concat (file-name-as-directory
                                      my/emacs-cache-dir)
-                                    "w3m")
-              w3m-home-page "http://www.google.com"
-              w3m-use-cookies t
-              w3m-command-arguments '("-cookie" "-F")
-              w3m-show-graphic-icons-in-header-line t
-              w3m-show-graphic-icons-in-mode-line t
-              w3m-default-display-inline-images t))
+                                    "w3m")))
 
 ;; eww
 (use-package eww
