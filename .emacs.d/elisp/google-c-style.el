@@ -111,6 +111,7 @@ Suitable for inclusion in `c-offsets-alist'."
                         (inher-intro . ++)
                         (comment-intro . 0)
                         (arglist-close . c-lineup-arglist)
+                        (arglist-cont-nonempty . +)
                         (topmost-intro . 0)
                         (block-open . 0)
                         (inline-open . 0)
@@ -127,7 +128,7 @@ Suitable for inclusion in `c-offsets-alist'."
                         (case-label . +)
                         (statement-case-open . +)
                         (statement-case-intro . +) ; case w/o {
-                        (access-label . /)
+                        (access-label . -) ;; before it was /
                         (innamespace . -))))
   "Google C/C++ Programming Style.")
 
