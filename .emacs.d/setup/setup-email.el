@@ -29,8 +29,8 @@
   :disabled t
   :after std11
   :commands (wl
-         wl-draft
-         wl-other-frame)
+             wl-draft
+             wl-other-frame)
   :config (progn
 
             ;; Location for custom scripts
@@ -368,12 +368,6 @@
                                                            (get-text-property (point) 'long)))))
                             (add-to-list 'my/mu4e-name-replacements (cons email name) t)
                             (customize-save-variable 'my/mu4e-name-replacements my/mu4e-name-replacements)))))
-
-            ;; Ignore some email addresses when auto completing:
-            (setq mu4e-compose-complete-ignore-address-regexp (rx  (or (seq "no" (zero-or-one "-") "reply")
-                                                                       (seq "replyto-" (one-or-more char) "@plus.google.com")
-                                                                       (seq "@" (one-or-more char) ".twitter.com")
-                                                                       (seq "do-not-reply" (zero-or-more char) "@"))))
 
             ;; Assure we use mu4e
             (setq mail-user-agent 'mu4e-user-agent)

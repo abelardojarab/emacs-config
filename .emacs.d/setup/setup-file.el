@@ -28,7 +28,7 @@
 (use-package auto-fill
   :defer t
   :diminish (auto-fill-mode . "Ⓕ")
-  :custom (fill-column 80)
+  :custom (fill-column 120)
   :hook (text-mode . auto-fill-mode))
 
 ;; aggressive fill on paragraphs
