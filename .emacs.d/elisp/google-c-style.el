@@ -111,7 +111,8 @@ Suitable for inclusion in `c-offsets-alist'."
                         (inher-intro . ++)
                         (comment-intro . 0)
                         (arglist-close . c-lineup-arglist)
-                        (arglist-cont-nonempty . +)
+                        ;; (arglist-cont-nonempty . +)
+                        (arglist-cont-nonempty (my/c-lineup-arglist-lambda +))
                         (topmost-intro . 0)
                         (block-open . 0)
                         (inline-open . 0)
@@ -131,6 +132,13 @@ Suitable for inclusion in `c-offsets-alist'."
                         (access-label . -) ;; before it was /
                         (innamespace . -))))
   "Google C/C++ Programming Style.")
+
+(defun my/c-lineup-arglist-lambda (langelem)
+  "Line up lambda."
+  (save-excursion
+    (back-to-indentation)
+    (when (looking-at "{")
+      '+)))
 
 ;;;###autoload
 (defun google-set-c-style ()
