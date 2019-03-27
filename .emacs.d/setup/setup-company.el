@@ -41,8 +41,6 @@
            (company-frontends                 '(company-pseudo-tooltip-unless-just-one-frontend
                                                 company-preview-frontend
                                                 company-echo-metadata-frontend))
-           (company-idle-delay                0)
-           (company-echo-delay                0)
            (company-selection-wrap-around     t)
            (company-minimum-prefix-length     2)
            (company-show-numbers              t)
@@ -50,6 +48,7 @@
            (company-tooltip-limit             10)
            (company-dabbrev-downcase          nil)
            (company-dabbrev-ignore-case       t)
+           (company-dabbrev-code-everywhere   t)
            (company-semantic-insert-arguments nil)
            (company-gtags-insert-arguments    t)
            (company-lighter-base              ""))
