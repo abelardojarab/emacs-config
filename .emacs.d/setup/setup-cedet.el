@@ -32,7 +32,7 @@
            (semantic-idle-scheduler-idle-time               10)
            (semantic-idle-scheduler-work-idle-time          60)
            (semantic-idle-scheduler-max-buffer-size         1)
-	   (semanticdb-search-system-databases              t))
+           (semanticdb-search-system-databases              t))
   :config (progn
 
             ;; To use additional features for names completion, and displaying of information for tags & classes,
@@ -49,7 +49,7 @@
             (setq semantic-default-submodes '(global-semanticdb-minor-mode
                                               global-semantic-mru-bookmark-mode
                                               global-semantic-load-enable-code-helpers
-					      global-semantic-idle-scheduler-mode))
+                                              global-semantic-idle-scheduler-mode))
 
             ;; Assure .emacs.cache/semanticdb directory exists
             (if (not (file-exists-p (concat (file-name-as-directory
@@ -62,9 +62,9 @@
             ;; Disable semantics for large files
             (add-hook 'semantic--before-fetch-tags-hook
                       (lambda () (if (and (>= (point-max) 0)
-					  (not (semantic-parse-tree-needs-rebuild-p)))
-                                     nil
-				   t)))
+                                     (not (semantic-parse-tree-needs-rebuild-p)))
+                                nil
+                              t)))
 
             ;; Don't use information from system include files, by removing system
             (setq-mode-local c-mode semanticdb-find-default-throttle
@@ -91,9 +91,9 @@ Exit the save between databases if there is user input."
                     ;; FIXME: Use `while-no-input'?
                     (save-mark-and-excursion ;; <-- added line
                       (semantic-exit-on-input 'semanticdb-idle-save
-			(mapc (lambda (db)
-				(semantic-throw-on-input 'semanticdb-idle-save)
-				(semanticdb-save-db db t))
+                        (mapc (lambda (db)
+                                (semantic-throw-on-input 'semanticdb-idle-save)
+                                (semanticdb-save-db db t))
                               semanticdb-database-list))))
                 (if (fboundp 'save-excursion)
                     (save-excursion ;; <-- added line
@@ -142,40 +142,19 @@ Throw away all the old tags, and recreate the tag database."
               (semanticdb-enable-gnu-global-databases 'c-mode t)
               (semanticdb-enable-gnu-global-databases 'c++-mode t))))
 
-;; Load contrib library
-(use-package eassist
-  :disabled t)
-
-;; EDE project managment, slows down Emacs
-(use-package ede
-  :disabled t
-  :config (progn
-            (global-ede-mode 1)
-            (ede-enable-generic-projects)
-            (setq ede-project-directories t)
-
-            ;; Default EDE directory
-            (setq-default ede-project-placeholder-cache-file (concat (file-name-as-directory
-                                                                      my/emacs-cache-dir)
-                                                                     "ede-projects.el"))
-
-            ;; Advice ede add projects to avoid errors
-            (defadvice ede-add-project-to-global-list (around bar activate)
-              (ignore-errors add-do-it))))
-
 ;; Show function in mode-line
 (use-package which-func
   :demand t
   :commands which-function-mode
   :custom ((which-func-unknown "⊥")
-           (which-func-maxout 1024)
-           (which-func-modes '(latex-mode
-                               markdown-mode
-                               org-mode
-                               emacs-lisp-mode
-                               python-mode
-                               c-mode
-                               c++-mode)))
+           (which-func-maxout  1024)
+           (which-func-modes   '(latex-mode
+                                 markdown-mode
+                                 org-mode
+                                 emacs-lisp-mode
+                                 python-mode
+                                 c-mode
+                                 c++-mode)))
   :config (progn
             (which-function-mode -1)
             (ignore-errors

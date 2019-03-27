@@ -26,7 +26,6 @@
 
 ;; Disable tool-bar and scroll-bar
 (when (display-graphic-p)
-  (setq-default line-spacing 2)
   (tool-bar-mode -1)
   (set-scroll-bar-mode 'right)
   (scroll-bar-mode -1)
@@ -54,7 +53,8 @@
              visual-line-mode
              toggle-truncate-lines)
   :diminish visual-line-mode
-  :custom (visual-line-fringe-indicators '(nil right-curly-arrow))
+  :custom ((visual-line-fringe-indicators '(nil right-curly-arrow))
+           (line-spacing                  2))
   :hook ((prog-mode text-mode) . my/enable-truncate-lines)
   :preface (defun my/enable-truncate-lines ()
              (visual-line-mode -1)
@@ -214,7 +214,7 @@ all the buffers."
   :defer t
   :commands column-enforce-mode
   :diminish column-enforce-mode
-  :custom (column-enforce-column 99)
+  :custom (column-enforce-column 120)
   :hook (prog-mode . column-enforce-mode))
 
 ;; Visually highlight the selected buffer

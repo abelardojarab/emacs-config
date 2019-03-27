@@ -59,7 +59,7 @@
 (use-package heartbeat-cursor
   :if (not (equal system-type 'windows-nt))
   :commands heartbeat-cursor-mode
-  :hook (((prog-mode text-mode) . heartbeat-cursor-mode)))
+  :hook ((prog-mode text-mode) . heartbeat-cursor-mode))
 
 ;; Multiple cursors
 (use-package multiple-cursors

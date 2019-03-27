@@ -57,11 +57,8 @@
              org-toggle-iimage
              my/reload-image-at-point
              my/resize-image-at-point)
+  :custom ((imagemagick-enabled-types t))
   :config (progn
-
-            ;; Enable Imagemagick types
-            (setq imagemagick-enabled-types t)
-
             ;; https://www.reddit.com/r/emacs/comments/55zk2d/adjust_the_size_of_pictures_to_be_shown_inside/
             (setq org-image-actual-width (/ (display-pixel-width) 3))
 

@@ -39,10 +39,10 @@
           ("C-c C-r" . my/dired-rsync)
           ("C-c C-d" . dired-filter-by-directory)
           ("C-c C-f" . dired-filter-by-file)))
+  :custom ((dired-omit-verbose nil))
   :config (progn
 
             ;; toggle `dired-omit-mode' with C-x M-o
-            (setq dired-omit-verbose nil)
             (add-to-list 'dired-omit-extensions ".DS_Store")
             (setq dired-omit-files
                   (concat dired-omit-files "\\|^.DS_STORE$\\|^.projectile$"))
@@ -138,10 +138,8 @@
             ;; Dired extensions
             (use-package dired+
               :after dired
+              :custom (diredp-hide-details-initially-flag nil)
               :config (progn
-                        ;; Emacs 24.4 defaults to an ls -1 view, not ls -l
-                        (setq diredp-hide-details-initially-flag nil)
-
                         ;; Reuse same directory buffer
                         (diredp-toggle-find-file-reuse-dir 1)))
 
@@ -164,7 +162,7 @@
               :bind (:map dired-mode-map
                           ("k" . dired-k))
               :commands (dired-k dired-k-no-revert)
-	      :hook ((dired-initial-position . dired-k)
+              :hook ((dired-initial-position . dired-k)
                      (dired-after-readin     . dired-k-no-revert)))
 
             ;; Display file icons in dired
