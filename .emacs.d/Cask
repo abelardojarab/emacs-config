@@ -270,6 +270,7 @@
 (depends-on "no-littering")
 (depends-on "nyan-mode")
 (depends-on "ob-restclient")
+(depends-on "opencl-mode")
 ;; (depends-on "org")
 (depends-on "org2blog")
 (depends-on "org-ac")

@@ -225,5 +225,8 @@
             "Add auto-save hook for clang-format-buffer-smart."
             (add-hook 'before-save-hook 'clang-format-buffer-smart nil t))))
 
+(use-package opencl-mode
+  :mode (("\\.cl\\'"    . opencl-mode)))
+
 (provide 'setup-c++)
 ;;; setup-c++.el ends here
