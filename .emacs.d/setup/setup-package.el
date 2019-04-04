@@ -113,7 +113,6 @@ corresponding `.el' file."
 (use-package memoize             :defer t)
 (use-package names               :defer t)
 (use-package parsebib            :defer t)
-(use-package pkg-info            :defer t)
 (use-package popup               :defer t)
 (use-package popwin              :defer t)
 (use-package pos-tip             :defer t)
@@ -125,6 +124,9 @@ corresponding `.el' file."
 
 ;; Just in case
 (use-package irony               :defer t :load-path (lambda () (expand-file-name "irony-mode/" user-emacs-directory)))
+
+;; Package information
+(use-package pkg-info :demand t)
 
 ;; Paradox
 (use-package paradox
