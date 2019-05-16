@@ -1,0 +1,2 @@
+;;; -*- no-byte-compile: t -*-
+(define-package "cmake-ide" "20190515.927" "Calls CMake to find out include paths and other compiler flags" '((emacs "24.4") (cl-lib "0.5") (seq "1.11") (levenshtein "0") (s "1.11.0")) :commit "995316483b7146d46b6c68541bbb8927dccfe3dc" :keywords '("languages") :authors '(("Atila Neves" . "atila.neves@gmail.com")) :maintainer '("Atila Neves" . "atila.neves@gmail.com") :url "http://github.com/atilaneves/cmake-ide")
