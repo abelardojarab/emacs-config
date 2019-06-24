@@ -41,7 +41,7 @@
          ([C-M-return]   . org-insert-todo-heading)
          ([S-return]     . org-insert-subheading)
          ([C-tab]        . org-cycle)
-         ("RET"          . org-retun)
+         ("RET"          . org-return)
          ("C-c c"        . org-html-copy)
          ("C-c k"        . org-cut-subtree)
          ("C-c t"        . org-show-todo-tree)
