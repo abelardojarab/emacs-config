@@ -219,7 +219,7 @@ little more place."
 
 ;; Activate ECB in graphical mode
 ;; (if (display-graphic-p)
-(my/ecb-activate)
+;; (my/ecb-activate)
 
 (provide 'setup-ecb)
 ;;; setup-ecb.el ends here

@@ -24,7 +24,16 @@
 
 ;;; Code:
 
-(unless (fboundp 'add-function)
+;; Only for Emacs24
+(unless (fboundp 'define-advice)
+  (add-to-list 'load-path (expand-file-name "elisp/emacs24" user-emacs-directory))
+
+  (setq epg--configurations nil)
+  (setq epg-config--program-alist nil)
+
+  (defun custom-prompt-customize-unsaved-options ()
+    nil)
+
   ;; If `add-function' is defined, we're presumably running on
   ;; an Emacs that comes with the real nadvice.el, so let's be careful
   ;; to do nothing in that case!
@@ -34,45 +43,46 @@
   (require 'advice)
 
 ;;;###autoload
-(defun advice-add (symbol where function &optional props)
-  (when props
-    (error "This version of nadvice.el does not support PROPS"))
-  (unless (symbolp function)
-    (error "This version of nadvice.el requires FUNCTION to be a symbol"))
-  (let ((body (cond
-               ((eq where :before)
-                `(progn (apply #',function (ad-get-args 0)) ad-do-it))
-               ((eq where :after)
-                `(progn ad-do-it (apply #',function (ad-get-args 0))))
-               ((eq where :override)
-                `(setq ad-return-value (apply #',function (ad-get-args 0))))
-               ((eq where :around)
-                `(setq ad-return-value
-                       (apply #',function
-                              (lambda (&rest nadvice--rest-arg)
-                                (ad-set-args 0 nadvice--rest-arg)
-                                ad-do-it)
-                              (ad-get-args 0))))
-               (t (error "This version of nadvice.el does not handle %S"
-                         where)))))
-    (ad-add-advice symbol
-                   `(,function nil t (advice lambda () ,body))
-                   'around
-                   nil)
-    (ad-activate symbol)))
+  (defun advice-add (symbol where function &optional props)
+    (when props
+      (error "This version of nadvice.el does not support PROPS"))
+    (unless (symbolp function)
+      (error "This version of nadvice.el requires FUNCTION to be a symbol"))
+    (let ((body (cond
+                 ((eq where :before)
+                  `(progn (apply #',function (ad-get-args 0)) ad-do-it))
+                 ((eq where :after)
+                  `(progn ad-do-it (apply #',function (ad-get-args 0))))
+                 ((eq where :override)
+                  `(setq ad-return-value (apply #',function (ad-get-args 0))))
+                 ((eq where :around)
+                  `(setq ad-return-value
+                         (apply #',function
+                                (lambda (&rest nadvice--rest-arg)
+                                  (ad-set-args 0 nadvice--rest-arg)
+                                  ad-do-it)
+                                (ad-get-args 0))))
+                 (t (error "This version of nadvice.el does not handle %S"
+                           where)))))
+      (ad-add-advice symbol
+                     `(,function nil t (advice lambda () ,body))
+                     'around
+                     nil)
+      (ad-activate symbol)))
 
 ;;;###autoload
-(defun advice-remove (symbol function)
-  ;; Just return nil if there is no advice, rather than signaling an
-  ;; error.
-  (condition-case nil
-      (ad-remove-advice symbol 'around function)
-    (error nil))
-  (condition-case nil
-      (ad-activate symbol)
-    (error nil)))
+  (defun advice-remove (symbol function)
+    ;; Just return nil if there is no advice, rather than signaling an
+    ;; error.
+    (condition-case nil
+        (ad-remove-advice symbol 'around function)
+      (error nil))
+    (condition-case nil
+        (ad-activate symbol)
+      (error nil)))
 
-(require 'nadvice24))
+  (require 'subr-x24)
+  (require 'nadvice24))
 
 (setq package-user-dir "~/.emacs.d/site-lisp/package-install")
 (require 'package)
