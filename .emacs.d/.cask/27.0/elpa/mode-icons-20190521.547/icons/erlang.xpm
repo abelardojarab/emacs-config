@@ -1,0 +1,25 @@
+/* XPM */
+static char *erlang[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 3 1 ",
+"  c #A90533",
+". c #AA0533",
+"X c None",
+/* pixels */
+"XXXXXXXXXXXXXXXX",
+"  XXXXX..XXXXX  ",
+" XXXXX    XXXXX ",
+" XXXXXXXXXXXXXX ",
+".XXXXXXXXXXXXXX.",
+".XXXXXXXXXXXXXX.",
+".XXXXX          ",
+".XXXXX          ",
+" XXXXX      .X  ",
+" .XXXXX     XXX ",
+"  XXXXXXX.XXXX. ",
+"XXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXX",
+" XX.XXXX.XX.XXXX",
+"XXXXXXXXXXXXXXXX",
+"XXXXXXXXXXXXXXXX"
+};
