@@ -69,7 +69,7 @@
 (require 'cl-lib)
 (require 'eieio)
 (require 'ring)
-(require 'project)
+;; (require 'project)
 
 (defgroup xref nil "Cross-referencing commands"
   :version "25.1"

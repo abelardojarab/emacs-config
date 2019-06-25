@@ -31,9 +31,6 @@
   (setq epg--configurations nil)
   (setq epg-config--program-alist nil)
 
-  (defun custom-prompt-customize-unsaved-options ()
-    nil)
-
   ;; If `add-function' is defined, we're presumably running on
   ;; an Emacs that comes with the real nadvice.el, so let's be careful
   ;; to do nothing in that case!
@@ -81,6 +78,9 @@
         (ad-activate symbol)
       (error nil)))
 
+  (defalias 'cl-defgeneric 'defgeneric)
+
+  (require 'cus-edit)
   (require 'subr-x24)
   (require 'nadvice24))
 

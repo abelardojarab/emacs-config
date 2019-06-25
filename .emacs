@@ -112,10 +112,10 @@
     (require 'setup-cedet)
 
     ;; Setup Language Server Protocol
-    (require 'setup-lsp)
+    (ignore-errors (require 'setup-lsp))
 
     ;; Setup C++
-    (require 'setup-c++)
+    (ignore-errors (require 'setup-c++))
 
     ;; Setup doxygen
     (require 'setup-doxygen)
@@ -172,7 +172,7 @@
     (require 'setup-auto-insert)
 
     ;; Setup Company
-    (require 'setup-company)
+    (ignore-errors (require 'setup-company))
 
     ;; Setup bookmarks
     (require 'setup-bookmarks)
@@ -259,7 +259,7 @@
     (require 'setup-iimage)
 
     ;; Setup ivy
-    (require 'setup-ivy)
+    (ignore-errors (require 'setup-ivy))
 
     ;; Setup helm
     (require 'setup-helm)
@@ -268,10 +268,10 @@
     (require 'setup-helm-plugins)
 
     ;; Setup dired
-    (require 'setup-dired)
+    (ignore-errors (require 'setup-dired))
 
     ;; Setup dired plugins
-    (require 'setup-dired-plugins)
+    (ignore-errors (require 'setup-dired-plugins))
 
     ;; Setup gnus
     (require 'setup-gnus)
