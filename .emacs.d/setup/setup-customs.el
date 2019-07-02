@@ -1,6 +1,6 @@
 ;;; setup-customs.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@ubuntu02>
 ;; Keywords:
@@ -107,7 +107,7 @@
   :group 'my/customs)
 
 (defcustom my/emacs-theme
-  'kaolin-light
+  'monokai
   "Preferred Emacs theme"
   :group 'my/customs
   :type 'list)
