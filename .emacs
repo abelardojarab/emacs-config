@@ -1,5 +1,5 @@
 ;; -*-mode: Emacs-Lisp; -*-
-;; Copyright (C) 1996-2018 Abelardo Jara-Berrocal
+;; Copyright (C) 1996-2019 Abelardo Jara-Berrocal
 ;; URL: http://jaraberrocal.readmyblog.org
 ;; This file is free software licensed under the terms of the
 ;; GNU General Public License, version 3 or later.
@@ -28,8 +28,8 @@
 ;; Only utilize local files
 (with-no-warnings
   (let ((file-name-handler-alist nil)
-    ;; CEDET
-    (byte-compile-warnings nil))
+        ;; CEDET
+        (byte-compile-warnings nil))
 
     ;; Disable needless warnings
     (setq warning-minimum-level :error)
@@ -69,11 +69,11 @@
     ;; Setup search
     (require 'setup-search)
 
-    ;; Setup keychain
-    (require 'setup-keychain)
+    ;; ;; Setup keychain
+    ;; (require 'setup-keychain)
 
-    ;; Setup tramp
-    (require 'setup-tramp)
+    ;; ;; Setup tramp
+    ;; (require 'setup-tramp)
 
     ;; Setup appearance
     (require 'setup-appearance)
@@ -112,10 +112,10 @@
     (require 'setup-cedet)
 
     ;; Setup Language Server Protocol
-    (ignore-errors (require 'setup-lsp))
+    (require 'setup-lsp)
 
     ;; Setup C++
-    (ignore-errors (require 'setup-c++))
+    (require 'setup-c++)
 
     ;; Setup doxygen
     (require 'setup-doxygen)
@@ -259,7 +259,7 @@
     (require 'setup-iimage)
 
     ;; Setup ivy
-    (ignore-errors (require 'setup-ivy))
+    (require 'setup-ivy)
 
     ;; Setup helm
     (require 'setup-helm)
@@ -268,16 +268,16 @@
     (require 'setup-helm-plugins)
 
     ;; Setup dired
-    (ignore-errors (require 'setup-dired))
+    (require 'setup-dired)
 
     ;; Setup dired plugins
-    (ignore-errors (require 'setup-dired-plugins))
+    (require 'setup-dired-plugins)
 
-    ;; Setup gnus
-    (require 'setup-gnus)
+    ;; ;; Setup gnus
+    ;; (require 'setup-gnus)
 
-    ;; Setup email
-    (require 'setup-email)
+    ;; ;; Setup email
+    ;; (require 'setup-email)
 
     ;; Setup Org (blogging support)
     (require 'setup-org-blog)
