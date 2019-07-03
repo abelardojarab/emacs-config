@@ -25,22 +25,9 @@
 
 
 
+
 (provide 'custom)
 ;;; custom.el ends here
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -81,6 +68,7 @@
  '(basic-c-compiler "g++" t nil "Customized with use-package basic-c-compile")
  '(beacon-color "#ec4780")
  '(bidi-display-reordering nil t nil "Customized with use-package emacs")
+ '(blink-cursor-mode nil)
  '(bm-buffer-persistence t nil nil "Customized with use-package bm")
  '(bm-cycle-all-buffers t nil nil "Customized with use-package bm")
  '(bm-highlight-style 'bm-highlight-line-and-fringe nil nil "Customized with use-package bm")
@@ -92,7 +80,8 @@
  '(calendar-mark-diary-entries-flag t nil nil "Customized with use-package appt")
  '(charmap-text-scale-adjust 2 t nil "Customized with use-package charmap")
  '(clang-format-style "llvm" t nil "Customized with use-package clang-format")
- '(column-enforce-column 99 t nil "Customized with use-package column-enforce-mode")
+ '(column-enforce-column 99 nil nil "Customized with use-package column-enforce-mode")
+ '(column-number-mode t)
  '(company-begin-commands
    '(self-insert-command org-self-insert-command c-electric-lt-gt c-electric-colon completion-separator-self-insert-command outshine-self-insert-command) nil nil "Customized with use-package company")
  '(company-bibtex-bibliography '("~/workspace/Documents/Bibliography/biblio.bib") nil nil "Customized with use-package company-bibtex")
@@ -118,7 +107,7 @@
  '(company-tooltip-limit 10 nil nil "Customized with use-package company")
  '(company-transformers '(company-sort-by-backend-importance) nil nil "Customized with use-package company")
  '(compilation-message-face 'default)
- '(copyright-year-ranges t t nil "Customized with use-package copyright")
+ '(copyright-year-ranges t nil nil "Customized with use-package copyright")
  '(counsel-etags-update-interval 180 nil nil "Customized with use-package counsel-etags")
  '(counsel-mode t)
  '(create-lockfiles nil nil nil "Customized with use-package no-littering")
@@ -127,7 +116,7 @@
  '(cua-normal-cursor-color "#839496")
  '(cua-overwrite-cursor-color "#b58900")
  '(cua-read-only-cursor-color "#859900")
- '(custom-enabled-themes '(monokai))
+ '(custom-enabled-themes '(one-light))
  '(custom-safe-themes
    '("54f2d1fcc9bcadedd50398697618f7c34aceb9966a6cbaa99829eb64c0c1f3ca" "bee55ba5e878d0584db9b2fb33f75c348a3008fcfe8e05ab8cae897ca604fd95" "bd7b7c5df1174796deefce5debc2d976b264585d51852c962362be83932873d9" "7c58646ae5de2a5563bd4061d3ff9ee06a8f85d22b08f89f59f3a77a4797ece0" "3f44e2d33b9deb2da947523e2169031d3707eec0426e78c7b8a646ef773a2077" "242527ce24b140d304381952aa7a081179a9848d734446d913ca8ef0af3cef21" "c3d4af771cbe0501d5a865656802788a9a0ff9cf10a7df704ec8b8ef69017c68" "190a9882bef28d7e944aa610aa68fe1ee34ecea6127239178c7ac848754992df" "baec3b9226614da30a3e5135592a65910527df93a257bba423c542695281bc55" "6dd2b995238b4943431af56c5c9c0c825258c2de87b6c936ee88d6bb1e577cb9" "e11569fd7e31321a33358ee4b232c2d3cf05caccd90f896e1df6cab228191109" "38e66a2a20fa9a27af5ffc4f4dd54f69e3fef6b51be7b351e137b24958bfebd7" "3d5720f488f2ed54dd4e40e9252da2912110948366a16aef503f3e9e7dfe4915" "599f1561d84229e02807c952919cd9b0fbaa97ace123851df84806b067666332" "ffca7ac44bfe9d585363f6bbf29f19529de216f85dce7a831dfc28883959ec05" "878497d07b1cb63d19c088031a189ba4edda845c7e0849ab68a4232ab4d6c0b7" "241627b2368997a03e05939e07dbb26672c6b00fd274906fe2a614d6024e7224" "2022c5a92bbc261e045ec053aa466705999863f14b84c012a43f55a95bf9feb8" "a24c5b3c12d147da6cef80938dca1223b7c7f70f2f382b26308eba014dc4833a" "5e52ce58f51827619d27131be3e3936593c9c7f9f9f9d6b33227be6331bf9881" "1f3113447a652b8436a9938bbac71ecaf022cc73ecd0d76182eb9713aa781f17" "8ed752276957903a270c797c4ab52931199806ccd9f0c3bb77f6f4b9e71b9272" "a4c9e536d86666d4494ef7f43c84807162d9bd29b0dfd39bdf2c3d845dcc7b2e" "2a739405edf418b8581dcd176aaf695d319f99e3488224a3c495cb0f9fd814e3" "06b2849748590f7f991bf0aaaea96611bb3a6982cad8b1e3fc707055b96d64ca" "3eb93cd9a0da0f3e86b5d932ac0e3b5f0f50de7a0b805d4eb1f67782e9eb67a4" "fbcdb6b7890d0ec1708fa21ab08eb0cc16a8b7611bb6517b722eba3891dfc9dd" "e87a2bd5abc8448f8676365692e908b709b93f2d3869c42a4371223aab7d9cf8" "cd8176f5688f9a0086d5bc2cacca3c7c2b56808bceafc9df2eb2c2f45f97cea6" "6c803f5992d797ab94a94004b459cc3af3f3cfbe59652f1fece297335d437c81" "a7b211f45891a56000b8f823ad9edb564d873a689c21d9fba114d7a703f9b322" "793d74f2269fd3c2df12900e725fbffca5aabe55ab3c9a5c9d5259e05f0c4de8" "0953e81e91886e57512ef653bf32890e829540484dc5e471c162adb797b9a86d" "95dd1eeafe55e8f94d9234ec5b4214d34bdeee930dd8f71044a0722a3878bcb2" "445b8fed4feed166c021f1102ee9e5233158b71eb5402182fc0a4c6b17d67ba8" "2ab5e12f7513825ba869ca3de0f6185a9deb82c6b1a222eb25b0e38a60c7a606" "a75137dcd452a69cd404b4d44f0e50986196bcd9cf92bae49f8aa01038228221" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "756597b162f1be60a12dbd52bab71d40d6a2845a3e3c2584c6573ee9c332a66e" "96ec5305ec9f275f61c25341363081df286d616a27a69904a35c9309cfa0fe1b" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" "fb4bf07618eab33c89d72ddc238d3c30918a501cf7f086f2edf8f4edba9bd59f" default))
  '(debug-on-error nil)
@@ -135,11 +124,12 @@
  '(delete-by-moving-to-trash t nil nil "Customized with use-package files")
  '(delete-old-versions t nil nil "Customized with use-package no-littering")
  '(diff-hl-flydiff-mode t)
- '(dimmer-fraction 0.25 t nil "Customized with use-package dimmer")
+ '(dimmer-fraction 0.25 nil nil "Customized with use-package dimmer")
  '(dired-async-mode t)
  '(dired-omit-verbose nil t)
  '(display-time-24hr-format t nil nil "Customized with use-package time")
  '(display-time-default-load-average nil nil nil "Customized with use-package time")
+ '(display-time-mode t)
  '(display-time-use-mail-icon t nil nil "Customized with use-package time")
  '(dumb-jump-aggressive nil t nil "Customized with use-package dumb-jump")
  '(dumb-jump-selector 'ivy t nil "Customized with use-package dumb-jump")
@@ -213,13 +203,13 @@
  '(fci-rule-color "#49483E")
  '(fci-rule-width 1 t nil "Customized with use-package fill-column-indicator")
  '(fill-column 80 nil nil "Customized with use-package auto-fill")
- '(flycheck-disabled-checkers '(html-tidy emacs-lisp-checkdoc) t nil "Customized with use-package flycheck")
- '(flycheck-highlighting-mode 'lines t nil "Customized with use-package flycheck")
- '(flycheck-shellcheck-follow-sources nil t nil "Customized with use-package flycheck")
+ '(flycheck-disabled-checkers '(html-tidy emacs-lisp-checkdoc) nil nil "Customized with use-package flycheck")
+ '(flycheck-highlighting-mode 'lines nil nil "Customized with use-package flycheck")
+ '(flycheck-shellcheck-follow-sources nil nil nil "Customized with use-package flycheck")
  '(flycheck-tip-avoid-show-func nil nil nil "Customized with use-package flycheck-tip")
- '(flyspell-delay 1 t nil "Customized with use-package flyspell")
- '(flyspell-issue-message-flag nil t nil "Customized with use-package flyspell")
- '(flyspell-issue-welcome-flag nil t nil "Customized with use-package flyspell")
+ '(flyspell-delay 1 nil nil "Customized with use-package flyspell")
+ '(flyspell-issue-message-flag nil nil nil "Customized with use-package flyspell")
+ '(flyspell-issue-welcome-flag nil nil nil "Customized with use-package flyspell")
  '(font-lock-maximum-decoration nil nil nil "Customized with use-package font-lock")
  '(font-lock-multiline t t nil "Customized with use-package font-lock")
  '(font-lock-support-mode 'jit-lock-mode nil nil "Customized with use-package font-lock")
@@ -552,6 +542,7 @@
  '(shackle-mode t)
  '(shackle-select-reused-windows nil)
  '(shift-select-mode t)
+ '(show-paren-mode t)
  '(smart-jump-selector 'ivy t)
  '(smart-tab-using-hippie-expand t)
  '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))
@@ -585,6 +576,7 @@
  '(time-stamp-format "%04y-%02m-%02d %02H:%02M:%02S (%u)" nil nil "Customized with use-package time-stamp")
  '(time-stamp-line-limit 20 t nil "Customized with use-package time-stamp")
  '(tls-checktrust t)
+ '(tool-bar-mode nil)
  '(tooltip-delay 1 nil nil "Customized with use-package tooltip")
  '(transient-mark-mode t)
  '(use-package-compute-statistics t)

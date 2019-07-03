@@ -1,2 +1,0 @@
-;;; -*- no-byte-compile: t -*-
-(define-package "auth-source-pass" "20190528.1959" "Integrate auth-source with password-store" '((emacs "25")) :commit "a3fbb672aa49d34108bdc129433739078ff2b498" :authors '(("Damien Cassou" . "damien@cassou.me") ("Nicolas Petton" . "nicolas@petton.fr") ("Keith Amidon" . "camalot@picnicpark.org")) :maintainer '("Damien Cassou" . "damien@cassou.me") :url "https://github.com/DamienCassou/auth-password-store")

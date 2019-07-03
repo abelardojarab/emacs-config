@@ -1,6 +1,6 @@
 ;;; setup-spell.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -29,18 +29,16 @@
   :custom ((ispell-highlight-face             'flyspell-incorrect)
            (ispell-silently-savep             t)
            (ispell-choices-win-default-height 5))
+  :preface (defun my/org-ispell ()
+             "Configure `ispell-skip-region-alist' for `org-mode'."
+             (make-local-variable 'ispell-skip-region-alist)
+             (add-to-list 'ispell-skip-region-alist '(org-property-drawer-re))
+             (add-to-list 'ispell-skip-region-alist '("~" "~"))
+             (add-to-list 'ispell-skip-region-alist '("=" "="))
+             (add-to-list 'ispell-skip-region-alist '("```" "```"))
+             (add-to-list 'ispell-skip-region-alist '("^#\\+BEGIN_SRC" . "^#\\+END_SRC")))
+  :hook ((org-mode markdown-mode) . my/org-ispell)
   :config (progn
-            (defun my/org-ispell ()
-              "Configure `ispell-skip-region-alist' for `org-mode'."
-              (make-local-variable 'ispell-skip-region-alist)
-              (add-to-list 'ispell-skip-region-alist '(org-property-drawer-re))
-              (add-to-list 'ispell-skip-region-alist '("~" "~"))
-              (add-to-list 'ispell-skip-region-alist '("=" "="))
-              (add-to-list 'ispell-skip-region-alist '("```" "```"))
-              (add-to-list 'ispell-skip-region-alist '("^#\\+BEGIN_SRC" . "^#\\+END_SRC")))
-            (add-hook 'org-mode-hook #'my/org-ispell)
-            (add-hook 'markdown-mode-hook #'my/org-ispell)
-
             ;; Find aspell and hunspell automatically
             (cond
              ;; try hunspell at first
@@ -155,7 +153,6 @@ Don't read buffer-local settings or word lists."
           (dolist (hook my/flyspell-modes-disabled)
             (add-hook hook (lambda () (flyspell-mode -1)))))
   :config (progn
-
             (defun flyspell-ajust-cursor-point (save cursor-location old-max)
               (when (not (looking-at "\\b"))
                 (forward-word)))
@@ -194,17 +191,16 @@ Don't read buffer-local settings or word lists."
 ;; Langtool
 (use-package langtool
   :if (executable-find "java")
+  :custom ((langtool-mother-tongue "en")
+           (langtool-disabled-rules '("WHITESPACE_RULE"
+                                      "EN_UNPAIRED_BRACKETS"
+                                      "COMMA_PARENTHESIS_WHITESPACE"
+                                      "EN_QUOTES")))
   :config (progn
-
             ;; tool settings
             (setq langtool-language-tool-jar (expand-file-name
                                               "jar/LanguageTool-3.2/languagetool-commandline.jar"
-                                              user-emacs-directory)
-                  langtool-mother-tongue "en"
-                  langtool-disabled-rules '("WHITESPACE_RULE"
-                                            "EN_UNPAIRED_BRACKETS"
-                                            "COMMA_PARENTHESIS_WHITESPACE"
-                                            "EN_QUOTES"))
+                                              user-emacs-directory))
 
             ;; Show LanguageTool report automatically by popup
             ;; This idea come from: http://d.hatena.ne.jp/LaclefYoshi/20150912/langtool_popup
