@@ -73,7 +73,7 @@
                              '(project unloaded system recursive))
 
             ;; Enable decoration mode
-            (global-semantic-decoration-mode t)
+            ;; (global-semantic-decoration-mode t)
 
             ;; Define missing variable and disable mode
             (defvar global-semantic-idle-summary-mode nil)
