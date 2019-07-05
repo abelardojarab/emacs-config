@@ -113,7 +113,7 @@
   :type 'list)
 
 (defcustom my/emacs-theme-console
-  'monokai
+  'material
   "Preferred Emacs theme"
   :group 'my/customs
   :type 'list)
