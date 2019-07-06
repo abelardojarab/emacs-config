@@ -59,6 +59,9 @@ url/cache/
 # cedet
 ede-projects.el
 
+# history
+history.el
+
 # smex
 smex-items
 
