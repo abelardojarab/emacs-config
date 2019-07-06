@@ -1,6 +1,6 @@
 ;;; setup-post.el ---                                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -116,7 +116,7 @@
     (my/set-face-fringe)
     (my/set-face-tabbar)
     (my/set-face-ecb)
-    (doom-modeline-init)
+    (doom-modeline-mode t)
 
     ;; remove modeline boxes
     (set-face-attribute 'mode-line nil :box nil)
@@ -133,7 +133,7 @@
                                  (my/set-face-ecb)
 
                                  ;; Set the modeline
-                                 (doom-modeline-init)
+                                 (doom-modeline-mode t)
                                  )))
 
 (provide 'setup-post)

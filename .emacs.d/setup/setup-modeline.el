@@ -1,6 +1,6 @@
 ;;; setup-modeline.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018 Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2019 Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -26,11 +26,9 @@
 
 ;; Nyan cat
 (use-package nyan-mode
-  :if (display-graphic-p)
   :commands nyan-mode
-  :config (progn
-            (nyan-mode t)
-            (nyan-start-animation)))
+  :custom (nyan-cat-face-number 4)
+  :hook (doom-modeline-mode . nyan-mode))
 
 ;; Powerline
 (use-package powerline
@@ -70,8 +68,12 @@
 ;; Doom modeline
 (use-package doom-modeline
   :defer t
-  :commands doom-modeline-init
-  :hook (after-init . doom-modeline-init))
+  :commands doom-modeline-mode
+  :hook (after-init . doom-modeline-mode)
+  :custom ((doom-modeline-buffer-file-name-style 'truncate-with-project)
+           (doom-modeline-icon            t)
+           (doom-modeline-major-mode-icon t)
+           (doom-modeline-minor-modes     nil)))
 
 (provide 'setup-modeline)
 ;;; setup-modeline.el ends here
