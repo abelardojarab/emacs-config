@@ -27,8 +27,7 @@
 ;; Nyan cat
 (use-package nyan-mode
   :commands nyan-mode
-  :custom (nyan-cat-face-number 4)
-  :hook (doom-modeline-mode . nyan-mode))
+  :custom (nyan-cat-face-number 4))
 
 ;; Powerline
 (use-package powerline

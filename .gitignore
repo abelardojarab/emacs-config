@@ -37,6 +37,9 @@ history
 # .cask/
 # dist/
 
+# Recent
+recentf
+
 # Flycheck
 flycheck_*.el
 
