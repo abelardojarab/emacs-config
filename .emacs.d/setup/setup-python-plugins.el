@@ -1,6 +1,6 @@
 ;;; setup-python-plugins.el ---                      -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -97,6 +97,10 @@
                        '(company-anaconda
                          :with company-yasnippet
                          :with company-capf))))
+
+;; Microsoft Python Language Server
+(use-package lsp-python-ms
+  :hook (python-mode . lsp))
 
 ;; Jupyter notebook
 ;; Usage

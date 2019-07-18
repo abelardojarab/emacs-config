@@ -1,5 +1,5 @@
 ;; -*-mode: Emacs-Lisp; -*-
-;; Copyright (C) 1996-2018 Abelardo Jara-Berrocal
+;; Copyright (C) 1996-2019 Abelardo Jara-Berrocal
 ;; URL: http://jaraberrocal.readmyblog.org
 ;; This file is free software licensed under the terms of the
 ;; GNU General Public License, version 3 or later.
@@ -247,6 +247,7 @@
 (depends-on "loop")
 ;; (depends-on "lorg-calendar")
 (depends-on "lsp-mode")
+(depends-on "lsp-python-ms")
 (depends-on "lsp-ui")
 (depends-on "magic-latex-buffer")
 (depends-on "magit")
@@ -254,6 +255,7 @@
 (depends-on "makey")
 (depends-on "markdown-mode")
 (depends-on "math-symbol-lists")
+(depends-on "mbsync")
 (depends-on "memoize")
 (depends-on "metaweblog")
 (depends-on "mocker")

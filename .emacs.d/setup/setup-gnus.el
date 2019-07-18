@@ -1,6 +1,6 @@
 ;;; setup-gnus.el ---                         -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -29,18 +29,15 @@
   :defer t
   :custom (mime-edit-split-message nil))
 
-;; Electric completions of email addresses and the like
+;; Electric completions of email addresses
 (use-package ecomplete)
 
 ;; To be able to search within your gmail/imap mail
 (use-package nnir
-  :config (setq nnmail-expiry-wait 30
-                nnmail-crosspost nil
-                nnmail-extra-headers (quote (To Cc Newsgroups))
-                nnmail-scan-directory-mail-source-once t
-
-                ;; Directory containing Unix mbox; defaults to message-directory
-                nnfolder-directory "~/Mail"))
+  :custom ((nnmail-expiry-wait 30)
+           (nnmail-crosspost nil)
+           (nnmail-scan-directory-mail-source-once t)
+           (nnfolder-directory "~/Mail")))
 
 ;; Gnus
 (use-package gnus
@@ -137,12 +134,11 @@
 
             ;; Mode hooks
             (add-hook 'gnus-group-mode-hook   #'gnus-topic-mode)
-            (add-hook 'gnus-group-mode-hook   #'hl-line-mode)
-            (add-hook 'gnus-summary-mode-hook #'hl-line-mode)
 
             ;; Truncate lines
             (mapc (lambda (mode)
                     (add-hook mode (lambda ()
+                                     (hl-line-mode t)
                                      (visual-line-mode -1)
                                      (toggle-truncate-lines t)
                                      (setq truncate-lines t))))
@@ -181,15 +177,12 @@
 ;; To be able to send email with your gmail/smtp mail
 (use-package smtpmail
   :after gnus
-  :config (progn
-            ;; Using smptmail to assure portability; we dont always have postfix
-            (setq message-send-mail-function 'smtpmail-send-it
-                  send-mail-function         'smtpmail-send-it
-                  smtpmail-smtp-server       "smtp.gmail.com"
-                  smtpmail-smtp-service      465
-                  smtpmail-debug-info        t
-                  ;; StartTLS is evil.
-                  smtpmail-stream-type       'ssl)))
+  :custom ((message-send-mail-function 'smtpmail-send-it)
+           (send-mail-function         'smtpmail-send-it)
+           (smtpmail-smtp-server       "smtp.gmail.com")
+           (smtpmail-smtp-service      465)
+           (smtpmail-debug-info        t)
+           (smtpmail-stream-type       'ssl)))
 
 ;; apel
 (use-package apel
@@ -215,6 +208,9 @@
   :demand t
   :commands my/message-mode-init
   :hook (message-mode . my/message-mode-init)
+  :custom ((message-generate-headers-first t)
+           (message-kill-buffer-on-exit    t)
+           (message-signature-file         ".signature"))
   :config (progn
 
             ;; decode html
@@ -253,11 +249,6 @@
               "Copy buffer to kill ring."
               (interactive)
               (kill-ring-save (point-min) (point-max)))
-
-            ;; message preferences
-            (setq message-generate-headers-first t
-                  message-kill-buffer-on-exit    t
-                  message-signature-file         ".signature")
 
             ;; message mode hooks
             (defun my/message-mode-init ()
@@ -315,6 +306,12 @@
   :after (dired all-the-icons gnus)
   :commands all-the-icons-gnus-setup
   :hook (gnus-group-mode . all-the-icons-gnus-setup))
+
+;; Easy integration of mbsync with gnus
+(use-package mbsync
+  :hook (mbsync-exit . gnus-group-get-new-news)
+  :bind (:map gnus-group
+              ("f" . 'mbsync)))
 
 (provide 'setup-gnus)
 ;;; setup-gnus.el ends here

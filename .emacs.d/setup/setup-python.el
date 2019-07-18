@@ -1,6 +1,6 @@
 ;;; setup-python.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -71,7 +71,7 @@
               ("TAB" . py-indent-line))
   :preface (defun check-python-module (&optional module)
              (and (executable-find "python3")
-		  (= 0 (call-process "python3"  nil nil nil "-c"
+          (= 0 (call-process "python3"  nil nil nil "-c"
                                      (concat "import "
                                              (if module module "jedi"))))))
   :custom ((py-shell-name                        "python3")
