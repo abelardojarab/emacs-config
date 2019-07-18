@@ -130,7 +130,8 @@ Suitable for inclusion in `c-offsets-alist'."
                         (statement-case-open . +)
                         (statement-case-intro . +) ; case w/o {
                         (access-label . -) ;; before it was /
-                        (innamespace . -))))
+                        (innamespace . -)
+                        (inextern-lang . -))))
   "Google C/C++ Programming Style.")
 
 (defun my/c-lineup-arglist-lambda (langelem)
