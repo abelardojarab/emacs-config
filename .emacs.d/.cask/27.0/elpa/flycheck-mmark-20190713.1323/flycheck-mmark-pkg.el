@@ -1,0 +1,2 @@
+;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/flycheck-mmark-20190713.1323/flycheck-mmark.el  -*- no-byte-compile: t -*-
+(define-package "flycheck-mmark" "20190713.1323" "Flycheck checker for the MMark markdown processor" '((emacs "24.4") (flycheck "0.29")) :commit "c796a2f18884bfc2afeec1fb2060da0f4044ddee" :keywords '("convenience" "text") :authors '(("Mark Karpov" . "markkarpov92@gmail.com")) :maintainer '("Mark Karpov" . "markkarpov92@gmail.com") :url "https://github.com/mmark-md/flycheck-mmark")
