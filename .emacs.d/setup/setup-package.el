@@ -126,7 +126,8 @@ corresponding `.el' file."
 (use-package irony               :defer t :load-path (lambda () (expand-file-name "irony-mode/" user-emacs-directory)))
 
 ;; Package information
-(use-package pkg-info :demand t)
+(use-package pkg-info
+  :demand t)
 
 ;; Paradox
 (use-package paradox
@@ -159,11 +160,10 @@ corresponding `.el' file."
            (auto-compile-source-recreate-deletes-dest t)
            (auto-compile-toggle-deletes-nonlib-dest   t)
            (auto-compile-update-autoloads             t))
+  :hook (auto-compile-inhibit-compile . auto-compile-inhibit-compile-detached-git-head)
   :config (progn
             (auto-compile-on-load-mode)
-            (auto-compile-on-save-mode)
-            (add-hook 'auto-compile-inhibit-compile-hook
-                      'auto-compile-inhibit-compile-detached-git-head)))
+            (auto-compile-on-save-mode)))
 
 (provide 'setup-package)
 ;;; setup-package.el ends here

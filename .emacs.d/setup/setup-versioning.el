@@ -1,6 +1,6 @@
 ;;; setup-versioning.el ---                         -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -71,9 +71,9 @@
 (use-package psvn
   :defer t
   :after vc
-  :config (setq svn-status-hide-unmodified        t
-                svn-status-hide-unknown           t
-                svn-status-svn-file-coding-system 'utf-8))
+  :custom ((svn-status-hide-unmodified        t)
+           (svn-status-hide-unknown           t)
+           (svn-status-svn-file-coding-system 'utf-8)))
 
 ;; git-modes (not available in melpa)
 (use-package git-modes
@@ -139,14 +139,32 @@
          (git-commit-mode-hook . my/magit-commit-mode-init)
          (git-commit-setup     . my/magit-commit-prompt))
   :custom ((with-editor-file-name-history-exclude '("1"))
-           (magit-last-seen-setup-instructions    "1.4.0"))
+           (magit-last-seen-setup-instructions   "1.4.0")
+           (magit-default-tracking-name-function 'magit-default-tracking-name-branch-only)
+           (magit-status-buffer-switch-function  'switch-to-buffer)
+           (magit-process-popup-time             10)
+           (magit-save-some-buffers              t)
+           (magit-set-upstream-on-push           'askifnotset)
+           (magit-diff-refine-hunk               t)
+           (magit-completing-read-function       'ivy-completing-read)
+           (magit-rewrite-inclusive              'ask)
+           (magit-backup-mode                    nil)
+           (magit-auto-revert-mode               nil)
+           (magit-refresh-file-buffer-hook       nil)
+           (magit-turn-on-auto-revert-mode       nil)
+           (magit-revert-buffers                 'silent)
+           (magit-keep-region-overlay            t)
+           (magit-refs-show-commit-count         'all)
+           (git-commit-fill-column               120)
+           (git-commit-summary-max-length        80)
+           (auto-revert-verbose                  nil))
   :init (progn
           (setenv "GIT_PAGER" "")
 
           ;; we no longer need vc-git
           (delete 'Git vc-handled-backends)
 
-	  ;; Ignore magit error
+          ;; Ignore magit error
           (defadvice magit-wip-commit-worktree (around bar activate)
             (ignore-errors add-do-it))
 
@@ -187,37 +205,8 @@
               (open-line 1))))
   :config (progn
 
-            ;; don't put "origin-" in front of new branch names by default
-            (setq magit-default-tracking-name-function 'magit-default-tracking-name-branch-only
-                  ;; open magit status in same window as current buffer
-                  magit-status-buffer-switch-function 'switch-to-buffer
-                  ;; pop the process buffer if we're taking a while to complete
-                  magit-process-popup-time 10
-                  ;; ask me to save buffers
-                  magit-save-some-buffers t
-                  ;; ask me if I want a tracking upstream
-                  magit-set-upstream-on-push 'askifnotset
-                  ;; highlight word/letter changes in hunk diffs
-                  magit-diff-refine-hunk t
-                  ;; use ivy to look for branches
-                  magit-completing-read-function 'ivy-completing-read
-                  ;; ask me if I want to include a revision when rewriting
-                  magit-rewrite-inclusive 'ask
-                  ;; this is too expensive to have on by default
-                  magit-backup-mode nil
-                  ;; don't revert automatically,
-                  magit-auto-revert-mode nil
-                  magit-refresh-file-buffer-hook nil ;; obsolete
-                  magit-turn-on-auto-revert-mode nil ;; obsolete
-                  magit-revert-buffers 'silent ;; obsolete
-                  magit-keep-region-overlay t
-                  ;; attempt to disable magit-auto-revert-immediately
-                  magit-auto-revert-immediately (null (and (boundp 'auto-revert-use-notify)
-                                                           auto-revert-use-notify))
-                  magit-refs-show-commit-count 'all
-                  git-commit-fill-column 120
-                  git-commit-summary-max-length 80
-                  auto-revert-verbose nil)
+            (setq magit-auto-revert-immediately (null (and (boundp 'auto-revert-use-notify)
+                                                           auto-revert-use-notify)))
 
             ;; Customize lighters
             (delight
@@ -236,7 +225,7 @@
             ;; Face setup
             (set-face-foreground 'magit-hash (face-foreground 'font-lock-type-face))
 
-            ;; restore previously hidden windows
+            ;; Restore previously hidden windows
             (defadvice magit-quit-window (around magit-restore-screen activate)
               (let ((current-mode major-mode))
                 ad-do-it
@@ -457,11 +446,11 @@
              git-gutter:stage-hunk
              git-gutter:next-hunk
              git-gutter:previous-hunk
-	     hydra-git-gutter/body)
+             hydra-git-gutter/body)
   :hook (magit-post-refresh . git-gutter:update-all-windows)
   :config (progn
 
-	    ;; Hydra binding for git-gutter
+            ;; Hydra binding for git-gutter
             (defhydra hydra-git-gutter (:body-pre (git-gutter-mode 1)
                                                   :hint nil)
               "
