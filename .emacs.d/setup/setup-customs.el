@@ -107,7 +107,7 @@
   :group 'my/customs)
 
 (defcustom my/emacs-theme
-  'leuven
+  'monokai
   "Preferred Emacs theme"
   :group 'my/customs
   :type 'list)
