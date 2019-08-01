@@ -48,7 +48,7 @@
 		   ("Stefan Monnier" . "monnier@iro.umontreal.ca"))
 		  (:maintainer "Stephen Berman" . "stephen.berman@gmx.net"))])
  (adjust-parens .
-		[(3 0)
+		[(3 1)
 		 nil "Indent and dedent Lisp code, automatically adjust close parens" tar
 		 ((:maintainer "Barry O'Reilly" . "gundaetiapo@gmail.com")
 		  (:authors
@@ -120,7 +120,11 @@
 			 (:url . "http://www.gnuvola.org/software/aa2u/"))])
  (async .
 	[(1 9 2)
-	 nil "Asynchronous processing in Emacs" tar
+	 ((cl-lib
+	   (0 5))
+	  (nadvice
+	   (0 3)))
+	 "Asynchronous processing in Emacs" tar
 	 ((:url . "https://github.com/jwiegley/emacs-async")
 	  (:maintainer "John Wiegley" . "jwiegley@gmail.com")
 	  (:authors
@@ -440,7 +444,11 @@
 	    (:url . "http://elpa.gnu.org/packages/debbugs.html"))])
  (delight .
 	  [(1 5)
-	   nil "A dimmer switch for your lighter text." single
+	   ((cl-lib
+	     (0 5))
+	    (nadvice
+	     (0 3)))
+	   "A dimmer switch for your lighter text" single
 	   ((:keywords "convenience")
 	    (:authors
 	     ("Phil Sainty" . "psainty@orcon.net.nz"))
@@ -627,7 +635,7 @@
 	   ("João Távora" . "joaotavora@gmail.com"))
 	  (:keywords "convenience" "languages"))])
  (el-search .
-	    [(1 12 5)
+	    [(1 12 6)
 	     ((emacs
 	       (25))
 	      (stream
@@ -983,7 +991,7 @@
 	       ("Michael Heerdegen" . "michael_heerdegen@web.de"))
 	      (:maintainer "Michael Heerdegen" . "michael_heerdegen@web.de"))])
  (ivy .
-      [(0 11 0)
+      [(0 12 0)
        ((emacs
 	 (24 1)))
        "Incremental Vertical completYon" tar
@@ -1082,7 +1090,7 @@
 	      ("Terrence Brannon" . "metaperl@gmail.com"))
 	     (:maintainer nil . "emacs-devel@gnu.org"))])
  (let-alist .
-   [(1 0 5)
+   [(1 0 6)
     ((emacs
       (24 1)))
     "Easily let-bind values of an assoc-list by their names" single
@@ -1908,7 +1916,8 @@
        ((:url . "http://elpa.gnu.org/packages/svg.html")
 	(:keywords "image")
 	(:authors
-	 ("Lars Magne Ingebrigtsen" . "larsi@gnus.org"))
+	 ("Lars Magne Ingebrigtsen" . "larsi@gnus.org")
+	 ("Felix E. Klee" . "felix.klee@inka.de"))
 	(:maintainer "Lars Magne Ingebrigtsen" . "larsi@gnus.org"))])
  (svg-clock .
 	    [(1 0)
@@ -1979,7 +1988,7 @@
 	  ("Oleh Krehel" . "ohwoeowho@gmail.com"))
 	 (:keywords "convenience"))])
  (tramp .
-	[(2 4 2)
+	[(2 4 2 1)
 	 ((emacs
 	   (24 4)))
 	 "Transparent Remote Access, Multiple Protocol" tar

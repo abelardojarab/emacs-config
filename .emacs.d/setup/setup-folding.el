@@ -1,6 +1,6 @@
 ;;; setup-folding.el ---                       -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -156,26 +156,26 @@
   :custom ((outshine-use-speed-commands                t)
            (outshine-org-style-global-cycling-at-bob-p t))
   :config (progn
-    (defvar-local my/outshine-allow-space-before-heading nil
-      "When non-nil, allow outshine heading to begin with whitespace.
+            (defvar-local my/outshine-allow-space-before-heading nil
+              "When non-nil, allow outshine heading to begin with whitespace.
 For example, when non-nil, do not require the \"// *\" style
 comments used by `outshine' to start at column 0 in `verilog-mode.'")
 
-    (defun my/outshine-calc-outline-regexp (orig-ret)
-      "Prefix the outline regexp with whitespace regexp, may be.
+            (defun my/outshine-calc-outline-regexp (orig-ret)
+              "Prefix the outline regexp with whitespace regexp, may be.
 Do this if `my/outshine-allow-space-before-heading' is non-nil."
-      (let ((ret orig-ret))
-        (when my/outshine-allow-space-before-heading
-          (setq ret (concat "[[:blank:]]*" orig-ret)))
-        ret))
-    (advice-add 'outshine-calc-outline-regexp :filter-return #'my/outshine-calc-outline-regexp)))
+              (let ((ret orig-ret))
+                (when my/outshine-allow-space-before-heading
+                  (setq ret (concat "[[:blank:]]*" orig-ret)))
+                ret))
+            (advice-add 'outshine-calc-outline-regexp :filter-return #'my/outshine-calc-outline-regexp)))
 
 ;; Fast Emacs navigation and control
 (use-package navi-mode
   :after outshine
   :commands (navi-search-and-switch)
   :config (setf (cdr (assoc :ALL (cdr (assoc "emacs-lisp" navi-keywords))))
-        "^[[:space:]]*(\\(use-package\\|\\(cl-\\)\\{0,1\\}def[a-z]+\\)\\*? "))
+                "^[[:space:]]*(\\(use-package\\|\\(cl-\\)\\{0,1\\}def[a-z]+\\)\\*? "))
 
 ;; Outline navigation, similar to outshine-navi
 (use-package helm-navi
@@ -379,21 +379,21 @@ If prefix argument is used, `set-selective-display' to the current column."
   :custom-face
   (origami-fold-replacement-face ((t (:inherit magit-diff-context-highlight))))
   (origami-fold-fringe-face ((t (:inherit magit-diff-context-highlight))))
-  :config (progn (face-spec-reset-face 'origami-fold-header-face)
-                 (defhydra hydra-origami (:color blue :hint none)
-                   "
+  :config (progn
+            (face-spec-reset-face 'origami-fold-header-face)
+            (defhydra hydra-origami (:color blue :hint none)
+              "
       _:_: recursively toggle node       _a_: toggle all nodes    _t_: toggle node
       _o_: show only current node        _u_: undo                _r_: redo
       _R_: reset
       "
-                   (":" origami-recursively-toggle-node)
-                   ("a" origami-toggle-all-nodes)
-                   ("t" origami-toggle-node)
-                   ("o" origami-show-only-node)
-                   ("u" origami-undo)
-                   ("r" origami-redo)
-                   ("R" origami-reset)
-                   )))
+              (":" origami-recursively-toggle-node)
+              ("a" origami-toggle-all-nodes)
+              ("t" origami-toggle-node)
+              ("o" origami-show-only-node)
+              ("u" origami-undo)
+              ("r" origami-redo)
+              ("R" origami-reset))))
 
 (provide 'setup-folding)
 ;;; setup-hideshow.el ends here

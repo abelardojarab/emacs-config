@@ -1,0 +1,211 @@
+[[./hercules.png]]
+
+An auto-magical, =which-key= based =hydra= banisher.
+
+* Overview
+** Standalone
+With almost no set-up code, =hercules.el= lets you call any group of
+related command sequentially with no prefix keys, while showing a
+handy popup to remember the bindings for those commands. =hercules.el=
+can create both of these (the grouped commands, and the popup) from
+any keymap. Here's what that looks like:
+
+#+BEGIN_SRC emacs-lisp
+  (hercules-def
+   :toggle-funs #'macrostep-mode
+   :keymap 'macrostep-keymap)
+   
+  (define-key <map> "<key>" #'macrostep-mode)
+#+END_SRC
+
+[[./hercules.gif]]
+
+** Relative to Other Packages
+If only there was a way to make a =hydra= without having to list all
+the bindings explicitly... Kind of like =which-key=...
+
+=hercules.el= implements the functionality of
+[[https://github.com/abo-abo/hydra][hydra]] by leveraging
+[[https://github.com/justbur/emacs-which-key][which-key]] auto-magic.
+
+Unlike =hydra=, =hercules.el= entry and exit points are associated
+with functions, not keys. Keys, on the other hand, are defined by
+traditional keymaps, which you can use as-is, or tweak to your liking
+using your tool of choice. =hercules.el= doesn't force this choice on
+you. That said, I highly recommend
+[[https://github.com/noctuid/general.el][general.el]].
+
+Ultimately, =hercules.el= saves you time by relying on work that has
+already been done for you --- usually, but not necessarily, as part of
+a time-tested minor-mode. The resulting interfaces tend to be more
+comprehensive than home-grown =hydras=, thus aiding you in
+discovering new functionality.
+
+Allow me to illustrate my point using an example from =hydras= README:
+
+*** Hydra Setup
+#+BEGIN_SRC emacs-lisp
+  (defhydra hydra-buffer-menu (:color pink
+                               :hint nil)
+    "
+  ^Mark^             ^Unmark^           ^Actions^          ^Search
+  ^^^^^^^^-----------------------------------------------------------------
+  _m_: mark          _u_: unmark        _x_: execute       _R_: re-isearch
+  _s_: save          _U_: unmark up     _b_: bury          _I_: isearch
+  _d_: delete        ^ ^                _g_: refresh       _O_: multi-occur
+  _D_: delete up     ^ ^                _T_: files only: % -28`Buffer-menu-files-only
+  _~_: modified
+  "
+    ("m" Buffer-menu-mark)
+    ("u" Buffer-menu-unmark)
+    ("U" Buffer-menu-backup-unmark)
+    ("d" Buffer-menu-delete)
+    ("D" Buffer-menu-delete-backwards)
+    ("s" Buffer-menu-save)
+    ("~" Buffer-menu-not-modified)
+    ("x" Buffer-menu-execute)
+    ("b" Buffer-menu-bury)
+    ("g" revert-buffer)
+    ("T" Buffer-menu-toggle-files-only)
+    ("O" Buffer-menu-multi-occur :color blue)
+    ("I" Buffer-menu-isearch-buffers :color blue)
+    ("R" Buffer-menu-isearch-buffers-regexp :color blue)
+    ("c" nil "cancel")
+    ("v" Buffer-menu-select "select" :color blue)
+    ("o" Buffer-menu-other-window "other-window" :color blue)
+    ("q" quit-window "quit" :color blue))
+
+  (define-key Buffer-menu-mode-map "." 'hydra-buffer-menu/body)
+#+END_SRC
+
+*** hercules.el Setup
+NOTE: This is the equivalent of hydra's buffer setup applied to window
+manipulation, since I don't use buffer-menu. Implementing it yourself
+should be trivial.
+#+BEGIN_SRC emacs-lisp
+  (hercules-def
+   :show-funs #'windresize
+   :hide-funs '(windresize-exit windresize-cancel-and-quit)
+   :keymap 'windresize-map)
+   
+  (define-key <map> "<key>" #'windresize)
+#+END_SRC
+
+** Bonus
+Last, and definitely least, =hercules.el= provides a more consistent
+interface for all your keybinding popup needs (the same =which-key= UI
+throughout your config).
+
+* Motivation 
+As mentioned, I initially wrote =hercules.el= to avoid reinventing the
+wheel by creating elaborate hydras for minor-modes that already worked
+like they had them, merely lacking the handy popup. These include:
+
+- =macrostep-mode=
+- =edebug-mode=
+- =debugger-mode=
+- =windresize=
+- many more
+  
+But =hercules.el= can use any keymap you have lying around, even if
+there's no mode associated with it. Just make one up. For example, you
+can steal =org-babel-map= and whip up what used to be a massive
+=hydra= in seconds:
+
+#+BEGIN_SRC emacs-lisp
+  (hercules-def
+   :toggle-funs #'org-babel-mode
+   :keymap 'org-babel-map
+   :transient t)
+   
+  (define-key <map> "<key>" #'org-babel-mode)
+#+END_SRC
+
+Pressing any key outside the map will leave the pseudo-mode and hide
+the =hercules.el= pop-up if *TRANSIENT* is =t=. But you can also use
+the *HIDE-FUNS* and *TOGGLE-FUNS* arguments to do the same while
+executing one last Hail Mary command. Combining them is not a problem
+either.
+
+Too crowded for you?
+
+#+BEGIN_SRC emacs-lisp
+  (hercules-def
+   :toggle-funs #'org-babel-mode
+   :keymap 'org-babel-map
+   :whitelist-keys '("n" "p" "t")
+   :transient t)
+   
+  (define-key <map> "<key>" #'org-babel-mode)
+#+END_SRC
+
+You can also use *BLACKLIST-KEYS*, *BLACKLIST-FUNS*, and
+*WHITELIST-FUNS*. to this end.
+
+What about defining =hercules.el= pop-ups from scratch? Easy. Keep in
+mind this would usually take 3 =defhydra= calls that would need to be
+explicitly connected.
+
+#+BEGIN_SRC emacs-lisp
+  (hercules-def
+   :toggle-funs #'my-random-mode
+   :keymap 'my-random-map
+   :transient t
+   :config '(general-def
+              :prefix-map 'my-random-map
+              "f" #'foo
+              "b" #'bar
+              "z" #'baz
+              "m" '(:ignore t :wk "mmap")
+              "mf" #'mfoo
+              "mb" #'mbar
+              "mz" #'mbaz
+              "n" '(:ignore t :wk "nmap")
+              "nf" #'nfoo
+              "nb" #'nbar
+              "nz" #'nbaz))
+
+  (define-key <map> "<key>" #'my-random-mode)
+#+END_SRC
+
+* Interface
+The only userland function you should concern yourself with is
+=hercules-def=. As such, you should get to know it well.
+
+** Arguments
+*TOGGLE-FUNS*, *SHOW-FUNS*, and *HIDE-FUNS* define entry and exit
+points for hercules.el to show *KEYMAP*. Both single functions and
+lists work. As all other arguments to =hercules-def=, these must be
+quoted.
+
+*KEYMAP* specifies the keymap for =hercules.el= to make a pop-up out
+of.  If *KEYMAP* is =nil=, it is assumed that one of *SHOW-FUNS* or
+*TOGGLE-FUNS* results in a =which-key--show-popup= call. This may be
+useful for functions such as =which-key-show-top-level=. I use it to
+remind myself of some obscure Evil commands from time to time.
+
+*BLACKLIST-KEYS* and *WHITELIST-KEYS* specify which (=kbd=
+interpretable) keys should removed from/allowed to remain on
+*KEYMAP*. Handy if you want to unbind things in bulk and don't want to
+get your hands dirty with keymaps. Both single characters and lists
+work. Blacklists take precedence over whitelists.
+
+*BLACKLIST-FUNS* and *WHITELIST-FUNS* are analogous to
+*BLACKLIST-KEYS* and *WHITELIST-KEYS* except that they operate on
+function symbols. These might be useful if a keymap specifies multiple
+bindings for a commands and pruning it is more efficient this
+way. Blacklists again take precedence over whitelists.
+
+*PACKAGE* must be passed along with *BLACKLIST-KEYS*,
+*WHITELIST-KEYS*, *BLACKLIST-FUNS*, or *WHITELIST-FUNS* if *KEYMAP*
+belongs to a lazy loaded package. Its contents should be the package
+name as a quoted symbol.
+
+Setting *TRANSIENT* to =t= allows you to get away with not setting
+*HIDE-FUNS* or *TOGGLE-FUNS* by dismissing hercules.el whenever you
+press a key not on *KEYMAP*.
+
+*CONFIG* is a quoted s-expression for the pedantic among us who would
+like to keep related configurations together. This might be useful if
+you wish to manually tweak *KEYMAP*, or even create a new one from
+scratch.

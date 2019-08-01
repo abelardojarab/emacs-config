@@ -1,6 +1,6 @@
 ;;; setup-docker.el ---                            -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -33,13 +33,13 @@
 (use-package docker
   :bind ("C-c d" . hydra-docker/body)
   :config (defhydra hydra-docker (:columns 5 :color blue)
-	    "Docker"
-	    ("c" docker-containers "Containers")
-	    ("v" docker-volumes "Volumes")
-	    ("i" docker-images "Images")
-	    ("n" docker-networks "Networks")
-	    ("b" dockerfile-build-buffer "Build Buffer")
-	    ("q" nil "Quit")))
+            "Docker"
+            ("c" docker-containers "Containers")
+            ("v" docker-volumes "Volumes")
+            ("i" docker-images "Images")
+            ("n" docker-networks "Networks")
+            ("b" dockerfile-build-buffer "Build Buffer")
+            ("q" nil "Quit")))
 
 ;;; Code:
 
