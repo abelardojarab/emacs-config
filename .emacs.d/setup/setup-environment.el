@@ -201,7 +201,8 @@
               (when (executable-find "gls")
                 (setq insert-directory-program "gls"))
               ;; Derive PATH by running a shell so that GUI Emacs sessions have access to it
-              (exec-path-from-shell-initialize)
+              ;; (exec-path-from-shell-initialize)
+
               ;; Correctly parse exec-path when PATH delimiter is a space
               (when (equal (file-name-nondirectory (getenv "SHELL")) "fish")
                 (setq exec-path (split-string (car exec-path) " "))
@@ -299,7 +300,8 @@ LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
 (use-package exec-path-from-shell
   :defer t
   :if (equal system-type 'darwin)
-  :init (exec-path-from-shell-initialize)
+  :config (exec-path-from-shell-initialize)
+  :commands (exec-path-from-shell-initialize)
   :custom (exec-path-from-shell-check-startup-files nil))
 
 ;; Display the time in the mode-line
