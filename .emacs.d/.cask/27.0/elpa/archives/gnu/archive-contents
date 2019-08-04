@@ -762,15 +762,15 @@
 	     ("Pavel Kobyakov" . "pk_at_work@yahoo.com"))
 	    (:maintainer "João Távora" . "joaotavora@gmail.com"))])
  (fountain-mode .
-		[(2 7 1)
+		[(2 7 2)
 		 ((emacs
 		   (24 5)))
 		 "Major mode for screenwriting in Fountain markup" single
-		 ((:url . "http://elpa.gnu.org/packages/fountain-mode.html")
-		  (:keywords "wp" "text")
+		 ((:keywords "wp" "text")
 		  (:authors
-		   ("Paul W. Rankin" . "hello@paulwrankin.com"))
-		  (:maintainer "Paul W. Rankin" . "hello@paulwrankin.com"))])
+		   ("Paul W. Rankin" . "pwr@sdf.org"))
+		  (:maintainer "Paul W. Rankin" . "pwr@sdf.org")
+		  (:url . "https://fountain-mode.org"))])
  (frame-tabs .
 	     [(1 1)
 	      nil "show buffer tabs in side window" single
