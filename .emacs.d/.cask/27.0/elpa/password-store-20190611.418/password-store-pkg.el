@@ -1,2 +1,0 @@
-;;; -*- no-byte-compile: t -*-
-(define-package "password-store" "20190611.418" "Password store (pass) support" '((emacs "25") (f "0.11.0") (s "1.9.0") (with-editor "2.5.11")) :commit "5a52772156b44ef9785e91ab78ab2e1c3b1e510e" :keywords '("tools" "pass" "password" "password-store") :authors '(("Svend Sorensen" . "svend@svends.net")) :maintainer '("Svend Sorensen" . "svend@svends.net") :url "https://www.passwordstore.org/")
