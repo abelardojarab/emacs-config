@@ -1,6 +1,6 @@
 ;;; setup-lsp.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -27,11 +27,13 @@
 ;; lsp-mode:  Emacs client/library for the Language Server Protocol
 (use-package lsp-mode
   :demand t
-  :commands lsp)
+  :commands lsp
+  :config (use-package dash
+            :demand t))
 
 (use-package lsp-clients
   :demand t
-  :after lsp
+  :after lsp-mode
   :commands lsp-define-stdio-client)
 
 ;; make sure we have lsp-imenu everywhere we have LSP
@@ -41,15 +43,15 @@
 ;; lsp-ui: This contains all the higher level UI modules of lsp-mode, like flycheck support and code lenses.
 (use-package lsp-ui
   :custom ((lsp-ui-sideline-enable               nil)
-	   (lsp-ui-doc-enable                    nil)
-	   (lsp-ui-flycheck-enable               t)
-	   (lsp-ui-imenu-enable                  t)
-	   (lsp-ui-sideline-ignore-duplicate     t )
-	   (lsp-ui-sideline-show-symbol          nil))
+           (lsp-ui-doc-enable                    nil)
+           (lsp-ui-flycheck-enable               t)
+           (lsp-ui-imenu-enable                  t)
+           (lsp-ui-sideline-ignore-duplicate     t )
+           (lsp-ui-sideline-show-symbol          nil))
   :hook (lsp-mode . lsp-ui-mode)
   :config (progn
-	    (if (display-graphic-p)
-		(setq lsp-ui-sideline-code-actions-prefix "ℹ "))
+            (if (display-graphic-p)
+                (setq lsp-ui-sideline-code-actions-prefix "ℹ "))
 
             (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
             (define-key lsp-ui-mode-map [remap xref-find-references]  #'lsp-ui-peek-find-references)))

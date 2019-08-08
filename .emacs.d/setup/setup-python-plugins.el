@@ -27,9 +27,9 @@
 ;; Jedi settings
 (use-package python-environment
   :demand t
-  :init (setq python-environment-directory (concat (file-name-as-directory
-                                                    my/emacs-cache-dir)
-                                                   "python-environments")))
+  :custom (python-environment-directory (concat (file-name-as-directory
+                                                 my/emacs-cache-dir)
+                                                "python-environments")))
 
 ;; Inter-process communication
 (use-package epc
@@ -61,7 +61,10 @@
 (use-package conda
   :defer t
   :if (file-exists-p "/opt/anaconda3/bin/conda")
-  :init (setq conda-anaconda-home "/opt/anaconda3")
+  :custom ((conda-anaconda-home           "/opt/anaconda3")
+           (cond-env-home-directory       "/opt/anaconda3")
+           (python-shell-interpreter      "/opt/anaconda3/bin/python3")
+           (python-shell-interpreter-args "-m IPython --simple-prompt -i"))
   :hook (python-mode . conda-env-autoactivate-mode)
   :commands (conda-env-activate
              conda-env-autoactivate-mode)
@@ -69,7 +72,8 @@
             ;; If you want interactive shell support, include:
             (conda-env-initialize-interactive-shells)
             ;; If you want eshell support, include:
-            (conda-env-initialize-eshell)))
+            (conda-env-initialize-eshell)
+            (conda-env-activate-mode t)))
 
 ;; Anaconda
 (use-package anaconda-mode
