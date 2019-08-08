@@ -27,10 +27,13 @@
 ;; lsp-mode:  Emacs client/library for the Language Server Protocol
 (use-package lsp-mode
   :demand t
-  :commands lsp
-  :config (use-package dash
-            :demand t))
+  :commands lsp)
 
+;; Fix bug on dash/lsp
+(load (expand-file-name "no-autoloads/dash.el" user-emacs-directory))
+(load (expand-file-name "no-autoloads/lsp-mode.el" user-emacs-directory))
+
+;; Enable lsp-clients
 (use-package lsp-clients
   :demand t
   :after lsp-mode

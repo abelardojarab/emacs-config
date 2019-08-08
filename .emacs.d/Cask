@@ -116,6 +116,7 @@
 ;; (depends-on "elisp")
 (depends-on "elisp-refs")
 (depends-on "elm-mode")
+(depends-on "elpy")
 (depends-on "elscreen")
 ;; (depends-on "emacs-color-themes")
 (depends-on "emamux")
