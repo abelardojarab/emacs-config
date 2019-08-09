@@ -84,6 +84,8 @@
                                 (progn
                                   ;; disable annoying "Python-Help" buffer
                                   (eldoc-mode -1)
+                                  ;; disable flymake, we will use flycheck
+                                  (flymake-mode -1)
                                   (setq-default python-indent-offset 4
                                                 py-indent-offset     4
                                                 py-shell-name        "python3")

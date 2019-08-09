@@ -12,6 +12,7 @@ tramp
 .\#*
 network-security.data
 history
+ac-comphist.dat
 
 # Org-mode
 .org-id-locations
