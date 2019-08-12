@@ -1,6 +1,6 @@
 ;;; setup-scroll.el ---                              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -44,6 +44,13 @@
   :defer t
   :commands centered-cursor-mode
   :config (centered-cursor-mode 1))
+
+(use-package fast-scroll
+  :demand t
+  :load-path (lambda () (expand-file-name "fast-scroll/" user-emacs-directory))
+  :config (progn
+            (fast-scroll-config)
+            (fast-scroll-advice-scroll-functions)))
 
 (provide 'setup-scroll)
 ;;; setup-scroll.el ends here
