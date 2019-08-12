@@ -46,11 +46,13 @@
   :config (centered-cursor-mode 1))
 
 (use-package fast-scroll
-  :demand t
+  :defer t
   :load-path (lambda () (expand-file-name "fast-scroll/" user-emacs-directory))
-  :config (progn
-            (fast-scroll-config)
-            (fast-scroll-advice-scroll-functions)))
+  :commands (fast-scroll-config
+             fast-scroll-advice-scroll-functions)
+  :hook ((prog-mode . fast-scroll-config)
+         (text-mode . fast-scroll-config))
+  :config (fast-scroll-advice-scroll-functions))
 
 (provide 'setup-scroll)
 ;;; setup-scroll.el ends here
