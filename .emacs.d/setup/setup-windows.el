@@ -324,7 +324,18 @@
                            (when (window-splittable-p window t)
                              (split-window window nil (if split-window-right
                                                           'left
-                                                        'right))))))))
+                                                        'right))
+                             ;; Go to next window
+                             (other-window 1)
+                             ;; Create new window below current one
+                             (split-window-below)
+                             ;; Start eshell in current window
+                             (eshell)
+                             ;; Go to previous window
+                             (other-window -1)
+                             ;; never open any buffer in window with shell
+                             (set-window-dedicated-p (nth 1 (window-list)) t)
+                             ))))))
 
             (setq split-window-right nil)
             (setq-default split-height-threshold  80 ;; the reasonable limit for vertical splits
