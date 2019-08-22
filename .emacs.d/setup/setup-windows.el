@@ -1,6 +1,6 @@
 ;;; setup-windows.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -341,34 +341,34 @@
             (setq-default split-height-threshold  80 ;; the reasonable limit for vertical splits
                           split-width-threshold   0)
 
-            (setq shackle-default-rule          '(:select t :autofit t :align right :size 0.4 :same t :inhibit-window-quit nil))
+            (setq shackle-default-rule          '(:regexp nil :select t :autofit t :align right :size 0.4 :same t :inhibit-window-quit nil))
             (setq shackle-rules
                   ;; CONDITION(:regexp)        :select|:noselect     :inhibit-window-quit   :size+:align|:other     :same|:popup
-                  '((compilation-mode             :regexp nil)
-                    (help-mode                    :regexp nil)
-                    (apropos-mode                 :autokill t)
+                  '((compilation-mode             :noselect t)
+                    (help-mode                    :noselect t)
                     (comint-mode                  :noesc t)
-                    (grep-mode                    :noselect t :autokill t)
-                    (Buffer-menu-mode             :autokill t)
                     (tabulated-list-mode          :noesc t)
+                    (grep-mode                    :noselect t :autokill t)
+                    (Buffer-menu-mode             :noselect t :autokill t)
+                    (apropos-mode                 :noselect t :autokill t)
                     (magit-status-mode            :inhibit-window-quit t)
                     (magit-log-mode               :inhibit-window-quit t)
                     ("*Warnings*"                 :noselect t)
-                    ("*Python-Help*"              :regexp nil :noselect t)
-                    ("*Completions*"              :regexp nil :noselect t)
-                    ("*Calendar*"                 :regexp nil :noselect t)
-                    ("*Messages*"                 :regexp nil :noselect t)
-                    ("*undo-tree*"                :regexp nil)
-                    ("*eshell*"                   :regexp nil)
-                    ("*Flycheck errors*"          :regexp nil)
-                    ("*info*"                     :autokill t)
+                    ("*Python-Help*"              :noselect t)
+                    ("*Completions*"              :noselect t)
+                    ("*Calendar*"                 :noselect t)
+                    ("*Messages*"                 :noselect t)
+                    ("*Flycheck errors*"          :noselect t)
+                    ("*undo-tree*"                :noselect t)
+                    ("*eshell*"                   :noesc t)
+                    ("*info*"                     :noselect t :autokill t)
                     ("*Help*"                     :noselect t :autokill t)
-                    ("\\magit:.*"                 :regexp t)
-                    ("\\*Org Src.*"               :regexp t)
-                    ("\\*Org todo.*"              :regexp t)
-                    ("\\*Async Shell.*\\*"        :regexp t :ignore t)
+                    ("\\magit:.*"                 :regexp t :inhibit-window-quit t)
+                    ("\\*Org Src.*"               :regexp t :inhibit-window-quit t)
+                    ("\\*Org todo.*"              :regexp t :inhibit-window-quit t)
+                    ("\\*Async Shell.*\\*"        :regexp t :noselect t)
                     ("^\\*.*Shell Command.*\\*$"  :regexp t :noselect t :autokill t)
-                    ("\\`\\*helm.*?\\*\\'"        :regexp t)
+                    ("\\`\\*helm.*?\\*\\'"        :regexp t :align right)
                     ("^ ?\\*"                     :regexp t :noselect t :autokill t :autoclose t)))))
 
 (provide 'setup-windows)
