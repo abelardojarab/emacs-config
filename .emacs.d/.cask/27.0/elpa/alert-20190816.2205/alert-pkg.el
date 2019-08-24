@@ -1,0 +1,2 @@
+;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/alert-20190816.2205/alert.el  -*- no-byte-compile: t -*-
+(define-package "alert" "20190816.2205" "Growl-style notification system for Emacs" '((gntp "0.1") (log4e "0.3.0") (cl-lib "0.5")) :commit "95a735e6947b0d09dbf9b9a944a21e5f5c1e6ee1" :keywords '("notification" "emacs" "message") :authors '(("John Wiegley" . "jwiegley@gmail.com")) :maintainer '("John Wiegley" . "jwiegley@gmail.com") :url "https://github.com/jwiegley/alert")
