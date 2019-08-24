@@ -1,6 +1,6 @@
 ;;; setup-tabbar.el ---                         -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -28,14 +28,14 @@
 (use-package tabbar
   :demand t
   :commands (tabbar-mode
-	     my/modification-state-change
-	     my/on-buffer-modification)
+         my/modification-state-change
+         my/on-buffer-modification)
   :bind (("C-c <right>" . tabbar-forward)
          ("C-c <left>"  . tabbar-backward)
          ("C-c <up>"    . tabbar-backward-group)
          ("C-c <down>"  . tabbar-forward-group))
   :hook ((after-save    . my/modification-state-change)
-	 (first-change  . my/on-buffer-modification))
+     (first-change  . my/on-buffer-modification))
   :custom ((tabbar-auto-scroll-flag  t)
            (tabbar-use-images        t)
            (tabbar-cycle-scope       (quote tabs))
@@ -105,13 +105,11 @@ That is, a string used to represent it on the tab bar."
 
 ;; Tabbar ruler pre-requisites
 (use-package mode-icons
-  :demand t
-  :if (display-graphic-p))
+  :demand t)
 
 ;; more tweaking to tabbar
 (use-package tabbar-ruler
   :demand t
-  :if (display-graphic-p)
   :after (powerline tabbar mode-icons projectile)
   :config (progn
             (setq tabbar-ruler-global-tabbar 't)

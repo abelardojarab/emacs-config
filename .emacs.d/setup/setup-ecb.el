@@ -1,6 +1,6 @@
 ;;; setup-ecb.el ---                       -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -218,8 +218,8 @@ little more place."
                         (projectile-speedbar-open-current-buffer-in-tree))))))
 
 ;; Activate ECB in graphical mode
-;; (if (display-graphic-p)
-;; (my/ecb-activate)
+(if (not (display-graphic-p))
+    (my/ecb-activate))
 
 (provide 'setup-ecb)
 ;;; setup-ecb.el ends here
