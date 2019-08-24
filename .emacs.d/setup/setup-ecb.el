@@ -218,8 +218,8 @@ little more place."
                         (projectile-speedbar-open-current-buffer-in-tree))))))
 
 ;; Activate ECB in graphical mode
-(if (not (display-graphic-p))
-    (my/ecb-activate))
+;; (if (not (display-graphic-p))
+;;    (my/ecb-activate))
 
 (provide 'setup-ecb)
 ;;; setup-ecb.el ends here
