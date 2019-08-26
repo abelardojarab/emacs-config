@@ -135,7 +135,7 @@
 
                                  ;; Set the modeline
                                  (doom-modeline-mode t)
-                                 (my/ecb-activate)
+                                 ;; (my/ecb-activate)
                                  )))
 
 (provide 'setup-post)
