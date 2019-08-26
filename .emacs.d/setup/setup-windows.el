@@ -84,8 +84,11 @@
 (use-package perspective
   :defer t
   :commands persp-mode
+  :custom ((persp-auto-save-opt             0)
+           (persp-autokill-buffer-on-remove 'kill-weak)
+           (persp-auto-resume-time          0.1)
+           (persp-auto-save-num-of-backups  1))
   :config (progn
-
             ;; Assure .emacs.cache/perspective-configs directory exists
             (if (not (file-exists-p (concat (file-name-as-directory
                                              my/emacs-cache-dir)
@@ -94,12 +97,7 @@
                                          my/emacs-cache-dir)
                                         "perspective-configs") t))
 
-            (setq persp-auto-save-opt             0
-                  persp-autokill-buffer-on-remove 'kill-weak
-                  persp-auto-resume-time          0.1
-                  persp-auto-save-num-of-backups  1
-                  persp-autokill-buffer-on-remove 'kill-weak
-                  persp-save-dir (file-name-as-directory
+            (setq persp-save-dir (file-name-as-directory
                                   (concat (file-name-as-directory my/emacs-cache-dir)
                                           "perspective-configs")))
 
@@ -113,7 +111,6 @@
   :commands purpose-mode
   :init (purpose-mode)
   :config (progn
-
             ;; Prefer helm
             (setq purposxe-preferred-prompt 'helm)
 
@@ -289,8 +286,7 @@
   :custom ((shackle-lighter               "")
            (shackle-select-reused-windows nil)
            (shackle-default-alignment     'right)
-           (shackle-default-size           0.4)
-           (shackle-default-ratio          0.4))
+           (shackle-default-size           0.4))
   :config (progn
 
             (with-eval-after-load "window"
