@@ -1,2 +1,0 @@
-;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/password-store-20190804.2004/password-store.el  -*- no-byte-compile: t -*-
-(define-package "password-store" "20190804.2004" "Password store (pass) support" '((emacs "25") (f "0.11.0") (s "1.9.0") (with-editor "2.5.11")) :commit "e93e03705fb5b81f3af85f04c07ad0ee2190b6aa" :keywords '("tools" "pass" "password" "password-store") :authors '(("Svend Sorensen" . "svend@svends.net")) :maintainer '("Svend Sorensen" . "svend@svends.net") :url "https://www.passwordstore.org/")
