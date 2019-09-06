@@ -818,7 +818,7 @@
 	   (:maintainer "Leo Liu" . "sdl.web@gmail.com")
 	   (:url . "https://github.com/leoliu/ggtags"))])
  (gited .
-	[(0 5 4)
+	[(0 5 6)
 	 ((emacs
 	   (24 4))
 	  (cl-lib
@@ -1389,7 +1389,7 @@
 	      (:maintainer "Michael Heerdegen" . "michael_heerdegen@web.de")
 	      (:url . "https://github.com/michael-heerdegen/on-screen.el"))])
  (org .
-      [(9 2 5)
+      [(9 2 6)
        nil "Outline-based notes management and organizer" tar
        ((:url . "https://orgmode.org")
 	(:maintainer "Carsten Dominik <carsten at orgmode dot org>")
@@ -1988,7 +1988,7 @@
 	  ("Oleh Krehel" . "ohwoeowho@gmail.com"))
 	 (:keywords "convenience"))])
  (tramp .
-	[(2 4 2 1)
+	[(2 4 2 2)
 	 ((emacs
 	   (24 4)))
 	 "Transparent Remote Access, Multiple Protocol" tar

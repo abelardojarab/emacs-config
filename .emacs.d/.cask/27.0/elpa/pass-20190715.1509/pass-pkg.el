@@ -1,2 +1,0 @@
-;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/pass-20190715.1509/pass.el  -*- no-byte-compile: t -*-
-(define-package "pass" "20190715.1509" "Major mode for password-store.el" '((emacs "24.3") (password-store "0.1") (password-store-otp "0.1.5") (f "0.17")) :commit "ba6a3f695acb380e1457a29a0d13b22641f72c4f" :keywords '("password-store" "password" "keychain") :authors '(("Nicolas Petton" . "petton.nicolas@gmail.com") ("Damien Cassou" . "damien@cassou.me")) :maintainer '("Nicolas Petton" . "petton.nicolas@gmail.com"))

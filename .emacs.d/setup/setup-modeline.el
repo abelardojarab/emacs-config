@@ -50,7 +50,12 @@
 (use-package spaceline-config
   :if (display-graphic-p)
   :after spaceline
-  :config (spaceline-helm-mode))
+  :config (progn
+            (spaceline-helm-mode 1)
+            (spaceline-emacs-theme)
+            (spaceline-toggle-org-clock-on)
+            (spaceline-toggle-minor-modes-off)
+            (spaceline-toggle-version-control-off)))
 
 (use-package spaceline-all-the-icons
   :if (display-graphic-p)
