@@ -1,2 +1,0 @@
-;;; -*- no-byte-compile: t -*-
-(define-package "smart-tab" "20170902.2107" "Intelligent tab completion and indentation." 'nil :commit "76a8ec13384975d39aa1b25e5384a02558dba574" :keywords '("extensions") :authors '(("John SJ Anderson" . "genehack@genehack.org") ("Sebastien Rocca Serra" . "sroccaserra@gmail.com") ("Daniel Hackney" . "dan@haxney.org")) :maintainer '("John SJ Anderson" . "genehack@genehack.org") :url "http://github.com/genehack/smart-tab/tree/master")

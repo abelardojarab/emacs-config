@@ -1,0 +1,2 @@
+;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/helm-xref-20190916.1544/helm-xref.el  -*- no-byte-compile: t -*-
+(define-package "helm-xref" "20190916.1544" "Helm interface for xref results" '((emacs "25.1") (helm "1.9.4")) :commit "316e1bdb877ec4634addc422cdb9572ee3e2afe0" :authors '(("Fritz Stelzer" . "brotzeitmacher@gmail.com")) :maintainer '("Fritz Stelzer" . "brotzeitmacher@gmail.com") :url "https://github.com/brotzeit/helm-xref")
