@@ -48,6 +48,9 @@ flycheck_*.el
 # server auth directory
 /server/
 
+# venv
+/rpc-venv/
+
 # projectiles files
 .projectile
 projectile-bookmarks.eld
