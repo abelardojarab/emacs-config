@@ -1,6 +1,6 @@
 ;;; setup-cmake.el ---                            -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -29,7 +29,8 @@
   :defer t
   :commands (irony-mode
              irony-install-server)
-  :if (executable-find "irony-server")
+  :if (and (executable-find "irony-server")
+           (not (executable-find "clangd")))
   :diminish irony-mode
   :load-path (lambda () (expand-file-name "irony-mode/" user-emacs-directory))
   :hook (((c++-mode c-mode objc-mode) . irony-mode))
@@ -58,6 +59,7 @@
 ;; Irony json projects
 (use-package irony-cdb-json
   :defer t
+  :if (not (executable-find "clangd"))
   :commands (irony-cdb-json-add-compile-commands-path
              irony-cdb-autosetup-compile-options)
   :hook ((irony-mode . irony-cdb-autosetup-compile-options))
@@ -84,7 +86,8 @@
              rtags-start-process-unless-running
              rtags-eldoc-function
              my/c-mode-init-rtags)
-  :if (executable-find "rdm")
+  :if (and (executable-find "rdm")
+           (not (executable-find "clangd")))
   :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory))
   :bind (:map c++-mode-map
               ("C-c C-i" . rtags-print-symbol-info)
@@ -149,7 +152,6 @@
 (use-package cmake-ide
   :if (not (equal system-type 'windows-nt))
   :defer t
-  :after (rtags irony)
   :commands (my/cmake-ide-init
              cmake-ide-compile
              cmake-ide-setup
@@ -262,11 +264,15 @@
                 (when (and (cmake-ide--locate-cmakelists)
                            (file-exists-p (cmake-ide--locate-cmakelists)))
                   (cmake-ide-maybe-run-cmake)
-                  (cmake-ide-maybe-start-rdm)
+                  (if (not (executable-find "clangd"))
+                      (cmake-ide-maybe-start-rdm))
                   (cmake-project-mode 1)
-                  (my/c-mode-init-rtags)
+                  (if (not (executable-find "clangd"))
+                      (my/c-mode-init-rtags))
                   (eldoc-mode)
-                  (turn-on-eldoc-mode))))
+                  (turn-on-eldoc-mode)
+                  (if (executable-find "clangd")
+                      (lsp)))))
 
             ;; Define cmake-ide-build-dir under ~/cmake_builds
             (defun my/cmake-ide-set-build-dir ()

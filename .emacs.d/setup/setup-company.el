@@ -1,6 +1,6 @@
 ;;; setup-company.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -121,11 +121,13 @@
 
             ;; Company integration with irony
             (use-package company-irony
-              :if (executable-find "irony-server"))
+              :if (and (executable-find "irony-server")
+                       (not (executable-find "clangd"))))
 
             ;; Company integration with rtags
             (use-package company-rtags
-              :if (executable-find "rdm")
+              :if (and (executable-find "rdm")
+                       (not (executable-find "clangd")))
               :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory))
               :custom (rtags-completions-enabled t))
 

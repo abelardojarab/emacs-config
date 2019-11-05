@@ -1,6 +1,6 @@
 ;;; setup-c++.el ---                                 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -64,25 +64,26 @@
              ;; Default C-style
              (setq my/cc-style
                    '("cc-mode"
-                     (c-offsets-alist . ((func-decl-cont . ++)
-                                         (member-init-intro . +)
-                                         (inher-intro . ++)
-                                         (comment-intro . 0)
-                                         (arglist-close . c-lineup-arglist)
-                                         (topmost-intro . 0)
-                                         (block-open . 0)
-                                         (inline-open . 0)
-                                         (substatement-open . 0)
-                                         (label . /)
-                                         (case-label . +)
-                                         (statement-case-open . +)
-                                         (statement-case-intro . +)
-                                         (access-label . /)
-                                         (innamespace . -)
-                                         (label . 0)
-                                         (case-label . +)
-                                         (inextern-lang . 0)
-                                         ))))
+                     (c-offsets-alist .
+                                      ((func-decl-cont       . ++)
+                                       (member-init-intro    . +)
+                                       (inher-intro          . ++)
+                                       (comment-intro        . 0)
+                                       (arglist-close        . c-lineup-arglist)
+                                       (topmost-intro        . 0)
+                                       (block-open           . 0)
+                                       (inline-open          . 0)
+                                       (substatement-open    . 0)
+                                       (label                . /)
+                                       (case-label           . +)
+                                       (statement-case-open  . +)
+                                       (statement-case-intro . +)
+                                       (access-label         . /)
+                                       (innamespace          . -)
+                                       (label                . 0)
+                                       (case-label           . +)
+                                       (inextern-lang        . 0)
+                                       ))))
 
              ;; Make C/C++ indentation reliable
              (defun my/c-indent-offset-according-to-syntax-context (key val)
@@ -170,7 +171,6 @@
              (condition-case nil (lsp) (user-error nil)))
   :config (progn
             (setq cquery-extra-init-params '(:index (:comments 2) :cacheFormat "msgpack" :completion (:detailedLabel t)))
-
             ;; use consolidated cache dir so we don't pollute project trees
             (setq cquery-cache-dir-function #'cquery-cache-dir-consolidated)
             (setq cquery-cache-dir-consolidated-path (expand-file-name "cquery-cache.d" "~/.cache/"))))

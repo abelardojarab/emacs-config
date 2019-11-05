@@ -27,7 +27,12 @@
 ;; lsp-mode:  Emacs client/library for the Language Server Protocol
 (use-package lsp-mode
   :demand t
-  :commands lsp)
+  :commands lsp
+  :hook ((c++-mode    . lsp)
+         (python-mode . lsp))
+  :config
+  ;; `-background-index' requires clangd v8+!
+  (setq lsp-clients-clangd-args '("-j=4" "-background-index" "-log=error")))
 
 ;; Fix bug on dash/lsp
 (load (expand-file-name "no-autoloads/dash.el" user-emacs-directory))
