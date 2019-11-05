@@ -1,6 +1,6 @@
 ;;; setup-tags.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -101,7 +101,11 @@
 (use-package xref
   :if (boundp 'xref-backend-functions)
   :bind (("M-*" . xref-pop-marker-stack)
-         ("C-]" . xref-find-definitions)))
+         ("C-]" . xref-find-definitions))
+  :config (setq xref-prompt-for-identifier '(not xref-find-definitions
+                                                 xref-find-definitions-other-window
+                                                 xref-find-definitions-other-frame
+                                                 xref-find-references)))
 
 ;; Emacs 25 backend for gtags/xref
 (use-package gxref

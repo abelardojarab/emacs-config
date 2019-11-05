@@ -37,6 +37,7 @@
 
 ;; only use Jedi if python interpreter is present
 (use-package jedi
+  :disabled t
   :if (and (executable-find "python")
            (check-python-module "epc")
            (check-python-module "jedi"))
@@ -101,20 +102,33 @@
 
 ;;;  company-anaconda
 (use-package company-anaconda
+  :disabled t
   :commands (company-anaconda-setup)
   :hook (python-mode . company-anaconda-setup)
   :init (defun company-anaconda-setup ()
           "Add company-anaconda to company-backends buffer-locally."
           (add-to-list (make-local-variable 'company-backends)
                        '(company-anaconda
+                         :with company-lsp
                          :with company-yasnippet
                          :with company-capf))))
 
 ;; Microsoft Python Language Server
 ;; Remember to install pip3 install python-language-server
 ;; Also install pycodestyle (<2.4.0), python-language-server will break otherwise
+(use-package company-lsp
+  :custom (company-lsp-async t))
+
 (use-package lsp-python-ms
-  :hook (python-mode . lsp))
+  :commands (company-lsp-setup)
+  :hook ((python-mode . lsp)
+         (python-mode . company-lsp-setup))
+  :init (defun company-lsp-setup ()
+          "Add company-anaconda to company-backends buffer-locally."
+          (add-to-list (make-local-variable 'company-backends)
+                       '(company-lsp
+                         :with company-yasnippet
+                         :with company-capf))))
 
 ;; Jupyter notebook
 ;; Usage
