@@ -105,11 +105,12 @@ That is, a string used to represent it on the tab bar."
 
 ;; Tabbar ruler pre-requisites
 (use-package mode-icons
+  :if (display-graphic-p)
   :demand t)
 
 ;; more tweaking to tabbar
 (use-package tabbar-ruler
-  :demand t
+  :if (display-graphic-p)
   :after (powerline tabbar mode-icons projectile)
   :config (progn
             (setq tabbar-ruler-global-tabbar 't)
