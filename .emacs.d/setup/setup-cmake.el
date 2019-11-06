@@ -264,11 +264,10 @@
                 (when (and (cmake-ide--locate-cmakelists)
                            (file-exists-p (cmake-ide--locate-cmakelists)))
                   (cmake-ide-maybe-run-cmake)
-                  (if (not (executable-find "clangd"))
-                      (cmake-ide-maybe-start-rdm))
+                  (when (not (executable-find "clangd"))
+                    (cmake-ide-maybe-start-rdm)
+                    (my/c-mode-init-rtags))
                   (cmake-project-mode 1)
-                  (if (not (executable-find "clangd"))
-                      (my/c-mode-init-rtags))
                   (eldoc-mode)
                   (turn-on-eldoc-mode)
                   (if (executable-find "clangd")
@@ -330,7 +329,7 @@
                                 (make-directory my/cmake-build-dir))
 
                             ;; Use Debug as default build
-                            (setq cmake-ide-cmake-opts "-DCMAKE_BUILD_TYPE=Debug")
+                            (setq cmake-ide-cmake-opts "-DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON")
 
                             ;; Set cmake-ide-build-dir according to both top project and cmake project names
                             (setq cmake-project-build-directory my/cmake-build-dir)

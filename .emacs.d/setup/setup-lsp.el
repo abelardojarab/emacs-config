@@ -30,9 +30,13 @@
   :commands lsp
   :hook ((c++-mode    . lsp)
          (python-mode . lsp))
-  :config
-  ;; `-background-index' requires clangd v8+!
-  (setq lsp-clients-clangd-args '("-j=4" "-background-index" "-log=error")))
+  :config (progn
+            ;; Prefer flake8, faster than pylint
+            (setq-default lsp-pyls-configuration-sources ["flake8"])
+            (setq-default lsp-pyls-plugins-pylint-enabled nil)
+
+            ;; `-background-index' requires clangd v8+!
+            (setq lsp-clients-clangd-args '("-j=4" "-background-index" "-log=error"))))
 
 ;; Fix bug on dash/lsp
 (load (expand-file-name "no-autoloads/dash.el" user-emacs-directory))

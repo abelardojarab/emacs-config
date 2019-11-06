@@ -63,6 +63,7 @@
   :hook (python-mode . elpy-enable)
   :commands (elpy-enable)
   :config (progn
+            (add-hook 'elpy-mode-hook (lambda () (highlight-indentation-mode -1)))
             (defalias 'workon 'pyenv-workon)
             (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))))
 
@@ -70,7 +71,7 @@
 ;;; Elpy can set the anaconda virtual env, but not the process. conda uses
 ;;; environment.yml (I think to find the process).
 (use-package conda
-  :defer t
+  :disabled t
   :if (file-exists-p "/opt/anaconda3/bin/conda")
   :custom ((conda-anaconda-home           "/opt/anaconda3")
            (cond-env-home-directory       "/opt/anaconda3")
@@ -86,6 +87,7 @@
 
 ;; Anaconda
 (use-package anaconda-mode
+  :disabled t
   :bind (:map anaconda-mode-map
               ("M-." . python-goto-sql-file-or-definition)
               ("M-," . anaconda-mode-find-assignments))
@@ -102,16 +104,7 @@
 
 ;;;  company-anaconda
 (use-package company-anaconda
-  :disabled t
-  :commands (company-anaconda-setup)
-  :hook (python-mode . company-anaconda-setup)
-  :init (defun company-anaconda-setup ()
-          "Add company-anaconda to company-backends buffer-locally."
-          (add-to-list (make-local-variable 'company-backends)
-                       '(company-anaconda
-                         :with company-lsp
-                         :with company-yasnippet
-                         :with company-capf))))
+  :disabled t)
 
 ;; Microsoft Python Language Server
 ;; Remember to install pip3 install python-language-server
@@ -128,7 +121,11 @@
           (add-to-list (make-local-variable 'company-backends)
                        '(company-lsp
                          :with company-yasnippet
-                         :with company-capf))))
+                         :with company-capf)))
+  :config (progn
+            ;; Prefer flake8, faster than pylint
+            (setq-default lsp-pyls-configuration-sources ["flake8"])
+            (setq-default lsp-pyls-plugins-pylint-enabled nil)))
 
 ;; Jupyter notebook
 ;; Usage
@@ -138,7 +135,7 @@
 ;; M-x ein:notebooklist-login (enter the token as the password)
 ;; M-x ein:notebooklist-open
 (use-package ein
-  :defer t
+  :disabled t
   :if (file-exists-p "/opt/anaconda3/bin/jupyter")
   :commands (;; Start the jupyter notebook server at the given path.
              ;; This only works if jupyter is in the default conda env.
@@ -167,8 +164,7 @@
 ;; Automatic formatting according to Python's PEP8
 (use-package py-autopep8
   :defer t
-  :commands py-autopep8-enable-on-save
-  :hook (python-mode . py-autopep8-enable-on-save))
+  :commands py-autopep8-enable-on-save)
 
 (provide 'setup-python-plugins)
 ;;; setup-python-plugins.el ends here
