@@ -62,6 +62,7 @@
   :demand t
   :hook (python-mode . elpy-enable)
   :commands (elpy-enable)
+  :custom (elpy-rpc-python-command "python3")
   :config (progn
             (add-hook 'elpy-mode-hook (lambda () (highlight-indentation-mode -1)))
             (defalias 'workon 'pyenv-workon)
