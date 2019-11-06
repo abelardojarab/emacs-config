@@ -1,0 +1,2 @@
+;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/restclient-20191009.1208/restclient.el  -*- no-byte-compile: t -*-
+(define-package "restclient" "20191009.1208" "An interactive HTTP client for Emacs" 'nil :commit "e8ca809ace13549a1ddffb4e4aaa5d5fce750f3d" :keywords '("http") :authors '(("Pavel Kurnosov" . "pashky@gmail.com")) :maintainer '("Pavel Kurnosov" . "pashky@gmail.com"))

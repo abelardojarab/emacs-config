@@ -73,7 +73,6 @@
          ((c-mode c++-mode) . company-c-setup)
          (text-mode         . company-text-setup))
   :config (progn
-
             ;; Use Emacs' built-in TAB completion hooks to trigger AC (Emacs >= 23.2)
             (setq tab-always-indent 'complete)
             (add-to-list 'completion-styles 'initials t)
