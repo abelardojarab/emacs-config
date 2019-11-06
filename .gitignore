@@ -50,6 +50,7 @@ flycheck_*.el
 
 # venv
 /rpc-venv/
+.emacs.d/elpy/rpc-venv
 
 # projectiles files
 .projectile
