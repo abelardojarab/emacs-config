@@ -27,6 +27,9 @@
 (setq package-user-dir "~/.emacs.d/site-lisp/package-install")
 (require 'package)
 
+;; Disable checking signature from elpa
+(setq package-check-signature nil)
+
 ;; Disable package initialize after us.
 (setq package-enable-at-startup nil)
 
