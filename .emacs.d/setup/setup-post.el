@@ -61,7 +61,9 @@
         (face-background 'default))
   (if (display-graphic-p)
       (setq my/tabbar-back-color
-            (color-lighten-name (face-background 'default) 12)))
+            (color-lighten-name (face-background 'default) 12))
+    (setq my/tabbar-back-color
+          (face-background 'default)))
   (custom-set-faces
    ;; tabbar background, with no boxes
    `(tabbar-default ((t (:box nil :inherit fixed-pitch :background ,my/tabbar-back-color :foreground ,my/tabbar-foreground-color))))
