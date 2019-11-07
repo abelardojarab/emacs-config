@@ -54,13 +54,14 @@
 (defun my/set-face-tabbar ()
   "Set the tabbar background to the same color as the regular background."
   (interactive)
-  (setq tabbar-separator '(0.0))
+  (setq tabbar-separator '(0.25))
   (setq my/tabbar-foreground-color
         (face-foreground 'default))
   (setq my/tabbar-background-color
         (face-background 'default))
-  (setq my/tabbar-back-color
-        (color-lighten-name (face-background 'default) 12))
+  (if (display-graphic-p)
+      (setq my/tabbar-back-color
+            (color-lighten-name (face-background 'default) 12)))
   (custom-set-faces
    ;; tabbar background, with no boxes
    `(tabbar-default ((t (:box nil :inherit fixed-pitch :background ,my/tabbar-back-color :foreground ,my/tabbar-foreground-color))))

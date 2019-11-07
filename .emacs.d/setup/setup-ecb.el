@@ -217,7 +217,7 @@ little more place."
                       (defadvice speedbar-item-load (after speedbar-highlight-file activate)
                         (projectile-speedbar-open-current-buffer-in-tree))))))
 
-;; Activate ECB in graphical mode
+;; Activate ECB in console mode
 ;; (if (not (display-graphic-p))
 ;;    (my/ecb-activate))
 

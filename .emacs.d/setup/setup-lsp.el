@@ -41,6 +41,7 @@
 ;; Fix bug on dash/lsp
 (load (expand-file-name "no-autoloads/dash.el" user-emacs-directory))
 (load (expand-file-name "no-autoloads/lsp-mode.el" user-emacs-directory))
+(load (expand-file-name "no-autoloads/helm-xref.el" user-emacs-directory))
 
 ;; Enable lsp-clients
 (use-package lsp-clients
