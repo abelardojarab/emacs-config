@@ -69,5 +69,10 @@
             (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
             (define-key lsp-ui-mode-map [remap xref-find-references]  #'lsp-ui-peek-find-references)))
 
+(use-package lsp-metals-treeview
+  :disabled t
+  :custom (lsp-metals-treeview-show-when-views-received t)
+  :config (lsp-metals-treeview-enable t))
+
 (provide 'setup-lsp)
 ;;; setup-lsp.el ends here

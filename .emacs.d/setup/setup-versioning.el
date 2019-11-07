@@ -159,6 +159,9 @@
            (git-commit-summary-max-length        80)
            (auto-revert-verbose                  nil))
   :init (progn
+          (if (executable-find "p4")
+              (use-package magit-p4))
+
           (setenv "GIT_PAGER" "")
 
           ;; we no longer need vc-git

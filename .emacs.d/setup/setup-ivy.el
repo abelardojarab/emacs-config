@@ -1,6 +1,6 @@
 ;;; setup-ivy.el ---                              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -238,6 +238,11 @@
   :commands all-the-icons-ivy-setup
   :after swiper
   :hook (counsel-mode . all-the-icons-ivy-setup))
+
+;; Ivy integration with lsp
+(use-package lsp-ivy
+  :commands (lsp-ivy-workspace-symbol
+             lsp-ivy-global-workspace-symbol))
 
 (provide 'setup-ivy)
 ;;; setup-swiper.el ends here
