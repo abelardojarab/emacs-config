@@ -1,6 +1,6 @@
-;;; solarized-dark-theme.el --- Solarized Dark Theme for Emacs.
+;;; solarized-dark-high-contrast-theme.el --- Solarized Light Theme for Emacs.
 
-;; Copyright (C) 2011-2019 Bozhidar Batsov
+;; Copyright (C) 2019 Thomas Frössman
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -23,11 +23,14 @@
 
 (require 'solarized)
 
-(deftheme solarized-dark "The dark variant of the Solarized colour theme")
+(deftheme solarized-dark-high-contrast
+  "The dark variant of the Solarized colour theme with slightly higher text contrast")
 
-(solarized-create-theme 'dark 'solarized-dark)
+(solarized-definition 'dark 'solarized-dark-high-contrast
+                      solarized-dark-high-contrast-palette-alist)
 
-(provide-theme 'solarized-dark)
+(provide-theme 'solarized-dark-high-contrast)
 
-(provide 'solarized-dark-theme)
-;;; solarized-dark-theme.el ends here
+
+(provide 'solarized-dark-high-contrast-theme)
+;;; solarized-dark-high-contrast-theme.el ends here

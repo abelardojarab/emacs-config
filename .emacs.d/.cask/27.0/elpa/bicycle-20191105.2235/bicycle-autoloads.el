@@ -28,9 +28,7 @@ Cycle visibility of all sections.
              a heading).
 4. ALL:      Show everything, except code blocks that have been
              collapsed individually (using a `hideshow' command
-             or function).
-
-\(fn)" t nil)
+             or function)." t nil)
 
 (if (fboundp 'register-definition-prefixes) (register-definition-prefixes "bicycle" '("bicycle-" "outline-")))
 

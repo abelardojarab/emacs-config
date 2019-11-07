@@ -1,6 +1,26 @@
 ;;; solarized-faces.el --- the faces definitions for solarized theme
 
-;; see solarized.el header for general package information.
+;; Copyright (C) 2011-2019 Bozhidar Batsov
+
+;; Author: Bozhidar Batsov <bozhidar@batsov.com>
+;; Author: Thomas Frössman <thomasf@jossystem.se>
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; the faces definitions for solarized theme
 
 ;;; Code:
 
@@ -1164,6 +1184,18 @@ customize the resulting theme."
        `(markdown-bold-face ((,class (:inherit bold))))
        `(markdown-code-face ((,class (:inherit fixed-pitch :foreground ,base01
                                                :background unspecified))))
+
+       `(magit-diff-added ((,class (:background ,green-1bg :foreground ,green-1fg))))
+       `(magit-diff-added-highlight ((,class (:background ,green-2bg :foreground ,green-2fg))))
+       `(magit-diff-base ((,class (:background ,yellow-1bg :foreground ,yellow-1fg))))
+       `(magit-diff-base-highlight ((,class (:background ,yellow-2bg  :foreground ,yellow-2fg))))
+
+       `(magit-diff-conflict-heading ((,class (:inherit magit-diff-hunk-heading))))
+       `(magit-diff-context ((,class (:foreground ,base0))))
+       `(magit-diff-removed ((,class (:background ,red-1bg :foreground ,red-1fg))))
+       `(magit-diff-removed-highlight ((,class (:background ,red-2bg :foreground ,red-2fg))))
+
+
        `(markdown-comment-face ((,class (:foreground ,base01 :strike-through t))))
        `(markdown-footnote-face ((,class (:inherit default))))
        `(markdown-header-delimiter-face ((,class (:foreground ,base01))))

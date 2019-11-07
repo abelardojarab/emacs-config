@@ -9,6 +9,19 @@
 ;;;### (autoloads nil "solarized" "solarized.el" (0 0 0 0))
 ;;; Generated autoloads from solarized.el
 
+(autoload 'solarized-color-blend-rgb "solarized" "\
+Blends COLOR1 onto COLOR2 with ALPHA.
+
+COLOR1 and COLOR2 should be color names (e.g. \"white\") or RGB
+triplet strings (e.g. \"#ff12ec\").
+
+Alpha should be a float between 0 and 1.
+
+Optional argument DIGITS-PER-COMPONENT can be either 4 (the default) or 2;
+use the latter if you need a 24-bit specification of a color.
+
+\(fn COLOR1 COLOR2 ALPHA &optional DIGITS-PER-COMPONENT)" nil nil)
+
 (autoload 'solarized-color-blend "solarized" "\
 Blends COLOR1 onto COLOR2 with ALPHA.
 
@@ -112,6 +125,14 @@ The Returned color-palette has the same format as `solarized-color-palette'
 ;;; Generated autoloads from solarized-wombat-dark-theme.el
 
 (if (fboundp 'register-definition-prefixes) (register-definition-prefixes "solarized-wombat-dark-theme" '("solarized-wombat-dark")))
+
+;;;***
+
+;;;### (autoloads nil "solarized-zenburn-theme" "solarized-zenburn-theme.el"
+;;;;;;  (0 0 0 0))
+;;; Generated autoloads from solarized-zenburn-theme.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "solarized-zenburn-theme" '("solarized-zenburn")))
 
 ;;;***
 

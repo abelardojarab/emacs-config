@@ -1,4 +1,4 @@
-(define-package "counsel-etags" "20191027.1230" "Fast and complete Ctags/Etags solution using ivy"
+(define-package "counsel-etags" "20191106.1225" "Fast and complete Ctags/Etags solution using ivy"
   '((emacs "24.4")
     (counsel "0.10.0")
     (ivy "0.10.0"))
