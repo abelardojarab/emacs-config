@@ -1,6 +1,6 @@
 ;;; setup-environment.el ---                 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -51,7 +51,13 @@
            (require-final-newline                 t)
            (debug-on-quit                         nil)
            (bidi-display-reordering               nil)
-           (no-redraw-on-reenter                  t))
+           (no-redraw-on-reenter                  t)
+           (column-number-indicator-zero-based    nil)
+           (track-eol                             t)
+           (minibuffer-eldef-shorten-default      t)
+           (register-preview-delay                2)
+           (register-separator                    "\n\n")
+           (history-delete-duplicates             t))
   :init (progn
 
           ;; Assure cache directory exists

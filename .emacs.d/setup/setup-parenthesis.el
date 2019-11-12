@@ -1,6 +1,6 @@
 ;;; setup-parenthesis.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -29,6 +29,8 @@
   :defer t
   :init (show-paren-mode t)
   :commands show-paren-mode
+  :custom ((show-paren-delay 0)
+           (show-paren-style 'expression))
   :config (progn
 
             ;; Show paren-mode when off-screen
