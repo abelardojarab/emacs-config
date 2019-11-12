@@ -1,2 +1,0 @@
-;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/cloud-theme-20190901.1701/cloud-theme.el  -*- no-byte-compile: t -*-
-(define-package "cloud-theme" "20190901.1701" "A light colored theme" '((emacs "24")) :commit "08090f00738809306fa156aac60d85ad6be9e672" :keywords '("color" "theme") :authors '(("Valerii Lysenko" . "vallyscode@gmail.com")) :maintainer '("Valerii Lysenko" . "vallyscode@gmail.com") :url "https://github.com/vallyscode/cloud-theme")
