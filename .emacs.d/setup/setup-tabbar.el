@@ -41,23 +41,6 @@
            (tabbar-cycle-scope       (quote tabs))
            (table-time-before-update 0.1))
   :config (progn
-            ;; Colors
-            (set-face-attribute 'tabbar-default nil
-                                :background "gray20" :foreground
-                                "gray60" :distant-foreground "gray50"
-                                :box nil)
-            (set-face-attribute 'tabbar-unselected nil
-                                :background "gray80" :foreground "black" :box nil)
-            (set-face-attribute 'tabbar-modified nil
-                                :foreground "red4" :box nil
-                                :inherit 'tabbar-unselected)
-            (set-face-attribute 'tabbar-selected nil
-                                :background "#405040" :foreground "white" :box nil)
-            (set-face-attribute 'tabbar-selected-modified nil
-                                :inherit 'tabbar-selected :foreground "GoldenRod2" :box nil)
-            (set-face-attribute 'tabbar-button nil
-                                :box nil)
-
             ;; Sort tabbar buffers by name
             (defun tabbar-add-tab (tabset object &optional append_ignored)
               "Add to TABSET a tab with value OBJECT if there isn't one there yet.
