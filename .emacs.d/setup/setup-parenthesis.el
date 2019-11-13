@@ -29,8 +29,7 @@
   :defer t
   :init (show-paren-mode t)
   :commands show-paren-mode
-  :custom ((show-paren-delay 0)
-           (show-paren-style 'expression))
+  :custom (show-paren-delay 0)
   :config (progn
 
             ;; Show paren-mode when off-screen

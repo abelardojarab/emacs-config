@@ -30,6 +30,7 @@
   :commands lsp
   :hook ((c++-mode    . lsp)
          (python-mode . lsp))
+  :custom (lsp-prefer-flymake nil)
   :config (progn
             ;; Prefer flake8, faster than pylint
             (setq-default lsp-pyls-configuration-sources ["flake8"])

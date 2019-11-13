@@ -28,19 +28,35 @@
 (use-package tabbar
   :demand t
   :commands (tabbar-mode
-         my/modification-state-change
-         my/on-buffer-modification)
+             my/modification-state-change
+             my/on-buffer-modification)
   :bind (("C-c <right>" . tabbar-forward)
          ("C-c <left>"  . tabbar-backward)
          ("C-c <up>"    . tabbar-backward-group)
          ("C-c <down>"  . tabbar-forward-group))
   :hook ((after-save    . my/modification-state-change)
-     (first-change  . my/on-buffer-modification))
+         (first-change  . my/on-buffer-modification))
   :custom ((tabbar-auto-scroll-flag  t)
            (tabbar-use-images        t)
            (tabbar-cycle-scope       (quote tabs))
            (table-time-before-update 0.1))
   :config (progn
+            ;; Colors
+            (set-face-attribute 'tabbar-default nil
+                                :background "gray20" :foreground
+                                "gray60" :distant-foreground "gray50"
+                                :family "Helvetica Neue" :box nil)
+            (set-face-attribute 'tabbar-unselected nil
+                                :background "gray80" :foreground "black" :box nil)
+            (set-face-attribute 'tabbar-modified nil
+                                :foreground "red4" :box nil
+                                :inherit 'tabbar-unselected)
+            (set-face-attribute 'tabbar-selected nil
+                                :background "#4090c0" :foreground "white" :box nil)
+            (set-face-attribute 'tabbar-selected-modified nil
+                                :inherit 'tabbar-selected :foreground "GoldenRod2" :box nil)
+            (set-face-attribute 'tabbar-button nil
+                                :box nil)
 
             ;; Sort tabbar buffers by name
             (defun tabbar-add-tab (tabset object &optional append_ignored)
@@ -56,22 +72,17 @@
                     (set tabset (sort (cons tab tabs)
                                       (lambda (a b) (string< (buffer-name (car a)) (buffer-name (car b))))))))))
 
-            ;; Reduce tabbar width to enable as many buffers as possible
-            (defun tabbar-buffer-tab-label (tab)
-              "Return a label for TAB.
-That is, a string used to represent it on the tab bar."
-              (let ((label  (if tabbar--buffer-show-groups
-                                (format "[%s] " (tabbar-tab-tabset tab))
-                              (format "%s" (tabbar-tab-value tab)))))
-                ;; Unless the tab bar auto scrolls to keep the selected tab
-                ;; visible, shorten the tab label to keep as many tabs as possible
-                ;; in the visible area of the tab bar.
-                (if nil ;; tabbar-auto-scroll-flag
-                    label
-                  (tabbar-shorten
-                   label (max 1 (/ (window-width)
-                                   (length (tabbar-view
-                                            (tabbar-current-tabset)))))))))
+            ;; Use Powerline to make tabs look nicer
+            ;; (this needs to run *after* the colors are set)
+            (use-package powerline)
+            (defvar my/tabbar-height 20)
+            (defvar my/tabbar-left (powerline-wave-right 'tabbar-default nil my/tabbar-height))
+            (defvar my/tabbar-right (powerline-wave-left nil 'tabbar-default my/tabbar-height))
+            (defun my/tabbar-tab-label-function (tab)
+              (powerline-render (list my/tabbar-left
+                                      (format " %s  " (car tab))
+                                      my/tabbar-right)))
+            (setq tabbar-tab-label-function #'my/tabbar-tab-label-function)
 
             ;; Tweaking the tabbar
             (defadvice tabbar-buffer-tab-label (after fixup_tab_label_space_and_flag activate)

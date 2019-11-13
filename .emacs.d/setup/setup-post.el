@@ -55,25 +55,22 @@
   "Set the tabbar background to the same color as the regular background."
   (interactive)
   (setq tabbar-separator '(0.25))
-  (setq my/tabbar-foreground-color
-        (face-foreground 'default))
-  (setq my/tabbar-background-color
-        (face-background 'default))
-  (if (display-graphic-p)
-      (setq my/tabbar-back-color
-            (color-lighten-name (face-background 'default) 12))
-    (setq my/tabbar-back-color
-          (face-background 'default)))
-  (custom-set-faces
-   ;; tabbar background, with no boxes
-   `(tabbar-default ((t (:box nil :inherit fixed-pitch :background ,my/tabbar-back-color :foreground ,my/tabbar-foreground-color))))
-   `(tabbar-button ((t (:box nil :inherit tabbar-default :foreground ,my/tabbar-background-color))))
-   `(tabbar-button-highlight ((t (:box nil :inherit tabbar-default))))
-   `(tabbar-highlight ((t (:box nil :underline nil))))
-   ;; selected tab, with no boxes
-   `(tabbar-selected ((t (:box nil :inherit tabbar-default :background ,my/tabbar-background-color))))
-   `(tabbar-separator ((t (:box nil :inherit tabbar-default :background ,my/tabbar-back-color))))
-   `(tabbar-unselected ((t (:box nil :inherit tabbar-default))))))
+  ;; Colors
+  (set-face-attribute 'tabbar-default nil
+                      :background "gray20" :foreground
+                      "gray60" :distant-foreground "gray50"
+                      :family "Helvetica Neue" :box nil)
+  (set-face-attribute 'tabbar-unselected nil
+                      :background "gray80" :foreground "black" :box nil)
+  (set-face-attribute 'tabbar-modified nil
+                      :foreground "red4" :box nil
+                      :inherit 'tabbar-unselected)
+  (set-face-attribute 'tabbar-selected nil
+                      :background "#4090c0" :foreground "white" :box nil)
+  (set-face-attribute 'tabbar-selected-modified nil
+                      :inherit 'tabbar-selected :foreground "GoldenRod2" :box nil)
+  (set-face-attribute 'tabbar-button nil
+                      :box nil))
 
 (add-hook 'after-init-hook #'my/set-face-fringe)
 (add-hook 'after-init-hook #'my/set-face-tabbar)
