@@ -75,9 +75,10 @@
             ;; Use Powerline to make tabs look nicer
             ;; (this needs to run *after* the colors are set)
             (use-package powerline)
+            (use-package powerline-separators)
             (defvar my/tabbar-height 20)
-            (defvar my/tabbar-left (powerline-roundstub 'tabbar-default nil my/tabbar-height))
-            (defvar my/tabbar-right (powerline-roundstub nil 'tabbar-default my/tabbar-height))
+            (defvar my/tabbar-left (powerline-roundstub-right 'tabbar-default nil my/tabbar-height))
+            (defvar my/tabbar-right (powerline-roundstub-left nil 'tabbar-default my/tabbar-height))
             (defun my/tabbar-tab-label-function (tab)
               (powerline-render (list my/tabbar-left
                                       (format " %s  " (car tab))
