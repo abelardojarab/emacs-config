@@ -83,6 +83,7 @@
  '(charmap-text-scale-adjust 2 t nil "Customized with use-package charmap")
  '(clang-format-style "llvm" t nil "Customized with use-package clang-format")
  '(column-enforce-column 99 nil nil "Customized with use-package column-enforce-mode")
+ '(column-number-indicator-zero-based nil)
  '(column-number-mode t)
  '(company-begin-commands
    '(self-insert-command org-self-insert-command c-electric-lt-gt c-electric-colon completion-separator-self-insert-command outshine-self-insert-command) nil nil "Customized with use-package company")
@@ -281,6 +282,7 @@
      ("#A75B00" . 70)
      ("#F309DF" . 85)
      ("#49483E" . 100)))
+ '(history-delete-duplicates t)
  '(hl-bg-colors
    '("#7B6000" "#8B2C02" "#990A1B" "#93115C" "#3F4D91" "#00629D" "#00736F" "#546E00"))
  '(hl-fg-colors
@@ -357,6 +359,7 @@
  '(line-spacing 2)
  '(load-file-rep-suffixes '("") t nil "Customized with use-package emacs")
  '(load-prefer-newer nil nil nil "Customized with use-package emacs")
+ '(lsp-prefer-flymake nil)
  '(lsp-ui-doc-enable nil t nil "Customized with use-package lsp-ui")
  '(lsp-ui-flycheck-enable t t nil "Customized with use-package lsp-ui")
  '(lsp-ui-imenu-enable t t nil "Customized with use-package lsp-ui")
@@ -400,6 +403,7 @@
  '(message-truncate-lines nil t nil "Customized with use-package emacs")
  '(mf--source-file-extension "cpp" t nil "Customized with use-package member-functions")
  '(mime-edit-split-message nil t nil "Customized with use-package mime-w3m")
+ '(minibuffer-eldef-shorten-default t t)
  '(moo-select-method 'ivy t nil "Customized with use-package function-args")
  '(neo-auto-indent-point t t nil "Customized with use-package neotree")
  '(neo-banner-message nil t nil "Customized with use-package neotree")
@@ -525,6 +529,10 @@
  '(reftex-plug-into-AUCTeX t t nil "Customized with use-package reftex-cite")
  '(reftex-save-parse-info t t nil "Customized with use-package reftex-cite")
  '(reftex-use-multiple-selection-buffers t t nil "Customized with use-package reftex-cite")
+ '(register-preview-delay 2)
+ '(register-separator "
+
+")
  '(report-emacs-bug-no-explanations t nil nil "Customized with use-package emacsbug")
  '(require-final-newline t nil nil "Customized with use-package emacs")
  '(resize-mini-windows 'grow-only nil nil "Customized with use-package frame")
@@ -582,6 +590,7 @@
  '(shackle-mode t)
  '(shackle-select-reused-windows nil)
  '(shift-select-mode t)
+ '(show-paren-delay 0)
  '(show-paren-mode t)
  '(smart-jump-selector 'ivy t)
  '(smart-tab-using-hippie-expand t)
@@ -621,6 +630,7 @@
  '(tls-checktrust t)
  '(tool-bar-mode nil)
  '(tooltip-delay 1 nil nil "Customized with use-package tooltip")
+ '(track-eol t)
  '(transient-mark-mode t)
  '(use-package-compute-statistics t)
  '(use-package-enable-imenu-support t)

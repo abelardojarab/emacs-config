@@ -66,7 +66,7 @@
                       :foreground "red4" :box nil
                       :inherit 'tabbar-unselected)
   (set-face-attribute 'tabbar-selected nil
-                      :background "#4090c0" :foreground "white" :box nil)
+                      :background "#405040" :foreground "white" :box nil)
   (set-face-attribute 'tabbar-selected-modified nil
                       :inherit 'tabbar-selected :foreground "GoldenRod2" :box nil)
   (set-face-attribute 'tabbar-button nil

@@ -45,14 +45,14 @@
             (set-face-attribute 'tabbar-default nil
                                 :background "gray20" :foreground
                                 "gray60" :distant-foreground "gray50"
-                                :family "Helvetica Neue" :box nil)
+                                :box nil)
             (set-face-attribute 'tabbar-unselected nil
                                 :background "gray80" :foreground "black" :box nil)
             (set-face-attribute 'tabbar-modified nil
                                 :foreground "red4" :box nil
                                 :inherit 'tabbar-unselected)
             (set-face-attribute 'tabbar-selected nil
-                                :background "#4090c0" :foreground "white" :box nil)
+                                :background "#405040" :foreground "white" :box nil)
             (set-face-attribute 'tabbar-selected-modified nil
                                 :inherit 'tabbar-selected :foreground "GoldenRod2" :box nil)
             (set-face-attribute 'tabbar-button nil
@@ -76,8 +76,8 @@
             ;; (this needs to run *after* the colors are set)
             (use-package powerline)
             (defvar my/tabbar-height 20)
-            (defvar my/tabbar-left (powerline-wave-right 'tabbar-default nil my/tabbar-height))
-            (defvar my/tabbar-right (powerline-wave-left nil 'tabbar-default my/tabbar-height))
+            (defvar my/tabbar-left (powerline-roundstub 'tabbar-default nil my/tabbar-height))
+            (defvar my/tabbar-right (powerline-roundstub nil 'tabbar-default my/tabbar-height))
             (defun my/tabbar-tab-label-function (tab)
               (powerline-render (list my/tabbar-left
                                       (format " %s  " (car tab))
