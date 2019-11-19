@@ -315,7 +315,7 @@ Set to non-nil to use the external XML parser."
   :group 'doxymacs)
 
 (defcustom doxymacs-external-xml-parser-executable
-  "/home/abelardojara/bin/doxymacs_parser"
+  "/home/abelardoj/bin/doxymacs_parser"
   "*Where the external XML parser executable is."
   :type 'string
   :group 'doxymacs)

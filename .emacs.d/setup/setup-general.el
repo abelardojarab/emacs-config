@@ -1,6 +1,6 @@
 ;;; setup-general.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@ubuntu02>
 ;; Keywords:
@@ -41,7 +41,9 @@
   :diminish (auto-revert-mode . " Ⓐ")
   :init (global-auto-revert-mode t)
   :custom ((auto-revert-verbose                 nil)
-           (global-auto-revert-non-file-buffers t))
+           (global-auto-revert-non-file-buffers t)
+           (auto-revert-interval                2)
+           (auto-revert-check-vc-info           t))
   :config (when (eq system-type 'darwin)
             ;; File notifications aren't supported on OS X
             (setq auto-revert-use-notify nil)))
@@ -58,28 +60,25 @@
 ;; Pos-tip library
 (use-package pos-tip
   :defer t
-  :config (progn
-            ;; pos-tip defaults
-            (setq-default pos-tip-internal-border-width 6
-                          pos-tip-border-width          1)
-
-            (defadvice popup-menu-show-quick-help
-                (around pos-tip-popup-menu-show-quick-help () activate)
-              "Show quick help using `pos-tip-show'."
-              (if (display-graphic-p)
-                  (let ((doc (popup-menu-document
-                              menu (or item
-                                       (popup-selected-item menu)))))
-                    (when (stringp doc)
-                      (pos-tip-show doc nil
-                                    (if (popup-hidden-p menu)
-                                        (or (plist-get args :point)
-                                            (point))
-                                      (overlay-end (popup-line-overlay
-                                                    menu (+ (popup-offset menu)
-                                                            (popup-selected-line menu)))))
-                                    nil 0) nil))
-                ad-do-it))))
+  :custom ((pos-tip-internal-border-width 6)
+           (pos-tip-border-width          1))
+  :config (defadvice popup-menu-show-quick-help
+              (around pos-tip-popup-menu-show-quick-help () activate)
+            "Show quick help using `pos-tip-show'."
+            (if (display-graphic-p)
+                (let ((doc (popup-menu-document
+                            menu (or item
+                                     (popup-selected-item menu)))))
+                  (when (stringp doc)
+                    (pos-tip-show doc nil
+                                  (if (popup-hidden-p menu)
+                                      (or (plist-get args :point)
+                                          (point))
+                                    (overlay-end (popup-line-overlay
+                                                  menu (+ (popup-offset menu)
+                                                          (popup-selected-line menu)))))
+                                  nil 0) nil))
+              ad-do-it)))
 
 ;; Turn on subword-mode for non-lispy languages
 (use-package subword
