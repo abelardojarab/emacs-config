@@ -1,2 +1,0 @@
-;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/challenger-deep-theme-20191031.2052/challenger-deep-theme.el  -*- no-byte-compile: t -*-
-(define-package "challenger-deep-theme" "20191031.2052" "challenger-deep Theme" '((emacs "24")) :commit "17ac92b95cd7d2f23a1ba4c49e4a87aa02cc8655" :authors '(("MaxSt")) :maintainer '("MaxSt") :url "https://github.com/challenger-deep-theme/emacs")
