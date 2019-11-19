@@ -247,7 +247,8 @@
     python
     js
     C
-    haskell)
+    haskell
+    restclient)
   "Modes where Org can utilize Babel"
   :group 'my/customs
   :type 'list)
