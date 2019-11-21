@@ -69,7 +69,6 @@
          ("RET"                              . company-complete-selection))
   :init (global-company-mode t)
   :hook ((org-mode          . add-pcomplete-to-capf)
-         ;; (minibuffer-setup  . company-minibuffer-setup)
          ((c-mode c++-mode) . company-c-setup)
          (text-mode         . company-text-setup))
   :config (progn
@@ -137,19 +136,21 @@
               (make-local-variable 'company-backends)
               (setq company-backends (copy-tree company-backends))
 
-              ;; Prefer gtags
-              (if (and (executable-find "global")
-                       (projectile-project-p)
-                       (file-exists-p (concat (projectile-project-root)
-                                              "GTAGS")))
+              ;; Prefer clangd
+              (if (or (executable-find "cquery")
+                      (executable-find "clangd"))
                   (setf (car company-backends)
-                        (append '(company-gtags)
+                        (append '(company-lsp)
                                 (car company-backends)))
 
-                (if (or (executable-find "cquery")
-                        (executable-find "clangd"))
+                ;; Fallback to global
+                (if (and (executable-find "global")
+                         (projectile-project-p)
+                         (file-exists-p (concat (projectile-project-root)
+                                                "GTAGS")))
+
                     (setf (car company-backends)
-                          (append '(company-lsp)
+                          (append '(company-gtags)
                                   (car company-backends)))
 
                   ;; Fallback to cmake/clang backends
@@ -163,8 +164,7 @@
                       (when (executable-find "irony-server")
                         (setf (car company-backends)
                               (append '(company-irony)
-                                      (car company-backends)))))))
-                ))
+                                      (car company-backends)))))))))
 
             ;; Documentation popups for company
             (use-package company-box
