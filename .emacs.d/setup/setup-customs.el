@@ -113,7 +113,7 @@
   :type 'list)
 
 (defcustom my/emacs-theme-console
-  'zerodark
+  'solarized-wombat-dark
   "Preferred Emacs theme"
   :group 'my/customs
   :type 'list)
@@ -247,7 +247,8 @@
     python
     js
     C
-    haskell)
+    haskell
+    restclient)
   "Modes where Org can utilize Babel"
   :group 'my/customs
   :type 'list)
