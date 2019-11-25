@@ -225,5 +225,9 @@ all the buffers."
   :commands dimmer-mode
   :config (dimmer-mode t))
 
+;; VSCode-style icons
+(use-package vscode-icon
+  :commands (vscode-icon-for-file))
+
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here

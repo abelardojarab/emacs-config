@@ -392,6 +392,7 @@
 (depends-on "visual-fill-column")
 (depends-on "visual-regexp")
 (depends-on "visual-regexp-steroids")
+(depends-on "vscode-icon")
 (depends-on "volatile-highlights")
 (depends-on "w3m")
 (depends-on "wanderlust")
@@ -414,6 +415,7 @@
 ;; Themes
 (depends-on "ample-theme")
 (depends-on "atom-one-dark-theme")
+(depends-on "base16-theme")
 (depends-on "challenger-deep-theme")
 (depends-on "cloud-theme")
 (depends-on "creamsody-theme")
