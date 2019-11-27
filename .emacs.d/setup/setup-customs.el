@@ -113,7 +113,7 @@
   :type 'list)
 
 (defcustom my/emacs-theme-console
-  'solarized-wombat-dark
+  'zerodark
   "Preferred Emacs theme"
   :group 'my/customs
   :type 'list)
