@@ -1,0 +1,2 @@
+;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/ivy-rich-20191202.30/ivy-rich.el  -*- no-byte-compile: t -*-
+(define-package "ivy-rich" "20191202.30" "More friendly display transformer for ivy." '((emacs "24.4") (ivy "0.8.0")) :commit "77191397db348cbd7031cdadfb6873aa35853236" :keywords '("ivy") :authors '(("Yevgnen Koh" . "wherejoystarts@gmail.com")) :maintainer '("Yevgnen Koh" . "wherejoystarts@gmail.com"))

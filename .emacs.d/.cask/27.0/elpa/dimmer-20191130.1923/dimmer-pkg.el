@@ -1,0 +1,2 @@
+;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/dimmer-20191130.1923/dimmer.el  -*- no-byte-compile: t -*-
+(define-package "dimmer" "20191130.1923" "visually highlight the selected buffer" '((emacs "25")) :commit "5602f041084441dabd2c471af10e23894bf2b721" :keywords '("faces" "editing") :authors '(("Neil Okamoto")) :maintainer '("Neil Okamoto") :url "https://github.com/gonewest818/dimmer.el")
