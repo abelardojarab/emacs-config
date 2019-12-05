@@ -86,8 +86,7 @@
              rtags-start-process-unless-running
              rtags-eldoc-function
              my/c-mode-init-rtags)
-  :if (and (executable-find "rdm")
-           (not (executable-find "clangd")))
+  :if (executable-find "rdm")
   :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory))
   :bind (:map c++-mode-map
               ("C-c C-i" . rtags-print-symbol-info)
@@ -138,8 +137,9 @@
                          (not (file-exists-p (concat (projectile-project-root)
                                                      "GTAGS"))))
                 (rtags-start-process-unless-running)
-                (setq-local eldoc-documentation-function #'rtags-eldoc-function)
-                (eldoc-mode t)))))
+                (unless (executable-find "clangd")
+                  (setq-local eldoc-documentation-function #'rtags-eldoc-function)
+                  (eldoc-mode t))))))
 
 ;; cmake syntax highlighting
 (use-package cmake-mode
@@ -264,8 +264,7 @@
                 (when (and (cmake-ide--locate-cmakelists)
                            (file-exists-p (cmake-ide--locate-cmakelists)))
                   (cmake-ide-maybe-run-cmake)
-                  (when (and (not (executable-find "clangd"))
-                             (executable-find "rdm"))
+                  (when (executable-find "rdm")
                     (cmake-ide-maybe-start-rdm)
                     (my/c-mode-init-rtags))
                   (cmake-project-mode 1)
