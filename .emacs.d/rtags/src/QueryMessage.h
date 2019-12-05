@@ -33,6 +33,7 @@ public:
     enum Type {
         Invalid,
         GenerateTest,
+        AsmFile,
         CheckReindex,
         ClassHierarchy,
         ClearProjects,
@@ -71,10 +72,8 @@ public:
         Suspend,
         SymbolInfo,
         Validate,
-#ifdef RTAGS_HAS_LUA
-        VisitAST,
-#endif
-        Tokens
+        Tokens,
+        IncludePath
     };
 
     enum Flag {
@@ -126,7 +125,9 @@ public:
         CodeCompletionEnabled = (1ull << 44),
         SynchronousDiagnostics = (1ull << 45),
         CodeCompleteNoWait = (1ull << 46),
-        AllTargets = (1ull << 47)
+        SymbolInfoIncludeSourceCode = (1ull << 47),
+        AllTargets = (1ull << 48),
+        HasMatch = (1ull << 29)
     };
 
     QueryMessage(Type type = Invalid);
@@ -177,11 +178,6 @@ public:
         std::sort(mPathFilters.begin(), mPathFilters.end());
     }
 
-#ifdef RTAGS_HAS_LUA
-    void setVisitASTScripts(const List<String> &scripts) { mVisitASTScripts = scripts; }
-    List<String> visitASTScripts() const { return mVisitASTScripts; }
-#endif
-
     void setKindFilters(const KindFilters &kindFilters) { mKindFilters = kindFilters; }
     const KindFilters &kindFilters() const { return mKindFilters; }
 
@@ -211,6 +207,9 @@ public:
     int minLine() const { return mMinLine; }
     int maxLine() const { return mMaxLine; }
 
+    int maxDepth() const { return mMaxDepth; }
+    void setMaxDepth(int depth) { mMaxDepth = depth; }
+
     int max() const { return mMax; }
     void setMax(int max) { mMax = max; }
 
@@ -223,6 +222,7 @@ public:
         case Project:
         case DeleteProject:
         case Reindex:
+        case IsIndexing:
         case RemoveFile:
         case Sources:
             mFlags |= MatchRegex;
@@ -249,15 +249,12 @@ private:
     String mQuery, mCodeCompletePrefix;
     Type mType;
     Flags<QueryMessage::Flag> mFlags;
-    int mMax, mMinLine, mMaxLine, mBuildIndex;
+    int mMax, mMaxDepth, mMinLine, mMaxLine, mBuildIndex;
     List<PathFilter> mPathFilters;
     KindFilters mKindFilters;
     Path mCurrentFile;
     UnsavedFiles mUnsavedFiles;
     int mTerminalWidth;
-#ifdef RTAGS_HAS_LUA
-    List<String> mVisitASTScripts;
-#endif
 };
 
 DECLARE_NATIVE_TYPE(QueryMessage::Type);

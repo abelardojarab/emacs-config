@@ -12,6 +12,7 @@
                              (setq debug-on-error nil)))
 
 (defvar debian-aspell-only-dictionary-alist nil)
+(defvar ivy-completing-read-handlers-alist nil)
 
 (defvar org-directory "~/workspace/Documents/Org")
 (if (not (file-exists-p org-directory))

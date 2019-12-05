@@ -36,14 +36,13 @@ public:
         : RTagsMessage(MessageId), mParseTime(0), mId(0), mBytesWritten(0)
     {}
 
-    void encode(Serializer &serializer) const;
-    void decode(Deserializer &deserializer);
+    void encode(Serializer &serializer) const override;
+    void decode(Deserializer &deserializer) override;
 
     enum Flag {
         None = 0x0,
         ParseFailure = 0x1,
-        InclusionError = 0x2,
-        UsedPCH = 0x4
+        UsedPCH = 0x2
     };
     Flags<Flag> flags() const { return mFlags; }
     void setFlags(Flags<Flag> f) { mFlags = f; }
@@ -83,20 +82,36 @@ public:
 
     const String &message() const { return mMessage; }
     void setMessage(const String &msg) { mMessage = msg; }
+    void setMessage(String &&msg) { mMessage = std::move(msg); }
 
     FixIts &fixIts() { return mFixIts; }
     Diagnostics &diagnostics() { return mDiagnostics; }
     Includes &includes() { return mIncludes; }
     enum FileFlag {
         NoFileFlag = 0x0,
-        Visited = 0x1,
-        IncludeError = 0x2
+        Visited = 0x1
     };
     Hash<uint32_t, Flags<FileFlag> > &files() { return mFiles; }
     const Hash<uint32_t, Flags<FileFlag> > &files() const { return mFiles; }
 
     size_t bytesWritten() const { return mBytesWritten; }
     void setBytesWritten(size_t bytes) { mBytesWritten = bytes; }
+
+    void clear()
+    {
+        clearCache();
+        mProject.clear();
+        mParseTime = 0;
+        mId = 0;
+        mIndexerJobFlags.clear();
+        mMessage.clear();
+        mFixIts.clear();
+        mDiagnostics.clear();
+        mIncludes.clear();
+        mFiles.clear();
+        mFlags.clear();
+        mBytesWritten = 0;
+    }
 private:
     Path mProject;
     uint64_t mParseTime, mId;

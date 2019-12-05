@@ -43,12 +43,8 @@ class Match;
 class RestoreThread;
 struct DependencyNode
 {
-    enum Flag {
-        Flag_None = 0x0,
-        Flag_IncludeError = 0x1
-    };
-    DependencyNode(uint32_t f, Flags<Flag> l = NullFlags)
-        : fileId(f), flags(l)
+    DependencyNode(uint32_t f)
+        : fileId(f)
     {}
     void include(DependencyNode *dependee)
     {
@@ -60,11 +56,7 @@ struct DependencyNode
 
     Dependencies dependents, includes;
     uint32_t fileId;
-
-    Flags<Flag> flags;
 };
-
-RCT_FLAGS(DependencyNode::Flag);
 
 class Project : public std::enable_shared_from_this<Project>
 {
@@ -77,7 +69,7 @@ public:
 
     Path path() const { return mPath; }
     Path projectDataDir() const { return mProjectDataDir; }
-    bool match(const Match &match, bool *indexed = 0) const;
+    bool match(const Match &match, bool *indexed = nullptr) const;
 
     enum FileMapType {
         Symbols,
@@ -95,30 +87,30 @@ public:
         case Usrs: return "usrs";
         case Tokens: return "tokens";
         }
-        return 0;
+        return nullptr;
     }
-    std::shared_ptr<FileMap<String, Set<Location> > > openSymbolNames(uint32_t fileId, String *err = 0)
+    std::shared_ptr<FileMap<String, Set<Location> > > openSymbolNames(uint32_t fileId, String *err = nullptr)
     {
         assert(mFileMapScope);
         return mFileMapScope->openFileMap<String, Set<Location> >(SymbolNames, fileId, mFileMapScope->symbolNames, err);
     }
-    std::shared_ptr<FileMap<Location, Symbol> > openSymbols(uint32_t fileId, String *err = 0)
+    std::shared_ptr<FileMap<Location, Symbol> > openSymbols(uint32_t fileId, String *err = nullptr)
     {
         assert(mFileMapScope);
         return mFileMapScope->openFileMap<Location, Symbol>(Symbols, fileId, mFileMapScope->symbols, err);
     }
-    std::shared_ptr<FileMap<String, Set<Location> > > openTargets(uint32_t fileId, String *err = 0)
+    std::shared_ptr<FileMap<String, Set<Location> > > openTargets(uint32_t fileId, String *err = nullptr)
     {
         assert(mFileMapScope);
         return mFileMapScope->openFileMap<String, Set<Location> >(Targets, fileId, mFileMapScope->targets, err);
     }
-    std::shared_ptr<FileMap<String, Set<Location> > > openUsrs(uint32_t fileId, String *err = 0)
+    std::shared_ptr<FileMap<String, Set<Location> > > openUsrs(uint32_t fileId, String *err = nullptr)
     {
         assert(mFileMapScope);
         return mFileMapScope->openFileMap<String, Set<Location> >(Usrs, fileId, mFileMapScope->usrs, err);
     }
 
-    std::shared_ptr<FileMap<uint32_t, Token> > openTokens(uint32_t fileId, String *err = 0)
+    std::shared_ptr<FileMap<uint32_t, Token> > openTokens(uint32_t fileId, String *err = nullptr)
     {
         assert(mFileMapScope);
         return mFileMapScope->openFileMap<uint32_t, Token>(Tokens, fileId, mFileMapScope->tokens, err);
@@ -157,7 +149,7 @@ public:
         return Rct::wildCmp(pattern.constData(), symbolName.constData(), cs);
     }
 
-    Symbol findSymbol(Location location, int *index = 0);
+    Symbol findSymbol(Location location, int *index = nullptr);
     Set<Symbol> findTargets(Location location) { return findTargets(findSymbol(location)); }
     Set<Symbol> findTargets(const Symbol &symbol);
     Symbol findTarget(Location location) { return RTags::bestTarget(findTargets(location)); }
@@ -198,7 +190,7 @@ public:
     Source source(uint32_t fileId, int buildIndex) const;
     bool hasSource(uint32_t fileId) const;
     bool isActiveJob(uint32_t sourceFileId) { return !sourceFileId || mActiveJobs.contains(sourceFileId); }
-    inline bool visitFile(uint32_t fileId, const Path &path, uint32_t sourceFileId);
+    inline bool visitFile(uint32_t fileId, uint32_t sourceFileId);
     inline void releaseFileIds(const Set<uint32_t> &fileIds);
     String fixIts(uint32_t fileId) const;
     int reindex(const Match &match,
@@ -227,7 +219,7 @@ public:
     void dumpFileMaps(const std::shared_ptr<QueryMessage> &msg, const std::shared_ptr<Connection> &conn);
     void removeSources(const Hash<uint32_t, uint32_t> &sources); // key fileid, value fileid for compile_commands.json
     void removeSource(uint32_t fileId);
-    Hash<uint32_t, Path> visitedFiles() const
+    Set<uint32_t> visitedFiles() const
     {
         std::lock_guard<std::mutex> lock(mMutex);
         return mVisitedFiles;
@@ -235,7 +227,10 @@ public:
     void encodeVisitedFiles(Serializer &serializer)
     {
         std::lock_guard<std::mutex> lock(mMutex);
-        serializer << mVisitedFiles;
+        serializer << static_cast<uint32_t>(mVisitedFiles.size());
+        for (uint32_t fileId : mVisitedFiles) {
+            serializer << fileId << Location::path(fileId);
+        }
     }
 
     enum ScopeFlag { None = 0x0, NoValidate = 0x1 };
@@ -316,7 +311,7 @@ private:
         Validate,
         ValidateSilent
     };
-    bool validate(uint32_t fileId, ValidateMode mode, String *error = 0) const;
+    bool validate(uint32_t fileId, ValidateMode mode, String *error = nullptr) const;
     void removeDependencies(uint32_t fileId);
     void updateDependencies(uint32_t fileId, const std::shared_ptr<IndexDataMessage> &msg);
     void loadFailed(uint32_t fileId);
@@ -326,7 +321,6 @@ private:
                        const UnsavedFiles &unsavedFiles = UnsavedFiles(),
                        const std::shared_ptr<Connection> &wait = std::shared_ptr<Connection>());
     void onDirtyTimeout(Timer *);
-    bool isTemplateDiagnostic(const std::pair<Location, Diagnostic> &diagnostic);
 
     struct FileMapScope {
         FileMapScope(const std::shared_ptr<Project> &proj, int m, Flags<ScopeFlag> f)
@@ -448,7 +442,7 @@ private:
 
     Files mFiles;
 
-    Hash<uint32_t, Path> mVisitedFiles;
+    Set<uint32_t> mVisitedFiles;
     int mJobCounter, mJobsStarted;
 
     time_t mLastIdleTime;
@@ -479,18 +473,16 @@ private:
 RCT_FLAGS(Project::WatchMode);
 RCT_FLAGS(Project::ScopeFlag);
 
-inline bool Project::visitFile(uint32_t visitFileId, const Path &path, uint32_t id)
+inline bool Project::visitFile(uint32_t visitFileId, uint32_t id)
 {
     assert(id);
     std::lock_guard<std::mutex> lock(mMutex);
     assert(visitFileId);
-    Path &p = mVisitedFiles[visitFileId];
     assert(id);
     assert(mActiveJobs.contains(id));
     std::shared_ptr<IndexerJob> &job = mActiveJobs[id];
     assert(job);
-    if (p.isEmpty()) {
-        p = path;
+    if (mVisitedFiles.insert(visitFileId)) {
         job->visited.insert(visitFileId);
         return true;
     }

@@ -239,7 +239,7 @@ void ProcessTestSuite::readFromStderr()
 
 void ProcessTestSuite::signals()
 {
-    EventLoop::SharedPtr loop(new EventLoop);
+    std::shared_ptr<EventLoop> loop(new EventLoop);
     loop->init(EventLoop::MainEventLoop);
 
     Process p;
@@ -263,7 +263,7 @@ void ProcessTestSuite::signals()
                                     stderrData.append(pp->readAllStdErr().c_str());
                                 });
 
-    p.finished().connect([&](Process* pp)
+    p.finished().connect([&](Process* pp, pid_t)
                          {
                              std::lock_guard<std::mutex> lock(mut);
                              if(pp != &p) wrongProcessObjPassed = true;
@@ -325,7 +325,7 @@ void ProcessTestSuite::env()
 
 void ProcessTestSuite::writeToStdin()
 {
-    EventLoop::SharedPtr loop(new EventLoop);
+    std::shared_ptr<EventLoop> loop(new EventLoop);
     loop->init(EventLoop::MainEventLoop);
 
     Process p;

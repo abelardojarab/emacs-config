@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 2.8.6)
 project(rtags)
 set(RTAGS_VERSION_MAJOR 2)
-set(RTAGS_VERSION_MINOR 21)
-set(RTAGS_VERSION_DATABASE 126)
-set(RTAGS_VERSION_SOURCES_FILE 14)
+set(RTAGS_VERSION_MINOR 34)
+set(RTAGS_VERSION_DATABASE 129)
+set(RTAGS_VERSION_SOURCES_FILE 15)
 set(RTAGS_VERSION ${RTAGS_VERSION_MAJOR}.${RTAGS_VERSION_MINOR}.${RTAGS_VERSION_DATABASE})
+set(RTAGS_BINARY_ROOT_DIR ${PROJECT_BINARY_DIR})
 
 if (RTAGS_ENABLE_DEV_OPTIONS)
     set(CPACK_PACKAGE_INSTALL_DIRECTORY "RTAGS")
@@ -36,10 +37,14 @@ if (RTAGS_ENABLE_DEV_OPTIONS)
 
     include(CPack)
 else ()
+    set(BUILD_TESTING 0 CACHE BOOL "Build testing files; requires cppunit.")
 
     set(RCT_WITH_TESTS ${BUILD_TESTING})
 
     set(CMAKE_LEGACY_CYGWIN_WIN32 0)
+    if (CMAKE_COMPILER_IS_GNUCXX)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wzero-as-null-pointer-constant")
+    endif ()
 
     if (APPLE)
         set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -g")
@@ -104,6 +109,13 @@ else ()
             set_property(TEST nosetests PROPERTY ENVIRONMENT "RTAGS_BINARY_DIR=${CMAKE_BINARY_DIR}/bin")
         else()
             message(WARNING "Nosetests executable not found! Excluding automated_tests from tests.")
+        endif ()
+
+        if (EMACS_EXECUTABLE AND NOT RTAGS_NO_ELISP_FILES)
+            add_test(NAME elisptests COMMAND ${EMACS_EXECUTABLE} -batch -L ${CMAKE_BINARY_DIR}/src -l ${CMAKE_SOURCE_DIR}/tests/lisp/rtags-test.el -f ert-run-tests-batch-and-exit)
+            set_property(TEST elisptests PROPERTY ENVIRONMENT "PATH=$ENV{PATH}:${CMAKE_BINARY_DIR}/bin")
+        else()
+            message(WARNING "No suitable Emacs version found! Skipping elisp tests.")
         endif ()
     endif ()
 

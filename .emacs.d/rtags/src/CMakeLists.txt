@@ -85,7 +85,7 @@ int main()
     set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${LIBCLANG_LIBRARIES})
     check_cxx_source_compiles("${LIBCLANG_COMPILE_TEST}" LIBCLANG_COMPILES)
     if (NOT LIBCLANG_COMPILES)
-        message(FATAL_ERROR "Failed to compile small clang test app.\nIt's likely that the include file <clang-c/Index.h> could not be found!\nMaybe you need to install the clang development package?\nSee CMakeFiles/CMakeError.log for more info.")
+        message(FATAL_ERROR "Failed to compile small clang test app.\nIt's likely that the include file <clang-c/Index.h> could not be found!\nMaybe you need to install the clang development package (delete the CMakeCache.txt file before trying to run cmake again after installation)?\nSee CMakeFiles/CMakeError.log for more info.")
     endif ()
     unset(CMAKE_REQUIRED_FLAGS)
     unset(CMAKE_REQUIRED_LIBRARIES)
@@ -107,30 +107,23 @@ int main()
 }
 ")
 include(CheckCXXSourceRuns)
-set(CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS} "-std=c++11" ${CMAKE_CXX_FLAGS} ${LIBCLANG_CXXFLAGS})
+#set(CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS} "-std=c++11" ${CMAKE_CXX_FLAGS} ${LIBCLANG_CXXFLAGS})
 #check_cxx_source_runs("${CXX_11_EXTENDED_REGEX_TEST}" CXX_11_EXTENDED_REGEX_SUPPORT)
 #if (NOT CXX_11_EXTENDED_REGEX_SUPPORT)
 #    message(FATAL_ERROR "The compiler uses a libstdc++ without c++11 regex support.")
 #endif ()
-unset(CMAKE_REQUIRED_FLAGS)
-unset(CMAKE_REQUIRED_LIBRARIES)
-unset(CXX_11_EXTENDED_REGEX_SUPPORT)
+#unset(CMAKE_REQUIRED_FLAGS)
+#unset(CMAKE_REQUIRED_LIBRARIES)
+#unset(CXX_11_EXTENDED_REGEX_SUPPORT)
 
 if (EXISTS ${CLANG_COMPILATION_INCLUDE})
     add_definitions(-DHAVE_CXCOMPILATIONDATABASE)
 endif ()
 
-if (LUA_ENABLED)
-    ExternalProject_Add(lua
-        DOWNLOAD_COMMAND ""
-        SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/lua
-        INSTALL_COMMAND ""
-        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=0 -DCMAKE_GENERATOR=${CMAKE_GENERATOR})
-endif ()
-
 set(RCT_RTTI_ENABLED 1)
 set(RCT_NO_INSTALL 1)
-set(RCT_NO_LIBRARY 1)
+set(RCT_STATIC 1)
+set(RCT_NO_LIBRARY 0)
 # Everyting which as been set either in rct/rct.cmake or rct/compiler.cmake
 # doesn't need to be set in this file again.
 include(rct/rct.cmake)
@@ -143,7 +136,6 @@ if (NOT CYGWIN)
 endif ()
 
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
-    add_compile_options("-Og")
     add_definitions("-DRTAGS_DEBUG")
     set(RCT_EVENTLOOP_CALLBACK_TIME_THRESHOLD 2000)
 endif ()
@@ -159,8 +151,6 @@ if (CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
     add_definitions(-D__LONG_LONG_SUPPORTED)
 endif ()
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
-
 set(RTAGS_SOURCES
     ClangIndexer.cpp
     ClangThread.cpp
@@ -168,6 +158,7 @@ set(RTAGS_SOURCES
     CompilerManager.cpp
     CompletionThread.cpp
     DependenciesJob.cpp
+    IncludePathJob.cpp
     FileManager.cpp
     FindFileJob.cpp
     FindSymbolsJob.cpp
@@ -195,24 +186,11 @@ set(RTAGS_SOURCES
     Symbol.cpp
     SymbolInfoJob.cpp
     Token.cpp
-    TokensJob.cpp
-    ${RCT_SOURCES})
-
-if (RP_USE_THREAD)
-    list(APPEND RTAGS_SOURCES RPThread.cpp)
-    add_definitions(-DRP_USE_THREAD=1)
-endif ()
-
-if (LUA_ENABLED)
-    list(APPEND RTAGS_SOURCES AST.cpp)
-endif ()
+    TokensJob.cpp)
 
 add_library(rtags STATIC ${RTAGS_SOURCES})
 if (RTAGS_BUILD_CLANG)
     add_dependencies(rtags llvmclang)
-endif ()
-if (LUA_ENABLED)
-    add_dependencies(rtags lua)
 endif ()
 
 if (RTAGS_COTIRE)
@@ -221,12 +199,7 @@ if (RTAGS_COTIRE)
     cotire(rtags)
 endif ()
 
-include_directories(
-    ${CMAKE_CURRENT_LIST_DIR}
-    ${RCT_INCLUDE_DIRS}
-    ${CMAKE_CURRENT_LIST_DIR}/selene/include
-    ${CMAKE_CURRENT_BINARY_DIR}/lua-prefix/src/lua-build
-    ${CMAKE_CURRENT_LIST_DIR}/lua/src)
+include_directories(${CMAKE_CURRENT_LIST_DIR} ${RCT_INCLUDE_DIRS})
 
 if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
     set(START_GROUP "")
@@ -237,10 +210,6 @@ else ()
 endif ()
 
 set(RTAGS_LIBRARIES rtags ${START_GROUP} ${LIBCLANG_LIBRARIES} ${END_GROUP})
-if (LUA_ENABLED)
-    list(APPEND RTAGS_LIBRARIES -L${CMAKE_CURRENT_BINARY_DIR}/lua-prefix/src/lua-build/ liblua.a)
-    add_definitions(-DRTAGS_HAS_LUA)
-endif ()
 
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     set_source_files_properties(AST.cpp PROPERTIES
@@ -250,8 +219,10 @@ else ()
         COMPILE_FLAGS "-Wno-unused-but-set-parameter -Wno-unused-parameter -Wno-unused-variable -ftemplate-depth=2000 -Wno-cast-qual -Wno-shadow")
 endif()
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${RTAGS_BINARY_ROOT_DIR}/bin)
+
 # RCT_LIBRARIES and stdc++ library must be at the end
-set(RTAGS_LIBRARIES ${RTAGS_LIBRARIES} -lstdc++ ${RCT_LIBRARIES})
+set(RTAGS_LIBRARIES ${RTAGS_LIBRARIES} -lstdc++ ${RCT_LIBRARIES} rct)
 add_executable(rc rc.cpp)
 target_link_libraries(rc ${RTAGS_LIBRARIES})
 
@@ -291,8 +262,8 @@ if (EMACS_EXECUTABLE)
         set(RTAGS_NO_ELISP_FILES TRUE)
     endif ()
 else ()
-    set(RTAGS_NO_ELISP_FILES TRUE)
     message(STATUS "Emacs was not found, elisp files are not going to be installed!")
+    set(RTAGS_NO_ELISP_FILES TRUE)
 endif ()
 
 set(RTAGS_ELISP_FILES
@@ -303,14 +274,11 @@ set(RTAGS_ELISP_FILES
     company-rtags.el
     flycheck-rtags.el)
 
-if (LUA_ENABLED AND NOT RTAGS_NO_LUA_FILES AND LUA_FOUND AND NOT ${CMAKE_CURRENT_BINARY_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
-    add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/rtags.lua
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/rtags.lua ${CMAKE_CURRENT_BINARY_DIR}/rtags.lua
-        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/rtags.lua
-        COMMENT "Copying ${CMAKE_CURRENT_SOURCE_DIR}/rtags.lua -> ${CMAKE_CURRENT_BINARY_DIR}/rtags.lua")
-endif ()
-
 if (NOT RTAGS_NO_ELISP_FILES)
+    if ("${EMACS_VERSION}" GREATER "25.0" OR "${EMACS_VERSION}" EQUAL "25.0")
+        list(APPEND RTAGS_ELISP_FILES rtags-xref.el)
+    endif ()
+
     if (NOT RTAGS_ELISP_INSTALL_LOCATION)
         set(RTAGS_ELISP_INSTALL_LOCATION ${CMAKE_INSTALL_PREFIX}/share/emacs/site-lisp/rtags/)
     endif ()

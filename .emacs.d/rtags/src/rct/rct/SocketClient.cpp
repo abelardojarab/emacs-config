@@ -49,7 +49,7 @@ SocketClient::SocketClient(int f, unsigned int mode)
     mBlocking = (mode & Blocking);
 
     if (!mBlocking) {
-        if (EventLoop::SharedPtr loop = EventLoop::eventLoop()) {
+        if (std::shared_ptr<EventLoop> loop = EventLoop::eventLoop()) {
             loop->registerSocket(mFd, EventLoop::SocketRead,
                                  std::bind(&SocketClient::socketCallback, this, std::placeholders::_1, std::placeholders::_2));
 #ifndef _WIN32
@@ -74,7 +74,7 @@ void SocketClient::close()
         return;
     mSocketState = Disconnected;
     if (!mBlocking) {
-        if (EventLoop::SharedPtr loop = EventLoop::eventLoop())
+        if (std::shared_ptr<EventLoop> loop = EventLoop::eventLoop())
             loop->unregisterSocket(mFd);
     }
     ::close(mFd);
@@ -87,10 +87,10 @@ class Resolver
 {
 public:
     Resolver();
-    Resolver(const String& host, uint16_t port, const SocketClient::SharedPtr& socket);
+    Resolver(const String& host, uint16_t port, const std::shared_ptr<SocketClient>& socket);
     ~Resolver();
 
-    void resolve(const String& host, uint16_t port, const SocketClient::SharedPtr& socket);
+    void resolve(const String& host, uint16_t port, const std::shared_ptr<SocketClient>& socket);
 
     addrinfo* res;
     sockaddr* addr;
@@ -98,17 +98,17 @@ public:
 };
 
 Resolver::Resolver()
-    : res(0), addr(0), size(0)
+    : res(nullptr), addr(nullptr), size(0)
 {
 }
 
-Resolver::Resolver(const String& host, uint16_t port, const SocketClient::SharedPtr& socket)
-    : res(0), addr(0), size(0)
+Resolver::Resolver(const String& host, uint16_t port, const std::shared_ptr<SocketClient>& socket)
+    : res(nullptr), addr(nullptr), size(0)
 {
     resolve(host, port, socket);
 }
 
-void Resolver::resolve(const String& host, uint16_t port, const SocketClient::SharedPtr& socket)
+void Resolver::resolve(const String& host, uint16_t port, const std::shared_ptr<SocketClient>& socket)
 {
     // first, see if this parses as an IP mAddress
     {
@@ -151,7 +151,7 @@ void Resolver::resolve(const String& host, uint16_t port, const SocketClient::Sh
     hints.ai_family = AF_UNSPEC; // AF_INET or AF_INET6 to force version
     hints.ai_socktype = SOCK_STREAM;
 
-    if (getaddrinfo(host.constData(), NULL, &hints, &res) != 0) {
+    if (getaddrinfo(host.constData(), nullptr, &hints, &res) != 0) {
         // bad
         socket->mSignalError(socket, SocketClient::DnsError);
         socket->close();
@@ -176,7 +176,7 @@ void Resolver::resolve(const String& host, uint16_t port, const SocketClient::Sh
         socket->mSignalError(socket, SocketClient::DnsError);
         socket->close();
         freeaddrinfo(res);
-        res = 0;
+        res = nullptr;
         return;
     }
 }
@@ -195,7 +195,7 @@ Resolver::~Resolver()
 
 bool SocketClient::connect(const String& host, uint16_t port)
 {
-    SocketClient::SharedPtr tcpSocket = shared_from_this();
+    std::shared_ptr<SocketClient> tcpSocket = shared_from_this();
     Resolver resolver(host, port, tcpSocket);
     if (!resolver.addr)
         return false;
@@ -222,7 +222,7 @@ bool SocketClient::connect(const String& host, uint16_t port)
             close();
             return false;
         }
-        if (EventLoop::SharedPtr loop = EventLoop::eventLoop()) {
+        if (std::shared_ptr<EventLoop> loop = EventLoop::eventLoop()) {
             loop->updateSocket(mFd, EventLoop::SocketRead|EventLoop::SocketWrite|EventLoop::SocketOneShot);
             mWriteWait = true;
         }
@@ -246,7 +246,7 @@ bool SocketClient::connect(const String& path)
     addr_un.sun_family = AF_UNIX;
     strncpy(addr_un.sun_path, path.constData(), sizeof(addr_un.sun_path));
 
-    SocketClient::SharedPtr unixSocket = shared_from_this();
+    std::shared_ptr<SocketClient> unixSocket = shared_from_this();
 
     int e;
     eintrwrap(e, ::connect(mFd, &addr, sizeof(addr_un)));
@@ -262,7 +262,7 @@ bool SocketClient::connect(const String& path)
             close();
             return false;
         }
-        if (EventLoop::SharedPtr loop = EventLoop::eventLoop()) {
+        if (std::shared_ptr<EventLoop> loop = EventLoop::eventLoop()) {
             loop->updateSocket(mFd, EventLoop::SocketRead|EventLoop::SocketWrite|EventLoop::SocketOneShot);
             mWriteWait = true;
         }
@@ -307,7 +307,7 @@ bool SocketClient::bind(uint16_t port)
 #endif
     e = ::setsockopt(mFd, SOL_SOCKET, SO_REUSEADDR, pin, sizeof(in));
     if (e == -1) {
-        SocketClient::SharedPtr udpSocket = shared_from_this();
+        std::shared_ptr<SocketClient> udpSocket = shared_from_this();
         mSignalError(udpSocket, BindError);
         close();
         return false;
@@ -318,7 +318,7 @@ bool SocketClient::bind(uint16_t port)
         return true;
     }
 
-    SocketClient::SharedPtr udpSocket = shared_from_this();
+    std::shared_ptr<SocketClient> udpSocket = shared_from_this();
     mSignalError(udpSocket, BindError);
     close();
     return false;
@@ -416,7 +416,7 @@ bool SocketClient::writeTo(const String& host, uint16_t port, const unsigned cha
 #endif
 
     assert((!size) == (!data));
-    SocketClient::SharedPtr socketPtr = shared_from_this();
+    std::shared_ptr<SocketClient> socketPtr = shared_from_this();
 
     Resolver resolver;
     if (port != 0)
@@ -446,25 +446,8 @@ bool SocketClient::writeTo(const String& host, uint16_t port, const unsigned cha
                 DEBUG() << "SENT(1)" << (writeBufferSize - total) << "BYTES" << e << errno;
                 if (e == -1) {
                     if (errno == EAGAIN || errno == EWOULDBLOCK) {
-                        if (mWMode == Synchronous) {
-                            if (EventLoop::SharedPtr loop = EventLoop::eventLoop()) {
-                                if (total) {
-                                    if (total < writeBufferSize) {
-                                        mWriteOffset += total;
-                                    } else {
-                                        mWriteOffset = 0;
-                                        mWriteBuffer.clear();
-                                    }
-                                    total = 0;
-                                }
-                                if (loop->processSocket(mFd) & EventLoop::SocketWrite)
-                                    break;
-                                if (mFd == -1)
-                                    return false;
-                            }
-                        }
                         assert(!mWriteWait);
-                        if (EventLoop::SharedPtr loop = EventLoop::eventLoop()) {
+                        if (std::shared_ptr<EventLoop> loop = EventLoop::eventLoop()) {
                             loop->updateSocket(mFd, EventLoop::SocketRead|EventLoop::SocketWrite|EventLoop::SocketOneShot);
                             mWriteWait = true;
                         }
@@ -495,7 +478,7 @@ bool SocketClient::writeTo(const String& host, uint16_t port, const unsigned cha
         }
         total = 0;
 
-        assert(data != 0 && size > 0);
+        assert(data != nullptr && size > 0);
 
         if (mWriteBuffer.isEmpty()) {
             for (;;) {
@@ -509,25 +492,8 @@ bool SocketClient::writeTo(const String& host, uint16_t port, const unsigned cha
                 DEBUG() << "SENT(2)" << (size - total) << "BYTES" << e << errno;
                 if (e == -1) {
                     if (errno == EAGAIN || errno == EWOULDBLOCK) {
-                        if (mWMode == Synchronous) {
-                            if (EventLoop::SharedPtr loop = EventLoop::eventLoop()) {
-                                // store the rest
-                                const unsigned int rem = size - total;
-                                if (mMaxWriteBufferSize && mWriteBuffer.size() + rem > mMaxWriteBufferSize) {
-                                    close();
-                                    return false;
-                                }
-                                mWriteBuffer.reserve(mWriteBuffer.size() + rem);
-                                memcpy(mWriteBuffer.end(), data + total, rem);
-                                mWriteBuffer.resize(mWriteBuffer.size() + rem);
-                                assert(!mWriteOffset);
-
-                                (void)loop->processSocket(mFd);
-                                return isConnected();
-                            }
-                        }
                         assert(!mWriteWait);
-                        if (EventLoop::SharedPtr loop = EventLoop::eventLoop()) {
+                        if (std::shared_ptr<EventLoop> loop = EventLoop::eventLoop()) {
                             loop->updateSocket(mFd, EventLoop::SocketRead|EventLoop::SocketWrite|EventLoop::SocketOneShot);
                             mWriteWait = true;
                         }
@@ -609,7 +575,7 @@ void SocketClient::socketCallback(int f, int mode)
     assert(f == mFd);
     (void)f;
 
-    SocketClient::SharedPtr socketPtr = shared_from_this();
+    std::shared_ptr<SocketClient> socketPtr = shared_from_this();
 
     if (mode == EventLoop::SocketError) {
         mSignalError(socketPtr, EventLoopError);
@@ -618,7 +584,7 @@ void SocketClient::socketCallback(int f, int mode)
     }
 
     if (mWriteWait && (mode & EventLoop::SocketWrite)) {
-        if (EventLoop::SharedPtr loop = EventLoop::eventLoop()) {
+        if (std::shared_ptr<EventLoop> loop = EventLoop::eventLoop()) {
             loop->updateSocket(mFd, EventLoop::SocketRead);
             mWriteWait = false;
         }
@@ -692,7 +658,7 @@ void SocketClient::socketCallback(int f, int mode)
             mSignalReadyRead(socketPtr, std::move(mReadBuffer));
 
         if (mWriteWait) {
-            if (EventLoop::SharedPtr loop = EventLoop::eventLoop()) {
+            if (std::shared_ptr<EventLoop> loop = EventLoop::eventLoop()) {
                 loop->updateSocket(mFd, EventLoop::SocketRead|EventLoop::SocketWrite|EventLoop::SocketOneShot);
             }
         }
@@ -721,7 +687,7 @@ void SocketClient::socketCallback(int f, int mode)
                 return;
             }
         }
-        write(0, 0);
+        write(nullptr, 0);
     }
 }
 
@@ -758,7 +724,7 @@ bool SocketClient::init(unsigned int mode)
 #endif
 
     if (!mBlocking) {
-        if (EventLoop::SharedPtr loop = EventLoop::eventLoop()) {
+        if (std::shared_ptr<EventLoop> loop = EventLoop::eventLoop()) {
             loop->registerSocket(mFd, EventLoop::SocketRead,
                                  std::bind(&SocketClient::socketCallback, this, std::placeholders::_1, std::placeholders::_2));
 #ifndef _WIN32   // no O_NONBLOCK on windows
@@ -815,7 +781,7 @@ double SocketClient::mbpsWritten() const
 #endif
 
 
-void SocketClient::bytesWritten(const SocketClient::SharedPtr &socket, uint64_t bytes)
+void SocketClient::bytesWritten(const std::shared_ptr<SocketClient> &socket, uint64_t bytes)
 {
     const uint64_t copy = bytes;
 #ifdef RCT_SOCKETCLIENT_TIMING_ENABLED

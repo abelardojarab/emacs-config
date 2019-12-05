@@ -21,6 +21,13 @@ public:
     virtual ~Message()
     {}
 
+    void clearCache()
+    {
+        mHeader.clear();
+        mValue.clear();
+        mVersion = 0;
+    }
+
     enum Flag {
         None = 0x0,
         Compressed = 0x1,
@@ -33,7 +40,7 @@ public:
     virtual void encode(Serializer &/* serializer */) const = 0;
     virtual void decode(Deserializer &/* deserializer */) = 0;
 
-    virtual size_t encodedSize() const { return -1; }
+    virtual size_t encodedSize() const { return String::npos; }
     enum MessageErrorType {
         Message_Success,
         Message_VersionError,
@@ -45,7 +52,7 @@ public:
         MessageErrorType type = Message_Success;
         String text;
     };
-    static std::shared_ptr<Message> create(int version, const char *data, int size, MessageError *error = 0);
+    static std::shared_ptr<Message> create(int version, const char *data, int size, MessageError *error = nullptr);
     template<typename T> static void registerMessage()
     {
         const uint8_t id = T::MessageId;

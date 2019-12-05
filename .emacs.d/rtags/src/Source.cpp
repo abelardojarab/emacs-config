@@ -99,6 +99,8 @@ static inline Source::Language guessLanguageFromSourceFile(const Path &sourceFil
             return Source::CPlusPlus;
         } else if (!strcmp(suffix, "c")) {
             return Source::C;
+        } else if (!strcmp(suffix, "cu")) {
+            return Source::C;
         } else if (!strcmp(suffix, "M")) {
             return Source::ObjectiveCPlusPlus;
         } else if (!strcmp(suffix, "mm")) {
@@ -281,6 +283,9 @@ static inline bool isCompiler(const Path &fullPath, const List<String> &environm
         return true;
     if (String(fullPath.fileName()).contains("emacs", String::CaseInsensitive))
         return false;
+    if (access(fullPath.constData(), R_OK | X_OK)) // can't execute it
+        return false;
+
     static Hash<Path, bool> sCache;
 
     bool ok;
@@ -324,19 +329,16 @@ static inline bool isCompiler(const Path &fullPath, const List<String> &environm
     return !proc.returnCode();
 }
 
-enum Mode {
-    Mode_Executable,
-    Mode_Compiler
-};
 static std::pair<Path, bool> resolveCompiler(const Path &unresolved,
                                              const Path &cwd,
-                                             const List<String>& environment,
+                                             const List<String> &environment,
                                              const List<Path> &pathEnvironment,
                                              SourceCache *cache)
 {
     std::pair<Path, bool> dummy;
     auto &compiler = cache ? cache->compilerCache[unresolved] : dummy;
     if (compiler.first.isEmpty()) {
+        bool wrapper = false;
         // error() << "Coming in with" << unresolved << cwd << pathEnvironment;
         Path resolve;
         Path file;
@@ -352,10 +354,9 @@ static std::pair<Path, bool> resolveCompiler(const Path &unresolved,
         if (!resolve.isEmpty()) {
             const Path resolved = resolve.resolved();
             if (isWrapper(resolved.fileName())) {
-                file = unresolved.fileName();
-            } else {
-                compiler.first = resolve;
+                wrapper = true;
             }
+            compiler.first = resolve;
         }
 
         if (compiler.first.isEmpty()) {
@@ -376,7 +377,7 @@ static std::pair<Path, bool> resolveCompiler(const Path &unresolved,
         } else {
             if (compiler.first.contains(".."))
                 compiler.first.canonicalize();
-            compiler.second = isCompiler(compiler.first, environment);
+            compiler.second = wrapper || isCompiler(compiler.first, environment);
         }
     }
 
@@ -581,11 +582,18 @@ SourceList Source::parse(const String &cmdLine,
                     language = ObjectiveC;
                 } else if (a == "objective-c++") {
                     language = ObjectiveCPlusPlus;
+                } else if (arg.size() > 2) {
+                    // intel compiler passes compiler options like SSE this way,
+                    // just ignore:
+                    // https://software.intel.com/en-us/cpp-compiler-developer-guide-and-reference-x-qx
+                    a.clear();
                 } else {
                     return SourceList();
                 }
-                arguments.append("-x");
-                arguments.append(a);
+                if (!a.isEmpty()) {
+                    arguments.append("-x");
+                    arguments.append(a);
+                }
             } else if (arg.startsWith("-D")) {
                 Define define;
                 String def, a;
@@ -914,6 +922,12 @@ List<String> Source::toCommandLine(Flags<CommandLineFlag> f, bool *usedPch) cons
         remove = config.value("remove-arguments").split(";").toSet();
     }
 
+    if (!(f & ExcludeDefaultArguments)) {
+        assert(server);
+        for (const auto &arg : server->options().defaultArguments)
+            ret.append(arg);
+    }
+
     for (size_t i=0; i<arguments.size(); ++i) {
         const String &arg = arguments.at(i);
         const bool hasValue = ::hasValue(arg);
@@ -930,11 +944,6 @@ List<String> Source::toCommandLine(Flags<CommandLineFlag> f, bool *usedPch) cons
         } else if (hasValue) {
             ++i;
         }
-    }
-    if (!(f & ExcludeDefaultArguments)) {
-        assert(server);
-        for (const auto &arg : server->options().defaultArguments)
-            ret.append(arg);
     }
 
     if (f & IncludeDefines) {

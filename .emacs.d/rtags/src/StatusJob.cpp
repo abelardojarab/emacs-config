@@ -36,7 +36,7 @@ int StatusJob::execute()
         return !strncasecmp(query.constData(), name, query.size());
     };
     bool matched = false;
-    const char *alternatives = "fileids|watchedpaths|dependencies|cursors|symbols|targets|symbolnames|sources|jobs|info|compilers|memory|project";
+    const char *alternatives = "fileids|watchedpaths|dependencies|cursors|symbols|targets|symbolnames|sources|jobs|daemon|info|compilers|memory|project";
 
     if (match("fileids")) {
         matched = true;
@@ -65,7 +65,7 @@ int StatusJob::execute()
         const Server::Options &opt = Server::instance()->options();
         out << "socketFile: " << opt.socketFile << '\n'
             << "dataDir: " << opt.dataDir << '\n'
-            << "options: " << opt.options
+            << "options: " << opt.options << '\n'
             << "jobCount: " << opt.jobCount << '\n'
             << "rpVisitFileTimeout: " << opt.rpVisitFileTimeout << '\n'
             << "rpIndexDataMessageTimeout: " << opt.rpIndexDataMessageTimeout << '\n'
@@ -83,6 +83,13 @@ int StatusJob::execute()
         if (!write(delimiter) || !write("jobs") || !write(delimiter))
             return 1;
         Server::instance()->dumpJobs(connection());
+    }
+
+    if (query.isEmpty() || match("daemon")) {
+        matched = true;
+        if (!write(delimiter) || !write("daemon") || !write(delimiter))
+            return 1;
+        Server::instance()->dumpDaemons(connection());
     }
 
     std::shared_ptr<Project> proj = project();
@@ -259,13 +266,11 @@ int StatusJob::execute()
             }
             write(String::format<1024>("    File: %s\n"
                                        "    Last-Modified: %s (%llu)\n"
-                                       "    Bytes written: %zu\n"
-                                       "    Environment: %s\n",
+                                       "    Bytes written: %zu\n",
                                        Location::path(info.first).constData(),
                                        String::formatTime(info.second.lastModifiedMs / 1000).constData(),
                                        static_cast<unsigned long long>(info.second.lastModifiedMs),
-                                       proj->bytesWritten(),
-                                       String::join(info.second.environment, '\n').constData()));
+                                       proj->bytesWritten()));
 
         }
         matched = true;

@@ -133,13 +133,13 @@
             (defun my/c-mode-init-rtags ()
               (interactive)
               (when (and (executable-find "rdm")
+                         (not (executable-find "clangd"))
                          (projectile-project-p)
                          (not (file-exists-p (concat (projectile-project-root)
                                                      "GTAGS"))))
-                (rtags-start-process-unless-running)
-                (unless (executable-find "clangd")
+                  (rtags-start-process-unless-running)
                   (setq-local eldoc-documentation-function #'rtags-eldoc-function)
-                  (eldoc-mode t))))))
+                  (eldoc-mode t)))))
 
 ;; cmake syntax highlighting
 (use-package cmake-mode
@@ -264,7 +264,8 @@
                 (when (and (cmake-ide--locate-cmakelists)
                            (file-exists-p (cmake-ide--locate-cmakelists)))
                   (cmake-ide-maybe-run-cmake)
-                  (when (executable-find "rdm")
+                  (when (and (executable-find "rdm")
+                             (not (executable-find "clangd")))
                     (cmake-ide-maybe-start-rdm)
                     (my/c-mode-init-rtags))
                   (cmake-project-mode 1)

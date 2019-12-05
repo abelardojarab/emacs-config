@@ -26,6 +26,7 @@
 
 #include "ClassHierarchyJob.h"
 #include "CompletionThread.h"
+#include "IncludePathJob.h"
 #include "DependenciesJob.h"
 #include "ClangThread.h"
 #include "FileManager.h"
@@ -90,10 +91,10 @@ static const List<Path> sSystemIncludePaths = {
 };
 #endif
 
-Server *Server::sInstance = 0;
+Server *Server::sInstance = nullptr;
 Server::Server()
     : mSuspended(false), mEnvironment(Rct::environment()), mPollTimer(-1), mExitCode(0),
-      mLastFileId(0), mCompletionThread(0), mHadActiveBuffers(false)
+      mLastFileId(0), mCompletionThread(nullptr), mActiveBuffersSet(false)
 {
     assert(!sInstance);
     sInstance = this;
@@ -108,19 +109,21 @@ Server::~Server()
         mCompletionThread->stop();
         mCompletionThread->join();
         delete mCompletionThread;
-        mCompletionThread = 0;
+        mCompletionThread = nullptr;
     }
 
     stopServers();
     mProjects.clear(); // need to be destroyed before sInstance is set to 0
     assert(sInstance == this);
-    sInstance = 0;
+    sInstance = nullptr;
     Message::cleanup();
 }
 
 bool Server::init(const Options &options)
 {
     RTags::initMessages();
+
+    Sandbox::setRoot(options.sandboxRoot);
 
     mOptions = options;
     mSuspended = (options.options & StartSuspended);
@@ -155,7 +158,7 @@ bool Server::init(const Options &options)
             "__builtin_ia32_xsaveopt",
             "__builtin_ia32_xsaveopt64",
             "__builtin_ia32_sbb_u32",
-            0
+            nullptr
         };
         for (int i=0; gccBuiltIntVectorFunctionDefines[i]; ++i) {
             mOptions.defines << Source::Define(String::format<128>("%s(...)", gccBuiltIntVectorFunctionDefines[i]));
@@ -183,6 +186,7 @@ bool Server::init(const Options &options)
         return false;
     }
 
+    mDefaultJobCount = options.jobCount;
     {
         Log l(LogLevel::Error, LogOutput::StdOut|LogOutput::TrailingNewLine);
         l << "Running with" << mOptions.jobCount << "jobs, using args:"
@@ -199,6 +203,10 @@ bool Server::init(const Options &options)
     }
 
     mJobScheduler.reset(new JobScheduler);
+    if (!mJobScheduler->start()) {
+        error() << "Failed to start job scheduler";
+        return false;
+    }
 
     if (!load())
         return false;
@@ -285,7 +293,7 @@ bool Server::initServers()
 #endif
 
     char *listenFds = getenv("LISTEN_FDS");
-    if (listenFds != NULL) {
+    if (listenFds != nullptr) {
         auto numFDs = atoi(listenFds);
         if (numFDs != 1) {
             error("Unexpected number of sockets from systemd: %d", numFDs);
@@ -302,31 +310,28 @@ bool Server::initServers()
         return true;
     }
 
-    for (int i=0; i<10; ++i) {
-        mUnixServer.reset(new SocketServer);
-        warning() << "listening" << mOptions.socketFile;
-        if (mUnixServer->listen(mOptions.socketFile)) {
-            break;
-        }
-        mUnixServer.reset();
-        if (!i) {
-            enum { Timeout = 1000 };
-            std::shared_ptr<Connection> connection = Connection::create(RClient::NumOptions);
-            if (connection->connectUnix(mOptions.socketFile, Timeout)) {
-                connection->send(QuitMessage());
-                connection->disconnected().connect(std::bind([](){ EventLoop::eventLoop()->quit(); }));
-                connection->finished().connect(std::bind([](){ EventLoop::eventLoop()->quit(); }));
-                EventLoop::eventLoop()->exec(Timeout);
-            }
-        } else {
+    if (Path::exists(mOptions.socketFile)) {
+        enum { Timeout = 1000 };
+        std::shared_ptr<Connection> connection = Connection::create(RClient::NumOptions);
+        if (connection->connectUnix(mOptions.socketFile, Timeout)) {
+            connection->send(QuitMessage());
+            connection->disconnected().connect(std::bind([](){ EventLoop::eventLoop()->quit(); }));
+            connection->finished().connect(std::bind([](){ EventLoop::eventLoop()->quit(); }));
+            EventLoop::eventLoop()->exec(Timeout);
             sleep(1);
         }
+
         Path::rm(mOptions.socketFile);
     }
-    if (!mUnixServer)
-        return false;
-    mUnixServer->newConnection().connect(std::bind(&Server::onNewConnection, this, std::placeholders::_1));
 
+    mUnixServer.reset(new SocketServer);
+    warning() << "listening" << mOptions.socketFile;
+    if (!mUnixServer->listen(mOptions.socketFile)) {
+        error() << "Failed to listen on " << mOptions.socketFile;
+        return false;
+    }
+
+    mUnixServer->newConnection().connect(std::bind(&Server::onNewConnection, this, std::placeholders::_1));
     return true;
 }
 
@@ -337,6 +342,8 @@ std::shared_ptr<Project> Server::addProject(const Path &path)
         project.reset(new Project(path));
         if (!project->init()) {
             Path::rmdir(project->projectDataDir());
+            mProjects.erase(path);
+            return std::shared_ptr<Project>();
         }
     }
     return project;
@@ -345,7 +352,7 @@ std::shared_ptr<Project> Server::addProject(const Path &path)
 void Server::onNewConnection(SocketServer *server)
 {
     while (true) {
-        SocketClient::SharedPtr client = server->nextConnection();
+        std::shared_ptr<SocketClient> client = server->nextConnection();
         if (!client) {
             break;
         }
@@ -353,7 +360,7 @@ void Server::onNewConnection(SocketServer *server)
         if (mOptions.maxSocketWriteBufferSize) {
             client->setMaxWriteBufferSize(mOptions.maxSocketWriteBufferSize);
         }
-        conn->setErrorHandler([](const SocketClient::SharedPtr &, Message::MessageError &&error) {
+        conn->setErrorHandler([](const std::shared_ptr<SocketClient> &, Message::MessageError &&error) {
                 if (error.type == Message::Message_VersionError) {
                     ::error("Wrong version marker. You're probably using mismatched versions of rc and rdm");
                 } else {
@@ -575,6 +582,7 @@ bool Server::parse(IndexParseData &data, String &&arguments, const Path &pwd, ui
     const auto &env = compileCommandsFileId ? data.compileCommands[compileCommandsFileId].environment : data.environment;
     SourceList sources = Source::parse(arguments, pwd, env, &unresolvedPaths, cache);
     bool ret = (sources.isEmpty() && unresolvedPaths.size() == 1 && unresolvedPaths.front() == "-");
+    debug() << "Got" << sources.size() << "sources, and" << unresolvedPaths << "from" << arguments;
     size_t idx = 0;
     for (Source &source : sources) {
         const Path path = source.sourceFile();
@@ -609,6 +617,8 @@ bool Server::parse(IndexParseData &data, String &&arguments, const Path &pwd, ui
             if (!list.contains(source))
                 list.append(source);
             ret = true;
+        } else {
+            debug() << "Shouldn't index" << source;
         }
     }
     return ret;
@@ -645,7 +655,7 @@ void Server::handleIndexMessage(const std::shared_ptr<IndexMessage> &message, co
     if (conn)
         conn->finish(ret ? 0 : 1);
     if (ret) {
-        auto proj = addProject(data.project);
+        auto proj = addProject(data.project.ensureTrailingSlash());
         if (proj) {
             assert(proj);
             proj->processParseData(std::move(data));
@@ -663,6 +673,7 @@ void Server::handleLogOutputMessage(const std::shared_ptr<LogOutputMessage> &mes
 
 void Server::handleIndexDataMessage(const std::shared_ptr<IndexDataMessage> &message, const std::shared_ptr<Connection> &conn)
 {
+    debug() << "Got handleIndexDataMessage";
     mJobScheduler->handleIndexDataMessage(message);
     conn->finish();
     mIndexDataMessageReceived();
@@ -724,9 +735,6 @@ void Server::handleQueryMessage(const std::shared_ptr<QueryMessage> &message, co
         findFile(message, conn);
         break;
     case QueryMessage::DumpFile:
-#ifdef RTAGS_HAS_LUA
-    case QueryMessage::VisitAST:
-#endif
         startClangThread(message, conn);
         break;
     case QueryMessage::Validate:
@@ -782,6 +790,7 @@ void Server::handleQueryMessage(const std::shared_ptr<QueryMessage> &message, co
         hasFileManager(message, conn);
         break;
     case QueryMessage::PreprocessFile:
+    case QueryMessage::AsmFile:
         preprocessFile(message, conn);
         break;
     case QueryMessage::ReloadFileManager:
@@ -798,6 +807,9 @@ void Server::handleQueryMessage(const std::shared_ptr<QueryMessage> &message, co
         break;
     case QueryMessage::Tokens:
         tokens(message, conn);
+        break;
+    case QueryMessage::IncludePath:
+        includePath(message, conn);
         break;
     }
 }
@@ -880,13 +892,22 @@ void Server::lastIndexed(const std::shared_ptr<QueryMessage> &query, const std::
     conn->finish();
 }
 
-void Server::isIndexing(const std::shared_ptr<QueryMessage> &, const std::shared_ptr<Connection> &conn)
+void Server::isIndexing(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn)
 {
-    for (const auto &it : mProjects) {
-        if (it.second->isIndexing()) {
+    std::shared_ptr<Project> project = projectForQuery(query);
+    if (project) {
+        if (project->isIndexing()) {
             conn->write("1");
             conn->finish();
             return;
+        }
+    } else {
+        for (const auto &it : mProjects) {
+            if (it.second->isIndexing()) {
+                conn->write("1");
+                conn->finish();
+                return;
+            }
         }
     }
     conn->write("0");
@@ -1145,6 +1166,34 @@ void Server::symbolInfo(const std::shared_ptr<QueryMessage> &query, const std::s
     conn->finish(ret);
 }
 
+void Server::includePath(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn)
+{
+    const Location loc = query->location();
+    if (loc.isNull()) {
+        conn->write("Not indexed");
+        conn->finish(RTags::NotIndexed);
+        return;
+    }
+
+    std::shared_ptr<Project> project = projectForQuery(query);
+    if (!project) {
+        error("No project");
+        conn->write("Not indexed");
+        conn->finish(RTags::NotIndexed);
+        return;
+    }
+
+    prepareCompletion(query, loc.fileId(), project);
+
+    {
+        IncludePathJob job(loc, query, project);
+        if (!job.run(conn)) {
+            conn->finish();
+            return;
+        }
+    }
+}
+
 void Server::dependencies(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn)
 {
     Path path;
@@ -1289,8 +1338,6 @@ void Server::listSymbols(const std::shared_ptr<QueryMessage> &query, const std::
 
 void Server::status(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn)
 {
-    conn->client()->setWriteMode(SocketClient::Synchronous);
-
     StatusJob job(query, currentProject());
     const int ret = job.run(conn);
     conn->finish(ret);
@@ -1390,7 +1437,7 @@ void Server::preprocessFile(const std::shared_ptr<QueryMessage> &query, const st
         conn->write<256>("%s build: %d not found", query->query().constData(), query->buildIndex());
         conn->finish();
     } else {
-        Preprocessor *pre = new Preprocessor(source, conn);
+        Preprocessor *pre = new Preprocessor((query->type() == QueryMessage::PreprocessFile) ? Preprocessor::Preprocess : Preprocessor::Asm, source, conn);
         pre->preprocess();
     }
 }
@@ -1500,12 +1547,13 @@ void Server::setCurrentProject(const std::shared_ptr<Project> &project)
 std::shared_ptr<Project> Server::projectForQuery(const std::shared_ptr<QueryMessage> &query)
 {
     List<Match> matches;
-    if (query->flags() & QueryMessage::HasLocation)
+    if (query->flags() & QueryMessage::HasLocation) {
         matches << query->location().path();
+    } else if (query->flags() & QueryMessage::HasMatch) {
+        matches << query->match();
+    }
     if (!query->currentFile().isEmpty())
         matches << query->currentFile();
-    if (!(query->flags() & QueryMessage::HasLocation))
-        matches << query->match();
 
     return projectForMatches(matches);
 }
@@ -1624,23 +1672,38 @@ void Server::project(const std::shared_ptr<QueryMessage> &query, const std::shar
 
 void Server::jobCount(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn)
 {
+    enum { MaxJobCount = 512 };
     String q = query->query();
     if (q.isEmpty()) {
         conn->write<128>("Running with %zu jobs", mOptions.jobCount);
     } else {
-        int jobCount;
-        bool ok;
+        int jobCount = -1;
+        bool ok = false;
         if (q == "default") {
             ok = true;
-            jobCount = std::max(2, ThreadPool::idealThreadCount());
+            jobCount = mDefaultJobCount;
+        } else if (q == "pop") {
+            if (mJobCountStack.isEmpty()) {
+                conn->write<128>("Job count stack is empty");
+            } else {
+                jobCount = mJobCountStack.back();
+                mJobCountStack.pop_back();
+                ok = true;
+            }
+        } else if (q.startsWith("push:")) {
+            jobCount = q.mid(5).toLongLong(&ok);
+            if (ok && jobCount > 0 && jobCount < MaxJobCount) {
+                mJobCountStack.append(mOptions.jobCount);
+            };
         } else {
             jobCount = q.toLongLong(&ok);
         }
-        if (!ok || jobCount < 0 || jobCount > 100) {
+        if (!ok || jobCount < 0 || jobCount > MaxJobCount) {
             conn->write<128>("Invalid job count %s (%d)", query->query().constData(), jobCount);
         } else {
             mOptions.jobCount = jobCount;
             conn->write<128>("Changed jobs to %zu", mOptions.jobCount);
+            mJobScheduler->startJobs();
         }
     }
     conn->finish();
@@ -1939,28 +2002,35 @@ void Server::setBuffers(const std::shared_ptr<QueryMessage> &query, const std::s
 {
     const String encoded = query->query();
     if (encoded.isEmpty()) {
-        for (uint32_t fileId : mActiveBuffers) {
-            conn->write(Location::path(fileId));
+        for (const auto &buffer : mActiveBuffers) {
+            conn->write<1024>("%s: %s", Location::path(buffer.first).constData(), buffer.second == Active ? "active" : "open");
         }
     } else {
-        mHadActiveBuffers = true;
+        mActiveBuffersSet = true;
         Deserializer deserializer(encoded);
+        unsigned char version;
+        deserializer >> version;
+        if (version != '1') {
+            conn->write("Mismatched rc and rdm, wrong version");
+            conn->finish();
+            return;
+        }
         int mode;
         deserializer >> mode;
-        List<Path> paths;
+        Hash<Path, bool> paths;
         deserializer >> paths;
         const size_t oldCount = mActiveBuffers.size();
         if (mode == 0 || mode == 1) {
             if (mode == 0)
                 mActiveBuffers.clear();
-            for (const Path &path : paths) {
-                if (uint32_t fileId = Location::insertFile(path))
-                    mActiveBuffers.insert(fileId);
+            for (const auto &path : paths) {
+                if (uint32_t fileId = Location::insertFile(path.first))
+                    mActiveBuffers[fileId] = path.second ? Active : Open;
             }
         } else {
             assert(mode == -1);
-            for (const Path &path : paths) {
-                mActiveBuffers.remove(Location::insertFile(path));
+            for (const auto &path : paths) {
+                mActiveBuffers.remove(Location::insertFile(path.first));
             }
         }
         if (oldCount < mActiveBuffers.size()) {
@@ -1969,17 +2039,6 @@ void Server::setBuffers(const std::shared_ptr<QueryMessage> &query, const std::s
             conn->write<32>("Removed %zu buffers", oldCount - mActiveBuffers.size());
         } else {
             conn->write<32>("We still have %zu buffers", oldCount);
-        }
-
-        if (mOptions.options & TranslationUnitCache && mode <= 0) {
-            const Path cacheDir = mOptions.dataDir + "tucache";
-            cacheDir.visit([this](const Path &path) -> Path::VisitResult {
-                    if (path.isFile() && !mActiveBuffers.contains(std::stol(path.fileName()))) {
-                        error() << "Don't want" << path << "no more" << Location::path(std::stol(path.fileName()));
-                        Path::rm(path);
-                    }
-                    return Path::Continue;
-                });
         }
     }
     mJobScheduler->sort();
@@ -2093,7 +2152,7 @@ void Server::handleVisitFileMessage(const std::shared_ptr<VisitFileMessage> &mes
     if (project && project->isActiveJob(id)) {
         assert(message->file() == message->file().resolved());
         fileId = Location::insertFile(message->file());
-        visit = project->visitFile(fileId, message->file(), id);
+        visit = project->visitFile(fileId, id);
     }
     VisitFileResponseMessage msg(fileId, visit);
     conn->send(msg);
@@ -2328,12 +2387,17 @@ void Server::codeCompleteAt(const std::shared_ptr<QueryMessage> &query, const st
         flags |= CompletionThread::IncludeMacros;
     if (query->flags() & QueryMessage::CodeCompleteNoWait)
         flags |= CompletionThread::NoWait;
-    mCompletionThread->completeAt(std::move(source), loc, flags, query->max(), query->unsavedFiles().value(loc.path()), query->codeCompletePrefix(), c);
+    mCompletionThread->completeAt(std::move(source), loc, flags, query->max(), query->unsavedFiles(), query->codeCompletePrefix(), c);
 }
 
 void Server::dumpJobs(const std::shared_ptr<Connection> &conn)
 {
-    mJobScheduler->dump(conn);
+    mJobScheduler->dumpJobs(conn);
+}
+
+void Server::dumpDaemons(const std::shared_ptr<Connection> &conn)
+{
+    mJobScheduler->dumpDaemons(conn);
 }
 
 class TestConnection
@@ -2549,7 +2613,6 @@ void Server::sourceFileModified(const std::shared_ptr<Project> &project, uint32_
     // error() << Location::path(fileId) << "modified" << (mCompletionThread ? (mCompletionThread->isCached(project, fileId) ? 1 : 0) : -1);
     if (mCompletionThread && mCompletionThread->isCached(project, fileId)) {
         mCompletionThread->reparse(project, fileId);
-
     }
 }
 
@@ -2572,7 +2635,7 @@ void Server::prepareCompletion(const std::shared_ptr<QueryMessage> &query, uint3
             }
 
             if (!source.isNull())
-                mCompletionThread->prepare(std::move(source), query->unsavedFiles().value(Location::path(fileId)));
+                mCompletionThread->prepare(std::move(source), query->unsavedFiles());
         }
     }
 }

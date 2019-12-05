@@ -17,9 +17,6 @@
 #include "rct/Connection.h"
 #include "RTags.h"
 #include "Server.h"
-#ifdef RTAGS_HAS_LUA
-#include "AST.h"
-#endif
 
 struct Dep : public DependencyNode
 {
@@ -64,7 +61,7 @@ CXChildVisitResult ClangThread::visit(const CXCursor &cursor)
             CXSourceRange range = clang_getCursorExtent(cursor);
             CXSourceLocation rangeEnd = clang_getRangeEnd(range);
             unsigned int endLine, endColumn;
-            clang_getPresumedLocation(rangeEnd, 0, &endLine, &endColumn);
+            clang_getPresumedLocation(rangeEnd, nullptr, &endLine, &endColumn);
             if (!(mQueryMessage->flags() & QueryMessage::DumpIncludeHeaders) && location.fileId() != mSource.fileId) {
                 return CXChildVisit_Continue;
             }
@@ -89,7 +86,7 @@ CXChildVisitResult ClangThread::visit(const CXCursor &cursor)
                     message += "auto resolves to " + RTags::cursorToString(autoResolved.cursor, RTags::AllCursorToStringFlags);
                 }
             }
-            auto printCursor = [&message](const CXCursor &c, bool *spec = 0) {
+            auto printCursor = [&message](const CXCursor &c, bool *spec = nullptr) {
                 CXCursor canonical = clang_getCanonicalCursor(c);
                 if (canonical != c && RTags::isValid(canonical)) {
                     message.append(" canonical ");
@@ -119,8 +116,8 @@ CXChildVisitResult ClangThread::visit(const CXCursor &cursor)
 
             printCursor(cursor);
 
-            writeToConnetion(message);
-            if (refSpecialized && false) {
+            writeToConnection(message);
+            if (refSpecialized) {
                 visit(ref);
             }
         }
@@ -153,24 +150,9 @@ void ClangThread::run()
 
     const unsigned long long parseTime = sw.restart();
     warning() << "parseTime" << parseTime;
-#ifdef RTAGS_HAS_LUA
-    if (mQueryMessage->type() == QueryMessage::VisitAST) {
-        std::shared_ptr<AST> ast = AST::create(mSource, sourceCode, translationUnit->unit);
-        if (ast) {
-            for (const String script : mQueryMessage->visitASTScripts()) {
-                warning() << "evaluating script:\n" << script;
-                for (const String &str : ast->evaluate(script)) {
-                    if (!str.isEmpty()) {
-                        writeToConnetion(str);
-                    }
-                }
-            }
-        }
-    } else
-#endif
     {
         if (mQueryMessage->type() == QueryMessage::DumpFile && mQueryMessage->flags() & QueryMessage::DumpCheckIncludes)
-            writeToConnetion(String::format<128>("Indexed: %s => %s", translationUnit->clangLine.constData(), translationUnit ? "success" : "failure"));
+            writeToConnection(String::format<128>("Indexed: %s => %s", translationUnit->clangLine.constData(), translationUnit ? "success" : "failure"));
 
         if (translationUnit) {
             clang_visitChildren(clang_getTranslationUnitCursor(translationUnit->unit), ClangThread::visitor, this);
@@ -183,19 +165,19 @@ void ClangThread::run()
     mConnection->disconnected().disconnect(key);
     std::weak_ptr<Connection> conn = mConnection;
     EventLoop::mainEventLoop()->callLater([conn]() {
-            if (auto c = conn.lock())
-                c->finish();
-        });
+        if (auto c = conn.lock())
+            c->finish();
+    });
 }
 
-void ClangThread::writeToConnetion(const String &message)
+void ClangThread::writeToConnection(const String &message)
 {
     std::weak_ptr<Connection> conn = mConnection;
     EventLoop::mainEventLoop()->callLater([conn, message]() {
-            if (auto c = conn.lock()) {
-                c->write(message);
-            }
-        });
+        if (auto c = conn.lock()) {
+            c->write(message);
+        }
+    });
 }
 
 void ClangThread::handleInclude(Location loc, const CXCursor &cursor)
@@ -295,9 +277,9 @@ void ClangThread::checkIncludes()
         for (const auto &dep  : it.second->includes) {
             Set<uint32_t> seen;
             if (!validateNeedsInclude(it.second, static_cast<Dep*>(dep.second), seen)) {
-                writeToConnetion(String::format<128>("%s includes %s for no reason",
-                                                     path.constData(),
-                                                     Location::path(dep.second->fileId).constData()));
+                writeToConnection(String::format<128>("%s includes %s for no reason",
+                                                      path.constData(),
+                                                      Location::path(dep.second->fileId).constData()));
             }
         }
 
@@ -316,12 +298,12 @@ void ClangThread::checkIncludes()
                     log << r.first << "=>" << r.second;
                     reasons << reason;
                 }
-                writeToConnetion(String::format<128>("%s should include %s (%s)",
-                                                     Location::path(it.first).constData(),
-                                                     Location::path(ref.first).constData(),
-                                                     String::join(reasons, " ").constData()));
+                writeToConnection(String::format<128>("%s should include %s (%s)",
+                                                      Location::path(it.first).constData(),
+                                                      Location::path(ref.first).constData(),
+                                                      String::join(reasons, " ").constData()));
                 // for (const auto &incs : mDependencies[ref.first]->dependents) {
-                //     writeToConnetion(String::format<128>("GOT INCLUDER %s:%d", Location::path(incs.first).constData(),
+                //     writeToConnection(String::format<128>("GOT INCLUDER %s:%d", Location::path(incs.first).constData(),
                 //                                          incs.first));
                 // }
             }

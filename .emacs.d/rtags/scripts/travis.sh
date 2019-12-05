@@ -22,43 +22,30 @@
 #
 # Description: The following variables can be changed from the build matrix:
 #  - ASAN        (default value is "1")
-#  - LUA_VERSION (default value is "5.3.2")
-#  - LUA_DISABLE (default value is "", set it to anything to disable lua
-#                 extension for that matrix)
 declare -a CMAKE_PARAMS=("-DCMAKE_CXX_COMPILER=$CXX$COMPILER_VERSION"
-                         "-DBUILD_TESTING=1"
-                         "-DCMAKE_C_COMPILER=$CC$COMPILER_VERSION")
+                         "-DCMAKE_C_COMPILER=$CC$COMPILER_VERSION"
+                         "-DBUILD_TESTING=1")
 
 if [ "$ASAN" ]; then
     CMAKE_PARAMS+=("-DASAN=address,undefined")
 fi
 
-LUA_DISABLE=${LUA_DISABLE:-""}
-if [ ! $LUA_DISABLE ]; then
-    CMAKE_PARAMS+=("-DLUA_ENABLED=1")
-    echo "Running build with Lua extension."
-else
-    echo "Running build without Lua extension."
-fi # end ! $LUA_DISABLE
-
-function build()
+export CCACHE_DEBUG=1
+function build_and_test()
 {
+    rm -rf build
     mkdir build && pushd build > /dev/null
     emacs --version
-    cmake "${CMAKE_PARAMS[@]}" .. || cat CMakeFiles/CMakeError.log
+    cmake "$1" "${CMAKE_PARAMS[@]}" .. || cat CMakeFiles/CMakeError.log
     make VERBOSE=1 -j2
-}
-
-# All arguments will be passed on to ctest
-function run_tests()
-{
-    PATH=$(pwd)/bin:$PATH
-    ctest --output-on-failure --verbose $@
+    shift
+    PATH=$(pwd)/bin:$PATH ctest --output-on-failure --verbose "$@"
+    popd >/dev/null
 }
 
 function add_cmake_params()
 {
-    for param in $@; do
+    for param in "$@"; do
         CMAKE_PARAMS[${#CMAKE_PARAMS[@]}]="$param"
     done
 }
@@ -66,25 +53,17 @@ function add_cmake_params()
 function osx()
 {
     ## Step -- Setup
-    brew update
-    brew install llvm yarn cppunit
-    brew upgrade python3
-    python3 -m pip install --upgrade pip
     pip3 install --user --upgrade nose PyHamcrest
 
     ## Step -- Build
     mkdir -p ~/.local/bin
-    ln -s /usr/local/Cellar/numpy/*/libexec/nose/bin/nosetests-3.7 \
-       ~/.local/bin/nosetests
-    export PYTHONPATH=/usr/local/lib/python3.7/site-packages
+    ln -s /usr/local/Cellar/numpy/*/libexec/nose/bin/nosetests-3.6 ~/.local/bin/nosetests
     export LIBCLANG_LLVM_CONFIG_EXECUTABLE=$(find /usr/local/Cellar/llvm/*/bin -name llvm-config 2>/dev/null)
     # Help cmake to find openssl includes/library
     add_cmake_params "-DOPENSSL_ROOT_DIR=/usr/local/opt/openssl"
 
-    build
-
-    ## Step -- Test
-    run_tests
+    # Note sure why the "elisptests" target is generated even though Emacs is to old (Works locally) :/
+    build_and_test -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -E elisp
 }
 
 function gnu_linux()
@@ -92,11 +71,7 @@ function gnu_linux()
     ## Step -- Setup
     pip3 install --user --upgrade nose PyHamcrest
 
-    ## Step -- Build
-    build
-
-    ## Step -- Test
-    run_tests
+    build_and_test -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
 }
 
 if [ $TRAVIS_OS_NAME = osx ]; then

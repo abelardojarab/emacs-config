@@ -19,30 +19,22 @@
 #include "RTags.h"
 
 QueryMessage::QueryMessage(Type type)
-    : RTagsMessage(MessageId), mType(type), mMax(-1), mMinLine(-1), mMaxLine(-1), mBuildIndex(0), mTerminalWidth(-1)
+    : RTagsMessage(MessageId), mType(type), mMax(-1), mMaxDepth(-1), mMinLine(-1), mMaxLine(-1), mBuildIndex(0), mTerminalWidth(-1)
 {
 }
 
 void QueryMessage::encode(Serializer &serializer) const
 {
     serializer << mCommandLine << mQuery << mCodeCompletePrefix << mType << mFlags << mMax
-               << mMinLine << mMaxLine << mBuildIndex << mPathFilters << mKindFilters
-               << mCurrentFile << mUnsavedFiles << mTerminalWidth
-#ifdef RTAGS_HAS_LUA
-               << mVisitASTScripts
-#endif
-        ;
+               << mMaxDepth << mMinLine << mMaxLine << mBuildIndex << mPathFilters << mKindFilters
+               << mCurrentFile << mUnsavedFiles << mTerminalWidth;
 }
 
 void QueryMessage::decode(Deserializer &deserializer)
 {
     deserializer >> mCommandLine >> mQuery >> mCodeCompletePrefix >> mType >> mFlags >> mMax
-                 >> mMinLine >> mMaxLine >> mBuildIndex >> mPathFilters >> mKindFilters
-                 >> mCurrentFile >> mUnsavedFiles >> mTerminalWidth
-#ifdef RTAGS_HAS_LUA
-                 >> mVisitASTScripts
-#endif
-        ;
+                 >> mMaxDepth >> mMinLine >> mMaxLine >> mBuildIndex >> mPathFilters >> mKindFilters
+                 >> mCurrentFile >> mUnsavedFiles >> mTerminalWidth;
 }
 
 Flags<Location::ToStringFlag> QueryMessage::locationToStringFlags(Flags<Flag> queryFlags)

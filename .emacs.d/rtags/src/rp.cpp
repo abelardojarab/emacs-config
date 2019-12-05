@@ -58,14 +58,22 @@ public:
 
 int main(int argc, char **argv)
 {
+    setvbuf(stdout, nullptr, _IONBF, 0);
+    setvbuf(stderr, nullptr, _IONBF, 0);
     LogLevel logLevel = LogLevel::Error;
     Path file;
+    bool logToSyslog = false;
+    bool daemon = false;
 
     for (int i=1; i<argc; ++i) {
         if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--verbose")) {
             ++logLevel;
         } else if (!strcmp(argv[i], "--priority")) { // ignore, only for wrapping purposes
             ++i;
+        } else if (!strcmp(argv[i], "--log-to-syslog")) {
+            logToSyslog = true;
+        } else if (!strcmp(argv[i], "--daemon")) {
+            daemon = true;
         } else {
             file = argv[i];
         }
@@ -77,14 +85,18 @@ int main(int argc, char **argv)
         path.mkdir(Path::Recursive);
         setenv("TMPDIR", path.c_str(), 1);
     }
-    setenv("LIBCLANG_NOTHREADS", "1", 0);
+    if (!daemon)
+        setenv("LIBCLANG_NOTHREADS", "1", 0);
     signal(SIGSEGV, sigHandler);
     signal(SIGABRT, sigHandler);
     signal(SIGBUS, sigHandler);
+    signal(SIGALRM, [](int) {
+        ClangIndexer::transition(ClangIndexer::Stopped);
+    });
 
     Flags<LogFlag> logFlags = LogStderr;
     std::shared_ptr<SyslogCloser> closer;
-    if (ClangIndexer::serverOpts() & Server::RPLogToSyslog) {
+    if (logToSyslog & Server::RPLogToSyslog) {
         logFlags |= LogSyslog;
         closer.reset(new SyslogCloser);
     }
@@ -94,29 +106,41 @@ int main(int argc, char **argv)
     RTags::initMessages();
     auto eventLoop = std::make_shared<EventLoop>();
     eventLoop->init(EventLoop::MainEventLoop);
-    String data;
+    ClangIndexer indexer(daemon ? ClangIndexer::Daemon : ClangIndexer::Normal);
+    while (true) {
+        String data;
 
-    if (!file.isEmpty()) {
-        data = file.readAll();
-    } else {
-        uint32_t size;
-        if (!fread(&size, sizeof(size), 1, stdin)) {
-            error() << "Failed to read from stdin";
-            return 1;
+        if (!file.isEmpty()) {
+            data = file.readAll();
+        } else {
+            uint32_t size;
+            if (!fread(&size, sizeof(size), 1, stdin)) {
+                error() << "Failed to read from stdin";
+                return 1;
+            }
+            data.resize(size);
+            if (!fread(&data[0], size, 1, stdin)) {
+                error() << "Failed to read from stdin";
+                return 2;
+            }
+            // FILE *f = fopen("/tmp/data", "w");
+            // fwrite(data.constData(), data.size(), 1, f);
+            // fclose(f);
         }
-        data.resize(size);
-        if (!fread(&data[0], size, 1, stdin)) {
-            error() << "Failed to read from stdin";
-            return 2;
+        if (!indexer.exec(data)) {
+            error() << "ClangIndexer error";
+            return 3;
         }
-        // FILE *f = fopen("/tmp/data", "w");
-        // fwrite(data.constData(), data.size(), 1, f);
-        // fclose(f);
-    }
-    ClangIndexer indexer;
-    if (!indexer.exec(data)) {
-        error() << "ClangIndexer error";
-        return 3;
+
+        if (daemon) {
+            if (ClangIndexer::state() == ClangIndexer::Running) {
+                printf("@FINISHED@");
+                fflush(stdout);
+            }
+            ClangIndexer::transition(ClangIndexer::NotStarted);
+        } else {
+            break;
+        }
     }
 
     return 0;

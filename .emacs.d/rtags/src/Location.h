@@ -97,7 +97,7 @@ public:
         bool save = false;
         (void)save;
         assert(path.isAbsolute());
-        assert(!path.contains(".."));
+        assert(!path.contains("/../"));
         // in the case of Source::compilerId path can be a symlink
         uint32_t ret;
         {
@@ -169,8 +169,8 @@ public:
         ConvertToRelative = 0x8
     };
 
-    String toString(Flags<ToStringFlag> flags = NoFlag, Hash<Path, String> *contextCache = 0) const;
-    String context(Flags<ToStringFlag> flags, Hash<Path, String> *cache = 0) const;
+    String toString(Flags<ToStringFlag> flags = NoFlag, Hash<Path, String> *contextCache = nullptr) const;
+    String context(Flags<ToStringFlag> flags, Hash<Path, String> *cache = nullptr) const;
 
     inline String debug() const;
 
@@ -232,7 +232,7 @@ public:
         memcpy(buf, &line, sizeof(line));
         memcpy(buf + 4, &col, sizeof(col));
         path.append(buf, 8);
-        return path;
+        return std::move(path);
     }
 
     static Location fromPathLineAndColumn(const String &str, const Path &pwd = Path())

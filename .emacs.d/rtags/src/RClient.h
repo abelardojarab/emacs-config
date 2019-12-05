@@ -38,6 +38,7 @@ public:
         AllDependencies,
         AllReferences,
         AllTargets,
+        AsmFile,
         BuildIndex,
         CheckIncludes,
         CheckReindex,
@@ -90,6 +91,7 @@ public:
         HasFileManager,
         Help,
         IncludeFile,
+        IncludePath,
         IsIndexed,
         IsIndexing,
         JSON,
@@ -106,6 +108,7 @@ public:
         MatchCaseInsensitive,
         MatchRegex,
         Max,
+        MaxDepth,
         NoColor,
         NoContext,
         NoRealPath,
@@ -143,6 +146,7 @@ public:
         SymbolInfoIncludeParents,
         SymbolInfoIncludeReferences,
         SymbolInfoIncludeTargets,
+        SymbolInfoIncludeSourceCode,
         SynchronousCompletions,
         SynchronousDiagnostics,
         TargetUsrs,
@@ -154,8 +158,6 @@ public:
         Verbose,
         VerifyVersion,
         Version,
-        VisitAST,
-        VisitASTScript,
         Wait,
         WildcardSymbolNames,
         XML,
@@ -169,6 +171,7 @@ public:
     CommandLineParser::ParseStatus parse(size_t argc, char **argv);
 
     int max() const { return mMax; }
+    int maxDepth() const { return mMaxDepth; }
     LogLevel logLevel() const { return mLogLevel; }
     int timeout() const { return mTimeout; }
     int buildIndex() const { return mBuildIndex; }
@@ -195,9 +198,6 @@ public:
     void onNewMessage(const std::shared_ptr<Message> &message, const std::shared_ptr<Connection> &);
     List<String> environment() const;
     String codeCompletePrefix() const { return mCodeCompletePrefix; }
-#ifdef RTAGS_HAS_LUA
-    List<String> visitASTScripts() const { return mVisitASTScripts; }
-#endif
 private:
     void addQuery(QueryMessage::Type t, String &&query = String(),
                   Flags<QueryMessage::Flag> extraQueryFlags = Flags<QueryMessage::Flag>());
@@ -208,7 +208,7 @@ private:
     void addCompile(Path &&compileCommands);
 
     Flags<QueryMessage::Flag> mQueryFlags;
-    int mMax, mTimeout, mMinOffset, mMaxOffset, mConnectTimeout, mBuildIndex;
+    int mMax, mMaxDepth, mTimeout, mMinOffset, mMaxOffset, mConnectTimeout, mBuildIndex;
     LogLevel mLogLevel;
     Set<QueryMessage::PathFilter> mPathFilters;
     QueryMessage::KindFilters mKindFilters;
@@ -224,9 +224,6 @@ private:
     Path mProjectRoot;
     int mTerminalWidth;
     int mExitCode;
-#ifdef RTAGS_HAS_LUA
-    List<String> mVisitASTScripts;
-#endif
     mutable List<String> mEnvironment;
 
     String mCommandLine;

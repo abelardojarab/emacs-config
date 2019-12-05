@@ -17,13 +17,14 @@
 #include "Server.h"
 #include "ClangIndexer.h"
 
+static Path sRoot;
 namespace Sandbox {
 const Path &root()
 {
-    if (Server::instance()) {
-        return Server::instance()->options().sandboxRoot;
-    } else {
-        return ClangIndexer::serverSandboxRoot();
-    }
+    return sRoot;
+}
+void setRoot(const Path &root)
+{
+    sRoot = root;
 }
 }

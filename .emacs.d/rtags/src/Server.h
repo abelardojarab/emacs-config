@@ -87,8 +87,7 @@ public:
         Separate32BitAnd64Bit = (1ull << 31),
         SourceIgnoreIncludePathDifferencesInUsr = (1ull << 32),
         NoLibClangIncludePath = (1ull << 33),
-        TranslationUnitCache = (1ull << 34),
-        CompletionDiagnostics = (1ull << 35)
+        CompletionDiagnostics = (1ull << 34)
     };
     struct Options {
         Options()
@@ -97,7 +96,7 @@ public:
               rpConnectAttempts(0), rpNiceValue(0), maxCrashCount(0),
               completionCacheSize(0), testTimeout(60 * 1000 * 5),
               maxFileMapScopeCacheSize(512), pollTimer(0), maxSocketWriteBufferSize(0),
-              tcpPort(0)
+              daemonCount(0), tcpPort(0)
         {
         }
 
@@ -107,7 +106,7 @@ public:
         int rpVisitFileTimeout, rpIndexDataMessageTimeout,
             rpConnectTimeout, rpConnectAttempts, rpNiceValue, maxCrashCount,
             completionCacheSize, testTimeout, maxFileMapScopeCacheSize, errorLimit,
-            pollTimer, maxSocketWriteBufferSize;
+            pollTimer, maxSocketWriteBufferSize, daemonCount;
         uint16_t tcpPort;
         List<String> defaultArguments, excludeFilters;
         Set<String> blockedArguments;
@@ -126,10 +125,27 @@ public:
     bool shouldIndex(const Source &source, const Path &project) const;
     void stopServers();
     void dumpJobs(const std::shared_ptr<Connection> &conn);
+    void dumpDaemons(const std::shared_ptr<Connection> &conn);
     std::shared_ptr<JobScheduler> jobScheduler() const { return mJobScheduler; }
-    const Set<uint32_t> &activeBuffers() const { return mActiveBuffers; }
-    bool hadActiveBuffers() const { return mHadActiveBuffers; }
-    bool isActiveBuffer(uint32_t fileId) const { return mActiveBuffers.contains(fileId); }
+    enum ActiveBufferType {
+        Inactive,
+        Active,
+        Open
+    };
+
+    Set<uint32_t> activeBuffers(ActiveBufferType type) const
+    {
+        assert(type != Inactive);
+        Set<uint32_t> ret;
+        for (const auto &buffer : mActiveBuffers) {
+            if (buffer.second == type) {
+                ret.insert(buffer.first);
+            }
+        }
+        return ret;
+    }
+    bool activeBuffersSet() const { return mActiveBuffersSet; }
+    ActiveBufferType activeBufferType(uint32_t fileId) const { return mActiveBuffers.value(fileId, Inactive); }
     int exitCode() const { return mExitCode; }
     std::shared_ptr<Project> currentProject() const { return mCurrentProject.lock(); }
     Hash<Path, std::shared_ptr<Project> > projects() const { return mProjects; }
@@ -140,7 +156,7 @@ public:
                String &&arguments,
                const Path &pwd,
                uint32_t compileCommandsFileId = 0,
-               SourceCache *cache = 0) const;
+               SourceCache *cache = nullptr) const;
     enum FileIdsFileFlag {
         None = 0x0,
         HasSandboxRoot = 0x1,
@@ -173,6 +189,7 @@ private:
     void codeCompleteAt(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
     void symbolInfo(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
     void dependencies(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
+    void includePath(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
     void startClangThread(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
     void dumpFileMaps(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
     void diagnose(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
@@ -222,18 +239,20 @@ private:
     static Server *sInstance;
     Options mOptions;
     bool mSuspended;
-    SocketServer::SharedPtr mUnixServer, mTcpServer;
+    std::shared_ptr<SocketServer> mUnixServer, mTcpServer;
     List<String> mEnvironment;
 
     int mPollTimer, mExitCode;
     uint32_t mLastFileId;
     std::shared_ptr<JobScheduler> mJobScheduler;
     CompletionThread *mCompletionThread;
-    bool mHadActiveBuffers;
-    Set<uint32_t> mActiveBuffers;
+    bool mActiveBuffersSet;
+    Hash<uint32_t, ActiveBufferType> mActiveBuffers;
     Set<std::shared_ptr<Connection> > mConnections;
 
     Signal<std::function<void()> > mIndexDataMessageReceived;
+    size_t mDefaultJobCount { 0 };
+    List<size_t> mJobCountStack;
 };
 RCT_FLAGS(Server::Option);
 RCT_FLAGS(Server::FileIdsFileFlag);

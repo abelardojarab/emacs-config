@@ -354,19 +354,19 @@ const char *Path::extension(size_t *len) const
                     *len = s - (dot + 1);
                 return data + dot + 1;
             case '/':
-                return 0;
+                return nullptr;
             default:
                 break;
             }
             --dot;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 bool Path::isSource(const char *ext)
 {
-    const char *sources[] = { "c", "cc", "cpp", "cxx", "c++", "moc", "mm", "m", 0 };
+    const char *sources[] = { "c", "cc", "cpp", "cxx", "c++", "moc", "mm", "m", "cu", nullptr };
     for (size_t i=0; sources[i]; ++i) {
         if (!strcasecmp(ext, sources[i]))
             return true;
@@ -393,7 +393,7 @@ bool Path::isHeader(const char *ext)
 {
     if (!ext)
         return true;
-    const char *headers[] = { "h", "hpp", "hxx", "hh", "tcc", 0 };
+    const char *headers[] = { "h", "hpp", "hxx", "hh", "tcc", "tpp", "txx", "inc", "cuh", nullptr };
     for (size_t i=0; headers[i]; ++i) {
         if (!strcasecmp(ext, headers[i]))
             return true;
@@ -478,11 +478,11 @@ bool Path::mkdir(const Path &path, MkDirMode mkdirMode, mode_t permissions)
 #endif
             if (r && errno != EEXIST && errno != EISDIR
 #ifdef OS_CYGWIN
-            		// on cygwin/msys2 we may try to create something like (/cygdrive)/c/some/path/
-            		// an mkdir() attempt to create /c/ will fail with EACCESS so we need to catch it here
-            		&& errno != EACCES
+                    // on cygwin/msys2 we may try to create something like (/cygdrive)/c/some/path/
+                    // an mkdir() attempt to create /c/ will fail with EACCESS so we need to catch it here
+                    && errno != EACCES
 #endif
-					)
+                    )
                 return false;
             buf[i] = '/';
         }
@@ -609,7 +609,7 @@ static void visitorWrapper(Path path, const std::function<Path::VisitResult(cons
 #endif
         switch (callback(path)) {
         case Path::Abort:
-            p = 0;
+            p = nullptr;
             break;
         case Path::Recurse:
             if (isDir)
@@ -666,7 +666,7 @@ Path Path::followLink(bool *ok) const
 size_t Path::readAll(char *&buf, size_t max) const
 {
     FILE *f = fopen(constData(), "r");
-    buf = 0;
+    buf = nullptr;
     if (!f)
         return -1;
     fseek(f, 0, SEEK_END);

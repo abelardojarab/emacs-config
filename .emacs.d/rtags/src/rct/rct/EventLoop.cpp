@@ -58,7 +58,7 @@
 #  endif
 #endif
 
-EventLoop::WeakPtr EventLoop::sMainLoop;
+std::weak_ptr<EventLoop> EventLoop::sMainLoop;
 std::mutex EventLoop::mMainMutex;
 static std::atomic<int> sMainEventPipe;
 static std::once_flag sMainOnce;
@@ -67,11 +67,11 @@ static pthread_key_t sEventLoopKey;
 // sadly GCC < 4.8 doesn't support thread_local
 // fall back to pthread instead in order to support 4.7
 
-static EventLoop::WeakPtr& localEventLoop()
+static std::weak_ptr<EventLoop>& localEventLoop()
 {
-    EventLoop::WeakPtr* ptr = static_cast<EventLoop::WeakPtr*>(pthread_getspecific(sEventLoopKey));
+    std::weak_ptr<EventLoop>* ptr = static_cast<std::weak_ptr<EventLoop>*>(pthread_getspecific(sEventLoopKey));
     if (!ptr) {
-        ptr = new EventLoop::WeakPtr;
+        ptr = new std::weak_ptr<EventLoop>;
         pthread_setspecific(sEventLoopKey, ptr);
     }
     return *ptr;
@@ -98,7 +98,7 @@ EventLoop::EventLoop()
     std::call_once(sMainOnce, [](){
             atexit(&EventLoop::cleanupLocalEventLoop);
             sMainEventPipe = -1;
-            pthread_key_create(&sEventLoopKey, 0);
+            pthread_key_create(&sEventLoopKey, nullptr);
 #ifndef _WIN32
             signal(SIGPIPE, SIG_IGN);
 #endif
@@ -112,10 +112,10 @@ EventLoop::~EventLoop()
 
 void EventLoop::cleanupLocalEventLoop()
 {
-    EventLoop::WeakPtr* ptr = static_cast<EventLoop::WeakPtr*>(pthread_getspecific(sEventLoopKey));
+    std::weak_ptr<EventLoop>* ptr = static_cast<std::weak_ptr<EventLoop>*>(pthread_getspecific(sEventLoopKey));
     if (!ptr) {
         delete ptr;
-        pthread_setspecific(sEventLoopKey, 0);
+        pthread_setspecific(sEventLoopKey, nullptr);
     }
 }
 
@@ -187,14 +187,14 @@ void EventLoop::init(unsigned int flags)
         act.sa_handler = signalHandler;
 
         if (mFlags & EnableSigIntHandler) {
-            if (::sigaction(SIGINT, &act, 0) == -1) {
+            if (::sigaction(SIGINT, &act, nullptr) == -1) {
                 cleanup();
                 return;
             }
         }
 
         if (mFlags & EnableSigTermHandler) {
-            if (::sigaction(SIGTERM, &act, 0) == -1) {
+            if (::sigaction(SIGTERM, &act, nullptr) == -1) {
                 cleanup();
                 return;
             }
@@ -234,11 +234,11 @@ void EventLoop::cleanup()
         act.sa_handler = SIG_DFL;
 
         if (mFlags & EnableSigIntHandler) {
-            ::sigaction(SIGINT, &act, 0);
+            ::sigaction(SIGINT, &act, nullptr);
         }
 
         if (mFlags & EnableSigTermHandler) {
-            ::sigaction(SIGTERM, &act, 0);
+            ::sigaction(SIGTERM, &act, nullptr);
         }
     }
 #endif
@@ -260,9 +260,9 @@ void EventLoop::cleanup()
     }
 }
 
-EventLoop::SharedPtr EventLoop::eventLoop()
+std::shared_ptr<EventLoop> EventLoop::eventLoop()
 {
-    EventLoop::SharedPtr loop = localEventLoop().lock();
+    std::shared_ptr<EventLoop> loop = localEventLoop().lock();
     if (!loop) {
         std::lock_guard<std::mutex> locker(mMainMutex);
         loop = sMainLoop.lock();
@@ -372,7 +372,7 @@ void EventLoop::unregisterTimer(int id)
 
 void EventLoop::clearTimer(int id)
 {
-    TimerData* t = 0;
+    TimerData* t = nullptr;
     {
         TimerData data;
         data.id = id;

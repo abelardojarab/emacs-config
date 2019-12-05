@@ -51,9 +51,9 @@ public:
     };
     bool isCached(const std::shared_ptr<Project> &project, uint32_t fileId) const;
     void completeAt(Source &&source, Location location, Flags<Flag> flags, int max,
-                    String &&unsaved, const String &prefix,
+                    const UnsavedFiles &unsavedFiles, const String &prefix,
                     const std::shared_ptr<Connection> &conn);
-    void prepare(Source &&source, String &&unsaved);
+    void prepare(Source &&source, const UnsavedFiles &unsavedFiles);
     Source findSource(const Set<uint32_t> &deps) const;
     void reparse(const std::shared_ptr<Project> &project, uint32_t fileId);
     void stop();
@@ -77,7 +77,8 @@ private:
         Location location;
         Flags<Flag> flags;
         int max;
-        String unsaved, prefix;
+        UnsavedFiles unsavedFiles;
+        String prefix;
         std::shared_ptr<Connection> conn;
     };
     LinkedList<Request*> mPending;
@@ -89,7 +90,7 @@ private:
     } *mDump;
 
     struct Completions {
-        Completions(Location loc) : location(loc), next(0), prev(0) {}
+        Completions(Location loc) : location(loc), next(nullptr), prev(nullptr) {}
         struct Candidate {
             String completion, signature, annotation, parent, briefComment;
             int priority = 0;
@@ -110,8 +111,8 @@ private:
             List<Chunk> chunks;
 
             enum Flag {
-                None = 0x0,
-                IncludeChunks = 0x1
+                Flag_None = 0x0,
+                Flag_IncludeChunks = 0x1
             };
             Value toValue(unsigned int flags) const;
         };
@@ -128,10 +129,10 @@ private:
 
     struct SourceFile {
         SourceFile()
-            : lastModified(0), parseTime(0), reparseTime(0), codeCompleteTime(0), completions(0), next(0), prev(0)
+            : lastModified(0), parseTime(0), reparseTime(0), codeCompleteTime(0), completions(0), next(nullptr), prev(nullptr)
         {}
         std::shared_ptr<RTags::TranslationUnit> translationUnit;
-        String unsaved;
+        UnsavedFiles unsavedFiles;
         uint64_t lastModified;
         uint64_t parseTime, reparseTime, codeCompleteTime; // ms
         size_t completions;

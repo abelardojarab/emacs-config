@@ -1,4 +1,3 @@
-
 /* This file is part of RTags (http://rtags.net).
 
    RTags is free software: you can redistribute it and/or modify
@@ -33,6 +32,33 @@ static inline const char *linkageSpelling(CXLinkageKind kind)
     case CXLinkage_External: return "Linkage: External";
     }
     return "";
+}
+
+static String sourceCode(const Path &path, int startLine, int startColumn, int endLine, int endColumn)
+{
+    assert(startLine != -1);
+    assert(startColumn != -1);
+    assert(endLine != -1);
+    assert(endColumn != -1);
+    assert(startLine < endLine || (startLine == endLine && startColumn < endColumn));
+    const String source = path.readAll(1024 * 1024);
+    if (source.isEmpty()) {
+        return String();
+    }
+
+    const size_t start = RTags::findOffset(startLine, startColumn, source);
+    if (start == String::npos) {
+        return String();
+    }
+
+    if (endLine == startLine) {
+        return source.mid(start, endColumn - startColumn);
+    }
+    const size_t end = RTags::findOffset(endLine, endColumn, source);
+    if (end == String::npos) {
+        return String();
+    }
+    return source.mid(start, end - start);
 }
 
 String Symbol::toString(const std::shared_ptr<Project> &project,
@@ -117,7 +143,7 @@ String Symbol::toString(const std::shared_ptr<Project> &project,
             ret << key << ": ";
         ret << piece << "\n";
     };
-    writePiece(0, "location", location.toString(locationToStringFlags));
+    writePiece(nullptr, "location", location.toString(locationToStringFlags));
     writePiece("SymbolName", "symbolname", symbolName);
     writePiece("Kind", "kind", kindSpelling());
     if (filterPiece("type")) {
@@ -140,7 +166,7 @@ String Symbol::toString(const std::shared_ptr<Project> &project,
     if (isDefinition() && RTags::isFunction(kind))
         writePiece("Stack cost", "stackcost", std::to_string(stackCost));
 #endif
-    writePiece(0, "linkage", linkageSpelling(linkage));
+    writePiece(nullptr, "linkage", linkageSpelling(linkage));
     ret += properties();
     writePiece("Usr", "usr", usr);
     if (size)
@@ -187,8 +213,6 @@ String Symbol::toString(const std::shared_ptr<Project> &project,
         }
     }
 
-
-
     if (cursorInfoFlags & IncludeTargets && project && filterPiece("targets")) {
         const auto targets = project->findTargets(*this);
         if (targets.size()) {
@@ -213,6 +237,18 @@ String Symbol::toString(const std::shared_ptr<Project> &project,
         }
     }
 
+    if (cursorInfoFlags & IncludeSourceCode && (endLine > startLine || (endLine == startLine && endColumn > startColumn))) {
+        const Path path = location.path();
+        String source = sourceCode(path, startLine, startColumn, endLine, endColumn);
+        if (!source.isEmpty()) {
+            ret.append(String::format<1024>("\nSource code: %s:%d:%d-%d:%d\n",
+                                            path.constData(), startLine, startColumn,
+                                            endLine, endColumn));
+            ret.append(source);
+            ret.append('\n');
+        }
+    }
+
     return ret;
 }
 
@@ -232,15 +268,6 @@ String Symbol::displayName() const
         const int end = symbolName.indexOf('(');
         if (end != -1)
             return symbolName.left(end);
-        break; }
-    case CXCursor_FieldDecl: {
-        int colon = symbolName.indexOf(':');
-        if (colon != -1) {
-            const int end = colon + 2;
-            while (colon > 0 && RTags::isSymbol(symbolName.at(colon - 1)))
-                --colon;
-            return symbolName.left(colon + 1) + symbolName.mid(end);
-        }
         break; }
     default:
         break;
@@ -267,9 +294,9 @@ Value Symbol::toValue(const std::shared_ptr<Project> &project,
     std::function<Value(const Symbol &, Flags<ToStringFlag>)> toValue = [&](const Symbol &symbol, Flags<ToStringFlag> f) {
         Value ret;
         auto formatLocation = [locationToStringFlags,&filterPiece, &ret](Location loc, const char *key, const char *ctxKey,
-                                                                         const char *keyFilter = 0,
-                                                                         const char *ctxKeyFilter = 0,
-                                                                         Value *val = 0) {
+                                                                         const char *keyFilter = nullptr,
+                                                                         const char *ctxKeyFilter = nullptr,
+                                                                         Value *val = nullptr) {
             if (!val)
                 val = &ret;
             if (filterPiece(keyFilter ? keyFilter : key))
@@ -278,10 +305,12 @@ Value Symbol::toValue(const std::shared_ptr<Project> &project,
                 (*val)[ctxKey] = loc.context(locationToStringFlags);
             }
         };
-        if (!symbol.isNull()) {
+        if (!symbol.location.isNull()) {
             formatLocation(symbol.location, "location", "context");
+        }
+        if (!symbol.isNull()) {
             if (symbol.argumentUsage.index != String::npos) {
-                formatLocation(symbol.argumentUsage.invocation, "invocation", "invocationContext", 0, "invocationcontext");
+                formatLocation(symbol.argumentUsage.invocation, "invocation", "invocationContext", nullptr, "invocationcontext");
                 if (filterPiece("invokedfunction"))
                     ret["invokedFunction"] = symbol.argumentUsage.invokedFunction.toString(locationToStringFlags);
                 formatLocation(symbol.argumentUsage.argument.location, "functionArgumentLocation", "functionArgumentLocationContext",

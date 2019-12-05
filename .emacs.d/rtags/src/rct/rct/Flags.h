@@ -56,7 +56,7 @@ public:
 
     void clear() { mValue = 0; }
     bool operator!() const { return !mValue; }
-    operator SafeBool() const { return mValue ? &safeBool : 0; }
+    operator SafeBool() const { return mValue ? &safeBool : nullptr; }
 
     template <typename F> bool test(F flag) const { return *this & flag; }
     Flags<T> test(Flags<T> flags) const { return construct(mValue & flags); }
@@ -224,7 +224,7 @@ public:
             mValue &= ~flag;
         }
     }
-    bool test(unsigned long long flag) const { return mValue & flag; }
+    unsigned int test(unsigned long long flag) const { return mValue & flag; }
 private:
     unsigned long long mValue;
 };
