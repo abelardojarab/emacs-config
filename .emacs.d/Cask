@@ -187,6 +187,7 @@
 (depends-on "helm-hunks")
 (depends-on "helm-lines")
 (depends-on "helm-ls-git")
+(depends-on "helm-lsp")
 (depends-on "helm-make")
 (depends-on "helm-mu")
 (depends-on "helm-navi")

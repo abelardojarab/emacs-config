@@ -97,7 +97,7 @@
                                               '("semantic-tag-boundary"                    . t)))
 
             (ecb-layout-define "leftright-analyse-y" left-right
-              "This function creates the following layout:
+                               "This function creates the following layout:
    --------------------------------------------------------------
    |              |                               |             |
    |  Directories |                               |  Methods    |
@@ -122,16 +122,16 @@
 If you have not set a compilation-window in `ecb-compile-window-height' then
 the layout contains no persistent compilation window and the other windows get a
 little more place."
-              (ecb-set-history-buffer)
-              (ecb-split-ver 0.3)
-              (ecb-set-sources-buffer)
-              (ecb-split-ver 0.5)
-              (ecb-set-symboldef-buffer)
-              (select-window (next-window (next-window)))
-              (ecb-set-methods-buffer)
-              (ecb-split-ver 0.5)
-              (ecb-set-analyse-buffer)
-              (select-window (previous-window (previous-window (selected-window) 0) 0)))
+                               (ecb-set-history-buffer)
+                               (ecb-split-ver 0.3)
+                               (ecb-set-sources-buffer)
+                               (ecb-split-ver 0.5)
+                               (ecb-set-symboldef-buffer)
+                               (select-window (next-window (next-window)))
+                               (ecb-set-methods-buffer)
+                               (ecb-split-ver 0.5)
+                               (ecb-set-analyse-buffer)
+                               (select-window (previous-window (previous-window (selected-window) 0) 0)))
 
             ;; Reparse files on 'first change' and 'after saving'
             (defun idle-timer-ecb-methods-callback ()
@@ -220,6 +220,63 @@ little more place."
 ;; Activate ECB in console mode
 ;; (if (not (display-graphic-p))
 ;;    (my/ecb-activate))
+
+(use-package treemacs
+  :defer t
+  :commands treemacs
+  :init (with-eval-after-load 'winum
+          (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+  :custom ((treemacs-collapse-dirs                 (if (executable-find "python3") 3 0))
+           (treemacs-deferred-git-apply-delay      0.5)
+           (treemacs-display-in-side-window        t)
+           (treemacs-eldoc-display                 t)
+           (treemacs-file-event-delay              5000)
+           (treemacs-file-follow-delay             0.2)
+           (treemacs-follow-after-init             t)
+           (treemacs-git-command-pipe              "")
+           (treemacs-goto-tag-strategy             'refetch-index)
+           (treemacs-indentation                   2)
+           (treemacs-indentation-string            " ")
+           (treemacs-is-never-other-window         nil)
+           (treemacs-max-git-entries               5000)
+           (treemacs-missing-project-action        'ask)
+           (treemacs-no-png-images                 nil)
+           (treemacs-no-delete-other-windows       t)
+           (treemacs-project-follow-cleanup        nil)
+           (treemacs-persist-file                  (expand-file-name ".emacs.cache/treemacs-persist" user-emacs-directory))
+           (treemacs-position                      'left)
+           (treemacs-recenter-distance             0.1)
+           (treemacs-recenter-after-file-follow    nil)
+           (treemacs-recenter-after-tag-follow     nil)
+           (treemacs-recenter-after-project-jump   'always)
+           (treemacs-recenter-after-project-expand 'on-distance)
+           (treemacs-show-cursor                   nil)
+           (treemacs-show-hidden-files             t)
+           (treemacs-silent-filewatch              nil)
+           (treemacs-silent-refresh                nil)
+           (treemacs-sorting                       'alphabetic-asc)
+           (treemacs-space-between-root-nodes      t)
+           (treemacs-tag-follow-cleanup            t)
+           (treemacs-tag-follow-delay              1.5)
+           (treemacs-width                         26))
+  :config (progn
+            (treemacs-follow-mode t)
+            (treemacs-filewatch-mode t)
+            (treemacs-fringe-indicator-mode t)
+            (pcase (cons (not (null (executable-find "git")))
+                         (not (null (executable-find "python3"))))
+              (`(t . t)
+               (treemacs-git-mode 'deferred))
+              (`(t . _)
+               (treemacs-git-mode 'simple))))
+  :bind  (:map global-map
+               ("M-0"       . treemacs-select-window)
+               ;;("C-x t 1"   . treemacs-delete-other-windows)
+               ;;("C-x t t"   . treemacs)
+               ;;("C-x t B"   . treemacs-bookmark)
+               ;;("C-x t C-t" . treemacs-find-file)
+               ;;("C-x t M-t" . treemacs-find-tag)
+               ))
 
 (provide 'setup-ecb)
 ;;; setup-ecb.el ends here

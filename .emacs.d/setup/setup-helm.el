@@ -1,6 +1,6 @@
 ;;; setup-helm.el ---                                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -66,7 +66,7 @@
            (helm-move-to-line-cycle-in-source         nil)
            (helm-scroll-amount                        8)
            (helm-truncate-lines                       nil)
-	   (helm-grep-truncate-lines                  t)
+       (helm-grep-truncate-lines                  t)
            (helm-ff-auto-update-initial-value         nil)
            (helm-ff-search-library-in-sexp            t)
            (helm-ff-skip-boring-files                 t)
@@ -79,8 +79,8 @@
            (helm-use-undecorated-frame-option         t))
   :config (progn
 
-	    (if (display-graphic-p)
-		(setq helm-buffers-end-truncated-string "…"))
+        (if (display-graphic-p)
+        (setq helm-buffers-end-truncated-string "…"))
 
             (defadvice helm-buffers-sort-transformer (around ignore activate)
               (setq ad-return-value (ad-get-arg 0)))
@@ -118,9 +118,9 @@
                   `((name . "Fonts")
                     (candidates . ,(font-family-list))
                     (action . (lambda (candidate) (progn
-						    (setq my/main-programming-font candidate)
-						    (set-face-attribute 'default nil :family candidate)
-						    (fontify-frame (selected-frame)))))))
+                            (setq my/main-programming-font candidate)
+                            (set-face-attribute 'default nil :family candidate)
+                            (fontify-frame (selected-frame)))))))
 
             (defun helm-fonts ()
               (interactive)
@@ -181,6 +181,10 @@
                 (helm :sources 'my/helm-imenu-source
                       :preselect str
                       :buffer "*helm imenu*")))))
+
+(use-package helm-lsp
+  :defer t
+  :commands helm-lsp-workspace-symbol)
 
 (provide 'setup-helm)
 ;;; setup-helm.el ends here
