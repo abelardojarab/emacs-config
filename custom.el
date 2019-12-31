@@ -91,6 +91,10 @@
    (quote
     (self-insert-command org-self-insert-command c-electric-lt-gt c-electric-colon completion-separator-self-insert-command outshine-self-insert-command)) nil nil "Customized with use-package company")
  '(company-bibtex-bibliography (quote ("~/workspace/Documents/Bibliography/biblio.bib")) nil nil "Customized with use-package company-bibtex")
+ '(company-box-backends-colors nil t)
+ '(company-box-doc-delay 0.3)
+ '(company-box-max-candidates 50)
+ '(company-box-show-single-candidate t)
  '(company-dabbrev-code-everywhere t)
  '(company-dabbrev-downcase nil nil nil "Customized with use-package company")
  '(company-dabbrev-ignore-case t nil nil "Customized with use-package company")
@@ -102,6 +106,7 @@
  '(company-idle-delay 0 nil nil "Customized with use-package company")
  '(company-lighter-base "" nil nil "Customized with use-package company")
  '(company-lsp-async t nil nil "Customized with use-package company-lsp")
+ '(company-lsp-cache-candidates (quote auto))
  '(company-minimum-prefix-length 2 nil nil "Customized with use-package company")
  '(company-quickhelp-color-background "#4F4F4F")
  '(company-quickhelp-color-foreground "#DCDCCC")
