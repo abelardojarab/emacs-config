@@ -66,6 +66,7 @@
 (depends-on "company")
 (depends-on "company-restclient")
 (depends-on "company-quickhelp")
+(depends-on "company-tabnine")
 (depends-on "company-tern")
 (depends-on "company-web")
 (depends-on "conda")
