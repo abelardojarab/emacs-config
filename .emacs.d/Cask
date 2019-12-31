@@ -449,5 +449,6 @@
 (depends-on "solarized-theme")
 (depends-on "sourcerer-theme")
 (depends-on "sublime-themes")
+(depends-on "vscdark-theme")
 (depends-on "zenburn-theme")
 (depends-on "zerodark-theme")

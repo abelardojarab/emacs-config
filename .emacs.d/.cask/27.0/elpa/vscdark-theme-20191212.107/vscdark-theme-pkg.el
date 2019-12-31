@@ -1,0 +1,2 @@
+;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/vscdark-theme-20191212.107/vscdark-theme.el  -*- no-byte-compile: t -*-
+(define-package "vscdark-theme" "20191212.107" "VS Code Dark+ like theme" '((emacs "24.1")) :commit "8eba74059e8a9db974e4056ee024e52fe54da485" :authors '(("Alexander L. Belikoff")) :maintainer '("Alexander L. Belikoff") :url "https://github.com/abelikoff/vscdark-theme")
