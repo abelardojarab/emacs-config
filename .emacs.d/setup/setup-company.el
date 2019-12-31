@@ -207,7 +207,6 @@
 
             ;; Documentation popups for company
             (use-package company-box
-
               :functions (my-company-box--make-line
                           my-company-box-icons--elisp)
               :commands (company-box--get-color
@@ -223,7 +222,7 @@
                        (company-box-doc-delay             0.3))
               :config (progn
                         ;; Support `company-common'
-                        (defun my-company-box--make-line (candidate)
+                        (defun my/company-box--make-line (candidate)
                           (-let* (((candidate annotation len-c len-a backend) candidate)
                                   (color (company-box--get-color backend))
                                   ((c-color a-color i-color s-color) (company-box--resolve-colors color))
@@ -247,7 +246,7 @@
                                                              'company-box--color s-color)
                                                  line)
                             line))
-                        (advice-add #'company-box--make-line :override #'my-company-box--make-line)
+                        (advice-add #'company-box--make-line :override #'my/company-box--make-line)
 
                         ;; Prettify icons
                         (defun my-company-box-icons--elisp (candidate)
