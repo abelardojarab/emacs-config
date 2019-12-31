@@ -115,7 +115,8 @@
 
             ;; company-lsp: Company completion backend for lsp-mode.
             (use-package company-lsp
-              :custom (company-lsp-async t))
+              :custom ((company-lsp-async t)
+                       (company-lsp-cache-candidates 'auto)))
 
             ;; Company integration with irony
             (use-package company-irony

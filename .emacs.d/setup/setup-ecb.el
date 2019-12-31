@@ -243,7 +243,9 @@ little more place."
            (treemacs-no-png-images                 nil)
            (treemacs-no-delete-other-windows       t)
            (treemacs-project-follow-cleanup        nil)
-           (treemacs-persist-file                  (expand-file-name ".emacs.cache/treemacs-persist" user-emacs-directory))
+           (treemacs-persist-file                  (concat (file-name-as-directory
+                                                            my/emacs-cache-dir)
+                                                           "treemacs-persist"))
            (treemacs-position                      'left)
            (treemacs-recenter-distance             0.1)
            (treemacs-recenter-after-file-follow    nil)
@@ -268,7 +270,17 @@ little more place."
               (`(t . t)
                (treemacs-git-mode 'deferred))
               (`(t . _)
-               (treemacs-git-mode 'simple))))
+               (treemacs-git-mode 'simple)))
+
+            ;; Integration with magit
+            (use-package treemacs-magit
+              :defer t
+              :after (treemacs magit))
+
+            ;; Integration with projectile
+            (use-package treemacs-projectile
+              :defer t
+              :after (treemacs projectile)))
   :bind  (:map global-map
                ("M-0"       . treemacs-select-window)
                ;;("C-x t 1"   . treemacs-delete-other-windows)

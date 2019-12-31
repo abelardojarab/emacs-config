@@ -87,6 +87,16 @@
           (my/disable-garbage-collection)
           (add-hook 'emacs-startup-hook #'my/enable-garbage-collection)
 
+          ;; Perform automatic GC
+          (add-hook 'emacs-startup-hook
+                    (lambda ()
+                      (if (boundp 'after-focus-change-function)
+                          (add-function :after after-focus-change-function
+                                        (lambda ()
+                                          (unless (frame-focus-state)
+                                            (garbage-collect))))
+                        (add-hook 'after-focus-change-function 'garbage-collect))))
+
           ;; Features
           (put 'narrow-to-region 'disabled nil)
           (put 'narrow-to-page   'disabled nil)
