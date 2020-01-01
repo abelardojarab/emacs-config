@@ -29,6 +29,15 @@
 ;; If you want to create a file, visit that file with 【▤】【o】,
 ;; then enter the text in that file's own buffer.")
 
+;; So Long mitigates slowness due to extremely long lines.
+;; Currently available in Emacs master branch *only*!
+(when (fboundp 'global-so-long-mode)
+  (global-so-long-mode))
+
+;; ad-handle-definition warnings are generated when functions are redefined with `defadvice',
+;; they are not helpful.
+(setq ad-redefinition-action 'accept)
+
 ;; Reporting Emacs bugs
 (use-package emacsbug
   :custom (report-emacs-bug-no-explanations t))
