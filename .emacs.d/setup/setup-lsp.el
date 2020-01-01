@@ -1,6 +1,6 @@
 ;;; setup-lsp.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -31,8 +31,8 @@
   :hook (((c-mode c++-mode)    . lsp)
          (python-mode          . lsp)
          (js2-mode             . lsp))
-  :custom ((lsp-prefer-flymake  nil)
-           (lsp-auto-guess-root nil)
+  :custom ((lsp-prefer-flymake       nil)
+           (lsp-auto-guess-root      nil)
            (lsp-file-watch-threshold (* 1024 1024)))
   :config (progn
             ;; Prefer flake8, faster than pylint
@@ -70,14 +70,14 @@
            (lsp-ui-sideline-ignore-duplicate     t )
            (lsp-ui-sideline-show-symbol          nil))
   :hook (lsp-mode . lsp-ui-mode)
-  :config (progn
-            (if (display-graphic-p)
-                (progn
-                  (setq lsp-ui-sideline-code-actions-prefix "ℹ ")
-                  (setq lsp-ui-doc-use-webkit t)))
-
-            (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
-            (define-key lsp-ui-mode-map [remap xref-find-references]  #'lsp-ui-peek-find-references)))
+  :bind (:map lsp-ui-mode-map
+              ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+              ([remap xref-find-references] . lsp-ui-peek-find-references)
+              ("C-c u" . lsp-ui-imenu))
+  :config (if (display-graphic-p)
+              (progn
+                (setq lsp-ui-sideline-code-actions-prefix "ℹ ")
+                (setq lsp-ui-doc-use-webkit t))))
 
 (use-package lsp-metals-treeview
   :disabled t

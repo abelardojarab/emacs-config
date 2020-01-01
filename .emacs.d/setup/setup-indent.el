@@ -1,6 +1,6 @@
 ;;; setup-indent.el ---                              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -73,8 +73,8 @@
 ;; if indent-tabs-mode is off, untabify before saving
 (add-hook 'write-file-hooks
           (lambda () (if (not indent-tabs-mode)
-                         (save-excursion
-                           (untabify (point-min) (point-max)))) nil))
+                    (save-excursion
+                      (untabify (point-min) (point-max)))) nil))
 
 ;; auto-indent pasted code
 (defadvice yank (after indent-region activate)
@@ -98,11 +98,11 @@
   :pin manual
   :defer t
   :commands auto-indent-mode
-  :init (setq auto-indent-indent-style              'conservative
-              auto-indent-on-visit-file             nil
-              auto-indent-blank-lines-on-move       nil
-              auto-indent-next-pair-timer-geo-mean  (quote ((default 0.0005 0)))
-              auto-indent-disabled-modes-list       (list (quote vhdl-mode))))
+  :custom ((auto-indent-indent-style              'conservative)
+           (auto-indent-on-visit-file             nil)
+           (auto-indent-blank-lines-on-move       nil)
+           (auto-indent-next-pair-timer-geo-mean  (quote ((default 0.0005 0))))
+           (auto-indent-disabled-modes-list       (list (quote vhdl-mode)))))
 
 ;; Permanent indentation guide
 (use-package indent-hint
