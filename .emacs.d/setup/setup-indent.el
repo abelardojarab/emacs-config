@@ -1,6 +1,6 @@
 ;;; setup-indent.el ---                              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -73,8 +73,8 @@
 ;; if indent-tabs-mode is off, untabify before saving
 (add-hook 'write-file-hooks
           (lambda () (if (not indent-tabs-mode)
-                    (save-excursion
-                      (untabify (point-min) (point-max)))) nil))
+                         (save-excursion
+                           (untabify (point-min) (point-max)))) nil))
 
 ;; auto-indent pasted code
 (defadvice yank (after indent-region activate)
@@ -109,33 +109,17 @@
   :defer t
   :commands indent-hint-mode
   :custom ((indent-hint-background-overlay t)
-       (indent-hint-bg                 nil)))
+           (indent-hint-bg                 nil)))
 
 ;; Transient indentation guide
 (use-package highlight-indent-guides
-  :disabled t ;; this mode is super slow
   :defer t
+  :diminish t
   :commands highlight-indent-guides-mode
-  :config (progn
-
-            ;; Fix indent guide issue with popup
-            (defvar my/indent-guide-mode-suppressed nil)
-            (defadvice popup-create (before highlight-indent-guides-mode activate)
-              "Suspend highlight-indent-guides-mode while popups are visible"
-              (let ((highlight-indent-guides-enabled (and (boundp 'highlight-indent-guides-mode) highlight-indent-guides-mode)))
-                (set (make-local-variable 'my/highlight-indent-guides-mode-suppressed) highlight-indent-guides-mode)
-                (when highlight-indent-guides-enabled
-                  (highlight-indent-guides-mode -1))))
-            (defadvice popup-delete (after highlight-indent-guides-mode activate)
-              "Restore highlight-indent-guides-mode when all popups have closed"
-              (let ((highlight-indent-guides-enabled (and (boundp 'highlight-indent-guides-mode) highlight-indent-guides-mode)))
-                (when (and (not popup-instances) my/highlight-indent-guides-mode-suppressed)
-                  (setq my/highlight-indent-guides-mode-suppressed nil)
-                  (highlight-indent-guides-mode 1))))
-
-            (setq highlight-indent-guides-method 'character)
-            (if (display-graphic-p)
-                (setq highlight-indent-guides-character ?┊))))
+  :custom ((highlight-indent-guides-method                   'character)
+           (highlight-indent-guides-responsive               'top)
+           (highlight-indent-guides-delay                    0)
+           (highlight-indent-guides-auto-character-face-perc 7)))
 
 ;; Highlight indentation levels
 (use-package highlight-indentation

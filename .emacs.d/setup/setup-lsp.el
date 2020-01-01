@@ -28,16 +28,19 @@
 (use-package lsp-mode
   :demand t
   :commands lsp
-  :hook ((c++-mode    . lsp)
-         (python-mode . lsp))
-  :custom (lsp-prefer-flymake nil)
+  :hook (((c-mode c++-mode)    . lsp)
+         (python-mode          . lsp)
+         (js2-mode             . lsp))
+  :custom ((lsp-prefer-flymake  nil)
+           (lsp-auto-guess-root nil)
+           (lsp-file-watch-threshold (* 1024 1024)))
   :config (progn
             ;; Prefer flake8, faster than pylint
             (setq-default lsp-pyls-configuration-sources ["flake8"])
             (setq-default lsp-pyls-plugins-pylint-enabled nil)
 
             ;; `-background-index' requires clangd v8+!
-            (setq lsp-clients-clangd-args '("-j=4" "-background-index" "-log=error"))))
+            (setq lsp-clients-clangd-args '("-j=5" "-background-index" "-log=error"))))
 
 ;; Fix bug on dash/lsp
 (load (expand-file-name "no-autoloads/dash.el" user-emacs-directory))
@@ -56,8 +59,12 @@
 
 ;; lsp-ui: This contains all the higher level UI modules of lsp-mode, like flycheck support and code lenses.
 (use-package lsp-ui
+  :diminish t
   :custom ((lsp-ui-sideline-enable               nil)
-           (lsp-ui-doc-enable                    nil)
+           (lsp-ui-doc-enable                    t)
+           (lsp-ui-doc-header                    t)
+           (lsp-ui-doc-include-signature         t)
+           (lsp-ui-doc-position                  'top)
            (lsp-ui-flycheck-enable               t)
            (lsp-ui-imenu-enable                  t)
            (lsp-ui-sideline-ignore-duplicate     t )
@@ -65,7 +72,9 @@
   :hook (lsp-mode . lsp-ui-mode)
   :config (progn
             (if (display-graphic-p)
-                (setq lsp-ui-sideline-code-actions-prefix "ℹ "))
+                (progn
+                  (setq lsp-ui-sideline-code-actions-prefix "ℹ ")
+                  (setq lsp-ui-doc-use-webkit t)))
 
             (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
             (define-key lsp-ui-mode-map [remap xref-find-references]  #'lsp-ui-peek-find-references)))
