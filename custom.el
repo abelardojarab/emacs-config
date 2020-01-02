@@ -1,6 +1,6 @@
 ;;; custom.el ---                                    -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2017, 2018, 2019  Abelardo Jara-Berrocal
+;; Copyright (C) 2017-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -679,7 +679,7 @@
  '(treemacs-no-delete-other-windows t t)
  '(treemacs-no-png-images nil t)
  '(treemacs-persist-file
-   "/home/abelardojara/workspace/emacs-config/.emacs.d/.emacs.cache/treemacs-persist" t)
+   "~/.emacs.cache/treemacs-persist" t)
  '(treemacs-position (quote left) t)
  '(treemacs-project-follow-cleanup nil t)
  '(treemacs-recenter-after-file-follow nil t)

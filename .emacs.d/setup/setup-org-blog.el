@@ -1,6 +1,6 @@
 ;;; setup-org-blog.el ---                            -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -49,7 +49,7 @@
 
               ;; blogging
               (setq personal-blog-name "personal-blog")
-              (setq personal-blog-url "http://abelardojarab.dyndns.org/xmlrpc.php")
+              (setq personal-blog-url "https://jaraberrocal.readmyblog.org/xmlrpc.php")
               (setq org2blog/wp-confirm-post t
                     org2blog/wp-blog-alist `((,personal-blog-name
                                               :url ,personal-blog-url
