@@ -1,6 +1,6 @@
 ;;; setup-parenthesis.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -31,7 +31,6 @@
   :commands show-paren-mode
   :custom (show-paren-delay 0)
   :config (progn
-
             ;; Show paren-mode when off-screen
             (defadvice show-paren-function (after show-matching-paren-offscreen activate)
               "If the matching paren is offscreen, show the matching line in the
@@ -44,6 +43,44 @@
                                            (char-equal (char-syntax cb) ?\) )
                                            (blink-matching-open))))
                   (when matching-text (message matching-text)))))
+
+            ;; we will call `blink-matching-open` ourselves...
+            (remove-hook 'post-self-insert-hook
+                         #'blink-paren-post-self-insert-function)
+
+            ;; this still needs to be set for `blink-matching-open` to work
+            (setq blink-matching-paren 'show)
+            (let ((ov nil)) ; keep track of the overlay
+              (advice-add
+               #'show-paren-function
+               :after
+               (defun show-paren--off-screen+ (&rest _args)
+                 "Display matching line for off-screen paren."
+                 (when (overlayp ov)
+                   (delete-overlay ov))
+                 ;; check if it's appropriate to show match info,
+                 ;; see `blink-paren-post-self-insert-function'
+                 (when (and (overlay-buffer show-paren--overlay)
+                            (not (or cursor-in-echo-area
+                                     executing-kbd-macro
+                                     noninteractive
+                                     (minibufferp)
+                                     this-command))
+                            (and (not (bobp))
+                                 (memq (char-syntax (char-before)) '(?\) ?\$)))
+                            (= 1 (logand 1 (- (point)
+                                              (save-excursion
+                                                (forward-char -1)
+                                                (skip-syntax-backward "/\\")
+                                                (point))))))
+                   ;; rebind `minibuffer-message' called by
+                   ;; `blink-matching-open' to handle the overlay display
+                   (cl-letf (((symbol-function #'minibuffer-message)
+                              (lambda (msg &rest args)
+                                (let ((msg (apply #'format-message msg args)))
+                                  (setq ov (display-line-overlay+
+                                            (window-start) msg))))))
+                     (blink-matching-open))))))
 
             ;; Enable mode
             (show-paren-mode 1)))
@@ -63,12 +100,10 @@
           (show-smartparens-global-mode t)
 
           (smartparens-global-mode t))
+  :custom ((sp-max-pair-length            2)
+           (sp-escape-quotes-after-insert nil))
   :config (progn
-
-            ;; Faster performance
-            (setq-default sp-max-pair-length 2)
-
-            ;; disable pairing of ' in minibuffer
+           ;; disable pairing of ' in minibuffer
             (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)
 
             ;; use smartparens to automatically indent correctly when opening new block
