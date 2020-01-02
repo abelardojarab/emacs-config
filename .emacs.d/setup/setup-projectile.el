@@ -1,6 +1,6 @@
 ;;; setup-projectile.el ---                          -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018, 2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -32,7 +32,12 @@
   :commands (projectile-global-mode
              projectile-compile-project
              projectile-find-file
-             projectile-project-root)
+             projectile-project-root
+             projectile-mode)
+  :hook (after-init . projectile-mode)
+  :custom ((projectile-mode-line-prefix "")
+           (projectile-sort-order       'recentf)
+           (projectile-use-git-grep     t))
   :bind (("C-x C-m" . projectile-compile-project)
          ("C-x C-g" . projectile-find-file))
   :config (progn
@@ -44,6 +49,19 @@
             (add-to-list 'projectile-project-root-files ".clang_complete")
             (add-to-list 'projectile-project-root-files ".clang_complete.in")
             (add-to-list 'projectile-project-root-files "AndroidManifest.xml")
+
+            ;; Use the faster searcher to handle project files: ripgrep `rg'.
+            (when (and (not (executable-find "fd"))
+                       (executable-find "rg"))
+              (setq projectile-generic-command
+                    (let ((rg-cmd ""))
+                      (dolist (dir projectile-globally-ignored-directories)
+                        (setq rg-cmd (format "%s --glob '!%s'" rg-cmd dir)))
+                      (concat "rg -0 --files --color=never --hidden" rg-cmd))))
+
+            ;; Support Perforce project
+            (let ((val (or (getenv "P4CONFIG") ".p4config")))
+              (add-to-list 'projectile-project-root-files-bottom-up val))
 
             (setq projectile-known-projects-file (concat (file-name-as-directory
                                                           my/emacs-cache-dir)

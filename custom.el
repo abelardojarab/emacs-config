@@ -162,7 +162,7 @@
  '(ecb-highlight-tag-with-point-delay 180 t nil "Customized with use-package ecb")
  '(ecb-history-make-buckets (quote mode) t nil "Customized with use-package ecb")
  '(ecb-kill-buffer-clears-history (quote auto) t nil "Customized with use-package ecb")
- '(ecb-layout-name "leftright-analyse-y" t nil "Customized with use-package ecb")
+ '(ecb-layout-name "left11" t nil "Customized with use-package ecb")
  '(ecb-options-version "2.50")
  '(ecb-show-sources-in-directories-buffer (quote always) t nil "Customized with use-package ecb")
  '(ecb-source-path

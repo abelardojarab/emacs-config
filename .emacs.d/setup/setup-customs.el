@@ -1,6 +1,6 @@
 ;;; setup-customs.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@ubuntu02>
 ;; Keywords:
@@ -118,7 +118,7 @@
   :group 'my/customs
   :type 'list)
 
-(defcustom my/ecb-layout-theme "leftright-analyse-y"
+(defcustom my/ecb-layout-theme "left11"
   "Preferred ECB layout name"
   :group 'my/customs
   :type 'string)
