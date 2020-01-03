@@ -1,6 +1,6 @@
 ;;; setup-versioning.el ---                         -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -171,25 +171,6 @@
           (defadvice magit-wip-commit-worktree (around bar activate)
             (ignore-errors add-do-it))
 
-          ;; make magit status go full-screen but remember previous window
-          (defadvice magit-status (around magit-fullscreen activate)
-            (window-configuration-to-register :magit-fullscreen)
-            ad-do-it
-            (delete-other-windows))
-
-          ;; Make `magit-log' run alone in the frame, and then restore the old window
-          ;; configuration when you quit out of magit.
-          (defadvice magit-log (around magit-fullscreen activate)
-            (window-configuration-to-register :magit-fullscreen)
-            ad-do-it
-            (delete-other-windows))
-
-          (defun magit-quit-session ()
-            "Restores the previous window configuration and kills the magit buffer"
-            (interactive)
-            (kill-buffer)
-            (jump-to-register :magit-fullscreen))
-
           ;; Don't show "MRev" in the modeline
           (when (bound-and-true-p magit-auto-revert-mode)
             (diminish 'magit-auto-revert-mode))
@@ -201,13 +182,17 @@
           (defadvice git-commit-abort (after delete-window activate)
             (delete-window))
 
+          (defun magit-quit-session ()
+            "Restores the previous window configuration and kills the magit buffer"
+            (interactive)
+            (kill-buffer))
+
           ;; these two force a new line to be inserted into a commit window,
           ;; which stops the invalid style showing up.
           (defun my/magit-commit-mode-init ()
             (when (looking-at "\n")
               (open-line 1))))
   :config (progn
-
             (setq magit-auto-revert-immediately (null (and (boundp 'auto-revert-use-notify)
                                                            auto-revert-use-notify)))
 
@@ -227,15 +212,6 @@
 
             ;; Face setup
             (set-face-foreground 'magit-hash (face-foreground 'font-lock-type-face))
-
-            ;; Restore previously hidden windows
-            (defadvice magit-quit-window (around magit-restore-screen activate)
-              (let ((current-mode major-mode))
-                ad-do-it
-                ;; we only want to jump to register when the last seen buffer
-                ;; was a magit-status buffer.
-                (when (eq 'magit-status-mode current-mode)
-                  (jump-to-register :magit-fullscreen))))
 
             (defun magit-maybe-commit (&optional show-options)
               "Runs magit-commit unless prefix is passed"
