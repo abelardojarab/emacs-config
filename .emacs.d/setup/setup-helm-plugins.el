@@ -1,6 +1,6 @@
 ;; setup-helm-plugins.el ---                        -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018, 2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -33,6 +33,14 @@
               ("a" . helm-grepint-grep))
   :config (helm-grepint-set-default-config))
 
+;; helm ripgrep
+(use-package helm-rg
+  :defer t
+  :after helm
+  :commands helm-rg
+  :bind (:map ctl-x-map
+              ("g" . helm-rg)))
+
 ;; helm elscreen
 (use-package helm-elscreen
   :defer t
@@ -43,15 +51,16 @@
   :defer t
   :after (helm helm-elscreen)
   :commands (helm-git-grep)
-  :bind (:map ctl-x-map
-              ("g" . helm-git-grep))
-  :config (setq helm-git-grep-candidate-number-limit nil))
+  :custom (helm-git-grep-candidate-number-limit nil))
 
 ;; helm ag/ack
 (use-package helm-ag
   :defer t
   :after helm
-  :commands (helm-ag helm-do-ag helm-do-ag-this-file helm-do-ag-project-root)
+  :commands (helm-ag
+             helm-do-ag
+             helm-do-ag-this-file
+             helm-do-ag-project-root)
   :config (progn
             ;; Fallback to ack if the silver searcher is not found
             (unless (or (executable-find "ag")

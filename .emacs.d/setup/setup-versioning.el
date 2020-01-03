@@ -126,6 +126,7 @@
              git-commit-setup-check-buffer)
   :defines (magit-ediff-dwim-show-on-hunks)
   :bind (:map ctl-x-map
+              ("g"        . helm-rg) ;; overriding
               ("m"        . magit-status)
               ("C-m"      . magit-dispatch-popup)
               :map magit-mode-map
@@ -182,6 +183,19 @@
           (defadvice git-commit-abort (after delete-window activate)
             (delete-window))
 
+          ;; make magit status go full-screen but remember previous window
+          (defadvice magit-status (around magit-fullscreen activate)
+            (window-configuration-to-register :magit-fullscreen)
+            ad-do-it
+            (delete-other-windows))
+
+          ;; Make `magit-log' run alone in the frame, and then restore the old window
+          ;; configuration when you quit out of magit.
+          (defadvice magit-log (around magit-fullscreen activate)
+            (window-configuration-to-register :magit-fullscreen)
+            ad-do-it
+            (delete-other-windows))
+
           (defun magit-quit-session ()
             "Restores the previous window configuration and kills the magit buffer"
             (interactive)
@@ -212,6 +226,15 @@
 
             ;; Face setup
             (set-face-foreground 'magit-hash (face-foreground 'font-lock-type-face))
+
+            ;; restore previously hidden windows
+            (defadvice magit-quit-window (around magit-restore-screen activate)
+              (let ((current-mode major-mode))
+                ad-do-it
+                ;; we only want to jump to register when the last seen buffer
+                ;; was a magit-status buffer.
+                (when (eq 'magit-status-mode current-mode)
+                  (jump-to-register :magit-fullscreen))))
 
             (defun magit-maybe-commit (&optional show-options)
               "Runs magit-commit unless prefix is passed"

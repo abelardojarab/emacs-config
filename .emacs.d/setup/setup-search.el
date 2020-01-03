@@ -1,6 +1,6 @@
 ;;; setup-search.el ---                              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -109,6 +109,11 @@
 (use-package avy
   :defer t
   :custom (avy-background t))
+
+;; Nicer search using ripgrep
+(use-package deadgrep
+  :if (executable-find "rg")
+  :commands deadgrep)
 
 (provide 'setup-search)
 ;;; setup-search.el ends here

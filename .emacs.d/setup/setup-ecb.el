@@ -1,6 +1,6 @@
 ;;; setup-ecb.el ---                       -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -33,7 +33,8 @@
   :commands (ecb-redraw-layout
              my/ecb-activate
              idle-timer-ecb-methods-start)
-  :custom ((ecb-truncate-lines                         t)
+  :custom ((stack-trace-on-error                       t)
+           (ecb-truncate-lines                         t)
            (ecb-auto-save-before-etags-methods-rebuild nil)
            (ecb-show-sources-in-directories-buffer     'always)
            (ecb-compile-window-height                  nil)
@@ -48,7 +49,6 @@
            (ecb-kill-buffer-clears-history             'auto)
            (ecb-tip-of-the-day                         nil))
   :config (progn
-
             (defadvice semanticdb-deep-find-tags-by-name-method (around bar activate)
               (ignore-errors add-do-it))
 
@@ -280,15 +280,7 @@ little more place."
             ;; Integration with projectile
             (use-package treemacs-projectile
               :defer t
-              :after (treemacs projectile)))
-  :bind  (:map global-map
-               ("M-0"       . treemacs-select-window)
-               ;;("C-x t 1"   . treemacs-delete-other-windows)
-               ;;("C-x t t"   . treemacs)
-               ;;("C-x t B"   . treemacs-bookmark)
-               ;;("C-x t C-t" . treemacs-find-file)
-               ;;("C-x t M-t" . treemacs-find-tag)
-               ))
+              :after (treemacs projectile))))
 
 (provide 'setup-ecb)
 ;;; setup-ecb.el ends here
