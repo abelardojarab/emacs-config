@@ -33,14 +33,11 @@
               ([(f7)] . gud-finish)
               ([(f8)] . gud-cont))
   :commands (gdb-few-windows gdb-many-windows)
-  :init (setq gud-key-prefix "\C-c\C-d")
+  :custom ((gud-key-prefix   "\C-c\C-d")
+           (gdb-many-windows t)
+           (gdb-show-main    t)
+           (gdb-max-frames   120))
   :config (progn
-
-            ;; gdb should use multi-windowed like all the other debuggers out there.
-            (setq gdb-many-windows t
-                  gdb-show-main    t
-                  gdb-max-frames   120)
-
             ;; Highlight the current line in the source window.
             (defconst gdb-highlight-face 'highlight
               "face to use for highlighting the current line")
@@ -112,6 +109,7 @@ source code, and program IO."
 ;; Microsoft debugger interface
 (use-package dap-mode
   :diminish t
+  :disabled t
   :bind (:map dap-mode-map
               (("<C-f5"   . dap-debug)
                ("<M-f5"   . dap-continue)
