@@ -188,7 +188,6 @@
             (when (looking-at "\n")
               (open-line 1))))
   :config (progn
-
             (setq magit-auto-revert-immediately (null (and (boundp 'auto-revert-use-notify)
                                                            auto-revert-use-notify)))
 
