@@ -182,6 +182,11 @@
           (defadvice git-commit-abort (after delete-window activate)
             (delete-window))
 
+          (defun magit-quit-session ()
+            "Restores the previous window configuration and kills the magit buffer"
+            (interactive)
+            (kill-buffer))
+
           ;; these two force a new line to be inserted into a commit window,
           ;; which stops the invalid style showing up.
           (defun my/magit-commit-mode-init ()
