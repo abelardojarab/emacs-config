@@ -75,5 +75,12 @@
                   projectile-globally-ignored-files (quote ("TAGS" "*.log" "*DS_Store" "node-modules")))
             (projectile-global-mode)))
 
+;; Integration with ripgrep
+(use-package projectile-ripgrep
+  :disabled t
+  :if (executable-find "rg")
+  :after projectile
+  :commands projectile-ripgrep)
+
 (provide 'setup-projectile)
 ;;; setup-projectile.el ends here

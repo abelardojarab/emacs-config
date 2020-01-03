@@ -28,6 +28,7 @@
 (use-package helm-grepint
   :defer t
   :after helm
+  :if (not (executable-find "rg"))
   :commands (helm-grepint-grep)
   :bind (:map ctl-x-map
               ("a" . helm-grepint-grep))
@@ -37,9 +38,10 @@
 (use-package helm-rg
   :defer t
   :after helm
+  :if (executable-find "rg")
   :commands helm-rg
   :bind (:map ctl-x-map
-              ("g" . helm-rg)))
+              ("a" . helm-rg)))
 
 ;; helm elscreen
 (use-package helm-elscreen
