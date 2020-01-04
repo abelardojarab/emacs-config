@@ -46,6 +46,14 @@
                              (plist-get commit-info :author-time)
                              (plist-get commit-info :author-summary)))))
 
+;; Perforce
+(use-package p4
+  :if (executable-find "p4")
+  :demand t
+  :custom ((p4-follow-symlinks          t)
+           (p4-use-p4config-exclusively t)
+           (p4-do-find-file             nil)))
+
 ;; Annotate lines with author history
 (use-package vc-annotate
   :defer t

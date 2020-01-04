@@ -1,6 +1,6 @@
 ;;; setup-cmake.el ---                            -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -162,6 +162,8 @@
   :init (if (not (file-exists-p "~/cmake_builds"))
             (make-directory "~/cmake_builds"))
   :config (progn
+            (defadvice cmake-ide-run-cmake (around bar activate)
+              (ignore-errors add-do-it))
 
             ;; Backup
             (use-package cmake-ide-backup
