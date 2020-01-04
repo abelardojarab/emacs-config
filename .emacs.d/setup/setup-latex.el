@@ -1,6 +1,6 @@
 ;;; setup-latex.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -71,9 +71,56 @@
 
           (setq bibtex-align-at-equal-sign t)))
 
+(use-package ebib
+  :demand t
+  :init (progn
+          ;; Restore legacy code
+          (eval-and-compile
+            (define-prefix-command 'ebib-prefix-map)
+            (suppress-keymap ebib-prefix-map)
+            (defvar ebib-prefixed-functions '(ebib-delete-entry
+                                              ebib-latex-entries
+                                              ebib-mark-entry
+                                              ebib-print-entries
+                                              ebib-push-bibtex-key
+                                              ebib-export-entry)))
+
+          ;; macro to redefine key bindings.
+          (defmacro ebib-key (buffer key &optional command)
+            (cond
+             ((eq buffer 'index)
+              (let ((one `(define-key ebib-index-mode-map ,key (quote ,command)))
+                    (two (when (or (null command)
+                                   (member command ebib-prefixed-functions))
+                           `(define-key ebib-prefix-map ,key (quote ,command)))))
+                (if two
+                    `(progn ,one ,two)
+                  one)))
+             ((eq buffer 'entry)
+              `(define-key ebib-entry-mode-map ,key (quote ,command)))
+             ((eq buffer 'strings)
+              `(define-key ebib-strings-mode-map ,key (quote ,command)))
+             ((eq buffer 'mark-prefix)
+              `(progn
+                 (define-key ebib-index-mode-map (format "%c" ebib-prefix-key) nil)
+                 (define-key ebib-index-mode-map ,key 'ebib-prefix-map)
+                 (setq ebib-prefix-key (string-to-char ,key))))
+             ((eq buffer 'multiline)
+              `(progn
+                 (define-key ebib-multiline-mode-map "\C-c" nil)
+                 (mapc #'(lambda (command)
+                           (define-key ebib-multiline-mode-map (format "\C-c%s%c" ,key (car command)) (cdr command)))
+                       '((?q . ebib-quit-multiline-edit)
+                         (?c . ebib-cancel-multiline-edit)
+                         (?s . ebib-save-from-multiline-edit)))
+                 (setq ebib-multiline-key (string-to-char ,key)))))))
+  :commands ebib-key)
+
 (use-package ebib-handy
   :defer t
-  :bind ("C-c b" . ebib-handy)
+  :after ebib
+  :load-path (lambda () (expand-file-name "ebib-handy/" user-emacs-directory))
+  :commands ebib-handy
   :config (progn
             (ebib-handy-enable)
             (setq ebib-extra-fields

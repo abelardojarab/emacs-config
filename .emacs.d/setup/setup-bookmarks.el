@@ -1,6 +1,6 @@
 ;;; setup-bookmarks.el ---                      -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -37,28 +37,30 @@
 
 ;; Visible bookmarks
 (use-package bm
-  :disabled t
   :defer t
   :commands (bm-repository-load
              bm-buffer-restore
              bm-buffer-save
              bm-buffer-save-all
              bm-repository-save
-             bm-toggle)
+             bm-toggle
+             bm-next)
   :bind (;; bind left mouse clicks and scrolls in left margin/fringe
          ("<left-fringe> <mouse-5>" . bm-next-mouse)
          ("<left-margin> <mouse-5>" . bm-next-mouse)
          ("<left-fringe> <mouse-4>" . bm-previous-mouse)
          ("<left-margin> <mouse-4>" . bm-previous-mouse)
          ("<left-fringe> <mouse-1>" . bm-toggle-mouse)
-         ("<left-margin> <mouse-1>" . bm-toggle-mouse))
+         ("<left-margin> <mouse-1>" . bm-toggle-mouse)
+         ("C-<f2>"                  . bm-toggle)
+         ("C-<f1>"                  . bm-next))
   :hook ((after-init   . bm-repository-load)
          (find-file    . bm-buffer-restore)
          (kill-buffer  . bm-buffer-save)
          (kill-emacs   . bm-repository-save))
   :custom ((bm-highlight-style             'bm-highlight-line-and-fringe)
            (bm-restore-repository-on-load  t)
-           (bm-cycle-all-buffers       t))
+           (bm-cycle-all-buffers           t))
   :init (setq bm-repository-file (concat (file-name-as-directory
                                           my/emacs-cache-dir) "bm-repository"))
   :custom (bm-buffer-persistence t)

@@ -121,8 +121,9 @@
   :defer t
   :commands (helm-bm)
   :after (helm bm)
-  :bind (:map ctl-x-map
-              ("l" . helm-bm))
+  :bind (("C-c b" . helm-bm)
+         :map ctl-x-map
+         ("l" . helm-bm))
   :config (setq helm-bookmark-show-location t))
 
 ;; helm etags plus
