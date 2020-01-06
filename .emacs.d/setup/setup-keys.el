@@ -1,6 +1,6 @@
 ;;; setup-keys.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -138,12 +138,6 @@
 ;; List buffers
 (global-set-key (kbd "<f12>")    'ivy-switch-buffer)
 
-;; Tabbar
-(global-set-key [C-prior]         'tabbar-backward-tab)
-(global-set-key [C-next]          'tabbar-forward-tab)
-(global-set-key [C-home]          'tabbar-backward-group)
-(global-set-key [C-end]           'tabbar-forward-group)
-
 ;; Escape key in minibuffer
 (bind-keys :map minibuffer-local-map
            ([escape] . abort-recursive-edit)
@@ -153,13 +147,6 @@
            ([escape] . abort-recursive-edit)
            :map minibuffer-local-isearch-map
            ([escape] . abort-recursive-edit))
-
-;; Tabbar, now using ctl-x-map
-(bind-keys :map ctl-x-map
-           ((kbd "<prior>")   . tabbar-backward-tab)
-           ((kbd "<next>")    . tabbar-forward-tab)
-           ((kbd "<home>")    . tabbar-backward-group)
-           ((kbd "<end>")     . tabbar-forward-group))
 
 ;; Splitting windows
 (bind-keys :map ctl-x-map
@@ -180,13 +167,6 @@
            ((kbd "<")         . decrease-left-margin)
            ((kbd "F")         . toggle-frame-fullscreen)
            ((kbd "T")         . toggle-truncate-lines))
-
-;; Extra Ctrl-x mappings for navigation
-(bind-keys :map ctl-x-map
-           ((kbd "<prior>")   . tabbar-backward-tab)
-           ((kbd "<next>")    . tabbar-forward-tab)
-           ((kbd "<home>")    . tabbar-backward-group)
-           ((kbd "<end>")     . tabbar-forward-group))
 
 ;; Cua mode helpers
 (bind-keys :map ctl-x-map

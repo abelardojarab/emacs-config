@@ -1,6 +1,6 @@
 ;;; setup-package.el ---                     -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -121,9 +121,13 @@ corresponding `.el' file."
 (use-package pos-tip             :defer t)
 (use-package s                   :defer t)
 (use-package seq                 :defer t)
-(use-package tabbar              :defer t)
 (use-package xml-rpc             :defer t)
 (use-package yaxception          :defer t)
+
+;; Tabbar mode
+(use-package tabbar
+  :defer t
+  :commands tabbar-mode)
 
 ;; Just in case
 (use-package irony               :defer t :load-path (lambda () (expand-file-name "irony-mode/" user-emacs-directory)))

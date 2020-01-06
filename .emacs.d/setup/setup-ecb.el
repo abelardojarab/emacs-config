@@ -150,16 +150,6 @@ little more place."
             (add-hook 'after-save-hook    #'idle-timer-ecb-methods-callback)
             (add-hook 'first-change-hook  #'idle-timer-ecb-methods-callback)
 
-            ;; Also reparse files on tabbar change
-            (defadvice tabbar-forward-tab (after recompute-semantic activate)
-              (idle-timer-ecb-methods-callback))
-
-            (defadvice tabbar-backward-tab (after recompute-semantic activate)
-              (idle-timer-ecb-methods-callback))
-
-            (defadvice tabbar-select-tab-callback (after recompute-semantic activate)
-              (idle-timer-ecb-methods-callback))
-
             ;; Speedbar
             (use-package sr-speedbar
               :disabled t
@@ -224,8 +214,9 @@ little more place."
 (use-package treemacs
   :defer t
   :commands treemacs
-  :init (with-eval-after-load 'winum
-          (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+  :init (setq treemacs-persist-file (concat (file-name-as-directory
+                                             my/emacs-cache-dir)
+                                            "treemacs-persist"))
   :custom ((treemacs-collapse-dirs                 (if (executable-find "python3") 3 0))
            (treemacs-deferred-git-apply-delay      0.5)
            (treemacs-display-in-side-window        t)
@@ -243,9 +234,6 @@ little more place."
            (treemacs-no-png-images                 nil)
            (treemacs-no-delete-other-windows       t)
            (treemacs-project-follow-cleanup        nil)
-           (treemacs-persist-file                  (concat (file-name-as-directory
-                                                            my/emacs-cache-dir)
-                                                           "treemacs-persist"))
            (treemacs-position                      'left)
            (treemacs-recenter-distance             0.1)
            (treemacs-recenter-after-file-follow    nil)

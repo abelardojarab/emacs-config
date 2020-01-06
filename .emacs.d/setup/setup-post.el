@@ -1,6 +1,6 @@
 ;;; setup-post.el ---                                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -50,34 +50,7 @@
    `(ecb-default-general-face ((t (:background ,my/ecb-background-color :inherit fixed-pitch))))
    `(ecb-default-highlight-face ((t (:inherit helm-selection-line))))))
 
-;; Default tabbar theme-ing
-(defun my/set-face-tabbar ()
-  "Set the tabbar background to the same color as the regular background."
-  (interactive)
-  (setq tabbar-separator '(0.25))
-  (setq my/tabbar-foreground-color
-        (face-foreground 'default))
-  (setq my/tabbar-background-color
-        (face-background 'default))
-  (if (display-graphic-p)
-      (setq my/tabbar-back-color
-            (color-lighten-name (face-background 'default) 12))
-    (setq my/tabbar-back-color "gray25"))
-
-  ;; Colors
-  (custom-set-faces
-   ;; tabbar background, with no boxes
-   `(tabbar-default ((t (:box nil :inherit fixed-pitch :background ,my/tabbar-back-color :foreground ,my/tabbar-foreground-color))))
-   `(tabbar-button ((t (:box nil :inherit tabbar-default :foreground ,my/tabbar-background-color))))
-   `(tabbar-button-highlight ((t (:box nil :inherit tabbar-default))))
-   `(tabbar-highlight ((t (:box nil :underline nil))))
-   ;; selected tab, with no boxes
-   `(tabbar-selected ((t (:box nil :inherit tabbar-default :background ,my/tabbar-background-color))))
-   `(tabbar-separator ((t (:box nil :inherit tabbar-default :background ,my/tabbar-back-color))))
-      `(tabbar-unselected ((t (:box nil :inherit tabbar-default))))))
-
 (add-hook 'after-init-hook #'my/set-face-fringe)
-(add-hook 'after-init-hook #'my/set-face-tabbar)
 (add-hook 'after-init-hook #'my/set-face-ecb)
 
 (defun set-selected-frame-dark ()
@@ -119,7 +92,6 @@
       (if (executable-find "xprop")
           (set-selected-frame-dark)))
     (my/set-face-fringe)
-    (my/set-face-tabbar)
     (my/set-face-ecb)
     (doom-modeline-mode t)
 
@@ -132,15 +104,15 @@
     (add-hook 'after-init-hook (lambda ()
                                  (load custom-file-x :noerror :nomessage)
 
+                                 ;; Do not enable tabbar
+                                 (tabbar-mode -1)
+
                                  ;; Add required faces
                                  (my/set-face-fringe)
-                                 (my/set-face-tabbar)
                                  (my/set-face-ecb)
 
                                  ;; Set the modeline
-                                 (doom-modeline-mode t)
-                                 ;; (my/ecb-activate)
-                                 )))
+                                 (doom-modeline-mode t))))
 
 (provide 'setup-post)
 ;;; setup-post.el ends here
