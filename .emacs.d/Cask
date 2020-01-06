@@ -43,6 +43,7 @@
 (depends-on "buttercup")
 (depends-on "calfw")
 (depends-on "cc-mode")
+(depends-on "centaur-tabs")
 (depends-on "centered-cursor-mode")
 (depends-on "cdlatex")
 (depends-on "c-eldoc")
