@@ -1,6 +1,6 @@
 ;; -*-mode: Emacs-Lisp; -*-
-;; Copyright (C) 1996-2019 Abelardo Jara-Berrocal
-;; URL: http://jaraberrocal.readmyblog.org
+;; Copyright (C) 1996-2020 Abelardo Jara-Berrocal
+;; URL: https://jaraberrocal.readmyblog.org
 ;; This file is free software licensed under the terms of the
 ;; GNU General Public License, version 3 or later.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -18,7 +18,7 @@
 (if (not (file-exists-p org-directory))
     (make-directory org-directory t))
 
-(defconst debian-emacs-flavor 'emacs25
+(defconst debian-emacs-flavor 'emacs26
   "A symbol representing the particular debian flavor of emacs running.
  Something like 'emacs20, 'xemacs20, etc.")
 

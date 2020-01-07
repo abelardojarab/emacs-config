@@ -1,6 +1,6 @@
 ;;; setup-keychain.el ---                            -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -117,7 +117,6 @@
            (epa-armor             t)
            (epa-pinentry-mode     nil))
   :config (progn
-
             ;; https://github.com/jwiegley/dot-emacs/blob/master/dot-gnus.el
             (defun epa--key-widget-value-create (widget)
               (let* ((key (widget-get widget :value))
