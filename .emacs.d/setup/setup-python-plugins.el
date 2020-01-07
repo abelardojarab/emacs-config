@@ -1,6 +1,6 @@
 ;;; setup-python-plugins.el ---                      -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -110,9 +110,6 @@
 ;; Microsoft Python Language Server
 ;; Remember to install pip3 install python-language-server
 ;; Also install pycodestyle (<2.4.0), python-language-server will break otherwise
-(use-package company-lsp
-  :custom (company-lsp-async t))
-
 (use-package lsp-python-ms
   :commands (company-lsp-setup)
   :hook ((python-mode . lsp)

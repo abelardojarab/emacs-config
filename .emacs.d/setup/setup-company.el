@@ -1,6 +1,6 @@
 ;;; setup-company.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -90,9 +90,16 @@
               (let ((completion-at-point-functions completion-at-point-functions-saved))
                 (company-complete-common)))
 
+            ;; company-lsp: Company completion backend for lsp-mode.
+            (use-package company-lsp
+              :demand t
+              :custom ((company-lsp-async t)
+                       (company-lsp-cache-candidates 'auto)))
+
             ;; Default company backends
             (setq company-backends
-                  '((company-keywords
+                  '((company-lsp
+                     company-keywords
                      company-dabbrev-code
                      :with company-yasnippet
                      :with company-capf)))
@@ -113,20 +120,13 @@
                                                               :with company-yasnippet
                                                               :with company-capf))))
 
-            ;; company-lsp: Company completion backend for lsp-mode.
-            (use-package company-lsp
-              :custom ((company-lsp-async t)
-                       (company-lsp-cache-candidates 'auto)))
-
             ;; Integration of company with TabNine
             (use-package company-tabnine
               :defer 1
               :if (executable-find "TabNine")
-              :custom (company-tabnine-max-num-results 9)
+              :custom (company-tabnine-max-num-results 5)
               :hook ((lsp-after-open . (lambda ()
-                                         (setq company-tabnine-max-num-results 3)
-                                         (add-to-list 'company-transformers 'company//sort-by-tabnine t)
-                                         (add-to-list 'company-backends '(company-lsp :with company-tabnine :separate))))
+                                         (add-to-list 'company-transformers 'company/sort-by-tabnine t)))
                      (kill-emacs . company-tabnine-kill-process))
               :config (progn
                         ;; Need to use a custom path for TabNine
@@ -137,7 +137,7 @@
                         (add-to-list 'company-backends #'company-tabnine)
 
                         ;; Integrate company-tabnine with lsp-mode
-                        (defun company//sort-by-tabnine (candidates)
+                        (defun company/sort-by-tabnine (candidates)
                           (if (or (functionp company-backend)
                                   (not (and (listp company-backend) (memq 'company-tabnine company-backend))))
                               candidates
@@ -173,37 +173,7 @@
               ;; make `company-backends' local is critical
               ;; or else, you will have completion in every major mode, that's very annoying!
               (make-local-variable 'company-backends)
-              (setq company-backends (copy-tree company-backends))
-
-              ;; Prefer clangd
-              (if (or (executable-find "cquery")
-                      (executable-find "clangd"))
-                  (setf (car company-backends)
-                        (append '(company-lsp)
-                                (car company-backends)))
-
-                ;; Fallback to global
-                (if (and (executable-find "global")
-                         (projectile-project-p)
-                         (file-exists-p (concat (projectile-project-root)
-                                                "GTAGS")))
-
-                    (setf (car company-backends)
-                          (append '(company-gtags)
-                                  (car company-backends)))
-
-                  ;; Fallback to cmake/clang backends
-                  (when (cmake-ide--locate-cmakelists)
-                    ;; Prefer rtags
-                    (if (executable-find "rdm")
-                        (setf (car company-backends)
-                              (append '(company-rtags)
-                                      (car company-backends)))
-                      ;; Fallback to irony
-                      (when (executable-find "irony-server")
-                        (setf (car company-backends)
-                              (append '(company-irony)
-                                      (car company-backends)))))))))
+              (setq company-backends (copy-tree company-backends)))
 
             ;; Documentation popups for company
             (use-package company-box
