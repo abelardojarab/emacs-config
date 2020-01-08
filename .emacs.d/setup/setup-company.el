@@ -25,6 +25,8 @@
 (use-package company
   :defer t
   :diminish company-mode
+  :defines (company-dabbrev-ignore-case
+            company-dabbrev-downcase)
   :commands (global-company-mode
              company-mode
              add-pcomplete-to-capf
@@ -268,10 +270,14 @@
             ;; Documentation popups for company
             (use-package company-quickhelp
               :disabled t
+              :defer t
+              :defines company-quickhelp-delay
+              :bind (:map company-active-map
+                          ([remap company-show-doc-buffer] . company-quickhelp-manual-begin))
               :custom ((company-quickhelp-delay                0.2)
                        (company-quickhelp-use-propertized-text t))
               :commands company-quickhelp-mode
-              :init (company-quickhelp-mode t)
+              :hook (global-company-mode . company-quickhelp-mode)
               :config (setq company-frontends (delq 'company-echo-metadata-frontend company-frontends)))
 
             ;; Company bibtex integration

@@ -1,6 +1,6 @@
 ;;; setup-helm.el ---                                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -50,6 +50,7 @@
          ("C-z"   . helm-select-action))
   :custom ((helm-mode-handle-completion-in-region     nil)
            (helm-bookmark-show-location               t)
+           (setq helm-turn-on-show-completion         nil) ;; do not split window
            (helm-buffer-max-length                    48)
            (helm-always-two-windows                   t)
            (helm-quick-update                         t)
@@ -66,7 +67,7 @@
            (helm-move-to-line-cycle-in-source         nil)
            (helm-scroll-amount                        8)
            (helm-truncate-lines                       nil)
-       (helm-grep-truncate-lines                  t)
+           (helm-grep-truncate-lines                  t)
            (helm-ff-auto-update-initial-value         nil)
            (helm-ff-search-library-in-sexp            t)
            (helm-ff-skip-boring-files                 t)
@@ -76,11 +77,11 @@
            (helm-display-buffer-reuse-frame           t)
            (helm-display-buffer-width                 180)
            (helm-display-buffer-height                60)
-           (helm-use-undecorated-frame-option         t))
+           (helm-use-undecorated-frame-option         t)
+           (helm-dabbrev-related-buffer               nil))
   :config (progn
-
-        (if (display-graphic-p)
-        (setq helm-buffers-end-truncated-string "…"))
+            (if (display-graphic-p)
+                (setq helm-buffers-end-truncated-string "…"))
 
             (defadvice helm-buffers-sort-transformer (around ignore activate)
               (setq ad-return-value (ad-get-arg 0)))
@@ -118,9 +119,9 @@
                   `((name . "Fonts")
                     (candidates . ,(font-family-list))
                     (action . (lambda (candidate) (progn
-                            (setq my/main-programming-font candidate)
-                            (set-face-attribute 'default nil :family candidate)
-                            (fontify-frame (selected-frame)))))))
+                                               (setq my/main-programming-font candidate)
+                                               (set-face-attribute 'default nil :family candidate)
+                                               (fontify-frame (selected-frame)))))))
 
             (defun helm-fonts ()
               (interactive)

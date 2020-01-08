@@ -1,6 +1,6 @@
 ;;; setup-eshell.el ---                       -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -26,7 +26,6 @@
 
 (use-package ielm
   :defer t
-  :chords (("RR" . ielm-repl))
   :bind (("C-'"      . ielm-repl)
          ("C-c C-z"  . ielm-repl)
          :map ctl-x-map
@@ -41,8 +40,9 @@
 
 (use-package eshell
   :defer t
-  :chords (("SS" . eshell-vertical))
-  :commands (eshell eshell-vertical eshell-horizontal)
+  :commands (eshell
+             eshell-vertical
+             eshell-horizontal)
   :bind (("C-c C-t"                 . eshell)
          :map ctl-x-map
          ("C-t"                     . eshell)
@@ -52,55 +52,54 @@
           ([remap eshell-pcomplete] . helm-esh-pcomplete)
           ("M-p"                    . helm-eshell-history)))
   :after helm
-  :init  (progn
-           ;; Fix lack of eshell-mode-map
-           (if (not (boundp 'eshell-mode-map))
-               (defvar eshell-mode-map (make-sparse-keymap)))
+  :custom ((eshell-glob-case-insensitive     t)
+           (eshell-scroll-to-bottom-on-input 'this)
+           (eshell-buffer-shorthand          t)
+           (eshell-history-size              1024)
+           (eshell-buffer-shorthand          t)
+           (eshell-cmpl-ignore-case          t)
+           (eshell-cmpl-cycle-completions    nil)
+           (eshell-last-dir-ring-size        512))
+  :init (progn
+          ;; Fix lack of eshell-mode-map
+          (if (not (boundp 'eshell-mode-map))
+              (defvar eshell-mode-map (make-sparse-keymap)))
 
-           ;; First, Emacs doesn't handle less well, so use cat instead for the shell pager:
-           (setenv "PAGER" "cat")
-           (setq-default eshell-directory-name    (concat (file-name-as-directory
-                                                           my/emacs-cache-dir)
-                                                          "eshell"))
-           (setq eshell-glob-case-insensitive     t
-                 eshell-scroll-to-bottom-on-input 'this
-                 eshell-buffer-shorthand          t
-                 eshell-history-size              1024
-                 eshell-buffer-shorthand          t
-                 eshell-cmpl-ignore-case          t
-                 eshell-cmpl-cycle-completions    nil
-                 eshell-aliases-file              (concat user-emacs-directory ".eshell-aliases")
-                 eshell-last-dir-ring-size        512))
+          ;; First, Emacs doesn't handle less well, so use cat instead for the shell pager:
+          (setenv "PAGER" "cat")
+          (setq-default eshell-directory-name (concat (file-name-as-directory
+                                                       my/emacs-cache-dir)
+                                                      "eshell"))
+          (setq eshell-aliases-file  (concat user-emacs-directory ".eshell-aliases"))
+
+          ;; Vertical split eshell
+          (defun eshell-vertical ()
+            "opens up a new shell in the directory associated with the current buffer's file."
+            (interactive)
+            (let* ((parent (if (buffer-file-name)
+                               (file-name-directory (buffer-file-name))
+                             default-directory))
+                   (name (car (last (split-string parent "/" t)))))
+              (split-window-right)
+              (other-window 1)
+              (eshell "new")
+              (rename-buffer (concat "*eshell: " name "*"))
+              (eshell-send-input)))
+
+          ;; Horizontal split eshell
+          (defun eshell-horizontal ()
+            "opens up a new shell in the directory associated with the current buffer's file."
+            (interactive)
+            (let* ((parent (if (buffer-file-name)
+                               (file-name-directory (buffer-file-name))
+                             default-directory))
+                   (name (car (last (split-string parent "/" t)))))
+              (split-window-below)
+              (other-window 1)
+              (eshell "new")
+              (rename-buffer (concat "*eshell: " name "*"))
+              (eshell-send-input))))
   :config (progn
-
-            ;; Vertical split eshell
-            (defun eshell-vertical ()
-              "opens up a new shell in the directory associated with the current buffer's file."
-              (interactive)
-              (let* ((parent (if (buffer-file-name)
-                                 (file-name-directory (buffer-file-name))
-                               default-directory))
-                     (name (car (last (split-string parent "/" t)))))
-                (split-window-right)
-                (other-window 1)
-                (eshell "new")
-                (rename-buffer (concat "*eshell: " name "*"))
-                (eshell-send-input)))
-
-            ;; Horizontal split eshell
-            (defun eshell-horizontal ()
-              "opens up a new shell in the directory associated with the current buffer's file."
-              (interactive)
-              (let* ((parent (if (buffer-file-name)
-                                 (file-name-directory (buffer-file-name))
-                               default-directory))
-                     (name (car (last (split-string parent "/" t)))))
-                (split-window-below)
-                (other-window 1)
-                (eshell "new")
-                (rename-buffer (concat "*eshell: " name "*"))
-                (eshell-send-input)))
-
             ;; Show fringe status for eshell
             (use-package eshell-fringe-status
               :defer t
@@ -141,9 +140,9 @@
 
               ;; Configuration choices
               (add-hook 'sh-mode-hook
-            (lambda ()
+                        (lambda ()
                           (setq sh-indentation  2
-                sh-basic-offset 2)
+                                sh-basic-offset 2)
                           (compilation-shell-minor-mode t)
                           (ansi-color-for-comint-mode-on)
                           (electric-indent-mode -1)))))
@@ -153,11 +152,11 @@
     :demand t
     :config (progn
               (dolist (elt interpreter-mode-alist)
-        (when (member (car elt) (list "csh" "tcsh"))
+                (when (member (car elt) (list "csh" "tcsh"))
                   (setcdr elt 'csh-mode)))
 
               (defun my/tcsh-set-indent-functions ()
-        (when (or (string-match ".*\\.alias" (buffer-file-name))
+                (when (or (string-match ".*\\.alias" (buffer-file-name))
                           (string-match "\\(.*\\)\\.csh$" (file-name-nondirectory (buffer-file-name))))
                   (setq-local indent-line-function   #'csh-indent-line)
                   (setq-local indent-region-function #'csh-indent-region)))
@@ -171,12 +170,11 @@
              eir-eval-in-shell
              eir-eval-in-python
              eir-eval-in-javascript)
+  :custom ((eir-jump-after-eval                 nil)
+           (eir-always-split-script-window      t)
+           (eir-delete-other-windows            t)
+           (eir-repl-placement                  'right))
   :config (progn
-            (setq eir-jump-after-eval            nil
-                  eir-always-split-script-window t
-                  eir-delete-other-windows       t
-                  eir-repl-placement             'right)
-
             ;; ielm support (for emacs lisp)
             (use-package eval-in-repl-ielm
               :commands eir-eval-in-ielm)
@@ -213,22 +211,22 @@
   :commands (multi-term
              my/multi-term-vertical
              my/multi-term-horizontal)
-  :config (progn
-            ;; Vertical split multi-term
-            (defun my/multi-term-vertical ()
-              "opens up a new terminal in the directory associated with the current buffer's file."
-              (interactive)
-              (split-window-right)
-              (other-window 1)
-              (multi-term))
+  :init (progn
+          ;; Vertical split multi-term
+          (defun my/multi-term-vertical ()
+            "opens up a new terminal in the directory associated with the current buffer's file."
+            (interactive)
+            (split-window-right)
+            (other-window 1)
+            (multi-term))
 
-            ;; Horizontal split multi-term
-            (defun my/multi-term-horizontal ()
-              "opens up a new terminal in the directory associated with the current buffer's file."
-              (interactive)
-              (split-window-below)
-              (other-window 1)
-              (multi-term))))
+          ;; Horizontal split multi-term
+          (defun my/multi-term-horizontal ()
+            "opens up a new terminal in the directory associated with the current buffer's file."
+            (interactive)
+            (split-window-below)
+            (other-window 1)
+            (multi-term))))
 
 (provide 'setup-eshell)
 ;;; setup-eshell.el ends here

@@ -1,6 +1,6 @@
 ;;; setup-undoandredo.el ---                         -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018, 2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -30,26 +30,24 @@
 
 ;; Better undo
 (use-package undo-tree
-  :defer 10
   :bind (("C-S-z"    . undo-tree-redo)
          ("C-z"      . undo-tree-undo)
          ("<undo>"   . undo-tree-undo)
          :map ctl-x-map
          ("u"        . undo-tree-undo))
-  :chords (("uu" . undo-tree-visualize))
   :diminish undo-tree-mode
-  :init (global-undo-tree-mode t)
+  :hook (after-init . global-undo-tree-mode)
   :commands global-undo-tree-mode
-  :config (progn
-            (setq undo-no-redo                        t
-                  undo-tree-visualizer-diff           t
-                  undo-tree-visualizer-timestamps     t
-                  undo-tree-auto-save                 t
-                  undo-tree-auto-save-history         t
-                  undo-tree-history-directory-alist   (list
-                                                       (cons "."
-                                                             (concat my/emacs-cache-dir
-                                                                     "/undo-tree-hist/"))))))
+  :custom ((undo-no-redo                        t)
+           (undo-tree-visualizer-diff           t)
+           (undo-tree-visualizer-timestamps     t)
+           (undo-tree-auto-save                 t)
+           (undo-tree-enable-undo-in-region     t)
+           (undo-tree-auto-save-history         t))
+  :config (setq undo-tree-history-directory-alist (list
+                                                   (cons "."
+                                                         (concat my/emacs-cache-dir
+                                                                 "/undo-tree-hist/")))))
 
 (provide 'setup-undoandredo)
 ;;; setup-undoandredo.el ends here

@@ -1,6 +1,6 @@
 ;;; setup-folding.el ---                       -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -374,8 +374,7 @@ If prefix argument is used, `set-selective-display' to the current column."
              origami-toggle-node
              origami-toggle-all-nodes
              origami-recursively-toggle-node)
-  :chords (("TT" . origami-toggle-node))
-  :init (global-origami-mode)
+  :hook (after-init . global-origami-mode)
   :custom-face
   (origami-fold-replacement-face ((t (:inherit magit-diff-context-highlight))))
   (origami-fold-fringe-face ((t (:inherit magit-diff-context-highlight))))

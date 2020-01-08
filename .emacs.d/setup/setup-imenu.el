@@ -1,6 +1,6 @@
 ;;; setup-imenu.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -30,11 +30,12 @@
 ;; imenu list
 (use-package imenu-list
   :defer t
-  :commands imenu-list
-  :config (setq imenu-list-size                   0.2
-                imenu-list-focus-after-activation t
-                imenu-list-auto-resize            t
-                imenu-list-position               'right))
+  :commands (imenu-list
+             imenu-list-smart-toggle)
+  :custom ((imenu-list-size                   0.3)
+           (imenu-list-focus-after-activation t)
+           (imenu-list-auto-resize            t)
+           (imenu-list-position               'right)))
 
 ;; imenus
 (use-package imenus)
