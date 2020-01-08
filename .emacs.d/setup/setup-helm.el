@@ -50,7 +50,7 @@
          ("C-z"   . helm-select-action))
   :custom ((helm-mode-handle-completion-in-region     nil)
            (helm-bookmark-show-location               t)
-           (setq helm-turn-on-show-completion         nil) ;; do not split window
+           (helm-turn-on-show-completion              nil) ;; do not split window
            (helm-buffer-max-length                    48)
            (helm-always-two-windows                   t)
            (helm-quick-update                         t)
