@@ -24,6 +24,13 @@
 
 ;;; Code:
 
+(defvar debian-aspell-only-dictionary-alist nil)
+(defvar ivy-completing-read-handlers-alist nil)
+
+(defvar org-directory "~/workspace/Documents/Org")
+(if (not (file-exists-p org-directory))
+    (make-directory org-directory t))
+
 (setq package-user-dir "~/.emacs.d/site-lisp/package-install")
 (require 'package)
 
@@ -157,6 +164,8 @@ corresponding `.el' file."
 
 ;; Enable chord keys for packages
 (use-package use-package-chords
+  :defer t
+  :commands key-chord-mode
   :config (key-chord-mode 1))
 
 ;; Auto-compile .el files on load

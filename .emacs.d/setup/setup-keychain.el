@@ -26,8 +26,8 @@
 
 ;; Secure sockets layer support
 (use-package starttls
-  :if (executable-find "gnutls-cli")
   :demand t
+  :if (executable-find "gnutls-cli")
   :custom ((starttls-use-gnutls      t)
            (starttls-gnutls-program  "gnutls-cli")
            (starttls-extra-arguments nil)
@@ -44,36 +44,37 @@
 
 ;; Keychain access
 (use-package keychain-environment
-  :demand t
+  :defer t
   :after starttls
-  :config (keychain-refresh-environment))
+  :commands keychain-refresh-environment
+  :hook (after-init . keychain-refresh-environment))
 
 ;; Keeping secrets in Emacs with GnuPG & EasyPG
 (use-package epg
   :demand t
   :after keychain-environment
+  :init (progn
+          ;; enable EasyPG handling
+          ;; gpg-agent confuses epa when getting passphrase
+          (defun my/squash-gpg (&rest ignored-frame)
+            "Kill any GPG_AGENT_INFO in our environment."
+            (setenv "GPG_AGENT_INFO" nil))
+
+          ;; Fix up the frame so we don't send pinentry to the wrong place
+          (defun my/fixup-gpg-agent (&optional frame)
+            "Tweak DISPLAY and GPG_TTY environment variables as appropriate to `FRAME'."
+            (when (not frame)
+              (setq frame (selected-frame)))
+            (my/squash-gpg)
+            (keychain-refresh-environment)
+            (if (display-graphic-p frame)
+                (setenv "DISPLAY" (terminal-name frame))
+              (setenv "GPG_TTY" (terminal-name frame))
+              (setenv "DISPLAY" nil))))
   :config (progn
             ;; https://www.masteringemacs.org/article/keeping-secrets-in-emacs-gnupg-auth-sources
             (if (executable-find "gpg2")
                 (setq epg-gpg-program "gpg2"))
-
-            ;; enable EasyPG handling
-            ;; gpg-agent confuses epa when getting passphrase
-            (defun my/squash-gpg (&rest ignored-frame)
-              "Kill any GPG_AGENT_INFO in our environment."
-              (setenv "GPG_AGENT_INFO" nil))
-
-            ;; Fix up the frame so we don't send pinentry to the wrong place
-            (defun my/fixup-gpg-agent (&optional frame)
-              "Tweak DISPLAY and GPG_TTY environment variables as appropriate to `FRAME'."
-              (when (not frame)
-                (setq frame (selected-frame)))
-              (my/squash-gpg)
-              (keychain-refresh-environment)
-              (if (display-graphic-p frame)
-                  (setenv "DISPLAY" (terminal-name frame))
-                (setenv "GPG_TTY" (terminal-name frame))
-                (setenv "DISPLAY" nil)))
 
             (when (getenv "DISPLAY")
               (add-hook 'after-make-frame-functions #'my/fixup-gpg-agent)
@@ -83,7 +84,8 @@
 (use-package epg-config
   :demand t
   :custom ((epa-file-cache-passphrase-for-symmetric-encryption t)
-           (setq epg--configurations nil))
+           (epg--configurations                                nil)
+           (epg-gpg-program                                    "gpg2"))
   :config (add-to-list 'epg-config--program-alist `(OpenPGP epg-gpg-program ("gpg" . ,epg-gpg-minimum-version))))
 
 ;; Pinentry (not available in melpa)
@@ -107,35 +109,16 @@
              ;; (setq epa-pinentry-mode 'loopback)
 
              (setq epa-file-name-regexp "\\.\\(gpg\\|asc\\)$")
-             (epa-file-name-regexp-update)))
+             (epa-file-name-regexp-update))
+  :hook (after-init . epa-file-enable))
 
 ;; EasyPG Emacs assistant
 (use-package epa
-  :demand t
+  :defer t
   :after epa-file
   :custom ((epa-popup-info-window nil)
            (epa-armor             t)
-           (epa-pinentry-mode     nil))
-  :config (progn
-            ;; https://github.com/jwiegley/dot-emacs/blob/master/dot-gnus.el
-            (defun epa--key-widget-value-create (widget)
-              (let* ((key (widget-get widget :value))
-                     (primary-sub-key (car (last (epg-key-sub-key-list key) 3)))
-                     (primary-user-id (car (epg-key-user-id-list key))))
-                (insert (format "%c "
-                                (if (epg-sub-key-validity primary-sub-key)
-                                    (car (rassq (epg-sub-key-validity primary-sub-key)
-                                                epg-key-validity-alist))
-                                  ? ))
-                        (epg-sub-key-id primary-sub-key)
-                        " "
-                        (if primary-user-id
-                            (if (stringp (epg-user-id-string primary-user-id))
-                                (epg-user-id-string primary-user-id)
-                              (epg-decode-dn (epg-user-id-string primary-user-id)))
-                          ""))))
-
-            (epa-file-enable)))
+           (epa-pinentry-mode     nil)))
 
 ;; .authinfo parsing (not longer valid for org2blog, use auth-source)
 (use-package netrc)
@@ -153,9 +136,13 @@
 
 ;; Provide utilities to interact with 'pass' ("the standard Unix password keychain manager")
 (use-package password-store
-  :demand t
+  :demand t)
+
+(use-package password-cache
   :if (and (equal system-type 'gnu/linux)
-           (executable-find "pass")))
+           (executable-find "pass"))
+  :custom ((password-cache-expiry nil)
+           (password-cache t)))
 
 ;; major-mode to manage 'pass'
 (use-package pass
@@ -173,7 +160,7 @@
   :after (password-store auth-source)
   :commands (auth-source-pass-enable)
   :config (setq auth-sources '(password-store))
-  :init (auth-source-pass-enable))
+  :hook (after-init . auth-source-pass-enable))
 
 ;; Secrets file
 (let ((secrets-file (concat (file-name-as-directory

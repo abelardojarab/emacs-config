@@ -11,13 +11,6 @@
                              (setq debug-on-quit nil)
                              (setq debug-on-error nil)))
 
-(defvar debian-aspell-only-dictionary-alist nil)
-(defvar ivy-completing-read-handlers-alist nil)
-
-(defvar org-directory "~/workspace/Documents/Org")
-(if (not (file-exists-p org-directory))
-    (make-directory org-directory t))
-
 (defconst debian-emacs-flavor 'emacs26
   "A symbol representing the particular debian flavor of emacs running.
  Something like 'emacs20, 'xemacs20, etc.")
@@ -70,8 +63,8 @@
     ;; Setup search
     (require 'setup-search)
 
-    ;; ;; Setup keychain
-    ;; (require 'setup-keychain)
+    ;; Setup keychain
+    (require 'setup-keychain)
 
     ;; ;; Setup tramp
     ;; (require 'setup-tramp)
