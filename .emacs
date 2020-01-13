@@ -64,7 +64,7 @@
     (require 'setup-search)
 
     ;; Setup keychain
-    (require 'setup-keychain)
+    ;; (require 'setup-keychain)
 
     ;; ;; Setup tramp
     ;; (require 'setup-tramp)
