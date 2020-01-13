@@ -307,7 +307,7 @@
     (require 'setup-jump)
 
     ;; Setup ergoemacs
-    (require 'setup-ergoemacs)
+    ;; (require 'setup-ergoemacs)
 
     ;; Disable checks
     (setq debug-on-quit nil)

@@ -106,12 +106,6 @@
 (global-set-key [(control n)]    'cua-scroll-down)
 (global-set-key [(control p)]    'cua-scroll-up)
 
-;; Highlight symbol at point
-(global-set-key [f3]             'highlight-symbol-at-point)
-(global-set-key [(control f3)]   'highlight-symbol-next)
-(global-set-key [(shift   f3)]   'highlight-symbol-prev)
-(global-set-key [(meta    f3)]   'highlight-symbol-query-replace)
-
 ;; Helm semantic (switch function)
 (global-set-key (kbd "<f4>")     'helm-semantic-or-imenu)
 
