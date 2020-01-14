@@ -1,0 +1,2 @@
+;;; Generated package description from /home/scratch.abelardoj_denver-info/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/org-make-toc-20200110.1804/org-make-toc.el  -*- no-byte-compile: t -*-
+(define-package "org-make-toc" "20200110.1804" "Automatic tables of contents for Org files" '((emacs "25.1") (dash "2.12") (s "1.10.0") (org "9.0")) :commit "be86a4e026befd9d10af42a22b2483c7969ccee1" :keywords '("org" "convenience") :authors '(("Adam Porter" . "adam@alphapapa.net")) :maintainer '("Adam Porter" . "adam@alphapapa.net") :url "http://github.com/alphapapa/org-make-toc")
