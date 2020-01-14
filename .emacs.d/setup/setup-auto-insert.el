@@ -1,6 +1,6 @@
 ;;; setup-auto-insert.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@gmail.com>
 ;; Keywords:
@@ -30,7 +30,7 @@
   :commands (auto-insert-mode
              auto-insert)
   :hook (((prog-mode markdown-mode org-mode) . auto-insert-mode)
-         (find-file . auto-insert))
+         (find-file                          . auto-insert))
   :custom (auto-insert-query nil))
 
 ;; Automated auto-insert of yasnippet templates on new files
