@@ -108,11 +108,12 @@ FACE defaults to inheriting from default and highlight."
              smartparens-mode
              show-smartparens-global-mode
              show-smartparens-mode)
-  :hook (after-init . (smartparens-global-mode show-smartparens-global-mode))
-  :init (use-package smartparens-config)
+  :hook (after-init . smartparens-global-mode)
   :custom ((sp-max-pair-length            2)
            (sp-escape-quotes-after-insert nil))
-  :config (progn
+:config (progn
+          (use-package smartparens-config)
+
             ;; disable pairing of ' in minibuffer
             (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)
 
