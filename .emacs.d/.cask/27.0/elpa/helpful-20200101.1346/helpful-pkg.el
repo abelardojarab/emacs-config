@@ -1,2 +1,0 @@
-;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/helpful-20200101.1346/helpful.el  -*- no-byte-compile: t -*-
-(define-package "helpful" "20200101.1346" "a better *help* buffer" '((emacs "25") (dash "2.12.0") (dash-functional "1.2.0") (s "1.11.0") (f "0.20.0") (elisp-refs "1.2")) :commit "982dd49c9c7e63fa94b56824f50dea4186081f8e" :keywords '("help" "lisp") :authors '(("Wilfred Hughes" . "me@wilfred.me.uk")) :maintainer '("Wilfred Hughes" . "me@wilfred.me.uk") :url "https://github.com/Wilfred/helpful")

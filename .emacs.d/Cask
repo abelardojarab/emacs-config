@@ -7,7 +7,10 @@
 
 (source gnu)
 (source melpa)
-(source org)
+
+;; Disable org as source as it breaks cask in some setups
+;; (source org)
+(depends-on "org-plus-contrib")
 
 (depends-on "ace-window")
 (depends-on "ac-html")

@@ -1,2 +1,0 @@
-;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/mbsync-20191002.751/mbsync.el  -*- no-byte-compile: t -*-
-(define-package "mbsync" "20191002.751" "run mbsync to fetch mails" 'nil :commit "b62491c0e0d89eb9c66261a16d7ac81231c9c453" :authors '(("Dimitri Fontaine" . "dim@tapoueh.org")) :maintainer '("Dimitri Fontaine" . "dim@tapoueh.org") :url "https://github.com/dimitri/mbsync-el")
