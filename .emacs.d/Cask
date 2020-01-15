@@ -403,6 +403,7 @@
 (depends-on "unify-opening")
 (depends-on "use-package")
 (depends-on "use-package-chords")
+(depends-on "use-package-ensure-system-package")
 (depends-on "uuidgen")
 (depends-on "vc-msg")
 (depends-on "verilog-mode")

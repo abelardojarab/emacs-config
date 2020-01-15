@@ -1,6 +1,6 @@
 ;;; setup-ido.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -81,8 +81,8 @@
 
 ;; Make compiler happy
 (use-package ido-hacks
-  :demand t
-  :config (ido-hacks-mode 1))
+  :defer t
+  :hook (after-init . ido-hacks-mode))
 
 ;; Ido everywhere
 (use-package ido-ubiquitous

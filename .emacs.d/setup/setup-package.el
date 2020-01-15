@@ -176,6 +176,10 @@ corresponding `.el' file."
   :commands key-chord-mode
   :config (key-chord-mode 1))
 
+;; Get ensure package support
+(use-package use-package-ensure-system-package
+   :demand t)
+
 ;; Auto-compile .el files on load
 (use-package auto-compile
   :demand t

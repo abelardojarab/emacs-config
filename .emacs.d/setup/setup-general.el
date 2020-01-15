@@ -1,6 +1,6 @@
 ;;; setup-general.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@ubuntu02>
 ;; Keywords:
@@ -244,6 +244,32 @@
          (text-mode . editorconfig-mode))
   :diminish editorconfig-mode
   :commands editorconfig-mode)
+
+;; Keep .emacs.d clean
+(use-package no-littering
+  :demand t
+  :init (setq no-littering-var-directory (expand-file-name "cache/var/" my/emacs-cache-dir)
+              no-littering-etc-directory (expand-file-name "cache/etc/" my/emacs-cache-dir))
+  :custom ((create-lockfiles                  nil)
+           (delete-old-versions               t)
+           (kept-new-versions                 6)
+           (kept-old-versions                 2)
+           (version-control                   t)
+           (make-backup-files                 nil)
+           (backup-by-copying                 t)
+           (backup-by-copying-when-mismatch   t)
+           (auto-save-interval                500)
+           (auto-save-default                 nil))
+  :config (progn
+            (setq
+             backup-directory-alist
+             `((".*" . ,(no-littering-expand-var-file-name "backup/")))
+             auto-save-file-name-transforms
+             `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
+
+            (setq-default semanticdb-default-save-directory (concat no-littering-var-directory "semanticdb")
+                          url-configuration-directory (concat no-littering-var-directory "url")
+                          eshell-directory-name (concat no-littering-var-directory "eshell" ))))
 
 (provide 'setup-general)
 ;;; setup-general.el ends here

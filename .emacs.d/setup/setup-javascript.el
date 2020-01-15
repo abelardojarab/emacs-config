@@ -1,6 +1,6 @@
 ;;; setup-javascript.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -31,6 +31,9 @@
           ;; Setup node.js path
           (setenv "NODE_PATH" (concat (concat (getenv "HOME")
                                               "/node_modules")
+                                      ":"
+                                      (concat (getenv "HOME")
+                                              "/local/lib/node_modules")
                                       ":/usr/local/lib/node_modules:/usr/local/lib/node"
                                       ":" (getenv "NODE_PATH")))
 
@@ -41,6 +44,10 @@
                                     (if local " " "-g")
                                     (if module module "tern"))))))
   :mode ("\\.js\\'" . js2-mode)
+  ;; :ensure-system-package ((typescript-language-server            . "npm install -g typescript-language-server")
+  ;;                         (javascript-typescript-language-server . "npm install -g javascript-typescript-language-server")
+  ;;                         (tsc                                   . "npm install -g typescript")
+  ;;                         (tern                                  . "npm install -g typescript"))
   :commands (js2-mode
              js2-minor-mode)
   :hook (js2-mode . flycheck-mode)

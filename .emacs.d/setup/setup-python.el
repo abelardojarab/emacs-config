@@ -1,6 +1,6 @@
 ;;; setup-python.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -27,8 +27,14 @@
 ;; Built-in python package
 (use-package python
   :demand t
+  ;; :ensure-system-package ((python-language-server . "pip3 install --user python-language-server")
+  ;;                         (pyflakes               . "pip3 install --user pyflakes")
+  ;;                         (pycodestyle            . "pip3 install --user pycodestyle")
+  ;;                         (venv                   . "pip3 install --user venv")
+  ;;                         (autopep8               . "pip3 install --user autopep8")
+  ;;                         (elpy                   . "pip3 install --user elpy")
+  ;;                         (jedi                   . "pip3 install --user jedi"))
   :config (progn
-
             ;; Update imenu
             (defun python-reset-imenu ()
               (interactive)
@@ -71,7 +77,7 @@
               ("TAB" . py-indent-line))
   :preface (defun check-python-module (&optional module)
              (and (executable-find "python3")
-          (= 0 (call-process "python3"  nil nil nil "-c"
+                  (= 0 (call-process "python3"  nil nil nil "-c"
                                      (concat "import "
                                              (if module module "jedi"))))))
   :custom ((py-shell-name                        "python3")

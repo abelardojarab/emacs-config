@@ -112,10 +112,10 @@
   :hook (after-init . purpose-mode)
   :custom (purpose-preferred-prompt 'helm)
   :init (progn
-            ;; overriding `purpose-mode-map' with empty keymap, so it doesn't conflict
-            ;; with original `C-x C-f', `C-x b', etc. and `semantic' key bindings. must
-            ;; be done before `window-purpose' is loaded
-            (setq purpose-mode-map (make-sparse-keymap)))
+          ;; overriding `purpose-mode-map' with empty keymap, so it doesn't conflict
+          ;; with original `C-x C-f', `C-x b', etc. and `semantic' key bindings. must
+          ;; be done before `window-purpose' is loaded
+          (setq purpose-mode-map (make-sparse-keymap)))
   :config (progn
             ;; Assure .emacs.cache/layouts directory exists
             (if (not (file-exists-p (concat (file-name-as-directory
@@ -125,8 +125,14 @@
                                          my/emacs-cache-dir)
                                         "purpose-layouts") t))
 
-            (setq purpose-layout-dirs (concat (file-name-as-directory my/emacs-cache-dir)
-                                              "purpose-layouts"))
+            (require 'cl-lib)
+            (cl-letf (((symbol-function 'etc)
+                       (symbol-function #'no-littering-expand-etc-file-name))
+                      ((symbol-function 'var)
+                       (symbol-function #'no-littering-expand-var-file-name)))
+              (with-no-warnings
+                (setq purpose-layout-dirs (list (etc (concat (file-name-as-directory my/emacs-cache-dir)
+                                                             "purpose-layouts"))))))
 
             (setq purpose-user-name-purposes
                   '(("*ag*"                        . search)
