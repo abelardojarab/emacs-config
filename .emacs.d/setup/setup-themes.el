@@ -1,6 +1,6 @@
 ;;; setup-themes.el ---                              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -23,6 +23,13 @@
 ;;
 
 ;;; Code:
+
+;; Let the themes deal with these things
+(dolist (param '(background-mode tty-color-mode screen-gamma
+                                 alpha font foreground-color background-color mouse-color
+                                 cursor-color border-color scroll-bar-foreground
+                                 scroll-bar-background))
+  (add-to-list 'frameset-filter-alist `(,param . :never)))
 
 ;; Font-core library
 (use-package font-core)

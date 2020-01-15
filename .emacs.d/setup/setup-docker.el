@@ -1,6 +1,6 @@
 ;;; setup-docker.el ---                            -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -22,6 +22,8 @@
 
 ;;
 
+;;; Code:
+
 ;; dockerfile-mode is pretty self explanatory
 (use-package dockerfile-mode
   :mode "\\Dockerfile\\'")
@@ -40,8 +42,6 @@
             ("n" docker-networks "Networks")
             ("b" dockerfile-build-buffer "Build Buffer")
             ("q" nil "Quit")))
-
-;;; Code:
 
 (provide 'setup-docker)
 ;;; setup-org-docker.el ends here

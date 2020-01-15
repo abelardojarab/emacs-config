@@ -1,6 +1,6 @@
 ;;; setup-org-agenda.el ---                          -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -27,7 +27,8 @@
 ;; appointment notification functions
 (use-package appt
   :defer t
-  :commands (appt-activate org-agenda-to-appt)
+  :commands (appt-activate
+             org-agenda-to-appt)
   :custom ((appt-message-warning-time        30)
            (appt-display-interval            15)
            (appt-display-mode-line           t)
@@ -35,7 +36,6 @@
            (appt-display-diary               nil)
            (appt-display-format              'window))
   :config (progn
-
             ;; Make appt aware of appointments from the agenda
             (defun org-agenda-to-appt ()
               "Activate appointments found in `org-agenda-files'."
@@ -70,8 +70,8 @@
          ("x"     . my/org-agenda-done)
          ("X"     . my/org-agenda-mark-done-and-add-followup)
          ("N"     . my/org-agenda-new))
-  :custom ((org-log-done                                    'time)
-           (org-enforce-todo-dependencies                   t)
+  :custom ((org-log-done                                     'time)
+           (org-enforce-todo-dependencies                    t)
            (org-agenda-inhibit-startup                       t)
            (org-agenda-dim-blocked-tasks                     t)
            (org-agenda-default-appointment-duration          60)
@@ -488,6 +488,12 @@ Captured %<%Y-%m-%d %H:%M>
               (not (member (nth 2 (org-heading-components)) org-done-keywords)))
             (setq org-refile-target-verify-function 'my/verify-refile-target)))
 
+;; Super agenda support
+(use-package org-super-agenda
+  :defer t
+  :commands org-super-agenda-mode
+  :hook (org-mode . org-super-agenda-mode))
+
 ;; Calendar viewer
 (use-package calfw
   :defer t
@@ -512,7 +518,7 @@ Captured %<%Y-%m-%d %H:%M>
              org-jira-get-subtasks
              org-jira-update-comment
              org-jira-todo-to-jira)
-  :custom (jiralib-url "http://jaraberrocal.readmyblog.org:8080")
+  :custom (jiralib-url "https://jaraberrocal.readmyblog.org/jira")
   :config (setq org-jira-working-dir "~/workspace/Documents/Org"))
 
 (provide 'setup-org-agenda)

@@ -1,6 +1,6 @@
 ;;; setup-org.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -68,7 +68,7 @@
            (org-highlight-latex-and-related '(latex))
            (org-catch-invisible-edits       'smart)
            (org-indent-mode                 nil)
-           (org-use-sub-superscripts        nil)
+           (org-use-sub-superscripts        "{}")
            (org-hide-emphasis-markers       t)
            (org-pretty-entities             t)
            (org-list-allow-alphabetical     t)
@@ -88,7 +88,6 @@
           (defun org-element-underline-successor      (arg))
           (defun org-element-verbatim-successor       (arg)))
   :config (progn
-
             ;; Basic packages
             (use-package org-list)
             (use-package org-indent)
@@ -112,7 +111,6 @@
 
             ;; Hide properties drawer in org mode
             (defalias 'org-cycle-hide-drawers 'my/block-org-cycle-hide-drawers)
-
             (defun my/block-org-cycle-hide-drawers (state)
               "Re-hide all drawers, footnotes or html blocks after a visibility state change."
               (when

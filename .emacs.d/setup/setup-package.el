@@ -49,6 +49,14 @@
                            ("melpa" . "https://melpa.org/packages/")
                            ("org"   . "http://orgmode.org/elpa/"))))
 
+;; Since I'm managing packages with `use-package' I don't ever want to
+;; save `package-selected-packages'.
+(defun pd-package--save-selected-packages (&optional value)
+  "Set `package-selected-packages' to VALUE."
+  (when value
+    (setq package-selected-packages value)))
+(fset 'package--save-selected-packages 'pd-package--save-selected-packages)
+
 ;; Add all sub-directories inside Cask dir
 (defun my/add-subfolders-to-load-path (parent-dir)
   "Add all level PARENT-DIR subdirs to the `load-path'."
@@ -137,7 +145,9 @@ corresponding `.el' file."
   :commands tabbar-mode)
 
 ;; Just in case
-(use-package irony               :defer t :load-path (lambda () (expand-file-name "irony-mode/" user-emacs-directory)))
+(use-package irony
+  :defer t
+  :load-path (lambda () (expand-file-name "irony-mode/" user-emacs-directory)))
 
 ;; Package information
 (use-package pkg-info
@@ -147,16 +157,14 @@ corresponding `.el' file."
 (use-package paradox
   :defer t
   :bind (("C-x C-u" . paradox-upgrade-packages))
+  :custom ((paradox-execute-asynchronously t)
+           (paradox-lines-per-entry        1)
+           (paradox-automatically-star     t)
+           (paradox-github-token           t))
   :config (progn
             ;; The "paradox-token" file is supposed to contain this line:
-            ;;     (setq paradox-github-token "<YOUR_TOKEN>")
+            ;; (setq paradox-github-token "<YOUR_TOKEN>")
             (load (locate-user-emacs-file "paradox-token") :noerror :nomessage)
-
-            ;; preferences
-            (setq paradox-execute-asynchronously t
-                  paradox-lines-per-entry        1
-                  paradox-automatically-star     t
-                  paradox-github-token           t)
             (paradox-enable))
   :commands (paradox-enable
              paradox-upgrade-packages

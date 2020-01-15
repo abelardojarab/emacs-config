@@ -1,2 +1,0 @@
-;;; Generated package description from /home/scratch.abelardoj_denver-info/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/pfuture-20200113.603/pfuture.el  -*- no-byte-compile: t -*-
-(define-package "pfuture" "20200113.603" "a simple wrapper around asynchronous processes" '((emacs "25.2")) :commit "9dfcfac76a569fceb931679d23a3db43206b4e81" :authors '(("Alexander Miller" . "alexanderm@web.de")) :maintainer '("Alexander Miller" . "alexanderm@web.de") :url "https://github.com/Alexander-Miller/pfuture")

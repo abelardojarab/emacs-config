@@ -1,6 +1,6 @@
 ;;; setup-yasnippet.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -44,19 +44,16 @@
   :commands (yas-global-mode
              yas-minor-mode
              yas-snippet-dirs)
+  :hook (after-init . yas-global-mode)
   :init (progn
           (if (file-exists-p "~/.emacs.d/snippets")
               (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
             (setq yas-snippet-dirs '()))
           (setq yas-snippet-dirs (cons (expand-file-name "snippets" user-emacs-directory)
                                        (yas-snippet-dirs)))
-          ;; (setq yas-snippet-dirs (cons (expand-file-name "snippets-extra" user-emacs-directory)
-          ;;                              (yas-snippet-dirs)))
 
-          (yas-initialize)
-          (yas-global-mode 1))
+          (yas-initialize))
   :config (progn
-
             ;; Do not activate for read only and non-existent snippets
             (set-default 'yas--dont-activate
                          #'(lambda ()

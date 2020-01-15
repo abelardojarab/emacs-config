@@ -1,6 +1,6 @@
 ;;; setup-windows.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -109,11 +109,9 @@
   :defer t
   :after helm
   :commands purpose-mode
-  :init (purpose-mode)
-  :config (progn
-            ;; Prefer helm
-            (setq purposxe-preferred-prompt 'helm)
-
+  :hook (after-init . purpose-mode)
+  :custom (purpose-preferred-prompt 'helm)
+  :init (progn
             ;; overriding `purpose-mode-map' with empty keymap, so it doesn't conflict
             ;; with original `C-x C-f', `C-x b', etc. and `semantic' key bindings. must
             ;; be done before `window-purpose' is loaded
@@ -144,6 +142,9 @@
             (setq purpose-user-mode-purposes
                   '((eshell-mode                   . terminal)
 
+                    (ag-mode                       . search)
+                    (rg-mode                       . search)
+
                     (c-mode                        . edit)
                     (c++-mode                      . edit)
                     (js2-mode                      . edit)
@@ -157,6 +158,7 @@
 
                     (gitconfig-mode                . edit)
 
+                    (message-mode                  . internet)
                     (mu4e-main-mode                . internet)
                     (mu4e-view-mode                . internet)
                     (mu4e-about-mode               . internet)
@@ -165,9 +167,6 @@
 
                     (pdf-view-mode                 . view)
                     (doc-view-mode                 . view)))
-
-            ;; Prefer helm
-            (setq purpose-preferred-prompt 'helm)
 
             ;; Load user preferences
             (purpose-compile-user-configuration)
@@ -200,6 +199,7 @@
 
             ;; Extensions for purpose
             (use-package window-purpose-x
+              :demand t
               :after window-purpose
               :config (progn
                         (purpose-x-golden-ratio-setup)
