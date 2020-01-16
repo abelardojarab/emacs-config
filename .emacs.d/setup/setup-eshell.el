@@ -116,9 +116,7 @@
   (use-package shell-pop
     :defer t
     :after eshell
-    :bind (("C-t" . shell-pop)
-           :map ctl-x-map
-           ("t"   . shell-pop))
+    :bind (("C-t" . shell-pop))
     :config (progn
               (setq shell-pop-window-size 45)
               (setq shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell)))))

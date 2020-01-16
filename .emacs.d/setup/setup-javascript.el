@@ -47,7 +47,8 @@
   ;; :ensure-system-package ((typescript-language-server            . "npm install -g typescript-language-server")
   ;;                         (javascript-typescript-language-server . "npm install -g javascript-typescript-language-server")
   ;;                         (tsc                                   . "npm install -g typescript")
-  ;;                         (tern                                  . "npm install -g typescript"))
+  ;;                         (tern                                  . "npm install -g typescript")
+  ;;                         (flow-bin                              . "npm install -g flow-bin"))
   :commands (js2-mode
              js2-minor-mode)
   :hook (js2-mode . flycheck-mode)
@@ -95,7 +96,8 @@
                         (add-to-list 'tern-command "--no-port-file" 'append)
                         (add-hook 'js2-mode-hook (lambda ()
                                                    (set (make-local-variable 'company-backends)
-                                                        '((company-tern
+                                                        '((company-lsp
+                                                           company-tern
                                                            company-files
                                                            :with company-yasnippet
                                                            :with company-capf)))))))))

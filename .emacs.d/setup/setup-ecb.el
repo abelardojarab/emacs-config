@@ -212,13 +212,46 @@ little more place."
 ;;    (my/ecb-activate))
 
 (use-package treemacs
-  :demand t
+  :defer t
   :commands treemacs
   :init (setq treemacs-persist-file (concat (file-name-as-directory
                                              my/emacs-cache-dir)
                                             "treemacs-persist"))
-  :custom (treemacs-position 'left)
+  :bind (:map global-map
+              ([f8]    . treemacs)
+              :map ctl-x-map
+              ("t"   .   treemacs))
+  :custom ((treemacs-position                     'left)
+           (treemacs-change-root-without-asking    t)
+           (treemacs-collapse-dirs                 (if (executable-find "python3") 3 0))
+           (treemacs-deferred-git-apply-delay      0.5)
+           (treemacs-display-in-side-window        t)
+           (treemacs-eldoc-display                 t)
+           (treemacs-file-event-delay              5000)
+           (treemacs-follow-after-init             t)
+           (treemacs-indentation                   2)
+           (treemacs-is-never-other-window         t)
+           (treemacs-max-git-entries               5000)
+           (treemacs-never-persist                 nil)
+           (treemacs-no-delete-other-windows       t)
+           (treemacs-project-follow-cleanup        nil)
+           (treemacs-recenter-after-file-follow    nil)
+           (treemacs-recenter-after-project-expand 'on-distance)
+           (treemacs-recenter-after-project-jump   'always)
+           (treemacs-recenter-distance             0.1)
+           (treemacs-show-hidden-files             t)
+           (treemacs-silent-filewatch              t)
+           (treemacs-silent-refresh                t)
+           (treemacs-sorting                       'alphabetic-desc)
+           (treemacs-tag-follow-cleanup            t)
+           (treemacs-tag-follow-delay              1.5)
+           (treemacs-width                         40)
+           (treemacs-indentation-string            (propertize " ǀ " 'face 'font-lock-comment-face)))
   :config (progn
+            ;; slightly lower the size of treemacs icons
+            (treemacs-resize-icons 18)
+
+            ;; Recommended configuration
             (treemacs-follow-mode t)
             (treemacs-filewatch-mode t)
             (treemacs-fringe-indicator-mode t)
@@ -232,20 +265,28 @@ little more place."
 ;; Integration with magit
 (use-package treemacs-magit
   :defer t
-  :after (treemacs magit))
+  :after (magit treemacs)
+  :commands treemacs-magit--schedule-update
+  :hook ((magit-post-commit
+          git-commit-post-finish
+          magit-post-stage
+          magit-post-unstage)
+         . treemacs-magit--schedule-update))
 
 ;; Integration with projectile
 (use-package treemacs-projectile
   :defer t
-  :after (treemacs projectile))
+  :after (projectile treemacs)
+  :bind (:map projectile-command-map
+              ("h" . treemacs-projectile)))
 
 ;; `lsp-mode' and `treemacs' integration
 (use-package lsp-treemacs
-  :demand t
+  :defer t
   :after (lsp-mode all-the-icons treemacs)
   :bind (:map lsp-mode-map
               ("C-<f8>" . lsp-treemacs-errors-list)
               ("<f8>"   . lsp-treemacs-symbols)))
- 
+
 (provide 'setup-ecb)
 ;;; setup-ecb.el ends here
