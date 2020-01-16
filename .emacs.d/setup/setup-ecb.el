@@ -217,9 +217,7 @@ little more place."
   :init (setq treemacs-persist-file (concat (file-name-as-directory
                                              my/emacs-cache-dir)
                                             "treemacs-persist"))
-  :bind (:map global-map
-              ([f8]    . treemacs)
-              :map ctl-x-map
+  :bind (:map ctl-x-map
               ("t"   .   treemacs))
   :custom ((treemacs-position                     'left)
            (treemacs-change-root-without-asking    t)

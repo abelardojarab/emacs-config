@@ -120,9 +120,6 @@
 (global-set-key (kbd "<f7>")     'flycheck-next-error)
 (global-set-key (kbd "C-<f7>")   'helm-flycheck)
 
-;; Treemacs
-(global-set-key (kbd "<f8>")     'treemacs)
-
 ;; Refresh file
 (global-set-key (kbd "<f9>")     'refresh-file)
 
