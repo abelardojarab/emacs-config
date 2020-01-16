@@ -1,6 +1,6 @@
 ;;; setup-eldoc.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -28,17 +28,17 @@
   :defer t
   :diminish eldoc-mode
   :commands (eldoc-mode
-	     turn-on-eldoc-mode
-	     my/eldoc-c-mode-init)
-  :hook (((prog-mode c-mode c++-mode)                                     . eldoc-mode)
-         ((emacs-lisp-mode lisp-interaction-mode ielm-mode)               . turn-on-eldoc-mode)
-         (c-mode-common                                                   . my/eldoc-c-mode-init))
+             turn-on-eldoc-mode
+             my/eldoc-c-mode-init)
+  :hook (((prog-mode c-mode c++-mode)                       . eldoc-mode)
+         ((emacs-lisp-mode lisp-interaction-mode ielm-mode) . turn-on-eldoc-mode)
+         (c-mode-common                                     . my/eldoc-c-mode-init))
   :custom ((eldoc-idle-delay                0.8)
            (eldoc-echo-area-use-multiline-p t))
   :preface (defun my/eldoc-c-mode-init ()
              (when (and (executable-find "global")
-			(projectile-project-p)
-			(file-exists-p (concat (projectile-project-root)
+                        (projectile-project-p)
+                        (file-exists-p (concat (projectile-project-root)
                                                "GTAGS")))
                (setq-local eldoc-documentation-function #'ggtags-eldoc-function))))
 
