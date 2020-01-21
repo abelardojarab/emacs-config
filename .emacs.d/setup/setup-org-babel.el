@@ -1,6 +1,6 @@
 ;;; setup-org-babel.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018, 2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -34,15 +34,16 @@
            (org-confirm-babel-evaluate   nil)
            (org-export-babel-evaluate    t))
   :config (progn
-
             ;; Assure you can execute org code
             (use-package ob-org)
 
-            ;; Rendering ditaa
-            (setq org-ditaa-jar-path (expand-file-name "jar/ditaa.jar" user-emacs-directory)
+            ;; Ditaa rendering
+            (use-package ob-ditaa
+              :config (setq org-ditaa-jar-path (expand-file-name "jar/ditaa.jar" user-emacs-directory)))
 
-                  ;; Rendering plantuml
-                  org-plantuml-jar-path (expand-file-name "jar/plantuml.jar" user-emacs-directory))
+            ;; Rendering plantuml
+            (use-package ob-plantuml
+              :config (setq org-plantuml-jar-path (expand-file-name "jar/plantuml.jar" user-emacs-directory)))
 
             ;; A progress indicator for code blocks in org-mode courtesy of John Kitchin
             (defadvice org-babel-execute-src-block (around progress nil activate)
@@ -102,14 +103,9 @@
               "#+end_src\n")
             (define-abbrev org-mode-abbrev-table "jssrc" "" 'skel-org-block-js)
 
-            (define-skeleton skel-header-block
-              "Creates my default header"
+            (define-skeleton skel-org-latex-header
+              "Insert LaTeX exporting header"
               ""
-              "#+TITLE: " str "\n"
-              "#+AUTHOR:\n"
-              "#+EMAIL:\n"
-              "#+LANGUAGE: en\n"
-              "\n"
               "# Additional style references:\n"
               "#+LATEX_HEADER: %% Using the word +LATEX_HEADER: %% (or tag :noexport) at the beginning of a heading prevents the entire subtree from being exported.\n"
               "\n"
@@ -188,6 +184,16 @@
               "#+LATEX_HEADER: %% Point at your bib file:\n"
               "#+LATEX_HEADER: %% \\addbibresource[datatype=bibtex]{/home/abelardojara/Dropbox/Documents/Bibliography/biblio.bib}\n"
               "#+LATEX_HEADER: %% \\bibliography{biblio}\n")
+            (define-abbrev org-mode-abbrev-table "ltxhdr" "" 'skel-org-latex-header)
+
+            (define-skeleton skel-header-block
+              "Creates my default header"
+              ""
+              "#+TITLE: " str "\n"
+              "#+AUTHOR:\n"
+              "#+EMAIL:\n"
+              "#+LANGUAGE: en\n"
+              "\n")
             (define-abbrev org-mode-abbrev-table "sheader" "" 'skel-header-block)
 
             ;; Tell auto-insert what to use for .org files

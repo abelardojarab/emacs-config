@@ -124,7 +124,7 @@
 
             ;; Integration of company with TabNine
             (use-package company-tabnine
-              :defer 1
+              :disabled t
               :if (executable-find "TabNine")
               :custom (company-tabnine-max-num-results 5)
               :hook ((lsp-after-open . (lambda ()
