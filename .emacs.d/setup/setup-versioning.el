@@ -134,7 +134,7 @@
              git-commit-setup-check-buffer)
   :defines (magit-ediff-dwim-show-on-hunks)
   :bind (:map ctl-x-map
-              ("m"        . magit-status)
+              ("g"        . magit-status)
               ("C-m"      . magit-dispatch-popup)
               :map magit-mode-map
               (("C-c C-a" . magit-just-amend)

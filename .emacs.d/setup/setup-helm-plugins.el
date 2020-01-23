@@ -114,7 +114,7 @@
   :defer t
   :commands (helm-ls-git-ls helm-browse-project)
   :bind (:map ctl-x-map
-              ("C-d" . helm-browse-project)))
+              ("l" . helm-browse-project)))
 
 ;; helm bm support
 (use-package helm-bm
@@ -123,7 +123,7 @@
   :after (helm bm)
   :bind (("C-c b" . helm-bm)
          :map ctl-x-map
-         ("l" . helm-bm))
+         ("m"     . helm-bm))
   :config (setq helm-bookmark-show-location t))
 
 ;; helm etags plus

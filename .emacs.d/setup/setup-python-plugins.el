@@ -35,7 +35,7 @@
 (use-package epc
   :demand t)
 
-;; only use Jedi if python interpreter is present
+;; Use Jedi only if python interpreter is present
 (use-package jedi
   :disabled t
   :if (and (executable-find "python")
@@ -43,9 +43,9 @@
            (check-python-module "jedi"))
   :commands (jedi:setup)
   :hook (python-mode . jedi:setup)
-  :custom ((jedi:setup-keys nil)
-           (jedi:complete-on-dot t)
-           (jedi:tooltip-method t)
+  :custom ((jedi:setup-keys                 nil)
+           (jedi:complete-on-dot            t)
+           (jedi:tooltip-method             t)
            (jedi:get-in-function-call-delay 0.2))
   :config (use-package company-jedi
             :hook (python-mode . company-jedi-setup)
@@ -58,8 +58,8 @@
 
 ;; Disable flymake when flycheck is present
 (use-package elpy
-  :after python
   :demand t
+  :after python
   :hook (python-mode . elpy-enable)
   :commands (elpy-enable)
   :custom (elpy-rpc-python-command "python3")

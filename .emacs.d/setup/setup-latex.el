@@ -33,12 +33,12 @@
              my/latex-mode-init)
   :mode ("\\.tex\\'" . LaTeX-mode)
   :hook (LaTeX-mode . my/latex-mode-init)
-  :custom ((TeX-auto-save t)
-           (TeX-parse-self t)
-           (TeX-save-query nil)
-           (TeX-PDF-mode t)
+  :custom ((TeX-auto-save                     t)
+           (TeX-parse-self                    t)
+           (TeX-save-query                    nil)
+           (TeX-PDF-mode                      t)
            (TeX-source-correlate-start-server t)
-           (TeX-master nil))
+           (TeX-master                        nil))
   :preface (defun my/latex-mode-init ()
              "Tweaks and customisations for LaTeX mode."
              ;; Auto-fill for LaTeX
