@@ -216,6 +216,7 @@
 (depends-on "highlight-indent-guides")
 ;; (depends-on "highlight-sexp")
 (depends-on "highlight-symbol")
+(depends-on "hledger-mode")
 (depends-on "hlinum")
 (depends-on "hl-todo")
 (depends-on "ht")
