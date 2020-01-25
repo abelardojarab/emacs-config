@@ -273,7 +273,7 @@
  '(heartbeat-cursor-mode t)
  '(helm-M-x-requires-pattern nil t nil "Customized with use-package helm-config")
  '(helm-always-two-windows t nil nil "Customized with use-package helm-config")
- '(helm-bookmark-show-location t nil nil "Customized with use-package helm-config")
+ '(helm-bookmark-show-location t t nil "Customized with use-package helm-config")
  '(helm-buffer-max-length 48 nil nil "Customized with use-package helm-config")
  '(helm-candidate-number-limit 50 nil nil "Customized with use-package helm-config")
  '(helm-dabbrev-related-buffer nil t)

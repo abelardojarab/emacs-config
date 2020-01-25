@@ -1,6 +1,6 @@
 ;;; setup-dired.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -39,7 +39,14 @@
           ("C-c C-r" . my/dired-rsync)
           ("C-c C-d" . dired-filter-by-directory)
           ("C-c C-f" . dired-filter-by-file)))
-  :custom ((dired-omit-verbose nil))
+  :custom ((ls-lisp-dirs-first                  t)
+           (global-auto-revert-non-file-buffers t)
+           (dired-omit-verbose nil)
+           (dired-recursive-copies              'top)
+           (dired-recursive-deletes             'top)
+           (dired-dwim-target                   t)
+           (dired-ls-F-marks-symlinks           t)
+           (dired-auto-revert-buffer            t))
   :config (progn
 
             ;; toggle `dired-omit-mode' with C-x M-o
@@ -93,18 +100,6 @@
             ;; Prevents buffers littering up things when moving around in Dired
             (put 'dired-find-alternate-file 'disabled nil)
 
-            (setq ls-lisp-dirs-first                  t
-                  dired-listing-switches              "-alhF --group-directories-first"
-                  dired-recursive-copies              'top
-                  dired-recursive-deletes             'top
-                  dired-dwim-target                   t
-                  ;; -F marks links with @
-                  dired-ls-F-marks-symlinks           t
-                  ;; Auto refresh dired
-                  dired-auto-revert-buffer            t
-                  ;; Auto refresh dired, but be quiet about it
-                  global-auto-revert-non-file-buffers t)
-
             ;; rsync helper
             (defun my/dired-rsync (dest)
               (interactive
@@ -139,13 +134,11 @@
             (use-package dired+
               :after dired
               :custom (diredp-hide-details-initially-flag nil)
-              :config (progn
-                        ;; Reuse same directory buffer
-                        (diredp-toggle-find-file-reuse-dir 1)))
+              :config (diredp-toggle-find-file-reuse-dir 1))
 
             ;; dired-ranger pre-requisite
             (use-package dired-hacks-utils
-              :demand t
+              :defer t
               :after dired)
 
             ;; Enable copying and pasting files
@@ -205,7 +198,6 @@
 
             ;; Simple directory explorer. It also works as a generic tree explore library
             (use-package direx
-              :demand t
               :after dired
               :bind (:map dired-mode-map
                           ("b"       . direx:jump-to-directory)
@@ -213,13 +205,12 @@
                           ("b"       . dired-jump)
                           ([mouse-1] . direx:mouse-2)
                           ([mouse-3] . direx:mouse-1))
-              :config (setq direx:closed-icon "+ "
-                            direx:leaf-icon   "| "
-                            direx:open-icon   "> "))
+              :custom ((direx:closed-icon "+ ")
+                       (direx:leaf-icon   "| ")
+                       (direx:open-icon   "> ")))
 
             ;; Integration with projectile
             (use-package direx-project
-              :demand t
               :after (direx projectile))
 
             ;; Choose starting dired directory
