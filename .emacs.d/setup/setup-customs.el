@@ -86,7 +86,7 @@
   :group 'my/customs
   :type 'string)
 
-(defcustom my/main-programming-font "Iosevka"
+(defcustom my/main-programming-font "iA Writer Mono V"
   "Preferred programming font"
   :type 'string
   :group 'my/customs)
@@ -96,7 +96,7 @@
   :type 'string
   :group 'my/customs)
 
-(defcustom my/main-writing-font "Cousine"
+(defcustom my/main-writing-font "iA Writer Mono V"
   "Preferred writing font"
   :type 'string
   :group 'my/customs)
@@ -107,7 +107,7 @@
   :group 'my/customs)
 
 (defcustom my/emacs-theme
-  'monokai
+  'zenburn
   "Preferred Emacs theme"
   :group 'my/customs
   :type 'list)
