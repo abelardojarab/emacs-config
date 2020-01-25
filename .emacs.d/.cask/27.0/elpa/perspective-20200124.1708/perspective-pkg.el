@@ -1,0 +1,2 @@
+;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/perspective-20200124.1708/perspective.el  -*- no-byte-compile: t -*-
+(define-package "perspective" "20200124.1708" "switch between named \"perspectives\" of the editor" '((emacs "24.4") (cl-lib "0.5")) :commit "927001941547e029da57c27a615038821b992eb8" :keywords '("workspace" "convenience" "frames") :authors '(("Natalie Weizenbaum" . "nex342@gmail.com")) :maintainer '("Natalie Weizenbaum" . "nex342@gmail.com") :url "http://github.com/nex3/perspective-el")
