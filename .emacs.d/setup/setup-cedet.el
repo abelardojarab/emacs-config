@@ -1,6 +1,6 @@
 ;;; setup-cedet.el ---
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -34,7 +34,6 @@
            (semantic-idle-scheduler-max-buffer-size         1)
            (semanticdb-search-system-databases              t))
   :config (progn
-
             ;; To use additional features for names completion, and displaying of information for tags & classes,
             ;; you also need to load the semantic-ia package. Unfortunately, semantic makes Emacs slow
             (use-package semantic/ia)
