@@ -163,9 +163,9 @@
   :preface (defun my/cmake-ide-find-project ()
              "Finds the directory of the project for cmake-ide."
              (with-eval-after-load 'projectile
-               (setq cmake-ide-project-dir (projectile-project-root))
-               (setq cmake-ide-build-dir (concat cmake-ide-project-dir "build")))
-             (setq cmake-ide-compile-command
+               (setq-local cmake-ide-project-dir (projectile-project-root))
+               (setq-local cmake-ide-build-dir (concat cmake-ide-project-dir "build")))
+             (setq-local cmake-ide-compile-command
                    (concat "cd " cmake-ide-build-dir " && cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=YES .. && make"))
              (cmake-ide-load-db))
   :init (progn
