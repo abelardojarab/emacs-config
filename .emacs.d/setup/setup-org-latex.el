@@ -1,6 +1,6 @@
 ;;; setup-org-latex.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -26,14 +26,14 @@
 
 ;; Tweaks for LaTeX exporting
 (use-package ox-latex
-  :defer 5
+  :defer t
   :after org
   :hook (org-mode . turn-on-org-cdlatex)
+  :commands turn-on-org-cdlatex
   :custom ((org-latex-listings                t)
            (org-latex-default-figure-position "!htb")
            (org-latex-table-caption-above     nil))
   :config (progn
-
             ;; Enable bibtex support
             (use-package ox-bibtex)
 
@@ -426,7 +426,6 @@
            (reftex-cite-prompt-optional-args      nil)
            (reftex-cite-cleanup-optional-args     t))
   :config (progn
-
             ;; Enable RefTeX in Org-mode to find bibliography
             (setq reftex-default-bibliography (list my/bibtex-completion-bibliography))
             (defun org-mode-reftex-setup ()
