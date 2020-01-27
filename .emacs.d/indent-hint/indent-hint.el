@@ -1,7 +1,7 @@
 ;; -*- encoding: utf-8-unix; -*-
 ;; File-name:    <indent-hint.el>
 ;; Create:       <2012-09-10 12:04:07 ran9er>
-;; Time-stamp:   <2017-07-25 10:02:55 (abelardojara)>
+;; Time-stamp:   <2020-01-27 12:04:47 (abelardoj)>
 ;; Mail:         <2999am@gmail.com>
 
 ;; *init
@@ -77,6 +77,7 @@ s1 ",\n" s2 "};"
     ;; (overlay-put ov ih-key nil)
     (delete-overlay ov)
     (set p (cons ov (eval p)))))
+
 (defun ih-overlay-exist (k p q)
   (let (r o (l (overlays-in p q)))
     (while (and l
@@ -86,6 +87,7 @@ s1 ",\n" s2 "};"
                    nil)))
       (setq l (cdr l)))
     (if r o)))
+
 (defun ih-make-head()
   (make-temp-name ""))
 ;; (defun ih-make-head1()
@@ -339,12 +341,12 @@ s1 ",\n" s2 "};"
      (cons (cons pt (current-column))
            (mapcar
             (lambda(x) (remove-if
-                   nil
-                   `(,x
-                     ,(overlay-get x ih-key)
-                     ;; ,(if (overlay-get x ih-head) 'head)
-                     ,(if (overlay-get x ih-bg) 'bg)
-                     ,(if (eq (overlay-get x 'face) 'hl-line) 'hl-line))))
+                        nil
+                        `(,x
+                          ,(overlay-get x ih-key)
+                          ;; ,(if (overlay-get x ih-head) 'head)
+                          ,(if (overlay-get x ih-bg) 'bg)
+                          ,(if (eq (overlay-get x 'face) 'hl-line) 'hl-line))))
             (overlays-in pt (1+ pt)))))))
 
 (when
