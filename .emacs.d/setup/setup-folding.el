@@ -63,85 +63,13 @@
               :map region-bindings-mode-map
               ("&"         . fold-this))
   :commands (fold-this fold-this-unfold-at-point)
-  :config (progn
-            (setq fold-this-persistent-folds t)
-
-            (defface my/fold-face
-              '((t (:foreground "deep sky blue" :slant italic)))
-              "Face used for fold ellipsis.")
-
-            (defvar my/fold-this--last-overlay nil
-              "Store the last overlay created by `fold-this'.")
-
-            ;; Patch the original `fold-this' command to save the overlay to the var
-            ;; `my/fold-this--last-overlay' and tweak the 'display property of the
-            ;; overlay
-            (defun fold-this (beg end)
-              (interactive "r")
-              (let ((o (make-overlay beg end nil t nil)))
-                (overlay-put o 'type 'fold-this)
-                (overlay-put o 'invisible t)
-                (overlay-put o 'keymap fold-this-keymap)
-                (overlay-put o 'face 'my/fold-face)
-                (overlay-put o 'modification-hooks '(fold-this--unfold-overlay))
-                (overlay-put o 'display (propertize " « » " 'face 'my/fold-face))
-                (overlay-put o 'evaporate t)
-                (setq my/fold-this--last-overlay o))
-              (deactivate-mark))))
+  :custom (fold-this-persistent-folds t))
 
 ;; Cycle code visibility
 (use-package hideshow
   :defer t
   :diminish hs-minor-mode
-  :hook (prog-mode  . hs-minor-mode)
-  :commands (hs-toggle-hiding
-             toggle-fold
-             toggle-fold-all
-             toggle-hide-all)
-  :config (progn
-
-            ;; default 'code, options: 'comment, t, nil
-            (setq hs-isearch-open 'code)
-
-            (defvar hs-special-modes-alist
-              (mapcar 'purecopy
-                      '((c-mode "{" "}" "/[*/]" nil nil)
-                        (c++-mode "{" "}" "/[*/]" nil nil)
-                        (bibtex-mode ("@\\S(*\\(\\s(\\)" 1))
-                        (java-mode "{" "}" "/[*/]" nil nil)
-                        (js-mode "{" "}" "/[*/]" nil)
-                        (javascript-mode  "{" "}" "/[*/]" nil))")"))
-
-            ;; Support to toggle/untoggle all
-            (defvar hs-hide-all nil "Current state of hideshow for toggling all.")
-            (make-local-variable 'hs-hide-all)
-
-            (defun toggle-hide-all ()
-              "Toggle hideshow all."
-              (interactive)
-              (setq hs-hide-all (not hs-hide-all))
-              (if hs-hide-all
-                  (hs-hide-all)
-                (hs-show-all)))
-
-            (defvar fold-all-fun nil "Function to fold all.")
-            (make-variable-buffer-local 'fold-all-fun)
-            (defvar fold-fun nil "Function to fold.")
-            (make-variable-buffer-local 'fold-fun)
-
-            (defun toggle-fold-all ()
-              "Toggle fold all."
-              (interactive)
-              (if fold-all-fun
-                  (call-interactively fold-all-fun)
-                (toggle-hide-all)))
-
-            (defun toggle-fold ()
-              "Toggle fold."
-              (interactive)
-              (if fold-fun
-                  (call-interactively fold-fun)
-                (hs-toggle-hiding)))))
+  :hook (prog-mode  . hs-minor-mode))
 
 ;; Cycle outline
 (use-package outline
@@ -152,23 +80,9 @@
 (use-package outshine
   :defer t
   :bind (:map outline-minor-mode-map
-              ("C-c TAB" . outshine-cycle-buffer))
+              ("C-c c" . outshine-cycle-buffer))
   :custom ((outshine-use-speed-commands                t)
-           (outshine-org-style-global-cycling-at-bob-p t))
-  :config (progn
-            (defvar-local my/outshine-allow-space-before-heading nil
-              "When non-nil, allow outshine heading to begin with whitespace.
-For example, when non-nil, do not require the \"// *\" style
-comments used by `outshine' to start at column 0 in `verilog-mode.'")
-
-            (defun my/outshine-calc-outline-regexp (orig-ret)
-              "Prefix the outline regexp with whitespace regexp, may be.
-Do this if `my/outshine-allow-space-before-heading' is non-nil."
-              (let ((ret orig-ret))
-                (when my/outshine-allow-space-before-heading
-                  (setq ret (concat "[[:blank:]]*" orig-ret)))
-                ret))
-            (advice-add 'outshine-calc-outline-regexp :filter-return #'my/outshine-calc-outline-regexp)))
+           (outshine-org-style-global-cycling-at-bob-p t)))
 
 ;; Fast Emacs navigation and control
 (use-package navi-mode
@@ -207,65 +121,16 @@ Do this if `my/outshine-allow-space-before-heading' is non-nil."
              yafolding-show-all
              yafolding-hide-element
              yafolding-hide-all)
-  :custom (yafolding-ellipsis-content " ⮷ ")
+  :bind (:map outline-minor-mode-map
+              ("C-c +" . yafolding-toggle-element)
+              ("C-c -" . yafolding-toggle-all))
+    :custom (yafolding-ellipsis-content " ⮷ ")
   :config (set-face-attribute 'yafolding-ellipsis-face nil :inherit 'my/fold-face))
 
 ;; Enable fold dwim (do what i mean)
 (use-package fold-dwim
   :defer t
-  :after hideshow
-  :bind ("C-c C-f" . my/fold-dwim)
-  :config (progn
-            (defun folding-marker-p (&optional pos)
-              (eq (get-char-property (or pos (point)) 'face) 'fringe))
-
-            (defadvice fold-dwim-toggle (around toggle-folding-on-folding-marker activate)
-              (if (folding-marker-p)
-                  (folding-toggle-show-hide)
-                ad-do-it))
-
-            (defadvice fold-dwim-hide-all (around folding-open-first activate)
-              (if (and (boundp 'folding-mode) folding-mode)
-                  (progn
-                    (folding-uninstall)
-                    (let ((hs-hide-comments-when-hiding-all nil))
-                      ad-do-it)
-                    (folding-mode))
-                ad-do-it))
-
-            ;; DWIM
-            (defvar my/fold-dwim--last-fn nil
-              "Store the symbol of the last function called using `my/fold-dwim'.")
-
-            (defun my/fold-dwim (&optional beg end)
-              "If region is selected use `fold-this', else use `yafolding-toggle-element'.
-If prefix argument is used, `set-selective-display' to the current column."
-              (interactive "r")
-              (let ((message-log-max nil))
-                (if (region-active-p)
-                    (progn
-                      (fold-this beg end)
-                      (setq my/fold-dwim--last-fn #'fold-this)
-                      (message "Folded the selected region using %s."
-                               (propertize
-                                (symbol-name my/fold-dwim--last-fn)
-                                'face 'font-lock-function-name-face)))
-                  (if current-prefix-arg
-                      (progn
-                        (set-selective-display (current-column))
-                        (setq my/fold-dwim--last-fn #'set-selective-display)
-                        (message "Folded using %s at column %d."
-                                 (propertize
-                                  (symbol-name my/fold-dwim--last-fn)
-                                  'face 'font-lock-function-name-face)
-                                 (current-column)))
-                    (progn
-                      (yafolding-toggle-element)
-                      (setq my/fold-dwim--last-fn #'yafolding-toggle-element)
-                      (message "Folded at current indent level using %s."
-                               (propertize
-                                (symbol-name my/fold-dwim--last-fn)
-                                'face 'font-lock-function-name-face)))))))))
+  :after hideshow)
 
 ;; Visual hideshow mode
 (use-package hideshowvis
@@ -273,80 +138,7 @@ If prefix argument is used, `set-selective-display' to the current column."
   :if (display-graphic-p)
   :after hideshow
   :commands (hideshowvis-minor-mode
-             hideshowvis-enable)
-  :config (progn
-            ;; Add the following to your .emacs and uncomment it in order to get a right arrow symbol
-            (define-fringe-bitmap 'hs-marker [0 32 48 56 60 56 48 32])
-
-            ;; Change -/+ to ▼/▶
-            (define-fringe-bitmap 'hideshowvis-hideable-marker [0 0 254 124 56 16 0 0])
-            (define-fringe-bitmap 'hs-marker [0 32 48 56 60 56 48 32])
-
-            (defface my/hs-fringe-face
-              '((t (:foreground "#888"
-                                :box (:line-width 2 :color "grey75" :style released-button))))
-              "Face used to highlight the fringe on folded regions"
-              :group 'hideshow)
-
-            ;; Redefine display functions
-            (defun display-code-line-counts (ov)
-              (when (eq 'code (overlay-get ov 'hs))
-                (let* ((marker-string "*fringe-dummy*")
-                       (marker-length (length marker-string))
-                       (display-string (format " ... %s <%d> ⮷ "
-                                               (replace-regexp-in-string
-                                                "\n" ""
-                                                (replace-regexp-in-string
-                                                 "^[ \t]*" ""
-                                                 (replace-regexp-in-string
-                                                  "[ \t]*$" ""
-                                                  (buffer-substring (overlay-start ov)
-                                                                    (+ (overlay-start ov) 40)))))
-                                               (count-lines (overlay-start ov)
-                                                            (overlay-end ov)))))
-                  (overlay-put ov 'help-echo "Hidden text... ")
-                  (put-text-property 0 marker-length 'display (list 'left-fringe 'hs-expand-bitmap 'my/hs-fringe-face) marker-string)
-                  (overlay-put ov 'before-string marker-string)
-                  (put-text-property 1 (length display-string) 'face 'my/fold-face display-string)
-                  (overlay-put ov 'display display-string))))
-            (setq hs-set-up-overlay 'display-code-line-counts)
-
-            (defadvice folding-subst-regions (around toggle-fringe (list find replace) activate)
-              ad-do-it
-              (save-excursion
-                (while list
-                  (let* ((begin (car list))
-                         (end (cadr list))
-                         bol eol
-                         (marker-string "*fringe-dummy*")
-                         (marker-length (length marker-string)))
-                    (dolist (ov (overlays-in begin end))
-                      (when (overlay-get ov 'fringe-folding-p)
-                        (delete-overlay ov)))
-                    (when (and (eq find ?\n) (eq replace ?\r))
-                      ;; \\n -> \\r add fringe
-                      (goto-char begin)
-                      (search-forward "\r")
-                      (forward-char -1)
-                      (let* ((ov (make-overlay (point) end))
-                             (display-string (format " ... %s <%d> ⮷ "
-                                                     (replace-regexp-in-string
-                                                      "\n" ""
-                                                      (replace-regexp-in-string
-                                                       "^[ \t]*" ""
-                                                       (replace-regexp-in-string
-                                                        "[ \t]*$" ""
-                                                        (buffer-substring (overlay-start ov)
-                                                                          (+ (overlay-start ov) 40)))))
-                                                     (count-lines (overlay-start ov)
-                                                                  (overlay-end ov)))))
-                        (put-text-property 0 marker-length 'display (list 'left-fringe 'hs-marker 'my/hs-fringe-face) marker-string)
-                        (overlay-put ov 'before-string marker-string)
-                        (put-text-property 1 (length display-string) 'face 'my/fold-face display-string)
-                        (overlay-put ov 'display display-string)
-                        (overlay-put ov 'priority 9999)
-                        (overlay-put ov 'fringe-folding-p t))))
-                  (setq list (cdr (cdr list))))))))
+             hideshowvis-enable))
 
 ;; vim-like fold
 (use-package vimish-fold
@@ -356,13 +148,12 @@ If prefix argument is used, `set-selective-display' to the current column."
               ("<tab>" . vimish-fold-unfold)
               :map vimish-fold-unfolded-keymap
               ("<tab>" . vimish-fold-refold))
-  :config (progn
-            (setq-default
-             vimish-fold-dir  (file-name-as-directory
-                               (concat (file-name-as-directory
-                                        my/emacs-cache-dir)
-                                       "vimish-fold"))
-             vimish-fold-header-width 79)))
+  :custom (vimish-fold-header-width 78)
+  :config (setq-default
+           vimish-fold-dir  (file-name-as-directory
+                             (concat (file-name-as-directory
+                                      my/emacs-cache-dir)
+                                     "vimish-fold"))))
 
 (use-package origami
   :defer t
