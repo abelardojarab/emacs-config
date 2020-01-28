@@ -41,7 +41,7 @@
           ("C-c C-f" . dired-filter-by-file)))
   :custom ((ls-lisp-dirs-first                  t)
            (global-auto-revert-non-file-buffers t)
-           (dired-omit-verbose nil)
+           (dired-omit-verbose                  nil)
            (dired-recursive-copies              'top)
            (dired-recursive-deletes             'top)
            (dired-dwim-target                   t)

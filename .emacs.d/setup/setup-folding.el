@@ -124,8 +124,7 @@
   :bind (:map outline-minor-mode-map
               ("C-c +" . yafolding-toggle-element)
               ("C-c -" . yafolding-toggle-all))
-    :custom (yafolding-ellipsis-content " ⮷ ")
-  :config (set-face-attribute 'yafolding-ellipsis-face nil :inherit 'my/fold-face))
+  :custom (yafolding-ellipsis-content " ⮷ "))
 
 ;; Enable fold dwim (do what i mean)
 (use-package fold-dwim
@@ -150,10 +149,10 @@
               ("<tab>" . vimish-fold-refold))
   :custom (vimish-fold-header-width 78)
   :config (setq-default
-           vimish-fold-dir  (file-name-as-directory
-                             (concat (file-name-as-directory
-                                      my/emacs-cache-dir)
-                                     "vimish-fold"))))
+           vimish-fold-dir (file-name-as-directory
+                            (concat (file-name-as-directory
+                                     my/emacs-cache-dir)
+                                    "vimish-fold"))))
 
 (use-package origami
   :defer t
