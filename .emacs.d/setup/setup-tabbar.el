@@ -33,7 +33,7 @@
   nil)
 
 (use-package centaur-tabs
-  :defer t
+  :demand t
   :bind (("C-<prior>"   . centaur-tabs-backward)
          ("C-<next>"    . centaur-tabs-forward)
          ("C-c <right>" . centaur-tabs-forward)
