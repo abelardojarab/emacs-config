@@ -208,8 +208,8 @@ little more place."
                         (projectile-speedbar-open-current-buffer-in-tree))))))
 
 ;; Activate ECB in console mode
-;; (if (not (display-graphic-p))
-;;    (my/ecb-activate))
+(if (display-graphic-p)
+    (add-hook 'after-init-hook #'my/ecb-activate))
 
 (use-package treemacs
   :defer t
