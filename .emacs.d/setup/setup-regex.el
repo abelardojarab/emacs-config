@@ -1,6 +1,6 @@
 ;;; setup-regex.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -26,7 +26,7 @@
 
 ;; visual regexp replace
 (use-package visual-regexp
-  :bind (("C-c r" . vr/replace)
+  :bind (("C-%"   . vr/isearch-forward)
          ("C-c q" . vr/query-replace)
          ("C-c m" . vr/mc-mark)))
 

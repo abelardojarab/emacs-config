@@ -53,6 +53,7 @@
   :hook (after-init . centaur-tabs-mode)
   :config (progn
             (centaur-tabs-mode t)
+            (centaur-tabs-group-by-projectile-project)
             (add-hook 'centaur-tabs-mode (lambda () (tabbar-mode -1)))))
 
 (provide 'setup-tabbar)

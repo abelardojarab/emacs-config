@@ -280,5 +280,14 @@
 ;; Setup Org plugins
 (use-package setup-org-plugins)
 
+;; pdf-tools
+(use-package pdf-tools
+  :disabled t
+  :if (executable-find "epdfinfo")
+  :mode ("\\.pdf\\'" . pdf-view-mode)
+  :hook (pdf-view-mode . pdf-tools-enable-minor-modes)
+  :custom ((pdf-view-display-size                  'fit-page)
+           (pdf-annot-activate-created-annotations t)))
+
 (provide 'setup-org)
 ;;; setup-org.el ends here
