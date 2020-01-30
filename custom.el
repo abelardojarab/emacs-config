@@ -148,7 +148,7 @@
  '(delete-by-moving-to-trash t nil nil "Customized with use-package files")
  '(delete-old-versions t nil nil "Customized with use-package no-littering")
  '(diff-hl-flydiff-mode t)
- '(dimmer-fraction 0.25 t nil "Customized with use-package dimmer")
+ '(dimmer-fraction 0.25 nil nil "Customized with use-package dimmer")
  '(dired-async-mode t)
  '(dired-auto-revert-buffer t)
  '(dired-dwim-target t)

@@ -44,11 +44,12 @@
 
 ;; Auto-revert buffers of changed files
 (use-package autorevert
-  :demand t
+  :defer t
   :if (not (equal system-type 'windows-nt))
-  :commands global-auto-revert-mode
+  :commands (global-auto-revert-mode
+             auto-revert-mode)
   :diminish (auto-revert-mode . " Ⓐ")
-  :init (global-auto-revert-mode t)
+  :hook ((prog-mode text-mode) auto-revert-mode)
   :custom ((auto-revert-verbose                 nil)
            (global-auto-revert-non-file-buffers t)
            (auto-revert-interval                2)
@@ -106,13 +107,10 @@
 ;; Uniquify-buffers
 (use-package uniquify
   :defer 2
-  :config (setq
-           uniquify-buffer-name-style 'post-forward
-           uniquify-separator " • "
-           ;; rename after killing uniquified
-           uniquify-after-kill-buffer-p t
-           ;; don't muck with special buffers
-           uniquify-ignore-buffers-re "^\\*"))
+  :custom ((uniquify-buffer-name-style   'post-forward)
+           (uniquify-separator           " • ")
+           (uniquify-after-kill-buffer-p t)
+           (uniquify-ignore-buffers-re   "^\\*")))
 
 ;; Unfill and fill
 (use-package unfill
@@ -143,10 +141,13 @@
 
 ;; Page break lines
 (use-package page-break-lines
+  :commands page-break-lines-mode
   :defer t)
 
 ;; Naive implementation of RFC4122 Universally Unique IDentifier generation
 (use-package uuidgen
+  :commands (uuidgen
+             insert-uuid-cid)
   :defer t)
 
 ;; This is a elisp library for websocket clients to talk to websocket servers,

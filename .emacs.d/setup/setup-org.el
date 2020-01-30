@@ -281,8 +281,22 @@
 (use-package setup-org-plugins)
 
 ;; pdf-tools
+(use-package pdf-history
+  :commands pdf-history-minor-mode)
+
+(use-package pdf-links
+  :commands pdf-links-minor-mode)
+
+(use-package pdf-outline
+  :commands pdf-outline-minor-mode)
+
+(use-package pdf-annot
+  :commands pdf-annot-minor-mode)
+
+(use-package pdf-sync
+  :commands pdf-sync-minor-mode)
+
 (use-package pdf-tools
-  :disabled t
   :if (executable-find "epdfinfo")
   :mode ("\\.pdf\\'" . pdf-view-mode)
   :hook (pdf-view-mode . pdf-tools-enable-minor-modes)
