@@ -46,10 +46,8 @@
 (use-package autorevert
   :defer t
   :if (not (equal system-type 'windows-nt))
-  :commands (global-auto-revert-mode
-             auto-revert-mode)
+  :commands global-auto-revert-mode
   :diminish (auto-revert-mode . " Ⓐ")
-  :hook ((prog-mode text-mode) auto-revert-mode)
   :custom ((auto-revert-verbose                 nil)
            (global-auto-revert-non-file-buffers t)
            (auto-revert-interval                2)
