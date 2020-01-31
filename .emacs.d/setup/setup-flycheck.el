@@ -1,6 +1,6 @@
 ;;; setup-flycheck.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -39,7 +39,6 @@
            (flycheck-disabled-checkers         '(html-tidy emacs-lisp-checkdoc))
            (flycheck-highlighting-mode         'lines))
   :config (progn
-
             (defun my/flycheck-adjust-syntax-eagerness ()
               "Adjust how often we check for errors based on if there are any.
 This lets us fix any errors as quickly as possible, but in a
@@ -149,8 +148,9 @@ flycheck-handle-idle-change, which removes the forced deferred."
   :after flycheck
   :custom (flycheck-tip-avoid-show-func nil))
 
-;; Another tooltip using pos-tip
+;; Another tooltip using pos-tip (does not work)
 (use-package flycheck-pos-tip
+  :disabled t
   :defer t
   :if (display-graphic-p)
   :after flycheck
