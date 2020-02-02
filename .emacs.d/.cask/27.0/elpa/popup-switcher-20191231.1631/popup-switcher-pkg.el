@@ -1,2 +1,0 @@
-;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/popup-switcher-20191231.1631/popup-switcher.el  -*- no-byte-compile: t -*-
-(define-package "popup-switcher" "20191231.1631" "switch to other buffers and files via popup." '((cl-lib "0.3") (popup "0.5.3")) :commit "e66769ea72f1fd38c2ba3cff505da334e2b26b45" :keywords '("popup" "switch" "buffers" "functions") :authors '(("Kostafey" . "kostafey@gmail.com")) :maintainer '("Kostafey" . "kostafey@gmail.com") :url "https://github.com/kostafey/popup-switcher")

@@ -1,0 +1,2 @@
+;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/switch-buffer-functions-20200127.409/switch-buffer-functions.el  -*- no-byte-compile: t -*-
+(define-package "switch-buffer-functions" "20200127.409" "Hook run when current buffer changed" 'nil :commit "40cb0c9e2c84b30e1c5c7458a795cda1bd8ad8fa" :keywords '("hook" "utility") :authors '(("10sr <8slashes+el [at] gmail [dot] com>")) :maintainer '("10sr <8slashes+el [at] gmail [dot] com>") :url "https://github.com/10sr/switch-buffer-functions-el")
