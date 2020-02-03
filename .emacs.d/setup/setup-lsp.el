@@ -64,12 +64,12 @@
            (lsp-ui-doc-enable                    t)
            (lsp-ui-doc-header                    t)
            (lsp-ui-doc-include-signature         t)
-           (lsp-ui-doc-position                  'top)
+           (lsp-ui-doc-position                  'at-point)
            (lsp-ui-flycheck-enable               t)
            (lsp-ui-imenu-enable                  t)
            (lsp-ui-sideline-ignore-duplicate     t )
            (lsp-ui-sideline-show-symbol          nil))
-  :hook (lsp-mode . lsp-ui-mode)
+  :hook (lsp-after-open . lsp-ui-mode)
   :bind (:map lsp-ui-mode-map
               ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
               ([remap xref-find-references] . lsp-ui-peek-find-references)
@@ -77,7 +77,8 @@
   :config (if (display-graphic-p)
               (progn
                 (setq lsp-ui-sideline-code-actions-prefix "ℹ ")
-                (setq lsp-ui-doc-use-webkit t))))
+                (when (require 'xwidget nil 'noerror)
+                  (setq lsp-ui-doc-use-webkit t)))))
 
 (use-package lsp-metals-treeview
   :disabled t
