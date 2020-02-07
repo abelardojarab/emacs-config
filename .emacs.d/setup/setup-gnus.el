@@ -1,6 +1,6 @@
 ;;; setup-gnus.el ---                         -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -46,8 +46,18 @@
   :bind (("M-G" . gnus)
          :map ctl-x-map
          ("M"   . compose-mail))
+  :custom ((gnus-treat-from-gravatar           t)
+           (gnus-asynchronous                  t)
+           (gnus-use-demon                     nil)
+           (gnus-activate-level                2)
+           (gnus-group-default-list-level      3)
+           (gnus-check-new-newsgroups          t)
+           (gnus-interactive-catchup           nil)
+           (gnus-interactive-exit              nil)
+           (gnus-select-method                 '(nnnil ""))
+           (gnus-permanently-visible-groups    "local")
+           (gnus-message-archive-method        gnus-select-method))
   :config (progn
-
             (gnus-add-configuration
              '(article
                (horizontal 1.0
@@ -62,6 +72,7 @@
                            (vertical 60 (group 1.0))
                            (vertical 1.0 (summary 1.0 point)))))
 
+            ;; Setup local sources
             (setq my/gnus-local '((nnmaildir "local"
                                              (directory "~/Mail")
                                              (directory-files nnheader-directory-files-safe)
@@ -69,47 +80,17 @@
                                              (nnir-search-engine notmuch))
 
                                   ;; News servers
-                                  (nntp "news.gwene.org")
-                                  (nntp "gmane"
-                                        (nntp-address "news.gmane.org")
-                                        (nntp-port-number 563)
-                                        (nntp-open-connection-function nntp-open-tls-stream)))
+                                  (nntp "news.gwene.org"))
                   my/gnus-gmail '(nnimap "gmail"
                                          (nnimap-address "imap.gmail.com")
                                          (nnimap-server-port 993)
                                          (nnimap-stream tls)
                                          (nnimap-authenticator login)
                                          (nnimap-expunge-on-close 'ask)))
+            (setq gnus-secondary-select-methods my/gnus-local)
 
             ;; You need this to be able to list all labels in gmail
             (setq gnus-ignored-newsgroups            "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]"
-
-                  ;; Asynchronous support
-                  gnus-asynchronous                  t
-                  gnus-use-demon                     nil
-
-                  ;; Default levels
-                  gnus-activate-level                2
-                  gnus-group-default-list-level      3
-
-                  ;; Enable checking news groups
-                  gnus-check-new-newsgroups          t
-
-                  ;; Dont ask question on exit
-                  gnus-interactive-catchup           nil
-                  gnus-interactive-exit              nil
-
-                  ;; Add Unix mbox'es (mbsync); in case we have local email
-                  gnus-select-method                 '(nnnil "") ;; my/gnus-local
-
-                  ;; Show email INBOX
-                  gnus-permanently-visible-groups    "local"
-
-                  ;; Secondary sources
-                  gnus-secondary-select-methods      my/gnus-local
-
-                  ;; Archive methods
-                  gnus-message-archive-method        gnus-select-method
 
                   ;; Display a button for MIME parts
                   gnus-inhibit-mime-unbuttonizing    t
@@ -123,10 +104,7 @@
                                                    "%0{ %}(%2t)"
                                                    "%2{ %}%-23,23n"
                                                    "%1{ %}%1{%B%}%2{%-102,102s%}%-140="
-                                                   "\n")
-
-                  ;; A gravatar is an image registered to an e-mail address
-                  gnus-treat-from-gravatar           t)
+                                                   "\n"))
 
             ;; Use gnus for email
             (setq mail-user-agent             'gnus-user-agent)
@@ -174,16 +152,6 @@
                 (gnus-summary-save-parts ".*" directory arg)
                 (message "Saving all MIME parts to %s...done" directory)))))
 
-;; To be able to send email with your gmail/smtp mail
-(use-package smtpmail
-  :after gnus
-  :custom ((message-send-mail-function 'smtpmail-send-it)
-           (send-mail-function         'smtpmail-send-it)
-           (smtpmail-smtp-server       "smtp.gmail.com")
-           (smtpmail-smtp-service      465)
-           (smtpmail-debug-info        t)
-           (smtpmail-stream-type       'ssl)))
-
 ;; apel
 (use-package apel
   :defer t)
@@ -212,7 +180,6 @@
            (message-kill-buffer-on-exit    t)
            (message-signature-file         ".signature"))
   :config (progn
-
             ;; decode html
             (use-package mm-decode
               :demand t

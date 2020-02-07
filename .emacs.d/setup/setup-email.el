@@ -1,6 +1,6 @@
 ;;; setup-email.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -24,144 +24,16 @@
 
 ;;; Code:
 
-;; Wanderlust
-(use-package wl
-  :disabled t
-  :after std11
-  :commands (wl
-             wl-draft
-             wl-other-frame)
-  :config (progn
-
-            ;; Location for custom scripts
-            (setq wl-root-dir (file-name-as-directory
-                               (concat (file-name-as-directory
-                                        my/emacs-cache-dir)
-                                       "wanderlust")))
-
-            ;; Assure wanderlust directory exists
-            (if (not (file-exists-p  (concat (file-name-as-directory
-                                              my/emacs-cache-dir)
-                                             "wanderlust")))
-                (make-directory  (concat (file-name-as-directory
-                                          my/emacs-cache-dir)
-                                         "wanderlust") t))
-
-            ;; General settings
-            (setq elmo-maildir-folder-path "~/Maildir"  ;; where i store my mail
-                  wl-stay-folder-window t               ;; show the folder pane (left)
-                  wl-folder-window-width 25             ;; toggle on/off with 'i'
-
-                  ;; Domains
-                  wl-local-domain my/user-domain
-                  wl-message-id-domain my/user-domain
-
-                  ;; From entry
-                  wl-from my/user-email
-
-                  ;; note: all below are dirs (Maildirs) under elmo-maildir-folder-path
-                  ;; the '.'-prefix is for marking them as maildirs
-                  wl-fcc ".[Gmail].Sent Mail"             ;; sent msgs go to the "sent"-folder
-                  wl-fcc-force-as-read t                  ; mark sent messages as read
-                  wl-default-folder ".INBOX"              ;; my main inbox
-                  wl-sent-folder ".[Gmail].Sent Mail"     ;; sent emails
-                  wl-draft-folder ".[Gmail].Drafts"       ;; store drafts in 'postponed'
-                  wl-trash-folder ".[Gmail].Bin"          ;; put trash in 'trash'
-                  wl-spam-folder ".[Gmail].Bin"
-                  wl-queue-folder ".Queue"                 ;; we don't use this
-
-                  wl-draft-reply-buffer-style 'full
-                  wl-summary-toggle-mime "mime"
-
-                  ;; Folders
-                  wl-folder-check-async t
-
-                  ;; Forwarded mails should use 'Fwd:', not 'Forward:'
-                  wl-forward-subject-prefix "Fwd: "
-
-                  ;; Show sent mail by who it was to
-                  wl-summary-showto-folder-regexp ".*"
-                  wl-summary-from-function 'wl-summary-default-from
-
-                  ;; hide many fields from message buffers
-                  wl-message-ignored-field-list '("^.*:")
-                  wl-message-visible-field-list
-                  '("^\\(To\\|Cc\\):"
-                    "^Subject:"
-                    "^\\(From\\|Reply-To\\):"
-                    "^Organization:"
-                    "^Message-Id:"
-                    "^\\(Posted\\|Date\\):")
-                  wl-message-sort-field-list
-                  '("^From"
-                    "^Organization:"
-                    "^X-Attribution:"
-                    "^Subject"
-                    "^Date"
-                    "^To"
-                    "^Cc"))
-
-            ;; File locations
-            (setq wl-init-file (concat wl-root-dir "wl.el")
-                  wl-folders-file (concat wl-root-dir "folders"))
-
-            ;; Look in zip files as if they are folders
-            (setq elmo-archive-treat-file t)
-
-            ;; from a WL-mailinglist post by David Bremner
-            ;; Invert behaviour of with and without argument replies.
-            (setq wl-draft-reply-without-argument-list
-                  '(("Reply-To" ("Reply-To") nil nil)
-                    ("Mail-Reply-To" ("Mail-Reply-To") nil nil)
-                    ("From" ("From") nil nil)))
-
-            ;; Bombard the world
-            (setq wl-draft-reply-with-argument-list
-                  '(("Followup-To" nil nil ("Followup-To"))
-                    ("Mail-Followup-To" ("Mail-Followup-To") nil ("Newsgroups"))
-                    ("Reply-To" ("Reply-To") ("To" "Cc" "From") ("Newsgroups"))
-                    ("From" ("From") ("To" "Cc") ("Newsgroups"))))
-
-            ;; suggested by Masaru Nomiya on the WL mailing list
-            (defun my/wl-draft-subject-check ()
-              "check whether the message has a subject before sending"
-              (if (and (< (length (std11-field-body "Subject")) 1)
-                       (null (y-or-n-p "No subject! Send current draft?")))
-                  (error "Abort.")))
-
-            ;; It's not uncommon to forget to add a subject or an attachment when you send a mail
-            ;; note, this check could cause some false positives; anyway, better
-            ;; safe than sorry...
-            (defun my/wl-draft-attachment-check ()
-              "if attachment is mention but none included, warn the the user"
-              (save-excursion
-                (goto-char 0)
-                (unless ;; don't we have an attachment?
-
-                    (re-search-forward "^Content-Disposition: attachment" nil t)
-                  (when ;; no attachment; did we mention an attachment?
-                      (re-search-forward "attach" nil t)
-                    (unless (y-or-n-p "Possibly missing an attachment. Send current draft?")
-                      (error "Abort."))))))
-
-            (add-hook 'wl-mail-send-pre-hook #'my/wl-draft-subject-check)
-            (add-hook 'wl-mail-send-pre-hook #'my/wl-draft-attachment-check)
-
-            ;; Assure we use mu4e
-            (if (boundp 'mail-user-agent)
-                (setq mail-user-agent 'wl-user-agent))
-            (if (fboundp 'define-mail-user-agent)
-                (define-mail-user-agent
-                  'wl-user-agent
-                  'wl-user-agent-compose
-                  'wl-draft-send
-                  'wl-draft-kill
-                  'mail-send-hook))
-
-            ;; Assure we use mu4e
-            (setq mail-user-agent 'wl-user-agent)
-            (setq read-mail-command 'wl-user-agent)
-            (setq gnus-dired-mail-mode 'wl-user-agent)))
+;; To be able to send email with your gmail/smtp mail
+(use-package smtpmail
+  :after gnus
+  :custom ((message-send-mail-function         'smtpmail-send-it)
+           (send-mail-function                 'smtpmail-send-it)
+           (smtpmail-default-smtp-server       "smtp.gmail.com")
+           (smtpmail-smtp-server               "smtp.gmail.com")
+           (smtpmail-smtp-service              465)
+           (smtpmail-debug-info                t)
+           (smtpmail-stream-type               'ssl)))
 
 ;; mu4e (asynchronous email client)
 (use-package mu4e
@@ -169,28 +41,28 @@
   :if (executable-find "mu")
   :load-path (lambda () (expand-file-name "mu/mu4e/" user-emacs-directory))
   :commands mu4e
-  :init (progn
-          ;; Assure mu4e exists
-          (if (not (file-exists-p my/mu4e-maildir))
-              (make-directory my/mu4e-maildir) t))
+  :init (if (not (file-exists-p my/mu4e-maildir))
+            (make-directory my/mu4e-maildir) t)
+  :custom ((mu4e-headers-skip-duplicates      t)
+           (mu4e-use-fancy-chars              t)
+           (mu4e-view-show-images             t)
+           (mu4e-hide-index-messages          t)
+           (mu4e-auto-retrieve-keys           t)
+           (mu4e-compose-dont-reply-to-self   t)
+           (mu4e-compose-in-new-frame         t)
+           (mu4e-split-view                   'horizontal)
+           (mu4e-headers-visible-columns      122)
+           (mu4e-headers-visible-lines        16)
+           (mu4e-context-policy               'pick-first)
+           (mu4e-compose-context-policy       'ask)
+           (mu4e-change-filenames-when-moving t)
+           (mu4e-confirm-quit                 nil)
+           (mu4e-update-interval              nil)
+           (mu4e-use-fancy-chars              t)
+           (mu4e-compose-format-flowed        nil))
   :config (progn
-            (setq mu4e-headers-skip-duplicates      t
-                  mu4e-use-fancy-chars              t
-                  mu4e-view-show-images             t
-                  mu4e-hide-index-messages          t
-                  mu4e-auto-retrieve-keys           t
-                  mu4e-compose-dont-reply-to-self   t
-                  mu4e-compose-in-new-frame         t
-                  mu4e-split-view                   'horizontal
-                  mu4e-headers-visible-columns      122
-                  mu4e-headers-visible-lines        16
-                  mu4e-context-policy               'pick-first
-                  mu4e-compose-context-policy       'ask
-                  mu4e-change-filenames-when-moving t
-                  mu4e-confirm-quit                 nil)
-
-            (setq mu4e-use-fancy-chars t
-                  mu4e-headers-draft-mark          '("D"  . "⚒  ") ;; draft
+            (setq mu4e-get-mail-command             "timelimit -t 180 -T 180 mbsync gmail")
+            (setq mu4e-headers-draft-mark          '("D"  . "⚒  ") ;; draft
                   mu4e-headers-seen-mark           '("S"  . "☑  ") ;; seen
                   mu4e-headers-unread-mark         '("u"  . "☐  ") ;; unseen
                   mu4e-headers-new-mark            '("N"  . "")
@@ -206,7 +78,7 @@
                   mu4e-headers-first-child-prefix  '("\\" . "▶")
                   mu4e-headers-has-child-prefix    '("+"  . "●"))
 
-            (setq mu4e-maildir my/mu4e-maildir
+            (setq mu4e-maildir       my/mu4e-maildir
                   mu4e-refile-folder "/[Gmail].Archive"
                   mu4e-drafts-folder "/[Gmail].Drafts"
                   mu4e-sent-folder   "/[Gmail].Sent Mail"
@@ -244,9 +116,6 @@
              'mu4e-bookmarks
              '("maildir:\"/[Gmail].Sent Mail\" AND date:7d..now"
                "Sent in last 7 days" ?s) t)
-
-            (setq mu4e-get-mail-command "timelimit -t 180 -T 180 mbsync gmail"
-                  mu4e-update-interval nil) ;; update interval in seconds
 
             (use-package mu4e-contrib
               :demand t
