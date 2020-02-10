@@ -204,6 +204,7 @@
              emamux:copy-kill-ring
              emamux:yank-from-list-buffers))
 
+;; Create buffer-associated terminals
 (use-package multi-term
   :defer t
   :commands (multi-term
@@ -225,6 +226,10 @@
             (split-window-below)
             (other-window 1)
             (multi-term))))
+
+;; Configuration files
+(use-package systemd
+  :mode (("\\.service$" . systemd-mode)))
 
 (provide 'setup-eshell)
 ;;; setup-eshell.el ends here

@@ -83,5 +83,8 @@
                         (setq yas-trigger-key [tab])
                         (add-to-list 'org-tab-first-hook 'yas--org-very-safe-expand)))))
 
+;; Competitive snippets
+(use-package competitive-programming-snippets)
+
 (provide 'setup-yasnippet)
 ;;; setup-yasnippet.el ends here

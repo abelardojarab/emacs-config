@@ -1,0 +1,2 @@
+;;; Generated package description from /home/scratch.abelardoj_denver-info/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/lavenderless-theme-20200209.1132/lavenderless-theme.el  -*- no-byte-compile: t -*-
+(define-package "lavenderless-theme" "20200209.1132" "A colorless theme inspired by Lavender" '((colorless-themes "0.1")) :commit "1d03bb86aec39d34735749170f7ad17bc5efb4a5" :keywords '("faces" "theme") :authors '(("Thomas Letan" . "contact@thomasletan.fr")) :maintainer '("Thomas Letan" . "contact@thomasletan.fr") :url "https://git.sr.ht/~lthms/colorless-themes.el")
