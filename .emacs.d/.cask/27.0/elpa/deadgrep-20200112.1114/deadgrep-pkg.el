@@ -1,2 +1,0 @@
-;;; Generated package description from /home/scratch.abelardoj_denver-info/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/deadgrep-20200112.1114/deadgrep.el  -*- no-byte-compile: t -*-
-(define-package "deadgrep" "20200112.1114" "fast, friendly searching with ripgrep" '((emacs "25.1") (dash "2.12.0") (s "1.11.0") (spinner "1.7.3")) :commit "06764269582b2f844ae2a163d2fece8143b1c578" :keywords '("tools") :authors '(("Wilfred Hughes" . "me@wilfred.me.uk")) :maintainer '("Wilfred Hughes" . "me@wilfred.me.uk") :url "https://github.com/Wilfred/deadgrep")

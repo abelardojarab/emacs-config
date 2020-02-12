@@ -1,0 +1,2 @@
+;;; Generated package description from /home/scratch.abelardoj_denver-info/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/immaterial-theme-20200209.656/immaterial-theme.el  -*- no-byte-compile: t -*-
+(define-package "immaterial-theme" "20200209.656" "A flexible theme based on material design principles" '((emacs "25")) :commit "d2c0f07686e5cab73d30a79359523797e56b640d" :keywords '("themes") :authors '(("Peter Gardfjäll")) :maintainer '("Peter Gardfjäll") :url "https://github.com/petergardfjall/emacs-immaterial-theme")
