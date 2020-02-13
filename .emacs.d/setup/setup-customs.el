@@ -86,7 +86,7 @@
   :group 'my/customs
   :type 'string)
 
-(defcustom my/main-programming-font "Ubuntu Mono derivative Powerline"
+(defcustom my/main-programming-font "Cascadia Code"
   "Preferred programming font"
   :type 'string
   :group 'my/customs)
@@ -107,7 +107,7 @@
   :group 'my/customs)
 
 (defcustom my/emacs-theme
-  'vscdark
+  'vs-light
   "Preferred Emacs theme"
   :group 'my/customs
   :type 'list)

@@ -120,7 +120,13 @@
   :custom ((highlight-indent-guides-method                   'character)
            (highlight-indent-guides-responsive               'top)
            (highlight-indent-guides-delay                    0)
-           (highlight-indent-guides-auto-character-face-perc 7)))
+           (highlight-indent-guides-auto-character-face-perc 7))
+  :config (progn
+            (when (display-graphic-p)
+              (setq highlight-indent-guides-auto-enabled nil)
+              (set-face-background 'highlight-indent-guides-odd-face "lightgray")
+              (set-face-background 'highlight-indent-guides-even-face "lightgray")
+              (set-face-foreground 'highlight-indent-guides-character-face "dimgray"))))
 
 ;; Highlight indentation levels
 (use-package highlight-indentation
@@ -128,5 +134,3 @@
   :commands highlight-indentation-mode)
 
 (provide 'setup-indent)
-
-;;; setup-indent.el ends here
