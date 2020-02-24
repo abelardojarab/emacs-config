@@ -1,6 +1,6 @@
 ;;; setup-calendar.el ---                            -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -26,10 +26,16 @@
 
 ;; Calendar and diary file
 (use-package calendar
-  :demand t
+  :defer t
+  :commands (calendar-mode)
   :hook ((calendar-today-visible      . calendar-mark-today)
          (diary-display-hook          . fancy-diary-display)
          (today-visible-calendar-hook . calendar-mark-today))
+  :custom ((calendar-set-date-style            'iso)
+           (calendar-week-start-day            1)
+           (calendar-view-diary-initially-flag t)
+           (calendar-mark-diary-entries-flag   t)
+           (calendar-today-marker              'calendar-today-face))
   :config (progn
             ;; Set up Org default files
             (let ((todo_workspace "~/workspace/Documents/Org/todo.org")
@@ -46,13 +52,7 @@
                       (setq org-directory "~/workspace/Documents/Org")
                     (setq org-directory "~/Google Drive/Documents/Org")))))
 
-            (setq diary-file                         (concat org-directory "/agenda.org")
-                  diary-date-forms                   diary-iso-date-forms
-                  calendar-set-date-style            'iso
-                  calendar-week-start-day            1
-                  calendar-view-diary-initially-flag t
-                  calendar-mark-diary-entries-flag   t
-                  calendar-today-marker              'calendar-today-face)
+            (setq diary-file (concat org-directory "/agenda.org"))
 
             ;; Enable Org date formatting
             (setq diary-date-forms (cons '(" *" "[<\* ]*" " *"
@@ -71,7 +71,8 @@
                                             omit-day-of-week-p)))
 
             ;; Enable diary file in Org mode
-            (setq org-agenda-include-diary (file-exists-p diary-file))))
+            (eval-after-load 'org-agenda
+              (setq org-agenda-include-diary (file-exists-p diary-file)))))
 
 (provide 'setup-calendar)
 ;;; setup-calendar.el ends here
