@@ -29,7 +29,6 @@
   :defer t
   :commands (calendar-mode)
   :hook ((calendar-today-visible      . calendar-mark-today)
-         (diary-display-hook          . fancy-diary-display)
          (today-visible-calendar-hook . calendar-mark-today))
   :custom ((calendar-set-date-style            'iso)
            (calendar-week-start-day            1)
