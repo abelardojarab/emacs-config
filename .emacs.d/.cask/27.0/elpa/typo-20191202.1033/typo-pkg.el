@@ -1,2 +1,0 @@
-;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/typo-20191202.1033/typo.el  -*- no-byte-compile: t -*-
-(define-package "typo" "20191202.1033" "Minor mode for typographic editing" 'nil :commit "54a9dbcfb24a146fd14232e927109eec59b50171" :keywords '("convenience" "wp") :authors '(("Jorgen Schaefer" . "forcer@forcix.cx")) :maintainer '("Jorgen Schaefer" . "forcer@forcix.cx") :url "https://github.com/jorgenschaefer/typoel")

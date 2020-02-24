@@ -1,2 +1,0 @@
-;;; Generated package description from /home/scratch.abelardoj_denver-info/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/colorless-themes-20200209.1132/colorless-themes.el  -*- no-byte-compile: t -*-
-(define-package "colorless-themes" "20200209.1132" "A macro to generate mostly colorless themes" 'nil :commit "1d03bb86aec39d34735749170f7ad17bc5efb4a5" :keywords '("faces themes" "faces") :authors '(("Thomas Letan" . "contact@thomasletan.fr")) :maintainer '("Thomas Letan" . "contact@thomasletan.fr") :url "https://git.sr.ht/~lthms/colorless-themes.el")

@@ -1,0 +1,2 @@
+;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/uuidgen-20200223.509/uuidgen.el  -*- no-byte-compile: t -*-
+(define-package "uuidgen" "20200223.509" "Provides various UUID generating functions" 'nil :commit "f096f35a6e1f27d2bc9e9093cd61dd97bc33f502" :keywords '("extensions" "lisp" "tools") :authors '(("Kan-Ru Chen" . "kanru@kanru.info")) :maintainer '("Kan-Ru Chen" . "kanru@kanru.info"))

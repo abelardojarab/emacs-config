@@ -1,2 +1,0 @@
-;;; Generated package description from /home/scratch.abelardoj_denver-info/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/centaur-tabs-20200207.1659/centaur-tabs.el  -*- no-byte-compile: t -*-
-(define-package "centaur-tabs" "20200207.1659" "Aesthetic, modern looking customizable tabs plugin" '((emacs "24.4") (powerline "2.4") (cl-lib "0.5")) :commit "0383af01742de0a33e5eab3d8fbcd0829db6c2f0" :authors '(("Emmanuel Bustos" . "ema2159@gmail.com")) :maintainer '("Emmanuel Bustos" . "ema2159@gmail.com") :url "https://github.com/ema2159/centaur-tabs")
