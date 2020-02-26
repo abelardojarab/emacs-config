@@ -28,11 +28,17 @@
 (use-package python
   :demand t
   ;; :ensure-system-package ((python-language-server . "pip3 install --user python-language-server")
+  ;;                         (epc                    . "pip3 install --user epc")
+  ;;                         (jedi                   . "pip3 install --user jedi")
   ;;                         (pyflakes               . "pip3 install --user pyflakes")
+  ;;                         (pylint                 . "pip3 install --user pylint")
   ;;                         (pycodestyle            . "pip3 install --user pycodestyle")
-  ;;                         (venv                   . "pip3 install --user venv")
+  ;;                         (virtualenv             . "pip3 install --user virtualenv")
+  ;;                         (pep8                   . "pip3 install --user pep8")
   ;;                         (autopep8               . "pip3 install --user autopep8")
   ;;                         (elpy                   . "pip3 install --user elpy")
+  ;;                         (rope                   . "pip3 install --user rope")
+  ;;                         (yapf                   . "pip3 install --user yapf")
   ;;                         (jedi                   . "pip3 install --user jedi"))
   :config (progn
             ;; Update imenu
