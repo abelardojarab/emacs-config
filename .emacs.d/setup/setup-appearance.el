@@ -1,6 +1,6 @@
 ;;; setup-appearance.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -228,6 +228,12 @@ all the buffers."
 ;; VSCode-style icons
 (use-package vscode-icon
   :commands (vscode-icon-for-file))
+
+;; Modern fringes
+(use-package modern-fringes
+  :if (display-graphic-p)
+  :hook (prog-mode . modern-fringes-mode)
+  :config (modern-fringes-invert-arrows))
 
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here

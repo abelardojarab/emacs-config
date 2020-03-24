@@ -278,6 +278,7 @@
 (depends-on "metaweblog")
 (depends-on "mocker")
 (depends-on "mode-icons")
+(depends-on "modern-fringes")
 (depends-on "mouse3")
 (depends-on "move-text")
 ;; (depends-on "mu")
