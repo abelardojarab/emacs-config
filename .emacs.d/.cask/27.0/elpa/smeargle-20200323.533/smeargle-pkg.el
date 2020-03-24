@@ -1,0 +1,2 @@
+;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/smeargle-20200323.533/smeargle.el  -*- no-byte-compile: t -*-
+(define-package "smeargle" "20200323.533" "Highlighting region by last updated time" '((emacs "24.3")) :commit "1c5c1e1d66aa96b818fbfcdf9fbec84e509b87be" :authors '(("Syohei YOSHIDA" . "syohex@gmail.com")) :maintainer '("Neil Okamoto" . "neil.okamoto+melpa@gmail.com") :url "https://github.com/emacsorphanage/smeargle")
