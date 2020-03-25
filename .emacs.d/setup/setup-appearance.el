@@ -235,5 +235,11 @@ all the buffers."
   :hook (prog-mode . modern-fringes-mode)
   :config (modern-fringes-invert-arrows))
 
+;; Ligatures
+(use-package fira-code-mode
+  :if (display-graphic-p)
+  :custom (fira-code-mode-disabled-ligatures '("[]" "#{" "#(" "#_" "#_(" "x")) ;; List of ligatures to turn off
+  :hook (prog-mode . fira-code-mode))
+
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here

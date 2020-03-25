@@ -147,6 +147,7 @@
 ;; (depends-on "fence-edit")
 (depends-on "filladapt")
 (depends-on "fill-column-indicator")
+(depends-on "fira-code-mode")
 (depends-on "flim")
 (depends-on "flycheck")
 (depends-on "flycheck-irony")
