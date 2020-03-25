@@ -26,7 +26,7 @@
 
 ;; Bookmark Plus
 (use-package bookmark
-  :defer t
+  :defer 10
   :custom (bookmark-save-flag 1)
   :config (progn
             (defadvice bookmark-load (around bar activate)
@@ -37,7 +37,7 @@
 
 ;; Visible bookmarks
 (use-package bm
-  :defer t
+  :defer 10
   :commands (bm-repository-load
              bm-buffer-restore
              bm-buffer-save
