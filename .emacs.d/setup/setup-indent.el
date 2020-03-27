@@ -25,6 +25,7 @@
 ;;; Code:
 
 ;; Set indent to 4 instead of 2
+(defvar my/tab-width 4)
 (setq standard-indent my/tab-width)
 
 ;; My personal configurations, has to use setq-default
