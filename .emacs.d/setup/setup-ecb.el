@@ -51,6 +51,11 @@
            (ecb-kill-buffer-clears-history             'auto)
            (ecb-tip-of-the-day                         nil))
   :config (progn
+            (when (display-graphic-p)
+              (with-eval-after-load 'ecb-face
+                ;; Use a slightly smaller face for the ECB tree-buffers.
+                (set-face-attribute 'ecb-default-general-face nil :height 0.9)))
+
             (defadvice semanticdb-deep-find-tags-by-name-method (around bar activate)
               (ignore-errors add-do-it))
 

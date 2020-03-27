@@ -183,13 +183,6 @@
           (when (bound-and-true-p magit-auto-revert-mode)
             (diminish 'magit-auto-revert-mode))
 
-          ;; Close popup when commiting
-          (defadvice git-commit-commit (after delete-window activate)
-            (delete-window))
-
-          (defadvice git-commit-abort (after delete-window activate)
-            (delete-window))
-
           ;; make magit status go full-screen but remember previous window
           (defadvice magit-status (around magit-fullscreen activate)
             (window-configuration-to-register :magit-fullscreen)
@@ -206,7 +199,8 @@
           (defun magit-quit-session ()
             "Restores the previous window configuration and kills the magit buffer"
             (interactive)
-            (kill-buffer))
+            (kill-buffer)
+            (jump-to-register :magit-fullscreen))
 
           ;; these two force a new line to be inserted into a commit window,
           ;; which stops the invalid style showing up.
