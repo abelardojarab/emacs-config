@@ -451,6 +451,7 @@
 (depends-on "darkokai-theme")
 (depends-on "eink-theme")
 (depends-on "eziam-theme")
+(depends-on "fantom-theme")
 (depends-on "flatui-theme")
 (depends-on "flucui-themes")
 (depends-on "github-theme")

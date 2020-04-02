@@ -1,6 +1,6 @@
 ;;; setup-org-plugins.el ---                         -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -35,6 +35,10 @@
   :defer t
   :config (defconst org-table-border-regexp "^[ \t]*[^|]"
             "Regexp matching any line outside an Org table."))
+
+;; Auto-align Org tables
+(use-package org-table-auto-align
+  :hook (org-mode .  org-table-auto-align-mode))
 
 ;; Use footnotes as eldoc source
 (use-package org-eldoc
