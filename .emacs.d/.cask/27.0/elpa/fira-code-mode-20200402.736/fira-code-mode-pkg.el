@@ -1,0 +1,2 @@
+;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/fira-code-mode-20200402.736/fira-code-mode.el  -*- no-byte-compile: t -*-
+(define-package "fira-code-mode" "20200402.736" "Minor mode for Fira Code ligatures using prettify-symbols" '((emacs "24.4")) :commit "152b67bfb3ed248c6926ea19158d24fafdf3446b" :keywords '("faces" "ligatures" "fonts" "programming-ligatures") :authors '(("Jonathan Ming" . "jming422@gmail.com")) :maintainer '("Jonathan Ming" . "jming422@gmail.com") :url "https://github.com/jming422/fira-code-mode")

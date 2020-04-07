@@ -1,2 +1,0 @@
-;;; Generated package description from /home/scratch.abelardoj_denver-info/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/oauth2-0.11/oauth2.el  -*- no-byte-compile: t -*-
-(define-package "oauth2" "0.11" "OAuth 2.0 Authorization Protocol" 'nil :url "http://elpa.gnu.org/packages/oauth2.html" :keywords '("comm") :authors '(("Julien Danjou" . "julien@danjou.info")) :maintainer '("Julien Danjou" . "julien@danjou.info"))
