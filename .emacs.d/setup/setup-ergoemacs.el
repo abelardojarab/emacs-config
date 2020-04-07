@@ -1,6 +1,6 @@
 ;;; setup-ergoemacs.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -26,12 +26,10 @@
 
 ;; Ergoemacs
 (use-package ergoemacs-mode-fixed
-  :defer t
-  :if (and (executable-find "gzip")
-           (display-graphic-p))
+  :defer 5
+  :if (executable-find "gzip")
   :commands (ergoemacs-mode
              ergoemacs-mode-after-init-emacs)
-  ;; :hook (after-init . ergoemacs-mode)
   :init (progn
           (setq ergoemacs-command-loop--modal-stack nil)
           (defun ergoemacs-command-loop--spinner-display (&optional string &rest args)
@@ -39,14 +37,14 @@
 
           (defun ergoemacs-command-loop--modal-p ()
             nil))
+  :custom ((ergoemacs-mode               "standard")
+           (ergoemacs-keyboard-layout    "us")
+           (ergoemacs-ignore-prev-global nil))
   :config (progn
             (defadvice ergoemacs-map--lookup-map (around bar activate)
               (ignore-errors add-do-it))
 
             (ergoemacs-mode-after-init-emacs)
-            (setq ergoemacs-theme              "standard"
-                  ergoemacs-keyboard-layout    "us"
-                  ergoemacs-ignore-prev-global nil)
             (ergoemacs-mode t)))
 
 (provide 'setup-ergoemacs)
