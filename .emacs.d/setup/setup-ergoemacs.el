@@ -27,7 +27,8 @@
 ;; Ergoemacs
 (use-package ergoemacs-mode-fixed
   :defer 5
-  :if (executable-find "gzip")
+  :if (and (executable-find "gzip")
+           (display-graphic-p))
   :commands (ergoemacs-mode
              ergoemacs-mode-after-init-emacs)
   :init (progn

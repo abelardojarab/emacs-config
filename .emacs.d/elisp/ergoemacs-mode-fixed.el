@@ -105,14 +105,10 @@
 (declare-function pcache-clear "pcache")
 (declare-function pcache-repository "pcache")
 
-
 ;; Fundamental ergoemacs functions
-
 
 ;; (unless (featurep 'ergoemacs-map)
 ;;   (load "ergoemacs-map"))
-
-
 
 ;; Ergoemacs-keybindings version
 (defconst ergoemacs-mode-version "5.14.7.3"
