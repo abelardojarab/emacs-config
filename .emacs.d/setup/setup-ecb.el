@@ -214,10 +214,6 @@ little more place."
                       (defadvice speedbar-item-load (after speedbar-highlight-file activate)
                         (projectile-speedbar-open-current-buffer-in-tree))))))
 
-;; Activate ECB in console mode
-(if (display-graphic-p)
-    (add-hook 'after-init-hook #'my/ecb-activate))
-
 (use-package treemacs
   :defer t
   :commands treemacs
