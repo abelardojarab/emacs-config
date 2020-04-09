@@ -237,6 +237,7 @@ all the buffers."
 
 ;; Ligatures
 (use-package fira-code-mode
+  :disabled t
   :if (display-graphic-p)
   :custom (fira-code-mode-disabled-ligatures '("[]" "#{" "#(" "#_" "#_(" "x")) ;; List of ligatures to turn off
   :hook (prog-mode . fira-code-mode))
