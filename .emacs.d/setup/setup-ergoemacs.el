@@ -33,6 +33,9 @@
              ergoemacs-mode-after-init-emacs)
   :init (progn
           (setq ergoemacs-command-loop--modal-stack nil)
+          (use-package ergoemacs-command-loop
+            :demand t)
+
           (defun ergoemacs-command-loop--spinner-display (&optional string &rest args)
             t)
 
