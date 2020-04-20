@@ -33,7 +33,13 @@
 
 ;; Docker allows for interaction with the Docker distribution
 (use-package docker
-  :bind ("C-c d" . hydra-docker/body)
+  :defer t
+  :commands (docker-containers
+             docker-volumes
+             docker-networks
+             docker-build
+             docker-build-buffer)
+  :bind ("C-c d" . docker-containers)
   :config (defhydra hydra-docker (:columns 5 :color blue)
             "Docker"
             ("c" docker-containers "Containers")

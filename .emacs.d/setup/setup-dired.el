@@ -32,7 +32,8 @@
              my/dired-mode-hook)
   :hook ((dired-mode . my/dired-mode-hook)
          (dired-mode . my/dired-imenu-init))
-  :bind (("C-x C-j"  . dired-jump)
+  :bind ((("C-x C-j"  . dired-jump)
+          ("C-c C-d"  . my/window-dired-vc-root-left)
          :map dired-mode-map
          (("u"       . dired-up-directory)
           ("RET"     . dired-find-alternate-file)
@@ -47,6 +48,20 @@
            (dired-dwim-target                   t)
            (dired-ls-F-marks-symlinks           t)
            (dired-auto-revert-buffer            t))
+  :init (defun my/window-dired-vc-root-left ()
+          "Open root directory of current version-controlled repository
+or the present working directory with `dired' and bespoke window
+parametersg."
+          (interactive)
+          (let ((dir (if (eq (vc-root-dir) nil)
+                         (dired-noselect default-directory)
+                       (dired-noselect (vc-root-dir)))))
+            (display-buffer-in-side-window
+             dir `((side . left)
+                   (slot . 0)
+                   (window-width . 0.15)))
+            (with-current-buffer dir
+              (rename-buffer "*Dired-Side*"))))
   :config (progn
 
             ;; toggle `dired-omit-mode' with C-x M-o
