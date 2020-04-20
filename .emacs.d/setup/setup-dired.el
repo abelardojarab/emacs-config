@@ -33,7 +33,7 @@
   :hook ((dired-mode . my/dired-mode-hook)
          (dired-mode . my/dired-imenu-init))
   :bind ((("C-x C-j"  . dired-jump)
-          ("C-c C-d"  . my/window-dired-vc-root-left)
+          ("C-c C-d"  . my/window-dired-vc-root-left))
          :map dired-mode-map
          (("u"       . dired-up-directory)
           ("RET"     . dired-find-alternate-file)
