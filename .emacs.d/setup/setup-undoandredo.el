@@ -160,5 +160,11 @@ Ask for the file name in the interactive case."
                     (undo-tree-recircle buffer-undo-tree))
                   return-string)))))
 
+;; Move through edit points
+(use-package goto-chg
+  :defer t
+  :commands (goto-last-change
+             goto-last-change-reverse))
+
 (provide 'setup-undoandredo)
 ;;; setup-undoandredo.el ends here

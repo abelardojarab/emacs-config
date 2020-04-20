@@ -285,5 +285,9 @@
            (display-line-numbers-mode -1))
        (advice-eval-interactive-spec spec)))))
 
+;; Clean stale buffers periodically
+(use-package midnight
+  :hook (after-init . midnight-mode))
+
 (provide 'setup-general)
 ;;; setup-general.el ends here
