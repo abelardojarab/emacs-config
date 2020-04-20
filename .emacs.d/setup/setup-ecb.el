@@ -217,9 +217,12 @@ little more place."
 (use-package treemacs
   :defer t
   :commands treemacs
-  :init (setq treemacs-persist-file (concat (file-name-as-directory
-                                             my/emacs-cache-dir)
-                                            "treemacs-persist"))
+  :init (progn
+          (setq treemacs-persist-file (concat (file-name-as-directory
+                                               my/emacs-cache-dir)
+                                              "treemacs-persist"))
+          (use-package treemacs-interface
+            :commands treemacs--maybe-move-forward))
   :bind (:map ctl-x-map
               ("t"   .   treemacs))
   :custom ((treemacs-position                     'left)

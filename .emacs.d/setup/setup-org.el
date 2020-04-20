@@ -106,6 +106,7 @@
                         (progn
                           (linum-mode         -1)
                           (org-indent-mode    -1)
+                          (abbrev-mode        t)
                           (flyspell-mode      t)
                           (writegood-mode     t))))
 

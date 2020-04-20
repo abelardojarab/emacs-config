@@ -1,6 +1,6 @@
 ;;; setup-org-babel.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018, 2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -25,6 +25,7 @@
 ;;; Code:
 
 (use-package ob
+  :defer t
   :after org
   :custom ((org-src-tab-acts-natively    t)
            (org-src-fontify-natively     t)
@@ -86,7 +87,6 @@
                          '("plantuml" . puml))
 
             ;; Abbrev
-            (add-hook 'org-mode-hook (lambda () (abbrev-mode 1)))
             (define-skeleton skel-org-block-elisp
               "Insert an emacs-lisp block"
               ""

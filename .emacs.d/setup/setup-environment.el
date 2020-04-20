@@ -1,6 +1,6 @@
 ;;; setup-environment.el ---                 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -59,6 +59,8 @@
            (register-separator                    "\n\n")
            (history-delete-duplicates             t))
   :init (progn
+          ;; Disable garbage collection messages
+          (setq garbage-collection-messages nil)
 
           ;; Assure cache directory exists
           (if (not (file-exists-p  my/emacs-cache-dir))
@@ -327,6 +329,13 @@ LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
            (display-time-24hr-format          t)
            (display-time-use-mail-icon        t))
   :config (display-time-mode t))
+
+(use-package gcmh
+  :demand t
+  :delight gcmh-mode
+  :commands gcmh-mode
+  :custom (gcmh-verbose t)
+  :config (gcmh-mode 1))
 
 (provide 'setup-environment)
 ;;; setup-environment.el ends here

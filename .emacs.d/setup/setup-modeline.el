@@ -1,6 +1,6 @@
 ;;; setup-modeline.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2019 Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020 Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -78,6 +78,12 @@
            (doom-modeline-icon            t)
            (doom-modeline-major-mode-icon t)
            (doom-modeline-minor-modes     nil)))
+
+;; Improved list of minor-modes and related menus
+(use-package minions
+  :demand t
+  :commands minions-mode
+  :config (minions-mode 1))
 
 (provide 'setup-modeline)
 ;;; setup-modeline.el ends here

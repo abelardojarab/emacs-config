@@ -110,8 +110,15 @@ corresponding `.el' file."
     :commands pallet-mode
     :config (pallet-mode t)))
 
+;; Asynchronous bytecode compilation
+(use-package async
+  :defer t
+  :init (use-package async-bytecomp
+          :commands async-bytecomp-package-mode
+          :config (async-bytecomp-package-mode 1))
+  :custom (async-bytecomp-allowed-packages '(all)))
+
 ;; Essential packages
-(use-package async               :defer t)
 (use-package buttercup           :defer t)
 (use-package ctable              :defer t)
 (use-package dash                :defer t)
@@ -178,7 +185,7 @@ corresponding `.el' file."
 
 ;; Get ensure package support
 (use-package use-package-ensure-system-package
-   :demand t)
+  :demand t)
 
 ;; Auto-compile .el files on load
 (use-package auto-compile

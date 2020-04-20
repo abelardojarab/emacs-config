@@ -1,0 +1,2 @@
+;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/orgtbl-ascii-plot-20200411.711/orgtbl-ascii-plot.el  -*- no-byte-compile: t -*-
+(define-package "orgtbl-ascii-plot" "20200411.711" "ascii-art bar plots in org-mode tables" 'nil :commit "59618630205fc8c0fcc74fb34c4581d9712a5181" :keywords '("org" "table" "ascii" "plot") :authors '(("Thierry Banel  tbanelwebmin at free dot fr") ("Michael Brand")) :maintainer '("Thierry Banel  tbanelwebmin at free dot fr"))

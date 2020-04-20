@@ -1,0 +1,2 @@
+;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/conda-20200420.1418/conda.el  -*- no-byte-compile: t -*-
+(define-package "conda" "20200420.1418" "Work with your conda environments" '((emacs "24.4") (pythonic "0.1.0") (dash "2.13.0") (s "1.11.0") (f "0.18.2")) :commit "f187948f7bda856befb54a08473c9aae3e595c8a" :keywords '("python" "environment" "conda") :authors '(("Rami Chowdhury" . "rami.chowdhury@gmail.com")) :maintainer '("Rami Chowdhury" . "rami.chowdhury@gmail.com") :url "http://github.com/necaris/conda.el")
