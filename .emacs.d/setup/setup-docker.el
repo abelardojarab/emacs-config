@@ -29,16 +29,32 @@
   :mode "\\Dockerfile\\'")
 
 ;; Allows TRAMP connections into running containers
-(use-package docker-tramp)
+(use-package docker-tramp
+  :after tramp
+  :defer 5)
 
 ;; Docker allows for interaction with the Docker distribution
 (use-package docker
   :defer t
+  :diminish t
   :commands (docker-containers
              docker-volumes
              docker-networks
              docker-build
              docker-build-buffer)
+  :init (progn
+          (use-package docker-image
+            :commands docker-images)
+          (use-package docker-container
+            :commands docker-containers)
+          (use-package docker-volume
+            :commands docker-volumes)
+          (use-package docker-network
+            :commands docker-containers)
+          (use-package docker-machine
+            :commands docker-machines)
+          (use-package docker-compose
+            :commands docker-compose))
   :bind ("C-c d" . docker-containers)
   :config (defhydra hydra-docker (:columns 5 :color blue)
             "Docker"
@@ -48,6 +64,11 @@
             ("n" docker-networks "Networks")
             ("b" dockerfile-build-buffer "Build Buffer")
             ("q" nil "Quit")))
+
+;; Docker compose files
+(use-package docker-compose-mode
+  :defer t
+  :mode ("docker-compose.*\.yml\\'" . docker-compose-mode))
 
 (provide 'setup-docker)
 ;;; setup-org-docker.el ends here

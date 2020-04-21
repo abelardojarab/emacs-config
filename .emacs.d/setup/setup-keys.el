@@ -24,9 +24,14 @@
 
 ;;; Code:
 
+;; Show freen keybindings for minor modes
+(use-package free-keys
+  :defer t
+  :commands free-keys)
+
 ;; As in Windows, replace after typing a letter
 (use-package delsel
-  :config (delete-selection-mode 1))
+  :hook (after-init . delete-selection-mode))
 
 ;; Windows-like mouse/arrow movement & selection
 (use-package cua-base
