@@ -444,14 +444,17 @@
 (use-package git-gutter
   :if (executable-find "git")
   :diminish git-gutter-mode
-  :init (global-git-gutter-mode t)
   :commands (global-git-gutter-mode
              git-gutter:stage-hunk
              git-gutter:next-hunk
              git-gutter:previous-hunk
              hydra-git-gutter/body)
-  :hook (magit-post-refresh . git-gutter:update-all-windows)
+  :custom (git-gutter:update-interval 5)
+  :hook ((magit-post-refresh . git-gutter:update-all-windows)
+         (after-init         . global-git-gutter-mode))
   :config (progn
+            ;; Set the foreground color of modified lines to something obvious
+            (set-face-foreground 'git-gutter:modified "purple")
 
             ;; Hydra binding for git-gutter
             (defhydra hydra-git-gutter (:body-pre (git-gutter-mode 1)
@@ -494,9 +497,9 @@ Git gutter:
                         (setq-default left-fringe-width  20)
                         (setq-default right-fringe-width 20)
                         (setq git-gutter-fr:side 'left-fringe)
-                        (set-face-foreground 'git-gutter-fr:modified "yellow")
-                        (set-face-foreground 'git-gutter-fr:added    "blue")
-                        (set-face-foreground 'git-gutter-fr:deleted  "white")
+                        (set-face-foreground 'git-gutter-fr:modified "purple")
+                        (set-face-foreground 'git-gutter-fr:added    "yellow")
+                        (set-face-foreground 'git-gutter-fr:deleted  "red")
 
                         (fringe-helper-define 'git-gutter-fr:added nil
                           ".XXXXXX."
