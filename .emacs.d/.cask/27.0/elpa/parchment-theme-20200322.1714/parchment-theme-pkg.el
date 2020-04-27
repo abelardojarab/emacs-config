@@ -1,2 +1,0 @@
-;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/parchment-theme-20200322.1714/parchment-theme.el  -*- no-byte-compile: t -*-
-(define-package "parchment-theme" "20200322.1714" "Light theme inspired by Acme and Leuven" '((autothemer "0.2")) :commit "bf158a064e4a00a47d24ed0c1725204ce6675064" :authors '(("Alex Griffin" . "a@ajgrf.com")) :maintainer '("Alex Griffin" . "a@ajgrf.com") :url "https://github.com/ajgrf/parchment")

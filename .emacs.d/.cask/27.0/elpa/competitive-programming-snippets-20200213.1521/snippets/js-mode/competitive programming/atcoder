@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name : AtCoder starting template
+# key: atcoder
+# --
+
+/**
+ * @file $1
+ * @author Seong Yong-ju <sei40kr@gmail.com>
+ */
+
+function main(input) {
+}
+
+main(require('fs').readFileSync('/dev/stdin', 'utf8'));
+$0

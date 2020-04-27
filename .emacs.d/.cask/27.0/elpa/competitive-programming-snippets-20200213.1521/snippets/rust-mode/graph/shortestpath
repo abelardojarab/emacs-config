@@ -1,0 +1,47 @@
+# -*- mode: snippet -*-
+# name: shortest path
+# contributor: Nakamura Kenko
+# key: shortestpath
+# --
+pub mod bellman_ford {
+    pub fn shortest_path(
+        graph: &Vec<Vec<(usize, i64)>>,
+        start: usize,
+        inf: i64,
+    ) -> (Vec<i64>, Vec<bool>) {
+        let n = graph.len();
+        let mut dist = vec![inf; n];
+        dist[start] = 0;
+        for _ in 0..n {
+            for v in 0..n {
+                for &(to, cost) in &graph[v] {
+                    if dist[v] == inf || dist[to] <= dist[v] + cost {
+                        continue;
+                    }
+                    dist[to] = dist[v] + cost;
+                }
+            }
+        }
+
+        let mut negative = vec![false; n];
+        for _ in 0..n {
+            for v in 0..n {
+                for &(to, cost) in &graph[v] {
+                    if dist[v] == inf {
+                        continue;
+                    }
+                    if dist[to] > dist[v] + cost {
+                        dist[to] = dist[v] + cost;
+                        negative[to] = true;
+                    }
+                    if negative[v] {
+                        negative[to] = true;
+                    }
+                }
+            }
+        }
+
+        return (dist, negative);
+    }
+}
+

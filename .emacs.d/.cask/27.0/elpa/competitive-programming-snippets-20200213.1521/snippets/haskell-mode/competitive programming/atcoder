@@ -1,0 +1,26 @@
+# -*- mode: snippet -*-
+# name : AtCoder starting template
+# key: atcoder
+# --
+
+import Control.Applicative
+import Control.Monad
+import Data.Array
+import Data.Bits
+import Data.Int
+import qualified Data.IntMap.Lazy as IntMap
+import Data.IntSet
+import Data.List
+import qualified Data.Map.Lazy as Map
+import Data.Maybe
+import Data.Ord
+import Data.Sequence
+import Data.Tuple
+
+-- `(file-name-nondirectory (buffer-file-name))` --- $0
+
+-- author: Seong Yong-ju <sei40kr@gmail.com>
+
+main :: IO ()
+main = do
+  print ans

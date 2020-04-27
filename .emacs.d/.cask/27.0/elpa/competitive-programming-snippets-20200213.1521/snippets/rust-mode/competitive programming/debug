@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: debug macro
+# contributor: hatoo
+# key: debug
+# --
+
+#[allow(unused_macros)]
+macro_rules! debug {
+  ($($a:expr),*) => {
+    println!(concat!($(stringify!($a), " = {:?}, "),*), $($a),*);
+  }
+}

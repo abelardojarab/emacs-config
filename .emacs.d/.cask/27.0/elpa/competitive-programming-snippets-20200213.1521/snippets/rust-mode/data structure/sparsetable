@@ -1,0 +1,50 @@
+# -*- mode: snippet -*-
+# name: sparse table
+# contributor: Nakamura Kenko
+# key: sparsetable
+# --
+pub mod sparse_table {
+
+    pub struct SparseTable<T, F> {
+        data: Vec<Vec<T>>,
+        op: F,
+    }
+
+    impl<T, F> SparseTable<T, F>
+    where
+        T: Copy,
+        F: Fn(T, T) -> T,
+    {
+        pub fn from(v: &[T], init: T, op: F) -> Self {
+            let size = v.len().next_power_of_two();
+            let count = size.trailing_zeros() as usize + 1;
+            let mut data = vec![vec![init; size]; count];
+            for (i, v) in v.iter().cloned().enumerate() {
+                data[0][i] = v;
+            }
+            for c in 1..count {
+                for i in 0..size {
+                    let next = std::cmp::min(size - 1, i + (1 << (c - 1)));
+                    data[c][i] = op(data[c - 1][i], data[c - 1][next]);
+                }
+            }
+
+            Self { data: data, op: op }
+        }
+
+        /// get the result for [l, r)
+        pub fn get(&self, l: usize, r: usize) -> T {
+            assert!(l < r);
+            let length = r - l;
+            if length == 1 {
+                return self.data[0][l];
+            }
+            let block_size = length.next_power_of_two() >> 1;
+            let c = block_size.trailing_zeros() as usize;
+            let left = self.data[c][l];
+            let right = self.data[c][r - block_size];
+            (self.op)(left, right)
+        }
+    }
+}
+

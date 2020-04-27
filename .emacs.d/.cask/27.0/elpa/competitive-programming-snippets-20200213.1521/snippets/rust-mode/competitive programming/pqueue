@@ -1,0 +1,27 @@
+# -*- mode: snippet -*-
+# name : Priority Queue
+# contributor : Seong Yong-ju <sei40kr@gmail.com>
+# key: pqueue
+# --
+
+use std::cmp::Ordering;
+
+#[derive(Copy, Clone, Eq, PartialEq)]
+struct State {
+    cost: u32,
+}
+
+impl Ord for State {
+    fn cmp(&self, other: &State) -> Ordering {
+        self.cost.cmp(&other.cost)
+    }
+}
+
+impl PartialOrd for State {
+    fn partial_cmp(&self, other: &State) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+// let mut queue = BinaryHeap::<State>::new();
+// queue.push(State { cost: 0 });

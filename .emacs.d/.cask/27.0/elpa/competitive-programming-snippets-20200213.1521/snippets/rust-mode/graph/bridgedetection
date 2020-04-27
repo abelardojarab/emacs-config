@@ -1,0 +1,75 @@
+# -*- mode: snippet -*-
+# name: bridge detection
+# contributor: Nakamura Kenko
+# key: bridgedetection
+# --
+pub struct BridgeDetector {
+    articulations: Vec<usize>,
+    bridges: Vec<(usize, usize)>,
+    visit: Vec<bool>,
+    order: Vec<usize>,
+    low_link: Vec<usize>,
+    k: usize,
+}
+
+impl BridgeDetector {
+    pub fn new(graph: &Vec<Vec<usize>>) -> Self {
+        let n = graph.len();
+        let mut d = BridgeDetector {
+            articulations: vec![],
+            bridges: vec![],
+            visit: vec![false; n],
+            order: vec![0; n],
+            low_link: vec![0; n],
+            k: 0,
+        };
+        d.run(graph);
+        d
+    }
+
+    fn run(&mut self, graph: &Vec<Vec<usize>>) {
+        let n = graph.len();
+        for i in 0..n {
+            if !self.visit[i] {
+                self.dfs(i, 0, graph, i);
+            }
+        }
+    }
+
+    fn dfs(&mut self, v: usize, previous: usize, graph: &Vec<Vec<usize>>, root: usize) {
+        self.visit[v] = true;
+        self.order[v] = self.k;
+        self.k += 1;
+        self.low_link[v] = self.order[v];
+
+        let mut is_articulation = false;
+        let mut dimension = 0;
+        for &next in graph[v].iter() {
+            if !self.visit[next] {
+                // The edge (v->next) is not a backedge.
+                dimension += 1;
+                self.dfs(next, v, graph, root);
+                self.low_link[v] = std::cmp::min(self.low_link[v], self.low_link[next]);
+                if v != root && self.order[v] <= self.low_link[next] {
+                    is_articulation = true;
+                }
+                if self.order[v] < self.low_link[next] {
+                    let min = std::cmp::min(v, next);
+                    let max = std::cmp::max(v, next);
+                    self.bridges.push((min, max));
+                }
+            } else if v == root || next != previous {
+                // The edge (v->next) is a back-edge.
+                self.low_link[v] = std::cmp::min(self.low_link[v], self.order[next]);
+            }
+        }
+
+        if v == root && dimension > 1 {
+            is_articulation = true;
+        }
+        if is_articulation {
+            self.articulations.push(v);
+        }
+    }
+}
+

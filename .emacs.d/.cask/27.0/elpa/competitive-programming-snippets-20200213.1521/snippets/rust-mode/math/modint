@@ -1,0 +1,150 @@
+# -*- mode: snippet -*-
+# name: mod int
+# contributor: Nakamura Kenko
+# key: modint
+# --
+pub mod mod_int {
+    use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
+
+    type Num = usize;
+    const MOD: Num = 1_000_000_007;
+
+    #[derive(Clone, Copy)]
+    pub struct ModInt<T: Copy + Clone>(pub T);
+
+    impl Add<ModInt<Num>> for ModInt<Num> {
+        type Output = ModInt<Num>;
+        fn add(self, rhs: ModInt<Num>) -> ModInt<Num> {
+            self + rhs.0
+        }
+    }
+
+    impl Add<Num> for ModInt<Num> {
+        type Output = ModInt<Num>;
+        fn add(self, mut rhs: Num) -> ModInt<Num> {
+            if rhs >= MOD {
+                rhs %= MOD;
+            }
+            let mut t = rhs + self.0;
+            if t >= MOD {
+                t = t - MOD;
+            }
+            ModInt(t)
+        }
+    }
+
+    impl Sub<Num> for ModInt<Num> {
+        type Output = ModInt<Num>;
+        fn sub(self, rhs: Num) -> ModInt<Num> {
+            let rhs = if rhs >= MOD { rhs % MOD } else { rhs };
+            let value = if self.0 < rhs { self.0 + MOD } else { self.0 };
+            ModInt(value - rhs)
+        }
+    }
+
+    impl Sub<ModInt<Num>> for ModInt<Num> {
+        type Output = ModInt<Num>;
+        fn sub(self, rhs: ModInt<Num>) -> ModInt<Num> {
+            self - rhs.0
+        }
+    }
+
+    impl AddAssign<Num> for ModInt<Num> {
+        fn add_assign(&mut self, other: Num) {
+            *self = *self + other;
+        }
+    }
+    impl AddAssign<ModInt<Num>> for ModInt<Num> {
+        fn add_assign(&mut self, other: ModInt<Num>) {
+            *self = *self + other;
+        }
+    }
+
+    impl SubAssign<Num> for ModInt<Num> {
+        fn sub_assign(&mut self, other: Num) {
+            *self = *self - other;
+        }
+    }
+
+    impl SubAssign<ModInt<Num>> for ModInt<Num> {
+        fn sub_assign(&mut self, other: ModInt<Num>) {
+            *self = *self - other;
+        }
+    }
+
+    impl Div<Num> for ModInt<Num> {
+        type Output = ModInt<Num>;
+        fn div(self, mut rhs: Num) -> ModInt<Num> {
+            if rhs >= MOD {
+                rhs %= MOD;
+            }
+            self * ModInt(rhs).pow(MOD - 2)
+        }
+    }
+
+    impl Div<ModInt<Num>> for ModInt<Num> {
+        type Output = ModInt<Num>;
+        fn div(self, rhs: ModInt<Num>) -> ModInt<Num> {
+            self / rhs.0
+        }
+    }
+
+    impl DivAssign<Num> for ModInt<Num> {
+        fn div_assign(&mut self, rhs: Num) {
+            *self = *self / rhs
+        }
+    }
+    impl DivAssign<ModInt<Num>> for ModInt<Num> {
+        fn div_assign(&mut self, rhs: ModInt<Num>) {
+            *self = *self / rhs
+        }
+    }
+
+    impl Mul<ModInt<Num>> for ModInt<Num> {
+        type Output = ModInt<Num>;
+
+        fn mul(self, rhs: ModInt<Num>) -> ModInt<Num> {
+            self * rhs.0
+        }
+    }
+    impl Mul<Num> for ModInt<Num> {
+        type Output = ModInt<Num>;
+
+        fn mul(self, mut rhs: Num) -> ModInt<Num> {
+            if rhs >= MOD {
+                rhs %= MOD;
+            }
+            let t = (self.0 * rhs) % MOD;
+            ModInt(t)
+        }
+    }
+
+    impl MulAssign<Num> for ModInt<Num> {
+        fn mul_assign(&mut self, rhs: Num) {
+            *self = *self * rhs;
+        }
+    }
+
+    impl MulAssign<ModInt<Num>> for ModInt<Num> {
+        fn mul_assign(&mut self, rhs: ModInt<Num>) {
+            *self = *self * rhs;
+        }
+    }
+
+    impl ModInt<Num> {
+        pub fn pow(self, e: usize) -> ModInt<Num> {
+            let mut result = ModInt(1);
+            let mut cur = self;
+            let mut e = e;
+            while e > 0 {
+                if e & 1 == 1 {
+                    result *= cur;
+                }
+                e >>= 1;
+                cur *= cur;
+            }
+            result
+        }
+    }
+}
+
