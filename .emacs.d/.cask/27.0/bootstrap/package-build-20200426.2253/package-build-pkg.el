@@ -1,4 +1,4 @@
-(define-package "package-build" "20200313.2359" "Tools for assembling a package archive"
+(define-package "package-build" "20200426.2253" "Tools for assembling a package archive"
   '((cl-lib "0.5")
     (emacs "24.1"))
   :keywords
