@@ -1,0 +1,12 @@
+# name : AtCoder starting template
+# contributor : Seong Yong-ju <sei40kr@gmail.com>
+# key: atcoder
+# --
+
+import numpy as np
+import pandas as pd
+
+# `(file-name-nondirectory (buffer-file-name))` --- $0
+# author: Seong Yong-ju <sei40kr@gmail.com>
+
+$0

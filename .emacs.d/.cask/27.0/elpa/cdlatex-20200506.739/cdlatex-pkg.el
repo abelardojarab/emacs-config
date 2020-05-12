@@ -1,2 +1,0 @@
-;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/cdlatex-20200506.739/cdlatex.el  -*- no-byte-compile: t -*-
-(define-package "cdlatex" "20200506.739" "Fast input methods for LaTeX environments and math" 'nil :commit "480387b39f6ddd9cd2a9511ecee064ad8e1dd324" :keywords '("tex") :authors '(("Carsten Dominik" . "carsten.dominik@gmail.com")) :maintainer '("Carsten Dominik" . "carsten.dominik@gmail.com"))

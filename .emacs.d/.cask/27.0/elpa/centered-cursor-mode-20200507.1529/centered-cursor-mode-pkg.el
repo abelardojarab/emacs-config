@@ -1,2 +1,0 @@
-;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/centered-cursor-mode-20200507.1529/centered-cursor-mode.el  -*- no-byte-compile: t -*-
-(define-package "centered-cursor-mode" "20200507.1529" "cursor stays vertically centered" 'nil :commit "f376bdb882047347345d5f0e3ec3fcef63ee93ba" :keywords '("convenience") :authors '(("André Riemann" . "andre.riemann@web.de")) :maintainer '("André Riemann" . "andre.riemann@web.de") :url "https://github.com/andre-r/centered-cursor-mode.el")
