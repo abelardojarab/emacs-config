@@ -179,8 +179,9 @@
 
             ;; Documentation popups for company
             (use-package company-box
-              :functions (my-company-box--make-line
-                          my-company-box-icons--elisp)
+              :disabled t
+              :functions (my/company-box--make-line
+                          my/company-box-icons--elisp)
               :commands (company-box--get-color
                          company-box--resolve-colors
                          company-box--add-icon
@@ -270,7 +271,6 @@
             ;; Documentation popups for company
             (use-package company-quickhelp
               :disabled t
-              :defer t
               :defines company-quickhelp-delay
               :bind (:map company-active-map
                           ([remap company-show-doc-buffer] . company-quickhelp-manual-begin))
