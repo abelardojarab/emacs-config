@@ -36,7 +36,7 @@
            (tls-checktrust           t))
   :config (let ((trustfile (replace-regexp-in-string
                             "\\\\" "/" (replace-regexp-in-string
-                                        "\n" "" (shell-command-to-string "python -m certifi")))))
+                                        "\n" "" (shell-command-to-string "python3 -m certifi")))))
             (setq tls-program (list
                                (format "gnutls-cli%s --x509cafile %s -p %%p %%h"
                                        (if (eq window-system 'w32) ".exe" "") trustfile))
@@ -86,7 +86,7 @@
   :custom ((epa-file-cache-passphrase-for-symmetric-encryption t)
            (epg--configurations                                nil)
            (epg-gpg-program                                    "gpg2"))
-  :config (add-to-list 'epg-config--program-alist `(OpenPGP epg-gpg-program ("gpg" . ,epg-gpg-minimum-version))))
+  :config (add-to-list 'epg-config--program-alist `(OpenPGP epg-gpg-program ("gpg2" . ,epg-gpg-minimum-version))))
 
 ;; Pinentry (not available in melpa)
 (use-package pinentry
@@ -126,13 +126,11 @@
 ;; .authinfo parsing
 (use-package auth-source
   :demand t
+  :if (not (executable-find "pass"))
   :config (progn
             (use-package secrets)
             (if (file-exists-p "~/.authinfo.gpg")
-                (add-to-list 'auth-sources "~/.authinfo.gpg"))
-
-            (if (file-exists-p "~/.authinfo")
-                (add-to-list 'auth-sources "~/.authinfo"))))
+                (add-to-list 'auth-sources "~/.authinfo.gpg"))))
 
 ;; Provide utilities to interact with 'pass' ("the standard Unix password keychain manager")
 (use-package password-store
@@ -142,7 +140,7 @@
   :if (and (equal system-type 'gnu/linux)
            (executable-find "pass"))
   :custom ((password-cache-expiry nil)
-           (password-cache t)))
+           (password-cache        t)))
 
 ;; major-mode to manage 'pass'
 (use-package pass
