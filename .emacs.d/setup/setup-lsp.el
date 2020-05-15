@@ -31,16 +31,14 @@
   :hook (((c-mode c++-mode)    . lsp)
          (python-mode          . lsp)
          (js2-mode             . lsp))
-  :custom ((lsp-prefer-flymake       nil)
-           (lsp-auto-guess-root      nil)
-           (lsp-file-watch-threshold (* 1024 1024)))
-  :config (progn
-            ;; Prefer flake8, faster than pylint
-            (setq-default lsp-pyls-configuration-sources ["flake8"])
-            (setq-default lsp-pyls-plugins-pylint-enabled nil)
-
-            ;; `-background-index' requires clangd v8+!
-            (setq lsp-clients-clangd-args '("-j=5" "-background-index" "-log=error"))))
+  :custom ((lsp-prefer-flymake               nil)
+           ;; Prefer flake8, faster than pylint
+           (lsp-pyls-configuration-sources   ["flake8"])
+           (lsp-pyls-plugins-pylint-enabled  nil)
+           (lsp-auto-guess-root              nil)
+           (lsp-file-watch-threshold         (* 1024 1024)))
+  ;; `-background-index' requires clangd v8+!
+  :config (setq lsp-clients-clangd-args '("-j=5" "-background-index" "-log=error")))
 
 ;; Fix bug on dash/lsp
 (load (expand-file-name "no-autoloads/dash.el" user-emacs-directory))
@@ -72,8 +70,8 @@
   :hook (lsp-after-open . lsp-ui-mode)
   :bind (:map lsp-ui-mode-map
               ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
-              ([remap xref-find-references] . lsp-ui-peek-find-references)
-              ("C-c u" . lsp-ui-imenu))
+              ([remap xref-find-references]  . lsp-ui-peek-find-references)
+              ("C-c u"                       . lsp-ui-imenu))
   :config (if (display-graphic-p)
               (progn
                 (setq lsp-ui-sideline-code-actions-prefix "ℹ ")
