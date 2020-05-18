@@ -24,6 +24,11 @@
 
 ;;; Code:
 
+(use-package org-fragtog
+  :defer t
+  :if (display-graphic-p)
+  :hook (org-mode . org-fragtog-mode))
+
 ;; Tweaks for LaTeX exporting
 (use-package ox-latex
   :defer t

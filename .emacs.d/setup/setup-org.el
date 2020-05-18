@@ -254,6 +254,7 @@
                         ;; Beamer/ODT/Markdown exporters
                         (use-package ox-beamer)
                         (use-package ox-odt)
+                        (use-package ox-gfm)
                         (use-package ox-md)
 
                         ;; HTML5 slide exporter

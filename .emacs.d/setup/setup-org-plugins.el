@@ -40,6 +40,11 @@
 (use-package org-table-auto-align
   :hook (org-mode .  org-table-auto-align-mode))
 
+;; Prettier tables using unicode glyphs
+(use-package org-pretty-table
+  :defer t
+  :hook (org-mode . org-pretty-table-mode))
+
 ;; Use footnotes as eldoc source
 (use-package org-eldoc
   :defer t
