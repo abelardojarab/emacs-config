@@ -25,7 +25,7 @@
 ;;; Code:
 
 (use-package js2-mode
-  :defer t
+  :demand t
   :mode "\\.js\\'"
   :defines js2-mode-map
   :init (progn
