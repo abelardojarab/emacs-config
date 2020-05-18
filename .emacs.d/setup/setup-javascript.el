@@ -27,6 +27,7 @@
 (use-package js2-mode
   :defer t
   :mode "\\.js\\'"
+  :defines js2-mode-map
   :init (progn
           ;; Setup node.js path
           (setenv "NODE_PATH" (concat (concat (getenv "HOME")
@@ -169,7 +170,6 @@
 ;; json-snatcher
 (use-package json-snatcher
   :defer t
-  :after js2-mode
   :commands jsons-print-path
   :bind (:map js2-mode-map
               ("C-c C-j" . jsons-print-path)
@@ -181,7 +181,6 @@
   :defer t
   :mode "\\.json$"
   :commands json-mode
-  :after (json-snatcher js2-mode)
   :custom (js-indent-level 4)
   :hook (json-mode . js2-minor-mode))
 
