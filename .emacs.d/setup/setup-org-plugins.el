@@ -43,7 +43,7 @@
 ;; Prettier tables using unicode glyphs
 (use-package org-pretty-table
   :defer t
-  :hook (org-mode . org-pretty-table-mode))
+  :commands org-pretty-table-mode)
 
 ;; Use footnotes as eldoc source
 (use-package org-eldoc
@@ -64,16 +64,7 @@
 (use-package org-fancy-priorities
   :defer t
   :hook (org-mode . org-fancy-priorities-mode)
-  :commands org-fancy-priorities-mode
-  :custom (org-fancy-priorities-list '((?A . "❗")
-                                       (?B . "⬆")
-                                       (?C . "⬇")
-                                       (?D . "☕")
-                                       (?1 . "⚡")
-                                       (?2 . "⮬")
-                                       (?3 . "⮮")
-                                       (?4 . "☕")
-                                       (?I . "❗"))))
+  :commands org-fancy-priorities-mode)
 
 ;; Org Table of Contents
 (use-package toc-org
