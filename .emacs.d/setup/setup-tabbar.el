@@ -51,11 +51,13 @@
            (centaur-tabs-close-button        "×")
            (centaur-tabs-gray-out-icons      'buffer)
            (centaur-tabs-set-icons           t)
+           (centaur-tabs-height              24)
            (x-underline-at-descent-line      t))
   :hook (after-init . centaur-tabs-mode)
   :config (progn
             (centaur-tabs-mode t)
             (centaur-tabs-group-by-projectile-project)
+            (centaur-tabs-change-fonts "P22 Underground Book" 130)
             (add-hook 'centaur-tabs-mode (lambda () (tabbar-mode -1)))))
 
 (provide 'setup-tabbar)
