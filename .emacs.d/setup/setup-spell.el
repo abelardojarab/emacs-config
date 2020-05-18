@@ -1,6 +1,6 @@
 ;;; setup-spell.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -168,6 +168,13 @@ Don't read buffer-local settings or word lists."
               (progn
                 (define-key flyspell-mouse-map [down-mouse-3] #'flyspell-correct-word)
                 (define-key flyspell-mouse-map [mouse-3] #'undefined)))))
+
+;; Profiling revealed flyspell-post-command-hook
+;; was responsible for 47% of CPU cycles by itself
+(use-package flyspell-lazy
+  :disabled t
+  :defer t
+  :hook (flyspell-mode . flyspell-lazy-mode))
 
 ;; flyspell ivy correction
 (use-package flyspell-correct-ivy

@@ -45,9 +45,11 @@
             centaur-tabs-set-modified-marker
             centaur-tabs-modified-marker)
   :commands centaur-tabs-mode
-  :custom ((centaur-tabs-set-bar             'over)
+  :custom ((centaur-tabs-set-bar             'above)
            (centaur-tabs-set-modified-marker t)
-           (centaur-tabs-modified-marker     "M")
+           (centaur-tabs-modified-marker     "o")
+           (centaur-tabs-close-button        "×")
+           (centaur-tabs-gray-out-icons      'buffer)
            (centaur-tabs-set-icons           t)
            (x-underline-at-descent-line      t))
   :hook (after-init . centaur-tabs-mode)

@@ -66,11 +66,14 @@
            (lsp-ui-flycheck-enable               t)
            (lsp-ui-imenu-enable                  t)
            (lsp-ui-sideline-ignore-duplicate     t )
-           (lsp-ui-sideline-show-symbol          nil))
+           (lsp-ui-sideline-show-symbol          nil)
+           (lsp-ui-doc-delay                     0.7 "higher than eldoc delay"))
   :hook (lsp-after-open . lsp-ui-mode)
   :bind (:map lsp-ui-mode-map
               ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
               ([remap xref-find-references]  . lsp-ui-peek-find-references)
+              ("M-."                         . lsp-ui-peek-find-definitions)
+              ("M-/"                         . lsp-ui-peek-find-references)
               ("C-c u"                       . lsp-ui-imenu))
   :config (if (display-graphic-p)
               (progn

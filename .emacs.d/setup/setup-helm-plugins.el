@@ -131,7 +131,7 @@
   :defer t
   :after (helm etags)
   :commands (helm-etags-select)
-  :bind ("M-." . helm-etags-select))
+  :bind ("C-." . helm-etags-select))
 
 ;; helm gtags
 (use-package helm-gtags
@@ -141,8 +141,7 @@
              helm-gtags-dwim
              helm-gtags-mode)
   :if (executable-find "global")
-  :bind (("C-." . helm-gtags-dwim)
-         :map ctl-x-map
+  :bind (:map ctl-x-map
          ("." . helm-gtags-dwim))
   :hook (c-mode-common . helm-gtags-mode)
   :custom ((helm-gtags-ignore-case            t)

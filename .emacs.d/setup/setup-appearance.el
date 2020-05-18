@@ -32,9 +32,16 @@
   (when (fboundp 'horizontal-scroll-bar-mode)
     (horizontal-scroll-bar-mode 0)))
 
-;; make the left fringe 14 pixels wide and the right 12
-(if (display-graphic-p)
-    (fringe-mode '(28 . 12)))
+(use-package fringe
+  :init (fringe-mode 0)
+  :config (progn
+            (or standard-display-table
+                (setq standard-display-table (make-display-table)))
+            (set-display-table-slot standard-display-table 0 ?\s)
+
+            ;; make the left fringe 28 pixels wide and the right 12
+            (if (display-graphic-p)
+                (fringe-mode '(28 . 12)))))
 
 ;; Enable tooltips
 (use-package tooltip

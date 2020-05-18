@@ -1,6 +1,6 @@
 ;;; setup-cursor.el ---                              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -54,6 +54,9 @@
 
 ;; Make the cursor the full width of the character at point
 (setq x-stretch-cursor t)
+
+;; Disable cursor in non-selected windows
+(setq cursor-in-non-selected-windows nil)
 
 ;; Blinking cursor
 (use-package heartbeat-cursor

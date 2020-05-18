@@ -43,7 +43,8 @@
   :defines (yas-initialize)
   :commands (yas-global-mode
              yas-minor-mode
-             yas-snippet-dirs)
+             yas-snippet-dirs
+             yas-reload-all)
   :hook (after-init . yas-global-mode)
   :init (progn
           (if (file-exists-p "~/.emacs.d/snippets")
@@ -54,6 +55,8 @@
 
           (yas-initialize))
   :config (progn
+            (add-to-list 'yas-key-syntaxes 'yas-shortest-key-until-whitespace)
+
             ;; Do not activate for read only and non-existent snippets
             (set-default 'yas--dont-activate
                          #'(lambda ()
