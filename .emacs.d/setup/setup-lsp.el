@@ -74,7 +74,7 @@
               ([remap xref-find-references]  . lsp-ui-peek-find-references)
               ("M-."                         . lsp-ui-peek-find-definitions)
               ("M-/"                         . lsp-ui-peek-find-references)
-              ("C-c u"                       . lsp-ui-imenu))
+              ("C-/"                         . lsp-ui-imenu))
   :config (if (display-graphic-p)
               (progn
                 (setq lsp-ui-sideline-code-actions-prefix "ℹ ")
