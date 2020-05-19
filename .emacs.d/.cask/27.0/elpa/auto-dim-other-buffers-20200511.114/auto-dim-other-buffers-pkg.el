@@ -1,2 +1,0 @@
-;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/auto-dim-other-buffers-20200511.114/auto-dim-other-buffers.el  -*- no-byte-compile: t -*-
-(define-package "auto-dim-other-buffers" "20200511.114" "Makes non-current buffers less prominent" 'nil :commit "bc36211be2d1d173dcbc505086958310a8e4c590" :authors '(("Steven Degutis") ("Michal Nazarewicz" . "mina86@mina86.com")) :maintainer '("Michal Nazarewicz" . "mina86@mina86.com") :url "https://github.com/mina86/auto-dim-other-buffers.el")

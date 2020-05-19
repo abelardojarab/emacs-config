@@ -1,0 +1,2 @@
+;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/auto-dim-other-buffers-20200518.1059/auto-dim-other-buffers.el  -*- no-byte-compile: t -*-
+(define-package "auto-dim-other-buffers" "20200518.1059" "Makes windows without focus less prominent" 'nil :commit "191d714ebb314e65db9bb89050163024f2b9f339" :authors '(("Michal Nazarewicz" . "mina86@mina86.com")) :maintainer '("Michal Nazarewicz" . "mina86@mina86.com") :url "https://github.com/mina86/auto-dim-other-buffers.el")
