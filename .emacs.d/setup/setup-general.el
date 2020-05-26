@@ -242,6 +242,7 @@
 ;; Cross-editor style configuration
 (use-package editorconfig
   :defer t
+  :disabled t
   :hook ((prog-mode . editorconfig-mode)
          (text-mode . editorconfig-mode))
   :diminish editorconfig-mode

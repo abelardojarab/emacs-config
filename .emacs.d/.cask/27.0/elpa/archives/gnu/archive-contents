@@ -18,7 +18,7 @@
 	 ("Leo Liu" . "sdl.web@gmail.com"))
 	(:keywords "tools" "processes" "convenience"))])
  (ada-mode .
-	   [(7 1 1)
+	   [(7 1 2)
 	    ((uniquify-files
 	      (1 0 1))
 	     (wisi
@@ -131,7 +131,7 @@
 	   ("John Wiegley" . "jwiegley@gmail.com"))
 	  (:keywords "async"))])
  (auctex .
-	 [(12 2 1)
+	 [(12 2 2)
 	  ((emacs
 	    (24 1))
 	   (cl-lib
@@ -687,7 +687,7 @@
 		      ("William Xu" . "william.xwl@gmail.com"))
 		     (:maintainer "William Xu" . "william.xwl@gmail.com"))])
  (elisp-benchmarks .
-		   [(1 4)
+		   [(1 5)
 		    nil "elisp benchmarks collection" tar
 		    ((:maintainer "Andrea Corallo" . "akrl@sdf.org")
 		     (:authors
@@ -755,7 +755,7 @@
 		   ("Magnar Sveen" . "magnars@gmail.com"))
 		  (:keywords "marking" "region"))])
  (exwm .
-       [(0 23)
+       [(0 24)
 	((xelb
 	  (0 18)))
 	"Emacs X Window Manager" tar
@@ -820,7 +820,7 @@
 		("Martin Rudalics" . "rudalics@gmx.at"))
 	       (:maintainer "Martin Rudalics" . "rudalics@gmx.at"))])
  (frog-menu .
-	    [(0 2 10)
+	    [(0 2 11)
 	     ((emacs
 	       (26))
 	      (avy
@@ -1281,7 +1281,7 @@
 	     ("David Engster" . "deng@randomsample.de"))
 	    (:maintainer "David Engster" . "deng@randomsample.de"))])
  (mmm-mode .
-	   [(0 5 7)
+	   [(0 5 8)
 	    ((cl-lib
 	      (0 2)))
 	    "Allow Multiple Major Modes in a buffer" tar
@@ -1566,7 +1566,7 @@
 	     ("Phillip Lord" . "phillip.lord@russet.org.uk"))
 	    (:url . "http://elpa.gnu.org/packages/persist.html"))])
  (phps-mode .
-	    [(0 3 49)
+	    [(0 3 51)
 	     ((emacs
 	       (26)))
 	     "Major mode for PHP with Semantic integration" tar
@@ -1602,7 +1602,7 @@
 	     (:maintainer "Feng Shu" . "tumashu@163.com")
 	     (:url . "https://github.com/tumashu/posframe"))])
  (project .
-	  [(0 2 0)
+	  [(0 3 0)
 	   ((emacs
 	     (26 3)))
 	   "Operations on the current project" single

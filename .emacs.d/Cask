@@ -411,6 +411,7 @@
 (depends-on "treemacs-magit")
 (depends-on "treemacs-projectile")
 (depends-on "typo")
+(depends-on "undo-fu")
 (depends-on "undo-tree")
 (depends-on "unfill")
 (depends-on "unify-opening")

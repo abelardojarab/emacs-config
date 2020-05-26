@@ -33,6 +33,7 @@
          :map minibuffer-local-isearch-map
          ("C-."   . helm-occur-from-isearch)
          :map ctl-x-map
+         ("."     . helm-semantic-or-imenu)
          ("C-b"   . helm-buffers-list)
          ("b"     . helm-buffers-list)
          ("p"     . helm-show-kill-ring)

@@ -1,6 +1,6 @@
 ;;; setup-scroll.el ---                              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -50,8 +50,6 @@
   :load-path (lambda () (expand-file-name "fast-scroll/" user-emacs-directory))
   :commands (fast-scroll-config
              fast-scroll-advice-scroll-functions)
-  :hook ((prog-mode . fast-scroll-config)
-         (text-mode . fast-scroll-config))
   :config (fast-scroll-advice-scroll-functions))
 
 (provide 'setup-scroll)

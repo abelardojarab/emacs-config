@@ -26,18 +26,21 @@
 
 ;; Redo
 (use-package redo+
-  :bind ("C-y" . redo))
+  :disabled t)
+
+;; Undo-redo backported from emacs28
+(use-package undo-fu
+  :bind (("C-S-z"    . undo-fu-only-redo)
+         ("C-z"      . undo-fu-only-undo)
+         ("<undo>"   . undo-fu-only-undo)))
 
 ;; Better undo
 (use-package undo-tree
-  :bind (("C-S-z"    . undo-tree-redo)
-         ("C-z"      . undo-tree-undo)
-         ("<undo>"   . undo-tree-undo)
-         :map ctl-x-map
+  :bind (:map ctl-x-map
          ("u"        . undo-tree-undo))
   :diminish undo-tree-mode
-  :hook (after-init . global-undo-tree-mode)
-  :commands global-undo-tree-mode
+  :commands (global-undo-tree-mode
+             undo-tree-mode)
   :custom ((undo-no-redo                        t)
            (undo-tree-visualizer-diff           t)
            (undo-tree-visualizer-timestamps     t)
