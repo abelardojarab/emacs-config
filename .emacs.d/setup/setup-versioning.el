@@ -449,11 +449,15 @@
              git-gutter:next-hunk
              git-gutter:previous-hunk
              hydra-git-gutter/body)
-  :custom (git-gutter:update-interval 5)
-  :hook ((magit-post-refresh      . git-gutter:update-all-windows)
-         (git-gutter:update-hooks . magit-after-revert-hook)
-         (git-gutter:update-hooks . magit-not-reverted-hook)
-         (after-init              . global-git-gutter-mode))
+  :custom ((git-gutter:update-interval 5)
+           (git-gutter:update-interval 1)
+           (git-gutter:window-width    2)
+           (git-gutter:ask-p           nil))
+  :hook ((magit-post-refresh                  . git-gutter:update-all-windows)
+         (git-gutter:update-hooks             . magit-after-revert-hook)
+         (git-gutter:update-hooks             . magit-not-reverted-hook)
+         (after-init                          . global-git-gutter-mode)
+         ((markdown-mode prog-mode conf-mode) . git-gutter-mode))
   :init (defhydra hydra-git-gutter (:body-pre (git-gutter-mode 1)
                                               :hint nil)
           "
@@ -482,57 +486,60 @@ Git gutter:
                       (git-gutter:clear))
            :color blue))
   :config (progn
+            ;; Disabled modes
+            (setq git-gutter:disabled-modes '(org-mode asm-mode image-mode))
+
             ;; Set the foreground color of modified lines to something obvious
-            (set-face-foreground 'git-gutter:modified "purple")
+            (set-face-foreground 'git-gutter:modified "purple")))
 
-            ;; Use fringe instead of margin for git-gutter-plus
-            (use-package git-gutter-fringe
-              :demand t
-              :if (and (executable-find "git")
-                       (display-graphic-p))
-              :after git-gutter
-              :custom ((left-fringe-width    20)
-                       (right-fringe-width   20)
-                       (git-gutter-fr:side   'left))
-              :config (progn
-                        (set-face-foreground 'git-gutter-fr:modified "purple")
-                        (set-face-foreground 'git-gutter-fr:added    "yellow")
-                        (set-face-foreground 'git-gutter-fr:deleted  "red")
+;; Use fringe instead of margin for git-gutter-plus
+(use-package git-gutter-fringe
+  :after git-gutter
+  :demand fringe-helper
+  :if (and (executable-find "git")
+           (display-graphic-p))
+  :custom ((left-fringe-width    20)
+           (right-fringe-width   20)
+           (git-gutter-fr:side   'left))
+  :config (progn
+            (set-face-foreground 'git-gutter-fr:modified "purple")
+            (set-face-foreground 'git-gutter-fr:added    "yellow")
+            (set-face-foreground 'git-gutter-fr:deleted  "red")
 
-                        (fringe-helper-define 'git-gutter-fr:added nil
-                          ".XXXXXX."
-                          "XXxxxxXX"
-                          "XX....XX"
-                          "XX....XX"
-                          "XXXXXXXX"
-                          "XXXXXXXX"
-                          "XX....XX"
-                          "XX....XX")
+            (fringe-helper-define 'git-gutter-fr:added nil
+              ".XXXXXX."
+              "XXxxxxXX"
+              "XX....XX"
+              "XX....XX"
+              "XXXXXXXX"
+              "XXXXXXXX"
+              "XX....XX"
+              "XX....XX")
 
-                        (fringe-helper-define 'git-gutter-fr:deleted nil
-                          "XXXXXX.."
-                          "XXXXXXX."
-                          "XX...xXX"
-                          "XX....XX"
-                          "XX....XX"
-                          "XX...xXX"
-                          "XXXXXXX."
-                          "XXXXXX..")
+            (fringe-helper-define 'git-gutter-fr:deleted nil
+              "XXXXXX.."
+              "XXXXXXX."
+              "XX...xXX"
+              "XX....XX"
+              "XX....XX"
+              "XX...xXX"
+              "XXXXXXX."
+              "XXXXXX..")
 
-                        (fringe-helper-define 'git-gutter-fr:modified nil
-                          "XXXXXXXX"
-                          "XXXXXXXX"
-                          "Xx.XX.xX"
-                          "Xx.XX.xX"
-                          "Xx.XX.xX"
-                          "Xx.XX.xX"
-                          "Xx.XX.xX"
-                          "Xx.XX.xX")
+            (fringe-helper-define 'git-gutter-fr:modified nil
+              "XXXXXXXX"
+              "XXXXXXXX"
+              "Xx.XX.xX"
+              "Xx.XX.xX"
+              "Xx.XX.xX"
+              "Xx.XX.xX"
+              "Xx.XX.xX"
+              "Xx.XX.xX")
 
-                        ;; Fringe fix in Windows
-                        (unless (string-equal system-type "windows-nt")
-                          (defadvice git-gutter-process-diff (before git-gutter-process-diff-advice activate)
-                            (ad-set-arg 0 (file-truename (ad-get-arg 0)))))))))
+            ;; Fringe fix in Windows
+            (unless (string-equal system-type "windows-nt")
+              (defadvice git-gutter-process-diff (before git-gutter-process-diff-advice activate)
+                (ad-set-arg 0 (file-truename (ad-get-arg 0)))))))
 
 ;; Highlight regions according to age
 (use-package smeargle
