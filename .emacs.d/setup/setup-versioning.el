@@ -449,9 +449,8 @@
              git-gutter:next-hunk
              git-gutter:previous-hunk
              hydra-git-gutter/body)
-  :custom ((git-gutter:update-interval 5)
-           (git-gutter:update-interval 1)
-           (git-gutter:window-width    2)
+  :custom ((git-gutter:update-interval 1)
+           (git-gutter:window-width    4)
            (git-gutter:ask-p           nil))
   :hook ((magit-post-refresh                  . git-gutter:update-all-windows)
          (git-gutter:update-hooks             . magit-after-revert-hook)
@@ -494,13 +493,11 @@ Git gutter:
 
 ;; Use fringe instead of margin for git-gutter-plus
 (use-package git-gutter-fringe
-  :after git-gutter
+  :disabled t
   :demand fringe-helper
   :if (and (executable-find "git")
            (display-graphic-p))
-  :custom ((left-fringe-width    20)
-           (right-fringe-width   20)
-           (git-gutter-fr:side   'left))
+  :custom (git-gutter-fr:side   'left)
   :config (progn
             (set-face-foreground 'git-gutter-fr:modified "purple")
             (set-face-foreground 'git-gutter-fr:added    "yellow")

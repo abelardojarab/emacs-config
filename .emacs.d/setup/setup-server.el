@@ -1,6 +1,6 @@
 ;;; setup-server.el ---                      -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -91,7 +91,7 @@
             (defun quit-emacs ()
               (interactive)
               (ignore-errors
-                (if (bound-and-true-p ergoemacs-mode)
+                 (if (bound-and-true-p ergoemacs-mode)
                     (ergoemacs-mode -1))
                 (setq my/really-kill-emacs t)
                 (kill-emacs)))
