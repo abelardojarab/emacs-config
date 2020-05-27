@@ -413,25 +413,25 @@
              git-timemachine-switch-branch)
   :if (executable-find "git")
   :after magit
-  :config (progn
-            (defun my/git-timemachine-show-selected-revision ()
-              "Show last (current) revision of file."
-              (interactive)
-              (let (collection)
-                (setq collection
-                      (mapcar (lambda (rev)
-                                ;; re-shape list for the ivy-read
-                                (cons (concat (substring (nth 0 rev) 0 7) "|" (nth 5 rev) "|" (nth 6 rev)) rev))
-                              (git-timemachine--revisions)))
-                (ivy-read "commits:"
-                          collection
-                          :action (lambda (rev)
-                                    (git-timemachine-show-revision rev)))))
+  :init (progn
+          (defun my/git-timemachine-show-selected-revision ()
+            "Show last (current) revision of file."
+            (interactive)
+            (let (collection)
+              (setq collection
+                    (mapcar (lambda (rev)
+                              ;; re-shape list for the ivy-read
+                              (cons (concat (substring (nth 0 rev) 0 7) "|" (nth 5 rev) "|" (nth 6 rev)) rev))
+                            (git-timemachine--revisions)))
+              (ivy-read "commits:"
+                        collection
+                        :action (lambda (rev)
+                                  (git-timemachine-show-revision rev)))))
 
-            (defun my/git-timemachine-start ()
-              "Open git snapshot with the selected version. Based on ivy-mode."
-              (interactive)
-              (git-timemachine--start #'my/git-timemachine-show-selected-revision))))
+          (defun my/git-timemachine-start ()
+            "Open git snapshot with the selected version. Based on ivy-mode."
+            (interactive)
+            (git-timemachine--start #'my/git-timemachine-show-selected-revision))))
 
 ;; Show blame for current line
 (use-package git-messenger
@@ -450,17 +450,13 @@
              git-gutter:previous-hunk
              hydra-git-gutter/body)
   :custom (git-gutter:update-interval 5)
-
-  :hook ((magit-post-refresh . git-gutter:update-all-windows)
-         (after-init         . global-git-gutter-mode))
-  :config (progn
-            ;; Set the foreground color of modified lines to something obvious
-            (set-face-foreground 'git-gutter:modified "purple")
-
-            ;; Hydra binding for git-gutter
-            (defhydra hydra-git-gutter (:body-pre (git-gutter-mode 1)
-                                                  :hint nil)
-              "
+  :hook ((magit-post-refresh      . git-gutter:update-all-windows)
+         (git-gutter:update-hooks . magit-after-revert-hook)
+         (git-gutter:update-hooks . magit-not-reverted-hook)
+         (after-init              . global-git-gutter-mode))
+  :init (defhydra hydra-git-gutter (:body-pre (git-gutter-mode 1)
+                                              :hint nil)
+          "
 Git gutter:
   _j_: next hunk        _s_tage hunk     _q_uit
   _k_: previous hunk    _r_evert hunk    _Q_uit and deactivate git-gutter
@@ -468,23 +464,26 @@ Git gutter:
   _h_: first hunk
   _l_: last hunk        set start _R_evision
 "
-              ("j" git-gutter:next-hunk)
-              ("k" git-gutter:previous-hunk)
-              ("h" (progn (goto-char (point-min))
-                          (git-gutter:next-hunk 1)))
-              ("l" (progn (goto-char (point-min))
-                          (git-gutter:previous-hunk 1)))
-              ("s" git-gutter:stage-hunk)
-              ("r" git-gutter:revert-hunk)
-              ("p" git-gutter:popup-hunk)
-              ("R" git-gutter:set-start-revision)
-              ("q" nil :color blue)
-              ("Q" (progn (git-gutter-mode -1)
-                          ;; git-gutter-fringe doesn't seem to
-                          ;; clear the markup right away
-                          (sit-for 0.1)
-                          (git-gutter:clear))
-               :color blue))
+          ("j" git-gutter:next-hunk)
+          ("k" git-gutter:previous-hunk)
+          ("h" (progn (goto-char (point-min))
+                      (git-gutter:next-hunk 1)))
+          ("l" (progn (goto-char (point-min))
+                      (git-gutter:previous-hunk 1)))
+          ("s" git-gutter:stage-hunk)
+          ("r" git-gutter:revert-hunk)
+          ("p" git-gutter:popup-hunk)
+          ("R" git-gutter:set-start-revision)
+          ("q" nil :color blue)
+          ("Q" (progn (git-gutter-mode -1)
+                      ;; git-gutter-fringe doesn't seem to
+                      ;; clear the markup right away
+                      (sit-for 0.1)
+                      (git-gutter:clear))
+           :color blue))
+  :config (progn
+            ;; Set the foreground color of modified lines to something obvious
+            (set-face-foreground 'git-gutter:modified "purple")
 
             ;; Use fringe instead of margin for git-gutter-plus
             (use-package git-gutter-fringe
@@ -492,12 +491,10 @@ Git gutter:
               :if (and (executable-find "git")
                        (display-graphic-p))
               :after git-gutter
+              :custom ((left-fringe-width    20)
+                       (right-fringe-width   20)
+                       (git-gutter-fr:side   'left))
               :config (progn
-
-                        ;; Please adjust fringe width if your own sign is too big.
-                        (setq-default left-fringe-width  20)
-                        (setq-default right-fringe-width 20)
-                        (setq git-gutter-fr:side 'left-fringe)
                         (set-face-foreground 'git-gutter-fr:modified "purple")
                         (set-face-foreground 'git-gutter-fr:added    "yellow")
                         (set-face-foreground 'git-gutter-fr:deleted  "red")
@@ -550,30 +547,22 @@ Git gutter:
   :commands (smerge-mode
              hydra-smerge/body
              my/enable-smerge-maybe)
-  :init (defun my/enable-smerge-maybe ()
-          "Auto-enable `smerge-mode' when merge conflict is detected."
-          (save-excursion
-            (goto-char (point-min))
-            (when (re-search-forward "^<<<<<<< " nil :noerror)
-              (smerge-mode 1))))
   :hook (find-file . my/enable-smerge-maybe)
-  :config (progn
-            (ignore-errors
-              (>=e "26.0"
-                   nil
-                   (defalias 'smerge-keep-upper 'smerge-keep-mine)
-                   (defalias 'smerge-keep-lower 'smerge-keep-other)
-                   (defalias 'smerge-diff-base-upper 'smerge-diff-base-mine)
-                   (defalias 'smerge-diff-upper-lower 'smerge-diff-mine-other)
-                   (defalias 'smerge-diff-base-lower 'smerge-diff-base-other)))
+  :init (progn
+          (defun my/enable-smerge-maybe ()
+            "Auto-enable `smerge-mode' when merge conflict is detected."
+            (save-excursion
+              (goto-char (point-min))
+              (when (re-search-forward "^<<<<<<< " nil :noerror)
+                (smerge-mode 1))))
 
-            (defhydra hydra-smerge (:color pink
-                                           :hint nil
-                                           :pre (smerge-mode 1)
-                                           ;; Disable `smerge-mode' when quitting hydra if
-                                           ;; no merge conflicts remain.
-                                           :post (smerge-auto-leave))
-              "
+          (defhydra hydra-smerge (:color pink
+                                         :hint nil
+                                         :pre (smerge-mode 1)
+                                         ;; Disable `smerge-mode' when quitting hydra if
+                                         ;; no merge conflicts remain.
+                                         :post (smerge-auto-leave))
+            "
 ^Move^       ^Keep^               ^Diff^                 ^Other^
 ^^-----------^^-------------------^^---------------------^^-------
 _n_ext       _b_ase               _<_: upper/base        _C_ombine
@@ -582,23 +571,31 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 ^^           _a_ll                _R_efine
 ^^           _RET_: current       _E_diff
 "
-              ("n" smerge-next)
-              ("p" smerge-prev)
-              ("b" smerge-keep-base)
-              ("u" smerge-keep-upper)
-              ("l" smerge-keep-lower)
-              ("a" smerge-keep-all)
-              ("RET" smerge-keep-current)
-              ("\C-m" smerge-keep-current)
-              ("<" smerge-diff-base-upper)
-              ("=" smerge-diff-upper-lower)
-              (">" smerge-diff-base-lower)
-              ("R" smerge-refine)
-              ("E" smerge-ediff)
-              ("C" smerge-combine-with-next)
-              ("r" smerge-resolve)
-              ("k" smerge-kill-current)
-              ("q" nil "cancel" :color blue))))
+            ("n" smerge-next)
+            ("p" smerge-prev)
+            ("b" smerge-keep-base)
+            ("u" smerge-keep-upper)
+            ("l" smerge-keep-lower)
+            ("a" smerge-keep-all)
+            ("RET" smerge-keep-current)
+            ("\C-m" smerge-keep-current)
+            ("<" smerge-diff-base-upper)
+            ("=" smerge-diff-upper-lower)
+            (">" smerge-diff-base-lower)
+            ("R" smerge-refine)
+            ("E" smerge-ediff)
+            ("C" smerge-combine-with-next)
+            ("r" smerge-resolve)
+            ("k" smerge-kill-current)
+            ("q" nil "cancel" :color blue)))
+  :config (ignore-errors
+            (>=e "26.0"
+                 nil
+                 (defalias 'smerge-keep-upper 'smerge-keep-mine)
+                 (defalias 'smerge-keep-lower 'smerge-keep-other)
+                 (defalias 'smerge-diff-base-upper 'smerge-diff-base-mine)
+                 (defalias 'smerge-diff-upper-lower 'smerge-diff-mine-other)
+                 (defalias 'smerge-diff-base-lower 'smerge-diff-base-other))))
 
 (provide 'setup-versioning)
 ;;; setup-versioning.el ends here
