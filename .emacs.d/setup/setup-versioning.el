@@ -450,6 +450,7 @@
              git-gutter:previous-hunk
              hydra-git-gutter/body)
   :custom (git-gutter:update-interval 5)
+
   :hook ((magit-post-refresh . git-gutter:update-all-windows)
          (after-init         . global-git-gutter-mode))
   :config (progn
@@ -534,10 +535,7 @@ Git gutter:
                         ;; Fringe fix in Windows
                         (unless (string-equal system-type "windows-nt")
                           (defadvice git-gutter-process-diff (before git-gutter-process-diff-advice activate)
-                            (ad-set-arg 0 (file-truename (ad-get-arg 0)))))
-
-                        ;; Start git gutter mode
-                        (global-git-gutter-mode t)))))
+                            (ad-set-arg 0 (file-truename (ad-get-arg 0)))))))))
 
 ;; Highlight regions according to age
 (use-package smeargle
