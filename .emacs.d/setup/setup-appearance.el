@@ -34,16 +34,14 @@
 
 (use-package fringe
   :init (fringe-mode 0)
-  :custom ((left-fringe-width  10)
-           (right-fringe-width 10))
   :config (progn
             (or standard-display-table
                 (setq standard-display-table (make-display-table)))
             (set-display-table-slot standard-display-table 0 ?\s)
 
-            ;; make the left fringe 12 pixels wide and the right 12
+            ;; make the left fringe 28 pixels wide and the right 12
             (if (display-graphic-p)
-                (fringe-mode '(10 . 10)))))
+                (fringe-mode '(28 . 12)))))
 
 ;; Enable tooltips
 (use-package tooltip

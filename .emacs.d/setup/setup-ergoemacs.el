@@ -26,8 +26,7 @@
 
 ;; Ergoemacs
 (use-package ergoemacs-mode-fixed
-  :disabled t
-  :defer t
+  :defer 5
   :if (and (executable-find "gzip")
            (display-graphic-p))
   :commands (ergoemacs-mode

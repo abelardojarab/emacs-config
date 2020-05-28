@@ -43,7 +43,6 @@
           (if (not (file-exists-p server-auth-dir))
               (make-directory server-auth-dir t)))
   :config (progn
-
             ;; Automatically kill all spawned processes on exit
             (defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
               "Prevent annoying \"Active processes exist\" query when you quit Emacs."

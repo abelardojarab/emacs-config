@@ -648,8 +648,6 @@ When STORE-P is non-nil, save the tables."
   "User `ergoemacs-mode' keymap.")
 
 ;; ErgoEmacs hooks
-
-
 (require 'cus-edit)
 
 (defvar ergoemacs-mode-startup-hook nil
@@ -874,7 +872,6 @@ Valid values are:
   :group 'ergoemacs-display)
 
 (define-obsolete-variable-alias 'ergoemacs-use-unicode-brackets 'ergoemacs-display-use-unicode-brackets-around-keys)
-
 
 (defcustom ergoemacs-display-small-symbols-for-key-modifiers nil
   "Use small symbols to represent alt+ ctl+ on windows/linux."
@@ -1320,7 +1317,8 @@ also perform `outline-next-visible-heading'"
   (global-set-key (kbd "C-x h") nil) ;; Mark whole buffer
   (global-set-key (kbd "C-a") ("C-x h" :emacs))
 
-  (global-set-key (kbd "C-z") 'undo-tree-undo)
+  (global-set-key (kbd "C-z") 'undo-fu-only-undo)
+  (global-set-key (kbd "C-S-z") 'undo-fu-only-redo)
 
   ;; Take out undo-tree's redo bindings
   (define-key undo-tree-map (kbd "C-?") nil)
@@ -1373,13 +1371,10 @@ also perform `outline-next-visible-heading'"
   (global-set-key (kbd "<S-mouse-1>") 'ignore)
   (global-set-key (kbd "C-+") 'text-scale-increase)
   (global-set-key (kbd "C--") 'text-scale-decrease)
-  (global-set-key (kbd "C-.") 'keyboard-quit)
-  (global-set-key (kbd "C-/") 'ielm-repl)
   (global-set-key (kbd "C-0") 'ergoemacs-text-scale-normal-size)
   (global-set-key (kbd "C-<next>") 'tabbar-forward)
   (global-set-key (kbd "C-<pause>") 'kill-compilation) ; stop compilation/find/grep
   (global-set-key (kbd "C-<prior>") 'tabbar-backward)
-  (global-set-key (kbd "C-=") 'text-scale-increase)
   (global-set-key (kbd "C-?") 'info)
   (global-set-key (kbd "C-S-<next>") 'ergoemacs-next-emacs-buffer)
   (global-set-key (kbd "C-S-<prior>") 'ergoemacs-previous-emacs-buffer)
@@ -1403,7 +1398,7 @@ also perform `outline-next-visible-heading'"
   (global-set-key (kbd "C-w") 'ergoemacs-close-current-buffer)
   (global-set-key (kbd "C-x <ergoemacs-timeout>") 'ergoemacs-cut-line-or-region)
   (global-set-key (kbd "C-x C-b") 'ibuffer)
-  (global-set-key (kbd "C-y") '(undo-tree-redo redo ergoemacs-redo) "↷ redo")
+  (global-set-key (kbd "C-y") '(undo-fu-only-redo redo ergoemacs-redo) "↷ redo")
 
   (global-set-key (kbd "M-S-<next>") 'forward-page)
   (global-set-key (kbd "M-S-<prior>") 'backward-page)

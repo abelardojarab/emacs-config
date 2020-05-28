@@ -22,7 +22,7 @@
 
 ;;
 
-;;; Code:
+;;;; Code:
 
 ;; Set indent to 4 instead of 2
 (defvar my/tab-width 4)
