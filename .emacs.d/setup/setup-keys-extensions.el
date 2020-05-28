@@ -1,6 +1,6 @@
 ;;; setup-keys-extensions.el ---                     -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -52,6 +52,9 @@
            (which-key-side-window-max-width 0.33)
            (which-key-special-keys          nil))
   :config (progn
+            (defadvice which-key--update (around bar activate)
+              (ignore-errors add-do-it))
+
             (setq which-key-key-replacement-alist
                   '(("<\\([[:alnum:]-]+\\)>" . "\\1")
                     ("TAB"                   . "↹")
@@ -81,7 +84,6 @@
             (add-to-list 'which-key-key-replacement-alist '("SPC" . "␣"))))
 
 ;; Get an instant cheat sheet for your current major mode
-;; with C-h C-m.
 (use-package discover-my-major
   :defer t
   :commands (discover-my-major

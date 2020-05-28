@@ -32,6 +32,8 @@
   :commands (ergoemacs-mode
              ergoemacs-mode-after-init-emacs)
   :init (progn
+          ;; Will not ignore any globally-defined key
+          (setq ergoemacs-ignore-prev-global nil)
           (setq ergoemacs-command-loop--modal-stack nil)
           (use-package ergoemacs-command-loop
             :demand t)

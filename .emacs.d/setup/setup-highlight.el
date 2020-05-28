@@ -79,8 +79,8 @@
   :defer t
   :commands highlight-symbol-mode
   :diminish highlight-symbol-mode
-  :custom ((highlight-symbol-idle-delay       0.1)
-           (highlight-symbol-on-navigation-p  t))
+  :custom ((highlight-symbol-idle-delay      0.1)
+           (highlight-symbol-on-navigation-p t))
   :config (progn
             ;; http://emacs.stackexchange.com/questions/931
             (defun highlight-symbol-mode-post-command ()
