@@ -116,6 +116,7 @@
 (use-package highlight-indent-guides
   :defer t
   :diminish t
+  :hook (prog-mode . highlight-indent-guides-mode)
   :commands highlight-indent-guides-mode
   :custom ((highlight-indent-guides-method                   'character)
            (highlight-indent-guides-responsive               'top)
