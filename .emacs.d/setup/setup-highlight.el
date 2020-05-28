@@ -1,6 +1,6 @@
 ;;; setup-highlight.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -27,9 +27,7 @@
 ;; highlight phrases or regular expressions
 (use-package hi-lock
   :defer t
-  :commands global-hi-lock-mode
-  ;; :init (global-hi-lock-mode 1)
-  )
+  :commands global-hi-lock-mode)
 
 ;; higlight changes in documents
 (use-package hilit-chg
@@ -56,11 +54,9 @@
   :commands (global-hl-line-mode
              my/hl-line-mode-off)
   :hook ((org-mode markdown-mode) . my/hl-line-mode-off)
+  ;; Highlight the line only in the active window
+  :custom (hl-line-sticky-flag nil)
   :config (progn
-
-            ;; Highlight the line only in the active window
-            (setq hl-line-sticky-flag nil)
-
             ;; https://stackoverflow.com/questions/20275596/how-to-use-hl-line-mode-to-highlight-just-one-1-line-when-visual-line-mode-is
             (defun visual-line-line-range ()
               (save-excursion (cons
@@ -83,6 +79,8 @@
   :defer t
   :commands highlight-symbol-mode
   :diminish highlight-symbol-mode
+  :custom ((highlight-symbol-idle-delay       0.1)
+           (highlight-symbol-on-navigation-p  t))
   :config (progn
             ;; http://emacs.stackexchange.com/questions/931
             (defun highlight-symbol-mode-post-command ()
@@ -98,10 +96,7 @@ create the new one."
               (when highlight-symbol-timer
                 (cancel-timer highlight-symbol-timer))
               (setq highlight-symbol-timer
-                    (run-with-timer value nil 'highlight-symbol-temp-highlight)))
-
-            (setq highlight-symbol-idle-delay       0.1
-                  highlight-symbol-on-navigation-p  t)))
+                    (run-with-timer value nil 'highlight-symbol-temp-highlight)))))
 
 ;; Highlight blocks
 (use-package highlight-blocks

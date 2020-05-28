@@ -451,7 +451,7 @@ little more place."
 ;; `lsp-mode' and `treemacs' integration
 (use-package lsp-treemacs
   :defer t
-  :after (lsp-mode all-the-icons treemacs)
+  :after (lsp-mode all-the-icons)
   :bind (:map lsp-mode-map
               ("C-<f8>" . lsp-treemacs-errors-list)
               ("<f8>"   . lsp-treemacs-symbols)))
