@@ -47,5 +47,11 @@
   :if (display-graphic-p)
   :config (remember-last-theme-enable))
 
+(defadvice custom-theme-recalc-variable (around bar activate)
+  (ignore-errors add-do-it))
+
+(defadvice enable-theme (around bar activate)
+  (ignore-errors add-do-it))
+
 (provide 'setup-themes)
 ;;; setup-themes.el ends here

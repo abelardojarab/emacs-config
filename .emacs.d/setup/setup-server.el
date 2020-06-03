@@ -29,12 +29,11 @@
   :demand t
   :bind (:map ctl-x-map
               ("C-c" . my/exit))
+  :custom ((server-use-tcp t)
+           (server-port    9999))
   :init (progn
-
           ;; Server configuration
-          (setq server-use-tcp    t
-                server-port       9999
-                server-auth-dir   (concat (file-name-as-directory
+          (setq server-auth-dir   (concat (file-name-as-directory
                                            my/emacs-cache-dir)
                                           "server")
                 server-socket-dir (concat (file-name-as-directory
@@ -78,10 +77,11 @@
               "Only kill emacs if a prefix is set"
               (when my/really-kill-emacs
                 ;; Kill all remaining clients
-                (if (not (my/modified-buffers-exist))
-                    (progn
-                      (dolist (client server-clients)
-                        (server-delete-client client))))
+                ;; (if (not (my/modified-buffers-exist))
+                ;;    (progn
+                (dolist (client server-clients)
+                  (server-delete-client client))
+                ;; ))
                 ;; Remove socket directory on emacs exit
                 (ignore-errors (delete-directory server-socket-dir t))
                 ad-do-it)
