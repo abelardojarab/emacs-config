@@ -31,9 +31,6 @@
                                  scroll-bar-background))
   (add-to-list 'frameset-filter-alist `(,param . :never)))
 
-;; Font-core library
-(use-package font-core)
-
 ;; Choose different themes depending if we are using GUI or not
 ;; Console colors are enabled if "export TERM=xterm-256color" is added into .bashrc
 (add-hook 'after-init-hook
@@ -44,14 +41,15 @@
 
 ;; Remember last theme
 (use-package remember-last-theme
+  :disabled t
   :if (display-graphic-p)
   :config (remember-last-theme-enable))
 
-(defadvice custom-theme-recalc-variable (around bar activate)
-  (ignore-errors add-do-it))
+;; (defadvice custom-theme-recalc-variable (around bar activate)
+;;   (ignore-errors add-do-it))
 
-(defadvice enable-theme (around bar activate)
-  (ignore-errors add-do-it))
+;; (defadvice enable-theme (around bar activate)
+;;   (ignore-errors add-do-it))
 
 (provide 'setup-themes)
 ;;; setup-themes.el ends here

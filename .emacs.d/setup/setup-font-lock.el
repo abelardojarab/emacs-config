@@ -1,6 +1,6 @@
 ;;; setup-font-lock.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -21,6 +21,9 @@
 ;;; Commentary:
 
 ;;
+
+;; Font-core library
+(use-package font-core)
 
 ;; Syntax coloring
 (use-package font-lock
