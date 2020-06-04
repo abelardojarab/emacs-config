@@ -176,9 +176,11 @@
   :demand t
   :commands my/message-mode-init
   :hook (message-mode . my/message-mode-init)
-  :custom ((message-generate-headers-first t)
+  :custom ((message-log-max                t)
+           (message-generate-headers-first t)
            (message-kill-buffer-on-exit    t)
-           (message-signature-file         ".signature"))
+           (message-signature-file         "~/.signature")
+           (message-send-mail-function     'smtpmail-send-it))
   :config (progn
             ;; decode html
             (use-package mm-decode

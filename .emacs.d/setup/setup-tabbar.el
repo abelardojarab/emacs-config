@@ -47,8 +47,6 @@
   :commands centaur-tabs-mode
   :custom ((centaur-tabs-set-bar             'above)
            (centaur-tabs-set-modified-marker t)
-           (centaur-tabs-modified-marker     "o")
-           (centaur-tabs-close-button        "×")
            (centaur-tabs-gray-out-icons      'buffer)
            (centaur-tabs-set-icons           t)
            (centaur-tabs-height              24)

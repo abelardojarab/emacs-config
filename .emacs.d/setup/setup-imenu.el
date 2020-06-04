@@ -24,6 +24,11 @@
 
 ;;; Code:
 
+;; imenu
+(use-package imenu
+  :custom ((imenu-auto-rescan t)
+           (imenu-max-item-length 200)))
+
 ;; imenu integration with helm/ivy
 (use-package imenu-anywhere)
 

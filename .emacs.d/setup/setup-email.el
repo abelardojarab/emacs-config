@@ -27,8 +27,7 @@
 ;; To be able to send email with your gmail/smtp mail
 (use-package smtpmail
   :after gnus
-  :custom ((message-send-mail-function         'smtpmail-send-it)
-           (send-mail-function                 'smtpmail-send-it)
+  :custom ((send-mail-function                 'smtpmail-send-it)
            (smtpmail-default-smtp-server       "smtp.gmail.com")
            (smtpmail-smtp-server               "smtp.gmail.com")
            (smtpmail-smtp-service              465)

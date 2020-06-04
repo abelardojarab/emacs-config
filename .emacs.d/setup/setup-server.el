@@ -76,12 +76,8 @@
             (defadvice kill-emacs (around my/really-exit activate)
               "Only kill emacs if a prefix is set"
               (when my/really-kill-emacs
-                ;; Kill all remaining clients
-                ;; (if (not (my/modified-buffers-exist))
-                ;;    (progn
                 (dolist (client server-clients)
                   (server-delete-client client))
-                ;; ))
                 ;; Remove socket directory on emacs exit
                 (ignore-errors (delete-directory server-socket-dir t))
                 ad-do-it)
