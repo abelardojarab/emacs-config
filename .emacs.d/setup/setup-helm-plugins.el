@@ -1,6 +1,6 @@
 ;; setup-helm-plugins.el ---                        -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018, 2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -184,9 +184,15 @@
   :config (progn
             (setq helm-bibtex-bibliography my/bibtex-completion-bibliography
                   helm-bibtex-library-path my/bibtex-completion-library-path
-                  helm-bibtex-notes-path my/bibtex-completion-notes)
+                  helm-bibtex-notes-path   my/bibtex-completion-notes)
 
-            ;; open pdf with system pdf viewer (works on mac)
+            (setq helm-bibtex-format-citation-functions
+                  '((org-mode . (lambda (x) (insert (concat
+                                                     "\\cite{"
+                                                     (mapconcat 'identity x ",")
+                                                     "}")) ""))))
+
+            ;; Open pdf with system pdf viewer (works on mac)
             (setq helm-bibtex-pdf-open-function
                   (lambda (fpath)
                     (start-process "open" "*open*" "open" fpath)))
@@ -240,9 +246,9 @@
          (emacs-lisp-mode   . dash-load-elisp))
   :bind (:map ctl-x-map
               ("d" . helm-dash))
+  :custom ((helm-dash-min-length       2)
+           (helm-dash-enable-debugging nil))
   :config (progn
-            (setq helm-dash-enable-debugging nil)
-            (setq helm-dash-min-length 2)
             (setq helm-dash-docsets-path (expand-file-name "docsets/" user-emacs-directory))
             (setq helm-dash-common-docsets '("Git"
                                              "Emacs_Lisp"))

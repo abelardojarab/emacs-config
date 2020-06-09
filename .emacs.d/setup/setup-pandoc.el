@@ -1,6 +1,6 @@
 ;;; setup-pandoc.el ---                              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -42,7 +42,10 @@
 
             ;; Prefer xelatex
             (if (executable-find "xelatex")
-                (setq org-pandoc-options '((standalone . t)) ; Default options
+                ;; Default options for all output formats
+                (setq org-pandoc-options '((standalone . t))
+                      ;; special extensions for markdown_github output
+                      org-pandoc-format-extensions '(markdown_github+pipe_tables+raw_html)
                       ;; Special settings for beamer-pdf and latex-pdf exporters
                       org-pandoc-options-for-beamer-pdf
                       '((latex-engine . "xelatex"))
