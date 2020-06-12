@@ -62,7 +62,8 @@
   :after python
   :hook (python-mode . elpy-enable)
   :commands (elpy-enable)
-  :custom (elpy-rpc-python-command "python3")
+  :custom ((elpy-rpc-python-command      "python3")
+           (elpy-rpc-ignored-buffer-size 5000000))
   :config (progn
             (add-hook 'elpy-mode-hook (lambda () (highlight-indentation-mode -1)))
             (defalias 'workon 'pyenv-workon)
