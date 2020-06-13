@@ -496,7 +496,7 @@ Captured %<%Y-%m-%d %H:%M>
 
 ;; Calendar viewer
 (use-package calfw
-  :defer t
+  :disabled t
   :commands cfw:open-org-calendar
   :config (use-package calfw-org))
 

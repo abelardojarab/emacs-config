@@ -32,6 +32,8 @@
 (defun tabbar-mode (mode)
   nil)
 
+(defvar tab-line-format)
+(setq tab-line-format nil)
 (use-package centaur-tabs
   :demand t
   :bind (("C-<prior>"   . centaur-tabs-backward)
