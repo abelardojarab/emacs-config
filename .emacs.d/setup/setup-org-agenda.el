@@ -62,14 +62,6 @@
   :defer t
   :after (org calendar)
   :commands (org-agenda org-archive-done-tasks)
-  :bind (("C-c A" . org-agenda)
-         :map org-mode-map
-         ("C-c i" . my/org-add-line-item-task)
-         :map org-agenda-mode-map
-         ("Y"     . org-agenda-todo-yesterday)
-         ("x"     . my/org-agenda-done)
-         ("X"     . my/org-agenda-mark-done-and-add-followup)
-         ("N"     . my/org-agenda-new))
   :custom ((org-log-done                                     'time)
            (org-enforce-todo-dependencies                    t)
            (org-agenda-inhibit-startup                       t)

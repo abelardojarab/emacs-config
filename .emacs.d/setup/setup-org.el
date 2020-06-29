@@ -29,11 +29,7 @@
   :defer t
   :mode (("\\.org$" . org-mode))
   :load-path (lambda () (expand-file-name "org/lisp" user-emacs-directory))
-  :bind (("C-c C"        . org-capture)
-         ("C-c L"        . org-store-link)
-         ("C-c I"        . org-insert-link-global)
-         ("C-c O"        . org-open-at-point-global)
-         :map org-mode-map
+  :bind (:map org-mode-map
          ("C-t"          . org-time-stamp)
          ("<return>"     . org-return)
          ([enter]        . org-return)

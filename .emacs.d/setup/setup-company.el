@@ -53,6 +53,7 @@
            (company-show-numbers              t)
            (company-tooltip-align-annotations t)
            (company-tooltip-limit             10)
+           (company-tooltip-flip-when-above   t)
            (company-dabbrev-downcase          nil)
            (company-dabbrev-ignore-case       t)
            (company-dabbrev-code-everywhere   t)
