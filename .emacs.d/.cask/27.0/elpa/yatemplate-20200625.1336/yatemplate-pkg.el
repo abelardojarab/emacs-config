@@ -1,0 +1,2 @@
+;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/yatemplate-20200625.1336/yatemplate.el  -*- no-byte-compile: t -*-
+(define-package "yatemplate" "20200625.1336" "File templates with yasnippet" '((yasnippet "0.8.1") (emacs "24.3")) :commit "23865adaee824db44acec8a4366ce2f29dd2e978" :keywords '("files" "convenience") :authors '(("Wieland Hoffmann" . "themineo+yatemplate@gmail.com")) :maintainer '("Wieland Hoffmann" . "themineo+yatemplate@gmail.com") :url "https://github.com/mineo/yatemplate")

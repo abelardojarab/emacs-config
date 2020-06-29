@@ -1,0 +1,2 @@
+;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/elquery-20200628.1756/elquery.el  -*- no-byte-compile: t -*-
+(define-package "elquery" "20200628.1756" "The HTML library for elisp." '((emacs "25.1") (s "1.11.0") (dash "2.13.0")) :commit "7cb5da9554bda8d24fcb54dae0f455cb8bef9906" :keywords '("html" "hypermedia" "tools" "webscale") :authors '(("Adam Niederer")) :maintainer '("Adam Niederer") :url "https://github.com/AdamNiederer/elquery")

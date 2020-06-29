@@ -1,0 +1,2 @@
+;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/charmap-20200616.1418/charmap.el  -*- no-byte-compile: t -*-
+(define-package "charmap" "20200616.1418" "Unicode table for Emacs" 'nil :commit "feac50b87d2a596c5e5b7b82b79ddd65b6dedd8c" :keywords '("unicode" "character" "ucs") :authors '(("Anan Mikami" . "lateau@gmail.com")) :maintainer '("Anan Mikami" . "lateau@gmail.com") :url "https://github.com/lateau/charmap")
