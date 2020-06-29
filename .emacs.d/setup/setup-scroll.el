@@ -25,13 +25,16 @@
 ;;; Code:
 
 (setq-default scroll-step                     1
-              scroll-margin                   1
-              scroll-conservatively           2000
-              scroll-preserve-screen-position 'always
-              scroll-up-aggressively          0.01
-              scroll-down-aggressively        0.01
-              fast-but-imprecise-scrolling    t
+              scroll-margin                   3
+              scroll-conservatively           101
+              scroll-preserve-screen-position 't
+              ;;scroll-up-aggressively          0.01
+              ;;scroll-down-aggressively        0.01
+              fast-but-imprecise-scrolling    nil
               auto-window-vscroll             nil)
+
+(defadvice line-move-to-column (around bar activate)
+  (ignore-errors add-do-it))
 
 ;; Be careful it can ruin shift-select-mode
 (use-package smooth-scrolling

@@ -32,6 +32,12 @@
              add-pcomplete-to-capf
              company-text-setup
              company-c-setup)
+  ;; Nicer looking faces
+  :custom-face
+  (company-tooltip-common
+   ((t (:inherit company-tooltip :weight bold :underline nil))))
+  (company-tooltip-common-selection
+   ((t (:inherit company-tooltip-selection :weight bold :underline nil))))
   :custom ((company-begin-commands           '(self-insert-command
                                                org-self-insert-command
                                                c-electric-lt-gt
