@@ -1,6 +1,6 @@
 ;;; setup-dabbrev.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -30,7 +30,7 @@
   :commands (abbrev-mode
              write-abbrev-file
              quietly-read-abbrev-file)
-  :diminish abbrev-mode
+  :diminish (abbrev-mode . " Ⓐ")
   :hook (kill-emacs . write-abbrev-file)
   :init (progn
           (setq abbrev-file-name (concat (file-name-as-directory

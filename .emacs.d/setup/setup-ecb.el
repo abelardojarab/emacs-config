@@ -221,7 +221,8 @@ little more place."
              treemacs-filewatch-mode
              treemacs-fringe-indicator-mode
              treemacs-load-theme
-             treemacs-create-theme)
+             treemacs-create-theme
+             treemacs-select-window)
   :init (progn
           (setq treemacs-persist-file (concat (file-name-as-directory
                                                my/emacs-cache-dir)

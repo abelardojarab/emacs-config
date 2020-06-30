@@ -27,6 +27,7 @@
 ;; Helm
 (use-package helm-config
   :demand t
+  :diminish (helm-mode . " Ⓗ")
   :bind (("C-`"   . helm-semantic-or-imenu)
          :map isearch-mode-map
          ("C-."   . helm-occur-from-isearch)

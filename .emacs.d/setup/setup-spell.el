@@ -141,7 +141,7 @@ Don't read buffer-local settings or word lists."
 
 ;; flyspell
 (use-package flyspell
-  :diminish (flyspell-mode . "ⓢ")
+  :diminish (flyspell-mode . " ⓢ")
   :if (not (equal 'system-type 'windows-nt))
   :commands (flyspell-mode flyspell-check-next-highlighted-word)
   :custom ((flyspell-delay 1)

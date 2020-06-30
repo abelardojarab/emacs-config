@@ -27,7 +27,7 @@
 ;; Yasnippet (should be invoked before auto-complete)
 (use-package yasnippet
   :defer t
-  :diminish yas-minor-mode
+  :diminish (yas-minor-mode . " Ⓨ")
   :bind (:map yas-minor-mode-map
               ;; Remove Yasnippet's default tab key binding (avoid collision with auto-complete)
               ("C-c r"       . yas-prev-field)

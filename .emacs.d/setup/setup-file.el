@@ -1,6 +1,6 @@
 ;;; setup-file.el ---                                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -27,7 +27,7 @@
 ;; Automatic filling setup
 (use-package auto-fill
   :defer t
-  :diminish (auto-fill-mode . "Ⓕ")
+  :diminish (auto-fill-mode . " Ⓕ")
   :custom (fill-column 120)
   :hook (text-mode . auto-fill-mode))
 

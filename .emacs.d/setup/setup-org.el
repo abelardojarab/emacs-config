@@ -86,7 +86,8 @@
   :config (progn
             ;; Basic packages
             (use-package org-list)
-            (use-package org-indent)
+            (use-package org-indent
+              :diminish (org-indent-mode . " Ⓞ"))
 
             ;; Avoid error when inserting '_'
             (defadvice org-backward-paragraph (around bar activate)

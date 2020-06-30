@@ -111,8 +111,8 @@
 (global-set-key [(control n)]    'cua-scroll-down)
 (global-set-key [(control p)]    'cua-scroll-up)
 
-;; Helm semantic (switch function)
-(global-set-key (kbd "<f4>")     'helm-semantic-or-imenu)
+;; List buffers
+(global-set-key (kbd "<f4>")    'ivy-switch-buffer)
 
 ;; Compile
 (global-set-key (kbd "<f5>")     'recompile)
@@ -134,8 +134,8 @@
 ;; Toggle frame maximized
 (global-set-key (kbd "<f11>")    'toggle-frame-maximized)
 
-;; List buffers
-(global-set-key (kbd "<f12>")    'ivy-switch-buffer)
+;; Helm semantic (switch function)
+(global-set-key (kbd "<f12>")     'helm-semantic-or-imenu)
 
 ;; Escape key in minibuffer
 (bind-keys :map minibuffer-local-map
@@ -181,9 +181,9 @@
            ((kbd "<C-tab>")                         .   comment-or-uncomment-region)
            ((kbd "M-.")                             .   helm-etags-select)
            ((kbd "C-.")                             .   helm-gtags-dwim)
-           ((kbd "<f4>")                            .   helm-semantic-or-imenu)
+           ((kbd "<f12>")                           .   helm-semantic-or-imenu)
            ((kbd "C-`")                             .   helm-semantic-or-imenu)
-           ((kbd "<f12>")                           .   ivy-switch-buffer)
+           ((kbd "<f4>")                            .   ivy-switch-buffer)
            ((kbd "<f5>")                            .   recompile)
            ((kbd "C-o")                             .   counsel-find-file)
            ((kbd "C-b")                             .   ivy-switch-buffer))
@@ -213,6 +213,25 @@
 (use-package console-keys
   :if (not (display-graphic-p))
   :load-path (lambda () (expand-file-name "console-keys/" user-emacs-directory)))
+
+;; For treemacs
+(defun my/add-current-project-to-treemacs ()
+  ""
+  (interactive)
+  (let ((project-path (projectile-project-root)))
+    (treemacs-add-project-at project-path
+                             (file-name-base (directory-file-name project-path)))))
+
+(defun my/select-treemacs-or-toggle ()
+  ""
+  (interactive)
+  (if (eq major-mode 'treemacs-mode)
+      (select-window my/treemacs-prior-window)
+    (setq my/treemacs-prior-window (selected-window))
+    (treemacs-select-window)))
+
+(global-set-key (kbd "<f1>") 'my/select-treemacs-or-toggle)
+(define-key dired-mode-map (kbd "<f1>") 'my/select-treemacs-or-toggle)
 
 (provide 'setup-keys)
 ;;; setup-keys.el ends here

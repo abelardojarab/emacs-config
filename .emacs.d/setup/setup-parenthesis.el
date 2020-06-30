@@ -103,7 +103,7 @@ FACE defaults to inheriting from default and highlight."
 ;; Smartparens
 (use-package smartparens
   :defer t
-  :diminish smartparens-mode
+  :diminish (smartparens-mode . " Ⓟ")
   :commands (smartparens-global-mode
              smartparens-mode
              show-smartparens-global-mode
@@ -130,7 +130,7 @@ FACE defaults to inheriting from default and highlight."
   :defer t
   :commands (autopair-mode
              autopair-global-mode)
-  :diminish autopair-mode
+  :diminish (autopair-mode . " Ⓟ")
   :config (progn
             (autopair-global-mode) ;; enable autopair in all buffers
             (setq autopair-autowrap t)
@@ -157,6 +157,7 @@ FACE defaults to inheriting from default and highlight."
 ;; Legacy minor mode
 (use-package paredit
   :defer t
+  :diminish (paredit-mode . " Ⓟ")
   :commands paredit-mode)
 
 (provide 'setup-parenthesis)
