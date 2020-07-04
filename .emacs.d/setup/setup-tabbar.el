@@ -35,7 +35,7 @@
 (defvar tab-line-format)
 (setq tab-line-format nil)
 (use-package centaur-tabs
-  :demand t
+  :disabled t
   :bind (("C-<prior>"   . centaur-tabs-backward)
          ("C-<next>"    . centaur-tabs-forward)
          ("C-c <right>" . centaur-tabs-forward)
