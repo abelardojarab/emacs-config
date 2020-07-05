@@ -29,31 +29,48 @@
   :if (display-graphic-p)
   :demand t)
 
-(use-package centaur-tabs
-  :disabled t
-  :bind (("C-<prior>"   . centaur-tabs-backward)
-         ("C-<next>"    . centaur-tabs-forward)
-         ("C-c <right>" . centaur-tabs-forward)
-         ("C-c <left>"  . centaur-tabs-backward))
-  :init (tabbar-mode -1)
-  :defines (centaur-tabs-style
-            centaur-tabs-set-icons
-            centaur-tabs-set-bar
-            centaur-tabs-set-modified-marker
-            centaur-tabs-modified-marker)
-  :commands centaur-tabs-mode
-  :custom ((centaur-tabs-set-bar             'above)
-           (centaur-tabs-set-modified-marker t)
-           (centaur-tabs-gray-out-icons      'buffer)
-           (centaur-tabs-set-icons           t)
-           (centaur-tabs-height              24)
-           (x-underline-at-descent-line      t))
-  :hook (after-init . centaur-tabs-mode)
+;; Tabbar
+(use-package tabbar
+  :hook (after-init . tabbar-mode)
   :config (progn
-            (centaur-tabs-mode t)
-            (centaur-tabs-group-by-projectile-project)
-            (centaur-tabs-change-fonts "P22 Underground Book" 130)
-            (add-hook 'centaur-tabs-mode (lambda () (tabbar-mode -1)))))
+            ;; Sort tabbar buffers by name
+            (defun tabbar-add-tab (tabset object &optional append_ignored)
+              "Add to TABSET a tab with value OBJECT if there isn't one there yet.
+ If the tab is added, it is added at the beginning of the tab list,
+ unless the optional argument APPEND is non-nil, in which case it is
+ added at the end."
+              (let ((tabs (tabbar-tabs tabset)))
+                (if (tabbar-get-tab object tabset)
+                    tabs
+                  (let ((tab (tabbar-make-tab object tabset)))
+                    (tabbar-set-template tabset nil)
+                    (set tabset (sort (cons tab tabs)
+                                      (lambda (a b) (string< (buffer-name (car a)) (buffer-name (car b))))))))))
+
+            ;; Add a buffer modification state indicator in the label
+            ;; Add a buffer modification state indicator in the tab label, and place a
+            ;; space around the label to make it looks less crowd.
+            (defadvice tabbar-buffer-tab-label (after fixup_tab_label_space_and_flag activate)
+              (setq ad-return-value
+                    (if (and (buffer-modified-p (tabbar-tab-value tab))
+                             (buffer-file-name (tabbar-tab-value tab)))
+                        (concat " * " (concat ad-return-value " "))
+                      (concat " " (concat ad-return-value " ")))))
+
+            ;; Called each time the modification state of the buffer changed.
+            (defun my/modification-state-change ()
+              (tabbar-set-template tabbar-current-tabset nil)
+              (tabbar-display-update))
+
+            ;; First-change-hook is called BEFORE the change is made.
+            (defun my/on-buffer-modification ()
+              (set-buffer-modified-p t)
+              (my/modification-state-change))
+            (add-hook 'after-save-hook 'my/modification-state-change)
+
+            ;; This doesn't work for revert, I don't know.
+            ;;(add-hook 'after-revert-hook 'my/modification-state-change)
+            (add-hook 'first-change-hook 'my/on-buffer-modification)))
 
 ;; Tabbar ruler
 (use-package tabbar-ruler
@@ -160,9 +177,7 @@ truncates text if needed.  Minimal width can be set with
                                                     'mouse-face 'tab-line-close-highlight
                                                     'help-echo "Click to close tab"))
 
-            (let ((bg (if (facep 'solaire-default-face)
-                          (face-attribute 'solaire-default-face :background)
-                        (face-attribute 'default :background)))
+            (let ((bg (face-attribute 'default :background))
                   (fg (face-attribute 'default :foreground))
                   (base (face-attribute 'mode-line :background))
                   (box-width (/ (line-pixel-height) 2)))

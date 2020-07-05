@@ -104,9 +104,6 @@
     (add-hook 'after-init-hook (lambda ()
                                  (load custom-file-x :noerror :nomessage)
 
-                                 ;; Do not enable tabbar
-                                 (tabbar-mode -1)
-
                                  ;; Add required faces
                                  (my/set-face-fringe)
                                  (my/set-face-ecb)
