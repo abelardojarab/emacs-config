@@ -45,32 +45,7 @@
                   (let ((tab (tabbar-make-tab object tabset)))
                     (tabbar-set-template tabset nil)
                     (set tabset (sort (cons tab tabs)
-                                      (lambda (a b) (string< (buffer-name (car a)) (buffer-name (car b))))))))))
-
-            ;; Add a buffer modification state indicator in the label
-            ;; Add a buffer modification state indicator in the tab label, and place a
-            ;; space around the label to make it looks less crowd.
-            (defadvice tabbar-buffer-tab-label (after fixup_tab_label_space_and_flag activate)
-              (setq ad-return-value
-                    (if (and (buffer-modified-p (tabbar-tab-value tab))
-                             (buffer-file-name (tabbar-tab-value tab)))
-                        (concat " * " (concat ad-return-value " "))
-                      (concat " " (concat ad-return-value " ")))))
-
-            ;; Called each time the modification state of the buffer changed.
-            (defun my/modification-state-change ()
-              (tabbar-set-template tabbar-current-tabset nil)
-              (tabbar-display-update))
-
-            ;; First-change-hook is called BEFORE the change is made.
-            (defun my/on-buffer-modification ()
-              (set-buffer-modified-p t)
-              (my/modification-state-change))
-            (add-hook 'after-save-hook 'my/modification-state-change)
-
-            ;; This doesn't work for revert, I don't know.
-            ;;(add-hook 'after-revert-hook 'my/modification-state-change)
-            (add-hook 'first-change-hook 'my/on-buffer-modification)))
+                                      (lambda (a b) (string< (buffer-name (car a)) (buffer-name (car b))))))))))))
 
 ;; Tabbar ruler
 (use-package tabbar-ruler
