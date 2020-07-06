@@ -107,23 +107,9 @@ source code, and program IO."
                 (select-window win0)))))
 
 ;; Microsoft debugger interface
-(use-package dap-mode
-  :diminish t
-  :disabled t
-  :bind (:map dap-mode-map
-              (("<C-f5"   . dap-debug)
-               ("<M-f5"   . dap-continue)
-               ("<C-f9>"   . dap-next)
-               ("<M-f11>" . dap-step-in)
-               ("<C-f11>" . dap-step-out)
-               ("<C-f12>" . dap-breakpoint-toggle)))
-  :hook ((after-init . dap-mode)
-         (dap-mode . dap-ui-mode)
-         (python-mode . (lambda () (require 'dap-python)))
-         (ruby-mode . (lambda () (require 'dap-ruby)))
-         (go-mode . (lambda () (require 'dap-go)))
-         (java-mode . (lambda () (require 'dap-java)))
-         ((c-mode c++-mode objc-mode swift) . (lambda () (require 'dap-lldb)))))
+(use-package dap-ui
+  :defer t
+  :commands (dap-ui-mode))
 
 (provide 'setup-gdb)
 ;;; setup-gdb.el ends here
