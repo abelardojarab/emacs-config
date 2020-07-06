@@ -60,20 +60,20 @@
 
       (if (fboundp 'color-lighten-name)
           (setq my/tabbar-bg-color
-                (color-lighten-name (face-background 'mode-line) 12))
+                (color-lighten-name (face-background 'default) 12))
         (setq my/tabbar-bg-color bg))
 
       (set-face-attribute 'tabbar-default nil
                           :foreground fg
-                          :background my/tabbar-back-color ;; bg
+                          :background my/tabbar-bg-color
                           :weight 'normal
                           :inherit nil
                           :box (list :line-width box-width
-                                     :color my/tabbar-back-color ;; bg
+                                     :color my/tabbar-bg-color
                                      ))
       (set-face-attribute 'tabbar-button nil
                           :foreground fg
-                          :background my/tabbar-back-color ;; base
+                          :background my/tabbar-back-color
                           :weight 'normal
                           :inherit nil
                           :box (list :line-width box-width
@@ -84,7 +84,11 @@
                           :weight 'normal
                           :inherit nil
                           :box (list :line-width box-width
-                                     :color bg)))))
+                                     :color bg))
+      (set-face-attribute 'tabbar-selected-modified nil
+                          :inherit 'tabbar-selected
+                          :foreground "GoldenRod2")
+      )))
 
 ;; Default ECB theme-ing
 (defun my/set-face-ecb ()
