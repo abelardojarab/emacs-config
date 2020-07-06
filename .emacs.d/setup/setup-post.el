@@ -73,7 +73,7 @@
                                      ))
       (set-face-attribute 'tabbar-button nil
                           :foreground fg
-                          :background my/tabbar-bg-color ;; base
+                          :background my/tabbar-back-color ;; base
                           :weight 'normal
                           :inherit nil
                           :box (list :line-width box-width
@@ -159,6 +159,9 @@
 
                                  ;; Set the modeline
                                  (doom-modeline-mode t))))
+
+;; Run it once
+(my/set-face-tabbar)
 
 (provide 'setup-post)
 ;;; setup-post.el ends here
