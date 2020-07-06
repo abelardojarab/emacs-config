@@ -334,3 +334,4 @@
 
 (setq debug-on-quit nil)
 (setq debug-on-error nil)
+(put 'scroll-left 'disabled nil)

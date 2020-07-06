@@ -137,6 +137,18 @@
 ;; Helm semantic (switch function)
 (global-set-key (kbd "<f12>")     'helm-semantic-or-imenu)
 
+;; Tabbar
+(global-set-key [C-prior]             'tabbar-backward-tab)
+(global-set-key [C-next]              'tabbar-forward-tab)
+(global-set-key [C-home]              'tabbar-backward-group)
+(global-set-key [C-end]               'tabbar-forward-group)
+
+;; Tabbar, now using ctl-x-map
+(global-set-key (kbd "C-x <prior>")   'tabbar-backward-tab)
+(global-set-key (kbd "C-x <next>")    'tabbar-forward-tab)
+(global-set-key (kbd "C-x <home>")    'tabbar-backward-group)
+(global-set-key (kbd "C-x <end>")     'tabbar-forward-group)
+
 ;; Escape key in minibuffer
 (bind-keys :map minibuffer-local-map
            ([escape] . abort-recursive-edit)
@@ -159,6 +171,12 @@
            ((kbd "<left>")    . windmove-left)
            ((kbd "<right>")   . windmove-right))
 
+;; Tabbar Ctrl-x mappings
+(define-key ctl-x-map (kbd "<prior>") 'tabbar-backward-tab)
+(define-key ctl-x-map (kbd "<next>")  'tabbar-forward-tab)
+(define-key ctl-x-map (kbd "<home>")  'tabbar-backward-group)
+(define-key ctl-x-map (kbd "<end>")   'tabbar-forward-group)
+
 ;; Extra Ctrl-x mappings
 (bind-keys :map ctl-x-map
            ((kbd "SPC")       . my/disable-rbm-deactivate-mark)
@@ -166,6 +184,7 @@
            ((kbd "<")         . decrease-left-margin)
            ((kbd "F")         . toggle-frame-fullscreen)
            ((kbd "T")         . toggle-truncate-lines))
+
 
 ;; Cua mode helpers
 (bind-keys :map ctl-x-map

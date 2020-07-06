@@ -40,6 +40,52 @@
   (custom-set-faces
    `(fringe ((t (:background ,my/fringe-background-color))))))
 
+;; Default tabbar theme-ing
+(defun my/set-face-tabbar ()
+  "Set the tabbar background to the same color as the regular background."
+  (interactive)
+  (setq tabbar-separator '(0.0))
+  (let ((bg (face-attribute 'default :background))
+        (fg (face-attribute 'default :foreground))
+        (base (face-attribute 'mode-line :background))
+        (box-width (/ (line-pixel-height) 2)))
+    (when (and (color-defined-p bg)
+               (color-defined-p fg)
+               (color-defined-p base)
+               (numberp box-width))
+      (if (fboundp 'color-lighten-name)
+          (setq my/tabbar-back-color
+                (color-lighten-name (face-background 'default) 12))
+        (setq my/tabbar-back-color base))
+
+      (if (fboundp 'color-lighten-name)
+          (setq my/tabbar-bg-color
+                (color-lighten-name (face-background 'mode-line) 12))
+        (setq my/tabbar-bg-color bg))
+
+      (set-face-attribute 'tabbar-default nil
+                          :foreground fg
+                          :background my/tabbar-back-color ;; bg
+                          :weight 'normal
+                          :inherit nil
+                          :box (list :line-width box-width
+                                     :color my/tabbar-back-color ;; bg
+                                     ))
+      (set-face-attribute 'tabbar-button nil
+                          :foreground fg
+                          :background my/tabbar-bg-color ;; base
+                          :weight 'normal
+                          :inherit nil
+                          :box (list :line-width box-width
+                                     :color my/tabbar-back-color))
+      (set-face-attribute 'tabbar-selected nil
+                          :foreground fg
+                          :background bg
+                          :weight 'normal
+                          :inherit nil
+                          :box (list :line-width box-width
+                                     :color bg)))))
+
 ;; Default ECB theme-ing
 (defun my/set-face-ecb ()
   "Set the ecb background to the same color as the regular background."
@@ -50,6 +96,7 @@
    `(ecb-default-general-face ((t (:background ,my/ecb-background-color :inherit fixed-pitch))))
    `(ecb-default-highlight-face ((t (:inherit helm-selection-line))))))
 
+(add-hook 'after-init-hook #'my/set-face-tabbar)
 (add-hook 'after-init-hook #'my/set-face-fringe)
 (add-hook 'after-init-hook #'my/set-face-ecb)
 
@@ -93,6 +140,7 @@
           (set-selected-frame-dark)))
     (my/set-face-fringe)
     (my/set-face-ecb)
+    (my/set-face-tabbar)
     (doom-modeline-mode t)
 
     ;; remove modeline boxes
@@ -106,6 +154,7 @@
 
                                  ;; Add required faces
                                  (my/set-face-fringe)
+                                 (my/set-face-tabbar)
                                  (my/set-face-ecb)
 
                                  ;; Set the modeline

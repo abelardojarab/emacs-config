@@ -32,6 +32,9 @@
 ;; Tabbar
 (use-package tabbar
   :hook (after-init . tabbar-mode)
+  :custom ((tabbar-auto-scroll-flag  t)
+           (tabbar-use-images        t)
+           (table-time-before-update 0.1))
   :config (progn
             ;; Sort tabbar buffers by name
             (defun tabbar-add-tab (tabset object &optional append_ignored)
@@ -45,17 +48,70 @@
                   (let ((tab (tabbar-make-tab object tabset)))
                     (tabbar-set-template tabset nil)
                     (set tabset (sort (cons tab tabs)
-                                      (lambda (a b) (string< (buffer-name (car a)) (buffer-name (car b))))))))))))
+                                      (lambda (a b) (string< (buffer-name (car a)) (buffer-name (car b))))))))))
+
+            ;; Reduce tabbar width to enable as many buffers as possible
+            (defun tabbar-buffer-tab-label (tab)
+              "Return a label for TAB.
+That is, a string used to represent it on the tab bar."
+              (let ((label  (if tabbar--buffer-show-groups
+                                (format "[%s] " (tabbar-tab-tabset tab))
+                              (format "%s" (tabbar-tab-value tab)))))
+                ;; Unless the tab bar auto scrolls to keep the selected tab
+                ;; visible, shorten the tab label to keep as many tabs as possible
+                ;; in the visible area of the tab bar.
+                (if nil ;; tabbar-auto-scroll-flag
+                    label
+                  (tabbar-shorten
+                   label (max 1 (/ (window-width)
+                                   (length (tabbar-view
+                                            (tabbar-current-tabset)))))))))
+
+            ;; Tweaking the tabbar
+            (defadvice tabbar-buffer-tab-label (after fixup_tab_label_space_and_flag activate)
+              (setq ad-return-value
+                    (if (and (buffer-modified-p (tabbar-tab-value tab))
+                             (buffer-file-name (tabbar-tab-value tab)))
+                        (concat "+" (concat ad-return-value ""))
+                      (concat "" (concat ad-return-value "")))))
+
+            ;; called each time the modification state of the buffer changed
+            (defun my/modification-state-change ()
+              (tabbar-set-template tabbar-current-tabset nil)
+              (tabbar-display-update))
+
+            ;; first-change-hook is called BEFORE the change is made
+            (defun my/on-buffer-modification ()
+              (set-buffer-modified-p t)
+              (my/modification-state-change))
+
+            ;; Assure switching tabs uses switch-to-buffer
+            (defun switch-tabbar (num)
+              (let* ((tabs (tabbar-tabs
+                            (tabbar-current-tabset)))
+                     (tab (nth
+                           (if (> num 0) (- num 1) (+ (length tabs) num))
+                           tabs)))
+                (if tab (switch-to-buffer (car tab)))))))
 
 ;; Tabbar ruler
 (use-package tabbar-ruler
   :demand t
-  :bind (("C-<prior>"   . tabbar-backward)
-         ("C-<next>"    . tabbar-forward)
-         ("C-c <right>" . tabbar-forward)
-         ("C-c <left>"  . tabbar-backward))
-  :custom ((tabbar-cycle-scope 'tabs)
-           (tabbar-ruler-global-tabbar t)))
+  :custom ((tabbar-cycle-scope         'tabs)
+           (tabbar-ruler-global-tabbar t))
+  :config (progn
+            ;; Fix for tabbar under Emacs 24.4
+            ;; store tabbar-cache into a real hash,
+            ;; rather than in frame parameters
+            (defvar tabbar-caches (make-hash-table :test 'equal))
+
+            (defun tabbar-create-or-get-tabbar-cache ()
+              "Return a frame-local hash table that acts as a memoization
+       cache for tabbar. Create one if the frame doesn't have one yet."
+              (or (gethash (selected-frame) tabbar-caches)
+                  (let ((frame-cache (make-hash-table :test 'equal)))
+                    (puthash (selected-frame) frame-cache tabbar-caches)
+                    frame-cache)))))
 
 ;; Newer built-in tabbar for Emacs
 (use-package tab-line
@@ -155,7 +211,7 @@ truncates text if needed.  Minimal width can be set with
             (let ((bg (face-attribute 'default :background))
                   (fg (face-attribute 'default :foreground))
                   (base (face-attribute 'mode-line :background))
-                  (box-width (/ (line-pixel-height) 2)))
+                  (box-width (/ (line-pixel-height) 4)))
               (when (and (color-defined-p bg)
                          (color-defined-p fg)
                          (color-defined-p base)
