@@ -106,10 +106,40 @@ source code, and program IO."
                 (set-window-dedicated-p win0 t)
                 (select-window win0)))))
 
+;; Use the Debug Adapter Protocol for running tests and debugging
+;; Posframe is a pop-up tool that must be manually installed for dap-mode
+(use-package posframe)
+
+;; Microsoft debugger interface
+(use-package dap-mouse
+  :demand t
+  :commands dap-tooltip-mode)
+
 ;; Microsoft debugger interface
 (use-package dap-ui
+  :demand t
+  :commands dap-ui-mode
+  :hook (dap-ui-mode . dap-ui-controls-mode))
+
+;; Microsoft debugger interface
+(use-package dap-mode
   :defer t
-  :commands (dap-ui-mode))
+  :commands (dap-mode
+             dap-debug
+             dap-debug-edit-template)
+  :hook ((dap-mode  . dap-tooltip-mode)
+         (dap-mode  . dap-ui-mode)
+         (prog-mode . dap-mode))
+  :after lsp-mode
+  :preface (setq dap-breakpoints-file (concat (file-name-as-directory
+                                               my/emacs-cache-dir)
+                                              "dap-breakpoints")
+                 dap-utils-extension-path (concat (file-name-as-directory
+                                                   my/emacs-cache-dir) "dap-extension/"))
+  :config (progn
+            (use-package dap-gdb-lldb)
+            (use-package dap-python)
+            (dap-auto-configure-mode)))
 
 (provide 'setup-gdb)
 ;;; setup-gdb.el ends here

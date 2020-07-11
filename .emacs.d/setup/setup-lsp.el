@@ -55,7 +55,7 @@
 (use-package lsp-imenu
   :hook (lsp-after-open . lsp-enable-imenu))
 
-;; lsp-ui: This contains all the higher level UI modules of lsp-mode, like flycheck support and code lenses.
+;; flycheck integration & higher level UI modules
 (use-package lsp-ui
   :diminish t
   :custom ((lsp-ui-sideline-enable               nil)
