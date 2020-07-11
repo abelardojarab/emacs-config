@@ -5,7 +5,7 @@
 ;; Author: Vibhav Pant, Fangrui Song, Ivan Yonchovski
 ;; Keywords: languages
 ;; Package-Requires: ((emacs "25.1") (dash "2.14.1") (dash-functional "2.14.1") (f "0.20.0") (ht "2.0") (spinner "1.7.3") (markdown-mode "2.3") (lv "0"))
-;; Version: 6.3.1
+;; Version: 7.0
 
 ;; URL: https://github.com/emacs-lsp/lsp-mode
 ;; This program is free software; you can redistribute it and/or modify
@@ -606,12 +606,7 @@ This flag affects only server which do not support incremental update."
   "If non-nil, enable the `dap-auto-configure-mode`."
   :type 'boolean
   :group 'lsp-mode
-  :package-version '(lsp-mode . "6.4"))
-
-(defcustom lsp-links-check-internal 0.1
-  "The interval for updating document links."
-  :group 'lsp-mode
-  :type 'float)
+  :package-version '(lsp-mode . "7.0"))
 
 (defcustom lsp-eldoc-enable-hover t
   "If non-nil, eldoc will display hover info when it is present."
@@ -805,10 +800,22 @@ ignored."
   :group 'lsp-mode
   :package-version '(lsp-mode . "6.3.2"))
 
+(defcustom lsp-completion-show-kind t
+  "Whether or not to show kind of completion candidates."
+  :type 'boolean
+  :group 'lsp-mode
+  :package-version '(lsp-mode . "7.0.1"))
+
 (defcustom lsp-completion-show-detail t
   "Whether or not to show detail of completion candidates."
   :type 'boolean
   :group 'lsp-mode)
+
+(defcustom lsp-completion-no-cache nil
+  "Whether or not caching the returned completions from server."
+  :type 'boolean
+  :group 'lsp-mode
+  :package-version '(lsp-mode . "7.0.1"))
 
 (defcustom lsp-server-trace nil
   "Request tracing on the server side.
@@ -1074,6 +1081,16 @@ called with nil the signature info must be cleared."
   "Contain the `lsp-session' for the current Emacs instance.")
 
 (defvar lsp--tcp-port 10000)
+
+(defvar lsp--tcp-server-port 0
+  "The server socket which is opened when using `lsp-tcp-server' (a server socket
+is opened in Emacs and the language server connects to it). The default
+value of 0 ensures that a random high port is used. Set it to a positive
+integer to use a specific port.")
+
+(defvar lsp--tcp-server-wait-seconds 10
+  "Wait this amount of time for the client to connect to our server socket
+when using `lsp-tcp-server'.")
 
 (defvar-local lsp--document-symbols nil
   "The latest document symbols.")
@@ -2021,12 +2038,13 @@ The `:global' workspace is global one.")
 
 (defun lsp--modeline-check-code-actions (&rest _)
   "Request code actions to update modeline for given BUFFER."
-  (lsp-request-async
-   "textDocument/codeAction"
-   (lsp--text-document-code-action-params)
-   #'lsp-modeline--update-code-actions
-   :mode 'tick
-   :cancel-token :lsp-modeline-code-actions))
+  (when (lsp-feature? "textDocument/codeAction")
+    (lsp-request-async
+     "textDocument/codeAction"
+     (lsp--text-document-code-action-params)
+     #'lsp-modeline--update-code-actions
+     :mode 'unchanged
+     :cancel-token :lsp-modeline-code-actions)))
 
 (define-minor-mode lsp-modeline-code-actions-mode
   "Toggle code actions on modeline."
@@ -2048,20 +2066,26 @@ The `:global' workspace is global one.")
   "Holds the current breadcrumb string on headerline.")
 
 (declare-function all-the-icons-material "ext:all-the-icons" t t)
-(declare-function treemacs-get-icon-value "ext:treemacs-icons" t t)
-(declare-function lsp-treemacs-symbol-kind->icon "ext:lsp-treemacs" t)
+(declare-function lsp-treemacs-symbol-icon "ext:lsp-treemacs" (kind))
 
 (defun lsp--headerline-breadcrumb-arrow-icon ()
   "Build the arrow icon for headerline breadcrumb."
   (if (require 'all-the-icons nil t)
       (all-the-icons-material "chevron_right"
-                             :face lsp-headerline-breadcrumb-face)
+                              :face lsp-headerline-breadcrumb-face)
     (propertize "›" 'face lsp-headerline-breadcrumb-face)))
 
 (lsp-defun lsp--headerline-breadcrumb-symbol-icon ((&DocumentSymbol :kind))
   "Build the SYMBOL icon for headerline breadcrumb."
   (when (require 'lsp-treemacs nil t)
-    (treemacs-get-icon-value (lsp-treemacs-symbol-kind->icon kind))))
+    (propertize " " 'display
+                (cl-list* 'image
+                          (plist-put
+                           (cl-copy-list
+                            (cl-rest (get-text-property
+                                      0 'display
+                                      (lsp-treemacs-symbol-icon kind))))
+                           :background (face-attribute 'header-line :background))))))
 
 (defun lsp--headerline-build-string (symbols-hierarchy)
   "Build the header-line from SYMBOLS-HIERARCHY."
@@ -3469,14 +3493,13 @@ If NO-MERGE is non-nil, don't merge the results but return alist workspace->resu
              (body (plist-put body :id id)))
 
         ;; cancel request in any of the hooks
-        (when hooks
-          (mapc (-lambda ((hook . local))
-                  (add-hook hook
-                            (lsp--create-request-cancel
-                             id target-workspaces hook buf method)
-                            nil local))
-                hooks)
-          (puthash id cleanup-hooks lsp--request-cleanup-hooks))
+        (mapc (-lambda ((hook . local))
+                (add-hook hook
+                          (lsp--create-request-cancel
+                           id target-workspaces hook buf method)
+                          nil local))
+              hooks)
+        (puthash id cleanup-hooks lsp--request-cleanup-hooks)
 
         (setq lsp--last-active-workspaces target-workspaces)
 
@@ -3956,23 +3979,23 @@ in that particular folder."
         (lsp--clean-company))))))
 
 (defun lsp-configure-buffer ()
-  (when (and lsp-modeline-code-actions-enable
-             (lsp-feature? "textDocument/codeAction"))
-    (lsp-modeline-code-actions-mode 1))
-
-  (when (and lsp-headerline-breadcrumb-enable
-             (lsp-feature? "textDocument/documentSymbol"))
-    (lsp-headerline-breadcrumb-mode 1))
-
-  (when (and lsp-lens-auto-enable
-             (lsp-feature? "textDocument/codeLens"))
-    (lsp-lens-mode 1))
-
-  (when (and lsp-enable-text-document-color
-             (lsp-feature? "textDocument/documentColor"))
-    (add-hook 'lsp-on-change-hook #'lsp--document-color nil t))
-
   (when lsp-auto-configure
+    (when (and lsp-modeline-code-actions-enable
+               (lsp-feature? "textDocument/codeAction"))
+      (lsp-modeline-code-actions-mode 1))
+
+    (when (and lsp-headerline-breadcrumb-enable
+               (lsp-feature? "textDocument/documentSymbol"))
+      (lsp-headerline-breadcrumb-mode 1))
+
+    (when (and lsp-lens-auto-enable
+               (lsp-feature? "textDocument/codeLens"))
+      (lsp-lens-mode 1))
+
+    (when (and lsp-enable-text-document-color
+               (lsp-feature? "textDocument/documentColor"))
+      (add-hook 'lsp-on-change-hook #'lsp--document-color nil t))
+
     (when (and lsp-enable-imenu
                (lsp-feature? "textDocument/documentSymbol"))
       (lsp-enable-imenu))
@@ -4574,24 +4597,25 @@ Applies on type formatting."
 
 ;; links
 (defun lsp--document-links ()
-  (lsp-request-async
-   "textDocument/documentLink"
-   `(:textDocument ,(lsp--text-document-identifier))
-   (lambda (links)
-     (lsp--remove-overlays 'lsp-link)
-     (seq-do
-      (-lambda ((link &as &DocumentLink :range (&Range :start :end)))
-        (-doto (make-button (lsp--position-to-point start)
-                            (lsp--position-to-point end)
-                            'action (lsp--document-link-keymap link)
-                            'keymap (let ((map (make-sparse-keymap)))
-                                      (define-key map [M-return] 'push-button)
-                                      (define-key map [mouse-2] 'push-button)
-                                      map)
-                            'help-echo "mouse-2, M-RET: Visit this link")
-          (overlay-put 'lsp-link t)))
-      links))
-   :mode 'tick))
+  (when (lsp-feature? "textDocument/documentLink")
+    (lsp-request-async
+     "textDocument/documentLink"
+     `(:textDocument ,(lsp--text-document-identifier))
+     (lambda (links)
+       (lsp--remove-overlays 'lsp-link)
+       (seq-do
+        (-lambda ((link &as &DocumentLink :range (&Range :start :end)))
+          (-doto (make-button (lsp--position-to-point start)
+                              (lsp--position-to-point end)
+                              'action (lsp--document-link-keymap link)
+                              'keymap (let ((map (make-sparse-keymap)))
+                                        (define-key map [M-return] 'push-button)
+                                        (define-key map [mouse-2] 'push-button)
+                                        map)
+                              'help-echo "mouse-2, M-RET: Visit this link")
+            (overlay-put 'lsp-link t)))
+        links))
+     :mode 'unchanged)))
 
 (defun lsp--document-link-handle-target (url)
   (let* ((parsed-url (url-generic-parse-url (url-unhex-string url)))
@@ -4741,8 +4765,9 @@ and the position respectively."
                                                        'lsp-completion-item)))
     (concat (when (and lsp-completion-show-detail detail?)
               (concat " " (s-replace "\r" "" detail?)))
-            (when-let (kind-name (and kind? (aref lsp--completion-item-kind kind?)))
-              (format " (%s)" kind-name)))))
+            (when lsp-completion-show-kind
+              (when-let (kind-name (and kind? (aref lsp--completion-item-kind kind?)))
+                (format " (%s)" kind-name))))))
 
 (defun lsp--looking-back-trigger-characterp (trigger-characters)
   "Return trigger character if text before point matches any of the TRIGGER-CHARACTERS."
@@ -4784,12 +4809,15 @@ Return `nil' when fails to guess prefix."
              (text (or insert-text? label))
              (point (point))
              (start (max 1 (- point (length text))))
+             (char-before (char-before start))
              start-point)
        (while (and (< start point) (not start-point))
-         (when (and (not (equal (char-syntax (char-before start)) ?w))
-                    (string-prefix-p (buffer-substring-no-properties start point) text))
+         (unless (or (and char-before (equal (char-syntax char-before) ?w))
+                     (not (string-prefix-p (buffer-substring-no-properties start point)
+                                           text)))
            (setq start-point start))
-         (cl-incf start))
+         (cl-incf start)
+         (setq char-before (char-before start)))
        start-point))))
 
 (defun lsp--capf-cached-items (items)
@@ -4806,6 +4834,9 @@ Return `nil' when fails to guess prefix."
                            'lsp-completion-score score?))
              it)))
 
+(defvar lsp--capf-no-reordering nil
+  "Dont do client-side reordering completion items when set.")
+
 (cl-defun lsp--capf-filter-candidates (items
                                        &rest plist
                                        &key lsp-items
@@ -4816,7 +4847,7 @@ Also, additional data to attached to each candidate can be passed via PLIST."
   (lsp--while-no-input
    (->>
     (if items
-        (->>
+        (-->
          (let (queries fuz-queries)
            (-keep (lambda (cand)
                     (let* ((start-point (get-text-property 0 'lsp-completion-start-point cand))
@@ -4839,11 +4870,13 @@ Also, additional data to attached to each candidate can be passed via PLIST."
                                            cand)
                         cand)))
                   items))
-         (-sort (lambda (o1 o2)
-                  (> (get-text-property 0 'sort-score o1)
-                     (get-text-property 0 'sort-score o2))))
+         (if lsp--capf-no-reordering
+             it
+           (sort it (lambda (o1 o2)
+                      (> (get-text-property 0 'sort-score o1)
+                         (get-text-property 0 'sort-score o2)))))
          ;; TODO: pass additional function to sort the candidates
-         (-map (-partial #'get-text-property 0 'lsp-completion-item)))
+         (-map (-partial #'get-text-property 0 'lsp-completion-item) it))
       lsp-items)
     (-map (lambda (item) (apply #'lsp--make-completion-item item plist))))))
 
@@ -4934,11 +4967,12 @@ Also, additional data to attached to each candidate can be passed via PLIST."
             (lambda ()
               (cond
                (done? result)
-               ((and lsp--capf-cache
+               ((and (not lsp-completion-no-cache)
+                     lsp--capf-cache
                      (listp lsp--capf-cache)
+                     (equal (cl-second lsp--capf-cache) bounds-start)
                      (s-prefix? (car lsp--capf-cache)
-                                (buffer-substring-no-properties bounds-start (point)))
-                     (< (cl-second lsp--capf-cache) (point)))
+                                (buffer-substring-no-properties bounds-start (point))))
                 (apply #'lsp--capf-filter-candidates (cddr lsp--capf-cache)))
                (t
                 (-let* ((resp (lsp-request-while-no-input
@@ -4962,7 +4996,9 @@ Also, additional data to attached to each candidate can be passed via PLIST."
                                                           bounds-start)))
                                            it))))
                         (markers (list bounds-start (copy-marker (point) t)))
-                        (prefix (buffer-substring-no-properties bounds-start (point))))
+                        (prefix (buffer-substring-no-properties bounds-start (point)))
+                        (lsp--capf-no-reordering t))
+                  (lsp--capf-clear-cache)
                   (setf done? completed
                         lsp--capf-cache (cond
                                          ((and done? (not (seq-empty-p items)))
@@ -5010,46 +5046,44 @@ Also, additional data to attached to each candidate can be passed via PLIST."
   "Exit function of `completion-at-point'.
 CANDIDATE is the selected completion item.
 Others: TRIGGER-CHARS"
-  (-let* (((&plist 'lsp-completion-item item
-                   'lsp-completion-start-point start-point
-                   'lsp-completion-markers markers
-                   'lsp-completion-prefix prefix)
-           (text-properties-at 0 candidate))
-          ((&CompletionItem :label :insert-text? :text-edit? :insert-text-format? :additional-text-edits?)
-           item))
-    (cond
-     (text-edit?
-      (apply #'delete-region markers)
-      (insert prefix)
-      (lsp--apply-text-edit text-edit?))
-     ((or insert-text? label)
-      (apply #'delete-region markers)
-      (insert prefix)
-      (delete-region start-point (point))
-      (insert (or insert-text? label))))
+  (unwind-protect
+       (-let* (((&plist 'lsp-completion-item item
+                        'lsp-completion-start-point start-point
+                        'lsp-completion-markers markers
+                        'lsp-completion-prefix prefix)
+                (text-properties-at 0 candidate))
+               ((&CompletionItem :label :insert-text? :text-edit? :insert-text-format? :additional-text-edits?)
+                item))
+         (cond
+           (text-edit?
+            (apply #'delete-region markers)
+            (insert prefix)
+            (lsp--apply-text-edit text-edit?))
+           ((or insert-text? label)
+            (apply #'delete-region markers)
+            (insert prefix)
+            (delete-region start-point (point))
+            (insert (or insert-text? label))))
 
-    (when (eq insert-text-format? 2)
-      (let (yas-indent-line)
-        (yas-expand-snippet
-         (lsp--to-yasnippet-snippet (buffer-substring start-point (point)))
-         start-point
-         (point))))
+         (when (eq insert-text-format? 2)
+           (let (yas-indent-line)
+             (yas-expand-snippet
+              (lsp--to-yasnippet-snippet (buffer-substring start-point (point)))
+              start-point
+              (point))))
 
-    (when (and lsp-completion-enable-additional-text-edit additional-text-edits?)
-      (lsp--apply-text-edits additional-text-edits?)))
+         (when (and lsp-completion-enable-additional-text-edit additional-text-edits?)
+           (lsp--apply-text-edits additional-text-edits?))
 
-  (lsp--capf-clear-cache)
+         (when (and lsp-signature-auto-activate
+                    (lsp-feature? "textDocument/signatureHelp"))
+           (lsp-signature-activate))
 
-  (when (and lsp-signature-auto-activate
-             (lsp-feature? "textDocument/signatureHelp"))
-    (lsp-signature-activate))
+         (setq-local lsp-inhibit-lsp-hooks nil)
 
-  (setq-local lsp-inhibit-lsp-hooks nil)
-
-  (when (lsp--looking-back-trigger-characterp trigger-chars)
-    (setq this-command 'self-insert-command)))
-
-(advice-add #'completion-at-point :before #'lsp--capf-clear-cache)
+         (when (lsp--looking-back-trigger-characterp trigger-chars)
+           (setq this-command 'self-insert-command)))
+    (lsp--capf-clear-cache)))
 
 (defun lsp--to-yasnippet-snippet (text)
   "Convert LSP snippet TEXT to yasnippet snippet."
@@ -5732,34 +5766,35 @@ It will show up only if current point has signature help."
 
 (defun lsp--document-color ()
   "Document color handler."
-  (lsp-request-async
-   "textDocument/documentColor"
-   `(:textDocument ,(lsp--text-document-identifier))
-   (lambda (result)
-     (lsp--remove-overlays 'lsp-color)
-     (seq-do
-      (-lambda ((&ColorInformation :color (color &as &Color :red :green :blue)
-                                   :range))
-        (-let* (((beg . end) (lsp--range-to-region range))
-                (overlay (make-overlay beg end))
-                (command (lsp--color-create-interactive-command color range)))
-          (overlay-put overlay 'lsp-color t)
-          (overlay-put overlay 'evaporate t)
-          (overlay-put overlay
-                       'before-string
-                       (propertize
-                        lsp-overlay-document-color-char
-                        'face `((:foreground ,(format "#%s%s%s"
-                                                      (lsp--number->color red)
-                                                      (lsp--number->color green)
-                                                      (lsp--number->color blue))))
-                        'action command
-                        'mouse-face 'lsp-lens-mouse-face
-                        'local-map (-doto (make-sparse-keymap)
-                                     (define-key [mouse-1] command))))))
-      result))
-   :mode 'tick
-   :cancel-token :document-color-token))
+  (when (lsp-feature? "textDocument/documentColor")
+    (lsp-request-async
+     "textDocument/documentColor"
+     `(:textDocument ,(lsp--text-document-identifier))
+     (lambda (result)
+       (lsp--remove-overlays 'lsp-color)
+       (seq-do
+        (-lambda ((&ColorInformation :color (color &as &Color :red :green :blue)
+                                     :range))
+          (-let* (((beg . end) (lsp--range-to-region range))
+                  (overlay (make-overlay beg end))
+                  (command (lsp--color-create-interactive-command color range)))
+            (overlay-put overlay 'lsp-color t)
+            (overlay-put overlay 'evaporate t)
+            (overlay-put overlay
+                         'before-string
+                         (propertize
+                          lsp-overlay-document-color-char
+                          'face `((:foreground ,(format "#%s%s%s"
+                                                        (lsp--number->color red)
+                                                        (lsp--number->color green)
+                                                        (lsp--number->color blue))))
+                          'action command
+                          'mouse-face 'lsp-lens-mouse-face
+                          'local-map (-doto (make-sparse-keymap)
+                                       (define-key [mouse-1] command))))))
+        result))
+     :mode 'unchanged
+     :cancel-token :document-color-token)))
 
 
 ;; hover
@@ -7070,7 +7105,7 @@ should return the command to start the LS server."
                      (tcp-server (make-network-process :name (format "*tcp-server-%s*" name)
                                                        :buffer (format "*tcp-server-%s*" name)
                                                        :family 'ipv4
-                                                       :service 0
+                                                       :service lsp--tcp-server-port
                                                        :sentinel (lambda (proc _string)
                                                                    (lsp-log "Language server %s is connected." name)
                                                                    (setf tcp-client-connection proc))
@@ -7086,7 +7121,8 @@ should return the command to start the LS server."
                                              :stderr (format "*tcp-server-%s*::stderr" name)
                                              :noquery t)))
                 (let ((retries 0))
-                  (while (and (not tcp-client-connection) (< retries 20))
+                  ;; wait for the client to connect (we sit-for 500 ms, so have to double lsp--tcp-server-wait-seconds)
+                  (while (and (not tcp-client-connection) (< retries (* 2 lsp--tcp-server-wait-seconds)))
                     (lsp--info "Waiting for connection for %s, retries: %s" name retries)
                     (sit-for 0.500)
                     (cl-incf retries)))
@@ -7422,7 +7458,7 @@ JavaScript file, tsserver.js (the *.js is required for Windows)."
     (-map (-compose #'symbol-name #'lsp--client-server-id) it)
     (format "%s" it)
     (propertize it 'face 'success)
-    (format "Installing following servers: %s" it)
+    (format " Installing following servers: %s" it)
     (propertize it
                 'local-map (make-mode-line-mouse-map
                             'mouse-1 (lambda ()
