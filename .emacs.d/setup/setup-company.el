@@ -100,8 +100,10 @@
             ;; company-lsp: Company completion backend for lsp-mode.
             (use-package company-lsp
               :demand t
-              :custom ((company-lsp-async t)
-                       (company-lsp-cache-candidates 'auto)))
+              :custom ((company-lsp-async               t)
+                       (company-lsp-cache-candidates    t)
+                       (company-lsp-enable-recompletion t)
+                       (company-lsp-enable-snippet      t)))
 
             ;; Default company backends
             (setq company-backends
