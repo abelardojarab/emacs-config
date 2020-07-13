@@ -42,9 +42,18 @@
             (use-package ob-ditaa
               :config (setq org-ditaa-jar-path (expand-file-name "jar/ditaa.jar" user-emacs-directory)))
 
-            ;; Rendering plantuml
+            ;; PlantUML rendering
             (use-package ob-plantuml
               :config (setq org-plantuml-jar-path (expand-file-name "jar/plantuml.jar" user-emacs-directory)))
+
+            ;; Mermaid rendering, requires 'npm install mermaid.cli'
+            (use-package ob-mermaid
+              :if (executable-find "mmdc"))
+
+            ;; Fast todo selection allows changing from any task todo state to any other state
+            ;; directly by selecting the appropriate key from the fast todo selection key menu. This
+            ;; is a great feature!
+            (setq org-use-fast-todo-selection t)
 
             ;; A progress indicator for code blocks in org-mode courtesy of John Kitchin
             (defadvice org-babel-execute-src-block (around progress nil activate)

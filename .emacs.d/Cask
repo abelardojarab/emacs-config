@@ -298,6 +298,8 @@
 (depends-on "nodejs-repl")
 (depends-on "no-littering")
 (depends-on "nyan-mode")
+(depends-on "ob-latex-as-png")
+(depends-on "ob-mermaid")
 (depends-on "ob-restclient")
 (depends-on "opencl-mode")
 ;; (depends-on "org")

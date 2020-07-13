@@ -247,8 +247,9 @@
     python
     js
     C
-    haskell
-    restclient)
+    mermaid
+    restclient
+    ledger)
   "Modes where Org can utilize Babel"
   :group 'my/customs
   :type 'list)

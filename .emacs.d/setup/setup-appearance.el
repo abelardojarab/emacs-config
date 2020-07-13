@@ -238,6 +238,7 @@ all the buffers."
 
 ;; Modern fringes
 (use-package modern-fringes
+  :disabled t
   :if (display-graphic-p)
   :hook (prog-mode . modern-fringes-mode)
   :config (modern-fringes-invert-arrows))
@@ -248,6 +249,10 @@ all the buffers."
   :if (display-graphic-p)
   :custom (fira-code-mode-disabled-ligatures '("[]" "#{" "#(" "#_" "#_(" "x")) ;; List of ligatures to turn off
   :hook (prog-mode . fira-code-mode))
+
+;; Show blank lines at the end of the file:
+(setq-default indicate-empty-lines t)
+(setq-default indicate-buffer-boundaries 'left)
 
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here

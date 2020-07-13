@@ -84,9 +84,10 @@
 ;; Time stamp
 (use-package time-stamp
   :defer t
-  :custom ((time-stamp-active t)
-           (time-stamp-line-limit 20)
-           (time-stamp-format "%04y-%02m-%02d %02H:%02M:%02S (%u)"))
+  :custom ((time-stamp-active        t)
+           (time-stamp-line-limit    20)
+           (time-stamp-warn-inactive t)
+           (time-stamp-format        "%04y-%02m-%02d %02H:%02M:%02S (%u)"))
   :commands time-stamp
   :hook (before-save . time-stamp))
 

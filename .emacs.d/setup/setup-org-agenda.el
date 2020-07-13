@@ -77,8 +77,12 @@
            (org-agenda-show-all-dates                        t)
            (org-agenda-skip-scheduled-if-done                t)
            (org-agenda-skip-deadline-if-done                 t)
-           (org-deadline-warning-days                        7))
-  :config (progn
+           (org-deadline-warning-days                        7)
+           ;; Fast todo selection allows changing from any task todo state to any other state
+           ;; directly by selecting the appropriate key from the fast todo selection key menu. This
+           ;; is a great feature!
+           (org-use-fast-todo-selection                      t))
+    :config (progn
 
             (defadvice org-agenda (around split-vertically activate)
               (let ((split-width-threshold 100)) ;; or whatever width makes sense for you

@@ -26,10 +26,10 @@
 
 (setq-default scroll-step                     1
               scroll-margin                   3
-              scroll-conservatively           101
+              scroll-conservatively           100000
               scroll-preserve-screen-position 't
-              ;;scroll-up-aggressively          0.01
-              ;;scroll-down-aggressively        0.01
+              scroll-up-aggressively          0.01
+              scroll-down-aggressively        0.01
               fast-but-imprecise-scrolling    nil
               auto-window-vscroll             nil)
 
