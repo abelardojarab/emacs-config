@@ -35,29 +35,33 @@
 (defun my/set-face-fringe ()
   "Set the fringe background to the same color as the regular background."
   (interactive)
-  (setq my/fringe-background-color
-        (face-background 'default))
-  (custom-set-faces
-   `(fringe ((t (:background ,my/fringe-background-color))))))
+  (let ((bg (face-attribute 'default :background)))
+    (set-face-attribute 'fringe nil :background bg)))
+
+;; Change padding of the tabs
+;; we also need to set separator to avoid overlapping tabs by highlighted tabs
+(custom-set-variables
+ '(tabbar-separator (quote (0.0))))
+(setq-default tabbar-separator (quote (0.0)))
 
 ;; Default tabbar theme-ing
 (defun my/set-face-tabbar ()
   "Set the tabbar background to the same color as the regular background."
   (interactive)
-  (setq tabbar-separator '(0.0))
   (let ((bg (face-attribute 'default :background))
         (fg (face-attribute 'default :foreground))
-        (base (face-attribute 'mode-line :background))
+        (base-fg (face-attribute 'mode-line :foreground))
+        (base-bg (face-attribute 'mode-line :background))
         (box-width (/ (line-pixel-height) 2)))
     (when (and (color-defined-p bg)
                (color-defined-p fg)
-               (color-defined-p base)
+               (color-defined-p base-fg)
+               (color-defined-p base-bg)
                (numberp box-width))
-      (if (fboundp 'color-lighten-name)
-          (setq my/tabbar-back-color
-                (color-lighten-name (face-background 'default) 12))
-        (setq my/tabbar-back-color base))
+      (defvar my/tabbar-base-bg-color base-bg)
+      (setq my/tabbar-base-bg-color base-bg)
 
+      (defvar my/tabbar-bg-color bg)
       (if (fboundp 'color-lighten-name)
           (setq my/tabbar-bg-color
                 (color-lighten-name (face-background 'default) 12))
@@ -72,12 +76,17 @@
                                      :color my/tabbar-bg-color
                                      ))
       (set-face-attribute 'tabbar-button nil
-                          :foreground fg
-                          :background my/tabbar-back-color
+                          :foreground base-fg
+                          :background my/tabbar-base-bg-color
                           :weight 'normal
                           :inherit nil
                           :box (list :line-width box-width
-                                     :color my/tabbar-back-color))
+                                     :color my/tabbar-base-bg-color))
+      (set-face-attribute 'tabbar-unselected nil
+                          :foreground base-fg
+                          :background my/tabbar-base-bg-color
+                          :box (list :line-width box-width
+                                     :color my/tabbar-base-bg-color))
       (set-face-attribute 'tabbar-selected nil
                           :foreground fg
                           :background bg
@@ -88,17 +97,24 @@
       (set-face-attribute 'tabbar-selected-modified nil
                           :inherit 'tabbar-selected
                           :foreground "GoldenRod2")
+      (set-face-attribute 'tabbar-separator nil
+                          :background my/tabbar-base-bg-color
+                          :height 0.6)
       )))
 
 ;; Default ECB theme-ing
 (defun my/set-face-ecb ()
   "Set the ecb background to the same color as the regular background."
   (interactive)
-  (setq my/ecb-background-color
-        (face-background 'default))
-  (custom-set-faces
-   `(ecb-default-general-face ((t (:background ,my/ecb-background-color :inherit fixed-pitch))))
-   `(ecb-default-highlight-face ((t (:inherit helm-selection-line))))))
+  (let ((bg (face-attribute 'default :background))
+        (fg (face-attribute 'default :foreground)))
+    (ignore-errors
+      (set-face-attribute 'ecb-default-general-face nil
+                          :foreground fg
+                          :background bg
+                          :inherit 'fixed-pitch)
+      (set-face-attribute 'ecb-default-highlight-face nil
+                          :inherit 'helm-selection-line))))
 
 (add-hook 'after-init-hook #'my/set-face-tabbar)
 (add-hook 'after-init-hook #'my/set-face-fringe)
