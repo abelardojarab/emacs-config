@@ -45,10 +45,10 @@
                                     (if local " " "-g")
                                     (if module module "tern"))))))
   :mode ("\\.js\\'" . js2-mode)
-  ;; :ensure-system-package ((typescript-language-server            . "npm install -g typescript-language-server")
+  ;; :ensure-system-package ((typescript-language-server            . "npm install -g typescript-lsp")
   ;;                         (javascript-typescript-language-server . "npm install -g javascript-typescript-language-server")
   ;;                         (tsc                                   . "npm install -g typescript")
-  ;;                         (tern                                  . "npm install -g typescript")
+  ;;                         (tern                                  . "npm install -g tern")
   ;;                         (flow-bin                              . "npm install -g flow-bin"))
   :commands (js2-mode
              js2-minor-mode)
