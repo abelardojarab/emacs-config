@@ -1,0 +1,2 @@
+;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/ob-mermaid-20200320.1504/ob-mermaid.el  -*- no-byte-compile: t -*-
+(define-package "ob-mermaid" "20200320.1504" "org-babel support for mermaid evaluation" 'nil :commit "cca09b64eff689d8bb15a77de9d4c7fe9845a1f9" :keywords '("lisp") :authors '(("Alexei Nunez" . "alexeirnunez@gmail.com")) :maintainer '("Alexei Nunez" . "alexeirnunez@gmail.com") :url "https://github.com/arnm/ob-mermaid")

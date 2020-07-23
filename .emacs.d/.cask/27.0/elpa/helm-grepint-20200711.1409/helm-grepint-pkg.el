@@ -1,0 +1,2 @@
+;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/helm-grepint-20200711.1409/helm-grepint.el  -*- no-byte-compile: t -*-
+(define-package "helm-grepint" "20200711.1409" "Generic helm interface to grep" '((helm "2.9.7") (emacs "24.4")) :commit "1a602e67fe9d6a01bf73c817eb2389c8fac3abdd" :keywords '("grep" "grepping" "searching" "helm" "tools" "convenience") :authors '(("Kalle Kankare" . "kalle.kankare@iki.fi")) :maintainer '("Kalle Kankare" . "kalle.kankare@iki.fi") :url "https://github.com/kopoli/helm-grepint")

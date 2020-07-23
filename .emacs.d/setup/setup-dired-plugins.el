@@ -1,6 +1,6 @@
 ;;; setup-dired-plugins.el ---                       -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -23,6 +23,12 @@
 ;;
 
 ;;; Code:
+
+;; Narrow dired to match filter
+(use-package dired-narrow
+  :defer t
+  :bind (:map dired-mode-map
+              ("/" . dired-narrow)))
 
 (use-package dired-sidebar
   :defer t

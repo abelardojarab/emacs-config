@@ -198,6 +198,7 @@
 (bind-keys :map my/keys-minor-mode-map
            ((kbd "<mouse-3>")                       .   mouse3-popup-menu)
            ((kbd "<C-tab>")                         .   comment-or-uncomment-region)
+           ((kbd "C-/")                             .   comment-or-uncomment-region)
            ((kbd "M-.")                             .   helm-etags-select)
            ((kbd "C-.")                             .   helm-gtags-dwim)
            ((kbd "<f12>")                           .   helm-semantic-or-imenu)

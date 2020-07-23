@@ -1,0 +1,2 @@
+;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/ialign-20200711.1117/ialign.el  -*- no-byte-compile: t -*-
+(define-package "ialign" "20200711.1117" "visual align-regexp" '((emacs "24.4")) :commit "eca40b8b59ea713dba21b18f5b047a6c086b91dc" :keywords '("tools" "editing" "align" "interactive") :authors '(("Michał Krzywkowski" . "k.michal@zoho.com")) :maintainer '("Michał Krzywkowski" . "k.michal@zoho.com") :url "https://github.com/mkcms/interactive-align")

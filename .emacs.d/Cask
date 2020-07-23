@@ -103,6 +103,7 @@
 (depends-on "dired-hacks-utils")
 (depends-on "dired-icon")
 (depends-on "dired-k")
+(depends-on "dired-narrow")
 (depends-on "dired-ranger")
 (depends-on "dired-sidebar")
 (depends-on "direx")
