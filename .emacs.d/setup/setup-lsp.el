@@ -86,5 +86,9 @@
   :custom (lsp-metals-treeview-show-when-views-received t)
   :config (lsp-metals-treeview-enable t))
 
+(use-package lsp-modeline
+  :defer t
+  :commands lsp-modeline-diagnostics-mode)
+
 (provide 'setup-lsp)
 ;;; setup-lsp.el ends here
