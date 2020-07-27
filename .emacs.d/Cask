@@ -356,6 +356,7 @@
 (depends-on "projectile-speedbar")
 (depends-on "python-environment")
 (depends-on "python-mode")
+(depends-on "python-pytest")
 (depends-on "py-autopep8")
 (depends-on "rainbow-delimiters")
 (depends-on "rainbow-mode")

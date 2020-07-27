@@ -165,5 +165,10 @@
   :defer t
   :commands py-autopep8-enable-on-save)
 
+;; I’m using pytest for testing my Python code these days.
+(use-package python-pytest
+  :after python
+  :bind (:map python-mode-map ("C-c C-p" . python-pytest-popup)))
+
 (provide 'setup-python-plugins)
 ;;; setup-python-plugins.el ends here
