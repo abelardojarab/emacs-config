@@ -80,7 +80,7 @@
   :after org
   :hook (org-mode . org-bullets-mode)
   :commands org-bullets-mode
-  :config (setq org-bullets-bullet-list '("◉" "○" "•" "•")))
+  :config (setq org-bullets-bullet-list '("◉" "✚" "○" "✖" "•")))
 
 ;; Seek headlines or content inside org buffers
 (use-package org-seek
