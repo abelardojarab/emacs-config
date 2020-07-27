@@ -95,7 +95,7 @@
 
             ;; Fancy ellipsis
             (if (display-graphic-p)
-                (setq org-ellipsis "⮷"))
+                (setq org-ellipsis "▼"))
 
             ;; Tweaks
             (add-hook 'org-mode-hook
