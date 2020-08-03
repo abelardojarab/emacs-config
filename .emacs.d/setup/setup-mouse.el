@@ -32,8 +32,12 @@
             (defun track-mouse (e))
             (setq mouse-sel-mode t)))
 
+;; Pixel resolution
 (use-package pixel-scroll
+  :disabled t
   :if (fboundp 'pixel-scroll-mode)
+  :custom ((pixel-dead-time            0)
+           (pixel-resolution-fine-flag nil))
   :config (pixel-scroll-mode 1))
 
 ;; Do not copy region use mouse dragging
@@ -54,22 +58,12 @@
 ;; don't accelerate scrolling
 (setq mouse-wheel-progressive-speed nil)
 
-;; Zoom in/out like feature, with mouse wheel
-(global-unset-key (kbd "<C-wheel-up>"))
-(global-unset-key (kbd "<C-wheel-down>"))
-(global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
-(global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
-
 ;; Get the scroll wheel to work
 (global-set-key [(shift button5)] '(lambdas () (interactive) (scroll-up-line)))
 (global-set-key [(shift button4)] '(lambda () (interactive) (scroll-down-line)))
-(global-set-key [(control button5)] 'text-scale-decrease)
-(global-set-key [(control button4)] 'text-scale-increase)
 
 (global-set-key [(shift mouse-5)] '(lambda () (interactive) (scroll-up-line)))
 (global-set-key [(shift mouse-4)] '(lambda () (interactive) (scroll-down-line)))
-(global-set-key [(control mouse-5)] 'text-scale-decrease)
-(global-set-key [(control mouse-4)] 'text-scale-increase)
 
 ;; Right click mouse
 (use-package mouse3
