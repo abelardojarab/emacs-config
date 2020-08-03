@@ -5,9 +5,9 @@
 ;; Author: Matthew Carter <m@ahungry.com>
 ;; Maintainer: Matthew Carter <m@ahungry.com>
 ;; URL: https://github.com/ahungry/fast-scroll
-;; Version: 0.0.1
+;; Version: 0.0.6
 ;; Keywords: ahungry convenience fast scroll scrolling
-;; Package-Requires: ((emacs "25.1"))
+;; Package-Requires: ((emacs "25.1") (cl-lib "0.6.1"))
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -33,14 +33,33 @@
 
 ;;; Code:
 
+(require 'cl-lib)
+
 ;; Fix for slow scrolling
 (declare-function evil-scroll-up "ext:evil-commands.el" (count) t)
 (declare-function evil-scroll-down "ext:evil-commands.el" (count) t)
 
+(defvar fast-scroll-mode nil)
 (defvar fast-scroll-mode-line-original nil)
 (defvar fast-scroll-pending-reset nil)
 (defvar fast-scroll-timeout 0)
 (defvar fast-scroll-count 0)
+(defvar fast-scroll-throttle 0.2)
+(defvar fast-scroll-throttling-p nil)
+
+(defvar fast-scroll-start-hook '())
+(defvar fast-scroll-end-hook '())
+
+;; This is more for internal use only to resolve timing issues with
+;; flip-flopping between buffers quickly.
+;; Initial idea was a single store to restore settings on, but that
+;; could end up "locking" a buffer if for some reason end fails to run
+;; for some odd reason.
+;; If the user does aggressively switch buffers and scroll fast in them,
+;; the worst case is prevented (all buffers become un-fast after the timer).
+;; However, no attempt is going to be made to 'fast-scroll' every buffer in this way,
+;; because all the timing sensitive code is a global package variable.
+(defvar fast-scroll--fn-called-in-buffer '())
 
 (defun fast-scroll-default-mode-line ()
   "An Emacs default/bare bones mode-line."
@@ -54,33 +73,54 @@
 
 (defun fast-scroll-get-milliseconds ()
   "Get the current MS in float up to 3 precision."
-  (read (format-time-string "%s.%3N")))
+  (string-to-number (format-time-string "%s.%3N")))
 
 (defun fast-scroll-end-p ()
   "See if we can end or not."
-  (> (- (fast-scroll-get-milliseconds) fast-scroll-timeout) 0.04))
+  (> (- (fast-scroll-get-milliseconds) fast-scroll-timeout) (- fast-scroll-throttle 0.01)))
+
+(defun fast-scroll--end (buf)
+  "Re-enable the things we disabled during the fast scroll for buffer BUF."
+  (when (fast-scroll-end-p)
+    (with-current-buffer buf
+      (setq fast-scroll--fn-called-in-buffer nil)
+      (setq mode-line-format fast-scroll-mode-line-original)
+      (font-lock-mode 1)
+      (run-hooks 'fast-scroll-end-hook)
+      (setq fast-scroll-throttling-p nil)
+      (setq fast-scroll-count 0))))
 
 (defun fast-scroll-end ()
-  "Re-enable the things we disabled during the fast scroll."
-  (when (fast-scroll-end-p)
-    (setq mode-line-format fast-scroll-mode-line-original)
-    (font-lock-mode 1)
-    (setq fast-scroll-count 0)))
+  "Re-enable the things we disabled during the fast scrolls."
+  (mapcar #'fast-scroll--end fast-scroll--fn-called-in-buffer))
 
-(defun fast-scroll-run-fn-minimally (f &rest r)
-  "Enables fast execution on function F with args R, by disabling certain modes."
+(defun fast-scroll--run-fn-minimally (f &rest r)
+  "Inner function for applying the function F of args R with the minimized modes.
+
+The outer function is the non-private prefixed one, which will only run when it has set
+a new buffer name (or found the existing buffer name to match the current one)."
   (unless fast-scroll-mode-line-original
     (setq fast-scroll-mode-line-original mode-line-format))
   (setq fast-scroll-count (+ 1 fast-scroll-count))
   (if (< fast-scroll-count 2)
       (progn
         (ignore-errors (apply f r))
-        (run-at-time 0.05 nil (lambda () (setq fast-scroll-count 0))))
+        (run-at-time fast-scroll-throttle nil (lambda () (setq fast-scroll-count 0))))
     (setq fast-scroll-timeout (fast-scroll-get-milliseconds))
-    (setq mode-line-format (fast-scroll-default-mode-line))
-    (font-lock-mode 0)
-    (ignore-errors (apply f r))
-    (run-at-time 0.05 nil #'fast-scroll-end)))
+    (if fast-scroll-throttling-p
+        (ignore-errors (apply f r))
+      (progn
+        (setq mode-line-format (fast-scroll-default-mode-line))
+        (font-lock-mode 1) ;; keep it enabled
+        (run-hooks 'fast-scroll-start-hook)
+        (ignore-errors (apply f r))))
+    (run-at-time fast-scroll-throttle nil #'fast-scroll-end)
+    (setq fast-scroll-throttling-p t)))
+
+(defun fast-scroll-run-fn-minimally (f &rest r)
+  "Enables fast execution on function F with args R, by disabling certain modes."
+  (cl-pushnew (buffer-name) fast-scroll--fn-called-in-buffer :test #'string=)
+  (apply #'fast-scroll--run-fn-minimally f r))
 
 (defun fast-scroll-scroll-up-command ()
   "Scroll up quickly - comparative to `scroll-up-command'."
@@ -127,6 +167,31 @@ Note this function's name implies compatibility with `unload-feature'."
   (advice-remove #'evil-scroll-up #'fast-scroll-run-fn-minimally)
   (advice-remove #'evil-scroll-down #'fast-scroll-run-fn-minimally)
   nil)
+
+;;;###autoload
+(define-minor-mode fast-scroll-mode
+  "Minor mode to speed up scrolling.
+
+When fast-scroll-mode is on, certain features/modes of Emacs will be
+shut off or minimized during the scrolling activity, to ensure
+the user experience the least amount of scroll-lag as possible.
+
+By default, enabling this global minor mode will advice the following
+scrolling built-ins (or commonly installed scroll functions): `scroll-up-command',
+`scroll-down-command', `evil-scroll-up', `evil-scroll-down'.
+
+Disabling this mode will unload the advice that was added when enabling.
+
+The mode-line format will also be set to a minimal mode-line
+during scrolling activity."
+  :group 'fast-scroll
+  :global t
+  :lighter " fs"
+  (if fast-scroll-mode
+      (progn
+        (fast-scroll-advice-scroll-functions))
+    (progn
+      (fast-scroll-unload-function))))
 
 (provide 'fast-scroll)
 ;;; fast-scroll.el ends here

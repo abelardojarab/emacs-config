@@ -51,9 +51,26 @@
 (use-package fast-scroll
   :defer t
   :load-path (lambda () (expand-file-name "fast-scroll/" user-emacs-directory))
-  :commands (fast-scroll-config
-             fast-scroll-advice-scroll-functions)
-  :config (fast-scroll-advice-scroll-functions))
+  :custom (fast-scroll-throttle 0.5)
+  :commands fast-scroll-mode
+  :hook (prog-mode . fast-scroll-mode)
+  :config (progn
+            (defun my/flycheck-enabled-p () (symbol-value 'flycheck-mode))
+            (defvar my/flycheck-mode-suppressed nil)
+            (make-variable-buffer-local 'my/flycheck-mode-suppressed)
+            (add-hook 'fast-scroll-start-hook (lambda ()
+                                                (let ((flycheck-enabled (my/flycheck-enabled-p)))
+                                                  (when flycheck-enabled
+                                                    (flycheck-mode -1)
+                                                    (setq my/flycheck-mode-suppressed flycheck-enabled)))))
+            (add-hook 'fast-scroll-end-hook (lambda ()
+                                              (when my/flycheck-mode-suppressed
+                                                (flycheck-mode 1)
+                                                (setq my/flycheck-mode-suppressed nil))))
+
+            (defun fast-scroll-default-mode-line ()
+              mode-line-format)
+            (fast-scroll-config)))
 
 (provide 'setup-scroll)
 ;;; setup-scroll.el ends here
