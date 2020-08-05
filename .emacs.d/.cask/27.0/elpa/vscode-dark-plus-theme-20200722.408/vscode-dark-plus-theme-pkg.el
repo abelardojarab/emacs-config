@@ -1,2 +1,0 @@
-;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/vscode-dark-plus-theme-20200722.408/vscode-dark-plus-theme.el  -*- no-byte-compile: t -*-
-(define-package "vscode-dark-plus-theme" "20200722.408" "Default Visual Studio Code Dark+ theme" 'nil :commit "4383ce06f0aca42e187170115b7a42cc019a263d" :authors '(("Ian Y.E. Pan")) :maintainer '("Ian Y.E. Pan") :url "https://github.com/ianpan870102/vscode-dark-plus-emacs-theme")
