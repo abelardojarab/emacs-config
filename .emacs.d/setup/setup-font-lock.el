@@ -28,6 +28,7 @@
 ;; Syntax coloring
 (use-package font-lock
   :defer t
+  :disabled t
   :commands (global-font-lock-mode
              font-lock-mode)
   :init (global-font-lock-mode t)

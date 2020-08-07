@@ -330,11 +330,12 @@ LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
            (display-time-use-mail-icon        t))
   :config (display-time-mode t))
 
+;; Automatic garbage collection
 (use-package gcmh
-  :demand t
+  :disabled t
   :delight gcmh-mode
   :commands gcmh-mode
-  :custom (gcmh-verbose t)
+  :custom (gcmh-verbose nil)
   :config (gcmh-mode 1))
 
 (provide 'setup-environment)
