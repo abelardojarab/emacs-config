@@ -27,6 +27,7 @@
 ;; lsp-mode:  Emacs client/library for the Language Server Protocol
 (use-package lsp-mode
   :demand t
+  :load-path (lambda () (expand-file-name "lsp-mode/" user-emacs-directory))
   :commands (lsp
              lsp-deferred)
   :hook (((c-mode c++-mode)    . lsp)
