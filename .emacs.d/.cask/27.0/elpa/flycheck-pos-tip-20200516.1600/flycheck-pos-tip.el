@@ -86,7 +86,13 @@ messages on TTY frames if `flycheck-pos-tip-mode' is active."
         (let ((message (flycheck-help-echo-all-error-messages errors))
               (line-height (car (window-line-height))))
           (flycheck-pos-tip--check-pos)
-          (pos-tip-show message nil nil nil flycheck-pos-tip-timeout
+          (prin1 message)
+          (pos-tip-show (with-temp-buffer
+                          (prin1 message)
+                          (princ "")
+                          (buffer-string))
+
+                        nil nil nil flycheck-pos-tip-timeout
                         flycheck-pos-tip-max-width nil
                         ;; Add a little offset to the tooltip to move it away
                         ;; from the corresponding text in the buffer.  We

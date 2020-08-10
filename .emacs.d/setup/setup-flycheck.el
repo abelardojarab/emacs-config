@@ -146,17 +146,39 @@ flycheck-handle-idle-change, which removes the forced deferred."
 
 ;; Tooltips
 (use-package flycheck-tip
+  :disabled t
   :after flycheck
   :custom (flycheck-tip-avoid-show-func nil))
 
 ;; Another tooltip using pos-tip (does not work)
 (use-package flycheck-pos-tip
-  :disabled t
   :defer t
   :if (display-graphic-p)
   :after flycheck
   :commands flycheck-pos-tip-mode
-  :hook (flycheck-mode . flycheck-pos-tip-mode))
+  :hook (flycheck-mode . flycheck-pos-tip-mode)
+  :config (defun flycheck-pos-tip-error-messages (errors)
+            "Display ERRORS, using a graphical tooltip on GUI frames."
+            (when errors
+              (if (display-graphic-p)
+                  (let ((message (flycheck-help-echo-all-error-messages errors))
+                        (line-height (car (window-line-height))))
+                    (flycheck-pos-tip--check-pos)
+                    (prin1 message)
+                    (pos-tip-show (with-temp-buffer
+                                    (prin1 message)
+                                    (princ "")
+                                    (buffer-string))
+
+                                  nil nil nil flycheck-pos-tip-timeout
+                                  flycheck-pos-tip-max-width nil
+                                  ;; Add a little offset to the tooltip to move it away
+                                  ;; from the corresponding text in the buffer.  We
+                                  ;; explicitly take the line height into account because
+                                  ;; pos-tip computes the offset from the top of the line
+                                  ;; apparently.
+                                  nil (and line-height (+ line-height 5))))
+                (funcall flycheck-pos-tip-display-errors-tty-function errors)))))
 
 (provide 'setup-flycheck)
 ;;; setup-flycheck.el ends here
