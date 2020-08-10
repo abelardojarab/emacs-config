@@ -456,7 +456,6 @@
  '(lsp-auto-guess-root nil nil nil "Customized with use-package lsp-mode")
  '(lsp-file-watch-threshold 1048576 nil nil "Customized with use-package lsp-mode")
  '(lsp-prefer-flymake nil t nil "Customized with use-package lsp-mode")
- '(lsp-pyls-configuration-sources ["flake8"] nil nil "Customized with use-package lsp-mode")
  '(lsp-pyls-plugins-pylint-enabled nil nil nil "Customized with use-package lsp-mode")
  '(lsp-ui-doc-delay 0.7 nil nil "higher than eldoc delay")
  '(lsp-ui-doc-enable t nil nil "Customized with use-package lsp-ui")

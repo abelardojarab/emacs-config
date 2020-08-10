@@ -41,7 +41,6 @@
            (lsp-eldoc-enable-hover           t)
            (lsp-eldoc-render-all             nil)
            (lsp-enable-snippet               t)
-           (lsp-pyls-configuration-sources ["flake8"])
            (lsp-file-watch-threshold         (* 1024 1024)))
   :config (progn
             ;; ignored directories

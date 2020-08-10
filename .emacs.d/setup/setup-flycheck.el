@@ -172,11 +172,6 @@ flycheck-handle-idle-change, which removes the forced deferred."
 
                     ;;               nil nil nil flycheck-pos-tip-timeout
                     ;;               flycheck-pos-tip-max-width nil
-                    ;;               ;; Add a little offset to the tooltip to move it away
-                    ;;               ;; from the corresponding text in the buffer.  We
-                    ;;               ;; explicitly take the line height into account because
-                    ;;               ;; pos-tip computes the offset from the top of the line
-                    ;;               ;; apparently.
                     ;;               nil (and line-height (+ line-height 5)))
                     )
                 (funcall flycheck-pos-tip-display-errors-tty-function errors)))))
