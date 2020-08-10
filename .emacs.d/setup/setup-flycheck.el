@@ -165,19 +165,20 @@ flycheck-handle-idle-change, which removes the forced deferred."
                         (line-height (car (window-line-height))))
                     (flycheck-pos-tip--check-pos)
                     (prin1 message)
-                    (pos-tip-show (with-temp-buffer
-                                    (prin1 message)
-                                    (princ "")
-                                    (buffer-string))
+                    ;; (pos-tip-show (with-temp-buffer
+                    ;;                 (prin1 message)
+                    ;;                 (princ "")
+                    ;;                 (buffer-string))
 
-                                  nil nil nil flycheck-pos-tip-timeout
-                                  flycheck-pos-tip-max-width nil
-                                  ;; Add a little offset to the tooltip to move it away
-                                  ;; from the corresponding text in the buffer.  We
-                                  ;; explicitly take the line height into account because
-                                  ;; pos-tip computes the offset from the top of the line
-                                  ;; apparently.
-                                  nil (and line-height (+ line-height 5))))
+                    ;;               nil nil nil flycheck-pos-tip-timeout
+                    ;;               flycheck-pos-tip-max-width nil
+                    ;;               ;; Add a little offset to the tooltip to move it away
+                    ;;               ;; from the corresponding text in the buffer.  We
+                    ;;               ;; explicitly take the line height into account because
+                    ;;               ;; pos-tip computes the offset from the top of the line
+                    ;;               ;; apparently.
+                    ;;               nil (and line-height (+ line-height 5)))
+                    )
                 (funcall flycheck-pos-tip-display-errors-tty-function errors)))))
 
 (provide 'setup-flycheck)
