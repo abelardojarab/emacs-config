@@ -27,18 +27,43 @@
 ;; lsp-mode:  Emacs client/library for the Language Server Protocol
 (use-package lsp-mode
   :demand t
-  :commands lsp
+  :commands (lsp
+             lsp-deferred)
   :hook (((c-mode c++-mode)    . lsp)
          (python-mode          . lsp)
          (js2-mode             . lsp))
   :custom ((lsp-prefer-flymake               nil)
-           ;; Prefer flake8, faster than pylint
-           (lsp-pyls-configuration-sources   ["flake8"])
            (lsp-pyls-plugins-pylint-enabled  nil)
            (lsp-auto-guess-root              nil)
+           (lsp-auto-configure               t)
+           (lsp-enable-completion-at-point   t)
+           (lsp-enable-xref                  t)
+           (lsp-eldoc-enable-hover           t)
+           (lsp-eldoc-render-all             nil)
+           (lsp-enable-snippet               t)
+           (lsp-pyls-configuration-sources ["flake8"])
            (lsp-file-watch-threshold         (* 1024 1024)))
-  ;; `-background-index' requires clangd v8+!
-  :config (setq lsp-clients-clangd-args '("-j=5" "-background-index" "-log=error")))
+  :config (progn
+            ;; ignored directories
+            (dolist (dir '(
+                           "[/\\\\]\\.venv$"
+                           "[/\\\\]\\.mypy_cache$"
+                           "[/\\\\]__pycache__$"
+                           "[/\\\\]\\.vscode$"
+                           ))
+              (push dir lsp-file-watch-ignored))
+
+            ;; Prefer pyright if available
+            (if (executable-find "pyright")
+                (setq lsp-pyls-configuration-sources ["pyright"]))
+
+            ;; `-background-index' requires clangd v8+!
+            (setq lsp-clients-clangd-args '("-j=5" "-background-index" "-log=error"))
+
+            ;; breadcrumb
+            (setq lsp-headerline-breadcrumb-enable t)
+            (setq lsp-headerline-breadcrumb-segments '(project file symbols))
+            ))
 
 ;; Fix bug on dash/lsp
 (load (expand-file-name "no-autoloads/dash.el" user-emacs-directory))
@@ -67,13 +92,17 @@
            (lsp-ui-imenu-enable                  t)
            (lsp-ui-sideline-ignore-duplicate     t )
            (lsp-ui-sideline-show-symbol          nil)
+           (lsp-ui-sideline-show-diagnostics     t)
+           (lsp-ui-sideline-show-code-actions    t)
+           (lsp-ui-peek-enable                   t)
+           (lsp-ui-peek-always-show              t)
            (lsp-ui-doc-delay                     0.7 "higher than eldoc delay"))
   :hook (lsp-after-open . lsp-ui-mode)
   :bind (:map lsp-ui-mode-map
               ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
               ([remap xref-find-references]  . lsp-ui-peek-find-references)
               ("M-."                         . lsp-ui-peek-find-definitions)
-              ("C-."                         . lsp-ui-peek-find-references)
+              ("M-?"                         . lsp-ui-peek-find-references)
               ("M-/"                         . lsp-ui-imenu))
   :config (if (display-graphic-p)
               (progn

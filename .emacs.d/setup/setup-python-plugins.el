@@ -126,6 +126,17 @@
             (setq-default lsp-pyls-configuration-sources ["flake8"])
             (setq-default lsp-pyls-plugins-pylint-enabled nil)))
 
+;; $ npm -g install pyright
+(use-package lsp-pyright
+  :if (executable-find "pyright")
+  :init (defun lsp-pyright/python-mode-hook ()
+          ;; lsp-pyright
+          (require 'lsp-pyright)
+          (when (fboundp 'flycheck-mode)
+            ;; we will use flake8 or pyright
+            (setq flycheck-disabled-checkers '(python-mypy))))
+  :hook (python-mode . lsp-pyright/python-mode-hook))
+
 ;; Jupyter notebook
 ;; Usage
 ;; M-x shell
