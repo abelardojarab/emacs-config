@@ -58,17 +58,19 @@
                 (setq lsp-pyls-configuration-sources ["pyright"]))
 
             ;; `-background-index' requires clangd v8+!
-            (setq lsp-clients-clangd-args '("-j=5" "-background-index" "-log=error"))
-
-            ;; breadcrumb
-            (setq lsp-headerline-breadcrumb-enable t)
-            (setq lsp-headerline-breadcrumb-segments '(project file symbols))
-            ))
+            (setq lsp-clients-clangd-args '("-j=5" "-background-index" "-log=error"))))
 
 ;; Fix bug on dash/lsp
 (load (expand-file-name "no-autoloads/dash.el" user-emacs-directory))
 (load (expand-file-name "no-autoloads/lsp-mode.el" user-emacs-directory))
 (load (expand-file-name "no-autoloads/helm-xref.el" user-emacs-directory))
+
+;; Breadcrumbs (conflicts with tabbar)
+(use-package lsp-headerline
+  :commands lsp-headerline-breadcrumb-mode
+  :config (progn
+            (setq lsp-headerline-breadcrumb-enable nil)
+            (setq lsp-headerline-breadcrumb-segments '(project file symbols))))
 
 ;; Enable lsp-clients
 (use-package lsp-clients
@@ -90,7 +92,7 @@
            (lsp-ui-doc-position                  'at-point)
            (lsp-ui-flycheck-enable               t)
            (lsp-ui-imenu-enable                  t)
-           (lsp-ui-sideline-ignore-duplicate     t )
+           (lsp-ui-sideline-ignore-duplicate     t)
            (lsp-ui-sideline-show-symbol          nil)
            (lsp-ui-sideline-show-diagnostics     t)
            (lsp-ui-sideline-show-code-actions    t)
