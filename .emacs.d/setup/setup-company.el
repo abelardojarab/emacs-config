@@ -100,6 +100,25 @@
             ;; company-lsp: Company completion backend for lsp-mode.
             (use-package company-lsp
               :demand t
+              :init (progn
+                      (defun lsp--sort-completions (completions)
+                        "Sort COMPLETIONS."
+                        (sort
+                         completions
+                         (-lambda ((&CompletionItem :sort-text? sort-text-left :label label-left)
+                                   (&CompletionItem :sort-text? sort-text-right :label label-right))
+                           (if (equal sort-text-left sort-text-right)
+                               (string-lessp label-left label-right)
+                             (string-lessp sort-text-left sort-text-right)))))
+                      (defun lsp--annotate (item)
+                        "Annotate ITEM detail."
+                        (-let (((&CompletionItem :detail? :kind?) (plist-get (text-properties-at 0 item)
+                                                                             'lsp-completion-item)))
+                          (concat (when (and lsp-completion-show-detail detail?)
+                                    (concat " " (s-replace "\r" "" detail?)))
+                                  (when lsp-completion-show-kind
+                                    (when-let (kind-name (and kind? (aref lsp--completion-item-kind kind?)))
+                                      (format " (%s)" kind-name)))))))
               :custom ((company-lsp-async               t)
                        (company-lsp-cache-candidates    t)
                        (company-lsp-enable-recompletion t)
