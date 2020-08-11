@@ -362,7 +362,7 @@
 (depends-on "py-autopep8")
 (depends-on "rainbow-delimiters")
 (depends-on "rainbow-mode")
-(depends-on "realgud")
+;; (depends-on "realgud")
 (depends-on "redo+")
 (depends-on "region-bindings-mode")
 (depends-on "region-state")
