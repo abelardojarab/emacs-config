@@ -54,8 +54,8 @@
   :commands (global-hl-line-mode
              my/hl-line-mode-off)
   :hook ((org-mode markdown-mode) . my/hl-line-mode-off)
-  ;; Highlight the line only in the active window
-  :custom (hl-line-sticky-flag nil)
+  :custom ((hl-line-sticky-flag   t)
+           (global-hl-sticky-flag t))
   :config (progn
             ;; https://stackoverflow.com/questions/20275596/how-to-use-hl-line-mode-to-highlight-just-one-1-line-when-visual-line-mode-is
             (defun visual-line-line-range ()

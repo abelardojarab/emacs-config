@@ -34,9 +34,10 @@
 (when (fboundp 'global-so-long-mode)
   (global-so-long-mode))
 
-;; ad-handle-definition warnings are generated when functions are redefined with `defadvice',
-;; they are not helpful.
-(setq ad-redefinition-action 'accept)
+;; Treat all themes as safe
+(use-package custom
+  :ensure nil
+  :custom (custom-safe-themes t "Treat all themes as safe"))
 
 ;; Reporting Emacs bugs
 (use-package emacsbug
@@ -254,13 +255,6 @@
   :init (setq no-littering-var-directory (expand-file-name "cache/var/" my/emacs-cache-dir)
               no-littering-etc-directory (expand-file-name "cache/etc/" my/emacs-cache-dir))
   :custom ((create-lockfiles                  nil)
-           (delete-old-versions               t)
-           (kept-new-versions                 6)
-           (kept-old-versions                 2)
-           (version-control                   t)
-           (make-backup-files                 nil)
-           (backup-by-copying                 t)
-           (backup-by-copying-when-mismatch   t)
            (auto-save-interval                500)
            (auto-save-default                 nil))
   :config (progn

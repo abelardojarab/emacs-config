@@ -24,6 +24,11 @@
 
 ;;; Code:
 
+;; A nice package to show the disk usage
+(use-package disk-usage
+  :disabled t
+  :demand t)
+
 ;; Automatic filling setup
 (use-package auto-fill
   :defer t
@@ -37,21 +42,30 @@
   :defer t
   :commands aggressive-fill-paragraph-mode)
 
-;; Revert buffer
+;; Backup and revert buffer
 (use-package files
   :demand t
   :custom ((after-find-file-from-revert-buffer    t)
+           (delete-old-versions                   t)
+           (delete-by-moving-to-trash             t)
+           (kept-new-versions                     6)
+           (kept-old-versions                     2)
+           (version-control                       t)
+           (make-backup-files                     nil)
+           (backup-by-copying                     t)
+           (backup-by-copying-when-mismatch       t)
            (w32-get-true-file-attributes          nil)
            (w32-pipe-read-delay                   0)
-           (delete-by-moving-to-trash             t)
            (read-file-name-completion-ignore-case t))
   :hook ((after-save-hook . executable-make-buffer-file-executable-if-script-p)
          (find-file-hooks . goto-address-prog-mode))
-  :config (defadvice find-file-read-args (around find-file-read-args-always-use-dialog-box act)
+  :config (progn
+            (setq confirm-kill-processes nil)
+            (defadvice find-file-read-args (around find-file-read-args-always-use-dialog-box act)
             "Simulate invoking menu item as if by the mouse; see `use-dialog-box'."
             (let ((last-nonmenu-event nil)
                   (use-dialog-box t))
-              ad-do-it)))
+              ad-do-it))))
 
 ;; More exhaustive cleaning of white space
 (use-package whitespace

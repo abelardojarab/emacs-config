@@ -48,35 +48,36 @@
            (dired-dwim-target                   t)
            (dired-ls-F-marks-symlinks           t)
            (dired-auto-revert-buffer            t))
-  :init (defun my/window-dired-vc-root-left ()
-          "Open root directory of current version-controlled repository
+  :init (progn
+          ;; extra hooks
+          (defun my/dired-mode-hook ()
+            (toggle-truncate-lines t)
+            (setq truncate-lines t)
+            (dired-omit-mode 1)
+            (dired-hide-details-mode t)
+            (hl-line-mode 1)
+            (projectile-mode 1))
+
+          (defun my/window-dired-vc-root-left ()
+            "Open root directory of current version-controlled repository
 or the present working directory with `dired' and bespoke window
 parametersg."
-          (interactive)
-          (let ((dir (if (eq (vc-root-dir) nil)
-                         (dired-noselect default-directory)
-                       (dired-noselect (vc-root-dir)))))
-            (display-buffer-in-side-window
-             dir `((side . left)
-                   (slot . 0)
-                   (window-width . 0.15)))
-            (with-current-buffer dir
-              (rename-buffer "*Dired-Side*"))))
+            (interactive)
+            (let ((dir (if (eq (vc-root-dir) nil)
+                           (dired-noselect default-directory)
+                         (dired-noselect (vc-root-dir)))))
+              (display-buffer-in-side-window
+               dir `((side . left)
+                     (slot . 0)
+                     (window-width . 0.15)))
+              (with-current-buffer dir
+                (rename-buffer "*Dired-Side*")))))
   :config (progn
 
             ;; toggle `dired-omit-mode' with C-x M-o
             (add-to-list 'dired-omit-extensions ".DS_Store")
             (setq dired-omit-files
                   (concat dired-omit-files "\\|^.DS_STORE$\\|^.projectile$"))
-
-            ;; extra hooks
-            (defun my/dired-mode-hook ()
-              (toggle-truncate-lines t)
-              (setq truncate-lines t)
-              (dired-omit-mode 1)
-              (dired-hide-details-mode t)
-              (hl-line-mode 1)
-              (projectile-mode 1))
 
             (defun my/dired-imenu-prev-index-position (&optional arg)
               "Go to the header line of previous directory."
@@ -145,7 +146,7 @@ parametersg."
                 ;; finally, switch to that window
                 (other-window 1)))
 
-            ;; Dired extensions
+            ;; dired extensions
             (use-package dired+
               :after dired
               :custom (diredp-hide-details-initially-flag nil)
@@ -153,8 +154,20 @@ parametersg."
 
             ;; dired-ranger pre-requisite
             (use-package dired-hacks-utils
-              :defer t
+              :demand t
               :after dired)
+
+            ;; Enable tree structures
+            (use-package dired-subtree
+              :bind (:map dired-mode-map
+                          ("i" . dired-subtree-insert)
+                          (";" . dired-subtree-remove)))
+
+            ;; Get git information
+            (use-package dired-git-info
+              :defer t
+              :bind (:map dired-mode-map
+                          (")" . dired-git-info-mode)))
 
             ;; Enable copying and pasting files
             (use-package dired-ranger
@@ -182,15 +195,11 @@ parametersg."
               :config (defadvice dired-icon--display (around bar activate)
                         (ignore-errors add-do-it)))
 
-            ;; Facility to see images inside dired
-            (use-package image-dired
-              :disabled t ;; caused issue with emacs server
-              :after dired
-              :config (progn
-                        (setq image-dired-cmd-create-thumbnail-options
-                              (replace-regexp-in-string "-strip" "-auto-orient -strip" image-dired-cmd-create-thumbnail-options)
-                              image-dired-cmd-create-temp-image-options
-                              (replace-regexp-in-string "-strip" "-auto-orient -strip" image-dired-cmd-create-temp-image-options))))
+            ;; Narrow dired to match filter
+            (use-package dired-narrow
+              :defer t
+              :bind (:map dired-mode-map
+                          ("/" . dired-narrow)))
 
             ;; Preview files in dired
             (use-package peep-dired

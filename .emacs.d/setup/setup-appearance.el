@@ -32,8 +32,14 @@
   (when (fboundp 'horizontal-scroll-bar-mode)
     (horizontal-scroll-bar-mode 0)))
 
+;; Toggle menu bar
+(use-package menu-bar
+  :demand t
+  :config (menu-bar-mode 1)
+  :bind ([S-f10] . menu-bar-mode))
+
+;; Fringe configuration
 (use-package fringe
-  :init (fringe-mode 0)
   :config (progn
             (or standard-display-table
                 (setq standard-display-table (make-display-table)))
@@ -42,6 +48,7 @@
             ;; make the left fringe 28 pixels wide and the right 12
             (if (display-graphic-p)
                 (fringe-mode '(28 . 12)))))
+
 
 ;; Enable tooltips
 (use-package tooltip

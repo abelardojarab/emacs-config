@@ -1,6 +1,6 @@
 ;;; setup-fonts.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -114,17 +114,20 @@
                                                     my/main-writing-font-size)
                                       :weight 'normal))
 
-                ;; Use e mathematical symbols
+                ;; Use mathematical symbols
                 (when (and (display-graphic-p)
                            (find-font (font-spec :name "Fira Code")))
                   (let ((utf8-font "Fira Code"))
                     (set-fontset-font "fontset-startup" '(#x000000 . #x3FFFFF) utf8-font)
                     (set-fontset-font "fontset-default" '(#x000000 . #x3FFFFF) utf8-font)
-                    (set-fontset-font "fontset-standard" '(#x000000 . #x3FFFFF) utf8-font)))))
+                    (set-fontset-font "fontset-standard" '(#x000000 . #x3FFFFF) utf8-font)))
+
+                ;; Specify fonts for all unicode characters
+                (when (member "Symbola" (font-family-list))
+                  (set-fontset-font t 'unicode "Symbola" nil 'prepend))))
 
             ;; Fontify frame only for graphical mode
             (when (display-graphic-p)
-
               ;; Fontify current frame
               (fontify-frame nil)
               (let (frame (selected-frame))
@@ -148,14 +151,34 @@
   :commands pretty-mode)
 
 ;; Prettier symbols
-(use-package prog-mode
+(use-package prettiy-symbols-mode
+  :defer t
   :if (fboundp 'global-prettify-symbols-mode)
+  :commands (prettify-symbols-mode
+             global-prettify-symbols-mode)
+  :hook (org-mode . prettify-symbols-mode)
+  :custom (prettify-symbols-unprettify-at-point 'right-edge)
   :config (progn
-            (when (boundp 'prettify-symbols-unprettify-at-point)
-              ;; show original text when point is over a prettified symbol
-              (setq prettify-symbols-unprettify-at-point 'right-edge))
-            ;; prettify symbols (turn lambda -> λ)
-            (global-prettify-symbols-mode 1)))
+            (setq-default prettify-symbols-alist '(("#+BEGIN_SRC" . "✎")
+                                                   ("#+END_SRC" . "□")
+                                                   ("#+begin_src" . "✎")
+                                                   ("#+end_src" . "□")
+                                                   (">=" . "≥")
+                                                   ("=>" . "⇨")
+                                                   ("[ ]" .  "☐")
+                                                   ("[X]" . "☑")
+                                                   ("[-]" . "?⛞" )
+                                                   ("#+TITLE" . "🕮")
+                                                   ("#+DATE" . "📆")
+                                                   ("#+AUTHOR" . "👤")
+                                                   ("#+COLUMNS" . "▓")
+                                                   ("#+EMAIL" . "🖂")
+                                                   ("#+OPTIONS" . ?⚙)
+                                                   ("#+TYP_TODO" . "☑")
+                                                   ("#+TAGS" . ?🏷)
+                                                   ("#+EXPORT_SELECT_TAGS" . ?🏷)
+                                                   ("#+EXPORT_EXCLUDE_TAGS" . ?🏷)
+                                                   ("#+DESCRIPTION" . ?🗎)))))
 
 (defun set-icon-fonts (CODE-FONT-ALIST)
   "Utility to associate many unicode points with specified fonts."

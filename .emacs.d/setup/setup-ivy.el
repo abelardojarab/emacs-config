@@ -1,6 +1,6 @@
 ;;; setup-ivy.el ---                              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -165,7 +165,7 @@
   :commands (counsel-org-clock-context
              counsel-org-clock-history))
 
-;; Ivy integration for Projectile
+;; Ivy integration with projectile
 (use-package counsel-projectile
   :defer t
   :commands counsel-projectile-mode

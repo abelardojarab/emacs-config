@@ -28,16 +28,16 @@
 (use-package appt
   :defer t
   :commands (appt-activate
-             org-agenda-to-appt)
+             my/org-agenda-to-appt)
   :custom ((appt-message-warning-time        30)
            (appt-display-interval            15)
            (appt-display-mode-line           t)
            (calendar-mark-diary-entries-flag t)
            (appt-display-diary               nil)
            (appt-display-format              'window))
-  :config (progn
+  :init (progn
             ;; Make appt aware of appointments from the agenda
-            (defun org-agenda-to-appt ()
+            (defun my/org-agenda-to-appt ()
               "Activate appointments found in `org-agenda-files'."
               (interactive)
               (let* ((today (org-date-to-gregorian
@@ -56,7 +56,8 @@
                                              "\\([0-9]\\{1,2\\}\\)\\([0-9]\\{2\\}\\)" tod)
                                         (concat (match-string 1 tod) ":"
                                                 (match-string 2 tod))))
-                            (if tod (appt-add tod event))))) entries)))))
+                            (if tod (appt-add tod event))))) entries))))
+  :config (add-hook 'diary-list-entries-hook 'diary-sort-entries t))
 
 (use-package org-agenda
   :defer t
@@ -142,7 +143,7 @@
             (add-hook 'org-finalize-agenda-hook
                       (lambda ()
                         (hl-line-mode t)
-                        (org-agenda-to-appt)                      ;; copy all agenda schedule to appointments
+                        (my/org-agenda-to-appt)                      ;; copy all agenda schedule to appointments
                         (appt-activate 1)))                       ;; active appt (appointment notification)
 
             ;; Fontify done checkbox items in org-mode

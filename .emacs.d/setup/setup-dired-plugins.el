@@ -24,12 +24,6 @@
 
 ;;; Code:
 
-;; Narrow dired to match filter
-(use-package dired-narrow
-  :defer t
-  :bind (:map dired-mode-map
-              ("/" . dired-narrow)))
-
 (use-package dired-sidebar
   :defer t
   :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))

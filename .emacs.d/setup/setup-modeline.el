@@ -83,6 +83,7 @@
 (use-package minions
   :demand t
   :commands minions-mode
+  :custom (minions-mode-line-lighter "#")
   :config (minions-mode 1))
 
 (provide 'setup-modeline)

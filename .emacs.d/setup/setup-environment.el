@@ -34,7 +34,8 @@
   :commands (my/minibuffer-exit
              my/minibuffer-setup
              my/show-init-time)
-  :custom ((byte-compile-warnings                 nil)
+  :custom ((ad-redefinition-action                'accept)
+           (byte-compile-warnings                 nil)
            (load-prefer-newer                     nil)
            (load-file-rep-suffixes                '(""))
            (require-final-newline                 'query)
@@ -57,7 +58,8 @@
            (minibuffer-eldef-shorten-default      t)
            (register-preview-delay                2)
            (register-separator                    "\n\n")
-           (history-delete-duplicates             t))
+           (history-delete-duplicates             t)
+           (tab-always-indent                     'complete "smart tab behavior - indent or complete"))
   :init (progn
           ;; Disable garbage collection messages
           (setq garbage-collection-messages nil)
@@ -179,6 +181,17 @@
                         xsel-output )))
                   (setq interprogram-cut-function 'xsel-cut-function)
                   (setq interprogram-paste-function 'xsel-paste-function)))
+
+              ;; Default frame appearance
+              (setq default-frame-alist
+                    '((fringe-mode (quote (1 . 1)) nil (fringe))
+                      (fringes-outside-margins nil t)
+                      (right-fringe . 0)
+                      (left-fringe)
+                      (left-fringe-width nil)
+                      (frame-resize-pixelwise t)
+                      (border-color . "black")
+                      (menu-bar-lines . 1)))
 
               ;; Get back font antialiasing
               (push '(font-backend xft x) default-frame-alist)
