@@ -58,6 +58,7 @@
 (depends-on "cmake-mode")
 (depends-on "cmake-project")
 (depends-on "column-enforce-mode")
+;; (depends-on "commander")
 (depends-on "company-anaconda")
 (depends-on "company-auctex")
 (depends-on "company-bibtex")
