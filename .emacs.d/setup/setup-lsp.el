@@ -85,7 +85,7 @@
 (use-package lsp-ui
   :diminish t
   :custom ((lsp-ui-sideline-enable               nil)
-           (lsp-ui-doc-enable                    t)
+           (lsp-ui-doc-enable                    nil)
            (lsp-ui-doc-header                    t)
            (lsp-ui-doc-include-signature         t)
            (lsp-ui-doc-position                  'at-point)

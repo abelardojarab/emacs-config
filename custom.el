@@ -469,7 +469,7 @@
  '(lsp-prefer-flymake nil t nil "Customized with use-package lsp-mode")
  '(lsp-pyls-plugins-pylint-enabled nil nil nil "Customized with use-package lsp-mode")
  '(lsp-ui-doc-delay 0.7 t nil "higher than eldoc delay")
- '(lsp-ui-doc-enable t t nil "Customized with use-package lsp-ui")
+ '(lsp-ui-doc-enable nil nil nil "Customized with use-package lsp-ui")
  '(lsp-ui-doc-header t t nil "Customized with use-package lsp-ui")
  '(lsp-ui-doc-include-signature t t nil "Customized with use-package lsp-ui")
  '(lsp-ui-doc-position (quote at-point) t nil "Customized with use-package lsp-ui")
