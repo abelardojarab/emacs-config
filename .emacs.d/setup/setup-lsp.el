@@ -24,6 +24,34 @@
 
 ;;; Code:
 
+(defconst lsp--completion-item-kind
+  [nil
+   "Text"
+   "Method"
+   "Function"
+   "Constructor"
+   "Field"
+   "Variable"
+   "Class"
+   "Interface"
+   "Module"
+   "Property"
+   "Unit"
+   "Value"
+   "Enum"
+   "Keyword"
+   "Snippet"
+   "Color"
+   "File"
+   "Reference"
+   "Folder"
+   "EnumMember"
+   "Constant"
+   "Struct"
+   "Event"
+   "Operator"
+   "TypeParameter"])
+
 ;; lsp-mode:  Emacs client/library for the Language Server Protocol
 (use-package lsp-mode
   :demand t
@@ -32,7 +60,9 @@
   :hook (((c-mode c++-mode)    . lsp)
          (python-mode          . lsp)
          (js2-mode             . lsp))
-  :custom ((lsp-prefer-flymake               nil)
+  :custom ((lsp-completion-show-detail       t)
+           (lsp-completion-show-kind         t)
+           (lsp-prefer-flymake               nil)
            (lsp-pyls-plugins-pylint-enabled  nil)
            (lsp-auto-guess-root              nil)
            (lsp-auto-configure               t)
@@ -42,6 +72,17 @@
            (lsp-eldoc-render-all             nil)
            (lsp-enable-snippet               t)
            (lsp-file-watch-threshold         (* 1024 1024)))
+  :init (defun lsp--resolve-completion (item)
+          "Resolve completion ITEM."
+          (cl-assert item nil "Completion item must not be nil")
+          (or (-first 'identity
+                      (condition-case _err
+                          (lsp-foreach-workspace
+                           (when (lsp:completion-options-resolve-provider?
+                                  (lsp--capability :completionProvider))
+                             (lsp-request "completionItem/resolve" item)))
+                        (error)))
+              item))
   :config (progn
             ;; ignored directories
             (dolist (dir '(
@@ -100,6 +141,8 @@
            (lsp-ui-doc-delay                     0.7 "higher than eldoc delay"))
   :hook (lsp-after-open . lsp-ui-mode)
   :bind (:map lsp-ui-mode-map
+              ("TAB"                         . company-lsp)
+              ("<tab>"                       . company-lsp)
               ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
               ([remap xref-find-references]  . lsp-ui-peek-find-references)
               ("M-."                         . lsp-ui-peek-find-definitions)
