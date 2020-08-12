@@ -284,5 +284,9 @@
 (use-package midnight
   :hook (after-init . midnight-mode))
 
+;; Posframe
+(use-package posframe
+  :demand t)
+
 (provide 'setup-general)
 ;;; setup-general.el ends here

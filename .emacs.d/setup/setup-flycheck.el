@@ -176,5 +176,24 @@ flycheck-handle-idle-change, which removes the forced deferred."
                     )
                 (funcall flycheck-pos-tip-display-errors-tty-function errors)))))
 
+;; posframe integration with flycheck
+(use-package flycheck-posframe
+  :defer t
+  :after flycheck
+  :if (and (window-system) (version<= "26.1" emacs-version))
+  :custom (flycheck-posframe-border-width 1)
+  :commands flycheck-posframe-configure-pretty-defaults
+  :hook (flycheck-mode . flycheck-posframe-configure-pretty-defaults)
+  :config (progn
+            (set-face-attribute 'flycheck-posframe-background-face nil :inherit 'default)
+            (set-face-attribute 'flycheck-posframe-border-face nil :foreground "gray50")
+            (set-face-attribute 'flycheck-posframe-info-face nil :inherit 'flycheck-error-list-info)
+            (set-face-attribute 'flycheck-posframe-warning-face nil :inherit 'flycheck-error-list-warning)
+            (set-face-attribute 'flycheck-posframe-error-face nil :inherit 'flycheck-error-list-error)
+            (add-hook 'flycheck-mode-hook (lambda ()
+                                            (if (not (bound-and-true-p lsp-ui-sideline-mode))
+                                                (flycheck-posframe-mode))))
+            (flycheck-posframe-configure-pretty-defaults)))
+
 (provide 'setup-flycheck)
 ;;; setup-flycheck.el ends here

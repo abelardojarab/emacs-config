@@ -121,9 +121,9 @@
                   `((name . "Fonts")
                     (candidates . ,(font-family-list))
                     (action . (lambda (candidate) (progn
-                                               (setq my/main-programming-font candidate)
-                                               (set-face-attribute 'default nil :family candidate)
-                                               (fontify-frame (selected-frame)))))))
+                                                    (setq my/main-programming-font candidate)
+                                                    (set-face-attribute 'default nil :family candidate)
+                                                    (fontify-frame (selected-frame)))))))
 
             (defun helm-fonts ()
               (interactive)
@@ -185,9 +185,26 @@
                       :preselect str
                       :buffer "*helm imenu*")))))
 
+;; Integration with helm
 (use-package helm-lsp
   :defer t
-  :commands helm-lsp-workspace-symbol)
+  :commands helm-lsp-workspace-symbol
+  :bind (:map lsp-ui-mode-map
+              ("C-." . helm-lsp-workspace-symbol)))
+
+;; Helm integration with posframe
+(use-package helm-posframe
+  :disabled t
+  :defer t
+  :if (and (window-system) (version<= "26.1" emacs-version))
+  :commands (helm-posframe-cleanup
+             helm-posframe-enable)
+  :hook ((helm-org-rifle-after-command . helm-posframe-cleanup)
+         (after-init                  . helm-posframe-enable))
+  :custom ((helm-posframe-poshandler 'posframe-poshandler-frame-center)
+           (helm-posframe-height     10))
+  :config (setq helm-posframe-width (round (* (frame-width) 0.49))
+                helm-posframe-parameters '((internal-border-width . 10))))
 
 (provide 'setup-helm)
 ;;; setup-helm.el ends here

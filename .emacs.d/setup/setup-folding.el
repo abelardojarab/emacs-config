@@ -182,7 +182,9 @@
               ("o" origami-show-only-node)
               ("u" origami-undo)
               ("r" origami-redo)
-              ("R" origami-reset))))
+              ("R" origami-reset)
+              ("q" nil "Quit")
+              )))
 
 (provide 'setup-folding)
 ;;; setup-hideshow.el ends here

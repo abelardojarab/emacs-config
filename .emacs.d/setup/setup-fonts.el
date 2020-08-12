@@ -123,8 +123,8 @@
                     (set-fontset-font "fontset-standard" '(#x000000 . #x3FFFFF) utf8-font)))
 
                 ;; Specify fonts for all unicode characters
-                (when (member "Symbola" (font-family-list))
-                  (set-fontset-font t 'unicode "Symbola" nil 'prepend))))
+                (when (member "Fira Code" (font-family-list))
+                  (set-fontset-font t 'unicode "Fira Code" nil 'prepend))))
 
             ;; Fontify frame only for graphical mode
             (when (display-graphic-p)

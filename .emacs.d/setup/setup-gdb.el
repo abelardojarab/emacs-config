@@ -106,10 +106,6 @@ source code, and program IO."
                 (set-window-dedicated-p win0 t)
                 (select-window win0)))))
 
-;; Use the Debug Adapter Protocol for running tests and debugging
-;; Posframe is a pop-up tool that must be manually installed for dap-mode
-(use-package posframe)
-
 ;; Microsoft debugger interface
 (use-package dap-mouse
   :demand t

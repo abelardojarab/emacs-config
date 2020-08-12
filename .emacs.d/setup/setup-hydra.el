@@ -1,6 +1,6 @@
 ;;; setup-hydra.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -27,7 +27,22 @@
 ;; hydra package
 (use-package hydra
   :demand t
-  :custom (hydra-lv nil))
+  :custom (hydra-lv nil)
+  :config (progn
+            (setq hydra-hint-display-type 'my/posframe)
+            (defun my/hydra-posframe-show (str)
+              (posframe-show
+               " *hydra-posframe*"
+               :string str
+               :point (point)
+               :internal-border-color "gray50"
+               :internal-border-width 2
+               :poshandler #'posframe-poshandler-frame-bottom-center))
+            (defun my/hydra-posframe-hide ()
+              (posframe-hide " *hydra-posframe*"))
+            (setq hydra-hint-display-alist
+                  (list (list 'my/posframe #'my/hydra-posframe-show #'my/hydra-posframe-hide))
+                  hydra--work-around-dedicated nil)))
 
 ;; hydra replacement using which-key
 (use-package hercules

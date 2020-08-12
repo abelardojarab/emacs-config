@@ -40,7 +40,6 @@
   :hook (after-init . which-key-mode)
   :if (and (not (equal system-type 'windows-nt))
            (display-graphic-p))
-  :init (which-key-mode t)
   :custom ((which-key-sort-order            #'which-key-prefix-then-key-order)
            (which-key-sort-uppercase-first  nil)
            (which-key-add-column-padding    1)
@@ -82,6 +81,14 @@
             (add-to-list 'which-key-key-replacement-alist '("RET" . "⏎"))
             (add-to-list 'which-key-key-replacement-alist '("DEL" . "⇤"))
             (add-to-list 'which-key-key-replacement-alist '("SPC" . "␣"))))
+
+;; which key posframe
+(use-package which-key-posframe
+  :defer t
+  :if (and (window-system) (version<= "26.1" emacs-version))
+  :after (which-key posframe)
+  :custom (which-key-posframe-border-width 2)
+  :hook (which-key-mode . which-key-posframe-mode))
 
 ;; Get an instant cheat sheet for your current major mode
 (use-package discover-my-major

@@ -41,7 +41,8 @@
              docker-volumes
              docker-networks
              docker-build
-             docker-build-buffer)
+             docker-build-buffer
+             hydra-docker/body)
   :init (progn
           (use-package docker-image
             :commands docker-images)

@@ -117,7 +117,7 @@
 
 (use-package counsel-gtags
   :if (executable-find "global")
-  :config (defhydra hydra-counsel-gtags (:color blue :columns 4)
+  :init (defhydra hydra-counsel-gtags (:color blue :columns 4)
             "GNU GLOBAL"
             ("d" counsel-gtags-find-definition "Definition")
             ("r" counsel-gtags-find-reference "Reference")
@@ -126,7 +126,8 @@
             ("n" counsel-gtags-go-forward "Next" :color red)
             ("p" counsel-gtags-go-backward "Previous" :color red)
             ("c" counsel-gtags-create-tags "Create")
-            ("u" counsel-gtags-update-tags "Update")))
+            ("u" counsel-gtags-update-tags "Update")
+            ("q" nil "Quit")))
 
 ;; Select from xref candidates with Ivy
 (use-package ivy-xref
@@ -142,6 +143,24 @@
   :commands ivy-switch-buffer
   :custom (ivy-rich-switch-buffer-align-virtual-buffer nil)
   :config (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer))
+
+;; Ivy integration with posframe
+(use-package ivy-posframe
+  :disabled t
+  :defer t
+  :if (and (window-system) (version<= "26.1" emacs-version))
+  :after swiper
+  :custom ((ivy-posframe-hide-minibuffer  t)
+           (ivy-posframe-border-width     2)
+           (ivy-posframe-min-width        80)
+           (ivy-posframe-min-height       10)
+           (ivy-posframe-width            nil)
+           (ivy-posframe-height           nil))
+  :hook (ivy-mode . ivy-posframe-mode)
+  :config (setq ivy-posframe-display-functions-alist
+        '((swiper . ivy-posframe-display-at-window-bottom-left)
+          (t . ivy-posframe-display-at-frame-center)
+          )))
 
 ;; Ivy integration with yasnippet
 (use-package ivy-yasnippet

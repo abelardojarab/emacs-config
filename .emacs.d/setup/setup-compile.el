@@ -1,6 +1,6 @@
 ;;; setup-compile.el ---
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -27,18 +27,13 @@
 ;; Better compile buffer
 (use-package compile
   :demand t
-  :config (progn
-
-            ;; make sure ant's output is in a format emacs likes
-            (setenv "ANT_ARGS" "-emacs")
-
-            ;; Compilation
-            (setq compilation-context-lines            1
-                  compilation-scroll-output            'first-error
-                  compilation-read-command             nil
-                  compilation-window-height            12
-                  compilation-auto-jump-to-first-error t
-                  compilation-auto-jump-to-next-error  t)))
+  :custom ((compilation-context-lines            1)
+           (compilation-scroll-output            'first-error)
+           (compilation-read-command             nil)
+           (compilation-window-height            12)
+           (compilation-auto-jump-to-first-error t)
+           (compilation-auto-jump-to-next-error  t))
+  :config (setenv "ANT_ARGS" "-emacs"))
 
 (provide 'setup-compile)
 ;;; setup-compile.el ends here
