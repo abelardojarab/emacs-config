@@ -148,11 +148,31 @@
               ("M-."                         . lsp-ui-peek-find-definitions)
               ("M-?"                         . lsp-ui-peek-find-references)
               ("M-/"                         . lsp-ui-imenu))
-  :config (if (display-graphic-p)
-              (progn
-                (setq lsp-ui-sideline-code-actions-prefix "ℹ ")
-                (when (require 'xwidget nil 'noerror)
-                  (setq lsp-ui-doc-use-webkit t)))))
+  :config (progn
+            (if (display-graphic-p)
+                (progn
+                  (setq lsp-ui-sideline-code-actions-prefix "ℹ ")
+                  (when (require 'xwidget nil 'noerror)
+                    (setq lsp-ui-doc-use-webkit t))))
+
+            ;; Information on right fringe
+            (add-to-list 'lsp-ui-doc-frame-parameters '(right-fringe . 8))
+
+            ;; `C-g'to close doc
+            (advice-add #'keyboard-quit :before #'lsp-ui-doc-hide)
+
+            ;; Reset `lsp-ui-doc-background' after loading theme
+            (add-hook 'after-load-theme-hook
+                      (lambda ()
+                        (setq lsp-ui-doc-border (face-foreground 'default))
+                        (set-face-background 'lsp-ui-doc-background
+                                             (face-background 'tooltip))))
+
+            ;; WORKAROUND Hide mode-line of the lsp-ui-imenu buffer
+            ;; @see https://github.com/emacs-lsp/lsp-ui/issues/243
+            (defadvice lsp-ui-imenu (after hide-lsp-ui-imenu-mode-line activate)
+              (setq mode-line-format nil)
+              )))
 
 (use-package lsp-metals-treeview
   :disabled t

@@ -186,9 +186,10 @@
               (setq default-frame-alist
                     '((fringe-mode (quote (1 . 1)) nil (fringe))
                       (fringes-outside-margins nil t)
-                      (right-fringe . 0)
+                      (right-fringe)
                       (left-fringe)
                       (left-fringe-width nil)
+                      (right-fringe-width nil)
                       (frame-resize-pixelwise t)
                       (border-color . "black")
                       (menu-bar-lines . 1)))

@@ -236,8 +236,6 @@ little more place."
               ("C-x t B"   . treemacs-bookmark)
               ("C-x t C-t" . treemacs-find-file)
               ("C-x t M-t" . treemacs-find-tag))
-  ;; :bind (:map ctl-x-map
-  ;;             ("t"   .   treemacs))
   :custom ((treemacs-position                     'left)
            (treemacs-change-root-without-asking    t)
            (treemacs-collapse-dirs                 (if (executable-find "python3") 3 0))
@@ -262,12 +260,8 @@ little more place."
            (treemacs-sorting                       'alphabetic-desc)
            (treemacs-tag-follow-cleanup            t)
            (treemacs-tag-follow-delay              1.5)
-           (treemacs-width                         40)
-           (treemacs-indentation-string            (propertize " ǀ " 'face 'font-lock-comment-face)))
+           (treemacs-width                         40))
   :config (progn
-            ;; slightly lower the size of treemacs icons
-            (treemacs-resize-icons 18)
-
             ;; Recommended configuration
             (treemacs-follow-mode t)
             (treemacs-filewatch-mode t)

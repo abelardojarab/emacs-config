@@ -825,7 +825,6 @@
  '(treemacs-git-command-pipe "")
  '(treemacs-goto-tag-strategy (quote refetch-index))
  '(treemacs-indentation 2 nil nil "Customized with use-package treemacs")
- '(treemacs-indentation-string #(" ǀ " 0 3 (face font-lock-comment-face)) nil nil "Customized with use-package treemacs")
  '(treemacs-is-never-other-window t nil nil "Customized with use-package treemacs")
  '(treemacs-max-git-entries 5000 nil nil "Customized with use-package treemacs")
  '(treemacs-missing-project-action (quote ask))
