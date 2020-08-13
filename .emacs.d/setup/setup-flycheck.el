@@ -35,10 +35,11 @@
                 (add-hook mode (lambda () (flycheck-mode t))))
               my/flycheck-modes)
   :hook ((flycheck-after-syntax-check . my/flycheck-adjust-syntax-eagerness))
-  :custom ((flycheck-shellcheck-follow-sources nil)
-           (flycheck-disabled-checkers         '(html-tidy emacs-lisp-checkdoc))
-           (flycheck-highlighting-mode         'lines)
-           (flycheck-checker-error-threshold    5000))
+  :custom ((flycheck-check-syntax-automatically '(save mode-enabled))
+           (flycheck-shellcheck-follow-sources  nil)
+           (flycheck-disabled-checkers          '(html-tidy emacs-lisp-checkdoc))
+           (flycheck-highlighting-mode          'lines)
+           (flycheck-checker-error-threshold     5000))
   :config (progn
             (defun my/flycheck-adjust-syntax-eagerness ()
               "Adjust how often we check for errors based on if there are any.

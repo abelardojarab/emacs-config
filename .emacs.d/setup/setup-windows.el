@@ -28,6 +28,7 @@
   :demand t
   :custom ((window-divider-default-places        'right-only)
            (window-divider-default-right-width   1)
+           (window-divider-default-bottom-width  1)
            (window-combination-resize            t)
            (frame-resize-pixelwise               t)
            (frame-inhibit-implied-resize         t)
@@ -37,6 +38,9 @@
            (resize-mini-windows                  'grow-only)
            (max-mini-window-height               30))
   :config (progn
+            ;; better  window splitting
+            (window-divider-mode)
+
             ;; default to maximised windows
             (add-to-list 'default-frame-alist '(fullscreen . maximized))
 

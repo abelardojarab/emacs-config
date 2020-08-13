@@ -188,9 +188,7 @@
 ;; Integration with helm
 (use-package helm-lsp
   :defer t
-  :commands helm-lsp-workspace-symbol
-  :bind (:map lsp-ui-mode-map
-              ("C-." . helm-lsp-workspace-symbol)))
+  :commands helm-lsp-workspace-symbol)
 
 ;; Helm integration with posframe
 (use-package helm-posframe

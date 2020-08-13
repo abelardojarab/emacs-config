@@ -177,12 +177,15 @@
 (use-package helpful
   :defer t
   :after elisp-refs
-  :bind (("C-h f" . helpful-function)
-         ("C-h c" . helpful-callable)
-         ("C-h x" . helpful-command)
-         ("C-h m" . helpful-macro)
-         ("C-h k" . helpful-key)
-         ("C-h v" . helpful-variable)))
+  :bind (([remap describe-function] . helpful-callable)
+         ([remap describe-variable] . helpful-variable)
+         ([remap describe-key]      . helpful-key)
+         ("C-h f"                   . helpful-function)
+         ("C-h c"                   . helpful-callable)
+         ("C-h x"                   . helpful-command)
+         ("C-h m"                   . helpful-macro)
+         ("C-h k"                   . helpful-key)
+         ("C-h v"                   . helpful-variable)))
 
 ;; Alignment
 (use-package ialign
