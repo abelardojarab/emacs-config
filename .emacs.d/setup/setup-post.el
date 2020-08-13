@@ -53,54 +53,55 @@
         (base-fg (face-attribute 'mode-line :foreground))
         (base-bg (face-attribute 'mode-line :background))
         (box-width (/ (line-pixel-height) 2)))
-    (when (and (color-defined-p bg)
-               (color-defined-p fg)
-               (color-defined-p base-fg)
-               (color-defined-p base-bg)
-               (numberp box-width))
-      (defvar my/tabbar-base-bg-color base-bg)
-      (setq my/tabbar-base-bg-color base-bg)
+    (ignore-errors
+      (when (and (color-defined-p bg)
+                 (color-defined-p fg)
+                 (color-defined-p base-fg)
+                 (color-defined-p base-bg)
+                 (numberp box-width))
+        (defvar my/tabbar-base-bg-color base-bg)
+        (setq my/tabbar-base-bg-color base-bg)
 
-      (defvar my/tabbar-bg-color bg)
-      (if (fboundp 'color-lighten-name)
-          (setq my/tabbar-bg-color
-                (color-lighten-name (face-background 'default) 12))
-        (setq my/tabbar-bg-color bg))
+        (defvar my/tabbar-bg-color bg)
+        (if (fboundp 'color-lighten-name)
+            (setq my/tabbar-bg-color
+                  (color-lighten-name (face-background 'default) 12))
+          (setq my/tabbar-bg-color bg))
 
-      (set-face-attribute 'tabbar-default nil
-                          :foreground fg
-                          :background my/tabbar-bg-color
-                          :weight 'normal
-                          :inherit nil
-                          :box (list :line-width box-width
-                                     :color my/tabbar-bg-color
-                                     ))
-      (set-face-attribute 'tabbar-button nil
-                          :foreground base-fg
-                          :background my/tabbar-base-bg-color
-                          :weight 'normal
-                          :inherit nil
-                          :box (list :line-width box-width
-                                     :color my/tabbar-base-bg-color))
-      (set-face-attribute 'tabbar-unselected nil
-                          :foreground base-fg
-                          :background my/tabbar-base-bg-color
-                          :box (list :line-width box-width
-                                     :color my/tabbar-base-bg-color))
-      (set-face-attribute 'tabbar-selected nil
-                          :foreground fg
-                          :background bg
-                          :weight 'normal
-                          :inherit nil
-                          :box (list :line-width box-width
-                                     :color bg))
-      (set-face-attribute 'tabbar-selected-modified nil
-                          :inherit 'tabbar-selected
-                          :foreground "GoldenRod2")
-      (set-face-attribute 'tabbar-separator nil
-                          :background my/tabbar-base-bg-color
-                          :height 0.6)
-      )))
+        (set-face-attribute 'tabbar-default nil
+                            :foreground fg
+                            :background my/tabbar-bg-color
+                            :weight 'normal
+                            :inherit nil
+                            :box (list :line-width box-width
+                                       :color my/tabbar-bg-color
+                                       ))
+        (set-face-attribute 'tabbar-button nil
+                            :foreground base-fg
+                            :background my/tabbar-base-bg-color
+                            :weight 'normal
+                            :inherit nil
+                            :box (list :line-width box-width
+                                       :color my/tabbar-base-bg-color))
+        (set-face-attribute 'tabbar-unselected nil
+                            :foreground base-fg
+                            :background my/tabbar-base-bg-color
+                            :box (list :line-width box-width
+                                       :color my/tabbar-base-bg-color))
+        (set-face-attribute 'tabbar-selected nil
+                            :foreground fg
+                            :background bg
+                            :weight 'normal
+                            :inherit nil
+                            :box (list :line-width box-width
+                                       :color bg))
+        (set-face-attribute 'tabbar-selected-modified nil
+                            :inherit 'tabbar-selected
+                            :foreground "GoldenRod2")
+        (set-face-attribute 'tabbar-separator nil
+                            :background my/tabbar-base-bg-color
+                            :height 0.6)
+        ))))
 
 ;; Default ECB theme-ing
 (defun my/set-face-ecb ()

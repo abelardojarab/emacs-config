@@ -52,7 +52,6 @@
             (setq yas-snippet-dirs '()))
           (setq yas-snippet-dirs (cons (expand-file-name "snippets" user-emacs-directory)
                                        (yas-snippet-dirs)))
-
           (yas-initialize))
   :config (progn
             (add-to-list 'yas-key-syntaxes 'yas-shortest-key-until-whitespace)
