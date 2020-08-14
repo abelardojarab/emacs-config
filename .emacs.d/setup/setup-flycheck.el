@@ -39,7 +39,7 @@
            (flycheck-shellcheck-follow-sources  nil)
            (flycheck-disabled-checkers          '(html-tidy emacs-lisp-checkdoc))
            (flycheck-highlighting-mode          'lines)
-           (flycheck-checker-error-threshold     5000))
+           (flycheck-checker-error-threshold    5000))
   :config (progn
             (defun my/flycheck-adjust-syntax-eagerness ()
               "Adjust how often we check for errors based on if there are any.
@@ -154,28 +154,11 @@ flycheck-handle-idle-change, which removes the forced deferred."
 ;; Another tooltip using pos-tip (does not work)
 (use-package flycheck-pos-tip
   :defer t
+  :disabled t
   :if (display-graphic-p)
   :after flycheck
   :commands flycheck-pos-tip-mode
-  :hook (flycheck-mode . flycheck-pos-tip-mode)
-  :config (defun flycheck-pos-tip-error-messages (errors)
-            "Display ERRORS, using a graphical tooltip on GUI frames."
-            (when errors
-              (if (display-graphic-p)
-                  (let ((message (flycheck-help-echo-all-error-messages errors))
-                        (line-height (car (window-line-height))))
-                    (flycheck-pos-tip--check-pos)
-                    (prin1 message)
-                    ;; (pos-tip-show (with-temp-buffer
-                    ;;                 (prin1 message)
-                    ;;                 (princ "")
-                    ;;                 (buffer-string))
-
-                    ;;               nil nil nil flycheck-pos-tip-timeout
-                    ;;               flycheck-pos-tip-max-width nil
-                    ;;               nil (and line-height (+ line-height 5)))
-                    )
-                (funcall flycheck-pos-tip-display-errors-tty-function errors)))))
+  :hook (flycheck-mode . flycheck-pos-tip-mode))
 
 ;; posframe integration with flycheck
 (use-package flycheck-posframe
@@ -183,8 +166,9 @@ flycheck-handle-idle-change, which removes the forced deferred."
   :after flycheck
   :if (and (window-system) (version<= "26.1" emacs-version))
   :custom (flycheck-posframe-border-width 1)
-  :commands flycheck-posframe-configure-pretty-defaults
-  :hook (flycheck-mode . flycheck-posframe-configure-pretty-defaults)
+  :commands (flycheck-posframe-configure-pretty-defaults
+             flycheck-posframe-mode)
+  :hook (flycheck-mode . flycheck-posframe-mode)
   :config (progn
             (set-face-attribute 'flycheck-posframe-background-face nil :inherit 'default)
             (set-face-attribute 'flycheck-posframe-border-face nil :foreground "gray50")
