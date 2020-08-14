@@ -44,6 +44,11 @@
            (enable-recursive-minibuffers          t)
            (visible-bell                          t)
            (ring-bell-function                    'ignore)
+           (kill-ring-max                         100)
+           (x-select-enable-clipboard             t)
+           (select-active-regions                 t)
+           (save-interprogram-paste-before-kill   1)
+           (yank-pop-change-selection             t)
            (save-interprogram-paste-before-kill   t)
            (recenter-positions                    '(middle top bottom))
            (line-move-visual                      t)
@@ -61,6 +66,10 @@
            (history-delete-duplicates             t)
            (tab-always-indent                     'complete "smart tab behavior - indent or complete"))
   :init (progn
+          ;; Allow some header variables
+          (put 'encoding 'safe-local-variable (lambda (val) #'stringp))
+          (put 'org-src-preserve-indentation 'safe-local-variable (lambda (val) #'booleanp))
+
           ;; Disable garbage collection messages
           (setq garbage-collection-messages nil)
 
@@ -184,7 +193,7 @@
 
               ;; Default frame appearance
               (setq default-frame-alist
-                    '((fringe-mode (quote (1 . 1)) nil (fringe))
+                    '((fringe-mode (quote (28 . 12)) nil (fringe))
                       (fringes-outside-margins nil t)
                       (right-fringe)
                       (left-fringe)

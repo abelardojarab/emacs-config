@@ -54,6 +54,7 @@
  '(async-bytecomp-allowed-packages (quote (all)) nil nil "Customized with use-package async")
  '(auto-compile-display-buffer nil nil nil "Customized with use-package auto-compile")
  '(auto-compile-mode-line-counter t nil nil "Customized with use-package auto-compile")
+ '(auto-compile-on-load-mode t)
  '(auto-compile-source-recreate-deletes-dest t nil nil "Customized with use-package auto-compile")
  '(auto-compile-toggle-deletes-nonlib-dest t nil nil "Customized with use-package auto-compile")
  '(auto-compile-update-autoloads t nil nil "Customized with use-package auto-compile")
