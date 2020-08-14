@@ -175,7 +175,7 @@
  '(doom-modeline-buffer-file-name-style (quote truncate-with-project) nil nil "Customized with use-package doom-modeline")
  '(doom-modeline-icon t nil nil "Customized with use-package doom-modeline")
  '(doom-modeline-major-mode-icon t nil nil "Customized with use-package doom-modeline")
- '(doom-modeline-minor-modes nil nil nil "Customized with use-package doom-modeline")
+ '(doom-modeline-minor-modes t nil nil "Customized with use-package doom-modeline")
  '(dumb-jump-aggressive nil t nil "Customized with use-package dumb-jump")
  '(dumb-jump-selector (quote ivy) t nil "Customized with use-package dumb-jump")
  '(ecb-auto-save-before-etags-methods-rebuild nil t nil "Customized with use-package ecb")
