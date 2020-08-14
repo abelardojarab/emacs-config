@@ -129,6 +129,9 @@
       "xprop -f _GTK_THEME_VARIANT 8u -set _GTK_THEME_VARIANT 'dark' -name '%s'"
       frame-name))))
 
+(defadvice custom-theme-recalc-variable (around bar activate)
+  (ignore-errors add-do-it))
+
 ;; Advice the load theme function
 (defadvice load-theme (around load-theme-around)
   (let ()
