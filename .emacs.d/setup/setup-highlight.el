@@ -50,7 +50,6 @@
 
 ;; Highlight the line
 (use-package hl-line
-  :hook (after-init . global-hl-line-mode)
   :commands (global-hl-line-mode
              my/hl-line-mode-off)
   :hook ((org-mode markdown-mode) . my/hl-line-mode-off)

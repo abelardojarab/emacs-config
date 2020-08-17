@@ -24,13 +24,13 @@
 
 ;;; Code:
 
-(setq-default scroll-step                     1
+(setq-default scroll-step                     10
               scroll-margin                   3
               scroll-conservatively           100000
               scroll-preserve-screen-position 't
               scroll-up-aggressively          0.01
               scroll-down-aggressively        0.01
-              fast-but-imprecise-scrolling    nil
+              fast-but-imprecise-scrolling    t
               auto-window-vscroll             nil)
 
 (defadvice line-move-to-column (around bar activate)
@@ -38,6 +38,7 @@
 
 ;; Be careful it can ruin shift-select-mode
 (use-package smooth-scrolling
+  :disabled t
   :defer t
   :commands smooth-scrolling-mode
   :config (smooth-scrolling-mode 1))
