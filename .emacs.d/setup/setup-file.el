@@ -62,10 +62,10 @@
   :config (progn
             (setq confirm-kill-processes nil)
             (defadvice find-file-read-args (around find-file-read-args-always-use-dialog-box act)
-            "Simulate invoking menu item as if by the mouse; see `use-dialog-box'."
-            (let ((last-nonmenu-event nil)
-                  (use-dialog-box t))
-              ad-do-it))))
+              "Simulate invoking menu item as if by the mouse; see `use-dialog-box'."
+              (let ((last-nonmenu-event nil)
+                    (use-dialog-box t))
+                ad-do-it))))
 
 ;; More exhaustive cleaning of white space
 (use-package whitespace
@@ -130,12 +130,7 @@
                 (set-terminal-coding-system 'utf-8-unix)
                 (set-keyboard-coding-system 'utf-8-unix)
                 (set-selection-coding-system 'utf-8-unix)
-                (prefer-coding-system 'utf-8-unix)))
-
-            ;; ansi-term doesn’t obey usage of utf-8-unix
-            (defadvice ansi-term (after advise-ansi-term-coding-system)
-              (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
-            (ad-activate 'ansi-term)))
+                (prefer-coding-system 'utf-8-unix)))))
 
 ;; sudo edit
 (use-package sudo-edit
