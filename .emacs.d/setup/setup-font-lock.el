@@ -41,39 +41,7 @@
            (jit-lock-stealth-load        10)
            (jit-lock-stealth-time        1)
            (jit-lock-stealth-nice        0.5)
-           (jit-lock-stealth-verbose     nil))
-  :config (progn
-            (defun global-font-lock-mode-check-buffers () nil)
-
-            ;; Displaying image tooltips in Emacs
-            (defvar image-tooltip-re (concat  "\\(?3:'\\|\"\\)\\(?1:.*\\."
-                                              (regexp-opt '("png" "PNG" "JPG" "jpeg"
-                                                            "jpg" "JPEG" "eps" "EPS"
-                                                            "pdf" "PDF" "ps" "PS"))
-                                              "\\)\\(?:\\3\\)")
-              "Regexp to match image filenames in quotes")
-
-            ;; Tooltip creation
-            (defun image-tooltip (window object position)
-              (save-excursion
-                (goto-char position)
-                (let (beg end imgfile img s)
-                  (while (not (looking-at image-tooltip-re))
-                    (forward-char -1))
-                  (setq imgfile (match-string-no-properties 1))
-                  (when (file-exists-p imgfile)
-                    (setq img (create-image (expand-file-name imgfile)
-                                            'imagemagick nil :width 200))
-                    (propertize "Look in the minibuffer"
-                                'display img)))))
-
-            ;; Enable tooltip in graphical mode
-            (if (display-graphic-p)
-                (font-lock-add-keywords
-                 nil
-                 `((,image-tooltip-re
-                    0 '(face font-lock-keyword-face
-                             help-echo image-tooltip)))))))
+           (jit-lock-stealth-verbose     nil)))
 
 ;; Colorize color strings
 (use-package rainbow-mode

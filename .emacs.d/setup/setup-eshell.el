@@ -40,6 +40,7 @@
 
 (use-package ansi-term
   :defer t
+  :commands ansi-term
   :config (progn
             (defadvice term-sentinel (around my/advice-term-sentinel (proc msg))
               (if (memq (process-status proc) '(signal exit))
@@ -137,10 +138,11 @@
     :defer t
     :after eshell
     :bind (("C-t" . shell-pop))
+    :custom ((shell-pop-window-size 45)
+             (shell-pop-term-shell  "/bin/bash"))
     :config (progn
-              (setq shell-pop-window-size 45)
               (setq shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell)))))
-              (setq shell-pop-term-shell "/bin/bash")
+
               ;; need to do this manually or not picked up by `shell-pop'
               (shell-pop--set-shell-type 'shell-pop-shell-type shell-pop-shell-type)))
 

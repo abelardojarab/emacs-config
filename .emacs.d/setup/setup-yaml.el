@@ -26,7 +26,7 @@
 
 ;; Yaml mode
 (use-package yaml-mode
-  :mode "\\.ya?ml\'")
+  :mode "\\.ya?ml\\'")
 
 (provide 'setup-yaml)
 ;;; setup-yaml.el ends here
