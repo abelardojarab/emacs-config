@@ -51,8 +51,10 @@
 ;; Highlight the line
 (use-package hl-line
   :commands (global-hl-line-mode
+             hl-line-mode
              my/hl-line-mode-off)
-  :hook ((org-mode markdown-mode) . my/hl-line-mode-off)
+  :hook ((prog-mode               . hl-line-mode)
+         ((org-mode markdown-mode) . my/hl-line-mode-off))
   :custom ((hl-line-sticky-flag   t)
            (global-hl-sticky-flag t))
   :config (progn
@@ -72,6 +74,12 @@
             (defadvice hi-lock-set-pattern (around use-overlays activate)
               (let ((font-lock-fontified nil))
                 ad-do-it))))
+
+;; Deferred highlighted line
+(use-package hl-line+
+  :config (progn
+            (hl-line-when-idle-interval 0.3)
+            (toggle-hl-line-when-idle 1)))
 
 ;; Highlight symbol
 (use-package highlight-symbol

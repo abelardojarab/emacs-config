@@ -26,7 +26,7 @@
 
 (setq-default scroll-step                     10
               scroll-margin                   3
-              scroll-conservatively           100000
+              scroll-conservatively           101
               scroll-preserve-screen-position 't
               scroll-up-aggressively          0.01
               scroll-down-aggressively        0.01
