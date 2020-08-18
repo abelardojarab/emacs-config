@@ -200,6 +200,7 @@ little more place."
 
             ;; Enable ECB
             (my/ecb-activate)
+            (my/set-face-ecb)
 
             ;; projectile and speedbar integration
             (use-package projectile-speedbar
