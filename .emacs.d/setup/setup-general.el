@@ -291,5 +291,14 @@
 (use-package posframe
   :demand t)
 
+;; for native-comp branch
+;; from: https://ddavis.io/posts/emacs-native-centos7/
+(when (fboundp 'native-compile-async)
+  (if (yes-or-no-p "async compile?")
+      (setq comp-async-jobs-number 4 ;; not using all cores
+            comp-deferred-compilation t
+            comp-deferred-compilation-black-list '())
+    (setq comp-deferred-compilation nil)))
+
 (provide 'setup-general)
 ;;; setup-general.el ends here

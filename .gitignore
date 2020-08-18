@@ -80,6 +80,9 @@ company-statistics-cache.el
 # anaconda-mode
 anaconda-mode/
 
+# eln cache
+eln-cache/
+
 ### Tags ###
 # Ignore tags created by etags, ctags, gtags (GNU global) and cscope
 TAGS

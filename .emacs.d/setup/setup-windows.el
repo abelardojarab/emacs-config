@@ -41,7 +41,7 @@
             ;; better  window splitting
             (window-divider-mode)
 
-            ;; default to maximised windows
+            ;; default to maximized windows
             (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
             ;; Removes *Completions* from buffer after you've opened a file.
