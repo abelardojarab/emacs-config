@@ -361,5 +361,12 @@ LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
   :custom (gcmh-verbose nil)
   :config (gcmh-mode 1))
 
+;; Fix missing maps
+(if (not (boundp 'minibuffer-local-must-match-map))
+    (defvar minibuffer-local-must-match-map (make-sparse-keymap)))
+
+(if (not (boundp 'minibuffer-local-must-match-filename-map))
+    (defvar minibuffer-local-must-match-filename-map (make-sparse-keymap)))
+
 (provide 'setup-environment)
 ;;; setup-environment.el ends here
