@@ -76,9 +76,7 @@
   :disabled t
   :if (file-exists-p "/opt/anaconda3/bin/conda")
   :custom ((conda-anaconda-home           "/opt/anaconda3")
-           (cond-env-home-directory       "/opt/anaconda3")
-           (python-shell-interpreter      "/opt/anaconda3/bin/python3")
-           (python-shell-interpreter-args "-m IPython --simple-prompt -i"))
+           (cond-env-home-directory       "/opt/anaconda3"))
   :hook (python-mode . conda-env-autoactivate-mode)
   :commands (conda-env-autoactivate-mode)
   :config (progn

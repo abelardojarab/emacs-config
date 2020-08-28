@@ -40,6 +40,8 @@
   ;;                         (rope                   . "pip3 install --user rope")
   ;;                         (yapf                   . "pip3 install --user yapf")
   ;;                         (jedi                   . "pip3 install --user jedi"))
+  :custom ((python-shell-interpreter      "python3")
+           (python-shell-interpreter-args "-m IPython --simple-prompt -i"))
   :config (progn
             ;; Update imenu
             (defun python-reset-imenu ()

@@ -141,8 +141,7 @@
            (lsp-ui-doc-delay                     0.7 "higher than eldoc delay"))
   :hook (lsp-after-open . lsp-ui-mode)
   :bind (:map lsp-ui-mode-map
-              ("TAB"                         . company-lsp)
-              ("<tab>"                       . company-lsp)
+              ("M-;"                         . company-lsp)
               ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
               ([remap xref-find-references]  . lsp-ui-peek-find-references)
               ("M-."                         . lsp-ui-peek-find-definitions)

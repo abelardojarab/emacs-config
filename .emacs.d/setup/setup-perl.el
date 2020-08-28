@@ -1,6 +1,6 @@
 ;;; setup-perl.el ---                                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -27,13 +27,11 @@
 (use-package perl-mode
   :mode ("\\.pl\\'" . perl-mode)
   :init (defalias 'perl-mode 'cperl-mode)
-  :config (progn
-            ;; (use-package perl-find-library)
-            (setq cperl-invalid-face nil
-                  cperl-close-paren-offset -4
-                  cperl-continued-statement-offset 0
-                  cperl-indent-level 4
-                  cperl-indent-parens-as-block t)))
+  :custom ((cperl-invalid-face               nil)
+           (cperl-close-paren-offset         -4)
+           (cperl-continued-statement-offset 0)
+           (cperl-indent-level               4)
+           (cperl-indent-parens-as-block     t)))
 
 (provide 'setup-perl)
 ;;; setup-perl.el ends here

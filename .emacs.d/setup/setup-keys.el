@@ -199,7 +199,7 @@
            ((kbd "<mouse-3>")                       .   mouse3-popup-menu)
            ((kbd "<C-tab>")                         .   comment-or-uncomment-region)
            ((kbd "C-/")                             .   comment-or-uncomment-region)
-           ((kbd "C-;")                             .   xref-find-references)
+           ((kbd "C-?")                             .   xref-find-references)
            ((kbd "C-.")                             .   xref-find-definitions)
            ((kbd "<f12>")                           .   helm-semantic-or-imenu)
            ((kbd "C-`")                             .   helm-semantic-or-imenu)
