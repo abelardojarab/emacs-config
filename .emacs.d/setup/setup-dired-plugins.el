@@ -42,52 +42,65 @@
              (defadvice dired-sidebar-refresh-buffer (around bar activate)
                (ignore-errors add-do-it))))
 
-  ;; neotree side bar
-  (use-package neotree
-    :defer t
-    :bind (("C-x C-n" . neotree-toggle))
-    :commands (neotree-toggle)
-    :bind (:map neotree-mode-map
-                (("<C-return>" . neotree-change-root)
-                 ("C"          . neotree-change-root)
-                 ("c"          . neotree-create-node)
-                 ("+"          . neotree-create-node)
-                 ("d"          . neotree-delete-node)
-                 ("r"          . neotree-rename-node)
-                 ("q"          . kill-buffer-and-window)))
-    :custom ((neo-window-width          32)
-             (neo-create-file-auto-open t)
-             (neo-banner-message        nil)
-             (neo-show-updir-line       t)
-             (neo-window-fixed-size     nil)
-             (neo-vc-integration        nil)
-             (neo-mode-line-type        'neotree)
-             (neo-smart-open            t)
-             (neo-dont-be-alone         t)
-             (neo-show-hidden-files     t)
-             (neo-mode-line-type        'none)
-             (neo-auto-indent-point     t))
-    :config (progn
-              (setq neo-theme (if (display-graphic-p) 'nerd 'arrow))
-              (setq neo-hidden-regexp-list '("venv" "\\.pyc$" "~$" "\\.git" "__pycache__" ".DS_Store"))
+;; neotree side bar
+(define-key (current-global-map) (kbd "C-e") nil)
+(bind-key* (kbd "C-e") 'neotree-toggle)
+(use-package neotree
+  :defer t
+  :bind (("C-e" . neotree-toggle))
+  :commands (neotree-toggle
+             neotree-project-dir)
+  :bind (:map neotree-mode-map
+              (("<C-return>" . neotree-change-root)
+               ("C"          . neotree-change-root)
+               ("c"          . neotree-create-node)
+               ("+"          . neotree-create-node)
+               ("d"          . neotree-delete-node)
+               ("r"          . neotree-rename-node)
+               ("q"          . kill-buffer-and-window)))
+  :custom ((neo-window-width          32)
+           (neo-create-file-auto-open t)
+           (neo-banner-message        nil)
+           (neo-show-updir-line       t)
+           (neo-window-fixed-size     nil)
+           (neo-vc-integration        nil)
+           (neo-mode-line-type        'neotree)
+           (neo-smart-open            t)
+           (neo-dont-be-alone         t)
+           (neo-show-hidden-files     t)
+           (neo-mode-line-type        'none)
+           (neo-auto-indent-point     t))
+  :init (defun neotree-project-dir ()
+          "Open NeoTree using the git root."
+          (interactive)
+          (let ((project-dir (ffip-project-root))
+                (file-name (buffer-file-name)))
+            (if project-dir
+                (progn
+                  (neotree-dir project-dir)
+                  (neotree-find file-name))
+              (message "Could not find git project root."))))
+  :config (progn
+            (setq neo-theme (if (display-graphic-p) 'nerd 'arrow))
+            (setq neo-hidden-regexp-list '("venv" "\\.pyc$" "~$" "\\.git" "__pycache__" ".DS_Store"))
 
-              ;; Fix neotree to not collide with ecb
-              (defun neo-global--create-window ()
-                "Create global neotree window."
-                (let ((window nil)
-                      (split-width-threshold 100)
-                      (buffer (neo-global--get-buffer t))
-                      (window-pos (if (eq neo-window-position 'left) 'left 'right)))
-                  (setq window
-                        (select-window
-                         ;; (split-window
-                         ;;  (frame-root-window (window-frame (selected-window)))
-                         ;;  nil window-pos)
-                         (split-window)))
-                  (neo-window--init window buffer)
-                  (neo-global--attach)
-                  (neo-global--reset-width)
-                  window))))
+            ;; Fix neotree to not collide with ecb
+            (defun neo-global--create-window ()
+              "Create global neotree window."
+              (let ((window nil)
+                    (split-width-threshold 100)
+                    (buffer (neo-global--get-buffer t))
+                    (window-pos (if (eq neo-window-position 'left) 'left 'right)))
+                (setq window
+                      (select-window
+                       ;; (split-window
+                       ;;  (frame-root-window (window-frame (selected-window)))
+                       ;;  nil window-pos)
+                       (split-window)))
+                (neo-window--init window buffer)
+                (neo-global--attach)
+                (neo-global--reset-width)
+                window))))
 
-  (provide 'setup-dired-plugins)
+(provide 'setup-dired-plugins)
 ;;; setup-dired-plugins.el ends here

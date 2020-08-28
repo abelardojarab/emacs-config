@@ -125,6 +125,10 @@
 (global-set-key (kbd "<f7>")     'flycheck-next-error)
 (global-set-key (kbd "C-<f7>")   'helm-flycheck)
 
+;; Neotree toggle
+(global-set-key (kbd "<f8>")     'neotree-project-dir)
+(global-set-key (kbd "C-<f8>")   'neotree-toggle)
+
 ;; Refresh file
 (global-set-key (kbd "<f9>")     'refresh-file)
 

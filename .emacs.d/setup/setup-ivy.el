@@ -82,6 +82,7 @@
   :diminish counsel-mode
   :hook (ivy-mode . counsel-mode)
   :bind (("M-x"                     . counsel-M-x)
+         ("C-S-p"                   . counsel-M-x) ;; like sublimetext/vscode
          ("C-o"                     . counsel-find-file)
          ("C-c C-v"                 . counsel-yank-pop)
          ("C-c C-a"                 . counsel-git-grep)
