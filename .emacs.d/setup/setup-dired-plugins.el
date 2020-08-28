@@ -47,8 +47,9 @@
 (bind-key* (kbd "C-e") 'neotree-toggle)
 (use-package neotree
   :defer t
-  :bind (("C-e" . neotree-toggle))
+  :bind (("C-e" . neotree-project-dir))
   :commands (neotree-toggle
+             neotree-show
              neotree-project-dir)
   :bind (:map neotree-mode-map
               (("<C-return>" . neotree-change-root)
@@ -71,17 +72,26 @@
            (neo-mode-line-type        'none)
            (neo-auto-indent-point     t))
   :init (defun neotree-project-dir ()
-          "Open NeoTree using the git root."
+          "Open NeoTree using the project root, using find-file-in-project,
+or the current buffer directory."
           (interactive)
-          (let ((project-dir (ffip-project-root))
-                (file-name (buffer-file-name)))
-            (if project-dir
-                (progn
-                  (neotree-dir project-dir)
-                  (neotree-find file-name))
-              (message "Could not find git project root."))))
+          (let ((project-dir
+                 (ignore-errors
+                   (ffip-project-root)
+                   ))
+                (file-name (buffer-file-name))
+                (neo-smart-open t))
+            (if (and (fboundp 'neo-global--window-exists-p)
+                     (neo-global--window-exists-p))
+                (neotree-hide)
+              (progn
+                (neotree-show)
+                (if project-dir
+                    (neotree-dir project-dir))
+                (if file-name
+                    (neotree-find file-name))))))
   :config (progn
-            (setq neo-theme (if (display-graphic-p) 'nerd 'arrow))
+            (setq neo-theme (if (display-graphic-p) 'icons 'nerd))
             (setq neo-hidden-regexp-list '("venv" "\\.pyc$" "~$" "\\.git" "__pycache__" ".DS_Store"))
 
             ;; Fix neotree to not collide with ecb

@@ -304,8 +304,8 @@ little more place."
   :defer t
   :after (lsp-mode all-the-icons)
   :bind (:map lsp-mode-map
-              ("C-<f8>" . lsp-treemacs-errors-list)
-              ("<f8>"   . lsp-treemacs-symbols)))
+              ("C-<f3>" . lsp-treemacs-errors-list)
+              ("<f3>"   . lsp-treemacs-symbols)))
 
 (provide 'setup-ecb)
 ;;; setup-ecb.el ends here
