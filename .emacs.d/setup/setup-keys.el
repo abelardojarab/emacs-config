@@ -37,11 +37,10 @@
 (use-package cua-base
   :demand t
   :init (defun cua-mode-disable () (cua-mode -1))
-  :hook ((prog-mode text-mode c-mode-common) . cua-mode-disable)
-  :config (progn
-            (global-set-key [remap scroll-up]   'cua-scroll-up)
-            (global-set-key [remap scroll-down] 'cua-scroll-down)
-            (transient-mark-mode t)))
+  :hook (((prog-mode text-mode c-mode-common) . cua-mode-disable)
+         (after-init                          . transient-mark-mode))
+  :bind (([remap scroll-up]    . cua-scroll-up)
+         ([remap scroll-down]  . cua-scroll-down)))
 
 ;; popup-based buffer switcher
 (use-package popup-switcher
