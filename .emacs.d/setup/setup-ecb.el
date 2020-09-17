@@ -261,7 +261,8 @@ little more place."
            (treemacs-sorting                       'alphabetic-desc)
            (treemacs-tag-follow-cleanup            t)
            (treemacs-tag-follow-delay              1.5)
-           (treemacs-width                         40))
+           (treemacs-width                         40)
+           (treemacs-space-between-root-nodes      nil))
   :config (progn
             ;; Recommended configuration
             (treemacs-follow-mode t)

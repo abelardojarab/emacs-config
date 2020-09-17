@@ -37,7 +37,8 @@
   :defer t
   :commands which-key-mode
   :diminish which-key-mode
-  :hook (after-init . which-key-mode)
+  :hook ((after-init . which-key-mode)
+         (lsp-mode   . lsp-enable-which-key-integration))
   :if (and (not (equal system-type 'windows-nt))
            (display-graphic-p))
   :custom ((which-key-sort-order            #'which-key-prefix-then-key-order)

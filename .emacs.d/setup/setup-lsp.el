@@ -56,7 +56,8 @@
 (use-package lsp-mode
   :demand t
   :commands (lsp
-             lsp-deferred)
+             lsp-deferred
+             lsp-enable-which-key-integration)
   :hook (((c-mode c++-mode)    . lsp)
          (python-mode          . lsp)
          (js2-mode             . lsp))
