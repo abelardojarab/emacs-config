@@ -1,0 +1,2 @@
+;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/eldoc-eval-20200902.1339/eldoc-eval.el  -*- no-byte-compile: t -*-
+(define-package "eldoc-eval" "20200902.1339" "Enable eldoc support when minibuffer is in use." 'nil :commit "5ecafc2b3d3e712c96dcdbcff0cbe43f1b6fed3d" :authors '(("Thierry Volpiatto" . "thierry.volpiatto@gmail.com")) :maintainer '("Thierry Volpiatto" . "thierry.volpiatto@gmail.com"))

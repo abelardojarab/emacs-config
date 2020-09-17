@@ -1,2 +1,0 @@
-;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/atom-one-dark-theme-20190705.554/atom-one-dark-theme.el  -*- no-byte-compile: t -*-
-(define-package "atom-one-dark-theme" "20190705.554" "Atom One Dark color theme" 'nil :commit "bcb60ba2b8582decb549cce4aa78be2cd8b10a73" :authors '(("Jonathan Chu" . "me@jonathanchu.is")) :maintainer '("Jonathan Chu" . "me@jonathanchu.is") :url "https://github.com/jonathanchu/atom-one-dark-theme")
