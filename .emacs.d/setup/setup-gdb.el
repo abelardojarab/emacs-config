@@ -133,6 +133,7 @@ source code, and program IO."
                  dap-utils-extension-path (concat (file-name-as-directory
                                                    my/emacs-cache-dir) "dap-extension/"))
   :config (progn
+            (use-package dap-cpptools)
             (use-package dap-gdb-lldb)
             (use-package dap-python)
             (dap-auto-configure-mode)))
