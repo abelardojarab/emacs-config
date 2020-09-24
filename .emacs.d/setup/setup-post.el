@@ -26,9 +26,6 @@
 
 ;; Add all diminished modes here
 
-(defadvice face-attribute (around bar activate)
-  (ignore-errors add-do-it))
-
 ;; Disable theme before setting a new one
 (defun disable-themes (&optional themes)
   (mapc #'disable-theme (or themes custom-enabled-themes)))
