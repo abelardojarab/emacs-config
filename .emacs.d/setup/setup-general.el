@@ -294,6 +294,9 @@
 ;; for native-comp branch
 ;; from: https://ddavis.io/posts/emacs-native-centos7/
 (when (fboundp 'native-compile-async)
+  (unless (fboundp 'subr-native-lambda-list)
+    (defun subr-native-lambda-list (x)
+      nil))
   (if (yes-or-no-p "async compile?")
       (setq comp-async-jobs-number 4 ;; not using all cores
             comp-deferred-compilation t
