@@ -196,7 +196,7 @@
 	   (:maintainer "Artur Malabarba" . "emacs@endlessparentheses.com")
 	   (:url . "https://github.com/Malabarba/beacon"))])
  (bluetooth .
-	    [(0 1 2)
+	    [(0 2)
 	     ((emacs
 	       (25 1))
 	      (dash
@@ -204,7 +204,8 @@
 	     "A Major mode for Bluetooth devices" single
 	     ((:keywords "hardware")
 	      (:authors
-	       ("Raffael Stocker" . "r.stocker@mnet-mail.de"))
+	       ("Raffael Stocker" . "r.stocker@mnet-mail.de")
+	       ("Etienne Prud’homme" . "e.e.f.prudhomme@gmail.com"))
 	      (:maintainer "Raffael Stocker" . "r.stocker@mnet-mail.de")
 	      (:url . "https://gitlab.com/rstocker/emacs-bluetooth"))])
  (bnf-mode .
@@ -1037,7 +1038,7 @@
 	   ("Oleh Krehel" . "ohwoeowho@gmail.com"))
 	  (:keywords "bindings"))])
  (hyperbole .
-	    [(7 1 2)
+	    [(7 1 3)
 	     ((emacs
 	       (24 4)))
 	     "GNU Hyperbole: The Everyday Hypertextual Information Manager" tar
@@ -1511,6 +1512,17 @@
 	     (:authors
 	      ("Ian Dunn" . "dunni@gnu.org"))
 	     (:keywords "convenience" "text" "org"))])
+ (org-translate .
+		[(0 1 1)
+		 ((emacs
+		   (25 1))
+		  (org
+		   (9 1)))
+		 "Org-based translation environment" single
+		 ((:url . "http://elpa.gnu.org/packages/org-translate.html")
+		  (:authors
+		   ("Eric Abrahamsen" . "eric@ericabrahamsen.net"))
+		  (:maintainer "Eric Abrahamsen" . "eric@ericabrahamsen.net"))])
  (orgalist .
 	   [(1 12)
 	    ((emacs
@@ -1596,7 +1608,7 @@
 	     ("Phillip Lord" . "phillip.lord@russet.org.uk"))
 	    (:url . "http://elpa.gnu.org/packages/persist.html"))])
  (phps-mode .
-	    [(0 3 58)
+	    [(0 3 62)
 	     ((emacs
 	       (26)))
 	     "Major mode for PHP with Semantic integration" tar

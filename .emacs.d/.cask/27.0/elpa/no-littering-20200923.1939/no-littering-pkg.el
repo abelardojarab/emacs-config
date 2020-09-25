@@ -1,0 +1,2 @@
+;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/no-littering-20200923.1939/no-littering.el  -*- no-byte-compile: t -*-
+(define-package "no-littering" "20200923.1939" "help keeping ~/.emacs.d clean" '((cl-lib "0.5")) :commit "438472ca63d8368a3d9d1691618df873758739c8" :authors '(("Jonas Bernoulli" . "jonas@bernoul.li")) :maintainer '("Jonas Bernoulli" . "jonas@bernoul.li") :url "https://github.com/emacscollective/no-littering")
