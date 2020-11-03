@@ -32,6 +32,7 @@
 ;; Tabbar
 (use-package tabbar
   :hook (after-init . tabbar-mode)
+  :preface (push "~/.emacs.d/etc/images/" image-load-path)
   :custom ((tabbar-auto-scroll-flag  t)
            (tabbar-use-images        t)
            (table-time-before-update 0.1))
@@ -247,7 +248,56 @@ truncates text if needed.  Minimal width can be set with
               (dolist (window (window-list))
                 (set-window-parameter window 'tab-line-cache nil)))
 
-            (add-hook 'window-configuration-change-hook #'my/tab-line-drop-caches)))
+            (add-hook 'window-configuration-change-hook #'my/tab-line-drop-caches)
+
+            (when (display-graphic-p)
+              (setq tab-line-new-button
+                    (propertize " + "
+                                'display `(image :type xpm
+                                                 :file ,(image-search-load-path
+                                                         "new@2x.xpm")
+                                                 :margin (2 . 0)
+                                                 :ascent center
+                                                 :scale 0.5)
+                                'keymap tab-line-add-map
+                                'mouse-face 'tab-line-highlight
+                                'help-echo "Click to add tab"))
+
+              (setq tab-line-close-button
+                    (propertize " x"
+                                'display `(image :type xpm
+                                                 :file ,(image-search-load-path
+                                                         "close@2x.xpm")
+                                                 :margin (2 . 0)
+                                                 :ascent center
+                                                 :scale 0.5)
+                                'keymap tab-line-tab-close-map
+                                'mouse-face 'tab-line-close-highlight
+                                'help-echo "Click to close tab"))
+
+              (setq tab-line-left-button
+                    (propertize " <"
+                                'display `(image :type xpm
+                                                 :file ,(image-search-load-path
+                                                         "left-arrow@2x.xpm")
+                                                 :margin (2 . 0)
+                                                 :ascent center
+                                                 :scale 0.5)
+                                'keymap tab-line-left-map
+                                'mouse-face 'tab-line-highlight
+                                'help-echo "Click to scroll left"))
+
+              (setq tab-line-right-button
+                    (propertize "> "
+                                'display `(image :type xpm
+                                                 :file ,(image-search-load-path
+                                                         "right-arrow@2x.xpm")
+                                                 :margin (2 . 0)
+                                                 :ascent center
+                                                 :scale 0.5)
+                                'keymap tab-line-right-map
+                                'mouse-face 'tab-line-highlight
+                                'help-echo "Click to scroll right")))))
 
 (provide 'setup-tabbar)
 ;;; setup-tabbar.el ends here

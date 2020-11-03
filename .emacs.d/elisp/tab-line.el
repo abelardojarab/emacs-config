@@ -29,7 +29,6 @@
 
 (require 'seq) ; tab-line.el is not pre-loaded so it's safe to use it here
 
-
 (defgroup tab-line nil
   "Window-local tabs."
   :group 'convenience
@@ -84,7 +83,6 @@
   :version "27.1"
   :group 'tab-line-faces)
 
-
 (defvar tab-line-tab-map
   (let ((map (make-sparse-keymap)))
     (define-key map [tab-line mouse-1] 'tab-line-select-tab)
@@ -124,7 +122,6 @@
     map)
   "Local keymap to scroll `tab-line-mode' window tabs to the right.")
 
-
 (defcustom tab-line-new-tab-choice t
   "Defines what to show in a new tab.
 If t, display a selection menu with all available buffers.
@@ -208,7 +205,6 @@ If nil, don't show it at all."
 (defvar tab-line-separator nil
   "String that delimits tabs.")
 
-
 (defcustom tab-line-tab-name-function #'tab-line-tab-name-buffer
   "Function to get a tab name.
 Function gets two arguments: tab to get name for and a list of tabs
@@ -240,8 +236,7 @@ to `tab-line-tab-name-truncated-buffer'."
   :group 'tab-line
   :version "27.1")
 
-(defvar tab-line-tab-name-ellipsis
-  (if (char-displayable-p ?…) "…" "..."))
+(defvar tab-line-tab-name-ellipsis t)
 
 (defun tab-line-tab-name-truncated-buffer (buffer &optional _buffers)
   "Generate tab name from BUFFER.
@@ -255,7 +250,6 @@ Append ellipsis `tab-line-tab-name-ellipsis' in this case."
                    tab-line-tab-name-ellipsis)
                   'help-echo tab-name))))
 
-
 (defcustom tab-line-tabs-function #'tab-line-tabs-window-buffers
   "Function to get a list of tabs to display in the tab line.
 This function should return either a list of buffers whose names will
@@ -398,7 +392,6 @@ variable `tab-line-tabs-function'."
             (list buffer)
             next-buffers)))
 
-
 (defun tab-line-format-template (tabs)
   "Template for displaying tab line for selected window."
   (let* ((selected-buffer (window-buffer))
@@ -479,7 +472,6 @@ variable `tab-line-tabs-function'."
               nil 'tab-line-cache
               (cons cache-key (tab-line-format-template tabs)))))))
 
-
 (defcustom tab-line-auto-hscroll t
   "Allow or disallow automatic horizontal scrolling of the tab line.
 Non-nil means the tab line are automatically scrolled horizontally to make
@@ -564,7 +556,6 @@ the selected tab visible."
                     (set-window-parameter nil 'tab-line-hscroll hscroll)))))))))
       (list show-arrows hscroll))))
 
-
 (defun tab-line-hscroll (&optional arg window)
   (let* ((hscroll (window-parameter window 'tab-line-hscroll))
          (tabs (if window
@@ -589,7 +580,6 @@ the selected tab visible."
     (tab-line-hscroll (- (or arg 1)) window)
     (force-mode-line-update window)))
 
-
 (defun tab-line-new-tab (&optional mouse-event)
   "Add a new tab to the tab line.
 Usually is invoked by clicking on the plus-shaped button.
@@ -642,6 +632,16 @@ using the `previous-buffer' command."
       (with-selected-window window
         (switch-to-buffer buffer))))))
 
+(defcustom tab-line-switch-cycling nil
+  "Enable cycling tab switch.
+If non-nil, `tab-line-switch-to-prev-tab' in the first tab
+switches to the last tab and `tab-line-switch-to-next-tab' in the
+last tab switches to the first tab.  This variable is not consulted
+when `tab-line-tabs-function' is `tab-line-tabs-window-buffers'."
+  :type 'boolean
+  :group 'tab-line
+  :version "28.1")
+
 (defun tab-line-switch-to-prev-tab (&optional mouse-event)
   "Switch to the previous tab.
 Its effect is the same as using the `previous-buffer' command
@@ -652,13 +652,16 @@ Its effect is the same as using the `previous-buffer' command
         (switch-to-prev-buffer window)
       (with-selected-window (or window (selected-window))
         (let* ((tabs (funcall tab-line-tabs-function))
-               (tab (nth (1- (seq-position
-                              tabs (current-buffer)
-                              (lambda (tab buffer)
-                                (if (bufferp tab)
-                                    (eq buffer tab)
-                                  (eq buffer (cdr (assq 'buffer tab)))))))
-                         tabs))
+               (pos (seq-position
+                     tabs (current-buffer)
+                     (lambda (tab buffer)
+                       (if (bufferp tab)
+                           (eq buffer tab)
+                         (eq buffer (cdr (assq 'buffer tab)))))))
+               (tab (if pos
+                        (if (and tab-line-switch-cycling (<= pos 0))
+                            (nth (1- (length tabs)) tabs)
+                          (nth (1- pos) tabs))))
                (buffer (if (bufferp tab) tab (cdr (assq 'buffer tab)))))
           (when (bufferp buffer)
             (switch-to-buffer buffer)))))))
@@ -673,18 +676,20 @@ Its effect is the same as using the `next-buffer' command
         (switch-to-next-buffer window)
       (with-selected-window (or window (selected-window))
         (let* ((tabs (funcall tab-line-tabs-function))
-               (tab (nth (1+ (seq-position
-                              tabs (current-buffer)
-                              (lambda (tab buffer)
-                                (if (bufferp tab)
-                                    (eq buffer tab)
-                                  (eq buffer (cdr (assq 'buffer tab)))))))
-                         tabs))
+               (pos (seq-position
+                     tabs (current-buffer)
+                     (lambda (tab buffer)
+                       (if (bufferp tab)
+                           (eq buffer tab)
+                         (eq buffer (cdr (assq 'buffer tab)))))))
+               (tab (if pos
+                        (if (and tab-line-switch-cycling (<= (length tabs) (1+ pos)))
+                            (car tabs)
+                          (nth (1+ pos) tabs))))
                (buffer (if (bufferp tab) tab (cdr (assq 'buffer tab)))))
           (when (bufferp buffer)
             (switch-to-buffer buffer)))))))
 
-
 (defcustom tab-line-close-tab-function 'bury-buffer
   "Defines what to do on closing the tab.
 If `bury-buffer', put the tab's buffer at the end of the list of all
@@ -725,7 +730,6 @@ from the tab line."
         (funcall tab-line-close-tab-function tab)))
       (force-mode-line-update))))
 
-
 ;;;###autoload
 (define-minor-mode tab-line-mode
   "Toggle display of window tab line in the buffer."
@@ -759,17 +763,19 @@ from the tab line."
   :group 'tab-line
   :version "27.1")
 
-
 (global-set-key [tab-line mouse-4]    'tab-line-hscroll-left)
 (global-set-key [tab-line mouse-5]    'tab-line-hscroll-right)
 (global-set-key [tab-line wheel-up]   'tab-line-hscroll-left)
 (global-set-key [tab-line wheel-down] 'tab-line-hscroll-right)
+(global-set-key [tab-line wheel-left] 'tab-line-hscroll-left)
+(global-set-key [tab-line wheel-right] 'tab-line-hscroll-right)
 
 (global-set-key [tab-line S-mouse-4]    'tab-line-switch-to-prev-tab)
 (global-set-key [tab-line S-mouse-5]    'tab-line-switch-to-next-tab)
 (global-set-key [tab-line S-wheel-up]   'tab-line-switch-to-prev-tab)
 (global-set-key [tab-line S-wheel-down] 'tab-line-switch-to-next-tab)
+(global-set-key [tab-line S-wheel-left] 'tab-line-switch-to-prev-tab)
+(global-set-key [tab-line S-wheel-right] 'tab-line-switch-to-next-tab)
 
-
 (provide 'tab-line)
 ;;; tab-line.el ends here
