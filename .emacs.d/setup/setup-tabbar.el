@@ -99,8 +99,9 @@ That is, a string used to represent it on the tab bar."
 (use-package tabbar-ruler
   :demand t
   :if (display-graphic-p)
-  :custom ((tabbar-cycle-scope         'tabs)
-           (tabbar-ruler-global-tabbar t))
+  :custom ((tabbar-cycle-scope             'tabs)
+           (tabbar-ruler-global-tabbar     t)
+           (tabbar-ruler-fancy-close-image nil))
   :config (progn
             ;; Fix for tabbar under Emacs 24.4
             ;; store tabbar-cache into a real hash,
@@ -118,6 +119,7 @@ That is, a string used to represent it on the tab bar."
 ;; Newer built-in tabbar for Emacs
 (use-package tab-line
   :disabled t
+  :preface (push "~/.emacs.d/etc/images/" image-load-path)
   :hook (after-init . global-tab-line-mode)
   :init (tabbar-mode -1)
   :custom ((tab-line-close-button-show t)
@@ -195,20 +197,7 @@ truncates text if needed.  Minimal width can be set with
                            (buffer-name (concat padding buffer-name))
                            (name-width (length buffer-name)))
                       (concat buffer-name (make-string (- tab-width name-width) ?\s)))))))
-
-            (setq tab-line-tab-name-function #'my/tab-line-name-buffer
-                  tab-line-right-button (propertize (if (char-displayable-p ?▶) " ▶ " " > ")
-                                                    'keymap tab-line-right-map
-                                                    'mouse-face 'tab-line-highlight
-                                                    'help-echo "Click to scroll right")
-                  tab-line-left-button (propertize (if (char-displayable-p ?◀) " ◀ " " < ")
-                                                   'keymap tab-line-left-map
-                                                   'mouse-face 'tab-line-highlight
-                                                   'help-echo "Click to scroll left")
-                  tab-line-close-button (propertize (if (char-displayable-p ?×) "× " "x ")
-                                                    'keymap tab-line-tab-close-map
-                                                    'mouse-face 'tab-line-close-highlight
-                                                    'help-echo "Click to close tab"))
+            (setq tab-line-tab-name-function #'my/tab-line-name-buffer)
 
             (let ((bg (face-attribute 'default :background))
                   (fg (face-attribute 'default :foreground))
@@ -247,57 +236,70 @@ truncates text if needed.  Minimal width can be set with
               "Drops `tab-line' cache in every window."
               (dolist (window (window-list))
                 (set-window-parameter window 'tab-line-cache nil)))
-
             (add-hook 'window-configuration-change-hook #'my/tab-line-drop-caches)
 
-            (when (display-graphic-p)
-              (setq tab-line-new-button
-                    (propertize " + "
-                                'display `(image :type xpm
-                                                 :file ,(image-search-load-path
-                                                         "new@2x.xpm")
-                                                 :margin (2 . 0)
-                                                 :ascent center
-                                                 :scale 0.5)
-                                'keymap tab-line-add-map
-                                'mouse-face 'tab-line-highlight
-                                'help-echo "Click to add tab"))
+            (if (display-graphic-p)
+                (progn
+                  (setq tab-line-new-button
+                        (propertize " + "
+                                    'display `(image :type xpm
+                                                     :file ,(image-search-load-path
+                                                             "new@2x.xpm")
+                                                     :margin (2 . 0)
+                                                     :ascent center
+                                                     :scale 0.5)
+                                    'keymap tab-line-add-map
+                                    'mouse-face 'tab-line-highlight
+                                    'help-echo "Click to add tab"))
 
-              (setq tab-line-close-button
-                    (propertize " x"
-                                'display `(image :type xpm
-                                                 :file ,(image-search-load-path
-                                                         "close@2x.xpm")
-                                                 :margin (2 . 0)
-                                                 :ascent center
-                                                 :scale 0.5)
-                                'keymap tab-line-tab-close-map
-                                'mouse-face 'tab-line-close-highlight
-                                'help-echo "Click to close tab"))
+                  (setq tab-line-close-button
+                        (propertize " x"
+                                    'display `(image :type xpm
+                                                     :file ,(image-search-load-path
+                                                             "close@2x.xpm")
+                                                     :margin (2 . 0)
+                                                     :ascent center
+                                                     :scale 0.5)
+                                    'keymap tab-line-tab-close-map
+                                    'mouse-face 'tab-line-close-highlight
+                                    'help-echo "Click to close tab"))
 
-              (setq tab-line-left-button
-                    (propertize " <"
-                                'display `(image :type xpm
-                                                 :file ,(image-search-load-path
-                                                         "left-arrow@2x.xpm")
-                                                 :margin (2 . 0)
-                                                 :ascent center
-                                                 :scale 0.5)
-                                'keymap tab-line-left-map
-                                'mouse-face 'tab-line-highlight
-                                'help-echo "Click to scroll left"))
+                  (setq tab-line-left-button
+                        (propertize " <"
+                                    'display `(image :type xpm
+                                                     :file ,(image-search-load-path
+                                                             "left-arrow@2x.xpm")
+                                                     :margin (2 . 0)
+                                                     :ascent center
+                                                     :scale 0.5)
+                                    'keymap tab-line-left-map
+                                    'mouse-face 'tab-line-highlight
+                                    'help-echo "Click to scroll left"))
 
-              (setq tab-line-right-button
-                    (propertize "> "
-                                'display `(image :type xpm
-                                                 :file ,(image-search-load-path
-                                                         "right-arrow@2x.xpm")
-                                                 :margin (2 . 0)
-                                                 :ascent center
-                                                 :scale 0.5)
-                                'keymap tab-line-right-map
-                                'mouse-face 'tab-line-highlight
-                                'help-echo "Click to scroll right")))))
+                  (setq tab-line-right-button
+                        (propertize "> "
+                                    'display `(image :type xpm
+                                                     :file ,(image-search-load-path
+                                                             "right-arrow@2x.xpm")
+                                                     :margin (2 . 0)
+                                                     :ascent center
+                                                     :scale 0.5)
+                                    'keymap tab-line-right-map
+                                    'mouse-face 'tab-line-highlight
+                                    'help-echo "Click to scroll right")))
+              (progn
+                (setq tab-line-right-button (propertize (if (char-displayable-p ?▶) " ▶ " " > ")
+                                                        'keymap tab-line-right-map
+                                                        'mouse-face 'tab-line-highlight
+                                                        'help-echo "Click to scroll right")
+                      tab-line-left-button (propertize (if (char-displayable-p ?◀) " ◀ " " < ")
+                                                       'keymap tab-line-left-map
+                                                       'mouse-face 'tab-line-highlight
+                                                       'help-echo "Click to scroll left")
+                      tab-line-close-button (propertize (if (char-displayable-p ?×) "× " "x ")
+                                                        'keymap tab-line-tab-close-map
+                                                        'mouse-face 'tab-line-close-highlight
+                                                        'help-echo "Click to close tab"))))))
 
 (provide 'setup-tabbar)
 ;;; setup-tabbar.el ends here
