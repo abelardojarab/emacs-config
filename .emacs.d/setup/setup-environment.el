@@ -26,7 +26,6 @@
 
 ;; These were defined in C code, so use emacs pseudo-package to set them.
 (use-package emacs
-  :if (version< emacs-version "27.1")
   :demand t
   :hook ((focus-out                     . garbage-collect)
          (minibuffer-setup              . my/minibuffer-setup)
@@ -206,7 +205,9 @@
                       (menu-bar-lines . 1)))
 
               ;; Get back font antialiasing
-              (push '(font-backend xft x) default-frame-alist)
+              (if (and (display-graphic-p)
+                       (version< emacs-version "27.1"))
+                  (push '(font-backend xft x) default-frame-alist))
 
               ;; Inspired by the windows version. Also used call-process here because
               ;; shell-command-to-string gave me 100% CPU usage by lisp.run until
