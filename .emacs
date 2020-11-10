@@ -11,9 +11,13 @@
                              (setq debug-on-quit nil)
                              (setq debug-on-error nil)))
 
-(defconst debian-emacs-flavor 'emacs26
-  "A symbol representing the particular debian flavor of emacs running.
+(if (version< emacs-version "27.1")
+    (defconst debian-emacs-flavor 'emacs26
+      "A symbol representing the particular debian flavor of emacs running.
  Something like 'emacs20, 'xemacs20, etc.")
+  (defconst debian-emacs-flavor 'emacs27
+    "A symbol representing the particular debian flavor of emacs running.
+ Something like 'emacs20, 'xemacs20, etc."))
 
 ;; Setup the starting directories
 (if (file-exists-p "~/workspace/emacs-config/.emacs.d")
@@ -75,7 +79,7 @@
     ;; Setup fonts
     (require 'setup-fonts)
 
-    ;; ;; Setup font lock
+    ;; Setup font lock
     (require 'setup-font-lock)
 
     ;; Setup region
@@ -267,8 +271,8 @@
     ;; Setup dired plugins
     (require 'setup-dired-plugins)
 
-    ;; ;; Setup gnus
-    ;; (require 'setup-gnus)
+    ;; Setup gnus
+    (require 'setup-gnus)
 
     ;; ;; Setup email
     ;; (require 'setup-email)
@@ -314,7 +318,8 @@
     (setq debug-on-error nil)
 
     ;; Setup server
-    (require 'setup-server)
+    (if (version< emacs-version "27.1")
+        (require 'setup-server))
 
     ;; Setup network-related tools
     (require 'setup-nettools)
@@ -328,7 +333,6 @@
 
     ;; Setup recentf (causes crash?)
     (require 'setup-recentf)
-
     ) ;; let
   ) ;; with-no-warnings
 

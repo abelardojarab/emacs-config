@@ -49,7 +49,6 @@
             (if (display-graphic-p)
                 (fringe-mode '(28 . 12)))))
 
-
 ;; Enable tooltips
 (use-package tooltip
   :defer t

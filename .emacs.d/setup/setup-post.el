@@ -117,7 +117,8 @@
       (set-face-attribute 'ecb-default-highlight-face nil
                           :inherit 'helm-selection-line))))
 
-(add-hook 'after-init-hook #'my/set-face-tabbar)
+(if (version< emacs-version "27.1")
+    (add-hook 'after-init-hook #'my/set-face-tabbar))
 (add-hook 'after-init-hook #'my/set-face-fringe)
 (add-hook 'after-init-hook #'my/set-face-ecb)
 
@@ -138,7 +139,8 @@
     (disable-themes)
     ad-do-it
 
-    (when (display-graphic-p)
+    (when (and (display-graphic-p)
+               (version< emacs-version "27.1"))
       (set-icon-fonts
        '(("fontawesome"
           ;;                         
@@ -164,8 +166,9 @@
           (set-selected-frame-dark)))
     (my/set-face-fringe)
     (my/set-face-ecb)
-    (my/set-face-tabbar)
-    (doom-modeline-mode t)
+    (when (version< emacs-version "27.1")
+      (my/set-face-tabbar)
+      (doom-modeline-mode t))
 
     ;; remove modeline boxes
     (set-face-attribute 'mode-line nil :box nil)
@@ -178,14 +181,16 @@
 
                                  ;; Add required faces
                                  (my/set-face-fringe)
-                                 (my/set-face-tabbar)
                                  (my/set-face-ecb)
 
                                  ;; Set the modeline
-                                 (doom-modeline-mode t))))
+                                 (when (version< emacs-version "27.1")
+                                     (my/set-face-tabbar)
+                                     (doom-modeline-mode t)))))
 
 ;; Run it once
-(my/set-face-tabbar)
+(if (version< emacs-version "27.1")
+    (my/set-face-tabbar))
 
 (provide 'setup-post)
 ;;; setup-post.el ends here

@@ -78,37 +78,38 @@
               (make-directory my/emacs-cache-dir) t)
 
           ;; Improve Emacs performance
-          (if (boundp 'max-specpdl-size)
-              (setq max-specpdl-size (* max-specpdl-size 40)
-                    max-lisp-eval-depth (* max-lisp-eval-depth 30)))
+          (when (version< emacs-version "27.1")
+            (if (boundp 'max-specpdl-size)
+                (setq max-specpdl-size (* max-specpdl-size 40)
+                      max-lisp-eval-depth (* max-lisp-eval-depth 30)))
 
-          (defun my/disable-garbage-collection ()
-            "Disable garbage collection."
-            (setq gc-cons-threshold most-positive-fixnum
-                  gc-cons-percentage 0.6))
+            (defun my/disable-garbage-collection ()
+              "Disable garbage collection."
+              (setq gc-cons-threshold most-positive-fixnum
+                    gc-cons-percentage 0.6))
 
-          (defun my/enable-garbage-collection ()
-            "Reset garbage collection to small-ish limit."
-            (setq gc-cons-threshold 16777216
-                  gc-cons-percentage 0.1))
+            (defun my/enable-garbage-collection ()
+              "Reset garbage collection to small-ish limit."
+              (setq gc-cons-threshold 16777216
+                    gc-cons-percentage 0.1))
 
-          ;; Helm runs with GC disabled
-          (add-hook 'minibuffer-setup-hook #'my/disable-garbage-collection)
-          (add-hook 'minibuffer-exit-hook  #'my/enable-garbage-collection)
+            ;; Helm runs with GC disabled
+            (add-hook 'minibuffer-setup-hook #'my/disable-garbage-collection)
+            (add-hook 'minibuffer-exit-hook  #'my/enable-garbage-collection)
 
-          ;; We disable GC during startup, we re-enable it afterwards.
-          (my/disable-garbage-collection)
-          (add-hook 'emacs-startup-hook #'my/enable-garbage-collection)
+            ;; We disable GC during startup, we re-enable it afterwards.
+            (my/disable-garbage-collection)
+            (add-hook 'emacs-startup-hook #'my/enable-garbage-collection)
 
-          ;; Perform automatic GC
-          (add-hook 'emacs-startup-hook
-                    (lambda ()
-                      (if (boundp 'after-focus-change-function)
-                          (add-function :after after-focus-change-function
-                                        (lambda ()
-                                          (unless (frame-focus-state)
-                                            (garbage-collect))))
-                        (add-hook 'after-focus-change-function 'garbage-collect))))
+            ;; Perform automatic GC
+            (add-hook 'emacs-startup-hook
+                      (lambda ()
+                        (if (boundp 'after-focus-change-function)
+                            (add-function :after after-focus-change-function
+                                          (lambda ()
+                                            (unless (frame-focus-state)
+                                              (garbage-collect))))
+                          (add-hook 'after-focus-change-function 'garbage-collect)))))
 
           ;; Features
           (put 'narrow-to-region 'disabled nil)

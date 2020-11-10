@@ -31,6 +31,7 @@
 
 ;; Tabbar
 (use-package tabbar
+  :if (version< emacs-version "27.1")
   :hook (after-init . tabbar-mode)
   :preface (push "~/.emacs.d/etc/images/" image-load-path)
   :custom ((tabbar-auto-scroll-flag  t)
@@ -98,7 +99,8 @@ That is, a string used to represent it on the tab bar."
 ;; Tabbar ruler
 (use-package tabbar-ruler
   :demand t
-  :if (display-graphic-p)
+  :if (and (display-graphic-p)
+           (version< emacs-version "27.1"))
   :custom ((tabbar-cycle-scope             'tabs)
            (tabbar-ruler-global-tabbar     t)
            (tabbar-ruler-fancy-close-image nil))
@@ -118,7 +120,7 @@ That is, a string used to represent it on the tab bar."
 
 ;; Newer built-in tabbar for Emacs
 (use-package tab-line
-  :disabled t
+  :if (not (version< emacs-version "27.0"))
   :preface (push "~/.emacs.d/etc/images/" image-load-path)
   :hook (after-init . global-tab-line-mode)
   :init (tabbar-mode -1)

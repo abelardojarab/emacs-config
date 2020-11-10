@@ -44,7 +44,6 @@
             (defun fontify-frame (&optional frame)
               (interactive)
               (let ()
-
                 (when (and (find-font (font-spec :name my/main-programming-font))
                            (find-font (font-spec :name my/main-writing-font)))
 
@@ -116,18 +115,22 @@
 
                 ;; Use mathematical symbols
                 (when (and (display-graphic-p)
-                           (find-font (font-spec :name "Fira Code")))
+                           (find-font (font-spec :name "Fira Code"))
+                           (version< emacs-version "27.1"))
                   (let ((utf8-font "Fira Code"))
                     (set-fontset-font "fontset-startup" '(#x000000 . #x3FFFFF) utf8-font)
                     (set-fontset-font "fontset-default" '(#x000000 . #x3FFFFF) utf8-font)
                     (set-fontset-font "fontset-standard" '(#x000000 . #x3FFFFF) utf8-font)))
 
                 ;; Specify fonts for all unicode characters
-                (when (member "Fira Code" (font-family-list))
+                (when (and (member "Fira Code" (font-family-list))
+                           (display-graphic-p)
+                           (version< emacs-version "27.1"))
                   (set-fontset-font t 'unicode "Fira Code" nil 'prepend))))
 
             ;; Fontify frame only for graphical mode
-            (when (display-graphic-p)
+            (when (and (display-graphic-p)
+                       (version< emacs-version "27.1"))
               ;; Fontify current frame
               (fontify-frame nil)
               (let (frame (selected-frame))
@@ -153,7 +156,8 @@
 ;; Prettier symbols
 (use-package prettiy-symbols-mode
   :defer t
-  :if (fboundp 'global-prettify-symbols-mode)
+  :if (and (fboundp 'global-prettify-symbols-mode)
+           (version< emacs-version "27.1"))
   :commands (prettify-symbols-mode
              global-prettify-symbols-mode)
   :hook (org-mode . prettify-symbols-mode)

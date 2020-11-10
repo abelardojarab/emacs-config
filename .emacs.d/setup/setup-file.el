@@ -107,6 +107,7 @@
 
 ;; Guarantee utf8 as input-method
 (use-package mule
+  :if (version< emacs-version "27.1")
   :demand t
   :custom (read-quoted-char-radix 10)
   :config (progn
