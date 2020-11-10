@@ -34,7 +34,6 @@
             (interactive "Font Name-Size: ")
             (set-face-attribute 'default nil :font font)))
   :config (progn
-
             ;; Prefer user choices
             (if (find-font (font-spec :name my/main-programming-font))
                 (if (not (find-font (font-spec :name my/main-writing-font)))

@@ -166,9 +166,8 @@
           (set-selected-frame-dark)))
     (my/set-face-fringe)
     (my/set-face-ecb)
-    (when (version< emacs-version "27.1")
-      (my/set-face-tabbar)
-      (doom-modeline-mode t))
+    (my/set-face-tabbar)
+    (doom-modeline-mode t)
 
     ;; remove modeline boxes
     (set-face-attribute 'mode-line nil :box nil)
@@ -184,9 +183,8 @@
                                  (my/set-face-ecb)
 
                                  ;; Set the modeline
-                                 (when (version< emacs-version "27.1")
-                                     (my/set-face-tabbar)
-                                     (doom-modeline-mode t)))))
+                                 (my/set-face-tabbar)
+                                 (doom-modeline-mode t))))
 
 ;; Run it once
 (if (version< emacs-version "27.1")

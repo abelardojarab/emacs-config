@@ -318,8 +318,7 @@
     (setq debug-on-error nil)
 
     ;; Setup server
-    (if (version< emacs-version "27.1")
-        (require 'setup-server))
+    (require 'setup-server)
 
     ;; Setup network-related tools
     (require 'setup-nettools)

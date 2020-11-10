@@ -26,6 +26,7 @@
 
 ;; These were defined in C code, so use emacs pseudo-package to set them.
 (use-package emacs
+  :if (version< emacs-version "27.1")
   :demand t
   :hook ((focus-out                     . garbage-collect)
          (minibuffer-setup              . my/minibuffer-setup)
