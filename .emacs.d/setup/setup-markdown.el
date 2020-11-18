@@ -49,7 +49,7 @@
                              (markdown-header-face-3 . 1.0)
                              (markdown-header-face-4 . 1.0)
                              (markdown-header-face-5 . 1.0)))
-               (set-face-attribute (car face) nil :weight 'normal :height (cdr face)))
+               (set-face-attribute (car face) nil :weight 'normal :height (cdr face))))
   :config (progn
             ;; This function is buggy and deletes text
             (defun markdown-table-align ()
