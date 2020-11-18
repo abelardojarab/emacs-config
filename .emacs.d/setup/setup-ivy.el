@@ -43,7 +43,8 @@
          ("s"       . swiper)
          ("b"       . ivy-switch-buffer)
          :map ivy-minibuffer-map
-         ("C-v"     . ivy-yank-word))
+         ("C-v"     . ivy-yank-word)
+         ("TAB"     . ivy-alt-done))
   :custom ((ivy-do-completion-in-region      nil)
            (ivy-wrap                         t)
            (ivy-fixed-height-minibuffer      t)

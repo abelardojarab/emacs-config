@@ -77,7 +77,9 @@
   :custom ((doom-modeline-buffer-file-name-style 'truncate-with-project)
            (doom-modeline-icon            t)
            (doom-modeline-major-mode-icon t)
-           (doom-modeline-minor-modes     nil)))
+           (doom-modeline-minor-modes     nil)
+           (doom-modeline-lsp             t)
+           (doom-modeline-height          15)))
 
 ;; Improved list of minor-modes and related menus
 (use-package minions
