@@ -1,6 +1,6 @@
 ;;; setup-markdown.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -43,8 +43,14 @@
            (markdown-wiki-link-fontify-missing t)
            (markdown-wiki-link-alias-first     nil)
            (markdown-indent-on-enter           'indent-and-new-item))
+  :preface (defun my/set-markdown-header-font-sizes ()
+             (dolist (face '((markdown-header-face-1 . 1.2)
+                             (markdown-header-face-2 . 1.1)
+                             (markdown-header-face-3 . 1.0)
+                             (markdown-header-face-4 . 1.0)
+                             (markdown-header-face-5 . 1.0)))
+               (set-face-attribute (car face) nil :weight 'normal :height (cdr face)))
   :config (progn
-
             ;; This function is buggy and deletes text
             (defun markdown-table-align ()
               nil)
@@ -57,6 +63,8 @@
 
             ;; Markdown preferences
             (defun my/markdown-mode-init ()
+              (my/set-markdown-header-font-sizes)
+
               ;; Do not wrap lines
               ;; we will use autofill
               (visual-line-mode          -1)

@@ -145,6 +145,9 @@ flycheck-handle-idle-change, which removes the forced deferred."
   :config (defun my/flycheck-rtags-setup ()
             (flycheck-select-checker 'rtags)))
 
+;; Flycheck grammarly
+;; (use-package flycheck-grammarly)
+
 ;; Tooltips
 (use-package flycheck-tip
   :disabled t
