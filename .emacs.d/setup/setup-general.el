@@ -23,7 +23,6 @@
 ;;
 
 ;;; Code:
-
 (setq initial-scratch-message
       ";; This buffer is for notes you don't want to save, and for Lisp evaluation.
 ;; If you want to create a file, visit that file with 【▤】【o】,
@@ -297,11 +296,12 @@
   (unless (fboundp 'subr-native-lambda-list)
     (defun subr-native-lambda-list (x)
       nil))
-  (if (yes-or-no-p "async compile?")
-      (setq comp-async-jobs-number 4 ;; not using all cores
-            comp-deferred-compilation t
-            comp-deferred-compilation-black-list '())
-    (setq comp-deferred-compilation nil)))
+  ;; (if (yes-or-no-p "async compile?")
+  (setq comp-async-jobs-number 4 ;; not using all cores
+        comp-deferred-compilation t
+        comp-deferred-compilation-black-list '())
+  ;; (setq comp-deferred-compilation nil))
+  )
 
 (provide 'setup-general)
 ;;; setup-general.el ends here

@@ -252,7 +252,7 @@
                 (setq exec-path (split-string (car exec-path) " "))
                 (setenv "PATH" (mapconcat 'identity exec-path ":"))
                 (setq eshell-path-env (getenv "PATH")))
-              (setenv "PATH" (concat "/usr/local/texlive/2014/bin/x86_64-darwin:/usr/texbin:/opt/local/bin:/usr/local/bin:" (getenv "PATH")))
+              (setenv "PATH" (concat "/usr/local/texlive/2020/bin/x86_64-darwin:/usr/texbin:/opt/local/bin:/usr/local/bin:" (getenv "PATH")))
               (push "/usr/local/bin" exec-path)
               (push "/opt/local/bin" exec-path)
               (push "/usr/texbin" exec-path)
@@ -343,7 +343,8 @@ LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
 ;; Exec path from shell in Mac OSX
 (use-package exec-path-from-shell
   :defer t
-  :if (equal system-type 'darwin)
+  :if (or (equal system-type 'darwin)
+          (equal system-type 'gnu/linux))
   :config (exec-path-from-shell-initialize)
   :commands (exec-path-from-shell-initialize)
   :custom (exec-path-from-shell-check-startup-files nil))

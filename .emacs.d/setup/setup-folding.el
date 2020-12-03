@@ -99,8 +99,8 @@
 ;; Cycle visibility on outline-minor-mode
 (use-package bicycle
   :after outline
-  :bind (:map outline-minor-mode-map
-              ("C-c C-c" . bicycle-cycle))
+  ;; :bind (:map outline-minor-mode-map
+  ;;             ("C-c C-c" . bicycle-cycle))
   :commands (bicycle-cycle
              bicycle-cycle-global))
 

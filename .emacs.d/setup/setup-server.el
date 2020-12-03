@@ -28,7 +28,7 @@
 (use-package server
   :demand t
   :bind (:map ctl-x-map
-              ("C-c" . my/exit))
+              ("C-c" . kill-emacs))
   :custom ((server-use-tcp t)
            (server-port    9999))
   :init (progn
@@ -51,66 +51,7 @@
             ;; http://stackoverflow.com/questions/885793/emacs-error-when-calling-server-start
             (defun server-ensure-safe-dir (dir) "Noop" t)
 
-            ;; Ensure there is always at least one visible frame open at all times
-            (defadvice server-save-buffers-kill-terminal (around dont-kill-last-client-frame activate)
-              (when (< 1 (length (frame-list)))
-                ad-do-it))
-
-            ;; Keeping emacs running even when "exiting"
-            (defun my/exit ()
-              (interactive)
-              (message (format "There are currently %d client(s) and %d frame(s)."
-                               (length server-clients)
-                               (length (frame-list))))
-
-              ;; Check for a server-buffer before closing the server-buffer
-              (if server-clients
-                  (server-edit))
-
-              ;; Hide the server
-              (if (display-graphic-p)
-                  (iconify-frame)
-                (make-frame-invisible nil t)))
-
-            (defvar my/really-kill-emacs nil)
-            (defadvice kill-emacs (around my/really-exit activate)
-              "Only kill emacs if a prefix is set"
-              (when my/really-kill-emacs
-                (dolist (client server-clients)
-                  (server-delete-client client))
-                ;; Remove socket directory on emacs exit
-                (ignore-errors (delete-directory server-socket-dir t))
-                ad-do-it)
-              (my/exit))
-
-            (defun quit-emacs ()
-              (interactive)
-              (ignore-errors
-                 (if (bound-and-true-p ergoemacs-mode)
-                    (ergoemacs-mode -1))
-                (setq my/really-kill-emacs t)
-                (kill-emacs)))
-
-            ;; Detect presence of modified buffers
-            (defun my/modified-buffers-exist()
-              "This function will check to see if there are any buffers
-that have been modified.  It will return true if there are
-and nil otherwise. Buffers that have buffer-offer-save set to
-nil are ignored."
-              (let (modified-found)
-                (dolist (buffer (buffer-list))
-                  (when (and (buffer-live-p buffer)
-                             (buffer-modified-p buffer)
-                             (not (buffer-base-buffer buffer))
-                             (or
-                              (buffer-file-name buffer)
-                              (progn
-                                (set-buffer buffer)
-                                (and buffer-offer-save (> (buffer-size) 0)))))
-                    (setq modified-found t)))
-                modified-found))
-
-            ;; Launch the server
+             ;; Launch the server
             (unless (server-running-p)
               (if (not (eq system-type 'windows-nt))
                   (server-start)))))

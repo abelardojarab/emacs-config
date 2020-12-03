@@ -209,18 +209,6 @@
             (when (looking-at "\n")
               (open-line 1))))
   :config (progn
-            ;; Speed up magit
-            ;; https://jakemccrary.com/blog/2020/11/14/speeding-up-magit/
-            (remove-hook 'magit-status-sections-hook 'magit-insert-tags-header)
-            (remove-hook 'magit-status-sections-hook 'magit-insert-status-headers)
-            (remove-hook 'magit-status-sections-hook 'magit-insert-unpushed-to-pushremote)
-            (remove-hook 'magit-status-sections-hook 'magit-insert-unpulled-from-pushremote)
-            (remove-hook 'magit-status-sections-hook 'magit-insert-unpulled-from-upstream)
-            (remove-hook 'magit-status-sections-hook 'magit-insert-unpushed-to-upstream-or-recent)
-
-            (setq magit-auto-revert-immediately (null (and (boundp 'auto-revert-use-notify)
-                                                           auto-revert-use-notify)))
-
             ;; Customize lighters
             (delight
              '((magit-diff-mode    "Magit Diff")
