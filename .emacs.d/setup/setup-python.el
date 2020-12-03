@@ -83,11 +83,16 @@
   :interpreter ("python3" . python-mode)
   :bind (:map python-mode-map
               ("TAB" . py-indent-line))
-  :preface (defun check-python-module (&optional module)
-             (and (executable-find "python3")
-                  (= 0 (call-process "python3"  nil nil nil "-c"
-                                     (concat "import "
-                                             (if module module "jedi"))))))
+  :preface (progn
+             (defun check-python-module (&optional module)
+               (and (executable-find "python3")
+                    (= 0 (call-process "python3"  nil nil nil "-c"
+                                       (concat "import "
+                                               (if module module "jedi"))))))
+
+             (defun run-python-once ()
+               (remove-hook 'python-mode-hook 'run-python-once)
+               (run-python (python-shell-parse-command))))
   :custom ((py-shell-name                        "python3")
            (py-shell-switch-buffers-on-execute-p t)
            (py-switch-buffers-on-execute-p       t)
@@ -96,6 +101,9 @@
   :config (add-hook 'python-mode-hook
                     (function (lambda ()
                                 (progn
+                                  ;; Assure there is an inferior Python process
+                                  (if (not (version< emacs-version "24.5"))
+                                      (run-python-once))
                                   ;; disable annoying "Python-Help" buffer
                                   (eldoc-mode -1)
                                   ;; disable flymake, we will use flycheck

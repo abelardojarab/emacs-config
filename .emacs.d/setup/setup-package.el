@@ -37,11 +37,10 @@
 ;; Disable checking signature from elpa
 (setq package-check-signature nil)
 
-;; Disable package initialize after us.
-(setq package-enable-at-startup nil)
-
-;; Ask package.el to not add (package-initialize) to .emacs.
-(setq package--init-file-ensured t)
+;; in ~/.emacs.d/init.el (or ~/.emacs.d/early-init.el in Emacs 27)
+(setq package-enable-at-startup nil ; don't auto-initialize!
+      ;; don't add that `custom-set-variables' block to my init.el!
+      package--init-file-ensured t)
 
 ;; use https for both melpa and gelpa
 (eval-and-compile

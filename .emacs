@@ -25,9 +25,12 @@
 
 ;; Only utilize local files
 (with-no-warnings
-  (let ((file-name-handler-alist nil)
-        ;; CEDET
-        (byte-compile-warnings nil))
+  (let ((byte-compile-warnings nil))
+    (defvar my/file-name-handler-alist file-name-handler-alist)
+    (setq file-name-handler-alist nil)
+    (add-hook 'emacs-startup-hook
+              (lambda ()
+                (setq file-name-handler-alist my/file-name-handler-alist)))
 
     ;; Disable needless warnings
     (setq warning-minimum-level :error)
@@ -88,8 +91,8 @@
     ;; Setup cursor
     (require 'setup-cursor)
 
-    ;; Setup scrolling
-    (require 'setup-scroll)
+    ;; ;; Setup scrolling
+    ;; (require 'setup-scroll)
 
     ;; Setup themes
     (require 'setup-themes)
