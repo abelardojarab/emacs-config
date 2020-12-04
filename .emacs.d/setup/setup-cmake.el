@@ -173,7 +173,9 @@
           (put 'cmake-ide-build-dir 'safe-local-variable #'stringp)
           (setq cmake-ide-flags-c++ (append '("-std=c++11")
                                             (mapcar (lambda (path) (concat "-I" path)) (semantic-gcc-get-include-paths "c++"))))
-          (setq cmake-ide-flags-c (append (mapcar (lambda (path) (concat "-I" path)) (semantic-gcc-get-include-paths "c"))))))
+          (setq cmake-ide-flags-c (append (mapcar (lambda (path) (concat "-I" path)) (semantic-gcc-get-include-paths "c")))))
+  :config (defadvice cmake-ide-load-db (around bar activate)
+                        (ignore-errors add-do-it)))
 
 (provide 'setup-cmake)
 ;;; setup-cmake.el ends here
