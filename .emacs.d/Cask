@@ -423,6 +423,7 @@
 (depends-on "tern")
 (depends-on "test-case-mode")
 ;; (depends-on "themes")
+(depends-on "tide")
 (depends-on "toc-org")
 (depends-on "treemacs")
 (depends-on "treemacs-magit")
