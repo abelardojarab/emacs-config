@@ -1,2 +1,0 @@
-;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/cov-20200630.1942/cov.el  -*- no-byte-compile: t -*-
-(define-package "cov" "20200630.1942" "Show coverage stats in the fringe." '((emacs "24.4") (f "0.18.2") (s "1.11.0") (elquery "0")) :commit "8b9c7d7f4e53ab3a66cc4d9c88ac07fa57c7a5fe" :keywords '("coverage" "gcov" "c") :authors '(("Adam Niederer")) :maintainer '("Adam Niederer") :url "https://github.com/AdamNiederer/cov")

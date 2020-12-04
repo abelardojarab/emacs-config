@@ -1,0 +1,2 @@
+;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/helm-etags-plus-20201003.1424/helm-etags-plus.el  -*- no-byte-compile: t -*-
+(define-package "helm-etags-plus" "20201003.1424" "Another Etags helm.el interface" '((helm "1.7.8")) :commit "52598fe69636add4b62cd9873041de5c6db9b7ac" :keywords '("helm" "etags") :authors '(("纪秀峰(Joseph)" . "jixiuf@gmail.com")) :maintainer '("纪秀峰(Joseph)" . "jixiuf@gmail.com") :url "https://github.com/jixiuf/helm-etags-plus")

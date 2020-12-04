@@ -1,0 +1,69 @@
+# -*- mode: snippet -*-
+# name: persistent array
+# contributor: Nakamura Kenko
+# key: persistentarray
+# --
+
+pub mod persistent_array {
+    use std::rc::Rc;
+
+    const N: usize = 20;
+    #[derive(Clone)]
+    pub struct Node<T: Clone> {
+        data: Option<T>,
+        children: [Option<Rc<Node<T>>>; N],
+    }
+
+    impl<T: Clone> Node<T> {
+        pub fn new(data: Option<T>, children: [Option<Rc<Node<T>>>; N]) -> Self {
+            Self { data, children }
+        }
+    }
+
+    impl<T: Clone> Default for Node<T> {
+        fn default() -> Self {
+            Self {
+                data: None,
+                children: Default::default(),
+            }
+        }
+    }
+
+    pub fn set<T: Clone>(index: usize, data: T, node: Option<Rc<Node<T>>>) -> Rc<Node<T>> {
+        if index == 0 {
+            match node {
+                Some(node) => {
+                    let new_node = Node::new(Some(data), node.children.clone());
+                    Rc::new(new_node)
+                }
+                None => Rc::new(Node::new(Some(data), Default::default())),
+            }
+        } else {
+            let child = match node
+                .as_ref()
+                .and_then(|node| node.children[index % N].as_ref())
+            {
+                Some(next_node) => set(index / N, data, Some(next_node.clone())),
+                None => set(index / N, data, None),
+            };
+            let mut new_node = match node {
+                Some(node) => node.as_ref().clone(),
+                None => Node::default(),
+            };
+            new_node.children[index % N] = Some(child);
+            Rc::new(new_node)
+        }
+    }
+
+    pub fn get<T: Clone>(index: usize, node: &Rc<Node<T>>) -> Option<T> {
+        if index == 0 {
+            node.data.clone()
+        } else {
+            match node.children[index % N].as_ref() {
+                Some(next_node) => get(index / N, next_node),
+                None => None,
+            }
+        }
+    }
+}
+
