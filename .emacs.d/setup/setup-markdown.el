@@ -115,5 +115,9 @@
                                   "/styles/panam-pandoc.css")
                           " --from gfm -t html5 --mathjax --highlight-style pygments --standalone"))))
 
+;; Taskpaper
+(use-package taskpaper-mode
+  :mode ("\\.todo\\'"       . taskpaper-mode))
+
 (provide 'setup-markdown)
 ;;; setup-markdown.el ends here

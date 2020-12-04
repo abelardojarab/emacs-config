@@ -205,4 +205,21 @@
   :mode "\\.elm\\'"
   :custom (elm-format-on-save t))
 
+;; Typescript mode
+(use-package typescript-mode
+  :defer t
+  :custom (typescript-indent-level 4))
+
+;; Tide
+(use-package tide
+  :defer t
+  :commands tide-setup
+  :hook ((typescript-mode js2-mode) . tide-setup))
+
+;; Angular mode
+(use-package ng2-mode
+  :defer t
+  :hook (ng2-ts-mode . typescript-mode)
+  :config (flycheck-add-mode 'typescript-tide 'ng2-ts-mode))
+
 (provide 'setup-javascript)
