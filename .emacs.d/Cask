@@ -125,6 +125,7 @@
 (depends-on "editorconfig")
 (depends-on "editorconfig-generate")
 (depends-on "ein")
+;; (depends-on "el-get")
 (depends-on "eldoc-overlay-mode")
 (depends-on "elfeed")
 ;; (depends-on "elisp")
