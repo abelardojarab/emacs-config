@@ -203,7 +203,8 @@
 
 (use-package lsp-modeline
   :defer t
-  :commands lsp-modeline-diagnostics-mode)
+  :commands (lsp-modeline-diagnostics-mode
+             lsp-modeline-workspace-status-mode))
 
 (provide 'setup-lsp)
 ;;; setup-lsp.el ends here
