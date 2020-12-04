@@ -431,7 +431,7 @@
 (depends-on "unify-opening")
 (depends-on "use-package")
 (depends-on "use-package-chords")
-(depends-on "use-package-elget")
+(depends-on "use-package-el-get")
 (depends-on "use-package-ensure-system-package")
 (depends-on "use-package-hydra")
 (depends-on "uuidgen")
