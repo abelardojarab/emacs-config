@@ -91,6 +91,12 @@ corresponding `.el' file."
            (use-package-verbose              t)
            (use-package-enable-imenu-support t)))
 
+;; Use-package plugins
+(use-package use-package-hydra
+  :demand t)
+;; (use-package use-package-el-get
+;;   :demand t)
+
 ;; Baseline packages
 (use-package cl)
 (use-package cl-lib)
