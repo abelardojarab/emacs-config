@@ -27,22 +27,15 @@
 ;; hydra package
 (use-package hydra
   :demand t
-  :custom (hydra-lv nil)
-  :config (progn
-            (setq hydra-hint-display-type 'my/posframe)
-            (defun my/hydra-posframe-show (str)
-              (posframe-show
-               " *hydra-posframe*"
-               :string str
-               :point (point)
-               :internal-border-color "gray50"
-               :internal-border-width 2
-               :poshandler #'posframe-poshandler-frame-bottom-center))
-            (defun my/hydra-posframe-hide ()
-              (posframe-hide " *hydra-posframe*"))
-            (setq hydra-hint-display-alist
-                  (list (list 'my/posframe #'my/hydra-posframe-show #'my/hydra-posframe-hide))
-                  hydra--work-around-dedicated nil)))
+  :custom (hydra-lv nil))
+
+;; Show hydra in posframe
+(use-package hydra-posframe
+  :load-path "<path-to-the-hydra-posframe>"
+  :hook (after-init . hydra-posframe-enable))
+
+;; Pretty Hydra
+(use-package pretty-hydra)
 
 ;; hydra replacement using which-key
 (use-package hercules
