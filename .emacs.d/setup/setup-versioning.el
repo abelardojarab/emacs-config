@@ -455,9 +455,9 @@
          (git-gutter:update-hooks             . magit-not-reverted-hook)
          (after-init                          . global-git-gutter-mode)
          ((markdown-mode prog-mode conf-mode) . git-gutter-mode))
-  :init (defhydra hydra-git-gutter (:body-pre (git-gutter-mode 1)
-                                              :hint nil)
-          "
+  :hydra (hydra-git-gutter (:body-pre (git-gutter-mode 1)
+                                      :hint nil)
+                           "
 Git gutter:
   _j_: next hunk        _s_tage hunk     _q_uit
   _k_: previous hunk    _r_evert hunk    _Q_uit and deactivate git-gutter
@@ -465,23 +465,23 @@ Git gutter:
   _h_: first hunk
   _l_: last hunk        set start _R_evision
 "
-          ("j" git-gutter:next-hunk)
-          ("k" git-gutter:previous-hunk)
-          ("h" (progn (goto-char (point-min))
-                      (git-gutter:next-hunk 1)))
-          ("l" (progn (goto-char (point-min))
-                      (git-gutter:previous-hunk 1)))
-          ("s" git-gutter:stage-hunk)
-          ("r" git-gutter:revert-hunk)
-          ("p" git-gutter:popup-hunk)
-          ("R" git-gutter:set-start-revision)
-          ("q" nil :color blue)
-          ("Q" (progn (git-gutter-mode -1)
-                      ;; git-gutter-fringe doesn't seem to
-                      ;; clear the markup right away
-                      (sit-for 0.1)
-                      (git-gutter:clear))
-           :color blue))
+                           ("j" git-gutter:next-hunk)
+                           ("k" git-gutter:previous-hunk)
+                           ("h" (progn (goto-char (point-min))
+                                       (git-gutter:next-hunk 1)))
+                           ("l" (progn (goto-char (point-min))
+                                       (git-gutter:previous-hunk 1)))
+                           ("s" git-gutter:stage-hunk)
+                           ("r" git-gutter:revert-hunk)
+                           ("p" git-gutter:popup-hunk)
+                           ("R" git-gutter:set-start-revision)
+                           ("q" nil :color blue)
+                           ("Q" (progn (git-gutter-mode -1)
+                                       ;; git-gutter-fringe doesn't seem to
+                                       ;; clear the markup right away
+                                       (sit-for 0.1)
+                                       (git-gutter:clear))
+                            :color blue))
   :config (progn
             ;; Disabled modes
             (setq git-gutter:disabled-modes '(org-mode asm-mode image-mode))
@@ -495,7 +495,7 @@ Git gutter:
   :demand fringe-helper
   :if (and (executable-find "git")
            (display-graphic-p))
-  :custom (git-gutter-fr:side   'left)
+  :custom (git-gutter-fr:side 'left)
   :config (progn
             (set-face-foreground 'git-gutter-fr:modified "purple")
             (set-face-foreground 'git-gutter-fr:added    "yellow")
@@ -550,21 +550,19 @@ Git gutter:
              hydra-smerge/body
              my/enable-smerge-maybe)
   :hook (find-file . my/enable-smerge-maybe)
-  :init (progn
-          (defun my/enable-smerge-maybe ()
-            "Auto-enable `smerge-mode' when merge conflict is detected."
-            (save-excursion
-              (goto-char (point-min))
-              (when (re-search-forward "^<<<<<<< " nil :noerror)
-                (smerge-mode 1))))
-
-          (defhydra hydra-smerge (:color pink
-                                         :hint nil
-                                         :pre (smerge-mode 1)
-                                         ;; Disable `smerge-mode' when quitting hydra if
-                                         ;; no merge conflicts remain.
-                                         :post (smerge-auto-leave))
-            "
+  :init (defun my/enable-smerge-maybe ()
+          "Auto-enable `smerge-mode' when merge conflict is detected."
+          (save-excursion
+            (goto-char (point-min))
+            (when (re-search-forward "^<<<<<<< " nil :noerror)
+              (smerge-mode 1))))
+  :hydra (hydra-smerge (:color pink
+                               :hint nil
+                               :pre (smerge-mode 1)
+                               ;; Disable `smerge-mode' when quitting hydra if
+                               ;; no merge conflicts remain.
+                               :post (smerge-auto-leave))
+                       "
 ^Move^       ^Keep^               ^Diff^                 ^Other^
 ^^-----------^^-------------------^^---------------------^^-------
 _n_ext       _b_ase               _<_: upper/base        _C_ombine
@@ -573,23 +571,23 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 ^^           _a_ll                _R_efine
 ^^           _RET_: current       _E_diff
 "
-            ("n" smerge-next)
-            ("p" smerge-prev)
-            ("b" smerge-keep-base)
-            ("u" smerge-keep-upper)
-            ("l" smerge-keep-lower)
-            ("a" smerge-keep-all)
-            ("RET" smerge-keep-current)
-            ("\C-m" smerge-keep-current)
-            ("<" smerge-diff-base-upper)
-            ("=" smerge-diff-upper-lower)
-            (">" smerge-diff-base-lower)
-            ("R" smerge-refine)
-            ("E" smerge-ediff)
-            ("C" smerge-combine-with-next)
-            ("r" smerge-resolve)
-            ("k" smerge-kill-current)
-            ("q" nil "cancel" :color blue)))
+                       ("n" smerge-next)
+                       ("p" smerge-prev)
+                       ("b" smerge-keep-base)
+                       ("u" smerge-keep-upper)
+                       ("l" smerge-keep-lower)
+                       ("a" smerge-keep-all)
+                       ("RET" smerge-keep-current)
+                       ("\C-m" smerge-keep-current)
+                       ("<" smerge-diff-base-upper)
+                       ("=" smerge-diff-upper-lower)
+                       (">" smerge-diff-base-lower)
+                       ("R" smerge-refine)
+                       ("E" smerge-ediff)
+                       ("C" smerge-combine-with-next)
+                       ("r" smerge-resolve)
+                       ("k" smerge-kill-current)
+                       ("q" nil "cancel" :color blue))
   :config (ignore-errors
             (>=e "26.0"
                  nil

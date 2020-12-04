@@ -57,14 +57,14 @@
           (use-package docker-compose
             :commands docker-compose))
   :bind ("C-c d" . docker-containers)
-  :config (defhydra hydra-docker (:columns 5 :color blue)
-            "Docker"
-            ("c" docker-containers "Containers")
-            ("v" docker-volumes "Volumes")
-            ("i" docker-images "Images")
-            ("n" docker-networks "Networks")
-            ("b" dockerfile-build-buffer "Build Buffer")
-            ("q" nil "Quit")))
+  :hydra (hydra-docker (:columns 5 :color blue)
+                       "Docker"
+                       ("c" docker-containers "Containers")
+                       ("v" docker-volumes "Volumes")
+                       ("i" docker-images "Images")
+                       ("n" docker-networks "Networks")
+                       ("b" dockerfile-build-buffer "Build Buffer")
+                       ("q" nil "Quit")))
 
 ;; Docker compose files
 (use-package docker-compose-mode
