@@ -1,6 +1,6 @@
 ;;; setup-jump.el ---                       -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -31,16 +31,16 @@
              dumb-jump-back
              dumb-jump-quick-look
              dumb-jump-go-other-window
-	     hydra-dumb-jump/body)
+             hydra-dumb-jump/body)
   :custom ((dumb-jump-selector  'ivy)
            (dumb-jump-aggressive nil))
-  :config (defhydra hydra-dumb-jump (:color blue)
-	    "Dumb Jump"
-	    ("g" dumb-jump-go "Jump to def")
-	    ("p" dumb-jump-back "Jump back")
-	    ("q" dumb-jump-quick-look "Quick look")
-	    ("o" dumb-jump-go-other-window "Jump in other window")
-	    ("q" nil "Quit")))
+  :hydra (hydra-dumb-jump (:color blue)
+                          "Dumb Jump"
+                          ("g" dumb-jump-go "Jump to def")
+                          ("p" dumb-jump-back "Jump back")
+                          ("q" dumb-jump-quick-look "Quick look")
+                          ("o" dumb-jump-go-other-window "Jump in other window")
+                          ("q" nil "Quit")))
 
 (use-package smart-jump
   :defer t

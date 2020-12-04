@@ -119,17 +119,17 @@
 
 (use-package counsel-gtags
   :if (executable-find "global")
-  :init (defhydra hydra-counsel-gtags (:color blue :columns 4)
-            "GNU GLOBAL"
-            ("d" counsel-gtags-find-definition "Definition")
-            ("r" counsel-gtags-find-reference "Reference")
-            ("s" counsel-gtags-find-symbol "Symbol")
-            ("f" counsel-gtags-find-file "File")
-            ("n" counsel-gtags-go-forward "Next" :color red)
-            ("p" counsel-gtags-go-backward "Previous" :color red)
-            ("c" counsel-gtags-create-tags "Create")
-            ("u" counsel-gtags-update-tags "Update")
-            ("q" nil "Quit")))
+  :hydra (hydra-counsel-gtags (:color blue :columns 4)
+                              "GNU GLOBAL"
+                              ("d" counsel-gtags-find-definition "Definition")
+                              ("r" counsel-gtags-find-reference "Reference")
+                              ("s" counsel-gtags-find-symbol "Symbol")
+                              ("f" counsel-gtags-find-file "File")
+                              ("n" counsel-gtags-go-forward "Next" :color red)
+                              ("p" counsel-gtags-go-backward "Previous" :color red)
+                              ("c" counsel-gtags-create-tags "Create")
+                              ("u" counsel-gtags-update-tags "Update")
+                              ("q" nil "Quit")))
 
 ;; Select from xref candidates with Ivy
 (use-package ivy-xref
@@ -160,9 +160,9 @@
            (ivy-posframe-height           nil))
   :hook (ivy-mode . ivy-posframe-mode)
   :config (setq ivy-posframe-display-functions-alist
-        '((swiper . ivy-posframe-display-at-window-bottom-left)
-          (t . ivy-posframe-display-at-frame-center)
-          )))
+                '((swiper . ivy-posframe-display-at-window-bottom-left)
+                  (t . ivy-posframe-display-at-frame-center)
+                  )))
 
 ;; Ivy integration with yasnippet
 (use-package ivy-yasnippet
