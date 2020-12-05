@@ -71,13 +71,15 @@
                     (t ;; Linux
                      ;; ultra high-resolution 2560x1440-pixel
                      (if (and (> (car (screen-size)) 2200)
-                              (> (cadr (screen-size)) 1300))
+                              (> (cadr (screen-size)) 1300)
+                              (> 3000 (car (screen-size))))
                          (progn ;; Ultra-HD monitor in Linux
                            (setq my/main-programming-font-size "13")
                            (setq my/main-writing-font-size "14"))
                        ;; high-resolution 2048x1152 and 1920x1028-pixel
                        (if (and (> (car (screen-size)) 1900)
-                                (> (cadr (screen-size)) 1000))
+                                (> (cadr (screen-size)) 1000)
+                                (> 3000 (car (screen-size))))
                            (progn ;; HD monitor in Linux
                              (setq my/main-programming-font-size "13")
                              (setq my/main-writing-font-size "13"))
