@@ -40,14 +40,8 @@
 
 ;; Fringe configuration
 (use-package fringe
-  :config (progn
-            (or standard-display-table
-                (setq standard-display-table (make-display-table)))
-            (set-display-table-slot standard-display-table 0 ?\s)
-
-            ;; make the left fringe 28 pixels wide and the right 12
-            (if (display-graphic-p)
-                (fringe-mode '(28 . 12)))))
+  :config (if (display-graphic-p)
+              (fringe-mode '(28 . 12))))
 
 ;; Enable tooltips
 (use-package tooltip
@@ -155,9 +149,10 @@ non-nil."
 ;; Better characters
 (unless standard-display-table
   (setq standard-display-table (make-display-table)))
-(if (display-graphic-p)
-    (set-display-table-slot standard-display-table
-                            'selective-display (string-to-vector " ⮷ ")))
+(when (display-graphic-p)
+  (set-display-table-slot standard-display-table 0 ?\s)
+  (set-display-table-slot standard-display-table
+                          'selective-display (string-to-vector " ⮷ ")))
 
 ;; Display vertical line
 (use-package fill-column-indicator

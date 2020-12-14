@@ -204,6 +204,10 @@
                       (border-color . "black")
                       (menu-bar-lines . 1)))
 
+              ;; Set the internal frame to be 0
+              (set-frame-parameter (selected-frame)
+                                   'internal-border-width 0)
+
               ;; Get back font antialiasing
               (if (and (display-graphic-p)
                        (version< emacs-version "27.1"))

@@ -46,7 +46,7 @@
            (which-key-add-column-padding    1)
            (which-key-max-display-columns   nil)
            (which-key-min-display-lines     5)
-           (which-key-idle-delay            2.0)
+           (which-key-idle-delay            0.8)
            (which-key-popup-type            'minibuffer)
            (which-key-side-window-location  'right)
            (which-key-side-window-max-width 0.33)
@@ -54,8 +54,7 @@
   :config (progn
             (defadvice which-key--update (around bar activate)
               (ignore-errors add-do-it))
-
-            (setq which-key-key-replacement-alist
+            (setq which-key-replacement-alist
                   '(("<\\([[:alnum:]-]+\\)>" . "\\1")
                     ("TAB"                   . "↹")
                     ("RET"                   . "⏎")
@@ -78,10 +77,10 @@
                     ("projectile-"    . "proj-")
                     ("magit-"         . "ma-")))
 
-            (add-to-list 'which-key-key-replacement-alist '("TAB" . "↹"))
-            (add-to-list 'which-key-key-replacement-alist '("RET" . "⏎"))
-            (add-to-list 'which-key-key-replacement-alist '("DEL" . "⇤"))
-            (add-to-list 'which-key-key-replacement-alist '("SPC" . "␣"))))
+            (add-to-list 'which-key-replacement-alist '("TAB" . "↹"))
+            (add-to-list 'which-key-replacement-alist '("RET" . "⏎"))
+            (add-to-list 'which-key-replacement-alist '("DEL" . "⇤"))
+            (add-to-list 'which-key-replacement-alist '("SPC" . "␣"))))
 
 ;; which key posframe
 (use-package which-key-posframe
