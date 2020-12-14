@@ -376,5 +376,19 @@
                     ("\\`\\*helm.*?\\*\\'"        :regexp t :align right)
                     ("^ ?\\*"                     :regexp t :noselect t :autokill t :autoclose t)))))
 
+;; Minor-mode to handle annoying windows in Emacs
+;; Only works well in conjunction with some system to handle window creation and placement, like shackle.el
+(use-package popup-buffers
+  :load-path (lambda () (expand-file-name "popup-buffers/" user-emacs-directory))
+  :bind (("C-!" . popup-buffers-toggle-latest)
+         ("M-!" . popup-buffers-cycle))
+  :commands popup-buffers-mode
+  :init (setq popup-buffers-reference-buffers
+              '("\\*Messages\\*"
+                "Output\\*$"
+                help-mode
+                compilation-mode))
+  :hook (after-init . popup-buffers-mode))
+
 (provide 'setup-windows)
 ;;; setup-windows.el ends here

@@ -1,0 +1,67 @@
+* Popup Buffers
+
+A minor-mode to handle annoying windows in Emacs. Only works well
+in conjunction  with some system to  handle window creation and  placement, like
+=shackle.el=. This plugin  summons windows  defined by  the user  as "popups"  by
+simply calling =display-buffer=.
+
+Pre-designate any buffer (by name or major-mode) as a popup, and it will stay out of your way.  Dismiss and summon it easily with one key. Useful for many things, including bringing up REPLS, documentation, etc:
+#+ATTR_ORG: :width 500
+#+ATTR_HTML: :width 500px
+[[file:images/popup-buffers-toggle-latest.gif]]
+
+Or you can cycle through all your popups:
+#+ATTR_ORG: :width 500
+#+ATTR_HTML: :width 500px
+[[file:images/popup-buffers-cycle.gif]]
+
+Demote a regular window to popup status:
+#+ATTR_ORG: :width 500
+#+ATTR_HTML: :width 500px
+[[file:images/popup-buffers-demote.gif]]
+
+Toggle all your popups:
+#+ATTR_ORG: :width 500
+#+ATTR_HTML: :width 500px
+[[file:images/popup-buffers-toggle-all.gif]]
+
+Or promote a popup to regular window (currently borked).
+
+* Usage
+To designate popups in your init file, see the customization section.
+
+There are only two commands of note, you can bind them as convenient:
+
+- =popup-buffers-toggle-latest=: Show/hide the latest popup. With a prefix arg, show/hide all your popups.
+- =popup-buffers-cycle=: Cycle through your popups in sequence. With a prefix arg, cycle backwards.
+  
+* Customization
+There is only one variable to customize at the moment:
+
+- =popup-buffers-reference-buffers=: List of buffers to treat as popups. Each entry in the list can be a regexp (string) to match buffer names against, or a major-mode (symbol) to match buffer major-modes against.
+
+  Example: 
+
+  #+BEGIN_SRC emacs-lisp
+    '("\\\*Messages\\\*"
+      "Output\\\*$"
+      help-mode
+      compilation-mode)
+  #+END_SRC
+
+  Will treat the following as popups: The Messages buffer, any buffer ending in "Output*", and all help and compilation buffers.
+* Setup (with =use-package=)
+
+#+BEGIN_SRC emacs-lisp
+    (use-package popup-buffers
+      :bind (("C-`" . popup-buffers-toggle-latest)
+             ("M-`" . popup-buffers-cycle))
+      :init
+      (setq popup-buffers-reference-buffers
+            '("\\*Messages\\*"
+              "Output\\*$"
+              help-mode
+              compilation-mode))
+
+      (popup-buffers-mode +1))
+#+END_SRC
