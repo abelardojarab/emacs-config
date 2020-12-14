@@ -161,9 +161,8 @@
   :hook (c-mode-common . my/cmake-ide-find-project)
   :preface (defun my/cmake-ide-find-project ()
              "Finds the directory of the project for cmake-ide."
-             (with-eval-after-load 'projectile
-               (setq-local cmake-ide-project-dir (projectile-project-root))
-               (setq-local cmake-ide-build-dir (concat cmake-ide-project-dir "build")))
+             (setq-local cmake-ide-project-dir (projectile-project-root))
+             (setq-local cmake-ide-build-dir (concat cmake-ide-project-dir "build"))
              (setq-local cmake-ide-compile-command
                          (concat "cd " cmake-ide-build-dir " && cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=YES .. && make"))
              (cmake-ide-setup)
@@ -175,7 +174,7 @@
                                             (mapcar (lambda (path) (concat "-I" path)) (semantic-gcc-get-include-paths "c++"))))
           (setq cmake-ide-flags-c (append (mapcar (lambda (path) (concat "-I" path)) (semantic-gcc-get-include-paths "c")))))
   :config (defadvice cmake-ide-load-db (around bar activate)
-                        (ignore-errors add-do-it)))
+            (ignore-errors add-do-it)))
 
 (provide 'setup-cmake)
 ;;; setup-cmake.el ends here

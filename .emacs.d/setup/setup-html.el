@@ -1,6 +1,6 @@
 ;;; setup-html.el ---                            -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -106,7 +106,6 @@
            (org-html-htmlize-output-type    'css)
            (org-html-htmlize-font-prefix    "org-"))
   :config (progn
-
             ;; It is required to disable `fci-mode' when `htmlize-buffer' is called;
             ;; otherwise the invisible fci characters show up as funky looking
             ;; visible characters in the source code blocks in the html file.

@@ -298,7 +298,6 @@
            (shackle-default-alignment     'right)
            (shackle-default-size           0.4))
   :config (progn
-
             (with-eval-after-load "window"
               (defcustom split-window-below nil
                 "If non-nil, vertical splits produce new windows below."
