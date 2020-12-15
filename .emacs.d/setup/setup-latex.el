@@ -147,5 +147,14 @@
 (use-package cdlatex
   :defer t)
 
+;; Preview latex equations
+(use-package math-preview
+  :defer t
+  :load-path (lambda () (expand-file-name "math-preview/" user-emacs-directory))
+  :commands (math-preview-at-point
+             math-preview-all)
+  :config (if (file-exists-p "~/.npm-global/bin/math-preview")
+              (setq math-preview-command "~/.npm-global/bin/math-preview")))
+
 (provide 'setup-latex)
 ;;; setup-latex.el ends here

@@ -287,7 +287,7 @@
 (depends-on "makey")
 (depends-on "markdown-mode")
 (depends-on "math-symbol-lists")
-(depends-on "marginalia")
+;; (depends-on "marginalia")
 (depends-on "mbsync")
 (depends-on "memoize")
 (depends-on "metaweblog")
