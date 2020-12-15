@@ -26,8 +26,11 @@
 
 ;; Tabbar ruler pre-requisites
 (use-package mode-icons
-  :if (display-graphic-p)
+  ;;  :if (display-graphic-p)
   :demand t)
+
+(defadvice mode-icons-set-mode-icon (around bar activate)
+  (ignore-errors add-do-it))
 
 ;; Tabbar
 (use-package tabbar
