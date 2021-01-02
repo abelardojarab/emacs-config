@@ -1,6 +1,6 @@
 ;;; setup-folding.el ---                       -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2021  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -69,7 +69,9 @@
 (use-package hideshow
   :defer t
   :diminish hs-minor-mode
-  :hook (prog-mode  . hs-minor-mode))
+  :hook (prog-mode  . hs-minor-mode)
+  :bind (("C-<" . hs-hide-block)
+         ("C->" . hs-show-block)))
 
 ;; Cycle outline
 (use-package outline
@@ -121,9 +123,6 @@
              yafolding-show-all
              yafolding-hide-element
              yafolding-hide-all)
-  :bind (:map outline-minor-mode-map
-              ("C-c +" . yafolding-toggle-element)
-              ("C-c -" . yafolding-toggle-all))
   :custom (yafolding-ellipsis-content " ⮷ "))
 
 ;; Enable fold dwim (do what i mean)

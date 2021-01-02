@@ -1,6 +1,6 @@
 ;;; setup-keys.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2021  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -256,5 +256,19 @@
 (global-set-key (kbd "<f1>") 'my/select-treemacs-or-toggle)
 (define-key dired-mode-map (kbd "<f1>") 'my/select-treemacs-or-toggle)
 
+;; Window resizing keys
+;; Ctrl + Shift + <left|right|up|down>
+(global-set-key (kbd "C-S-<left>")
+                (lambda () (interactive)
+                  (enlarge-window-horizontally 1)))
+(global-set-key (kbd "C-S-<right>")
+                (lambda () (interactive)
+                  (shrink-window-horizontally 1)))
+(global-set-key (kbd "C-S-<up>")
+                (lambda () (interactive)
+                  (shrink-window 1)))
+(global-set-key (kbd "C-S-<down>")
+                (lambda () (interactive)
+                  (enlarge-window 1)))
 (provide 'setup-keys)
 ;;; setup-keys.el ends here
