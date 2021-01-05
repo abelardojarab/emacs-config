@@ -1,6 +1,6 @@
 ;;; setup-appearance.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2021  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -267,8 +267,8 @@ all the buffers."
   :custom (fira-code-mode-disabled-ligatures '("[]" "#{" "#(" "#_" "#_(" "x")) ;; List of ligatures to turn off
   :hook (prog-mode . fira-code-mode))
 
-;; Show blank lines at the end of the file:
-(setq-default indicate-empty-lines t)
+;; Do not show blank lines at the end of the file:
+(setq-default indicate-empty-lines nil)
 (setq-default indicate-buffer-boundaries 'left)
 
 (provide 'setup-appearance)

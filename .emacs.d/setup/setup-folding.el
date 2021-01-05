@@ -79,10 +79,9 @@
   :hook ((prog-mode message-mode markdown-mode) . outline-minor-mode))
 
 ;; Bring org cycle extensions to outline-minor-mode
+;; (using bicycle now)
 (use-package outshine
-  :defer t
-  :bind (:map outline-minor-mode-map
-              ("C-c c" . outshine-cycle-buffer))
+  :disabled t
   :custom ((outshine-use-speed-commands                t)
            (outshine-org-style-global-cycling-at-bob-p t)))
 
@@ -102,7 +101,8 @@
 (use-package bicycle
   :after outline
   :bind (:map outline-minor-mode-map
-              ("C-c C-c" . bicycle-cycle))
+              ("C-c C-c"   . bicycle-cycle)
+              ("C-c c"     . bicycle-cycle-global))
   :commands (bicycle-cycle
              bicycle-cycle-global))
 
@@ -153,6 +153,7 @@
                                      my/emacs-cache-dir)
                                     "vimish-fold"))))
 
+;;
 (use-package origami
   :defer t
   :custom (origami-show-fold-header t)

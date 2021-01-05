@@ -1,6 +1,6 @@
 ;;; setup-eshell.el ---                       -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2021  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -136,7 +136,6 @@
   ;; Get shell on current directory
   (use-package shell-pop
     :defer t
-    :after eshell
     :bind (("C-t" . shell-pop))
     :custom ((shell-pop-window-size 45)
              (shell-pop-term-shell  "/bin/bash"))
