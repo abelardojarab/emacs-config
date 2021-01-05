@@ -1,6 +1,6 @@
 ;;; setup-lsp.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2021  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -60,9 +60,11 @@
              lsp-enable-which-key-integration)
   :hook (((c-mode c++-mode)    . lsp)
          (python-mode          . lsp)
-         (js2-mode             . lsp))
+         (js2-mode             . lsp)
+         (lsp-mode             . lsp-lens-mode))
   :custom ((lsp-completion-show-detail       t)
            (lsp-completion-show-kind         t)
+           (lsp-semantic-highlightning       t)
            (lsp-prefer-flymake               nil)
            (lsp-pyls-plugins-pylint-enabled  nil)
            (lsp-auto-guess-root              nil)
@@ -85,6 +87,9 @@
                         (error)))
               item))
   :config (progn
+            (setq read-process-output-max (* 1024 1024 10))
+            (setq lsp-completion-provider :capf)
+
             ;; ignored directories
             (dolist (dir '(
                            "[/\\\\]\\.venv$"
