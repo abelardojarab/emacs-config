@@ -1,6 +1,6 @@
 ;;; setup-modeline.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020 Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2021 Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -73,7 +73,8 @@
 (use-package doom-modeline
   :defer t
   :commands doom-modeline-mode
-  :hook (after-init . doom-modeline-mode)
+  :hook ((after-init   . doom-modeline-mode)
+         (window-setup . doom-modeline-mode))
   :custom ((doom-modeline-buffer-file-name-style 'truncate-with-project)
            (doom-modeline-icon            t)
            (doom-modeline-major-mode-icon t)

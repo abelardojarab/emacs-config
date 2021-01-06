@@ -1,6 +1,6 @@
 ;;; setup-file.el ---                                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2021  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -34,7 +34,12 @@
   :defer t
   :diminish (auto-fill-mode . " Ⓕ")
   :custom (fill-column 120)
-  :hook (text-mode . auto-fill-mode))
+  :hook (text-mode . auto-fill-mode)
+  ;; set auto-fill to trigger on punctuation rather than only on whitespace.
+  :config (mapc
+           (lambda (c)
+             (set-char-table-range auto-fill-chars c t))
+           "!-=+]};:'\",.?"))
 
 ;; aggressive fill on paragraphs
 (use-package aggressive-fill-paragraph

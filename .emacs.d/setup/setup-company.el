@@ -1,6 +1,6 @@
 ;;; setup-company.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2021  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -344,6 +344,10 @@
                                               company-auctex-bibs
                                               company-bibtex)
                                             company-backends)))))))
+
+(use-package company-tng-mode
+  :commands company-tng-mode
+  :hook (company-mode . company-tng-mode))
 
 (provide 'setup-company)
 ;;; setup-company.el ends here
