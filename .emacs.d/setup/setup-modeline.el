@@ -73,8 +73,7 @@
 (use-package doom-modeline
   :defer t
   :commands doom-modeline-mode
-  :hook ((after-init   . doom-modeline-mode)
-         (window-setup . doom-modeline-mode))
+  :hook (after-init   . doom-modeline-mode)
   :custom ((doom-modeline-buffer-file-name-style 'truncate-with-project)
            (doom-modeline-icon            t)
            (doom-modeline-major-mode-icon t)

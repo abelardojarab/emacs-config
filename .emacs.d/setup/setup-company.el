@@ -345,7 +345,9 @@
                                               company-bibtex)
                                             company-backends)))))))
 
+;; company-tng (Tab and Go) allows you to perform completion using just TAB.
 (use-package company-tng-mode
+  :disabled t
   :commands company-tng-mode
   :hook (company-mode . company-tng-mode))
 
