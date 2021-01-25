@@ -1,6 +1,6 @@
 ;;; setup-python-plugins.el ---                      -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2021  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -70,7 +70,7 @@
             (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))))
 
 ;;; conda is needed to set anaconda virtual environment python process.
-;;; Elpy can set the anaconda virtual env, but not the process. conda uses
+;;; elpy can set the anaconda virtual env, but not the process. conda uses
 ;;; environment.yml (I think to find the process).
 (use-package conda
   :disabled t
@@ -178,6 +178,38 @@
 (use-package python-pytest
   :after python
   :bind (:map python-mode-map ("C-c C-p" . python-pytest-popup)))
+
+(use-package code-cells
+  :if (executable-find "jupytext")
+  :load-path (lambda () (expand-file-name "code-cells/" user-emacs-directory))
+  :config (progn
+            (setq code-cells-convert-ipynb-style '(("jupytext" "--to" "ipynb" "--from" "markdown")
+                                                   ("jupytext" "--to" "markdown" "--from" "ipynb")
+                                                   markdown-mode))
+            (defhydra notebook-hydra (:color red :hint nil)
+              "
+_j_/_k_: ↓/↑, _h_ome, _l_ast, _q_uit      \
+Cell: _e_val, mark and e_x_ecute      \
+Kernel: _r_estart, eval _a_bove, _z_: pop to
+"
+              ("h" beginning-of-buffer)
+              ("l" (progn (end-of-buffer)
+                          (code-cells-backward-cell)))
+              ("j" code-cells-forward-cell)
+              ("k" code-cells-backward-cell)
+              ("z" jupyter-repl-pop-to-buffer :color blue)
+              ("x" (progn (code-cells-mark-cell)
+                          (call-interactively 'execute-extended-command)))
+              ("C-SPC" code-cells-mark-cell)
+              ("r" jupyter-repl-restart-kernel)
+              ("a" (code-cells-do (pulse-momentary-highlight-region (point-min) start)
+                                  (jupyter-eval-region (point-min) start)))
+              ("e" (code-cells-do (pulse-momentary-highlight-region start end)
+                                  (jupyter-eval-region start end)
+                                  (code-cells-forward-cell)))
+              ("M-w" (code-cells-do (kill-ring-save start end)))
+              ("C-w" (code-cells-do (kill-region start end)))
+              ("q" nil :exit t))))
 
 (provide 'setup-python-plugins)
 ;;; setup-python-plugins.el ends here
