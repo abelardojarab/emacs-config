@@ -66,9 +66,9 @@
   (define-key menu-bar-file-menu [open-file] '("Open File..." . kde-open-file))) ;; if
 
  ;; Mac
- ((equal system-type 'darwin)
-  (global-set-key "\C-x\C-f" 'mac-open-file)
-  (define-key menu-bar-file-menu [open-file] '("Open File..." . mac-open-file))) ;; if
+ ;; ((equal system-type 'darwin)
+ ;;  (global-set-key "\C-x\C-f" 'mac-open-file)
+ ;;  (define-key menu-bar-file-menu [open-file] '("Open File..." . mac-open-file))) ;; if
 
  (t
   nil)) ;; cond
