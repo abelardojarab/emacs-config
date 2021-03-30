@@ -1,6 +1,6 @@
 ;;; setup-c++.el ---                                 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2019  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2019, 2021  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -54,7 +54,7 @@
              (defun my/c++-mode-indent-init ()
                (interactive)
                (google-set-c-style)
-               (setq tab-width 4) ;; change this to taste, this is what K&R uses
+               (setq-default tab-width 4) ;; change this to taste, this is what K&R uses
                (make-local-variable 'c-basic-offset)
                (setq c-basic-offset tab-width)
                (make-local-variable 'c-indent-level)
@@ -95,7 +95,6 @@
              ;; Default C-style
              (defun my/c-mode-indent-init ()
                (interactive)
-
                (c-set-style "Linux")
                (c-set-offset 'substatement-open 0)
                (c-set-offset 'innamespace 0)
