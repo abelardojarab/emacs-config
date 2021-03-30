@@ -7,6 +7,7 @@
 
 (setq debug-on-quit t)
 (setq debug-on-error t)
+(defvar image-load-path nil)
 (add-hook 'after-init-hook (lambda ()
                              (setq debug-on-quit nil)
                              (setq debug-on-error nil)))
