@@ -123,6 +123,9 @@ corresponding `.el' file."
           :config (async-bytecomp-package-mode 1))
   :custom (async-bytecomp-allowed-packages '(all)))
 
+;; Needed
+(require 'dash-functional)
+
 ;; Essential packages
 (use-package buttercup           :defer t)
 (use-package ctable              :defer t)
