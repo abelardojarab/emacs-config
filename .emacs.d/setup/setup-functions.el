@@ -23,6 +23,7 @@
 ;;
 
 ;;; Code:
+(defvar after-find-file-from-revert-buffer nil)
 
 (defun -rpartial (fn &rest args)
     "Takes a function FN and fewer than the normal arguments to FN,
