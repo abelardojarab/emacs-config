@@ -1,0 +1,2 @@
+;;; Generated package description from ox-asciidoc.el  -*- no-byte-compile: t -*-
+(define-package "ox-asciidoc" "20211224.538" "AsciiDoc Back-End for Org Export Engine" '((org "8.1")) :commit "27bf9a3e900c782bd57719c81c0aa68d9a1e3b46" :authors '(("Yasushi SHOJI" . "yasushi.shoji@gmail.com")) :maintainer '("Yasushi SHOJI" . "yasushi.shoji@gmail.com") :keywords '("org" "asciidoc") :url "https://github.com/yashi/org-asciidoc")

@@ -1,2 +1,0 @@
-;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/git-gutter-fringe-20200323.2249/git-gutter-fringe.el  -*- no-byte-compile: t -*-
-(define-package "git-gutter-fringe" "20200323.2249" "Fringe version of git-gutter.el" '((git-gutter "0.88") (fringe-helper "0.1.1") (cl-lib "0.5") (emacs "24")) :commit "23347da9fe26e61f04ba3a7b04daa325876aa8ac" :authors '(("Syohei YOSHIDA" . "syohex@gmail.com")) :maintainer '("Neil Okamoto" . "neil.okamoto+melpa@gmail.com") :url "https://github.com/emacsorphanage/git-gutter-fringe")

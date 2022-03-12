@@ -120,7 +120,7 @@
 
 ;; Enable lsp-clients
 (use-package lsp-clients
-  :demand t
+  :disabled t
   :after lsp-mode
   :commands lsp-define-stdio-client)
 

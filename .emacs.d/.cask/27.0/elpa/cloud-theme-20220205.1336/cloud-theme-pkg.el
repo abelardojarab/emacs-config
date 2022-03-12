@@ -1,0 +1,2 @@
+;;; Generated package description from cloud-theme.el  -*- no-byte-compile: t -*-
+(define-package "cloud-theme" "20220205.1336" "A light colored theme" '((emacs "24")) :commit "16372ea1f527917102ac302afaec3ef09e289d24" :authors '(("Valerii Lysenko" . "vallyscode@gmail.com")) :maintainer '("Valerii Lysenko" . "vallyscode@gmail.com") :keywords '("color" "theme") :url "https://github.com/vallyscode/cloud-theme")

@@ -1,0 +1,2 @@
+;;; Generated package description from helm-posframe.el  -*- no-byte-compile: t -*-
+(define-package "helm-posframe" "20211103.236" "Using posframe to show helm window" '((emacs "26.0") (posframe "1.0.0") (helm "0.1")) :commit "87461b52b6f3f378c63642a33f584d4a4ba28351" :authors '(("Feng Shu")) :maintainer '("Feng Shu" . "tumashu@163.com") :keywords '("abbrev" "convenience" "matching" "helm") :url "https://github.com/tumashu/helm-posframe")

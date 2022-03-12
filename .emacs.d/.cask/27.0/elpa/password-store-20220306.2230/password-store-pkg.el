@@ -1,0 +1,2 @@
+;;; Generated package description from password-store.el  -*- no-byte-compile: t -*-
+(define-package "password-store" "20220306.2230" "Password store (pass) support" '((emacs "25") (s "1.9.0") (with-editor "2.5.11") (auth-source-pass "5.0.0")) :commit "c4d8a1d815e79ddd89a85d3e36a41d29f0475771" :authors '(("Svend Sorensen" . "svend@svends.net")) :maintainer '("Tino Calancha" . "tino.calancha@gmail.com") :keywords '("tools" "pass" "password" "password-store") :url "https://www.passwordstore.org/")

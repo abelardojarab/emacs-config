@@ -1,0 +1,2 @@
+;;; Generated package description from taskpaper-mode.el  -*- no-byte-compile: t -*-
+(define-package "taskpaper-mode" "20220117.2118" "Major mode for working with TaskPaper files" 'nil :commit "f4fd155f48c24393a42bb7e04f71161e6da6b284" :authors '(("Dmitry Safronov" . "saf.dmitry@gmail.com")) :maintainer '("Dmitry Safronov" . "saf.dmitry@gmail.com") :keywords '("outlines" "notetaking" "task management" "productivity" "taskpaper") :url "https://github.com/saf-dmitry/taskpaper-mode")

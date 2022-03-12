@@ -1,0 +1,2 @@
+;;; Generated package description from page-break-lines.el  -*- no-byte-compile: t -*-
+(define-package "page-break-lines" "20210104.2224" "Display ^L page breaks as tidy horizontal lines" '((emacs "24.4")) :commit "28783cd6b86b3cd41e51e6b2486173e2485a76cc" :authors '(("Steve Purcell" . "steve@sanityinc.com")) :maintainer '("Steve Purcell" . "steve@sanityinc.com") :keywords '("convenience" "faces") :url "https://github.com/purcell/page-break-lines")
