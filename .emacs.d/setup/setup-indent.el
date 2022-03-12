@@ -1,6 +1,6 @@
 ;;; setup-indent.el ---                              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -114,6 +114,7 @@
 
 ;; Transient indentation guide
 (use-package highlight-indent-guides
+  :if (display-graphic-p)
   :defer t
   :diminish t
   :commands highlight-indent-guides-mode
