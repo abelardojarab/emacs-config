@@ -1,6 +1,6 @@
 ;;; setup-functions.el ---                   -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2018, 2022  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -23,6 +23,27 @@
 ;;
 
 ;;; Code:
+
+(defun -rpartial (fn &rest args)
+    "Takes a function FN and fewer than the normal arguments to FN,
+and returns a fn that takes a variable number of additional ARGS.
+When called, the returned function calls FN with the additional
+args first and then ARGS."
+      (lambda (&rest args-before) (apply fn (append args-before args))))
+
+(defun custom-add-choice (variable choice)
+    "Add CHOICE to the custom type of VARIABLE.
+If a choice with the same tag already exists, no action is taken."
+    (let ((choices (get variable 'custom-type)))
+      (unless (eq (car choices) 'choice)
+        (error "Not a choice type: %s" choices))
+      (unless (seq-find (lambda (elem)
+                          (equal (caddr (member :tag elem))
+                                 (caddr (member :tag choice))))
+                        (cdr choices))
+        ;; Put the new choice at the end.
+        (put variable 'custom-type
+             (append choices (list choice))))))
 
 ;; Missing variables
 (defvar scheme-imenu-generic-expression "")
@@ -102,12 +123,12 @@
   :commands (string-trim-left
              string-trim-right
              string-trim-right
-	     string-trim
-	     string-truncate
+         string-trim
+         string-truncate
              string-suffix-p)
   :config (progn
-	    (put 'if-let   'byte-obsolete-info nil)
-	    (put 'when-let 'byte-obsolete-info nil)
+        (put 'if-let   'byte-obsolete-info nil)
+        (put 'when-let 'byte-obsolete-info nil)
 
             (unless (fboundp 'string-suffix-p)
               (defun string-suffix-p (suffix string  &optional ignore-case)
