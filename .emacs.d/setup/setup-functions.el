@@ -1,6 +1,6 @@
 ;;; setup-functions.el ---                   -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018, 2022  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -24,23 +24,6 @@
 
 ;;; Code:
 (defvar after-find-file-from-revert-buffer nil)
-
-(defun -compose (&rest fns)
-  "Takes a list of functions and returns a fn that is the
-composition of those fns. The returned fn takes a variable
-number of arguments, and returns the result of applying
-each fn to the result of applying the previous fn to
-the arguments (right-to-left)."
-  (lambda (&rest args)
-    (car (-reduce-r-from (lambda (fn xs) (list (apply fn xs)))
-                         args fns))))
-
-(defun -rpartial (fn &rest args)
-    "Takes a function FN and fewer than the normal arguments to FN,
-and returns a fn that takes a variable number of additional ARGS.
-When called, the returned function calls FN with the additional
-args first and then ARGS."
-      (lambda (&rest args-before) (apply fn (append args-before args))))
 
 (defun -partial (fn &rest args)
   "Takes a function FN and fewer than the normal arguments to FN,
