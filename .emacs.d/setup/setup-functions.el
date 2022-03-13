@@ -23,6 +23,24 @@
 ;;
 
 ;;; Code:
+
+
+;; Missing function
+(when (not (fboundp 'custom-add-choice))
+  (defun custom-add-choice (variable choice)
+    "Add CHOICE to the custom type of VARIABLE.
+If a choice with the same tag already exists, no action is taken."
+    (let ((choices (get variable 'custom-type)))
+      (unless (eq (car choices) 'choice)
+        (error "Not a choice type: %s" choices))
+      (unless (seq-find (lambda (elem)
+                          (equal (caddr (member :tag elem))
+                                 (caddr (member :tag choice))))
+                        (cdr choices))
+        ;; Put the new choice at the end.
+        (put variable 'custom-type
+             (append choices (list choice)))))))
+
 (defvar after-find-file-from-revert-buffer nil)
 
 (defun -partial (fn &rest args)
@@ -156,20 +174,6 @@ This function satisfies the following laws:
   (-compose (-prodfn f g ...) (-juxt f' g' ...)) = (-juxt (-compose f f') (-compose g g') ...)
   (-compose (-partial 'nth n) (-prod f1 f2 ...)) = (-compose fn (-partial 'nth n))"
   (lambda (x) (-zip-with 'funcall fns x)))
-
-(defun custom-add-choice (variable choice)
-    "Add CHOICE to the custom type of VARIABLE.
-If a choice with the same tag already exists, no action is taken."
-    (let ((choices (get variable 'custom-type)))
-      (unless (eq (car choices) 'choice)
-        (error "Not a choice type: %s" choices))
-      (unless (seq-find (lambda (elem)
-                          (equal (caddr (member :tag elem))
-                                 (caddr (member :tag choice))))
-                        (cdr choices))
-        ;; Put the new choice at the end.
-        (put variable 'custom-type
-             (append choices (list choice))))))
 
 ;; Missing variables
 (defvar scheme-imenu-generic-expression "")

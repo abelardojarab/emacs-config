@@ -1,6 +1,6 @@
 ;;; setup-functions-required.el ---             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -61,6 +61,11 @@ Evaluates all cached timer functions in sequence."
     (when font-lock-mode
       (with-no-warnings
         (font-lock-fontify-buffer)))))
+
+;; Missing function
+(when (not (fboundp 'display--update-for-mouse-movement))
+  (defun display--update-for-mouse-movement (a b)
+    nil))
 
 ;; Missing function
 (when (not (fboundp 'make-variable-frame-local))
