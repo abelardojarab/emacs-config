@@ -137,9 +137,9 @@ Throw away all the old tags, and recreate the tag database."
                                                                     "semanticdb"))
 
             ;; semanticdb support for global/gtags
-            (when (executable-find "global")
+            (ignore-errors (when (executable-find "global")
               (semanticdb-enable-gnu-global-databases 'c-mode t)
-              (semanticdb-enable-gnu-global-databases 'c++-mode t))))
+              (semanticdb-enable-gnu-global-databases 'c++-mode t)))))
 
 ;; Show function in mode-line
 (use-package which-func
