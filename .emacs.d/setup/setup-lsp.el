@@ -1,6 +1,6 @@
 ;;; setup-lsp.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2021  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -210,6 +210,18 @@
   :defer t
   :commands (lsp-modeline-diagnostics-mode
              lsp-modeline-workspace-status-mode))
+
+(use-package tree-sitter
+  :defer t
+  :commands (tree-sitter-mode
+             global-tree-sitter-mode))
+
+(use-package tree-sitter-langs
+  :defer t)
+
+(use-package helm-tree-sitter
+  :defer t
+  :commands helm-tree-sitter)
 
 (provide 'setup-lsp)
 ;;; setup-lsp.el ends here

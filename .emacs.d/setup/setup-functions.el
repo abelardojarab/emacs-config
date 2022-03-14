@@ -24,7 +24,6 @@
 
 ;;; Code:
 
-
 ;; Missing function
 (when (not (fboundp 'custom-add-choice))
   (defun custom-add-choice (variable choice)
