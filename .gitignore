@@ -102,4 +102,6 @@ cscope.in.out
 cscope.po.out
 .lsp*
 
+async-bytecomp.log
 # End of https://www.gitignore.io/api/tags,emacs
+
