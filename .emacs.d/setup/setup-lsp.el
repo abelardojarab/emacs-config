@@ -213,7 +213,6 @@
 
 (use-package tree-sitter
   :defer t
-  :disabled t
   :commands (tree-sitter-mode
              global-tree-sitter-mode)
   :hook (after-init . global-tree-sitter-mode)
@@ -222,7 +221,6 @@
             (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)))
 
 (use-package helm-tree-sitter
-  :disabled t
   :defer t
   :commands helm-tree-sitter)
 
