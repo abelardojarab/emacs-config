@@ -450,6 +450,8 @@
 (depends-on "visual-regexp-steroids")
 (depends-on "vscode-icon")
 (depends-on "volatile-highlights")
+(depends-on "vterm")
+(depends-on "vterm-toggle")
 (depends-on "w3m")
 (depends-on "wanderlust")
 (depends-on "web-completion-data")
