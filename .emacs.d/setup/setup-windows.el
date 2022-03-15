@@ -1,6 +1,6 @@
 ;;; setup-windows.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -383,12 +383,38 @@
   :bind (("C-!" . popup-buffers-toggle-latest)
          ("M-!" . popup-buffers-cycle))
   :commands popup-buffers-mode
-  :init (setq popup-buffers-reference-buffers
-              '("\\*Messages\\*"
-                "Output\\*$"
-                help-mode
-                compilation-mode))
+  :custom (popup-buffers-reference-buffers
+           '("\\*Messages\\*"
+             "Output\\*$"
+             "TAGS\\*$"
+             help-mode
+             compilation-mode))
   :hook (after-init . popup-buffers-mode))
+
+;; Another mode to control popup buffers
+(defun popper-echo-mode nil)
+(use-package popper
+  :bind* ("C-c :" . popper-toggle-latest)
+  :bind (("C-`"   . popper-toggle-latest)
+         ("C-\\"  . popper-cycle)
+         ("C-M-`" . popper-toggle-type))
+  :config (progn
+            (require 'popper-echo)
+            (popper-mode +1)
+            (popper-echo-mode +1))
+  :custom (popper-reference-buffers '("\\*Messages\\*"
+                                      "Output\\*$"
+                                      "TAGS\\*$"
+                                      "\\*Async Shell Command\\*"
+                                      help-mode
+                                      "magit:.\*"
+                                      "\\*deadgrep.\*"
+                                      "\\*eldoc.\*"
+                                      "\\*xref\\*"
+                                      "\\*direnv\\*"
+                                      "\\*Warnings\\*"
+                                      "\\*Bookmark List\\*"
+                                      compilation-mode)))
 
 (provide 'setup-windows)
 ;;; setup-windows.el ends here

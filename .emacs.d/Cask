@@ -353,6 +353,7 @@
 (depends-on "pkg-info")
 (depends-on "plantuml-mode")
 (depends-on "polymode")
+(depends-on "popper")
 (depends-on "popup")
 (depends-on "popup-switcher")
 (depends-on "popwin")

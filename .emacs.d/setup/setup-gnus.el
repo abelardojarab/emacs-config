@@ -1,6 +1,6 @@
 ;;; setup-gnus.el ---                         -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -23,6 +23,9 @@
 ;;
 
 ;;; Code:
+
+(defalias 'view-emacs-news 'ignore)
+(defalias 'describe-gnu-project 'ignore)
 
 ;; Mime support
 (use-package mime-w3m
