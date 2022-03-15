@@ -103,5 +103,8 @@ cscope.po.out
 .lsp*
 
 async-bytecomp.log
+*/*/*/*/*/build/*
+vterm-module.so
+
 # End of https://www.gitignore.io/api/tags,emacs
 
