@@ -254,21 +254,19 @@
 
 ;; vterm integration
 (use-package vterm
-  :config
-  (defun turn-off-chrome ()
-    (hl-line-mode -1)
-    (display-line-numbers-mode -1))
-  :hook (vterm-mode . turn-off-chrome))
-
-(use-package vterm-toggle
-  :custom
-  (vterm-toggle-fullscreen-p nil "Open a vterm in another window.")
-  (vterm-toggle-scope 'project)
-  :bind (("C-c v" . #'vterm-toggle)
-         :map vterm-mode-map
-         ("C-\\" . #'popper-cycle)
-         ("s-t"  . #'vterm) ;; Open up new tabs quickly
-         ("s-v"  . #'vterm-yank)))
+  :if (file-exists-p "/usr/include/vterm.h")
+  :hook (vterm-mode . turn-off-chrome)
+  :init (defun turn-off-chrome ()
+          (hl-line-mode -1)
+          (display-line-numbers-mode -1))
+  :config (use-package vterm-toggle
+            :custom ((vterm-toggle-fullscreen-p nil "Open a vterm in another window.")
+                     (vterm-toggle-scope 'project))
+            :bind (("C-c v" . #'vterm-toggle)
+                   :map vterm-mode-map
+                   ("C-\\" . #'popper-cycle)
+                   ("s-t"  . #'vterm) ;; Open up new tabs quickly
+                   ("s-v"  . #'vterm-yank))))
 
 (provide 'setup-eshell)
 ;;; setup-eshell.el ends here
