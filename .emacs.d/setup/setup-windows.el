@@ -387,6 +387,9 @@
            '("\\*Messages\\*"
              "Output\\*$"
              "TAGS\\*$"
+             "magit:.\*"
+             "magit-diff:.\*"
+             "magit-process:.\*"
              help-mode
              compilation-mode))
   :hook (after-init . popup-buffers-mode))
@@ -408,6 +411,8 @@
                                       "\\*Async Shell Command\\*"
                                       help-mode
                                       "magit:.\*"
+                                      "magit-diff:.\*"
+                                      "magit-process:.\*"
                                       "\\*deadgrep.\*"
                                       "\\*eldoc.\*"
                                       "\\*xref\\*"

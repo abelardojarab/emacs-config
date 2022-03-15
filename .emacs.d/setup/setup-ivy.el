@@ -1,6 +1,6 @@
 ;;; setup-ivy.el ---                              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -86,6 +86,7 @@
          ("C-S-p"                   . counsel-M-x) ;; like sublimetext/vscode
          ("C-o"                     . counsel-find-file)
          ("C-c C-v"                 . counsel-yank-pop)
+         ("C-c <xterm-paste>"       . counsel-yank-pop)
          ("C-c C-a"                 . counsel-git-grep)
          ("C-c C-g"                 . counsel-git-checkout)
          ([remap bookmark-jump]     . counsel-bookmark)
