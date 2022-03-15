@@ -215,9 +215,11 @@
   :defer t
   :commands (tree-sitter-mode
              global-tree-sitter-mode)
+  :custom (tree-sitter-langs-grammar-dir "~/.config/tree-sitter/bin")
   :hook (after-init . global-tree-sitter-mode)
   :config (progn
-            (require 'tree-sitter-langs)
+            ;; (require 'tree-sitter-langs)
+            (ignore-errors (tree-sitter-require 'python))
             (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)))
 
 (use-package helm-tree-sitter

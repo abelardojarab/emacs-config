@@ -33,7 +33,7 @@
   "The directory where the library `tree-sitter-langs' is located.")
 
 ;; TODO: Separate build-time settings from run-time settings.
-(defcustom tree-sitter-langs-grammar-dir "~/.emacs.d/.cask/27.2/elpa/tree-sitter-langs-20220212.641/bin" ;; tree-sitter-langs--dir
+(defcustom tree-sitter-langs-grammar-dir tree-sitter-langs--dir
   "The root data directory of `tree-sitter-langs'.
 The 'bin' directory under this directory is used to stored grammar
 binaries (either downloaded, or compiled from source).
