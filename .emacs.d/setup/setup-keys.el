@@ -1,6 +1,6 @@
 ;;; setup-keys.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2021  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -24,7 +24,7 @@
 
 ;;; Code:
 
-;; Show freen keybindings for minor modes
+;; Show free keybindings for minor modes
 (use-package free-keys
   :defer t
   :commands free-keys)
@@ -187,7 +187,6 @@
            ((kbd "<")         . decrease-left-margin)
            ((kbd "F")         . toggle-frame-fullscreen)
            ((kbd "T")         . toggle-truncate-lines))
-
 
 ;; Cua mode helpers
 (bind-keys :map ctl-x-map
