@@ -218,8 +218,48 @@
   :custom (tree-sitter-langs-grammar-dir "~/.config/tree-sitter/bin")
   :hook (after-init . global-tree-sitter-mode)
   :config (progn
-            ;; (require 'tree-sitter-langs)
-            (ignore-errors (tree-sitter-require 'python))
+            (setq tree-sitter-load-path (list "~/.config/tree-sitter/bin"))
+            (defun tree-sitter-load (lang-symbol &optional file native-symbol-name)
+              "Load a language grammar from FILE and register it under the name LANG-SYMBOL.
+If another language was already registered under the same name, override it.
+
+This function returns the loaded language object.
+
+FILE should be the base name (without extension) of the native shared library
+that exports the language as the native symbol NATIVE-SYMBOL-NAME.
+
+If FILE is nil, the base name is assumed to be LANG-SYMBOL's name.
+
+If NATIVE-SYMBOL-NAME is nil, the name of the exported native symbol is assumed
+to be LANG-SYMBOL's name, prefixed with \"tree_sitter_\"."
+              (let* ((lang-name (symbol-name lang-symbol))
+                     ;; Example: c-sharp -> c_sharp.
+                     (fallback-name (replace-regexp-in-string "-" "_" lang-name))
+                     (native-symbol-name (or native-symbol-name
+                                             (format "tree_sitter_%s"
+                                                     fallback-name)))
+                     ;; List of base file names to search for.
+                     (files (if file
+                                ;; Use only FILE, if it's given.
+                                (list file)
+                              ;; Otherwise use LANG-SYMBOL. First, as-is. Then, with hyphens
+                              ;; replaced by underscores.
+                              (cons lang-name
+                                    (unless (string= lang-name fallback-name)
+                                      (list fallback-name)))))
+                     (full-path (seq-some (lambda (base-name)
+                                            (locate-file base-name
+                                                         tree-sitter-load-path
+                                                         tree-sitter-load-suffixes))
+                                          files)))
+                (unless full-path
+                  ;; TODO: Define custom error class.
+                  (error "Cannot find shared library for language: %S" lang-symbol))
+                (let ((language (tsc--load-language (file-truename full-path) native-symbol-name lang-symbol)))
+                  (setf (map-elt tree-sitter-languages lang-symbol) language)
+                  language)))
+
+            (ignore-errors (require 'tree-sitter-langs))
             (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)))
 
 (use-package helm-tree-sitter
