@@ -1,6 +1,6 @@
 ;;; setup-ecb.el ---                       -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -304,7 +304,9 @@ little more place."
 (use-package lsp-treemacs
   :defer t
   :after (lsp-mode all-the-icons)
-  :bind (:map lsp-mode-map
+  :bind (:map ctl-x-map
+              ("/" . lsp-treemacs-symbols)
+         :map lsp-mode-map
               ("C-<f3>" . lsp-treemacs-errors-list)
               ("<f3>"   . lsp-treemacs-symbols)))
 

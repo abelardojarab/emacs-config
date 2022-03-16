@@ -49,9 +49,7 @@
              psw-switch-buffer
              psw-switch-function
              psw-switch-projectile-files
-             psw-navigate-files)
-  :bind (:map ctl-x-map
-              ("/" . psw-switch-function)))
+             psw-navigate-files))
 
 ;; Native file opening
 (cond

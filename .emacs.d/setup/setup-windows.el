@@ -398,8 +398,7 @@
 (defun popper-echo-mode nil)
 (use-package popper
   :bind* ("C-c :" . popper-toggle-latest)
-  :bind (("C-`"   . popper-toggle-latest)
-         ("C-\\"  . popper-cycle)
+  :bind (("C-\\"  . popper-cycle)
          ("C-M-`" . popper-toggle-type))
   :config (progn
             (require 'popper-echo)
