@@ -100,6 +100,7 @@
          :map ctl-x-map
          ("x"                       . counsel-M-x)
          ("C-r"                     . counsel-recentf)
+         ("<xterm-paste>"           . counsel-yank-pop)
          :map ivy-minibuffer-map
          ("M-y"                     . ivy-next-line)
          :map read-expression-map

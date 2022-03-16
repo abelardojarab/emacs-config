@@ -1,6 +1,6 @@
 ;;; setup-dired-plugins.el ---                       -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -43,10 +43,9 @@
                (ignore-errors add-do-it))))
 
 ;; neotree side bar
-(define-key (current-global-map) (kbd "C-e") nil)
-(bind-key* (kbd "C-e") 'neotree-toggle)
 (use-package neotree
   :defer t
+  :bind* ("C-e" . neotree-toggle)
   :bind (("C-e" . neotree-project-dir))
   :commands (neotree-toggle
              neotree-show
@@ -77,8 +76,7 @@ or the current buffer directory."
           (interactive)
           (let ((project-dir
                  (ignore-errors
-                   (ffip-project-root)
-                   ))
+                   (ffip-project-root)))
                 (file-name (buffer-file-name))
                 (neo-smart-open t))
             (if (and (fboundp 'neo-global--window-exists-p)

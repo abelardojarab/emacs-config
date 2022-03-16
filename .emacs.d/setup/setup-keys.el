@@ -192,7 +192,7 @@
 (bind-keys :map ctl-x-map
            ((kbd "C-s")       . save-buffer)
            ((kbd "C-a")       . mark-whole-buffer)
-           ((kbd "C-v")       . clipboard-yank)
+           ((kbd "C-v")       . counsel-yank-pop)
            ((kbd "C-z")       . undo))
 
 ;; Overwrite other modes
