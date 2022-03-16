@@ -100,7 +100,7 @@
 
 ;; magit
 (use-package magit
-  :defer t
+  :demand t
   :commands (projectile-vc
              magit-init
              magit-status
