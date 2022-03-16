@@ -1,6 +1,6 @@
 ;;; setup-versioning.el ---                         -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -132,7 +132,8 @@
              magit-not-reverted-hook
              magit-dispatch-popup
              git-commit-setup-check-buffer)
-  :defines (magit-ediff-dwim-show-on-hunks)
+  :defines (magit-ediff-dwim-show-on-hunks
+            my/magit-commit-prompt)
   :bind (("C-c g" . magit-status)
          :map ctl-x-map
          ("g"        . magit-status)
