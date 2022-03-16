@@ -100,7 +100,7 @@
 
 ;; magit
 (use-package magit
-  :demand t
+  :defer t
   :commands (projectile-vc
              magit-init
              magit-status
@@ -244,7 +244,7 @@
                 (magit-commit)))
 
             ;; Prettify magit interface
-            (when (display-graphic-p)
+            (when t ;; (display-graphic-p)
               (defmacro pretty-magit (WORD ICON PROPS &optional NO-PROMPT?)
                 "Replace sanitized WORD with ICON, PROPS and by default add to prompts."
                 `(prog1
