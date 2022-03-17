@@ -106,6 +106,9 @@ async-bytecomp.log
 */*/*/*/*/build/*
 vterm-module.so
 tsc-dyn.so
+*/*/*/*/*/target
+*/*/*/*/*.so
+*.so
 
 # End of https://www.gitignore.io/api/tags,emacs
 
