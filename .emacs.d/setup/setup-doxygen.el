@@ -1,6 +1,6 @@
 ;;; setup-doxygen.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -33,8 +33,9 @@
               ("C-c TAB" . doxymacs-insert-function-comment))
   :if (executable-find "doxymacs_parser")
   :diminish doxymacs-mode
-  :load-path (lambda () (expand-file-name "doxymacs/lisp" user-emacs-directory))
-  :hook (c-mode-common . doxymacs-mode))
+  :load-path (lambda () (expand-file-name "doxymacs/build/lisp" user-emacs-directory))
+  ;; :hook (c-mode-common . doxymacs-mode)
+  )
 
 (provide 'setup-doxygen)
 ;;; setup-doxygen.el ends here
