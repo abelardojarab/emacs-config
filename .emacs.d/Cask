@@ -108,6 +108,7 @@
 (depends-on "dired-ranger")
 (depends-on "dired-sidebar")
 (depends-on "direx")
+(depends-on "dirvish")
 (depends-on "discover-my-major")
 ;; (depends-on "docker-compose-mode")
 (depends-on "dockerfile-mode")

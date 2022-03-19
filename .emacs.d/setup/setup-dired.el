@@ -1,6 +1,6 @@
 ;;; setup-dired.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -225,7 +225,7 @@ parametersg."
               :after dired
               :bind (:map dired-mode-map
                           ("b"       . direx:jump-to-directory)
-                          :map direx:direx-mode-map
+                          :map direx-mode-map
                           ("b"       . dired-jump)
                           ([mouse-1] . direx:mouse-2)
                           ([mouse-3] . direx:mouse-1))

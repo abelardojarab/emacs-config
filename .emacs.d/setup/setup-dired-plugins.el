@@ -110,5 +110,8 @@ or the current buffer directory."
                 (neo-global--reset-width)
                 window))))
 
+;; Modern dired
+(use-package dirvish)
+
 (provide 'setup-dired-plugins)
 ;;; setup-dired-plugins.el ends here

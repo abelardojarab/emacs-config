@@ -1,6 +1,6 @@
 ;;; setup-python-plugins.el ---                      -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2021  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -179,6 +179,7 @@
   :after python
   :bind (:map python-mode-map ("C-c C-p" . python-pytest-popup)))
 
+;; Integration with Jupyter
 (use-package code-cells
   :if (executable-find "jupytext")
   :load-path (lambda () (expand-file-name "code-cells/" user-emacs-directory))
@@ -210,6 +211,15 @@ Kernel: _r_estart, eval _a_bove, _z_: pop to
               ("M-w" (code-cells-do (kill-ring-save start end)))
               ("C-w" (code-cells-do (kill-region start end)))
               ("q" nil :exit t))))
+
+;; Sphinx-styled documentation generation
+(use-package sphinx-doc
+  :hook (python-mode . sphinx-doc-mode))
+
+;; Numpy-styled documentation generation
+(use-package numpydoc
+  :bind (:map python-mode-map
+              ("C-c C-n" . numpydoc-generate)))
 
 (provide 'setup-python-plugins)
 ;;; setup-python-plugins.el ends here
