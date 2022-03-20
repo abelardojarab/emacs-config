@@ -148,9 +148,12 @@ parametersg."
 
             ;; dired extensions
             (use-package dired+
-              :after dired
+              :disabled t
+              :if (display-graphic-p)
               :custom (diredp-hide-details-initially-flag nil)
-              :config (diredp-toggle-find-file-reuse-dir 1))
+              :config (progn
+                        (setq diredp-bind-problematic-terminal-keys nil)
+                        (diredp-toggle-find-file-reuse-dir 1)))
 
             ;; dired-ranger pre-requisite
             (use-package dired-hacks-utils

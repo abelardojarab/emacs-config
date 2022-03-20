@@ -111,7 +111,9 @@ or the current buffer directory."
                 window))))
 
 ;; Modern dired
-(use-package dirvish)
+(use-package dirvish
+  :defer t
+  :commands dirvish)
 
 (provide 'setup-dired-plugins)
 ;;; setup-dired-plugins.el ends here
