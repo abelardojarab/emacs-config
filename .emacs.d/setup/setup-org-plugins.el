@@ -1,6 +1,6 @@
 ;;; setup-org-plugins.el ---                         -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -94,6 +94,13 @@
   :after org
   :hook (org-mode . org-autolist-mode)
   :commands org-autolist-mode)
+
+;; Modern org styles
+(use-package org-modern
+  :defer t
+  :after org
+  :hook ((org-mode org-agenda-finalize) . org-modern-mode)
+  :commands org-modern-mode)
 
 (provide 'setup-org-plugins)
 ;;; setup-org-plugins.el ends here

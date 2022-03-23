@@ -1,6 +1,6 @@
 ;;; setup-highlight.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -55,8 +55,9 @@
              my/hl-line-mode-off)
   :hook ((prog-mode               . hl-line-mode)
          ((org-mode markdown-mode) . my/hl-line-mode-off))
-  :custom ((hl-line-sticky-flag   t)
-           (global-hl-sticky-flag t))
+  :custom ((hl-line-sticky-flag      t)
+           (hl-line-overlay-priority +50)
+           (global-hl-sticky-flag    t))
   :config (progn
             ;; https://stackoverflow.com/questions/20275596/how-to-use-hl-line-mode-to-highlight-just-one-1-line-when-visual-line-mode-is
             (defun visual-line-line-range ()
