@@ -33,6 +33,8 @@
 (when (fboundp 'global-so-long-mode)
   (global-so-long-mode))
 
+
+
 ;; Treat all themes as safe
 (use-package custom
   :ensure nil
@@ -41,6 +43,8 @@
 ;; Reporting Emacs bugs
 (use-package emacsbug
   :custom (report-emacs-bug-no-explanations t))
+
+(defvar org-mode-map (make-keymap))
 
 ;; Auto-revert buffers of changed files
 (use-package autorevert

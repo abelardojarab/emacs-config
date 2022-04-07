@@ -1,6 +1,6 @@
 ;;; custom.el ---                                    -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2017-2021  Abelardo Jara-Berrocal
+;; Copyright (C) 2017-2022  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -131,6 +131,7 @@
  '(company-selection-wrap-around t nil nil "Customized with use-package company")
  '(company-semantic-insert-arguments nil nil nil "Customized with use-package company")
  '(company-show-numbers t nil nil "Customized with use-package company")
+ '(company-show-quick-access t nil nil "Customized with use-package company")
  '(company-tooltip-align-annotations t nil nil "Customized with use-package company")
  '(company-tooltip-limit 10 nil nil "Customized with use-package company")
  '(company-transformers '(company-sort-by-backend-importance) nil nil "Customized with use-package company")
@@ -234,12 +235,9 @@
      (object :foreground "#5974ab" :slant italic)
      (package :foreground "#000000")
      (deprecated :strike-through "#000000")))
- '(epa-armor t t nil "Customized with use-package epa")
  '(epa-file-cache-passphrase-for-symmetric-encryption t nil nil "Customized with use-package epg-config")
- '(epa-popup-info-window nil nil nil "Customized with use-package epa")
  '(epg--configurations nil t nil "Customized with use-package epg-config")
  '(epg-gpg-program "gpg2" nil nil "Customized with use-package epg-config")
- '(epg-pinentry-mode nil nil nil "Customized with use-package epa")
  '(ergoemacs-ctl-c-or-ctl-x-delay 0.2)
  '(ergoemacs-handle-ctl-c-or-ctl-x 'both)
  '(ergoemacs-ignore-prev-global nil nil nil "Customized with use-package ergoemacs-mode-fixed")
@@ -452,6 +450,7 @@
  '(load-prefer-newer nil nil nil "Customized with use-package emacs")
  '(ls-lisp-dirs-first t nil nil "Customized with use-package dired-x")
  '(lsp-auto-guess-root nil nil nil "Customized with use-package lsp-mode")
+ '(lsp-completion-enable t nil nil "Customized with use-package lsp-mode")
  '(lsp-file-watch-threshold 1048576 nil nil "Customized with use-package lsp-mode")
  '(lsp-prefer-flymake nil t nil "Customized with use-package lsp-mode")
  '(lsp-pyls-plugins-pylint-enabled nil nil nil "Customized with use-package lsp-mode")
@@ -486,6 +485,7 @@
  '(magit-revert-buffers 'silent t nil "Customized with use-package magit")
  '(magit-rewrite-inclusive 'ask t nil "Customized with use-package magit")
  '(magit-save-some-buffers t t nil "Customized with use-package magit")
+ '(magit-section-keep-region-overlay t nil nil "Customized with use-package magit")
  '(magit-set-upstream-on-push 'askifnotset t nil "Customized with use-package magit")
  '(magit-status-buffer-switch-function 'switch-to-buffer t nil "Customized with use-package magit")
  '(magit-turn-on-auto-revert-mode nil t nil "Customized with use-package magit")
@@ -878,6 +878,7 @@
  '(w3m-show-graphic-icons-in-header-line t t nil "Customized with use-package w3m")
  '(w3m-show-graphic-icons-in-mode-line t t nil "Customized with use-package w3m")
  '(w3m-use-cookies t t nil "Customized with use-package w3m")
+ '(warning-suppress-types '((emacs) (emacs) (emacs)))
  '(weechat-color-list
    (unspecified "#272822" "#49483E" "#F70057" "#F92672" "#86C30D" "#A6E22E" "#BEB244" "#E6DB74" "#40CAE4" "#66D9EF" "#FB35EA" "#FD5FF0" "#74DBCD" "#A1EFE4" "#F8F8F2" "#F8F8F0"))
  '(which-func-maxout 1024 nil nil "Customized with use-package which-func")
