@@ -24,6 +24,10 @@
 
 ;;; Code:
 
+(use-package puppet-mode
+  :load-path (lambda () (expand-file-name "puppet-mode/" user-emacs-directory))
+  :mode ("\\.pp$" . puppet-mode))
+
 ;; A nice package to show the disk usage
 (use-package disk-usage
   :disabled t
