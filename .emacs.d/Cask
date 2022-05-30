@@ -259,6 +259,7 @@
 (depends-on "ivy-xref")
 ;; (depends-on "jar")
 (depends-on "jedi")
+(depends-on "jenkinsfile-mode")
 (depends-on "js2-mode")
 (depends-on "js2-refactor")
 (depends-on "json-mode")
