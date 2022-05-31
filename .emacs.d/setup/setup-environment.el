@@ -1,6 +1,6 @@
 ;;; setup-environment.el ---                 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -375,6 +375,12 @@ LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
 
 (if (not (boundp 'minibuffer-local-must-match-filename-map))
     (defvar minibuffer-local-must-match-filename-map (make-sparse-keymap)))
+
+;; Jenkinsfile
+(use-package jenkinsfile-mode
+  :mode ("Jenkinsfile" . jenkinsfile-mode)
+  :commands jenkinsfile-mode
+  :defer t)
 
 (provide 'setup-environment)
 ;;; setup-environment.el ends here
