@@ -7,6 +7,7 @@
 
 (setq debug-on-quit t)
 (setq debug-on-error t)
+
 (defvar image-load-path nil)
 (add-hook 'after-init-hook (lambda ()
                              (setq debug-on-quit nil)
@@ -34,7 +35,7 @@
                 (setq file-name-handler-alist my/file-name-handler-alist)))
 
     ;; Disable needless warnings
-    (setq warning-minimum-level :error)
+    (setq warning-minimum-level :emergency)
 
     ;; Basics
     (add-to-list 'load-path (expand-file-name "elisp/" user-emacs-directory))
