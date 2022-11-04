@@ -1,2 +1,0 @@
-;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/magit-p4-20170414.1246/magit-p4.el  -*- no-byte-compile: t -*-
-(define-package "magit-p4" "20170414.1246" "git-p4 plug-in for Magit" '((magit "2.1") (magit-popup "2.1") (p4 "12.0") (cl-lib "0.5")) :commit "cdc05f2d564409baac9ca15b1a2a0110a6ff12b7" :keywords '("vc" "tools") :authors '(("Damian T. Dobroczy\\\\'nski" . "qoocku@gmail.com")) :maintainer '("Aleksey Fedotov" . "lexa@cfotr.com") :url "https://github.com/qoocku/magit-p4")

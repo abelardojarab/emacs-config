@@ -1,2 +1,0 @@
-;;; Generated package description from which-key-posframe.el  -*- no-byte-compile: t -*-
-(define-package "which-key-posframe" "20210615.944" "Using posframe to show which-key" '((emacs "26.0") (posframe "0.4.3") (which-key "3.3.2")) :commit "90e85d74899fc23d95798048cc0bbdb4bab9c1b7" :authors '(("Yanghao Xie")) :maintainer '("Yanghao Xie" . "yhaoxie@gmail.com") :keywords '("convenience" "bindings" "tooltip") :url "https://github.com/yanghaoxie/which-key-posframe")

@@ -1,0 +1,2 @@
+;;; Generated package description from helm-mu.el  -*- no-byte-compile: t -*-
+(define-package "helm-mu" "20220920.1200" "Helm sources for searching emails and contacts." '((helm "1.5.5")) :commit "b9865a3a8ba8af572fcf12d975ea04dc9437c1a2" :authors '(("Titus von der Malsburg" . "malsburg@posteo.de")) :maintainer '("Titus von der Malsburg" . "malsburg@posteo.de") :url "https://github.com/emacs-helm/helm-mu")

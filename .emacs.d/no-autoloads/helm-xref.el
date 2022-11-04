@@ -4,8 +4,9 @@
 
 ;; Author: Fritz Stelzer <brotzeitmacher@gmail.com>
 ;; URL: https://github.com/brotzeit/helm-xref
-;; Package-Version: 20191108.859
-;; Version: 0.5
+;; Package-Version: 20211017.1334
+;; Package-Commit: ea0e4ed8a9baf236e4085cbc7178241f109a53fa
+;; Version: 1.0
 ;; Package-Requires: ((emacs "25.1") (helm "1.9.4"))
 
 ;;; License:
@@ -64,13 +65,14 @@
 (defun helm-xref-candidates-26 (xrefs)
   "Convert XREF-ALIST items to helm candidates and add them to `helm-xref-alist'."
   (dolist (xref xrefs)
-    (with-slots (summary location) xref
-      (let* ((line (xref-location-line location))
-             (file (xref-location-group location))
-             candidate)
-        (setq candidate
-              (funcall helm-xref-candidate-formatting-function file line summary))
-        (push (cons candidate xref) helm-xref-alist))))
+    (let* ((summary (xref-item-summary xref))
+           (location (xref-item-location xref))
+           (line (xref-location-line location))
+           (file (xref-location-group location))
+           candidate)
+      (setq candidate
+            (funcall helm-xref-candidate-formatting-function file line summary))
+      (push (cons candidate xref) helm-xref-alist)))
   (setq helm-xref-alist (reverse helm-xref-alist)))
 
 (defun helm-xref-candidates-27 (fetcher alist)
@@ -81,13 +83,14 @@
            (assoc-default 'fetched-xrefs alist)
            (funcall fetcher))))
 	(dolist (xref xrefs)
-	  (with-slots (summary location) xref
-	    (let* ((line (xref-location-line location))
+	  (let* ((summary (xref-item-summary xref))
+           (location (xref-item-location xref))
+           (line (xref-location-line location))
 		       (file (xref-location-group location))
 		       candidate)
-          (setq candidate
+      (setq candidate
 		        (funcall helm-xref-candidate-formatting-function file line summary))
-          (push (cons candidate xref) helm-xref-alist)))))
+      (push (cons candidate xref) helm-xref-alist))))
   (setq helm-xref-alist (reverse helm-xref-alist)))
 
 (defun helm-xref-format-candidate-short (file line summary)
@@ -131,13 +134,14 @@
   "Set buffer and point according to xref-item ITEM.
 
 Use FUNC to display buffer."
-  (with-slots (summary location) item
-    (let* ((marker (xref-location-marker location))
-           (buf (marker-buffer marker))
-           (offset (marker-position marker)))
-      (switch-to-buffer buf)
-      (goto-char offset)
-      (funcall func buf))))
+  (let* ((summary (xref-item-summary item))
+         (location (xref-item-location item))
+         (marker (xref-location-marker location))
+         (buf (marker-buffer marker))
+         (offset (marker-position marker)))
+    (switch-to-buffer buf)
+    (goto-char offset)
+    (funcall func buf)))
 
 (defun helm-xref-source ()
   "Return a `helm' source for xref results."
@@ -150,6 +154,7 @@ Use FUNC to display buffer."
               ("Other window" . (lambda (item) (helm-xref-goto-xref-item item 'switch-to-buffer-other-window))))
     :candidate-number-limit 9999))
 
+;;;###autoload
 (defun helm-xref-show-xrefs (xrefs _alist)
   "Function to display XREFS.
 
@@ -161,6 +166,7 @@ Needs to be set the value of `xref-show-xrefs-function'."
         :input helm-xref-input
         :buffer "*helm-xref*"))
 
+;;;###autoload
 (defun helm-xref-show-xrefs-27 (fetcher alist)
   "Function to display XREFS.
 
@@ -171,6 +177,7 @@ Needs to be set the value of `xref-show-xrefs-function'."
         :truncate-lines t
         :buffer "*helm-xref*"))
 
+;;;###autoload
 (defun helm-xref-show-defs-27 (fetcher alist)
   "Function to display list of definitions."
   (let ((xrefs (funcall fetcher)))
@@ -183,11 +190,13 @@ Needs to be set the value of `xref-show-xrefs-function'."
                                (cons (cons 'fetched-xrefs xrefs)
                                      alist))))))
 
-(if (< emacs-major-version 27)
-    (setq xref-show-xrefs-function 'helm-xref-show-xrefs)
-  (progn
-    (setq xref-show-xrefs-function 'helm-xref-show-xrefs-27)
-    (setq xref-show-definitions-function 'helm-xref-show-defs-27)))
+;;;###autoload
+(progn
+  (if (< emacs-major-version 27)
+      (setq xref-show-xrefs-function 'helm-xref-show-xrefs)
+    (progn
+      (setq xref-show-xrefs-function 'helm-xref-show-xrefs-27)
+      (setq xref-show-definitions-function 'helm-xref-show-defs-27))))
 
 (provide 'helm-xref)
 ;;; helm-xref.el ends here

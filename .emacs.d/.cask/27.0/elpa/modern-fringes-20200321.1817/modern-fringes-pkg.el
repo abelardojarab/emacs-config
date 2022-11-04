@@ -1,2 +1,0 @@
-;;; Generated package description from /home/abelardojara/workspace/emacs-config/.emacs.d/.cask/27.0/elpa/modern-fringes-20200321.1817/modern-fringes.el  -*- no-byte-compile: t -*-
-(define-package "modern-fringes" "20200321.1817" "Replaces default fringe bitmaps with better looking ones" 'nil :commit "108daba8407dc8acf140157e7f49137c397a0af7" :keywords '("themes" "fringes" "convenience") :authors '(("Quen Jankosky" . "quen.jankosky@gmail.com")) :maintainer '("Quen Jankosky" . "quen.jankosky@gmail.com") :url "http://github.com/specialbomb/emacs-modern-fringes")

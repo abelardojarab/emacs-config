@@ -1,0 +1,287 @@
+This is elquery.info, produced by makeinfo version 6.7 from
+elquery.texi.
+
+
+File: elquery.info,  Node: Top,  Next: Usage,  Up: (dir)
+
+elquery: parse, query, and format HTML with Emacs Lisp
+******************************************************
+
+     Write things.  Do things.
+   elquery is a library that lets you parse, query, set, and format HTML
+using Emacs Lisp.  It implements (most of) the querySelector
+(https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector)
+API with 'elquery-$', and can get and set HTML attributes.
+
+* Menu:
+
+* Usage::
+* Functions::
+* Selector Syntax::
+* Internal Data Structure::
+
+
+File: elquery.info,  Node: Usage,  Next: Functions,  Prev: Top,  Up: Top
+
+1 Usage
+*******
+
+Given the below HTML file, some usage examples include:
+
+<html style="height: 100vh">
+  <head class="baz"><title class="baz" data-bar="foo">Complex HTML Page</title></head>
+  <body class="baz bur" style="height: 100%">
+    <h1 id="bar" class="baz wow">Wow this is an <em>example</em></h1>
+    <input id="quux" class="baz foo"/>
+    <iframe sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+            width="100%" height="100%" src="example.org">
+    </iframe>
+  </body>
+</html>
+
+(let ((html (elquery-read-file "~/baz.html")))
+  ;;; Query elements
+  (elquery-el (car (elquery-$ ".baz#quux" html)))
+  ;; => "input"
+  (mapcar 'elquery-el (elquery-$ ".baz" html))
+  ;; => ("input" "h1" "body" "title" "head")
+  (mapcar (lambda (el) (elquery-el (elquery-parent el))) (elquery-$ ".baz" html))
+  ;; => ("body" "body" "html" "head" "html")
+  (mapcar (lambda (el) (mapcar 'elquery-el (elquery-siblings el))) (elquery-$ ".baz" html))
+  ;; => (("h1" "input" "iframe") ("h1" "input" "iframe") ("head" "body") ("title") ("head" "body"))
+
+  ;;; Read properties of elements
+  (elquery-classes (car (elquery-$ ".baz#quux" html)))
+  ;; => ("baz" "foo")
+  (elquery-prop (car (elquery-$ "iframe" html)) "sandbox")
+  ;; => "allow-same-origin allow-scripts allow-popups allow-forms"
+  (elquery-text (car (elquery-$ "h1" html)))
+  ;; => "Wow this is an"
+  (elquery-full-text (car (elquery-$ "h1" html)) " ")
+  ;; => "Wow this is an example"
+
+  ;;; Write parsed HTML
+  (elquery-write html nil)
+  ;; => "<html style=\"height: 100vh\"> ... </html>"
+  )
+
+
+File: elquery.info,  Node: Functions,  Next: Selector Syntax,  Prev: Usage,  Up: Top
+
+2 Functions
+***********
+
+* Menu:
+
+* I/O and Parsing::
+* DOM Traversal::
+* Common Trait Selection::
+* Property Modification::
+* Predicates::
+* General Tree Functions::
+
+
+File: elquery.info,  Node: I/O and Parsing,  Next: DOM Traversal,  Up: Functions
+
+2.1 I/O and Parsing
+===================
+
+   * '(elquery-read-url URL)' - Return a parsed tree of the HTML at URL
+   * '(elquery-read-file FILE)' - Return a parsed tree of the HTML in
+     FILE
+   * '(elquery-read-buffer BUFFER)' - Return a parsed tree of the HTML
+     in BUFFER
+   * '(elquery-read-string STRING)' - Return a parsed tree of the HTML
+     in STRING
+   * '(elquery-write TREE)' - Return a string of the HTML representation
+     of TREE and its children.
+   * '(elquery-fmt TREE)' - Return a string of the HTML representation
+     of the topmost node of TREE, without its children or closing tag.
+   * '(elquery-pprint TREE)' - Return a pretty, CSS-selector-like
+     representation of the topmost node of TREE.
+
+
+File: elquery.info,  Node: DOM Traversal,  Next: Common Trait Selection,  Prev: I/O and Parsing,  Up: Functions
+
+2.2 DOM Traversal
+=================
+
+   * '(elquery-$ SELECTOR TREE)' - Return a list of subtrees of TREE
+     which matches the query string.  Currently, the element name, id,
+     class, and property values are supported, along with some set
+     operations and hierarchy relationships.  See Selector Syntax for a
+     more detailed overview of valid selectors.
+   * '(elquery-parent NODE)' - Return the parent of NODE
+   * '(elquery-child NODE)' - Return the first child of NODE
+   * '(elquery-children NODE)' - Return a list of the children of NODE
+   * '(elquery-siblings NODE)' - Return a list of the siblings of NODE
+   * '(elquery-next-children NODE)' - Return a list of children of NODE
+     with the children's children removed.
+   * '(elquery-next-sibling NODE)' - Return the sibling immediately
+     following NODE
+
+
+File: elquery.info,  Node: Common Trait Selection,  Next: Property Modification,  Prev: DOM Traversal,  Up: Functions
+
+2.3 Common Trait Selection
+==========================
+
+   * '(elquery-class? NODE CLASS)' - Return whether NODE has the class
+     CLASS
+   * '(elquery-id NODE)' - Return the id of NODE
+   * '(elquery-classes NODE)' - Return a list of the classes of NODE
+   * '(elquery-text NODE)' - Return the text content of NODE. If there
+     are multiple text elements, for example, '<span>Hello
+     <span>cruel</span> world</span>', return the concatenation of these
+     nodes, 'Hello world', with two spaces between 'Hello' and 'world'
+   * '(elquery-full-text NODE)' - Return the text content of NODE and
+     its children.  If there are multiple text elements, for example,
+     '<span>Hello <span>cruel</span> world</span>', return the
+     concatenation of these nodes, 'Hello cruel world'.
+
+
+File: elquery.info,  Node: Property Modification,  Next: Predicates,  Prev: Common Trait Selection,  Up: Functions
+
+2.4 Property Modification
+=========================
+
+   * '(elquery-props NODE)' - Return a plist of this node's properties,
+     including its id, class, and data attributes.
+   * '(elquery-data NODE KEY &optional VAL)' - Return the value of
+     NODE's data-KEY property.  If VAL is supplied, destructively set
+     NODE's data-KEY property to VAL. For example, on the node '<span
+     data-name="adam">', '(elquery-data node "name")' would return
+     'adam'
+   * '(elquery-prop NODE PROP &optional VAL)' - Return the value of PROP
+     in NODE. If VAL is supplied, destructively set PROP to VAL.
+   * '(elquery-rm-prop NODE)' - Destructively remove PROP from NODE
+
+
+File: elquery.info,  Node: Predicates,  Next: General Tree Functions,  Prev: Property Modification,  Up: Functions
+
+2.5 Predicates
+==============
+
+   * '(elquery-nodep OBJ)' - Return whether OBJ is a DOM node
+   * '(elquery-elp OBJ)' - Return whether OBJ is not a text node
+   * '(elquery-textp OBJ)' - Return whether OBJ is a text node
+
+
+File: elquery.info,  Node: General Tree Functions,  Prev: Predicates,  Up: Functions
+
+2.6 General Tree Functions
+==========================
+
+Because HTML is a large tree representation, elq includes some general
+tree manipulation functions which it uses internally, and may be useful
+to you when dealing with the DOM.
+
+   * '(elquery-tree-remove-if pred tree)' - Remove all elements from
+     TREE if they satisfy PRED. Preserves the structure and order of the
+     tree.
+   * '(elquery-tree-remove-if-not pred tree)' - Remove all elements from
+     TREE if they do not satisfy PRED. Preserves the structure and order
+     of the tree.
+   * '(elquery-tree-mapcar fn tree)' - Apply FN to all elements in TREE
+   * '(elquery-tree-reduce fn tree)' - Perform an in-order reduction of
+     TREE with FN. Equivalent to a reduction on a flattened tree.
+   * '(elquery-tree-flatten tree)' - Flatten the tree, removing all list
+     nesting and leaving a list of only atomic elements.  This does not
+     preserve the order of the elements.
+   * '(elquery-tree-flatten-until pred tree)' - Flatten the tree, but
+     treat elements matching PRED as atomic elements, not preserving
+     order.
+
+
+File: elquery.info,  Node: Selector Syntax,  Next: Internal Data Structure,  Prev: Functions,  Up: Top
+
+3 Selector Syntax
+*****************
+
+We support a significant subset of jQuery's selector syntax.  If I ever
+decide to make this project even more web-scale, I'll add colon
+selectors and more property equality tests.
+
+   * '#foo' - Select all elements with the id "foo"
+   * '.bar' - Select all elements with the class "bar"
+   * '[name=user]' - Select all elements whose "name" property is "user"
+   * '#foo.bar[name=user]' - Logical intersection of the above three
+     selectors.  Select all elements whose id is "foo", class is ".bar",
+     and "name" is "user"
+   * '#foo .bar, [name=user]' - Select all elements with the class "bar"
+     in the subtrees of all elements with the id "foo", along with all
+     elements whose "name" is "user"
+   * '#foo > .bar' - Select all elements with class "bar" whose
+     immediate parent has id "foo"
+   * '#foo ~ .bar' - Select all elements with class "bar" which are
+     siblings of elements with id "foo"
+   * '#foo + .bar' - Select all elements with class "bar" which
+     immediately follow elements with id "foo"
+
+   All permutations of union, intersection, child, next-child, and
+sibling relationships are supported.
+
+
+File: elquery.info,  Node: Internal Data Structure,  Prev: Selector Syntax,  Up: Top
+
+4 Internal Data Structure
+*************************
+
+Each element is a plist, which is guaranteed to have at least one
+key-value pair, and an ':el' key.  All elements of this plist are
+accessible with the above functions, but the internal representation of
+a document node is below for anybody brave enough to hack on this:
+
+   * ':el' - A string containing the name of the element.  If the node
+     is a "text node", ':el is nil'
+   * ':text' - A string containing the concatenation of all text
+     elements immediately below this one on the tree.  For example, the
+     node representing '<span>Hello <span>cruel</span> world</span>'
+     would be ~Hello world".
+   * ':props' - A plist of HTML properties for each element, including
+     but not limited to its ':id', 'class', 'data-*', and 'name'
+     attributes.
+   * ':parent' - A pointer to the parent element.  Emacs thinks this is
+     a list.
+   * ':children' - A list of elements immediately below this one on the
+     tree, including text nodes.
+
+   The data structure used in queries via '(elquery-$)' is very similar,
+although it doesn't have ':text' keyword (PRs welcome!)  and has an
+extra ':rel' keyword, which specifies the relationship between the query
+and its ':children'.  ':rel' may be one of ':next-child', ':child',
+'next-sibling', and ':sibling'.  This is used by the internal function
+'(elquery--$)' which must determine whether it can continue recursion
+down the tree based on the relationship of two intersections in a
+selector.
+
+
+Tag Table:
+Node: Top75
+Node: Usage627
+Ref: #usage720
+Node: Functions2268
+Ref: #functions2381
+Node: I/O and Parsing2524
+Ref: #io-and-parsing2649
+Node: DOM Traversal3335
+Ref: #dom-traversal3487
+Node: Common Trait Selection4278
+Ref: #common-trait-selection4454
+Node: Property Modification5188
+Ref: #property-modification5359
+Node: Predicates5975
+Ref: #predicates6124
+Node: General Tree Functions6315
+Ref: #general-tree-functions6458
+Node: Selector Syntax7501
+Ref: #selector-syntax7644
+Node: Internal Data Structure8778
+Ref: #internal-data-structure8919
+
+End Tag Table
+
+
+Local Variables:
+coding: utf-8
+End:

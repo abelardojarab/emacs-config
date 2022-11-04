@@ -1,0 +1,2 @@
+;;; Generated package description from cov.el  -*- no-byte-compile: t -*-
+(define-package "cov" "20220727.31" "Show coverage stats in the fringe." '((emacs "24.4") (f "0.18.2") (s "1.11.0") (elquery "0")) :commit "cd3e1995c596cc227124db9537792d8329ffb696" :authors '(("Adam Niederer")) :maintainer '("Adam Niederer") :keywords '("coverage" "gcov" "c" "lcov" "coveralls" "clover") :url "https://github.com/AdamNiederer/cov")
