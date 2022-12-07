@@ -68,6 +68,10 @@
   :defer t
   :commands esup)
 
+;; Minions
+(use-package minions
+  :demand t)
+
 ;; With-editor (emacsclient support)
 (use-package with-editor
   :hook ((shell-mode eshell-mode term-exec) . with-editor-export-editor))

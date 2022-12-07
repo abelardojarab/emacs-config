@@ -1,26 +1,27 @@
-;;; minions.el --- A minor-mode menu for the mode line  -*- lexical-binding: t -*-
+;;; minions.el --- A minor-mode menu for the mode line  -*- lexical-binding:t -*-
 
-;; Copyright (C) 2018-2020  Jonas Bernoulli
+;; Copyright (C) 2018-2022 Jonas Bernoulli
 
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Homepage: https://github.com/tarsius/minions
+;; Keywords: convenience
 
-;; Package-Requires: ((emacs "25.2") (dash "2.13.0"))
+;; Package-Requires: ((emacs "25.2") (compat "28.1.1.0"))
 
-;; This file is not part of GNU Emacs.
+;; SPDX-License-Identifier: GPL-3.0-or-later
 
-;; This file is free software; you can redistribute it and/or modify
-;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 3, or (at your option)
-;; any later version.
-
+;; This file is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published
+;; by the Free Software Foundation, either version 3 of the License,
+;; or (at your option) any later version.
+;;
 ;; This file is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
-
-;; For a full copy of the GNU General Public License
-;; see <http://www.gnu.org/licenses/>.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this file.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
@@ -39,10 +40,16 @@
 ;;; Code:
 
 (require 'cl-lib)
-(require 'dash)
+(require 'compat)
 
-(eval-when-compile
-  (require 'subr-x))
+(eval-when-compile (require 'subr-x))
+
+(define-obsolete-variable-alias 'minions-blacklist
+  'minions-hidden-modes "Minions 0.3.7")
+(define-obsolete-variable-alias 'minions-whitelist
+  'minions-available-modes "Minions 0.3.7")
+(define-obsolete-variable-alias 'minions-direct
+  'minions-prominent-modes "Minions 0.3.7")
 
 ;;; Options
 
@@ -50,14 +57,14 @@
   "A minor-mode menu for the mode line."
   :group 'mode-line)
 
-(defcustom minions-blacklist nil
+(defcustom minions-hidden-modes nil
   "List of minor-modes that are never shown in the mode menu.
 
 These modes are not even displayed when they are enabled."
   :group 'minions
   :type '(repeat (symbol :tag "Mode")))
 
-(defcustom minions-whitelist
+(defcustom minions-available-modes
   ;; Based on elements of `mode-line-mode-menu'.
   '((abbrev-mode . nil)
     (auto-fill-mode . nil)
@@ -83,7 +90,7 @@ global minor-mode, nil otherwise."
                                 :on "global (non-nil)"
                                 :off "local (nil)"))))
 
-(defcustom minions-direct nil
+(defcustom minions-prominent-modes nil
   "List of minor-modes that are shown directly in the mode line."
   :group 'minions
   :type '(repeat (symbol :tag "Mode")))
@@ -133,7 +140,7 @@ minor-modes that is usually displayed directly in the mode line."
 
 (defvar minions-mode-line-minor-modes-map
   (let ((map (make-sparse-keymap)))
-    (define-key map [mode-line down-mouse-1] 'minions-minor-modes-menu)
+    (define-key map [mode-line down-mouse-1] #'minions-minor-modes-menu)
     map))
 
 (defvar minions-mode-line-modes
@@ -152,14 +159,13 @@ mouse-3: Toggle minor modes"
                       'mouse-face 'mode-line-highlight
                       'local-map (make-mode-line-mouse-map
                                   'mouse-2 #'mode-line-widen))
-          `(:propertize ("" (:eval (--filter (memq (car it) minions-direct)
-                                             minor-mode-alist)))
-			mouse-face mode-line-highlight
-			help-echo "Minor mode
+          `(:propertize ("" (:eval (minions--prominent-modes)))
+                        mouse-face mode-line-highlight
+                        help-echo "Minor mode
 mouse-1: Display minor mode menu
 mouse-2: Show help for minor mode
 mouse-3: Toggle minor modes"
-			local-map ,mode-line-minor-mode-keymap)
+                        local-map ,mode-line-minor-mode-keymap)
           " "
           '(:eval (propertize minions-mode-line-lighter
                               'face minions-mode-line-face
@@ -178,39 +184,45 @@ minor modes in a space conserving menu.")
 (put 'minions-mode-line-modes 'risky-local-variable t)
 (make-variable-buffer-local 'minions-mode-line-modes)
 
-(defun minions-minor-modes-menu (event)
+(defun minions-minor-modes-menu ()
   "Pop up a menu with minor mode menus and toggles.
 
 The menu has an entry for every enabled minor mode, except those
-that are listed in `minions-blacklist'.  It also has entries for
-modes that are not enabled but listed in `minions-whitelist'.
-If a mode defines a menu, then its entry shows that as a submenu.
-Otherwise the entry can only be used to toggle the mode.
-
-EVENT has to be an input event."
-  (interactive "@e")
+listed in `minions-hidden-modes' or `minions-prominent-modes',
+and for modes listed in `minions-available-modes', even if they
+are not enabled.  If a mode defines a menu, then its entry shows
+that as a submenu.  Otherwise the entry can only be used to
+toggle the mode."
+  (interactive)
   (pcase-let ((map (make-sparse-keymap))
               (`(,local ,global) (minions--modes)))
-    (define-key map [minions--help-menu]
-      (list 'menu-item "Describe..." (minions--help-menu)))
-    (define-key map [describe-mode]
-      (list 'menu-item "Describe modes" 'describe-mode))
-    (define-key map [--help]  (list 'menu-item "Help"))
-    (define-key map [--line1] (list 'menu-item "--double-line"))
-    (dolist (mode global)
-      (if-let (menu (and (symbol-value mode)
-                         (minions--mode-menu mode)))
-          (define-key map (vector mode) menu)
-        (minions--define-toggle map mode)))
-    (define-key map [--global] (list 'menu-item "Global Modes"))
-    (define-key map [--line2]  (list 'menu-item "--double-line"))
+    (define-key-after map [--local] (list 'menu-item "Local Modes"))
     (dolist (mode local)
       (if-let (menu (and (symbol-value mode)
                          (minions--mode-menu mode)))
-          (define-key map (vector mode) menu)
+          (define-key-after map (vector mode) menu)
         (minions--define-toggle map mode)))
-    (define-key map [--local] (list 'menu-item "Local Modes"))
-    (x-popup-menu event map)))
+    (define-key-after map [--line2]  (list 'menu-item "--double-line"))
+    (define-key-after map [--global] (list 'menu-item "Global Modes"))
+    (dolist (mode global)
+      (if-let (menu (and (symbol-value mode)
+                         (minions--mode-menu mode)))
+          (define-key-after map (vector mode) menu)
+        (minions--define-toggle map mode)))
+    (define-key-after map [--line1] (list 'menu-item "--double-line"))
+    (define-key-after map [--help]  (list 'menu-item "Help"))
+    (define-key-after map [describe-mode]
+      (list 'menu-item "Describe modes" 'describe-mode))
+    (define-key-after map [minions--help-menu]
+      (list 'menu-item "Describe..." (minions--help-menu)))
+    (condition-case nil
+        (popup-menu map)
+      (quit nil))))
+
+(defun minions--prominent-modes ()
+  (cl-remove-if-not (lambda (mode)
+                      (memq (car mode) minions-prominent-modes))
+                    minor-mode-alist))
 
 (defun minions--modes ()
   (let (local global)
@@ -223,15 +235,15 @@ EVENT has to be an input event."
                              (cl-mapcan (pcase-lambda (`(,mode ,_))
                                           (and (boundp mode)
                                                (list mode)))
-                                        minions-whitelist))
-                   minions-blacklist))
+                                        minions-available-modes))
+                   minions-hidden-modes))
       (if (or (local-variable-if-set-p mode)
-              (let ((elt (assq mode minions-whitelist)))
+              (let ((elt (assq mode minions-available-modes)))
                 (and elt (not (cdr elt)))))
           (push mode local)
         (push mode global)))
-    (list (sort local  #'string>)
-          (sort global #'string>))))
+    (list (sort local  #'string<)
+          (sort global #'string<))))
 
 (defun minions--mode-menu (mode)
   (let* ((map  (or (cdr (assq mode minor-mode-map-alist))
@@ -243,14 +255,14 @@ EVENT has to be an input event."
     (and menu
          (let ((wrap (make-sparse-keymap)))
            (set-keymap-parent wrap menu)
-           (define-key wrap [minions] (list 'menu-item "--double-line"))
            (minions--define-toggle wrap mode)
+           (define-key-after wrap [minions] (list 'menu-item "--double-line"))
            (list 'menu-item (symbol-name mode) wrap)))))
 
 (defun minions--define-toggle (map mode)
   (let ((fn (or (get mode :minor-mode-function) mode)))
     (when (functionp fn)
-      (define-key map (vector mode)
+      (define-key-after map (vector mode)
         (list 'menu-item (symbol-name mode) fn
               :help (minions--documentation fn)
               :button (cons :toggle mode))))))
@@ -258,19 +270,19 @@ EVENT has to be an input event."
 (defun minions--help-menu ()
   (pcase-let ((map (make-sparse-keymap))
               (`(,local ,global) (minions--modes)))
-    (dolist (mode global)
-      (minions--define-help map mode))
-    (define-key map [--global] (list 'menu-item "Global Modes"))
-    (define-key map [--line2]  (list 'menu-item "--double-line"))
+    (define-key-after map [--local] (list 'menu-item "Local Modes"))
     (dolist (mode local)
       (minions--define-help map mode))
-    (define-key map [--local] (list 'menu-item "Local Modes"))
+    (define-key-after map [--line2]  (list 'menu-item "--double-line"))
+    (define-key-after map [--global] (list 'menu-item "Global Modes"))
+    (dolist (mode global)
+      (minions--define-help map mode))
     map))
 
 (defun minions--define-help (map mode)
   (let ((fn (or (get mode :minor-mode-function) mode)))
     (when (functionp fn)
-      (define-key map (vector mode)
+      (define-key-after map (vector mode)
         (list 'menu-item
               (symbol-name mode)
               (lambda ()
