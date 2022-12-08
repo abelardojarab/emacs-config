@@ -1,6 +1,6 @@
 ;;; setup-spell.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -81,7 +81,7 @@
 
             ;; change dictionary: "C-c e" = english, "C-c s"=spanish, "C-c w"=turn off flyspell
             (add-hook 'text-mode-hook
-                      '(lambda ()
+                      #'(lambda ()
                          (local-set-key (kbd "C-c s 2")
                                         (lambda () (interactive)
                                           (ispell-change-dictionary "en_US")

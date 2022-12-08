@@ -217,8 +217,9 @@
   :commands (tree-sitter-mode
              global-tree-sitter-mode)
   :custom (tree-sitter-langs-grammar-dir "~/.config/tree-sitter/bin")
-  ;; :hook (after-init . global-tree-sitter-mode)
+  :hook (after-init . global-tree-sitter-mode)
   :config (progn
+            (add-hook 'python-mode-hook #'tree-sitter-hl-mode)
             (setq tree-sitter-load-path (list "~/.config/tree-sitter/bin"))
             (defun tree-sitter-load (lang-symbol &optional file native-symbol-name)
               "Load a language grammar from FILE and register it under the name LANG-SYMBOL.

@@ -1,8 +1,8 @@
 ;;; setup-general.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara-Berrocal <abelardojara@ubuntu02>
+;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -32,8 +32,6 @@
 ;; Currently available in Emacs master branch *only*!
 (when (fboundp 'global-so-long-mode)
   (global-so-long-mode))
-
-
 
 ;; Treat all themes as safe
 (use-package custom
