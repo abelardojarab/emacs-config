@@ -1,6 +1,6 @@
 ;;; setup-ess.el ---
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -46,7 +46,7 @@
 
             ;; http://www.kieranhealy.org/blog/archives/2009/10/12/make-shift-enter-do-a-lot-in-ess/
             (add-hook 'ess-mode-hook
-                      '(lambda ()
+                      #'(lambda ()
                          (setq comint-scroll-to-bottom-on-input  t
                                comint-scroll-to-bottom-on-output t
                                comint-move-point-for-output      t)

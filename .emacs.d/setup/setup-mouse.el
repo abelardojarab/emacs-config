@@ -1,6 +1,6 @@
 ;;; setup-mouse.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -59,11 +59,11 @@
 (setq mouse-wheel-progressive-speed nil)
 
 ;; Get the scroll wheel to work
-(global-set-key [(shift button5)] '(lambdas () (interactive) (scroll-up-line)))
-(global-set-key [(shift button4)] '(lambda () (interactive) (scroll-down-line)))
+(global-set-key [(shift button5)] #'(lambdas () (interactive) (scroll-up-line)))
+(global-set-key [(shift button4)] #'(lambda () (interactive) (scroll-down-line)))
 
-(global-set-key [(shift mouse-5)] '(lambda () (interactive) (scroll-up-line)))
-(global-set-key [(shift mouse-4)] '(lambda () (interactive) (scroll-down-line)))
+(global-set-key [(shift mouse-5)] #'(lambda () (interactive) (scroll-up-line)))
+(global-set-key [(shift mouse-4)] #'(lambda () (interactive) (scroll-down-line)))
 
 ;; Right click mouse
 (use-package mouse3

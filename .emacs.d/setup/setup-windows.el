@@ -46,14 +46,14 @@
 
             ;; Removes *Completions* from buffer after you've opened a file.
             (add-hook 'minibuffer-exit-hook
-                      '(lambda ()
+                      #'(lambda ()
                          (let ((buffer "*Completions*"))
                            (and (get-buffer buffer)
                                 (kill-buffer buffer)))))
 
             ;; Put a nice title to the window, including filename
             (add-hook 'window-configuration-change-hook
-                      (lambda ()
+                      #'(lambda ()
                         (setq frame-title-format
                               (concat
                                invocation-name "@" system-name ": "

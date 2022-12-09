@@ -219,8 +219,8 @@
              global-tree-sitter-mode)
   :custom ((tree-sitter-langs-grammar-dir "~/.config/tree-sitter")
            (tree-sitter-langs-grammar-git "~/.config/tree-sitter/bundle"))
-  :hook ((after-init . global-tree-sitter-mode)
-         (prog-mode  . tree-sitter-hl-mode))
+  ;; :hook ((after-init . global-tree-sitter-mode)
+  ;;       (prog-mode  . tree-sitter-hl-mode))
   :config (progn
             (setq tree-sitter-load-path (list "~/.config/tree-sitter/bin"))
             (defun tree-sitter-load (lang-symbol &optional file native-symbol-name)

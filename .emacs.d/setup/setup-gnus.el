@@ -242,7 +242,7 @@
             (add-to-list 'auto-mode-alist '(".*mutt.*" . message-mode))
             (setq mail-header-separator "")
             (define-key message-mode-map (kbd "C-c C-c")
-              '(lambda ()
+              #'(lambda ()
                  "save and exit quickly"
                  (interactive)
                  (save-buffer)
