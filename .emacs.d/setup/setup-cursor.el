@@ -60,6 +60,7 @@
 
 ;; Blinking cursor
 (use-package heartbeat-cursor
+  :disabled t
   :if (not (equal system-type 'windows-nt))
   :commands heartbeat-cursor-mode
   :hook ((prog-mode text-mode) . heartbeat-cursor-mode))

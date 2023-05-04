@@ -26,6 +26,7 @@
 
 ;; Test-case mode
 (use-package test-case-mode
+  :disabled t
   :hook (find-file . enable-test-case-mode-if-test))
 
 (provide 'setup-xunit)

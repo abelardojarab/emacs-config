@@ -33,7 +33,7 @@
 
 ;; Inter-process communication
 (use-package epc
-  :demand t)
+  :disabled t)
 
 ;; Use Jedi only if python interpreter is present
 (use-package jedi
