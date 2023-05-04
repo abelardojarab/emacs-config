@@ -1,0 +1,2 @@
+;;; Generated package description from org-modern.el  -*- no-byte-compile: t -*-
+(define-package "org-modern" "20230422.634" "Modern looks for Org" '((emacs "27.1") (compat "29.1.4.0")) :commit "e0a1a00490acc3bbbf199e433c9ef60e03f9d416" :authors '(("Daniel Mendler" . "mail@daniel-mendler.de")) :maintainers '(("Daniel Mendler" . "mail@daniel-mendler.de")) :maintainer '("Daniel Mendler" . "mail@daniel-mendler.de") :keywords '("outlines" "hypermedia" "wp") :url "https://github.com/minad/org-modern")

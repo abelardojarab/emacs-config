@@ -211,10 +211,13 @@
   :after (helm async org)
   :custom ((org-ref-insert-cite-key "C-c [")
            (org-ref-default-citation-link "autocite"))
-  :config (setq org-ref-default-bibliography (list my/bibtex-completion-bibliography)
-                org-ref-bibliography-files (list my/bibtex-completion-bibliography)
-                org-ref-pdf-directory my/bibtex-completion-library-path
-                org-ref-bibliography-notes my/bibtex-completion-notes))
+  :config (progn
+            (setq org-ref-default-bibliography (list my/bibtex-completion-bibliography)
+                  org-ref-bibliography-files (list my/bibtex-completion-bibliography)
+                  org-ref-pdf-directory my/bibtex-completion-library-path
+                  org-ref-bibliography-notes my/bibtex-completion-notes
+                  org-export-before-parsing-functions '(org-ref-glossary-before-parsing
+                                                         org-ref-acronyms-before-parsing))))
 
 ;; helm themes
 (use-package helm-themes

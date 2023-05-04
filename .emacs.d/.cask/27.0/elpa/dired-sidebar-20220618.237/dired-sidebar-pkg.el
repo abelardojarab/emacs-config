@@ -1,2 +1,0 @@
-;;; Generated package description from dired-sidebar.el  -*- no-byte-compile: t -*-
-(define-package "dired-sidebar" "20220618.237" "Tree browser leveraging dired" '((emacs "25.1") (dired-subtree "0.0.1")) :commit "f08bf15cb6cb3c44102731f50ffd812d8d68316c" :authors '(("James Nguyen" . "james@jojojames.com")) :maintainer '("James Nguyen" . "james@jojojames.com") :keywords '("dired" "files" "tools") :url "https://github.com/jojojames/dired-sidebar")

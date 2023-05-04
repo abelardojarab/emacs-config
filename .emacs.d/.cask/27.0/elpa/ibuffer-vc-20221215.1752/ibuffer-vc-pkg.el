@@ -1,0 +1,2 @@
+;;; Generated package description from ibuffer-vc.el  -*- no-byte-compile: t -*-
+(define-package "ibuffer-vc" "20221215.1752" "Group ibuffer's list by VC project, or show VC status" '((emacs "25.1")) :commit "9204001d1c5ca39409485c1574fd315b0e137a92" :authors '(("Steve Purcell" . "steve@sanityinc.com")) :maintainers '(("Steve Purcell" . "steve@sanityinc.com")) :maintainer '("Steve Purcell" . "steve@sanityinc.com") :keywords '("convenience") :url "https://github.com/purcell/ibuffer-vc")
