@@ -45,7 +45,7 @@
              yas-minor-mode
              yas-snippet-dirs
              yas-reload-all)
-  :hook (after-init . yas-global-mode)
+  :hook (on-first-input . yas-global-mode)
   :init (progn
           (if (file-exists-p "~/.emacs.d/snippets")
               (setq yas-snippet-dirs '("~/.emacs.d/snippets"))

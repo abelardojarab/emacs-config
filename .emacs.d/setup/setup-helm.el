@@ -198,7 +198,7 @@
   :commands (helm-posframe-cleanup
              helm-posframe-enable)
   :hook ((helm-org-rifle-after-command . helm-posframe-cleanup)
-         (after-init                  . helm-posframe-enable))
+         (on-first-input               . helm-posframe-enable))
   :custom ((helm-posframe-poshandler 'posframe-poshandler-frame-center)
            (helm-posframe-height     10))
   :config (setq helm-posframe-width (round (* (frame-width) 0.49))

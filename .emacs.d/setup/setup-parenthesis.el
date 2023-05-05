@@ -27,7 +27,7 @@
 ;; Show-paren-mode: subtle blinking of matching paren (defaults are ugly)
 (use-package paren
   :defer t
-  :hook (after-init . show-paren-mode)
+  :hook (on-first-input . show-paren-mode)
   :commands show-paren-mode
   :custom ((show-paren-style                   'paren)
            (show-paren-delay                   0.03)
@@ -108,7 +108,7 @@ FACE defaults to inheriting from default and highlight."
              smartparens-mode
              show-smartparens-global-mode
              show-smartparens-mode)
-  :hook (after-init . smartparens-global-mode)
+  :hook (on-first-input . smartparens-global-mode)
   :custom ((sp-max-pair-length            2)
            (sp-escape-quotes-after-insert nil))
   :config (progn

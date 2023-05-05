@@ -222,5 +222,11 @@ Don't read buffer-local settings or word lists."
             (setq langtool-autoshow-message-function
                   'langtool-autoshow-detail-popup)))
 
+;; Jinx is a just-in-time spell checker.
+(use-package jinx
+  :if (executable-find "enchant")
+  :hook (on-first-buffer . global-jinx-mode)
+  :bind ([remap ispell-word] . jinx-correct))
+
 (provide 'setup-spell)
 ;;; setup-spell.el ends here

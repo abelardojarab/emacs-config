@@ -37,7 +37,7 @@
   :init (setq projectile-known-projects-file
               (concat (file-name-as-directory
                        my/emacs-cache-dir) "projectile-bookmarks.eld"))
-  :hook (after-init . projectile-mode)
+  :hook (on-first-buffer . projectile-mode)
   :custom ((projectile-mode-line-prefix "")
            (projectile-sort-order       'recentf)
            (projectile-use-git-grep     t))

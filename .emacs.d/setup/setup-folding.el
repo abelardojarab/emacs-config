@@ -153,7 +153,7 @@
                                      my/emacs-cache-dir)
                                     "vimish-fold"))))
 
-;;
+;; origami folding package
 (use-package origami
   :defer t
   :custom (origami-show-fold-header t)
@@ -164,7 +164,7 @@
              origami-toggle-node
              origami-toggle-all-nodes
              origami-recursively-toggle-node)
-  :hook (after-init . global-origami-mode)
+  :hook (on-first-buffer . global-origami-mode)
   :custom-face
   (origami-fold-replacement-face ((t (:inherit magit-diff-context-highlight))))
   (origami-fold-fringe-face ((t (:inherit magit-diff-context-highlight))))

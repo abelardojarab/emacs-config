@@ -31,7 +31,7 @@
 
 ;; As in Windows, replace after typing a letter
 (use-package delsel
-  :hook (after-init . delete-selection-mode))
+  :hook (on-first-buffer . delete-selection-mode))
 
 ;; Windows-like mouse/arrow movement & selection
 (use-package cua-base

@@ -344,6 +344,13 @@ LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
                (message "Emacs startup completed in: %.2fms"
                         (my/time-subtract-millis after-init-time before-init-time))))))
 
+;; benchmark-init is a simple package that may or may not carry its weight versus usepackage-compute-statistics.
+;; Run benchmark-init/show-durations-tabulated to check this one out.
+(use-package benchmark-init
+  :demand t
+  :hook (after-init . benchmark-init/deactivate)
+  :config (benchmark-init/activate))
+
 ;; Exec path from shell in Mac OSX
 (use-package exec-path-from-shell
   :defer t
@@ -363,11 +370,11 @@ LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
 
 ;; Automatic garbage collection
 (use-package gcmh
-  :disabled t
   :delight gcmh-mode
   :commands gcmh-mode
   :custom (gcmh-verbose nil)
-  :config (gcmh-mode 1))
+  :init (setq gc-cons-threshold (* 80 1024 1024))
+  :config (emacs-startup , gcmh-mode))
 
 ;; Fix missing maps
 (if (not (boundp 'minibuffer-local-must-match-map))

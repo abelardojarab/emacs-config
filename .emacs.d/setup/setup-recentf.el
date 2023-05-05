@@ -25,7 +25,7 @@
 ;;; Code:
 
 (use-package recentf
-  :defer 4
+  :hook (on-first-file-hook . recentf-mode)
   :commands (recentf-mode
              recentf-add-file
              recentf-apply-filename-handlers)

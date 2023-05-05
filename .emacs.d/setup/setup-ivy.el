@@ -35,7 +35,7 @@
              ivy-switch-buffer
              ivy-switch-buffer-other-window)
   :diminish ivy-mode
-  :hook (after-init . ivy-mode)
+  :hook (on-first-input . ivy-mode)
   :defines (projectile-completion-system
             magit-completing-read-function)
   :bind (("C-c C-r" . ivy-resume)
@@ -192,7 +192,7 @@
 (use-package counsel-projectile
   :defer t
   :commands counsel-projectile-mode
-  :hook (after-init . counsel-projectile-mode))
+  :hook (on-first-input . counsel-projectile-mode))
 
 ;; Tramp ivy interface
 (use-package counsel-tramp

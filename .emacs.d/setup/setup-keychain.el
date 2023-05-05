@@ -42,6 +42,11 @@
                                        (if (eq window-system 'w32) ".exe" "") trustfile))
                   gnutls-trustfiles (list trustfile))))
 
+;; For the love of all that is holy, do not continue with untrusted connections!
+(use-package gnutls
+  :defer t
+  :custom (gnutls-verify-error t))
+
 ;; Keychain access
 (use-package keychain-environment
   :defer t

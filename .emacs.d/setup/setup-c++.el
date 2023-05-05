@@ -139,7 +139,7 @@
 
 ;; Show inline arguments hint for the C/C++ function at point
 (use-package function-args
-  :defer t
+  :disabled t
   :diminish function-args-mode
   :bind (:map c-mode-map
               ("C-j" . moo-jump-directory)

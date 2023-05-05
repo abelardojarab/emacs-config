@@ -134,6 +134,7 @@
              git-commit-setup-check-buffer)
   :defines (magit-ediff-dwim-show-on-hunks
             my/magit-commit-prompt)
+  :functions my/magit-clone-read-args-a
   :bind (("C-c g" . magit-status)
          :map ctl-x-map
          ("g"        . magit-status)
@@ -167,7 +168,9 @@
            (magit-refs-show-commit-count         'all)
            (git-commit-fill-column               120)
            (git-commit-summary-max-length        80)
-           (auto-revert-verbose                  nil))
+           (auto-revert-verbose                  nil)
+           (magit-clone-default-directory        "~/workspace/")
+           (magit-no-message (list "Turning on magit-auto-revert-mode...")))
   :init (progn
           (if (executable-find "p4")
               (use-package magit-p4))
@@ -210,6 +213,14 @@
             (when (looking-at "\n")
               (open-line 1))))
   :config (progn
+            (defun my/magit-clone-read-args-a (orig-fun &rest args)
+              "Sets `vertico-preselect' to `prompt' when cloning repos, so we
+clone to the default prompted directory, and not some random
+existing directory under `magit-clone-default-directory'."
+              (let ((vertico-preselect 'prompt))
+                (apply orig-fun args)))
+            (advice-add 'magit-clone-read-args :around #'my/magit-clone-read-args-a)
+
             ;; Customize lighters
             (delight
              '((magit-diff-mode    "Magit Diff")

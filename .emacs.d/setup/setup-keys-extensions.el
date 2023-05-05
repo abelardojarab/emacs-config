@@ -37,8 +37,8 @@
   :defer t
   :commands which-key-mode
   :diminish which-key-mode
-  :hook ((after-init . which-key-mode)
-         (lsp-mode   . lsp-enable-which-key-integration))
+  :hook ((on-first-input . which-key-mode)
+         (lsp-mode       . lsp-enable-which-key-integration))
   :if (and (not (equal system-type 'windows-nt))
            (display-graphic-p))
   :custom ((which-key-sort-order            #'which-key-prefix-then-key-order)
@@ -50,7 +50,9 @@
            (which-key-popup-type            'minibuffer)
            (which-key-side-window-location  'right)
            (which-key-side-window-max-width 0.33)
-           (which-key-special-keys          nil))
+           (which-key-special-keys          nil)
+           (which-key-show-early-on-C-h     t)
+           (which-key-idle-secondary-delay  1e-9))
   :config (progn
             (defadvice which-key--update (around bar activate)
               (ignore-errors add-do-it))

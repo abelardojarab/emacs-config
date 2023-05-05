@@ -33,6 +33,10 @@
 (when (fboundp 'global-so-long-mode)
   (global-so-long-mode))
 
+;; We’re also going to use on.el to provide some of the same hooks Doom uses.
+(use-package on
+  :demand t)
+
 ;; Treat all themes as safe
 (use-package custom
   :ensure nil
@@ -50,8 +54,8 @@
   :if (not (equal system-type 'windows-nt))
   :commands (global-auto-revert-mode
              auto-revert-mode)
-  :hook ((after-init . global-auto-revert-mode)
-         (dired-mode . auto-revert-mode))
+  :hook ((on-first-buffer . global-auto-revert-mode)
+         (dired-mode      . auto-revert-mode))
   :diminish (auto-revert-mode . " Ⓐ")
   :custom ((auto-revert-verbose                 nil)
            (global-auto-revert-non-file-buffers t)
@@ -290,11 +294,41 @@
 
 ;; Clean stale buffers periodically
 (use-package midnight
-  :hook (after-init . midnight-mode))
+  :hook (on-first-buffer . midnight-mode))
 
 ;; Posframe
 (use-package posframe
   :demand t)
+
+;; set-mark-command-repeat-pop means we only need to hit C-u or C-x once before subsequent C-SPC, which makes it much nicer to navigate.
+(setq set-mark-command-repeat-pop t)
+
+;; Vertico is a little bit nicer version of the builtin icomplete-vertical.
+(use-package vertico
+  :hook (on-first-input . vertico-mode))
+
+(use-package vertico-indexed
+  :after vertico
+  :config (vertico-indexed-mode))
+
+(use-package vertico-multiform
+  :after vertico
+  :custom (vertico-multiform-commands '((git-related-find-file (vertico-sort-function . nil))))
+  :config (vertico-multiform-mode))
+
+(use-package vertico-directory
+  :after vertico
+  :bind (:map vertico-map
+        ("RET" . vertico-directory-enter)
+        ("M-DEL" . vertico-directory-delete-word))
+  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
+
+;; Marginalia annotates minibuffer completions with some useful info.
+(use-package marginalia
+  :after vertico
+  :bind (:map minibuffer-local-map
+        ("M-A" . marginalia-cycle))
+  :config (marginalia-mode))
 
 ;; For native-comp branch
 (when (fboundp 'native-compile-async)

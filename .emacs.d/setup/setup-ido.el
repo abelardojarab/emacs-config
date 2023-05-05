@@ -81,8 +81,8 @@
 
 ;; Make compiler happy
 (use-package ido-hacks
-  :defer t
-  :hook (after-init . ido-hacks-mode))
+  :disabled t
+  :hook (on-first-buffer . ido-hacks-mode))
 
 ;; Ido everywhere
 (use-package ido-ubiquitous
@@ -93,7 +93,6 @@
 ;; Ido vertical mode
 (use-package ido-vertical-mode
   :disabled t
-  :demand t
   :config (ido-vertical-mode 1))
 
 ;; Use ibuffer
