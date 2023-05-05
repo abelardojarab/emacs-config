@@ -189,5 +189,10 @@
       (--each codes
         (set-fontset-font t `(,it . ,it) font)))))
 
+(use-package unicode-fonts
+  :defer t
+  :if (display-graphic-p)
+  :commands unicode-fonts-setup)
+
 (provide 'setup-fonts)
 ;;; setup-fonts.el ends here

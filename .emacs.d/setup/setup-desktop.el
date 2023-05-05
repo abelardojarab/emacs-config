@@ -146,5 +146,9 @@
             (setq dashboard-items '((recents . 10) (projects . 10)))
             (dashboard-setup-startup-hook)))
 
+(use-package page-break-lines
+  :hook ((dashboard-mode  . page-break-lines-mode)
+         (org-agenda-mode . page-break-lines-mode)))
+
 (provide 'setup-desktop)
 ;;; setup-desktop.el ends here

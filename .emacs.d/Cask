@@ -445,6 +445,7 @@
 (depends-on "undo-fu")
 (depends-on "undo-tree")
 (depends-on "unfill")
+(depends-on "unicode-fonts")
 (depends-on "unify-opening")
 (depends-on "use-package")
 (depends-on "use-package-chords")
