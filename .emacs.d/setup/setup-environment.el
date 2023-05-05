@@ -351,6 +351,9 @@ LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
   :hook (after-init . benchmark-init/deactivate)
   :config (benchmark-init/activate))
 
+(use-package benchmark-init-modes
+  :commands benchmark-init/show-durations-tabulated)
+
 ;; Exec path from shell in Mac OSX
 (use-package exec-path-from-shell
   :defer t
