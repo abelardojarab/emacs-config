@@ -148,6 +148,7 @@ parametersg."
 
             ;; dired extensions
             (use-package dired+
+              :disabled t
               :custom (diredp-hide-details-initially-flag nil)
               :init (setq diredp-bind-problematic-terminal-keys nil)
               :config (diredp-toggle-find-file-reuse-dir 1))
