@@ -133,6 +133,7 @@
   :diminish t
   :custom ((lsp-ui-sideline-enable               nil)
            (lsp-ui-doc-enable                    nil)
+           (lsp-ui-doc-show-with-cursor          t)
            (lsp-ui-doc-header                    t)
            (lsp-ui-doc-include-signature         t)
            (lsp-ui-doc-position                  'bottom)

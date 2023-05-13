@@ -40,8 +40,21 @@
 
 ;; Fringe configuration
 (use-package fringe
-  :config (if (display-graphic-p)
-              (fringe-mode '(28 . 12))))
+  :config (progn
+            (setq-default fringe-indicator-alist
+                          '((truncation nil nil)
+                            (continuation nil nil)
+                            (overlay-arrow . right-triangle)
+                            (up . up-arrow)
+                            (down . down-arrow)
+                            (top top-left-angle top-right-angle)
+                            (bottom bottom-left-angle bottom-right-angle top-right-angle top-left-angle)
+                            (top-bottom left-bracket right-bracket top-right-angle top-left-angle)
+                            (empty-line . empty-line)
+                            (unknown . question-mark)))
+
+            (if (display-graphic-p)
+              (fringe-mode '(28 . 12)))))
 
 ;; Enable tooltips
 (use-package tooltip
@@ -98,6 +111,12 @@ non-nil."
                         ;; take Emacs 26 line numbers into account
                         (+ (if (boundp 'display-line-numbers) 6 0)
                            fill-column)))
+
+;; display-line-numbers is replacement of old linum-mode
+(use-package display-line-numbers
+  :if (boundp 'display-line-numbers)
+  :custom (display-line-numbers-widen t)
+  :hook ((prog-mode conf-mode) . display-line-numbers-mode))
 
 ;; Faster line numbers
 (use-package linum-ex

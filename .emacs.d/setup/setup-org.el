@@ -95,7 +95,7 @@
 
             ;; Fancy ellipsis
             (if (display-graphic-p)
-                (setq org-ellipsis "▼"))
+                (setq org-ellipsis "↴"))
 
             ;; Tweaks
             (add-hook 'org-mode-hook
@@ -246,7 +246,8 @@
               :config (progn
                         ;; Default export
                         (use-package ox-org)
-                        (use-package ox-extra)
+                        (use-package ox-extra
+                          :config (ox-extras-activate '(latex-header-blocks ignore-headlines)))
 
                         ;; Beamer/ODT/Markdown exporters
                         (use-package ox-beamer)
