@@ -116,16 +116,16 @@
 
                 ;; Use mathematical symbols
                 (when (and (display-graphic-p)
-                           (find-font (font-spec :name "Fira Code")))
-                  (let ((utf8-font "Fira Code"))
+                           (find-font (font-spec :name "MesloLGMDZ Nerd Font Mono")))
+                  (let ((utf8-font "MesloLGMDZ Nerd Font Mono"))
                     (set-fontset-font "fontset-startup" '(#x000000 . #x3FFFFF) utf8-font)
                     (set-fontset-font "fontset-default" '(#x000000 . #x3FFFFF) utf8-font)
                     (set-fontset-font "fontset-standard" '(#x000000 . #x3FFFFF) utf8-font)))
 
                 ;; Specify fonts for all unicode characters
-                (when (and (member "Fira Code" (font-family-list))
+                (when (and (member "MesloLGMDZ Nerd Font Mono" (font-family-list))
                            (display-graphic-p))
-                  (set-fontset-font t 'unicode "Fira Code" nil 'prepend))))
+                  (set-fontset-font t 'unicode "MesloLGMDZ Nerd Font Mono" nil 'prepend))))
 
             ;; Fontify frame only for graphical mode
             (when (display-graphic-p)

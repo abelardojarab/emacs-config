@@ -69,6 +69,9 @@
             (defadvice powerline-minor-modes (around delight-powerline-minor-modes activate)
               (let ((inhibit-mode-name-delight nil)) ad-do-it))))
 
+;; Better fonts for doom modeline
+(use-package nerd-icons)
+
 ;; Doom modeline
 (use-package doom-modeline
   :defer t
@@ -79,7 +82,7 @@
            (doom-modeline-major-mode-icon t)
            (doom-modeline-minor-modes     nil)
            (doom-modeline-lsp             t)
-           (doom-modeline-height          15)))
+           (doom-modeline-height          24)))
 
 ;; Improved list of minor-modes and related menus
 (use-package minions
