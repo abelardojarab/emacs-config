@@ -1,6 +1,6 @@
 ;;; setup-versioning.el ---                         -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -608,6 +608,13 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
                  (defalias 'smerge-diff-base-upper 'smerge-diff-base-mine)
                  (defalias 'smerge-diff-upper-lower 'smerge-diff-mine-other)
                  (defalias 'smerge-diff-base-lower 'smerge-diff-base-other))))
+
+;; A git blame plugin for emacs inspired by VS Code’s GitLens plugin
+(use-package blamer
+  :custom
+  (blamer-idle-time 0.3)
+  (blamer-min-offset 70)
+  :hook (on-first-buffer . global-blamer-mode))
 
 (provide 'setup-versioning)
 ;;; setup-versioning.el ends here

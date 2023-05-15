@@ -42,6 +42,7 @@
 (depends-on "bicycle")
 (depends-on "bind-key")
 (depends-on "bison-mode")
+(depends-on "blamer")
 (depends-on "bm")
 (depends-on "bookmark+")
 (depends-on "browse-kill-ring")
