@@ -1,6 +1,6 @@
 ;;; setup-lsp.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -131,18 +131,19 @@
 ;; flycheck integration & higher level UI modules
 (use-package lsp-ui
   :diminish t
-  :custom ((lsp-ui-sideline-enable               nil)
-           (lsp-ui-doc-enable                    nil)
+  :custom ((lsp-ui-doc-enable                    nil)
            (lsp-ui-doc-show-with-cursor          t)
            (lsp-ui-doc-header                    t)
            (lsp-ui-doc-include-signature         t)
            (lsp-ui-doc-position                  'bottom)
            (lsp-ui-flycheck-enable               t)
            (lsp-ui-imenu-enable                  t)
+           (lsp-ui-sideline-enable               nil)
            (lsp-ui-sideline-ignore-duplicate     t)
            (lsp-ui-sideline-show-symbol          nil)
            (lsp-ui-sideline-show-diagnostics     t)
            (lsp-ui-sideline-show-code-actions    t)
+           (lsp-ui-sideline-show-hover           t)
            (lsp-ui-peek-enable                   t)
            (lsp-ui-peek-always-show              t)
            (lsp-ui-doc-delay                     0.7 "higher than eldoc delay"))

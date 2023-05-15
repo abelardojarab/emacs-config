@@ -1,6 +1,6 @@
 ;;; setup-folding.el ---                       -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2021  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -155,7 +155,7 @@
 
 ;; origami folding package
 (use-package origami
-  :defer t
+  :defer t ;; not maintained anymore
   :custom (origami-show-fold-header t)
   :commands (hydra-origami/body
              global-origami-mode

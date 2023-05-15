@@ -1,5 +1,5 @@
 ;; -*-mode: Emacs-Lisp; -*-
-;; Copyright (C) 1996-2022 Abelardo Jara-Berrocal
+;; Copyright (C) 1996-2023 Abelardo Jara-Berrocal
 ;; URL: http://jaraberrocal.readmyblog.org
 ;; This file is free software licensed under the terms of the
 ;; GNU General Public License, version 3 or later.
@@ -272,6 +272,7 @@
 (depends-on "langtool")
 (depends-on "latex-pretty-symbols")
 (depends-on "levenshtein")
+(depends-on "line-reminder")
 (depends-on "list-utils")
 (depends-on "log4e")
 (depends-on "loop")
@@ -403,6 +404,7 @@
 (depends-on "shackle")
 (depends-on "shell-pop")
 (depends-on "showkey")
+(depends-on "doc-show-inline")
 ;; (depends-on "site-lisp")
 (depends-on "skewer-mode")
 (depends-on "slack")

@@ -1,6 +1,6 @@
 ;;; setup-c++.el ---                                 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2019, 2021  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -226,6 +226,14 @@
 
 (use-package opencl-mode
   :mode (("\\.cl\\'"    . opencl-mode)))
+
+(use-package doc-show-inline
+  :commands (doc-show-inline-mode)
+  :config
+  (define-key c-mode-map (kbd "C-;") 'doc-show-inline-mode)
+  (define-key c++-mode-map (kbd "C-;") 'doc-show-inline-mode)
+  :hook ((c-mode . doc-show-inline-mode)
+         (c++-mode . doc-show-inline-mode)))
 
 (provide 'setup-c++)
 ;;; setup-c++.el ends here

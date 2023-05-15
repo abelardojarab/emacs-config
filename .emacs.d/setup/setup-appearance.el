@@ -1,6 +1,6 @@
 ;;; setup-appearance.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2021  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -54,7 +54,7 @@
                             (unknown . question-mark)))
 
             (if (display-graphic-p)
-              (fringe-mode '(28 . 12)))))
+                (fringe-mode '(28 . 12)))))
 
 ;; Enable tooltips
 (use-package tooltip
@@ -289,6 +289,30 @@ all the buffers."
 ;; Do not show blank lines at the end of the file:
 (setq-default indicate-empty-lines nil)
 (setq-default indicate-buffer-boundaries 'left)
+
+(require 'indicators)
+(use-package line-reminder
+  :init (progn
+          (setq line-reminder-show-option 'indicators)
+          (setq line-reminder-linum-left-string "")
+          (setq line-reminder-linum-right-string " "))
+  :config (progn
+            (add-hook 'prog-mode-hook
+                      (function
+                       (lambda ()
+                         (line-reminder-mode t)
+                         (setq line-reminder-show-option 'indicators))))
+            (fringe-helper-define 'my-line-reminder-bitmap nil
+                                  "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.."
+                                  "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.."
+                                  "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.."
+                                  "..xxx.." "..xxx.."  ; original bitmap stops here
+                                  "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.."
+                                  "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.."  ; add a tone to make it longer
+                                  )
+
+            (setq line-reminder-bitmap 'my-line-reminder-bitmap))
+  :hook (on-first-buffer . global-line-reminder-mode))
 
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here

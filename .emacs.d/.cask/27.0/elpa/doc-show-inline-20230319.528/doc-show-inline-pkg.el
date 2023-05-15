@@ -1,0 +1,2 @@
+;;; Generated package description from doc-show-inline.el  -*- no-byte-compile: t -*-
+(define-package "doc-show-inline" "20230319.528" "Show doc-strings found in external files" '((emacs "27.1")) :commit "261554a788e9cc6c0ba538a732667e514fab70c6" :authors '(("Campbell Barton" . "ideasman42@gmail.com")) :maintainers '(("Campbell Barton" . "ideasman42@gmail.com")) :maintainer '("Campbell Barton" . "ideasman42@gmail.com") :keywords '("convenience") :url "https://codeberg.org/ideasman42/emacs-doc-show-inline")
