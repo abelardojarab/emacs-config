@@ -1,6 +1,6 @@
 ;;; custom.el ---                                    -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2017-2022  Abelardo Jara-Berrocal
+;; Copyright (C) 2017-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -155,7 +155,7 @@
  '(delete-by-moving-to-trash t nil nil "Customized with use-package files")
  '(delete-old-versions t nil nil "Customized with use-package no-littering")
  '(diff-hl-flydiff-mode t)
- '(dimmer-fraction 0.25 t nil "Customized with use-package dimmer")
+ '(dimmer-fraction 0.25 nil nil "Customized with use-package dimmer")
  '(dired-async-mode t)
  '(dired-auto-revert-buffer t nil nil "Customized with use-package dired-x")
  '(dired-dwim-target t nil nil "Customized with use-package dired-x")
@@ -171,10 +171,7 @@
  '(display-time-default-load-average nil nil nil "Customized with use-package time")
  '(display-time-mode t)
  '(display-time-use-mail-icon t nil nil "Customized with use-package time")
- '(doom-modeline-buffer-file-name-style 'truncate-with-project nil nil "Customized with use-package doom-modeline")
- '(doom-modeline-icon t nil nil "Customized with use-package doom-modeline")
- '(doom-modeline-major-mode-icon t nil nil "Customized with use-package doom-modeline")
- '(doom-modeline-minor-modes t nil nil "Customized with use-package doom-modeline")
+ '(doom-modeline-mode t)
  '(dumb-jump-aggressive nil t nil "Customized with use-package dumb-jump")
  '(dumb-jump-selector 'ivy t nil "Customized with use-package dumb-jump")
  '(ecb-auto-save-before-etags-methods-rebuild nil t nil "Customized with use-package ecb")
@@ -546,7 +543,6 @@
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
  '(nxml-auto-insert-xml-declaration-flag t t nil "Customized with use-package nxml-mode")
  '(nxml-slash-auto-complete-flag t t nil "Customized with use-package nxml-mode")
- '(nyan-cat-face-number 4 t nil "Customized with use-package nyan-mode")
  '(org-CUA-compatible t)
  '(org-agenda-compact-blocks t t nil "Customized with use-package org-agenda")
  '(org-agenda-default-appointment-duration 60 t nil "Customized with use-package org-agenda")
@@ -646,7 +642,6 @@
  '(pos-tip-border-width 1 t nil "Customized with use-package pos-tip")
  '(pos-tip-foreground-color "#272822")
  '(pos-tip-internal-border-width 6 t nil "Customized with use-package pos-tip")
- '(powerline-default-separator 'slant nil nil "Customized with use-package spaceline")
  '(projectile-mode t nil (projectile))
  '(projectile-mode-line-prefix "" nil nil "Customized with use-package projectile")
  '(projectile-sort-order 'recentf nil nil "Customized with use-package projectile")
@@ -758,11 +753,6 @@
  '(smtpmail-stream-type 'ssl nil nil "Customized with use-package smtpmail")
  '(sp-escape-quotes-after-insert nil nil nil "Customized with use-package smartparens")
  '(sp-max-pair-length 2 t nil "Customized with use-package smartparens")
- '(spaceline-display-default-perspective t t nil "Customized with use-package spaceline")
- '(spaceline-flycheck-bullet "• %s" t nil "Customized with use-package spaceline")
- '(spaceline-highlight-face-func 'spaceline-highlight-face-modified t nil "Customized with use-package spaceline")
- '(spaceline-separator-dir-left '(left . left) t nil "Customized with use-package spaceline")
- '(spaceline-separator-dir-right '(right . right) t nil "Customized with use-package spaceline")
  '(stack-trace-on-error t t nil "Customized with use-package ecb")
  '(starttls-extra-arguments nil nil nil "Customized with use-package starttls")
  '(starttls-gnutls-program "gnutls-cli" nil nil "Customized with use-package starttls")

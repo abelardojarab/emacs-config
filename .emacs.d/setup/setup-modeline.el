@@ -64,6 +64,13 @@
   :if (display-graphic-p)
   :after spaceline-config)
 
+;; Improved list of minor-modes and related menus
+(use-package minions
+  :demand t
+  :commands minions-mode
+  :custom (minions-mode-line-lighter "#")
+  :config (minions-mode 1))
+
 ;; Doom modeline
 (use-package doom-modeline
   :defer t
@@ -75,14 +82,14 @@
            (doom-modeline-minor-modes       nil)
            (doom-modeline-lsp               t)
            (doom-modeline-height            24)
-           (doom-modeline-project-detection 'projectile)))
-
-;; Improved list of minor-modes and related menus
-(use-package minions
-  :demand t
-  :commands minions-mode
-  :custom (minions-mode-line-lighter "#")
-  :config (minions-mode 1))
+           (doom-modeline-env-version       t)
+           (doom-modeline-persp-name             t)
+           (doom-modeline-buffer-file-name-style 'truncate-upto-project)
+           (doom-modeline-project-detection      'projectile))
+  :config (progn
+            ;; Whether display minor modes in mode-line or not.
+            (setq doom-modeline-minor-modes (featurep 'minions))
+            ))
 
 (provide 'setup-modeline)
 ;;; setup-modeline.el ends here
