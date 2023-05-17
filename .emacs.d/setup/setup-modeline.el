@@ -1,6 +1,6 @@
 ;;; setup-modeline.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2021 Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023 Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -31,6 +31,7 @@
 
 ;; Powerline
 (use-package powerline
+  :disabled t
   :after projectile
   :config (unless (display-graphic-p)
             (powerline-default-theme)))
@@ -48,6 +49,7 @@
 
 ;; Spaceline configuration
 (use-package spaceline-config
+  :disabled t
   :if (display-graphic-p)
   :after spaceline
   :config (progn
@@ -58,19 +60,9 @@
             (spaceline-toggle-version-control-off)))
 
 (use-package spaceline-all-the-icons
+  :disabled t
   :if (display-graphic-p)
   :after spaceline-config)
-
-;; Customize Emacs lighters
-(use-package delight
-  :config (progn
-            (defadvice powerline-major-mode (around delight-powerline-major-mode activate)
-              (let ((inhibit-mode-name-delight nil)) ad-do-it))
-            (defadvice powerline-minor-modes (around delight-powerline-minor-modes activate)
-              (let ((inhibit-mode-name-delight nil)) ad-do-it))))
-
-;; Better fonts for doom modeline
-(use-package nerd-icons)
 
 ;; Doom modeline
 (use-package doom-modeline
@@ -78,11 +70,12 @@
   :commands doom-modeline-mode
   :hook (after-init   . doom-modeline-mode)
   :custom ((doom-modeline-buffer-file-name-style 'truncate-with-project)
-           (doom-modeline-icon            t)
-           (doom-modeline-major-mode-icon t)
-           (doom-modeline-minor-modes     nil)
-           (doom-modeline-lsp             t)
-           (doom-modeline-height          24)))
+           (doom-modeline-icon              t)
+           (doom-modeline-major-mode-icon   t)
+           (doom-modeline-minor-modes       nil)
+           (doom-modeline-lsp               t)
+           (doom-modeline-height            24)
+           (doom-modeline-project-detection 'projectile)))
 
 ;; Improved list of minor-modes and related menus
 (use-package minions

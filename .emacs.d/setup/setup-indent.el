@@ -1,6 +1,6 @@
 ;;; setup-indent.el ---                              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -116,7 +116,7 @@
 (use-package highlight-indent-guides
   :if (display-graphic-p)
   :defer t
-  :diminish t
+  :diminish highlight-indent-guides-mode
   :commands highlight-indent-guides-mode
   ;; :hook (prog-mode . highlight-indent-guides-mode)
   :custom ((highlight-indent-guides-method                   'character)

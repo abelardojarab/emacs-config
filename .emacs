@@ -1,5 +1,5 @@
 ;; -*-mode: Emacs-Lisp; -*-
-;; Copyright (C) 1996-2022 Abelardo Jara-Berrocal
+;; Copyright (C) 1996-2023 Abelardo Jara-Berrocal
 ;; URL: https://jaraberrocal.readmyblog.org
 ;; This file is free software licensed under the terms of the
 ;; GNU General Public License, version 3 or later.
@@ -93,7 +93,7 @@
     ;; Setup cursor
     (require 'setup-cursor)
 
-    ;; ;; Setup scrolling
+    ;; Setup scrolling
     (require 'setup-scroll)
 
     ;; Setup themes

@@ -1,6 +1,6 @@
 ;;; setup-package.el ---                     -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -194,7 +194,8 @@ corresponding `.el' file."
 (use-package cl)
 (use-package cl-lib)
 (use-package bind-key)
-(use-package diminish)
+(use-package diminish :demand t)
+(use-package delight :demand t)
 (use-package let-alist)
 (use-package color)
 (use-package ansi-color)

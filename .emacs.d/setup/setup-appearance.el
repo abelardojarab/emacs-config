@@ -165,6 +165,9 @@ non-nil."
   :if (display-graphic-p)
   :commands all-the-icons-insert)
 
+;; Better fonts
+(use-package nerd-icons)
+
 ;; Better characters
 (unless standard-display-table
   (setq standard-display-table (make-display-table)))
@@ -290,7 +293,9 @@ all the buffers."
 (setq-default indicate-empty-lines nil)
 (setq-default indicate-buffer-boundaries 'left)
 
-(require 'indicators)
+(use-package indicators
+  :diminish indicators-mode)
+
 (use-package line-reminder
   :init (progn
           (setq line-reminder-show-option 'indicators)
