@@ -1,0 +1,2 @@
+;;; Generated package description from consult-dir.el  -*- no-byte-compile: t -*-
+(define-package "consult-dir" "20221001.1748" "Insert paths into the minibuffer prompt" '((emacs "26.1") (consult "0.9") (project "0.6.0")) :commit "ed8f0874d26f10f5c5b181ab9f2cf4107df8a0eb" :authors '(("Karthik Chikmagalur")) :maintainers '(("Karthik Chikmagalur" . "karthik.chikmagalur@gmail.com")) :maintainer '("Karthik Chikmagalur" . "karthik.chikmagalur@gmail.com") :keywords '("convenience") :url "https://github.com/karthink/consult-dir")

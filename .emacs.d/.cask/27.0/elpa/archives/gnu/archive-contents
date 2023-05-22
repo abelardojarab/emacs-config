@@ -252,7 +252,7 @@
 	    ("Artur Malabarba" . "emacs@endlessparentheses.com"))
 	   (:commit . "0cf8b60f62876f3e75653a5fb30d5d5cdd74c586"))])
  (beframe .
-	  [(0 2 0)
+	  [(0 3 0)
 	   ((emacs
 	     (28 1)))
 	   "Isolate buffers per frame" tar
@@ -260,7 +260,7 @@
 	    (:maintainer "Protesilaos Stavrou General Issues" . "~protesilaos/general-issues@lists.sr.ht")
 	    (:authors
 	     ("Protesilaos Stavrou" . "info@protesilaos.com"))
-	    (:commit . "edfab6eefe4ac35cd8d1ed87fc7f670496d25e40"))])
+	    (:commit . "24551a22b4561cdf4c256b941aeb6176e993c280"))])
  (bind-key .
 	   [(2 4 1)
 	    nil "A simple way to manage personal keybindings" tar
@@ -381,6 +381,18 @@
 	       (:authors
 		("Artur Malabarba" . "emacs@endlessparentheses.com"))
 	       (:keywords "lisp"))])
+ (calibre .
+	  [(1 3 3)
+	   ((emacs
+	     (27 1))
+	    (compat
+	     (29 1 4 1)))
+	   "Interact with Calibre libraries from Emacs" tar
+	   ((:url . "https://git.disroot.org/kjartanoli/calibre.el")
+	    (:maintainer "Kjartan Oli Agustsson" . "kjartanoli@disroot.org")
+	    (:authors
+	     ("Kjartan Oli Agustsson" . "kjartanoli@disroot.org"))
+	    (:commit . "ad65bf9b51edaf85371db958a1dcaff2f620519f"))])
  (cape .
        [(0 15)
 	((emacs
@@ -1013,7 +1025,7 @@
 	 ("Eduardo Ochs" . "eduardoochs@gmail.com"))
 	(:commit . "16613c18c5ec17755f083f4839bca7e4e05dd4c7"))])
  (ef-themes .
-	    [(0 11 0)
+	    [(1 0 1)
 	     ((emacs
 	       (27 1)))
 	     "Colorful and legible themes" tar
@@ -1022,7 +1034,7 @@
 	      (:maintainer "Ef-Themes Development" . "~protesilaos/ef-themes@lists.sr.ht")
 	      (:authors
 	       ("Protesilaos Stavrou" . "info@protesilaos.com"))
-	      (:commit . "1d7e6e78df914e8829e6511a935616b0895403ae"))])
+	      (:commit . "4224ae4b6e3e04e1b5b5ab37b9b8e95de6a679d7"))])
  (eglot .
 	[(1 15)
 	 ((emacs
@@ -1126,7 +1138,7 @@
 		    ("Omar Antolín Camarena" . "omar@matem.unam.mx"))
 		   (:commit . "127492fac048cecfdba145d496a902022a68d1d5"))])
  (ement .
-	[(0 9 1)
+	[(0 9 3)
 	 ((emacs
 	   (27 1))
 	  (map
@@ -1149,7 +1161,7 @@
 	  (:maintainer "Adam Porter" . "adam@alphapapa.net")
 	  (:authors
 	   ("Adam Porter" . "adam@alphapapa.net"))
-	  (:commit . "dc3514e5c69d061d9a6a4ba36257de3209f6b8fa"))])
+	  (:commit . "16e05cf4d3f3cc8dcfa30a4c2426066dbef798ad"))])
  (emms .
        [(15)
 	((cl-lib
@@ -1933,7 +1945,7 @@
 	      ("Terrence Brannon" . "metaperl@gmail.com"))
 	     (:maintainer nil . "emacs-devel@gnu.org"))])
  (latex-table-wizard .
-		     [(1 5 1)
+		     [(1 5 2)
 		      ((emacs
 			(27 1))
 		       (auctex
@@ -1946,7 +1958,7 @@
 		       (:maintainer "Enrico Flor" . "enrico@eflor.net")
 		       (:authors
 			("Enrico Flor" . "enrico@eflor.net"))
-		       (:commit . "76d307f27eab65470592400819afaba493c78ef4"))])
+		       (:commit . "2998be936aa31415051ee2a8d2912424045d966c"))])
  (leaf .
        [(4 5 5)
 	((emacs
@@ -2508,18 +2520,18 @@
 	      ("Taylor Grinn" . "grinntaylor@gmail.com"))
 	     (:commit . "9ae5d4a2c576671e8f7ab20d202eefa65af51b25"))])
  (org-remark .
-	     [(1 0 5)
+	     [(1 1 0)
 	      ((emacs
 		(27 1))
 	       (org
 		(9 4)))
 	      "Highlight & annotate any text files" tar
 	      ((:url . "https://github.com/nobiot/org-remark")
-	       (:keywords "org-mode" "annotation" "writing" "note-taking" "marginal-notes")
+	       (:keywords "org-mode" "annotation" "note-taking" "marginal-notes" "wp")
 	       (:maintainer "Noboru Ota" . "me@nobiot.com")
 	       (:authors
 		("Noboru Ota" . "me@nobiot.com"))
-	       (:commit . "576e5680682bfb80a50b057b8752e0674d766f8d"))])
+	       (:commit . "41a615c9f865c4c192d074f95b88cf2290cbc971"))])
  (org-transclusion .
 		   [(1 3 2)
 		    ((emacs
@@ -2698,7 +2710,7 @@
 	 ("Adam Porter" . "adam@alphapapa.net"))
 	(:commit . "367c6a5a9a4bf320dcccb54bdd80ac46aa8be06f"))])
  (poke .
-       [(3 0)
+       [(3 2)
 	((emacs
 	  (25)))
 	"Emacs meets GNU poke!" tar
@@ -2706,7 +2718,7 @@
 	 (:maintainer "Jose E. Marchesi" . "jemarch@gnu.org")
 	 (:authors
 	  ("Jose E. Marchesi" . "jemarch@gnu.org"))
-	 (:commit . "bc0bd9e618a468bbb0d0a68cdc2462db43b5b689"))])
+	 (:commit . "77bdcce97e06bbd6771f35acbb3f399457bebb71"))])
  (poke-mode .
 	    [(3 0)
 	     nil "Major mode for editing Poke programs" tar
