@@ -172,6 +172,9 @@
            (magit-clone-default-directory        "~/workspace/")
            (magit-no-message (list "Turning on magit-auto-revert-mode...")))
   :init (progn
+          (use-package magit-popup
+            :functions magit-define-popup)
+
           (if (executable-find "p4")
               (use-package magit-p4))
 

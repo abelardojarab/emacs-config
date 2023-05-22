@@ -1,6 +1,6 @@
 ;;; setup-spell.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -224,7 +224,7 @@ Don't read buffer-local settings or word lists."
 
 ;; Jinx is a just-in-time spell checker.
 (use-package jinx
-  :if (executable-find "enchant")
+  :if (executable-find "enchant2")
   :hook (on-first-buffer . global-jinx-mode)
   :bind ([remap ispell-word] . jinx-correct))
 
