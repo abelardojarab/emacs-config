@@ -319,15 +319,15 @@
 (use-package vertico-directory
   :after vertico
   :bind (:map vertico-map
-        ("RET" . vertico-directory-enter)
-        ("M-DEL" . vertico-directory-delete-word))
+              ("RET" . vertico-directory-enter)
+              ("M-DEL" . vertico-directory-delete-word))
   :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 
 ;; Marginalia annotates minibuffer completions with some useful info.
 (use-package marginalia
   :after vertico
   :bind (:map minibuffer-local-map
-        ("M-A" . marginalia-cycle))
+              ("M-A" . marginalia-cycle))
   :config (marginalia-mode))
 
 ;; For native-comp branch
@@ -338,6 +338,22 @@
   (setq comp-async-jobs-number 4 ;; not using all cores
         comp-deferred-compilation t
         comp-deferred-compilation-black-list '()))
+
+;; Bug workaround, 2023-02-26:
+(if (not (boundp 'comp-enable-subr-trampolines))
+    (setq comp-enable-subr-trampolines native-comp-enable-subr-trampolines))
+
+(defun has-fast-json ()
+  "Return t if \"json-serialize\" is implemented as a C function.
+This was done for Emacs 27 but not all builds include the C version,
+which is a lot faster."
+  (and
+   (subrp (symbol-function 'json-serialize))
+   ;; test that it works -- on Windows the DLL (or deps) may be missing
+   (equal (json-serialize (json-parse-string "[123]")) "[123]")))
+
+(unless (has-fast-json)
+  (warn "This emacs is using older elisp json functions; maybe rebuild with libjansson?"))
 
 (provide 'setup-general)
 ;;; setup-general.el ends here

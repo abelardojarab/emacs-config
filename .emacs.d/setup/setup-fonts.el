@@ -1,6 +1,6 @@
 ;;; setup-fonts.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -45,6 +45,10 @@
               (let ()
                 (when (and (find-font (font-spec :name my/main-programming-font))
                            (find-font (font-spec :name my/main-writing-font)))
+
+                  ;; I like italic comment face as long as the actual font supports it
+                  ;; (which Hack does)
+                  (set-face-italic font-lock-comment-face t)
 
                   ;; Adjust text size based on resolution
                   (case system-type

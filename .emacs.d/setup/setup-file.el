@@ -1,6 +1,6 @@
 ;;; setup-file.el ---                                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2021  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -119,6 +119,7 @@
   :demand t
   :custom (read-quoted-char-radix 10)
   :config (progn
+            (set-charset-priority 'unicode)
             (set-input-method nil)
             (if (equal system-type 'windows-nt)
                 (progn
@@ -129,6 +130,7 @@
                   (set-terminal-coding-system 'utf-8)
                   (set-keyboard-coding-system 'utf-8)
                   (set-selection-coding-system 'utf-16-le)
+                  (setq default-process-coding-system '(utf-8-unix . utf-8-unix))
                   (prefer-coding-system 'utf-8-unix)) ;; progn
               (progn
                 (set-locale-environment "en_US.UTF-8")
@@ -139,6 +141,7 @@
                 (set-terminal-coding-system 'utf-8-unix)
                 (set-keyboard-coding-system 'utf-8-unix)
                 (set-selection-coding-system 'utf-8-unix)
+                (setq default-process-coding-system '(utf-8-unix . utf-8-unix))
                 (prefer-coding-system 'utf-8-unix)))))
 
 ;; sudo edit

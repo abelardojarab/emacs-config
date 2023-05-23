@@ -1,6 +1,6 @@
 ;;; setup-jump.el ---                       -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -34,6 +34,7 @@
              hydra-dumb-jump/body)
   :custom ((dumb-jump-selector  'ivy)
            (dumb-jump-aggressive nil))
+  :hook (xref-backend-functions . dumb-jump-xref-activate)
   :hydra (hydra-dumb-jump (:color blue)
                           "Dumb Jump"
                           ("g" dumb-jump-go "Jump to def")

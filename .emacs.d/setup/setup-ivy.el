@@ -229,6 +229,9 @@ not a list, return a one-element list containing OBJECT."
         (completion-category-overrides nil))
     (consult-line)))
 
+(use-package consult-xref
+  :commands consult-xref)
+
 (use-package consult
   :after projectile
   :defines consult-buffer-sources
