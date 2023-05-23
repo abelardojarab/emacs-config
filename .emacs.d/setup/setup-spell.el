@@ -224,7 +224,7 @@ Don't read buffer-local settings or word lists."
 
 ;; Jinx is a just-in-time spell checker.
 (use-package jinx
-  :if (executable-find "enchant2")
+  :if (executable-find "enchant-2")
   :hook (on-first-buffer . global-jinx-mode)
   :bind ([remap ispell-word] . jinx-correct))
 
