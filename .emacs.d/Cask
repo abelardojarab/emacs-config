@@ -162,6 +162,7 @@
 (depends-on "fira-code-mode")
 (depends-on "flim")
 (depends-on "flycheck")
+(depends-on "flycheck-clang-tidy")
 (depends-on "flycheck-irony")
 (depends-on "flycheck-posframe")
 (depends-on "flycheck-pos-tip")

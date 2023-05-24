@@ -291,7 +291,7 @@ all the buffers."
 
 ;; Do not show blank lines at the end of the file:
 (setq-default indicate-empty-lines nil)
-(setq-default indicate-buffer-boundaries 'left)
+(setq-default indicate-buffer-boundaries nil)
 
 (use-package indicators
   :diminish indicators-mode)

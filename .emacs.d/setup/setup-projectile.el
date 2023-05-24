@@ -1,6 +1,6 @@
 ;;; setup-projectile.el ---                          -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -75,7 +75,10 @@
                   projectile-enable-caching      t
                   projectile-sort-order          'recently-active
                   projectile-indexing-method     'alien
-                  projectile-globally-ignored-files (quote ("TAGS" "*.log" "*DS_Store" "node-modules")))
+                  projectile-globally-ignored-file-suffixes '("#" "~" ".swp" ".o" ".so" ".exe"
+                                                              ".dll" ".elc" ".pyc" ".jar" ".class")
+                  projectile-globally-ignored-files (quote ("TAGS" "*.log" "*DS_Store" "node-modules"
+                                                            "build" ".cache" ".vscode" ".idea" "contrib" "__pychace__")))
             (projectile-global-mode)))
 
 ;; Integration with ripgrep

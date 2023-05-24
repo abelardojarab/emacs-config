@@ -1,6 +1,6 @@
 ;;; setup-flycheck.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -35,7 +35,12 @@
                 (add-hook mode (lambda () (flycheck-mode t))))
               my/flycheck-modes)
   :hook ((flycheck-after-syntax-check . my/flycheck-adjust-syntax-eagerness))
-  :custom ((flycheck-check-syntax-automatically '(save mode-enabled))
+  :bind
+  ((:map flycheck-error-list-mode-map
+         ("q" . delete-window)
+         ("j" . flycheck-error-list-next-error)
+         ("k" . flycheck-error-list-previous-error)))
+  :custom ((flycheck-check-syntax-automatically '(save idle-change mode-enabled))
            (flycheck-shellcheck-follow-sources  nil)
            (flycheck-disabled-checkers          '(html-tidy emacs-lisp-checkdoc))
            (flycheck-highlighting-mode          'lines)
@@ -77,6 +82,8 @@ flycheck-handle-idle-change, which removes the forced deferred."
               (add-to-list 'flycheck-checkers 'proselint))
 
             ;; Define fringe indicator / warning levels
+            (define-fringe-bitmap 'flycheck-fringe-bitmap-double-arrow
+              [16 48 112 240 112 48 16] nil nil 'center)
             (define-fringe-bitmap 'flycheck-fringe-bitmap-ball
               (vector #b00000000
                       #b00000000
@@ -95,20 +102,56 @@ flycheck-handle-idle-change, which removes the forced deferred."
                       #b00000000
                       #b00000000
                       #b00000000))
+            (define-fringe-bitmap 'flycheck-fringe-bitmap-one-excl
+              (vector #b00000000
+                      #b00000000
+                      #b00000000
+                      #b00110000
+                      #b00110000
+                      #b00110000
+                      #b00110000
+                      #b00110000
+                      #b00110000
+                      #b00110000
+                      #b00110000
+                      #b00000000
+                      #b00110000
+                      #b00110000
+                      #b00000000
+                      #b00000000
+                      #b00000000))
+            (define-fringe-bitmap 'flycheck-fringe-bitmap-two-excl
+              (vector #b00000000
+                      #b00000000
+                      #b00000000
+                      #b01100110
+                      #b01100110
+                      #b01100110
+                      #b01100110
+                      #b01100110
+                      #b01100110
+                      #b01100110
+                      #b01100110
+                      #b00000000
+                      #b01100110
+                      #b01100110
+                      #b00000000
+                      #b00000000
+                      #b00000000))
             (flycheck-define-error-level 'error
               :severity 2
               :overlay-category 'flycheck-error-overlay
-              :fringe-bitmap 'flycheck-fringe-bitmap-ball
+              :fringe-bitmap 'flycheck-fringe-bitmap-two-excl
               :fringe-face 'flycheck-fringe-error)
             (flycheck-define-error-level 'warning
               :severity 1
               :overlay-category 'flycheck-warning-overlay
-              :fringe-bitmap 'flycheck-fringe-bitmap-ball
+              :fringe-bitmap 'flycheck-fringe-bitmap-one-excl
               :fringe-face 'flycheck-fringe-warning)
             (flycheck-define-error-level 'info
               :severity 0
               :overlay-category 'flycheck-info-overlay
-              :fringe-bitmap 'flycheck-fringe-bitmap-ball
+              :fringe-bitmap 'flycheck-fringe-bitmap-double-arrow
               :fringe-face 'flycheck-fringe-info)
 
             ;; Display error messages on one line in minibuffer
@@ -144,6 +187,11 @@ flycheck-handle-idle-change, which removes the forced deferred."
   :hook (c-mode-common . my/flycheck-rtags-setup)
   :config (defun my/flycheck-rtags-setup ()
             (flycheck-select-checker 'rtags)))
+
+(use-package flycheck-clang-tidy
+  :if (executable-find "clang-tidy")
+  :after flycheck
+  :hook (flycheck-mode . flycheck-clang-tidy-setup))
 
 ;; Flycheck grammarly
 ;; (use-package flycheck-grammarly)
