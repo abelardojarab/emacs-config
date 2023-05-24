@@ -1,6 +1,6 @@
 ;;; setup-general.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -340,8 +340,9 @@
         comp-deferred-compilation-black-list '()))
 
 ;; Bug workaround, 2023-02-26:
-(if (not (boundp 'comp-enable-subr-trampolines))
-    (setq comp-enable-subr-trampolines native-comp-enable-subr-trampolines))
+(if (boundp 'native-comp-enable-subr-trampolines)
+    (if (not (boundp 'comp-enable-subr-trampolines))
+        (setq comp-enable-subr-trampolines native-comp-enable-subr-trampolines)))
 
 (defun has-fast-json ()
   "Return t if \"json-serialize\" is implemented as a C function.
