@@ -108,6 +108,8 @@ That is, a string used to represent it on the tab bar."
            (tabbar-ruler-global-tabbar     t)
            (tabbar-ruler-fancy-close-image nil))
   :config (progn
+            (tabbar-ruler-group-by-projectile-project)
+
             ;; Fix for tabbar under Emacs 24.4
             ;; store tabbar-cache into a real hash,
             ;; rather than in frame parameters

@@ -107,6 +107,8 @@ not a list, return a one-element list containing OBJECT."
          ("C-c C-j"                 . counsel-org-goto)
          ("C-c C-t"                 . counsel-org-tag)
          :map ctl-x-map
+         ("C-p"                     . counsel-projectile-switch-project)
+         ("C-r"                     . counsel-recentf)
          ("x"                       . counsel-M-x)
          ("<xterm-paste>"           . counsel-yank-pop)
          :map ivy-minibuffer-map
@@ -278,8 +280,6 @@ not a list, return a one-element list containing OBJECT."
          ;; ("M-s u" . consult-focus-lines)
          ;; Isearch integration
          ;;("M-s e" . consult-isearch-history)
-         :map ctl-x-map
-         ("C-r"                     . consult-recent-file)
          :map isearch-mode-map
          ("C-o" . consult-line-literal)
          ("M-e" . consult-isearch-history)
