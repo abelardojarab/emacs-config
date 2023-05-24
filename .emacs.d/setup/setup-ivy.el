@@ -66,6 +66,7 @@ not a list, return a one-element list containing OBJECT."
            (ivy-use-virtual-buffers          t)
            (ivy-magic-slash-non-match-action nil))
   :config (progn
+            (diminish 'ivy-mode) ;; need to add because ivy-mode doesnt diminish
             (push #'+ivy-yas-prompt yas-prompt-functions)
             (setq completion-in-region-function #'ivy-completion-in-region)
 

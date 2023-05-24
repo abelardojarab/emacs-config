@@ -1,6 +1,6 @@
 ;;; setup-python-plugins.el ---                      -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -183,34 +183,33 @@
 (use-package code-cells
   :if (executable-find "jupytext")
   :load-path (lambda () (expand-file-name "code-cells/" user-emacs-directory))
-  :config (progn
-            (setq code-cells-convert-ipynb-style '(("jupytext" "--to" "ipynb" "--from" "markdown")
-                                                   ("jupytext" "--to" "markdown" "--from" "ipynb")
-                                                   markdown-mode))
-            (defhydra notebook-hydra (:color red :hint nil)
-              "
+  :config (setq code-cells-convert-ipynb-style '(("jupytext" "--to" "ipynb" "--from" "markdown")
+                                                 ("jupytext" "--to" "markdown" "--from" "ipynb")
+                                                 markdown-mode))
+  :hydra (notebook-hydra (:color red :hint nil)
+                         "
 _j_/_k_: ↓/↑, _h_ome, _l_ast, _q_uit      \
 Cell: _e_val, mark and e_x_ecute      \
 Kernel: _r_estart, eval _a_bove, _z_: pop to
 "
-              ("h" beginning-of-buffer)
-              ("l" (progn (end-of-buffer)
-                          (code-cells-backward-cell)))
-              ("j" code-cells-forward-cell)
-              ("k" code-cells-backward-cell)
-              ("z" jupyter-repl-pop-to-buffer :color blue)
-              ("x" (progn (code-cells-mark-cell)
-                          (call-interactively 'execute-extended-command)))
-              ("C-SPC" code-cells-mark-cell)
-              ("r" jupyter-repl-restart-kernel)
-              ("a" (code-cells-do (pulse-momentary-highlight-region (point-min) start)
-                                  (jupyter-eval-region (point-min) start)))
-              ("e" (code-cells-do (pulse-momentary-highlight-region start end)
-                                  (jupyter-eval-region start end)
-                                  (code-cells-forward-cell)))
-              ("M-w" (code-cells-do (kill-ring-save start end)))
-              ("C-w" (code-cells-do (kill-region start end)))
-              ("q" nil :exit t))))
+                         ("h" beginning-of-buffer)
+                         ("l" (progn (end-of-buffer)
+                                     (code-cells-backward-cell)))
+                         ("j" code-cells-forward-cell)
+                         ("k" code-cells-backward-cell)
+                         ("z" jupyter-repl-pop-to-buffer :color blue)
+                         ("x" (progn (code-cells-mark-cell)
+                                     (call-interactively 'execute-extended-command)))
+                         ("C-SPC" code-cells-mark-cell)
+                         ("r" jupyter-repl-restart-kernel)
+                         ("a" (code-cells-do (pulse-momentary-highlight-region (point-min) start)
+                                             (jupyter-eval-region (point-min) start)))
+                         ("e" (code-cells-do (pulse-momentary-highlight-region start end)
+                                             (jupyter-eval-region start end)
+                                             (code-cells-forward-cell)))
+                         ("M-w" (code-cells-do (kill-ring-save start end)))
+                         ("C-w" (code-cells-do (kill-region start end)))
+                         ("q" nil :exit t)))
 
 ;; Sphinx-styled documentation generation
 (use-package sphinx-doc

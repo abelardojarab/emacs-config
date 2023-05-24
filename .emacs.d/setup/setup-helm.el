@@ -1,6 +1,6 @@
 ;;; setup-helm.el ---                                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -156,7 +156,7 @@
             (defun my/helm-projectile-init ()
               (helm-projectile-on)
               (setq projectile-switch-project-action 'helm-projectile)
-              (setq projectile-completion-system 'helm))))
+              (setq projectile-completion-system 'ivy))))
 
 ;; Indent semantic entries
 (use-package helm-imenu
