@@ -24,6 +24,9 @@
 
 ;;; Code:
 
+(defconst org-tag-re "[[:alnum:]_@#%]+"
+  "Regexp matching a single tag.")
+
 ;; Org mode
 (use-package org
   :defer t
