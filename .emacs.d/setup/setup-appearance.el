@@ -54,7 +54,7 @@
                             (unknown . question-mark)))
 
             (if (display-graphic-p)
-                (fringe-mode '(28 . 12)))))
+                (fringe-mode '(14 . 12)))))
 
 ;; Enable tooltips
 (use-package tooltip
