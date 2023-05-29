@@ -365,7 +365,29 @@ existing directory under `magit-clone-default-directory'."
                                                     (string-to-number (match-string 3)) )
                                               hunk-list))) )))
                       (signal 'git-error (buffer-substring-no-properties (buffer-end -1) (buffer-end 1)))))
-                  hunk-list)))))
+                  hunk-list))))
+  :hydra (hydra-git-menu (global-map "<f7>"
+                                        :color blue)
+                            "
+^Navigate^        ^Action^               ^Info^
+^^^^^^^^^^^^---------------------------------------------------
+_j_: next hunk    _s_: stage hunk        _d_: diff
+_k_: prev hunk    _S_: stage file        _c_: show commit
+^ ^               _U_: unstage file      _g_: magit status
+^ ^               ^ ^                    _t_: git timemachine
+^ ^               ^ ^                    ^ ^
+"
+                            ("j" git-gutter:next-hunk)
+                            ("k" git-gutter:previous-hunk)
+                            ("s" git-gutter:stage-hunk)
+                            ("S" magit-stage-file)
+                            ("U" magit-unstage-file)
+                            ("c" git-messenger:popup-show)
+                            ("g" magit-status :exit t)
+                            ("d" magit-diff-buffer-file)
+                            ("t" git-timemachine :exit t)
+                            ("q" quit-window "quit-window")
+                            ("<ESC>" git-gutter:update-all-windows "quit" :exit t)))
 
 ;; magit integration with git flow
 (use-package magit-gitflow
@@ -422,6 +444,7 @@ existing directory under `magit-clone-default-directory'."
 (use-package git-timemachine
   :defer t
   :commands (my/git-timemachine-start
+             git-timemachine
              git-timemachine-toggle
              git-timemachine-switch-branch)
   :if (executable-find "git")
@@ -444,7 +467,13 @@ existing directory under `magit-clone-default-directory'."
           (defun my/git-timemachine-start ()
             "Open git snapshot with the selected version. Based on ivy-mode."
             (interactive)
-            (git-timemachine--start #'my/git-timemachine-show-selected-revision))))
+            (git-timemachine--start #'my/git-timemachine-show-selected-revision)))
+  :hydra (hydra-git-timemachine-menu (:color blue)
+                                        ("s" git-timemachine "start")
+                                        ("j" git-timemachine-show-next-revision "next revision")
+                                        ("k" git-timemachine-show-previous-revision "prev revision")
+                                        ("c" git-timemachine-show-current-revision "curr revision")
+                                        ("<ESC>" git-timemachine-show-current-revision "quit" :exit t)))
 
 ;; Show blame for current line
 (use-package git-messenger
