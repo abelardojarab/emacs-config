@@ -288,33 +288,37 @@ not a list, return a one-element list containing OBJECT."
          ("M-s l" . consult-line-literal) ;; needed by consult-line to detect isearch
          ("M-s L" . consult-line-multi) ;; needed by consult-line to detect isearch
          )
-  :init
-  ;; Use Consult to select xref locations with preview
-  (setq xref-show-xrefs-function #'consult-xref
-        xref-show-definitions-function #'consult-xref)
+  :hook (completion-list-mode . consult-preview-at-point-mode)
+  :init (progn
+          (setq register-preview-delay 0.5
+                register-preview-function #'consult-register-format)
+          (advice-add #'register-preview :override #'consult-register-window)
 
-  :config
-  (setq consult-project-root-function #'projectile-project-root)
-  (setq consult-narrow-key "<") ; use this to show different types of things in C-x b
+          ;; Use Consult to select xref locations with preview
+          (setq xref-show-xrefs-function #'consult-xref
+                xref-show-definitions-function #'consult-xref))
+  :config (progn
+            (setq consult-project-root-function #'projectile-project-root)
+            (setq consult-narrow-key "<") ; use this to show different types of things in C-x b
 
-  (consult-customize
-   consult-theme
-   :preview-key '(:debounce 0.4 any)
-   consult-ripgrep consult-git-grep consult-grep
-   consult-bookmark consult-recent-file consult-xref
-   consult--source-recent-file consult--source-project-recent-file consult--source-bookmark
-   )
-  ;; Use projects as a source for consult-buffer
-  ;; Works, but hides "file" sources -- use "<" to select other sources
-  (projectile-load-known-projects)
-  (setq my-consult-source-projectile-projects
-        `(:name "Projectile projects"
-                :narrow   ?P
-                :category project
-                :action   ,#'projectile-switch-project-by-name
-                :items    ,projectile-known-projects))
-  (add-to-list 'consult-buffer-sources my-consult-source-projectile-projects 'append)
-  )
+            (consult-customize
+             consult-theme
+             :preview-key '(:debounce 0.4 any)
+             consult-ripgrep consult-git-grep consult-grep
+             consult-bookmark consult-recent-file consult-xref
+             consult--source-recent-file consult--source-project-recent-file consult--source-bookmark
+             )
+            ;; Use projects as a source for consult-buffer
+            ;; Works, but hides "file" sources -- use "<" to select other sources
+            (projectile-load-known-projects)
+            (setq my-consult-source-projectile-projects
+                  `(:name "Projectile projects"
+                          :narrow   ?P
+                          :category project
+                          :action   ,#'projectile-switch-project-by-name
+                          :items    ,projectile-known-projects))
+            (add-to-list 'consult-buffer-sources my-consult-source-projectile-projects 'append)
+            ))
 
 (use-package consult-dir
   :bind (("C-x C-d" . consult-dir)
