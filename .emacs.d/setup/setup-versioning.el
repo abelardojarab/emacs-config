@@ -367,8 +367,8 @@ existing directory under `magit-clone-default-directory'."
                       (signal 'git-error (buffer-substring-no-properties (buffer-end -1) (buffer-end 1)))))
                   hunk-list))))
   :hydra (hydra-git-menu (global-map "<f7>"
-                                        :color blue)
-                            "
+                                     :color blue)
+                         "
 ^Navigate^        ^Action^               ^Info^
 ^^^^^^^^^^^^---------------------------------------------------
 _j_: next hunk    _s_: stage hunk        _d_: diff
@@ -377,17 +377,17 @@ _k_: prev hunk    _S_: stage file        _c_: show commit
 ^ ^               ^ ^                    _t_: git timemachine
 ^ ^               ^ ^                    ^ ^
 "
-                            ("j" git-gutter:next-hunk)
-                            ("k" git-gutter:previous-hunk)
-                            ("s" git-gutter:stage-hunk)
-                            ("S" magit-stage-file)
-                            ("U" magit-unstage-file)
-                            ("c" git-messenger:popup-show)
-                            ("g" magit-status :exit t)
-                            ("d" magit-diff-buffer-file)
-                            ("t" git-timemachine :exit t)
-                            ("q" quit-window "quit-window")
-                            ("<ESC>" git-gutter:update-all-windows "quit" :exit t)))
+                         ("j" git-gutter:next-hunk)
+                         ("k" git-gutter:previous-hunk)
+                         ("s" git-gutter:stage-hunk)
+                         ("S" magit-stage-file)
+                         ("U" magit-unstage-file)
+                         ("c" git-messenger:popup-show)
+                         ("g" magit-status :exit t)
+                         ("d" magit-diff-buffer-file)
+                         ("t" git-timemachine :exit t)
+                         ("q" quit-window "quit-window")
+                         ("<ESC>" git-gutter:update-all-windows "quit" :exit t)))
 
 ;; magit integration with git flow
 (use-package magit-gitflow
@@ -469,11 +469,11 @@ _k_: prev hunk    _S_: stage file        _c_: show commit
             (interactive)
             (git-timemachine--start #'my/git-timemachine-show-selected-revision)))
   :hydra (hydra-git-timemachine-menu (:color blue)
-                                        ("s" git-timemachine "start")
-                                        ("j" git-timemachine-show-next-revision "next revision")
-                                        ("k" git-timemachine-show-previous-revision "prev revision")
-                                        ("c" git-timemachine-show-current-revision "curr revision")
-                                        ("<ESC>" git-timemachine-show-current-revision "quit" :exit t)))
+                                     ("s" git-timemachine "start")
+                                     ("j" git-timemachine-show-next-revision "next revision")
+                                     ("k" git-timemachine-show-previous-revision "prev revision")
+                                     ("c" git-timemachine-show-current-revision "curr revision")
+                                     ("<ESC>" git-timemachine-show-current-revision "quit" :exit t)))
 
 ;; Show blame for current line
 (use-package git-messenger
@@ -495,6 +495,7 @@ _k_: prev hunk    _S_: stage file        _c_: show commit
            (git-gutter:window-width    4)
            (git-gutter:ask-p           nil))
   :hook ((magit-post-refresh                  . git-gutter:update-all-windows)
+         (focus-in                            . git-gutter:update-all-windows)
          (git-gutter:update-hooks             . magit-after-revert-hook)
          (git-gutter:update-hooks             . magit-not-reverted-hook)
          (after-init                          . global-git-gutter-mode)
@@ -527,8 +528,18 @@ Git gutter:
                                        (git-gutter:clear))
                             :color blue))
   :config (progn
+            ;; Only enable the backends that are available, so it doesn't have to check
+            ;; when opening each buffer.
+            (setq git-gutter:handled-backends
+                  (cons 'git (cl-remove-if-not #'executable-find (list 'hg 'svn 'bzr)
+                                               :key #'symbol-name)))
+
+            ;; update git-gutter when using magit commands
+            (advice-add #'magit-stage-file   :after #'+vc-gutter-update-h)
+            (advice-add #'magit-unstage-file :after #'+vc-gutter-update-h)
+
             ;; Disabled modes
-            (setq git-gutter:disabled-modes '(org-mode asm-mode image-mode))
+            (setq git-gutter:disabled-modes '(org-mode asm-mode image-mode fundamental-mode pdf-view-mode))
 
             ;; Set the foreground color of modified lines to something obvious
             (set-face-foreground 'git-gutter:modified "purple")))
