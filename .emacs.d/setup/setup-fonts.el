@@ -198,5 +198,21 @@
   :if (display-graphic-p)
   :commands unicode-fonts-setup)
 
+;; font-utils - Utilities for Unicode characters
+(use-package font-utils
+  :demand t
+  :custom
+  (font-utils-less-feedback nil)
+  (font-utils-use-persistent-storage "font-utils")
+  (font-utils-use-memory-cache t))
+
+;; ucs-utils - Utilities for Unicode characters
+(use-package ucs-utils
+  :demand t
+  :custom
+  (ucs-utils-trade-memory-for-speed t)
+  (ucs-utils-use-persistent-storage "ucs-utils")
+  (ucs-utils-hide-numbered-cjk-ideographs t))
+
 (provide 'setup-fonts)
 ;;; setup-fonts.el ends here

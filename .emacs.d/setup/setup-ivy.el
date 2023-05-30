@@ -232,10 +232,22 @@ not a list, return a one-element list containing OBJECT."
     (consult-line)))
 
 (use-package consult-xref
+  :ensure nil ;; part of consult
   :commands consult-xref)
 
 (use-package consult-imenu
-  :demand t
+  :ensure nil ;; part of consult
+  :commands consult-imenu)
+
+(use-package consult-register
+  :ensure nil ;; part of consult
+  :commands
+  (consult-register
+   consult-register-load
+   consult-register-store))
+
+(use-package consult-imenu
+  :ensure nil ;; part of consult
   :commands consult-imenu)
 
 (use-package consult
@@ -251,10 +263,6 @@ not a list, return a one-element list containing OBJECT."
          ([remap switch-to-buffer] . consult-buffer)
          ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
          ("C-x 5 b" . consult-buffer-other-frame) ;; orig. switch-to-buffer-other-frame
-         ;; Custom M-# bindings for fast register access
-         ("M-#" . consult-register-load)
-         ("M-'" . consult-register-store) ;; orig. abbrev-prefix-mark (unrelated)
-         ("C-M-#" . consult-register)
          ;; Other custom bindings
          ("M-y" . consult-yank-pop)                ;; orig. yank-pop
          ("<help> a" . consult-apropos) ;; orig. apropos-command
@@ -266,19 +274,6 @@ not a list, return a one-element list containing OBJECT."
          ("M-g o" . consult-outline) ;; Alternative: consult-org-heading
          ("M-g m" . consult-mark)
          ("M-g k" . consult-global-mark)
-         ("M-g i" . consult-imenu)
-         ("M-g I" . consult-imenu-multi)
-         ;; M-s bindings (search-map)
-         ;; ("M-s f" . consult-find)
-         ;; ("M-s F" . consult-locate)
-         ;; ("M-s g" . consult-grep)
-         ;; ("M-s G" . consult-git-grep)
-         ;; ("M-s r" . consult-ripgrep)
-         ;; ("M-s l" . consult-line-literal)
-         ;; ("M-s L" . consult-line-multi)
-         ;; ("M-s m" . consult-multi-occur)
-         ;; ("M-s k" . consult-keep-lines)
-         ;; ("M-s u" . consult-focus-lines)
          ;; Isearch integration
          ;;("M-s e" . consult-isearch-history)
          :map isearch-mode-map
@@ -329,22 +324,49 @@ not a list, return a one-element list containing OBJECT."
 ;; flycheck integration - nice. ~M-g f~
 (use-package consult-flycheck)
 
-;; Optionally use the `orderless' completion style. See
-;; `+orderless-dispatch' in the Consult wiki for an advanced Orderless style
-;; dispatcher. Additionally enable `partial-completion' for file path
-;; expansion. `partial-completion' is important for wildcard support.
-;; Multiple files can be opened at once with `find-file' if you enter a
-;; wildcard. You may also give the `initials' completion style a try.
 (use-package orderless
-  :init
-  ;; Configure a custom style dispatcher (see the Consult wiki)
-  ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
-  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
+  ;; If it is lazy loaded, a message is show in the minibuffer the
+  ;; first time it is used
+  :demand t
   :custom
-  (completion-styles '(orderless))
+  (completion-styles '(basic orderless))
   (completion-category-defaults nil)
-  (completion-category-overrides '((file (styles partial-completion))))
-  )
+  (completion-category-overrides
+   '((file (styles . (basic partial-completion orderless)))
+     (project-file (styles . (basic substring partial-completion orderless)))
+     (imenu (styles . (basic substring orderless)))
+     (kill-ring (styles . (basic substring orderless)))
+     (consult-location (styles . (basic substring orderless)))))
+  :config
+  (defun +orderless-literal-style-dispatcher (pattern _index _total)
+    "Style dispatcher which recognizes patterns which have an \"=\" as suffix and
+  dispatches those to the orderless-literal style."
+    (when (string-suffix-p "=" pattern)
+      `(orderless-literal . ,(substring pattern 0 -1))))
+  (defun +orderless-initialism-style-dispatcher (pattern _index _total)
+    "Style dispatchter which recognizes patterns which have an \";\" as suffix and
+  dispatches those to the orderless-initialism style."
+    (when (string-suffix-p ";" pattern)
+      `(orderless-initialism . ,(substring pattern 0 -1))))
+  (defun +orderless-flex-style-dispatcher (pattern _index _total)
+    "Style dispatcher which recognizes patterns which have an \",\" as suffix and
+  dispatches those to the orderless-flex style."
+    (when (string-suffix-p "," pattern)
+      `(orderless-flex . ,(substring pattern 0 -1))))
+  (setq orderless-component-separator " +")
+  (setq orderless-matching-styles
+        '(orderless-prefixes
+          orderless-initialism
+          orderless-regexp
+          orderless-flex))
+  (setq orderless-style-dispatchers
+        '(+orderless-literal-style-dispatcher
+          +orderless-initialism-style-dispatcher
+          +orderless-flex-style-dispatcher))
+  :bind
+  (:map minibuffer-local-completion-map
+   ("SPC" . nil)
+   ("?" . nil)))
 
 (provide 'setup-ivy)
 ;;; setup-swiper.el ends here

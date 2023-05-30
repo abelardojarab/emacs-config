@@ -75,8 +75,8 @@
     ;; Setup keychain
     (require 'setup-keychain)
 
-    ;; ;; Setup tramp
-    ;; (require 'setup-tramp)
+    ;; Setup tramp
+    (require 'setup-tramp)
 
     ;; Setup appearance
     (require 'setup-appearance)
