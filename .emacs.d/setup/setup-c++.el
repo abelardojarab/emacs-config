@@ -235,5 +235,8 @@
   :hook ((c-mode . doc-show-inline-mode)
          (c++-mode . doc-show-inline-mode)))
 
+(use-package dts-mode
+  :mode ("\\.dts\\'" "\\.dtsi\\'"))
+
 (provide 'setup-c++)
 ;;; setup-c++.el ends here
