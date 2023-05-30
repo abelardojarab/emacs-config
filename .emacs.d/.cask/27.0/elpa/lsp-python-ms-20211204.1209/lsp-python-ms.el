@@ -32,7 +32,7 @@
 
 ;;; Code:
 (require 'cl-lib)
-(require 'conda nil 'noerror)
+;; (require 'conda nil 'noerror)
 (require 'find-file-in-project nil 'noerror)
 (require 'json)
 (require 'lsp-mode)

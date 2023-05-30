@@ -1,2 +1,0 @@
-;;; Generated package description from dired-narrow.el  -*- no-byte-compile: t -*-
-(define-package "dired-narrow" "20230318.2146" "Live-narrowing of search results for dired" '((dash "2.7.0") (dired-hacks-utils "0.0.1")) :commit "1596e516835099b96cb65d1dc372cfbdff6aea96" :authors '(("Matúš Goljer" . "matus.goljer@gmail.com")) :maintainers '(("Matúš Goljer" . "matus.goljer@gmail.com")) :maintainer '("Matúš Goljer" . "matus.goljer@gmail.com") :keywords '("files"))
