@@ -1,6 +1,6 @@
 ;;; setup-imenu.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -36,7 +36,12 @@
 (use-package imenu-list
   :defer t
   :commands (imenu-list
-             imenu-list-smart-toggle)
+             imenu-list-minor-mode
+             imenu-list-show
+             imenu-list-quit-window)
+  :functions (imenu-list-ret-dwim
+              imenu-list-resize-window
+              imenu-list-update)
   :custom ((imenu-list-size                   0.3)
            (imenu-list-focus-after-activation t)
            (imenu-list-auto-resize            t)

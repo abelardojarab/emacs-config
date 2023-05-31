@@ -305,6 +305,12 @@
 
 ;; Vertico is a little bit nicer version of the builtin icomplete-vertical.
 (use-package vertico
+  :delight vertico-mode
+  :custom
+  (vertico-scroll-margin 0)
+  (vertico-count 10)
+  (vertico-resize nil)
+  (vertico-cycle t)
   :hook (on-first-input . vertico-mode))
 
 (use-package vertico-indexed

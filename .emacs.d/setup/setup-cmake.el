@@ -1,6 +1,6 @@
 ;;; setup-cmake.el ---                            -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -170,7 +170,7 @@
   :init (progn
           (use-package semantic/bovine/gcc)
           (put 'cmake-ide-build-dir 'safe-local-variable #'stringp)
-          (setq cmake-ide-flags-c++ (append '("-std=c++11")
+          (setq cmake-ide-flags-c++ (append '("-std=c++17")
                                             (mapcar (lambda (path) (concat "-I" path)) (semantic-gcc-get-include-paths "c++"))))
           (setq cmake-ide-flags-c (append (mapcar (lambda (path) (concat "-I" path)) (semantic-gcc-get-include-paths "c")))))
   :config (defadvice cmake-ide-load-db (around bar activate)

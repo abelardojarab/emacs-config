@@ -244,7 +244,10 @@ not a list, return a one-element list containing OBJECT."
   :commands
   (consult-register
    consult-register-load
-   consult-register-store))
+   consult-register-store)
+  :bind (([remap jump-to-register] . consult-register-load)
+         ([remap point-to-register] . consult-register-store)
+         ))
 
 (use-package consult-imenu
   :ensure nil ;; part of consult
@@ -253,6 +256,22 @@ not a list, return a one-element list containing OBJECT."
 (use-package consult
   :after projectile
   :defines consult-buffer-sources
+  :functions (consult-completion-in-region
+              consult-register-format)
+  :commands (consult-goto-line
+             consult-line
+             consult-isearch-history
+             consult-mark
+             consult-yank-from-kill-ring
+             consult-ripgrep
+             consult-grep
+             consult-find
+             consult-man
+             consult-buffer
+             consult-narrow-help
+             consult-bookmark
+             consult-completion-in-region
+             consult-register-format)
   :bind (;; C-c bindings (mode-specific-map)
          ("C-c h" . consult-history)
          ("C-c m" . consult-mode-command)
@@ -275,7 +294,6 @@ not a list, return a one-element list containing OBJECT."
          ("M-g m" . consult-mark)
          ("M-g k" . consult-global-mark)
          ;; Isearch integration
-         ;;("M-s e" . consult-isearch-history)
          :map isearch-mode-map
          ("C-o" . consult-line-literal)
          ("M-e" . consult-isearch-history)
@@ -284,7 +302,25 @@ not a list, return a one-element list containing OBJECT."
          ("M-s L" . consult-line-multi) ;; needed by consult-line to detect isearch
          )
   :hook (completion-list-mode . consult-preview-at-point-mode)
+  :custom
+  (consult-line-numbers-widen t)
+  (consult-async-min-input 3)
+  (consult-async-input-debounce 0.5)
+  (consult-async-input-throttle 0.8)
+  (consult-narrow-key ">")
+  (consult-ripgrep-args
+   "rg --null --line-buffered --color=never --max-columns=1000 \
+      --path-separator / --no-ignore-vcs --smart-case --no-heading \
+      --with-filename --line-number --search-zip")
   :init (progn
+          (setq completion-in-region-function
+                #'(lambda (&rest args)
+                    (apply (if vertico-mode
+                               #'consult-completion-in-region
+                             #'completion--in-region)
+                           args))
+                register-preview-function #'consult-register-format)
+
           (setq register-preview-delay 0.5
                 register-preview-function #'consult-register-format)
           (advice-add #'register-preview :override #'consult-register-window)
@@ -365,8 +401,8 @@ not a list, return a one-element list containing OBJECT."
           +orderless-flex-style-dispatcher))
   :bind
   (:map minibuffer-local-completion-map
-   ("SPC" . nil)
-   ("?" . nil)))
+        ("SPC" . nil)
+        ("?" . nil)))
 
 (provide 'setup-ivy)
 ;;; setup-swiper.el ends here
