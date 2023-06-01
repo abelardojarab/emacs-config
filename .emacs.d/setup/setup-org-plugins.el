@@ -62,7 +62,7 @@
 
 ;; Use UTF8 symbols for Org Todo priorities
 (use-package org-fancy-priorities
-  :defer t
+  :disabled t ;; makes org hang
   :hook (org-mode . org-fancy-priorities-mode)
   :commands org-fancy-priorities-mode)
 
