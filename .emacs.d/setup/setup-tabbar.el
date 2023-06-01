@@ -329,8 +329,8 @@ truncates text if needed.  Minimal width can be set with
 
 ;; Configuring tabs with centaur-tabs
 (use-package centaur-tabs
-  :if (and (not (version< emacs-version "27.0"))
-           (display-graphic-p))
+  :if (and (display-graphic-p)
+           (not (version< emacs-version "27.0")))
   :custom
   ((centaur-tabs-style       "rounded")
    (centaur-tabs-set-bar     'left)
@@ -391,6 +391,7 @@ truncates text if needed.  Minimal width can be set with
   :config (progn
             (centaur-tabs-headline-match)
             (centaur-tabs-group-by-projectile-project)
+            (centaur-tabs-mode t)
 
             ;; Tabbar
             (global-set-key [C-prior]             'centaur-tabs-backward-tab)
