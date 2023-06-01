@@ -1,6 +1,6 @@
 ;;; setup-org-plugins.el ---                         -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -47,7 +47,7 @@
 
 ;; Use footnotes as eldoc source
 (use-package org-eldoc
-  :defer t
+  :disabled t
   :hook ((org-mode . org-eldoc-load)
          (org-mode . eldoc-mode))
   :commands org-eldoc-load

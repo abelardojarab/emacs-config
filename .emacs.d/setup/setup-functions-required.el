@@ -1,6 +1,6 @@
 ;;; setup-functions-required.el ---             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -106,6 +106,17 @@ Defaults to `error'."
   (setq-default indent-tabs-mode tabs)
   (setq-default tab-width length)
   (setq-default tab-stop-list (number-sequence length 100 length)))
+
+;; Missing ensure-list
+(unless (fboundp 'ensure-list)
+  (defun ensure-list (object)
+    "Return OBJECT as a list.
+If OBJECT is already a list, return OBJECT itself.  If it's
+not a list, return a one-element list containing OBJECT."
+    (declare (side-effect-free error-free))
+    (if (listp object)
+        object
+      (list object))))
 
 (provide 'setup-functions-required)
 ;;; setup-functions-required.el ends here

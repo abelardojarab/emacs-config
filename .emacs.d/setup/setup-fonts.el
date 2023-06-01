@@ -162,8 +162,22 @@
            (display-graphic-p))
   :commands (prettify-symbols-mode
              global-prettify-symbols-mode)
-  :hook (org-mode . prettify-symbols-mode)
-  :custom (prettify-symbols-unprettify-at-point 'right-edge))
+  :hook (org-mode . my/org-mode/load-prettify-symbols)
+  :custom (prettify-symbols-unprettify-at-point 'right-edge)
+  :init (defun my/org-mode/load-prettify-symbols ()
+          (interactive)
+          (setq prettify-symbols-alist
+                '(("lambda" .   "λ")
+                  ("|>" .   "▷")
+                  ("<|" .   "◁")
+                  ("->>" .  "↠")
+                  ("->"  .   "→")
+                  ("<-"  .   "←")
+                  ("=>"  .   "⇒")
+                  ("<="  .   "≤")
+                  (">="  .   "≥")))
+
+          (prettify-symbols-mode 1)))
 
 (defun set-icon-fonts (CODE-FONT-ALIST)
   "Utility to associate many unicode points with specified fonts."

@@ -23,15 +23,51 @@
 ;;
 
 ;;; Code:
-(unless (fboundp 'ensure-list)
-  (defun ensure-list (object)
-    "Return OBJECT as a list.
-If OBJECT is already a list, return OBJECT itself.  If it's
-not a list, return a one-element list containing OBJECT."
-    (declare (side-effect-free error-free))
-    (if (listp object)
-        object
-      (list object))))
+
+;; completion style that divides the pattern into space-separated components
+(use-package orderless
+  ;; If it is lazy loaded, a message is show in the minibuffer the
+  ;; first time it is used
+  :demand t
+  :custom
+  (completion-styles '(basic orderless))
+  (completion-category-defaults nil)
+  (completion-category-overrides
+   '((file (styles . (basic partial-completion orderless)))
+     (project-file (styles . (basic substring partial-completion orderless)))
+     (imenu (styles . (basic substring orderless)))
+     (kill-ring (styles . (basic substring orderless)))
+     (consult-location (styles . (basic substring orderless)))))
+  :config
+  (defun +orderless-literal-style-dispatcher (pattern _index _total)
+    "Style dispatcher which recognizes patterns which have an \"=\" as suffix and
+  dispatches those to the orderless-literal style."
+    (when (string-suffix-p "=" pattern)
+      `(orderless-literal . ,(substring pattern 0 -1))))
+  (defun +orderless-initialism-style-dispatcher (pattern _index _total)
+    "Style dispatchter which recognizes patterns which have an \";\" as suffix and
+  dispatches those to the orderless-initialism style."
+    (when (string-suffix-p ";" pattern)
+      `(orderless-initialism . ,(substring pattern 0 -1))))
+  (defun +orderless-flex-style-dispatcher (pattern _index _total)
+    "Style dispatcher which recognizes patterns which have an \",\" as suffix and
+  dispatches those to the orderless-flex style."
+    (when (string-suffix-p "," pattern)
+      `(orderless-flex . ,(substring pattern 0 -1))))
+  (setq orderless-component-separator " +")
+  (setq orderless-matching-styles
+        '(orderless-prefixes
+          orderless-initialism
+          orderless-regexp
+          orderless-flex))
+  (setq orderless-style-dispatchers
+        '(+orderless-literal-style-dispatcher
+          +orderless-initialism-style-dispatcher
+          +orderless-flex-style-dispatcher))
+  :bind
+  (:map minibuffer-local-completion-map
+        ("SPC" . nil)
+        ("?" . nil)))
 
 (use-package swiper
   :defer t
@@ -66,6 +102,9 @@ not a list, return a one-element list containing OBJECT."
            (ivy-use-virtual-buffers          t)
            (ivy-magic-slash-non-match-action nil))
   :config (progn
+            (setq ivy-re-builders-alist '((t . orderless-ivy-re-builder)))
+            (add-to-list 'ivy-highlight-functions-alist '(orderless-ivy-re-builder . orderless-ivy-highlight))
+
             (diminish 'ivy-mode) ;; need to add because ivy-mode doesnt diminish
             (push #'+ivy-yas-prompt yas-prompt-functions)
             (setq completion-in-region-function #'ivy-completion-in-region)
@@ -375,50 +414,6 @@ not a list, return a one-element list containing OBJECT."
   :hook (consult-lsp . consult-lsp-marginalia-mode)
   :bind (:map lsp-mode-map
               ([remap xref-find-apropos] . consult-lsp-symbols)))
-
-(use-package orderless
-  ;; If it is lazy loaded, a message is show in the minibuffer the
-  ;; first time it is used
-  :demand t
-  :custom
-  (completion-styles '(basic orderless))
-  (completion-category-defaults nil)
-  (completion-category-overrides
-   '((file (styles . (basic partial-completion orderless)))
-     (project-file (styles . (basic substring partial-completion orderless)))
-     (imenu (styles . (basic substring orderless)))
-     (kill-ring (styles . (basic substring orderless)))
-     (consult-location (styles . (basic substring orderless)))))
-  :config
-  (defun +orderless-literal-style-dispatcher (pattern _index _total)
-    "Style dispatcher which recognizes patterns which have an \"=\" as suffix and
-  dispatches those to the orderless-literal style."
-    (when (string-suffix-p "=" pattern)
-      `(orderless-literal . ,(substring pattern 0 -1))))
-  (defun +orderless-initialism-style-dispatcher (pattern _index _total)
-    "Style dispatchter which recognizes patterns which have an \";\" as suffix and
-  dispatches those to the orderless-initialism style."
-    (when (string-suffix-p ";" pattern)
-      `(orderless-initialism . ,(substring pattern 0 -1))))
-  (defun +orderless-flex-style-dispatcher (pattern _index _total)
-    "Style dispatcher which recognizes patterns which have an \",\" as suffix and
-  dispatches those to the orderless-flex style."
-    (when (string-suffix-p "," pattern)
-      `(orderless-flex . ,(substring pattern 0 -1))))
-  (setq orderless-component-separator " +")
-  (setq orderless-matching-styles
-        '(orderless-prefixes
-          orderless-initialism
-          orderless-regexp
-          orderless-flex))
-  (setq orderless-style-dispatchers
-        '(+orderless-literal-style-dispatcher
-          +orderless-initialism-style-dispatcher
-          +orderless-flex-style-dispatcher))
-  :bind
-  (:map minibuffer-local-completion-map
-        ("SPC" . nil)
-        ("?" . nil)))
 
 (provide 'setup-ivy)
 ;;; setup-swiper.el ends here

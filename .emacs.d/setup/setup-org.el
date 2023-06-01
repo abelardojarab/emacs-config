@@ -1,6 +1,6 @@
 ;;; setup-org.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -33,19 +33,19 @@
   :mode (("\\.org$" . org-mode))
   :load-path (lambda () (expand-file-name "org/lisp" user-emacs-directory))
   :bind (:map org-mode-map
-         ("C-t"          . org-time-stamp)
-         ("<return>"     . org-return)
-         ([enter]        . org-return)
-         ([kp-enter]     . org-meta-return)
-         ([C-M-return]   . org-insert-todo-heading)
-         ([S-return]     . org-insert-subheading)
-         ([C-tab]        . org-cycle)
-         ("RET"          . org-return)
-         ("C-c c"        . org-html-copy)
-         ("C-c k"        . org-cut-subtree)
-         ("C-c t"        . org-show-todo-tree)
-         ("C-c r"        . org-refile)
-         ("C-c v"        . org-reveal))
+              ("C-t"          . org-time-stamp)
+              ("<return>"     . org-return)
+              ([enter]        . org-return)
+              ([kp-enter]     . org-meta-return)
+              ([C-M-return]   . org-insert-todo-heading)
+              ([S-return]     . org-insert-subheading)
+              ([C-tab]        . org-cycle)
+              ("RET"          . org-return)
+              ("C-c c"        . org-html-copy)
+              ("C-c k"        . org-cut-subtree)
+              ("C-c t"        . org-show-todo-tree)
+              ("C-c r"        . org-refile)
+              ("C-c v"        . org-reveal))
   :commands (org-mode
              org-capture
              org-store-link
@@ -87,6 +87,13 @@
           (defun org-element-underline-successor      (arg))
           (defun org-element-verbatim-successor       (arg)))
   :config (progn
+            (add-hook 'org-mode-hook
+                      (lambda ()
+                        (add-hook 'before-save-hook 'org-update-all-dblocks)
+                        (add-hook 'before-save-hook 'org-table-recalculate-buffer-tables)
+                        (add-hook 'auto-save-hook 'org-update-all-dblocks)
+                        (add-hook 'auto-save-hook 'org-table-recalculate-buffer-tables)))
+
             ;; Basic packages
             (use-package org-list)
             (use-package org-indent

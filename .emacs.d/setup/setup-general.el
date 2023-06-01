@@ -22,7 +22,8 @@
 
 ;;
 
-(unless (eq system-type 'gnu/linux)
+;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=59081
+(when (equal system-type 'darwin)
   (progn
     (add-to-list 'image-types 'svg)
 
