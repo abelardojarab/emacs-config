@@ -34,7 +34,8 @@
 
 ;; Tabbar
 (use-package tabbar
-  :if (version< emacs-version "27.1")
+  :if (or (version< emacs-version "27.1")
+          (not (display-graphic-p)))
   :hook (after-init . tabbar-mode)
   :preface (push "~/.emacs.d/etc/images/" image-load-path)
   :custom ((tabbar-auto-scroll-flag  t)
@@ -328,7 +329,8 @@ truncates text if needed.  Minimal width can be set with
 
 ;; Configuring tabs with centaur-tabs
 (use-package centaur-tabs
-  :if (not (version< emacs-version "27.0"))
+  :if (and (not (version< emacs-version "27.0"))
+           (display-graphic-p))
   :custom
   ((centaur-tabs-style       "rounded")
    (centaur-tabs-set-bar     'left)
@@ -389,7 +391,6 @@ truncates text if needed.  Minimal width can be set with
   :config (progn
             (centaur-tabs-headline-match)
             (centaur-tabs-group-by-projectile-project)
-            (centaur-tabs-mode t)
 
             ;; Tabbar
             (global-set-key [C-prior]             'centaur-tabs-backward-tab)
