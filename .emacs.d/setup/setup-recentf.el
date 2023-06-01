@@ -1,6 +1,6 @@
 ;;; setup-recentf.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -29,18 +29,23 @@
   :commands (recentf-mode
              recentf-add-file
              recentf-apply-filename-handlers)
+  :custom
+  (recentf-save-file-modes #o600)
+  (recentf-max-saved-items 1024)
+  (recentf-auto-cleanup 600)
+  (recentf-exclude '(;; compressed files and archives
+                     "\\.tar$" "\\.tbz2$" "\\.tbz$" "\\.tgz$"
+                     "\\.bz2$" "\\.bz$" "\\.gz$" "\\.gzip$" "\\.xz$" "\\.zpaq$"
+                     "\\.lz$" "\\.lrz$" "\\.lzo$" "\\.lzma$" "\\.shar$" "\\.kgb$"
+                     "\\.zip$" "\\.Z$" "\\.7z$" "\\.rar$"
+                     ;; TRAMP paths
+                     "^/sudo:" "^/ssh:"))
+  (recentf-auto-cleanup 60)
   :init (progn
           (setq recentf-filename-handlers '(abbreviate-file-name))
           (setq recentf-save-file (concat (file-name-as-directory
                                            my/emacs-cache-dir)
                                           "recentf"))
-          (setq recentf-max-saved-items 300
-                recentf-exclude '("/auto-install/" ".recentf" "/repos/" "/elpa/"
-                                  "\\.mime-example" "\\.ido.last" "COMMIT_EDITMSG"
-                                  ".gz"
-                                  "~$" "/tmp/" "/ssh:" "/sudo:" "/scp:")
-                recentf-auto-cleanup 600)
-          (if (not noninteractive) (recentf-mode 1))
 
           (defun recentf-save-list ()
             "Save the recent list.
@@ -83,7 +88,9 @@ file to write to."
           (add-to-list 'recentf-exclude no-littering-var-directory)
           (add-to-list 'recentf-exclude no-littering-etc-directory)
 
-          (recentf-mode 1)))
+          (advice-add #'recentf-cleanup :after #'(lambda (&rest _ignored)
+                                                   ;; Don't show the message in the bottom of the screen
+                                                   (message nil)))))
 
 (provide 'setup-recentf)
 ;;; setup-recentf.el ends here

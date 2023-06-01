@@ -86,6 +86,7 @@
 (depends-on "consult-flycheck")
 (depends-on "consult-dir")
 (depends-on "consult-lsp")
+(depends-on "consult-yasnippet")
 (depends-on "counsel")
 (depends-on "counsel-dash")
 (depends-on "counsel-etags")

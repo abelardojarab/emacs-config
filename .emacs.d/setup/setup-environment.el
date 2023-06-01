@@ -1,6 +1,6 @@
 ;;; setup-environment.el ---                 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -24,16 +24,44 @@
 
 ;;; Code:
 
+;; Minibuffer [built-in]
+(use-package minibuffer
+  :hook ((minibuffer-setup              . my/minibuffer-setup)
+         (minibuffer-exit               . my/minibuffer-exit))
+  :commands (my/minibuffer-exit
+             my/minibuffer-setup)
+  :custom ((minibuffer-eldef-shorten-default      t)
+           (minibuffer-default-prompt-format      " [...]"))
+  :init (progn
+          (defun my/disable-garbage-collection ()
+            "Disable garbage collection."
+            (setq gc-cons-threshold most-positive-fixnum
+                  gc-cons-percentage 0.6))
+
+          (defun my/enable-garbage-collection ()
+            "Reset garbage collection to small-ish limit."
+            (setq gc-cons-threshold 16777216
+                  gc-cons-percentage 0.1))
+
+          ;; Helm runs with GC disabled
+          (add-hook 'minibuffer-setup-hook #'my/disable-garbage-collection)
+          (add-hook 'minibuffer-exit-hook  #'my/enable-garbage-collection))
+  :config (progn
+            ;; set high gc limit for minibuffer so doesn't slowdown on helm etc
+            (defun my/minibuffer-setup ()
+              "Setup minibuffer."
+              (setq gc-cons-threshold most-positive-fixnum))
+
+            (defun my/minibuffer-exit ()
+              "Undo minibuffer setup."
+              (setq gc-cons-threshold (* 64 1024 1024)))))
+
 ;; These were defined in C code, so use emacs pseudo-package to set them.
 (use-package emacs
   :demand t
   :hook ((focus-out                     . garbage-collect)
-         (minibuffer-setup              . my/minibuffer-setup)
-         (minibuffer-exit               . my/minibuffer-exit)
          (find-file-not-found-functions . make-parent-directory))
-  :commands (my/minibuffer-exit
-             my/minibuffer-setup
-             my/show-init-time)
+  :commands (my/show-init-time)
   :custom ((ad-redefinition-action                'accept)
            (byte-compile-warnings                 nil)
            (load-prefer-newer                     nil)
@@ -60,7 +88,6 @@
            (no-redraw-on-reenter                  t)
            (column-number-indicator-zero-based    nil)
            (track-eol                             t)
-           (minibuffer-eldef-shorten-default      t)
            (register-preview-delay                2)
            (register-separator                    "\n\n")
            (history-delete-duplicates             t)
@@ -82,20 +109,6 @@
             (if (boundp 'max-specpdl-size)
                 (setq max-specpdl-size (* max-specpdl-size 40)
                       max-lisp-eval-depth (* max-lisp-eval-depth 30))))
-
-          (defun my/disable-garbage-collection ()
-            "Disable garbage collection."
-            (setq gc-cons-threshold most-positive-fixnum
-                  gc-cons-percentage 0.6))
-
-          (defun my/enable-garbage-collection ()
-            "Reset garbage collection to small-ish limit."
-            (setq gc-cons-threshold 16777216
-                  gc-cons-percentage 0.1))
-
-          ;; Helm runs with GC disabled
-          (add-hook 'minibuffer-setup-hook #'my/disable-garbage-collection)
-          (add-hook 'minibuffer-exit-hook  #'my/enable-garbage-collection)
 
           ;; We disable GC during startup, we re-enable it afterwards.
           (my/disable-garbage-collection)
@@ -133,15 +146,6 @@
             (defun make-parent-directory ()
               "Make sure the directory of `buffer-file-name' exists."
               (make-directory (file-name-directory buffer-file-name) t))
-
-            ;; set high gc limit for minibuffer so doesn't slowdown on helm etc
-            (defun my/minibuffer-setup ()
-              "Setup minibuffer."
-              (setq gc-cons-threshold most-positive-fixnum))
-
-            (defun my/minibuffer-exit ()
-              "Undo minibuffer setup."
-              (setq gc-cons-threshold (* 64 1024 1024)))
 
             ;; Printing
             (setq ps-paper-type        'a4

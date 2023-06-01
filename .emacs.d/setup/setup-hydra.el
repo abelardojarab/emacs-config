@@ -1,6 +1,6 @@
 ;;; setup-hydra.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -31,8 +31,7 @@
 
 ;; Show hydra in posframe
 (use-package hydra-posframe
-  :load-path "<path-to-the-hydra-posframe>"
-  :hook (after-init . hydra-posframe-enable))
+  :hook (after-init . hydra-posframe-mode))
 
 ;; Pretty Hydra
 (use-package pretty-hydra)

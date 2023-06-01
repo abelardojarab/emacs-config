@@ -22,6 +22,20 @@
 
 ;;
 
+(setq
+ initial-buffer-choice nil
+ inhibit-startup-message t
+ inhibit-startup-screen t
+ inhibit-startup-buffer-menu t
+ inhibit-x-resources t)
+;; This is a weird one, see
+;; https://emacshorrors.com/posts/advertising-your-freedom.html
+(fset 'display-startup-echo-area-message 'ignore)
+
+;; compat - Emacs Lisp Compatibility Library
+(use-package compat
+  :demand t)
+
 ;;; Code:
 (setq initial-scratch-message
       ";; This buffer is for notes you don't want to save, and for Lisp evaluation.
@@ -77,6 +91,11 @@
 ;; With-editor (emacsclient support)
 (use-package with-editor
   :hook ((shell-mode eshell-mode term-exec) . with-editor-export-editor))
+
+;; pcache - persistent caching for Emacs
+(use-package pcache
+  :config (setq pcache-directory (file-name-as-directory
+                                  my/emacs-cache-dir)))
 
 ;; Pos-tip library
 (use-package pos-tip

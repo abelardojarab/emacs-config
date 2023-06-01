@@ -360,6 +360,22 @@ not a list, return a one-element list containing OBJECT."
 ;; flycheck integration - nice. ~M-g f~
 (use-package consult-flycheck)
 
+;; Consult integration with yasnippet
+(use-package consult-yasnippet
+  :after yasnippet
+  :commands consult-yasnippet)
+
+;; Consult integration with lsp
+(use-package consult-lsp
+  :defer t
+  :after (lsp-mode consult marginalia)
+  :commands (consult-lsp-diagnostics
+             consult-lsp-symbols
+             consult-lsp-file-symbols)
+  :hook (consult-lsp . consult-lsp-marginalia-mode)
+  :bind (:map lsp-mode-map
+              ([remap xref-find-apropos] . consult-lsp-symbols)))
+
 (use-package orderless
   ;; If it is lazy loaded, a message is show in the minibuffer the
   ;; first time it is used
