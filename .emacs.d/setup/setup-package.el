@@ -231,7 +231,21 @@ corresponding `.el' file."
   :init (use-package async-bytecomp
           :commands async-bytecomp-package-mode
           :config (async-bytecomp-package-mode 1))
-  :custom (async-bytecomp-allowed-packages '(all)))
+  :custom (async-bytecomp-allowed-packages '(all))
+  :config (progn
+            ;; For native-comp branch
+            (when (fboundp 'native-compile-async)
+              (unless (fboundp 'subr-native-lambda-list)
+                (defun subr-native-lambda-list (x)
+                  nil))
+              (setq comp-async-jobs-number 4 ;; not using all cores
+                    comp-deferred-compilation t
+                    comp-deferred-compilation-black-list '()))
+
+            ;; Bug workaround, 2023-02-26:
+            (if (boundp 'native-comp-enable-subr-trampolines)
+                (if (not (boundp 'comp-enable-subr-trampolines))
+                    (setq comp-enable-subr-trampolines native-comp-enable-subr-trampolines)))))
 
 ;; Needed
 (require 'dash-functional)

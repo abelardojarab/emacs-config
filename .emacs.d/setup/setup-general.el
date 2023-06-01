@@ -362,20 +362,6 @@ Image types are symbols like `xbm' or `jpeg'."
               ("M-A" . marginalia-cycle))
   :config (marginalia-mode))
 
-;; For native-comp branch
-(when (fboundp 'native-compile-async)
-  (unless (fboundp 'subr-native-lambda-list)
-    (defun subr-native-lambda-list (x)
-      nil))
-  (setq comp-async-jobs-number 4 ;; not using all cores
-        comp-deferred-compilation t
-        comp-deferred-compilation-black-list '()))
-
-;; Bug workaround, 2023-02-26:
-(if (boundp 'native-comp-enable-subr-trampolines)
-    (if (not (boundp 'comp-enable-subr-trampolines))
-        (setq comp-enable-subr-trampolines native-comp-enable-subr-trampolines)))
-
 (defun has-fast-json ()
   "Return t if \"json-serialize\" is implemented as a C function.
 This was done for Emacs 27 but not all builds include the C version,

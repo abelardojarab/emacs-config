@@ -448,6 +448,7 @@
 ;; (depends-on "styles")
 (depends-on "sudo-edit")
 ;; (depends-on "sunrise-commander")
+(depends-on "svg-tag-mode")
 (depends-on "swiper")
 (depends-on "switch-buffer-functions")
 (depends-on "swiper-helm")

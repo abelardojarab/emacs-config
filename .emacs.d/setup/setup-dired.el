@@ -1,6 +1,6 @@
 ;;; setup-dired.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -211,7 +211,7 @@ parametersg."
             ;; All the icons on dired
             (use-package all-the-icons-dired
               :if (display-graphic-p)
-              :after dired
+              :after (all-the-icons dired)
               :diminish all-the-icons-dired-mode
               :commands all-the-icons-dired-mode
               :hook (dired-mode . all-the-icons-dired-mode))

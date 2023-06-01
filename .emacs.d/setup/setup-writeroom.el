@@ -1,6 +1,6 @@
 ;;; setup-writeroom.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -42,7 +42,6 @@
   :defer t
   :diminish typo-mode
   :commands typo-mode
-  :hook (org-mode . typo-mode)
   :config (setq-default typo-language "English"))
 
 (provide 'setup-writeroom)

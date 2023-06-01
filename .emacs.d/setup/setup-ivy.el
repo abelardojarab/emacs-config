@@ -252,45 +252,16 @@
 ;; Icons for ivy
 (use-package all-the-icons-ivy
   :defer t
-  :if (display-grayscale-p)
+  :if (display-graphic-p)
   :commands all-the-icons-ivy-setup
-  :after swiper
+  :after (all-the-icons swiper)
   :hook (counsel-mode . all-the-icons-ivy-setup))
 
 ;; Ivy integration with lsp
 (use-package lsp-ivy
+  :after (lsp-mode swiper)
   :commands (lsp-ivy-workspace-symbol
              lsp-ivy-global-workspace-symbol))
-
-;; Use the ~substring~ completion style so calling this from isearch works properly
-(defun consult-line-literal ()
-  (interactive)
-  (let ((completion-styles '(substring))
-        (completion-category-defaults nil)
-        (completion-category-overrides nil))
-    (consult-line)))
-
-(use-package consult-xref
-  :ensure nil ;; part of consult
-  :commands consult-xref)
-
-(use-package consult-imenu
-  :ensure nil ;; part of consult
-  :commands consult-imenu)
-
-(use-package consult-register
-  :ensure nil ;; part of consult
-  :commands
-  (consult-register
-   consult-register-load
-   consult-register-store)
-  :bind (([remap jump-to-register] . consult-register-load)
-         ([remap point-to-register] . consult-register-store)
-         ))
-
-(use-package consult-imenu
-  :ensure nil ;; part of consult
-  :commands consult-imenu)
 
 (use-package consult
   :after projectile
@@ -392,18 +363,51 @@
             (add-to-list 'consult-buffer-sources my-consult-source-projectile-projects 'append)
             ))
 
+
+;; Use the ~substring~ completion style so calling this from isearch works properly
+(defun consult-line-literal ()
+  (interactive)
+  (let ((completion-styles '(substring))
+        (completion-category-defaults nil)
+        (completion-category-overrides nil))
+    (consult-line)))
+
+(use-package consult-xref
+  :ensure nil ;; part of consult
+  :commands consult-xref)
+
+(use-package consult-imenu
+  :ensure nil ;; part of consult
+  :commands consult-imenu)
+
+(use-package consult-register
+  :ensure nil ;; part of consult
+  :commands
+  (consult-register
+   consult-register-load
+   consult-register-store)
+  :bind (([remap jump-to-register] . consult-register-load)
+         ([remap point-to-register] . consult-register-store)
+         ))
+
+(use-package consult-imenu
+  :ensure nil ;; part of consult
+  :commands consult-imenu)
+
 (use-package consult-dir
+  :ensure nil ;; part of consult
   :bind (("C-x C-d" . consult-dir)
          :map minibuffer-local-completion-map
          ("C-x C-d" . consult-dir)
          ("C-x C-j" . consult-dir-jump-file)))
 
 ;; flycheck integration - nice. ~M-g f~
-(use-package consult-flycheck)
+(use-package consult-flycheck
+  :after (consult flycheck))
 
 ;; Consult integration with yasnippet
 (use-package consult-yasnippet
-  :after yasnippet
+  :after (yasnippet consult)
   :commands consult-yasnippet)
 
 ;; Consult integration with lsp
