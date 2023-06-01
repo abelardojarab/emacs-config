@@ -1,6 +1,6 @@
 ;;; setup-eshell.el ---                       -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -254,14 +254,16 @@
 
 ;; vterm integration
 (use-package vterm
-  :if (file-exists-p "/usr/include/vterm.h")
+  :if (or (file-exists-p "/usr/include/vterm.h")
+          (file-exists-p "/opt/local/include/vterm.h"))
   :hook (vterm-mode . turn-off-chrome)
   :init (defun turn-off-chrome ()
           (hl-line-mode -1)
           (display-line-numbers-mode -1)))
 
 (use-package vterm-toggle
-  :if (file-exists-p "/usr/include/vterm.h")
+  :if (or (file-exists-p "/usr/include/vterm.h")
+          (file-exists-p "/opt/local/include/vterm.h"))
   :custom ((vterm-toggle-fullscreen-p nil "Open a vterm in another window.")
            (vterm-toggle-scope 'project))
   :bind (("C-t" . #'vterm-toggle)
