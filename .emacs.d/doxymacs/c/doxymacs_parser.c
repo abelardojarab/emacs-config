@@ -70,7 +70,7 @@ typedef struct _hash_entry
 
 hash_entry *symbol_hash[HASH_SIZE];
 
-inline unsigned int hash(const char *s)
+unsigned int hash(const char *s)
 {
     unsigned int h = 0;
 
@@ -82,7 +82,7 @@ inline unsigned int hash(const char *s)
     return abs(h % HASH_SIZE);
 }
 
-inline void AddToHash(completion_list *cl)
+void AddToHash(completion_list *cl)
 {
     unsigned int h = hash(cl->symbol);
     hash_entry **cur = &symbol_hash[h];
@@ -96,7 +96,7 @@ inline void AddToHash(completion_list *cl)
 }
 
 /* mmmmm... free hash */
-inline void FreeHash(void)
+void FreeHash(void)
 {
     unsigned int i;
     for (i = 0; i < HASH_SIZE; i++)
@@ -341,7 +341,7 @@ inline char *Encode(const char *s)
 
 /* Output the completion list in a way {X}Emacs can easily read in */
 
-inline int OutputCompletionList(void)
+int OutputCompletionList(void)
 {
     completion_list *cur = comp_list;
 
@@ -400,7 +400,7 @@ inline int OutputCompletionList(void)
 
 /* Clean up */
 
-inline void FreeCompletionList(void)
+void FreeCompletionList(void)
 {
     completion_list *cur = comp_list;
 
@@ -429,7 +429,7 @@ inline void FreeCompletionList(void)
 
 /* Add the members of a compound to the completion list */
 
-inline int AddCompoundMembers(xmlNodePtr compound,
+int AddCompoundMembers(xmlNodePtr compound,
                               const char *name, const char *url)
 {
     xmlNodePtr child = compound->xmlChildrenNode;
