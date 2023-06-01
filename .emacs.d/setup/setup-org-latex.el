@@ -1,6 +1,6 @@
 ;;; setup-org-latex.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -61,6 +61,11 @@
                                                       (concat (file-name-as-directory
                                                                my/emacs-cache-dir)
                                                               "ltxpng")))
+
+            ;; So, dvisvgm is my choice. The rendered svgs also looks extra cripsy
+            (if (string-match-p "RSVG" system-configuration-features)
+                (setq org-latex-preview-default-process 'dvisvgm)
+              (setq org-latex-preview-default-process 'dvipng))
 
             ;; Bigger LaTeX fragments and other options for LaTeX export
             (setq org-format-latex-options '(:scale 2.0

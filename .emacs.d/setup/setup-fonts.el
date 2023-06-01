@@ -186,10 +186,19 @@
       (--each codes
         (set-fontset-font t `(,it . ,it) font)))))
 
+;; Fallback font for non-ascii glyphs
 (use-package unicode-fonts
   :defer t
   :if (display-graphic-p)
-  :commands unicode-fonts-setup)
+  :commands unicode-fonts-setup
+  :config (progn
+   :config
+    ;; Common math symbols
+    (dolist (unicode-block '("Mathematical Alphanumeric Symbols"))
+      (push "JuliaMono" (cadr (assoc unicode-block unicode-fonts-block-font-mapping))))))
+
+;; For Iosevka
+(set-char-table-range composition-function-table ?+ '(["\\(?:++++\\)" 0 font-shape-gstring]))
 
 ;; font-utils - Utilities for Unicode characters
 (use-package font-utils
