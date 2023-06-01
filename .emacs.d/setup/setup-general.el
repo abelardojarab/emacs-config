@@ -22,6 +22,19 @@
 
 ;;
 
+(unless (eq system-type 'gnu/linux)
+  (progn
+    (add-to-list 'image-types 'svg)
+
+    ;; overriding image.el function image-type-available-p
+    (defun image-type-available-p (type)
+      "Return t if image type TYPE is available.
+Image types are symbols like `xbm' or `jpeg'."
+      (if (eq 'svg type)
+          nil
+        (and (fboundp 'init-image-library)
+             (init-image-library type))))))
+
 (setq
  initial-buffer-choice nil
  inhibit-startup-message t
