@@ -384,7 +384,8 @@ truncates text if needed.  Minimal width can be set with
          (term-mode . centaur-tabs-local-mode)
          (calendar-mode . centaur-tabs-local-mode)
          (org-agenda-mode . centaur-tabs-local-mode)
-         (helpful-mode.centaur -tabs-local-mode))
+         (helpful-mode.centaur -tabs-local-mode)
+         (after-init . centaur-tabs-mode))
   :config (progn
             (centaur-tabs-headline-match)
             (centaur-tabs-group-by-projectile-project)
