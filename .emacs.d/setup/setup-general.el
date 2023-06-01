@@ -362,17 +362,5 @@ Image types are symbols like `xbm' or `jpeg'."
               ("M-A" . marginalia-cycle))
   :config (marginalia-mode))
 
-(defun has-fast-json ()
-  "Return t if \"json-serialize\" is implemented as a C function.
-This was done for Emacs 27 but not all builds include the C version,
-which is a lot faster."
-  (and
-   (subrp (symbol-function 'json-serialize))
-   ;; test that it works -- on Windows the DLL (or deps) may be missing
-   (equal (json-serialize (json-parse-string "[123]")) "[123]")))
-
-(unless (has-fast-json)
-  (warn "This emacs is using older elisp json functions; maybe rebuild with libjansson?"))
-
 (provide 'setup-general)
 ;;; setup-general.el ends here

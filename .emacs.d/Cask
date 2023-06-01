@@ -298,7 +298,7 @@
 (depends-on "lsp-java")
 (depends-on "lsp-mode")
 (depends-on "lsp-pyright")
-(depends-on "lsp-python-ms")
+;; (depends-on "lsp-python-ms")
 (depends-on "lsp-origami")
 (depends-on "lsp-treemacs")
 (depends-on "lsp-ui")

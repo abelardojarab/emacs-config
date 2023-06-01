@@ -34,13 +34,31 @@
 
 ;; Tabbar
 (use-package tabbar
-  ;; :if (version< emacs-version "27.1")
+  :if (version< emacs-version "27.1")
   :hook (after-init . tabbar-mode)
   :preface (push "~/.emacs.d/etc/images/" image-load-path)
   :custom ((tabbar-auto-scroll-flag  t)
            (tabbar-use-images        t)
            (table-time-before-update 0.1))
   :config (progn
+            ;; Tabbar
+            (global-set-key [C-prior]             'tabbar-backward-tab)
+            (global-set-key [C-next]              'tabbar-forward-tab)
+            (global-set-key [C-home]              'tabbar-backward-group)
+            (global-set-key [C-end]               'tabbar-forward-group)
+
+            ;; Tabbar, now using ctl-x-map
+            (global-set-key (kbd "C-x <prior>")   'tabbar-backward-tab)
+            (global-set-key (kbd "C-x <next>")    'tabbar-forward-tab)
+            (global-set-key (kbd "C-x <home>")    'tabbar-backward-group)
+            (global-set-key (kbd "C-x <end>")     'tabbar-forward-group)
+
+            ;; Tabbar Ctrl-x mappings
+            (define-key ctl-x-map (kbd "<prior>") 'tabbar-backward-tab)
+            (define-key ctl-x-map (kbd "<next>")  'tabbar-forward-tab)
+            (define-key ctl-x-map (kbd "<home>")  'tabbar-backward-group)
+            (define-key ctl-x-map (kbd "<end>")   'tabbar-forward-group)
+
             ;; Sort tabbar buffers by name
             (defun tabbar-add-tab (tabset object &optional append_ignored)
               "Add to TABSET a tab with value OBJECT if there isn't one there yet.
@@ -102,8 +120,8 @@ That is, a string used to represent it on the tab bar."
 ;; Tabbar ruler
 (use-package tabbar-ruler
   :demand t
-  ;; :if (and (display-graphic-p)
-  ;;          (version< emacs-version "27.1"))
+  :if (and (display-graphic-p)
+           (version< emacs-version "27.1"))
   :custom ((tabbar-cycle-scope             'tabs)
            (tabbar-ruler-global-tabbar     t)
            (tabbar-ruler-fancy-close-image nil))
@@ -307,6 +325,88 @@ truncates text if needed.  Minimal width can be set with
                                                         'keymap tab-line-tab-close-map
                                                         'mouse-face 'tab-line-close-highlight
                                                         'help-echo "Click to close tab"))))))
+
+;; Configuring tabs with centaur-tabs
+(use-package centaur-tabs
+  :if (not (version< emacs-version "27.0"))
+  :custom
+  ((centaur-tabs-style       "rounded")
+   (centaur-tabs-set-bar     'left)
+   (centaur-tabs-height       24)
+   (centaur-tabs-cycle-scope 'groups)
+   (centaur-tabs-show-navigation-buttons t)
+   (centaur-tabs-set-icons    t))
+  :init (progn
+          (tabbar-mode -1)
+          (defun centaur-tabs nil)
+          (defun  centaur-tabs-buffer-groups  ()
+            "`centaur-tabs-buffer-groups'control buffers'group rules.
+    Group centaur-tabs with mode if buffer is derived from `eshell-mode'
+    `emacs-lisp-mode'`dired-mode'`org-mode'`magit-mode'.
+    All buffer name start with * will group to  \" Emacs \" .
+    Other buffer group by `centaur-tabs-get-group-name'with project name."
+            (list
+             (cond
+              ((or (string-equal "*" (substring (buffer-name) 0 1))
+                   (memq major-mode '(magit-process-mode
+                                      magit-status-mode
+                                      magit-diff-mode
+                                      magit-log-mode
+                                      magit-file-mode
+                                      magit-blob-mode
+                                      magit-blame-mode
+                                      )))
+               "Emacs")
+              ((derived-mode-p 'prog-mode)
+               "Editing")
+              ((derived-mode-p 'dired-mode)
+               "Dired")
+              ((derived-mode-p 'vterm-mode)
+               "Terminal")
+              ((memq major-mode '(helpful-mode
+                                  help-mode))
+               "Help")
+              ((memq major-mode '(org-mode
+                                  org-agenda-clockreport-mode
+                                  org-src-mode
+                                  org-agenda-mode
+                                  org-beamer-mode
+                                  org-indent-mode
+                                  org-bullets-fashion
+                                  org-cdlatex-mode
+                                  org-agenda-log-mode
+                                  diary-mode))
+               "OrgMode")
+              (t
+               (centaur-tabs-get-group-name  (current-buffer)))))))
+  :hook ((recentf-mode . centaur-tabs-local-mode)
+         (dashboard-mode .centaur-tabs-local-mode)
+         (term-mode . centaur-tabs-local-mode)
+         (calendar-mode . centaur-tabs-local-mode)
+         (org-agenda-mode . centaur-tabs-local-mode)
+         (helpful-mode.centaur -tabs-local-mode))
+  :config (progn
+            (centaur-tabs-headline-match)
+            (centaur-tabs-group-by-projectile-project)
+            (centaur-tabs-mode t)
+
+            ;; Tabbar
+            (global-set-key [C-prior]             'centaur-tabs-backward-tab)
+            (global-set-key [C-next]              'centaur-tabs-forward-tab)
+            (global-set-key [C-home]              'centaur-tabs-backward-group)
+            (global-set-key [C-end]               'centaur-tabs-forward-group)
+
+            ;; Tabbar, now using ctl-x-map
+            (global-set-key (kbd "C-x <prior>")   'centaur-tabs-backward-tab)
+            (global-set-key (kbd "C-x <next>")    'centaur-tabs-forward-tab)
+            (global-set-key (kbd "C-x <home>")    'centaur-tabs-backward-group)
+            (global-set-key (kbd "C-x <end>")     'centaur-tabs-forward-group)
+
+            ;; Tabbar Ctrl-x mappings
+            (define-key ctl-x-map (kbd "<prior>") 'centaur-tabs-backward-tab)
+            (define-key ctl-x-map (kbd "<next>")  'centaur-tabs-forward-tab)
+            (define-key ctl-x-map (kbd "<home>")  'centaur-tabs-backward-group)
+            (define-key ctl-x-map (kbd "<end>")   'centaur-tabs-forward-group)))
 
 (provide 'setup-tabbar)
 ;;; setup-tabbar.el ends here
