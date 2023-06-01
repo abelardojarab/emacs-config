@@ -121,8 +121,8 @@ That is, a string used to represent it on the tab bar."
 ;; Tabbar ruler
 (use-package tabbar-ruler
   :demand t
-  :if (and (display-graphic-p)
-           (version< emacs-version "27.1"))
+  :if (or (not (display-graphic-p))
+          (version< emacs-version "27.1"))
   :custom ((tabbar-cycle-scope             'tabs)
            (tabbar-ruler-global-tabbar     t)
            (tabbar-ruler-fancy-close-image nil))
