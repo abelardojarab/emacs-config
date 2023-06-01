@@ -25,9 +25,13 @@
 (if (file-exists-p "~/workspace/emacs-config/.emacs.d")
     (setq user-emacs-directory "~/workspace/emacs-config/.emacs.d"))
 
+(setq byte-compile-warnings '(cl-functions))
+
 ;; Only utilize local files
 (with-no-warnings
   (let ((byte-compile-warnings nil))
+    (setq byte-compile-warnings '(cl-functions))
+
     (defvar my/file-name-handler-alist file-name-handler-alist)
     (setq file-name-handler-alist nil)
     (add-hook 'emacs-startup-hook
@@ -343,3 +347,4 @@
 (setq debug-on-quit nil)
 (setq debug-on-error nil)
 (put 'scroll-left 'disabled nil)
+(put 'upcase-region 'disabled nil)
