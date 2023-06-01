@@ -297,10 +297,9 @@ all the buffers."
   :diminish indicators-mode)
 
 (use-package line-reminder
-  :init (progn
-          (setq line-reminder-show-option 'indicators)
-          (setq line-reminder-linum-left-string "")
-          (setq line-reminder-linum-right-string " "))
+  :custom ((line-reminder-show-option 'indicators)
+           (line-reminder-linum-left-string "")
+           (line-reminder-linum-right-string " "))
   :config (progn
             (add-hook 'prog-mode-hook
                       (function
@@ -308,13 +307,13 @@ all the buffers."
                          (line-reminder-mode t)
                          (setq line-reminder-show-option 'indicators))))
             (fringe-helper-define 'my-line-reminder-bitmap nil
-                                  "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.."
-                                  "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.."
-                                  "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.."
-                                  "..xxx.." "..xxx.."  ; original bitmap stops here
-                                  "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.."
-                                  "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.."  ; add a tone to make it longer
-                                  )
+              "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.."
+              "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.."
+              "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.."
+              "..xxx.." "..xxx.."  ; original bitmap stops here
+              "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.."
+              "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.."  ; add a tone to make it longer
+              )
 
             (setq line-reminder-bitmap 'my-line-reminder-bitmap))
   :hook (on-first-buffer . global-line-reminder-mode))

@@ -24,6 +24,22 @@
 
 ;;; Code:
 
+;; Remove security vulnerability
+(eval-after-load "enriched"
+  '(defun enriched-decode-display-prop (start end &optional param)
+     (list start end)))
+
+(setq
+ initial-buffer-choice nil
+ inhibit-startup-message t
+ inhibit-startup-screen t
+ inhibit-startup-buffer-menu t
+ inhibit-x-resources t)
+
+;; This is a weird one, see
+;; https://emacshorrors.com/posts/advertising-your-freedom.html
+(fset 'display-startup-echo-area-message 'ignore)
+
 (defun make-obsolete (obsolete-name current-name &optional when)
   "Make the byte-compiler warn that function OBSOLETE-NAME is obsolete.
 OBSOLETE-NAME should be a function name or macro name (a symbol).

@@ -352,6 +352,8 @@
       --path-separator / --no-ignore-vcs --smart-case --no-heading \
       --with-filename --line-number --search-zip")
   :init (progn
+          ;; Use `consult-completion-in-region' if Vertico is enabled.
+          ;; Otherwise use the default `completion--in-region' function.
           (setq completion-in-region-function
                 #'(lambda (&rest args)
                     (apply (if vertico-mode

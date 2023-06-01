@@ -36,16 +36,6 @@ Image types are symbols like `xbm' or `jpeg'."
         (and (fboundp 'init-image-library)
              (init-image-library type))))))
 
-(setq
- initial-buffer-choice nil
- inhibit-startup-message t
- inhibit-startup-screen t
- inhibit-startup-buffer-menu t
- inhibit-x-resources t)
-;; This is a weird one, see
-;; https://emacshorrors.com/posts/advertising-your-freedom.html
-(fset 'display-startup-echo-area-message 'ignore)
-
 ;; compat - Emacs Lisp Compatibility Library
 (use-package compat
   :demand t)
@@ -365,6 +355,9 @@ Image types are symbols like `xbm' or `jpeg'."
 ;; Marginalia annotates minibuffer completions with some useful info.
 (use-package marginalia
   :after vertico
+  :custom
+  (marginalia-max-relative-age 0)
+  (marginalia-align 'right)
   :bind (:map minibuffer-local-map
               ("M-A" . marginalia-cycle))
   :config (marginalia-mode))

@@ -124,10 +124,12 @@
                                             (garbage-collect))))
                         (add-hook 'after-focus-change-function 'garbage-collect))))
 
-          ;; Features
+          ;; run at full power please
+          (put 'downcase-region 'disabled nil)
+          (put 'upcase-region 'disabled nil)
           (put 'narrow-to-region 'disabled nil)
-          (put 'narrow-to-page   'disabled nil)
-          (put 'narrow-to-defun  'disabled nil))
+          (put 'narrow-to-page 'disabled nil)
+          (put 'narrow-to-defun 'disabled nil))
   :config (progn
             ;; Disable word wrapping
             (setq-default word-wrap nil)

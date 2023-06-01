@@ -366,7 +366,7 @@ existing directory under `magit-clone-default-directory'."
                                               hunk-list))) )))
                       (signal 'git-error (buffer-substring-no-properties (buffer-end -1) (buffer-end 1)))))
                   hunk-list))))
-  :hydra (hydra-git-menu (global-map "<f7>"
+  :hydra (hydra-git-menu (global-map "<f8>"
                                      :color blue)
                          "
 ^Navigate^        ^Action^               ^Info^

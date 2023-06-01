@@ -1,6 +1,6 @@
 ;;; setup-keys.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -121,10 +121,6 @@
 ;; Flycheck
 (global-set-key (kbd "<f7>")     'flycheck-next-error)
 (global-set-key (kbd "C-<f7>")   'helm-flycheck)
-
-;; Neotree toggle
-(global-set-key (kbd "<f8>")     'neotree-project-dir)
-(global-set-key (kbd "C-<f8>")   'neotree-toggle)
 
 ;; Refresh file
 (global-set-key (kbd "<f9>")     'refresh-file)
