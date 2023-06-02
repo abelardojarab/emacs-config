@@ -83,6 +83,12 @@
            (svn-status-hide-unknown           t)
            (svn-status-svn-file-coding-system 'utf-8)))
 
+;; git modeline and git utilities (not available in melpa)
+(use-package git-emacs
+  :if (executable-find "git")
+  :load-path (lambda () (expand-file-name "git-emacs/" user-emacs-directory))
+  :config (use-package git-modeline))
+
 ;; git-modes (not available in melpa)
 (use-package git-modes
   :demand t
@@ -427,12 +433,6 @@ _k_: prev hunk    _S_: stage file        _c_: show commit
             (defadvice svn-sttus-update-modeline (after svn-update-diff-hl activate)
               (diff-hl-update))))
 
-;; git modeline and git utilities (not available in melpa)
-(use-package git-emacs
-  :if (executable-find "git")
-  :load-path (lambda () (expand-file-name "git-emacs/" user-emacs-directory))
-  :config (use-package git-modeline))
-
 ;; gist
 (use-package gist
   :defer t
@@ -474,13 +474,6 @@ _k_: prev hunk    _S_: stage file        _c_: show commit
                                      ("k" git-timemachine-show-previous-revision "prev revision")
                                      ("c" git-timemachine-show-current-revision "curr revision")
                                      ("<ESC>" git-timemachine-show-current-revision "quit" :exit t)))
-
-;; Show blame for current line
-(use-package git-messenger
-  :if (executable-find "git")
-  :commands (git-messenger:popup-message)
-  :custom (git-messenger:show-detail t)
-  :config (define-key git-messenger-map (kbd "RET") 'git-messenger:popup-close))
 
 ;; Show git state for individual lines on the margin
 (use-package git-gutter
@@ -658,6 +651,20 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   (blamer-idle-time 0.3)
   (blamer-min-offset 70)
   :hook (on-first-buffer . global-blamer-mode))
+
+;; Show blame for current line
+(use-package git-messenger
+  :if (executable-find "git")
+  :commands (git-messenger:popup-message)
+  :custom (git-messenger:show-detail t)
+  :config (define-key git-messenger-map (kbd "RET") 'git-messenger:popup-close))
+
+;; git-link grabs links to lines, regions, commits, or home pages.
+(use-package git-link
+  :custom
+  (git-link-use-commit t)
+  (git-link-use-single-line-number t)
+  :commands (git-link git-link-commit git-link-homepage))
 
 (provide 'setup-versioning)
 ;;; setup-versioning.el ends here

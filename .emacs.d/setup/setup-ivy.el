@@ -26,49 +26,11 @@
 
 ;; completion style that divides the pattern into space-separated components
 (use-package orderless
-  ;; If it is lazy loaded, a message is show in the minibuffer the
-  ;; first time it is used
   :demand t
-  :custom
-  (completion-styles '(basic orderless))
-  (completion-category-defaults nil)
-  (completion-category-overrides
-   '((file (styles . (basic partial-completion orderless)))
-     (project-file (styles . (basic substring partial-completion orderless)))
-     (imenu (styles . (basic substring orderless)))
-     (kill-ring (styles . (basic substring orderless)))
-     (consult-location (styles . (basic substring orderless)))))
-  :config
-  (defun +orderless-literal-style-dispatcher (pattern _index _total)
-    "Style dispatcher which recognizes patterns which have an \"=\" as suffix and
-  dispatches those to the orderless-literal style."
-    (when (string-suffix-p "=" pattern)
-      `(orderless-literal . ,(substring pattern 0 -1))))
-  (defun +orderless-initialism-style-dispatcher (pattern _index _total)
-    "Style dispatchter which recognizes patterns which have an \";\" as suffix and
-  dispatches those to the orderless-initialism style."
-    (when (string-suffix-p ";" pattern)
-      `(orderless-initialism . ,(substring pattern 0 -1))))
-  (defun +orderless-flex-style-dispatcher (pattern _index _total)
-    "Style dispatcher which recognizes patterns which have an \",\" as suffix and
-  dispatches those to the orderless-flex style."
-    (when (string-suffix-p "," pattern)
-      `(orderless-flex . ,(substring pattern 0 -1))))
-  (setq orderless-component-separator " +")
-  (setq orderless-matching-styles
-        '(orderless-prefixes
-          orderless-initialism
-          orderless-regexp
-          orderless-flex))
-  (setq orderless-style-dispatchers
-        '(+orderless-literal-style-dispatcher
-          +orderless-initialism-style-dispatcher
-          +orderless-flex-style-dispatcher))
-  :bind
-  (:map minibuffer-local-completion-map
-        ("SPC" . nil)
-        ("?" . nil)))
+  :after vertico
+  :custom (completion-styles '(orderless)))
 
+;; flexible, simple tools for minibuffer completion in Emacs
 (use-package swiper
   :defer t
   :commands (swiper
@@ -79,7 +41,7 @@
              ivy-resume
              ivy-switch-buffer
              ivy-switch-buffer-other-window)
-  :diminish ivy-mode
+  :delight ivy-mode
   :hook (on-first-input . ivy-mode)
   :defines (projectile-completion-system
             magit-completing-read-function)

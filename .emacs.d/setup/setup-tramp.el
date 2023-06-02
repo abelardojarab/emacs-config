@@ -1,6 +1,6 @@
 ;;; setup-tramp.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -25,7 +25,14 @@
 ;;; Code:
 
 (use-package tramp
+  :custom ((tramp-default-method       "ssh")
+           (tramp-verbose              1)
+           (tramp-default-remote-shell "/bin/bash"))
   :init (progn
+          (setq tramp-connection-local-default-shell-variables
+                '((shell-file-name . "/bin/bash")
+                  (shell-command-switch . "-c")))
+
           ;; Create an alias
           (defalias 'exit-tramp 'tramp-cleanup-all-connections)
 
@@ -48,7 +55,6 @@
           ;; Set control master options before loading tramp
           (setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath=~/.emacs.cache/ssh-ControlPath -o ControlPersist=no"))
   :config (progn
-
             ;; Refresh SSH agent
             (when (executable-find "keychain")
               ;; Re-enable the SSH keyring in case Emacs does not refreshes it
