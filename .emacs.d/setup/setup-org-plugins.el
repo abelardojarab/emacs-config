@@ -26,7 +26,6 @@
 
 ;; Indentation, list bullets and checkboxes using monospace
 (use-package org-variable-pitch
-  :disabled t
   :commands org-variable-pitch-minor-mode
   :hook (org-mode . org-variable-pitch-minor-mode))
 
@@ -38,7 +37,6 @@
 
 ;; Auto-align Org tables
 (use-package org-table-auto-align
-  :disabled t
   :hook (org-mode .  org-table-auto-align-mode))
 
 ;; Prettier tables using unicode glyphs
@@ -69,7 +67,6 @@
 
 ;; Org Table of Contents
 (use-package toc-org
-  :defer t
   :after org
   :hook (org-mode . toc-org-enable)
   :commands toc-org-enable)
@@ -84,20 +81,17 @@
 
 ;; Seek headlines or content inside org buffers
 (use-package org-seek
-  :disabled t
   :after org
   :commands (org-seek-string org-seek-regexp org-seek-headlines))
 
 ;; Automated bulleting
 (use-package org-autolist
-  :disabled t
   :after org
   :hook (org-mode . org-autolist-mode)
   :commands org-autolist-mode)
 
 ;; Modern org styles
 (use-package org-modern
-  :disabled t
   :after org
   :hook ((org-mode org-agenda-finalize) . org-modern-mode)
   :commands org-modern-mode)
