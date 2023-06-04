@@ -71,8 +71,7 @@ All windows are purpose-dedicated.")
 ;; the name arg ("purpose-x-code1") is necessary for Emacs 24.5 and older
 ;; (omitting it produces an "Invalid slot name" error)
 (defvar purpose-x-code1-purpose-config
-  (purpose-conf "purpose-x-code1"
-                :mode-purposes
+  (purpose-conf :mode-purposes
                 '((ibuffer-mode . buffers)
                   (dired-mode . dired)
                   (imenu-list-major-mode . ilist))))
@@ -191,7 +190,7 @@ imenu."
 ;;; - `purpose-x-magit-off'
 
 (defvar purpose-x-magit-single-conf
-  (purpose-conf "magit-single"
+  (purpose-conf
                 ;; using `magit' as a condition in
                 ;; `purpose-special-action-sequences' is interpreted
                 ;; as a predicate function (for buffer's without a
@@ -203,7 +202,6 @@ imenu."
 
 (defvar purpose-x-magit-multi-conf
   (purpose-conf
-   "magit-multi"
    :mode-purposes '((magit-diff-mode . magit-diff)
                     (magit-status-mode . magit-status)
                     (magit-log-mode . magit-log)
@@ -423,7 +421,6 @@ The configuration is updated according to
   (interactive)
   (cl-flet ((joiner (x) (cons x 'popup)))
     (let ((conf (purpose-conf
-                 "popwin"
                  :mode-purposes (mapcar #'joiner purpose-x-popwin-major-modes)
                  :name-purposes (mapcar #'joiner purpose-x-popwin-buffer-names)
                  :regexp-purposes (mapcar #'joiner

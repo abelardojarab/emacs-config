@@ -164,7 +164,7 @@
 ;;  `isearch.el'.  So, in your `~/.emacs' file, do this:
 ;;
 ;;  (eval-after-load "isearch" '(require 'isearch-prop))
- 
+
 ;;(@* "Overview of Features")
 ;;
 ;;; Overview of Features ---------------------------------------------
@@ -351,7 +351,7 @@
 ;;    (command `isearchp-toggle-hiding-comments').  You can toggle
 ;;    ignoring comments during Isearch, using `C-M-;' (command
 ;;    `isearchp-toggle-ignoring-comments').
- 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
@@ -577,7 +577,7 @@
 (defvar isearchp-reg-beg) ;; In `isearch+.el'.
 (defvar isearchp-reg-end) ;; In `isearch+.el'.
 (defvar comment-end-skip) ;; In `newcomment.el' (Emacs 24+).
- 
+
 ;;(@* "Macros")
 
 ;;; Macros ----------------------------------------------
@@ -606,7 +606,7 @@ comments."
                                   ,@body))
          (when isearchp-ignore-comments-flag (isearchp-hide/show-comments 'show ,ostart ,oend))
          ,result))))
- 
+
 ;;(@* "Options")
 
 ;;; Options ----------------------------------------------------------
@@ -669,7 +669,7 @@ This has the effect that comments are ignored for searching."
   "Non-nil means limit query-replacing to the zones of `zz-izones-var'.
 This option has no effect if you do not use library `zones.el'."
   :type 'boolean :group 'isearch-plus)
- 
+
 ;;(@* "Internal Variables")
 
 ;;; Internal Variables -----------------------------------------------
@@ -729,7 +729,7 @@ Possible values are `text', `overlay', and nil, meaning both.")
 
 (defvar isearchp-zone-limits-function 'isearchp-zone-limits-izones
   "Function used to return limits of current search zones.")
- 
+
 ;;(@* "Keys")
 
 ;;; Keys -------------------------------------------------------------
@@ -744,7 +744,7 @@ Possible values are `text', `overlay', and nil, meaning both.")
 (when (fboundp 'isearchp-narrow-to-matching-zones)
   (define-key isearch-mode-map (kbd "S-SPC")      'isearchp-narrow-to-matching-zones))
 (define-key isearch-mode-map (kbd "C-S-SPC")      'isearchp-narrow-to-lazy-highlights)
- 
+
 ;;(@* "General Search-Property Commands")
 
 ;;; General Search-Property Commands ---------------------------------
@@ -1179,7 +1179,7 @@ remove the dimming.)"
           isearchp-property-type    'text
           isearchp-property-values  (list (cons regexp predicate)))
     (when msgp (message (if matches-p "Scanning for regexp matches...done" "NO MATCH for regexp")))))
-   
+
 ;;(@* "General Non-Interactive Functions")
 
 ;;; General Non-Interactive Search-Property Functions ----------------
@@ -1225,7 +1225,7 @@ ARG is normally from the prefix arg - see `isearchp-property-forward'."
         isearch-wrapped                  nil
         isearch-adjusted                 nil
         ;; isearch-barrier                  (point)
-	;; isearch-yank-flag                nil
+    ;; isearch-yank-flag                nil
         ;; isearch-error                    nil
         ;; isearch-just-started             t
         )
@@ -1392,7 +1392,7 @@ PREDICATE must be a function with two required arguments."
   "Return the default match function for text or overlay PROPERTY.
 Properties `face' and `mumamo-major-mode' are handled specially.
 For other properties the values are matched using `equal'."
-  (case property
+  (cl-case property
     ((face font-lock-face) (lambda (val rprop)
                              (if (consp rprop)
                                  (condition-case nil ; Allow for dotted cons.
@@ -1476,7 +1476,7 @@ options `lazy-highlight-cleanup' and `lazy-highlight-max-at-a-time'.
 Remember that you can use `\\<isearch-mode-map>\\[isearchp-cleanup]' to remove lazy-highlighting and
 artifacts from property searching.  This includes dimming and all
 `isearchp-' properties."
-  (interactive 
+  (interactive
    (list (if (and transient-mark-mode  mark-active) (region-beginning) (point-min))
          (if (and transient-mark-mode  mark-active) (region-end) (point-max))
          current-prefix-arg))
@@ -1484,7 +1484,7 @@ artifacts from property searching.  This includes dimming and all
 
 (defun isearchp-lazy-highlights-forward-regexp (beg end &optional restartp)
   "Same as `isearchp-lazy-highlights-forward', but regexp search."
-  (interactive 
+  (interactive
    (list (if (and transient-mark-mode  mark-active) (region-beginning) (point-min))
          (if (and transient-mark-mode  mark-active) (region-end) (point-max))
          current-prefix-arg))
@@ -1627,7 +1627,7 @@ Returns non-nil if the property was added, nil if not."
       (isearchp-with-comments-hidden
        start end
        (restore-buffer-modified-p nil)
-       (condition-case-no-debug add-prop-to-zones-with-other-prop
+       (condition-case-unless-debug add-prop-to-zones-with-other-prop
            (save-excursion
              (goto-char (setq last-beg  start))
              (while (and last-beg  (< last-beg end))
@@ -1793,7 +1793,7 @@ See `isearchp-add-regexp-as-property' for the parameter descriptions."
         (last-beg      nil)
         (added-prop-p  nil))
     (with-silent-modifications
-      (condition-case-no-debug isearchp-regexp-scan
+      (condition-case-unless-debug isearchp-regexp-scan
           (save-excursion
             (restore-buffer-modified-p nil)
             (goto-char (setq last-beg  beg))
@@ -1869,11 +1869,11 @@ Optional arg TEST is the test function.  If nil, test with `equal'.
 See `make-hash-table' for possible values of TEST."
   (setq test  (or test  #'equal))
   (let ((htable  (make-hash-table :test test)))
-    (loop for elt in sequence
+    (cl-loop for elt in sequence
        unless (gethash elt htable)
        do     (puthash elt elt htable)
-       finally return (loop for i being the hash-values in htable collect i))))
- 
+       finally return (cl-loop for i being the hash-values in htable collect i))))
+
 ;;(@* "Search-Zones Commands and Functions")
 
 ;;; Search-Zones Commands and Functions ------------------------------
@@ -2162,7 +2162,7 @@ Non-interactively:
            (when msgp (message "Showing only ANTI-zones now")))))
 
   )
- 
+
 ;;(@* "Imenu Commands and Functions")
 
 ;;; Imenu Commands and Functions -------------------------------------
@@ -2304,7 +2304,7 @@ Non-nil REGEXP-P means use regexp search (otherwise, literal search)."
   (let ((result  ()))
     (dolist (x xs) (when (funcall pred x) (push x result)))
     (nreverse result)))
- 
+
 ;;(@* "THING Commands and Functions")
 
 ;;; THING Commands and Functions" ------------------------------------
@@ -2588,7 +2588,7 @@ This function respects both `isearchp-search-complement-domain-p' and
       (isearchp-with-comments-hidden
        beg end
        (restore-buffer-modified-p nil)
-       (condition-case-no-debug isearchp-thing-scan
+       (condition-case-unless-debug isearchp-thing-scan
            (save-excursion
              (goto-char (setq last-beg  beg)) ; `isearchp-next-visible-thing-and-bounds' uses point.
              (while (and last-beg  (< last-beg end))

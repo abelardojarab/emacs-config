@@ -185,5 +185,12 @@
                         ("q" nil "Quit")
                         ))
 
+;; lsp-origami provides support for origami.el
+(use-package lsp-origami
+  :defer t
+  :after (lsp-mode origami)
+  :init (defun lsp-origami () nil)
+  :hook (lsp-after-open . #'lsp-origami-try-enable))
+
 (provide 'setup-folding)
 ;;; setup-hideshow.el ends here

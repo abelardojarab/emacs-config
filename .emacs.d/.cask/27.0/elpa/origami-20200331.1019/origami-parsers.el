@@ -95,7 +95,7 @@ position in the CONTENT."
                              ;; complexity here is due to having to find the end of the children so that the
                              ;; parent encompasses them
                              (-reduce-r-from (lambda (nodes acc)
-                                               (destructuring-bind (children-end . children) (build-nodes (cdr nodes))
+                                               (cl-destructuring-bind (children-end . children) (build-nodes (cdr nodes))
                                                  (let ((this-end (max children-end (end (car nodes)))))
                                                    (cons (max this-end (car acc))
                                                          (cons (funcall create
@@ -193,19 +193,19 @@ position in the CONTENT."
       (insert content)
       (python-mode)
       (defun python-subparser (beg end)
-	"find all fold block between beg and end."
-	(goto-char beg)
-	(let (acc)
-	  ;; iterate all same level children.
-	  (while (and (beginning-of-defun -1) (<= (point) end)) ;; have children between beg and end?
-	    (let* ((new-beg (point))
-		   (new-offset (progn (search-forward-regexp ":" nil t) (- (point) new-beg)))
-		   (new-end (progn (end-of-defun) (point))))
-	      (setq acc (cons (funcall create new-beg new-end new-offset
-				       (python-subparser new-beg new-end))
-			      acc))
-	      (goto-char new-end)))
-	  acc))
+    "find all fold block between beg and end."
+    (goto-char beg)
+    (let (acc)
+      ;; iterate all same level children.
+      (while (and (beginning-of-defun -1) (<= (point) end)) ;; have children between beg and end?
+        (let* ((new-beg (point))
+           (new-offset (progn (search-forward-regexp ":" nil t) (- (point) new-beg)))
+           (new-end (progn (end-of-defun) (point))))
+          (setq acc (cons (funcall create new-beg new-end new-offset
+                       (python-subparser new-beg new-end))
+                  acc))
+          (goto-char new-end)))
+      acc))
       (python-subparser (point-min) (point-max)))))
 
 (defun origami-lisp-parser (create regex)

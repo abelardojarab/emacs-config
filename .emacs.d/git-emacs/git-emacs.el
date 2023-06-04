@@ -50,7 +50,7 @@
 ;; First, make sure that vc-git.el is in your load path. Emacs 23 ships it by
 ;; default, for older versions you can get it from git distributions prior
 ;; to 1.6.x.
-;; 
+;;
 ;; 1) Load at startup (simplest)
 ;;
 ;; (add-to-list 'load-path "~/.emacs.d/git-emacs")  ; or your installation path
@@ -241,11 +241,11 @@ a failure message."
     ;; trim front
     (while (and (< begin end)
                 (memq (aref str begin) '(? ?\n)))
-      (incf begin))
+      (cl-incf begin))
     ;; trim rear
     (while (and (<= begin end)
                 (memq (aref str end) '(? ?\n)))
-      (decf end))
+      (cl-decf end))
     (substring str begin (+ end 1))))
 
 (defun git--exec-string (cmd &rest args)
@@ -289,7 +289,7 @@ the standard output there. Returns the git return code."
   (let ((end (- (length str) 1)))
     (while (and (< 0 end)
                 (memq (aref str end) '(? ?\n)))
-      (decf end))
+      (cl-decf end))
     (substring str 0 (+ end 1))))
 
 (defun git--pop-to-buffer(buffer)
@@ -369,7 +369,7 @@ autoloading which we know has already happened."
 
 (defsubst git--interpret-to-state-symbol (stat)
   "Interpret a one-letter git state string to our state symbols."
-  (case (string-to-char stat)
+  (cl-case (string-to-char stat)
     (?H 'uptodate )
     (?M 'modified )
     (?? 'unknown  )
@@ -487,7 +487,7 @@ visiting files that no longer exist."
                   ;; A hash table is probably not worth it here.
                   (setq buffers-not-reverted
                         (delq buffer buffers-not-reverted))
-                  (incf num-buffers-refreshed)))
+                  (cl-incf num-buffers-refreshed)))
             ;; Filter buffers by their saved status.
             (dolist (buffer buffers-that-exist)
               (if (buffer-modified-p buffer)
@@ -496,7 +496,7 @@ visiting files that no longer exist."
             ;; Do the state mark update if the user quits the revert prompts.
             ;; Or, on all unsaved buffers.
             (unwind-protect
-                (case git-working-dir-change-behaviour
+                (cl-case git-working-dir-change-behaviour
                   ('git-ask-for-all-saved
                    (map-y-or-n-p
                     (lambda(buffer) (format "%s has changed, refresh buffer? "
@@ -978,9 +978,9 @@ except EXCEPTS. Returns the user's selection."
   "Interactive git pull. Prompts user for a remote branch, and pulls from it.
   This command will fail if we can not do a ff-only pull from the remote branch."
   (interactive)
-  (let ((remote (git--select-remote 
-                 (concat "Select remote for pull (local branch:" 
-                         (git--current-branch) 
+  (let ((remote (git--select-remote
+                 (concat "Select remote for pull (local branch:"
+                         (git--current-branch)
                          "): "))))
     (message (git--pull-ff-only remote))))
 
@@ -999,19 +999,19 @@ except EXCEPTS. Returns the user's selection."
                                 (let ((lines (split-string resultstring "\n")))
                                   (if (string-equal (nth 2 lines) "Already up-to-date.")
                                       "Already up-to-date."
-                                    (let ((revision-change 
-                                           (split-string (cadr (split-string (nth 2 lines) )) 
+                                    (let ((revision-change
+                                           (split-string (cadr (split-string (nth 2 lines) ))
                                                          "\\.\\.")))
-                                      (concat "Pulled revisions from " 
-                                              (car revision-change) 
-                                              " to " 
-                                              (cadr revision-change) 
+                                      (concat "Pulled revisions from "
+                                              (car revision-change)
+                                              " to "
+                                              (cadr revision-change)
                                               "." (nth (- (length lines) 2) lines))))))))
     (let ((remote-name (car split-remote))
           (remote-branch (car (cdr split-remote))))
       (condition-case err
           (progn
-            (funcall parse-success-string 
+            (funcall parse-success-string
                      (git--exec-string "pull" "--ff-only" remote-name (concat remote-branch))))
         (error (error-message-string err))))))
 
@@ -1023,30 +1023,30 @@ except EXCEPTS. Returns the user's selection."
   (nth j (nth i arr)))
 
 (defun git--actual-push (remote-name remote-branch)
-  (let ((actual-run-output 
-         (git--split-porcelain 
-          (git--exec-string "push" "--porcelain" 
-                            remote-name 
+  (let ((actual-run-output
+         (git--split-porcelain
+          (git--exec-string "push" "--porcelain"
+                            remote-name
                             (concat (git--current-branch) ":" remote-branch)))))
-    (message (concat "Pushed changes " 
-                     (git--n-n-th 1 2 dry-run-output) 
-                     " to remote " 
-                     remote-name 
-                     "/" 
+    (message (concat "Pushed changes "
+                     (git--n-n-th 1 2 dry-run-output)
+                     " to remote "
+                     remote-name
+                     "/"
                      remote-branch))))
 
 (defun git--push-ff-only (remote)
   "Pushes from current branch into remote, fast-forward only."
   (let ((split-remote (split-string remote "/")))
-    (let ((dry-run-output (git--split-porcelain 
-                           (git--exec-string "push" "--dry-run" "--porcelain" 
-                                             (car split-remote) 
+    (let ((dry-run-output (git--split-porcelain
+                           (git--exec-string "push" "--dry-run" "--porcelain"
+                                             (car split-remote)
                                              (concat (git--current-branch) ":" (cadr split-remote))))))
       (let ((newbranch (string-equal (git--n-n-th 1 2 dry-run-output) "[new branch]"))
             (change-diff (git--n-n-th 1 2 dry-run-output))
             (up-to-date (string-equal (git--n-n-th 1 0 dry-run-output) "Everything up-to-date")))
-        (cond (newbranch (if (y-or-n-p (concat "Pushing will create branch " 
-                                               (cadr split-remote) 
+        (cond (newbranch (if (y-or-n-p (concat "Pushing will create branch "
+                                               (cadr split-remote)
                                                " in remote. Continue? "))
                              (git--actual-push (car split-remote) (cadr split-remote))
                            (message "Did not push.")))
@@ -1152,7 +1152,7 @@ pending commit buffer or nil if the buffer wasn't needed."
       (setq filename (file-relative-name buffer-file-name)))
 
     (if on-git?
-      (case (git--status-file filename)
+      (cl-case (git--status-file filename)
         ('modified (git-commit-all))    ; modified -> commit
         ('staged (git-commit-all))      ; staged -> commit
         ('unknown (git--add filename))  ; unknown  -> add
@@ -1291,7 +1291,7 @@ buffer TEMPLATE. Returns the buffer."
 
           (setq conflict-end (match-beginning 0))
 
-          (case side
+          (cl-case side
             ('local (delete-region conflict-sep conflict-end))
             ('remote (delete-region conflict-begin conflict-sep))
             (t (error "Side must be one of 'local or 'remote"))))))
@@ -1683,7 +1683,7 @@ a prefix argument, is specified, does a commit --amend."
 (defun git-clone (dir)
   "Clone a repository (prompts for the URL) into the local directory DIR (
 prompts if unspecified)."
-  
+
   (interactive "DLocal destination directory: ")
 
   (let ((repository
@@ -1871,7 +1871,7 @@ the result as a message."
                                        (git--config-get-author)))
 
       (git--config "--global" "user.name" name))
-    
+
     (when (or (null email) (string= "" email))
       (setq email (read-from-minibuffer "User Email : "
                                         (git--config-get-email)))
@@ -1887,7 +1887,7 @@ the result as a message."
     (insert file-or-glob "\n")
     (append-to-file (point-min) (point-max)
                     (expand-file-name ".gitignore" (git--get-top-dir)))))
-  
+
 (defun git-switch-branch (&optional branch)
   "Git switch branch, selecting from a list of branches."
   (interactive)
@@ -1927,7 +1927,7 @@ for new files to add to git."
              (let ((current-file (file-relative-name buffer-file-name)))
                (when (member current-file choices)
                  (message "default: %S" current-file) current-file))))
-         (files (git--select-from-user "Add new files (glob) >> " 
+         (files (git--select-from-user "Add new files (glob) >> "
                                        choices nil default-choice))
          (matched-files (mapcar #'(lambda (fi) (git--fileinfo->name fi))
                                 (git--ls-files "--others" "--exclude-standard"
@@ -1959,17 +1959,17 @@ valid ediff-buffer-A and B variables, among others. If the
 versions are identical, error out without executing either type
 of hook."
   (let* ((buf1 (find-file-noselect file))
-	 (buf2 nil)
-	 (config (current-window-configuration)))
+     (buf2 nil)
+     (config (current-window-configuration)))
 
     ;; build buf2
     (with-temp-buffer
       (let ((abspath (expand-file-name file))
-	    (filename nil))
+        (filename nil))
 
-	;; get relative to git root dir
-	(cd (git--get-top-dir (file-name-directory abspath)))
-	(let ((filerev (concat rev (file-relative-name abspath))))
+    ;; get relative to git root dir
+    (cd (git--get-top-dir (file-name-directory abspath)))
+    (let ((filerev (concat rev (file-relative-name abspath))))
               (setq buf2 (git--cat-file (if (equal rev ":")
                                             (concat "<index>" filerev)
                                           filerev)
@@ -2014,7 +2014,7 @@ buffer instead of a new one."
          (friendly-rev1 (or rev1 "<index>"))
          (friendly-rev2 (if (eq t rev2) "<index>" (or rev2 "<working>")))
          (diff-buffer-name (format "*git diff: %s %s..%s*"
-                                   (case (length files)
+                                   (cl-case (length files)
                                      (0 (abbreviate-file-name
                                          (git--get-top-dir)))
                                      (1 (file-relative-name (first files)))
@@ -2614,15 +2614,15 @@ usual pre / post work: ask for save, ask for refresh."
    3 secs
    (lambda (p)
      ;; iterating visible buffers
-     (let ((visible-buffers 
+     (let ((visible-buffers
             (mapcar #'(lambda (window) (window-buffer window)) (window-list))))
-       (loop for buffer in visible-buffers do
+       (cl-loop for buffer in visible-buffers do
              (with-current-buffer buffer
                (when (and (not tramp-mode) (buffer-file-name (git--in-vc-mode?)))
                  (let ((top (expand-file-name ".git/index" (git--get-top-dir))))
                    (when
-		       (and (file-exists-p top)
-			    (> p (second (time-since (elt (file-attributes top) 4)))))
+               (and (file-exists-p top)
+                (> p (second (time-since (elt (file-attributes top) 4)))))
                      (git--update-modeline))))))))
    secs))
 

@@ -1,7 +1,7 @@
 ;; Mode line decoration support, part of git-emacs.
 ;;
 ;; See git-emacs.el for license and versioning.
-;; 
+;;
 ;; ref. "test-runner-image.el" posted at
 ;; "http://nschum.de/src/emacs/test-runner/"
 
@@ -29,7 +29,7 @@ of mode-line-format."
 
 (defun git--interpret-state-mode-color (stat)
   "Return a mode line status color appropriate for STAT (a state symbol)."
-  (case stat
+  (cl-case stat
     ('modified "tomato"      )
     ('unknown  "gray"        )
     ('added    "blue"        )
@@ -47,9 +47,9 @@ of mode-line-format."
 "/* XPM */
 static char * data[] = {
 \"14 7 3 1\",
-\" 	c None\",
-\"+	c #202020\",
-\".	c %s\",
+\"  c None\",
+\"+ c #202020\",
+\". c %s\",
 \"      +++     \",
 \"     +...+    \",
 \"    +.....+   \",
@@ -64,9 +64,9 @@ static char * data[] = {
 "/* XPM */
 static char * data[] = {
 \"18 13 3 1\",
-\" 	c None\",
-\"+	c #000000\",
-\".	c %s\",
+\"  c None\",
+\"+ c #000000\",
+\". c %s\",
 \"                  \",
 \"       +++++      \",
 \"      +.....+     \",
@@ -82,7 +82,7 @@ static char * data[] = {
 \"                  \"};"))
 
 (defun git--interpret-state-mode-letter(stat)
-   (case stat
+   (cl-case stat
      ('modified "M")
      ('unknown  "?")
      ('added    "A")
@@ -102,8 +102,8 @@ static char * data[] = {
 
 (defun git-state-decoration-colored-letter(stat)
   (propertize
-   (concat 
-    (propertize 
+   (concat
+    (propertize
      (git--interpret-state-mode-letter stat)
      'face (list ':foreground (git--interpret-state-mode-color stat)))
     " ")
@@ -149,7 +149,7 @@ static char * data[] = {
   "Updates the state marks of all the buffers visiting the REPO-OR-FILELIST,
 which is a repository dir or a list of files. This is more efficient than
 doing update--state-mark for each buffer."
-  
+
   (git--uninstall-state-mark-modeline)
   (let ((buffers (git--find-buffers repo-or-filelist)))
     (when (and buffers git-state-modeline-decoration)
@@ -189,9 +189,9 @@ doing update--state-mark for each buffer."
                        (with-current-buffer (car buffer-stat)
                          (git--update-state-mark (cdr buffer-stat)))))
                  file-index)))))
-      
+
 ;; example on state-modeline-mark
-;; 
+;;
 ;;(git--install-state-mark-modeline 'modified)
 ;; (git--uninstall-state-mark-modeline)
 ;; (git--update-all-state-marks)

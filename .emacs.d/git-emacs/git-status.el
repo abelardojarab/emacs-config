@@ -100,7 +100,7 @@
   (let ((stat (git--fileinfo->stat info)))
     (propertize (capitalize (symbol-name stat))
                 'face
-                (case stat
+                (cl-case stat
                   ('modified 'git--modified-face )
                   ('uptodate 'git--uptodate-face )
                   ('unknown  'git--unknown-face  )
@@ -123,7 +123,7 @@ to ls -sh; e.g. 29152 -> 28K."
       (while (and (< i (length suffixes))
                   (>= size 1000))       ; 1023K would be 5 chars
         (setq size (/ size 1024.0))
-        (incf i))
+        (cl-incf i))
       (format (if (< size 10) "%.1f%c" "%.0f%c")
               size (elt suffixes (- i 1))))))
 
@@ -142,7 +142,7 @@ to ls -sh; e.g. 29152 -> 28K."
     (format
      (if (eq type 'commit) "%s  [submodule>]" "%s")
      (propertize name 'face
-                 (case type
+                 (cl-case type
                    ('tree 'git--mark-tree-face)
                    ('blob 'git--mark-blob-face)
                    ('commit 'git--mark-submodule-face)
@@ -800,7 +800,7 @@ them)."
 (defun git--status-view-open-or-expand ()
   "Open or expands the current file / directory / submodule."
   (interactive)
-  (case (git--status-view-select-type)
+  (cl-case (git--status-view-select-type)
     ('tree (git--status-view-expand-tree-toggle))
     ('blob (git--status-view-open-file))
     ('commit (git--status-view-descend-submodule))
@@ -884,12 +884,12 @@ current line. You can think of this as the \"selected files\"."
             (num-deleted 0))
         (when tracked-files
           (apply #'git--exec-string "rm" "-f" "--" tracked-files))
-        (incf num-deleted (length tracked-files))
+        (cl-incf num-deleted (length tracked-files))
         ;; Remove other files directly
         (unwind-protect
             (dolist (file untracked-files)
               (delete-file file)
-              (incf num-deleted))
+              (cl-incf num-deleted))
           (message "Deleted %d files" num-deleted)))))
 
   (revert-buffer))

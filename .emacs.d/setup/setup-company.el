@@ -1,6 +1,6 @@
 ;;; setup-company.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2021  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -257,7 +257,7 @@
                       (defun company-auctex-labels (command &optional arg &rest ignored)
                         "company-auctex-labels backend"
                         (interactive (list 'interactive))
-                        (case command
+                        (cl-case command
                           (interactive (company-begin-backend 'company-auctex-labels))
                           (prefix (company-auctex-prefix "\\\\.*ref{\\([^}]*\\)\\="))
                           (candidates (company-auctex-label-candidates arg))))

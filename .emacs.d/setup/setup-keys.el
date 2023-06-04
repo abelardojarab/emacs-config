@@ -189,7 +189,9 @@
 ;; Define custom key mode
 (define-minor-mode my/keys-minor-mode
   "A minor mode so that my key settings override annoying major modes."
-  t "" 'my/keys-minor-mode-map)
+  :init-value t
+  :lighter ""
+  :keymap 'my/keys-minor-mode-map)
 (diminish 'my/keys-minor-mode)
 (my/keys-minor-mode 1)
 (defun my/keys-disable-setup-hook ()

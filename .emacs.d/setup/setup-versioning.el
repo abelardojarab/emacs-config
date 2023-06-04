@@ -63,7 +63,7 @@
             (let ((bol (point))
                   (date (vc-call-backend vc-annotate-backend 'annotate-time))
                   (inhibit-read-only t))
-              (assert (>= (point) bol))
+              (cl-assert (>= (point) bol))
               (put-text-property bol (point) 'invisible 'vc-annotate-annotation)
               (when (string-equal "Git" vc-annotate-backend)
                 (save-excursion

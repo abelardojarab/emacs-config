@@ -51,7 +51,7 @@
                   (set-face-italic font-lock-comment-face t)
 
                   ;; Adjust text size based on resolution
-                  (case system-type
+                  (cl-case system-type
                     ('windows-nt
                      (if (> (x-display-pixel-width) 2000)
                          (progn ;; HD monitor in Windows
