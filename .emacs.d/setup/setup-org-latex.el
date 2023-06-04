@@ -40,7 +40,7 @@
            (org-latex-table-caption-above     nil))
   :config (progn
             ;; Enable bibtex support
-            (use-package ox-bibtex)
+            ;; (use-package ox-bibtex)
 
             (setq org-export-latex-quotes
                   '(("en" ("\\(\\s-\\|[[(]\\)\"" . "\\enquote{") ("\\(\\S-\\)\"" . "}") ("\\(\\s-\\|(\\)'" . "`"))))

@@ -1,10 +1,10 @@
 ;;; ob-org.el --- Babel Functions for Org Code Blocks -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2010-2017 Free Software Foundation, Inc.
+;; Copyright (C) 2010-2023 Free Software Foundation, Inc.
 
 ;; Author: Eric Schulte
 ;; Keywords: literate programming, reproducible research
-;; Homepage: http://orgmode.org
+;; URL: https://orgmode.org
 
 ;; This file is part of GNU Emacs.
 
@@ -27,6 +27,10 @@
 ;; contents of the code block are returned in a raw result.
 
 ;;; Code:
+
+(require 'org-macs)
+(org-assert-version)
+
 (require 'ob)
 
 (declare-function org-export-string-as "ox"
@@ -34,7 +38,7 @@
 
 (defvar org-babel-default-header-args:org
   '((:results . "raw silent") (:exports . "code"))
-  "Default arguments for evaluating a org source block.")
+  "Default arguments for evaluating an org source block.")
 
 (defvar org-babel-org-default-header
   "#+TITLE: default empty header\n"
@@ -66,7 +70,5 @@ This function is called by `org-babel-execute-src-block'."
   (error "Org does not support sessions"))
 
 (provide 'ob-org)
-
-
 
 ;;; ob-org.el ends here

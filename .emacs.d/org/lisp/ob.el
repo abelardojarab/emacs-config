@@ -1,10 +1,10 @@
 ;;; ob.el --- Working with Code Blocks in Org        -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2009-2017 Free Software Foundation, Inc.
+;; Copyright (C) 2009-2023 Free Software Foundation, Inc.
 
 ;; Authors: Eric Schulte
 ;; Keywords: literate programming, reproducible research
-;; Homepage: http://orgmode.org
+;; URL: https://orgmode.org
 
 ;; This file is part of GNU Emacs.
 
@@ -22,13 +22,17 @@
 ;; along with GNU Emacs.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Code:
+
+(require 'org-macs)
+(org-assert-version)
+
 (require 'org-macs)
 (require 'org-compat)
+(require 'org-keys)
 (require 'ob-eval)
 (require 'ob-core)
 (require 'ob-comint)
 (require 'ob-exp)
-(require 'ob-keys)
 (require 'ob-table)
 (require 'ob-lob)
 (require 'ob-ref)

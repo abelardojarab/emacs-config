@@ -1,10 +1,11 @@
 ;;; ob-groovy.el --- Babel Functions for Groovy      -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2017 Free Software Foundation, Inc.
+;; Copyright (C) 2013-2023 Free Software Foundation, Inc.
 
-;; Author: Miro Bezjak
+;; Author: Miro Bezjak <bezjak.miro@gmail.com>
+;; Maintainer: Palak Mathur <palakmathur@gmail.com>
 ;; Keywords: literate programming, reproducible research
-;; Homepage: http://orgmode.org
+;; URL: https://orgmode.org
 
 ;; This file is part of GNU Emacs.
 
@@ -25,11 +26,15 @@
 ;; Currently only supports the external execution.  No session support yet.
 
 ;;; Requirements:
-;; - Groovy language :: http://groovy.codehaus.org
+;; - Groovy language :: https://groovy-lang.org
 ;; - Groovy major mode :: Can be installed from MELPA or
 ;;   https://github.com/russel/Emacs-Groovy-Mode
 
 ;;; Code:
+
+(require 'org-macs)
+(org-assert-version)
+
 (require 'ob)
 
 (defvar org-babel-tangle-lang-exts) ;; Autoloaded
@@ -45,9 +50,9 @@ parameters may be used, like groovy -v"
   :type 'string)
 
 (defun org-babel-execute:groovy (body params)
-  "Execute a block of Groovy code with org-babel.  This function is
-called by `org-babel-execute-src-block'"
-  (message "executing Groovy source code block")
+  "Execute a block of Groovy code with org-babel.
+This function is called by `org-babel-execute-src-block'."
+  (message "Executing Groovy source code block")
   (let* ((processed-params (org-babel-process-params params))
          (session (org-babel-groovy-initiate-session (nth 0 processed-params)))
          (result-params (nth 2 processed-params))
@@ -65,7 +70,6 @@ called by `org-babel-execute-src-block'"
       (cdr (assq :rowname-names params)) (cdr (assq :rownames params))))))
 
 (defvar org-babel-groovy-wrapper-method
-
   "class Runner extends Script {
     def out = new PrintWriter(new ByteArrayOutputStream())
     def run() { %s }
@@ -73,7 +77,6 @@ called by `org-babel-execute-src-block'"
 
 println(new Runner().run())
 ")
-
 
 (defun org-babel-groovy-evaluate
     (session body &optional result-type result-params)
@@ -84,12 +87,12 @@ in BODY as elisp."
   (when session (error "Sessions are not (yet) supported for Groovy"))
   (pcase result-type
     (`output
-     (let ((src-file (org-babel-temp-file "groovy-")))
+     (let ((src-file (org-babel-temp-file "groovy_")))
        (progn (with-temp-file src-file (insert body))
               (org-babel-eval
                (concat org-babel-groovy-command " " src-file) ""))))
     (`value
-     (let* ((src-file (org-babel-temp-file "groovy-"))
+     (let* ((src-file (org-babel-temp-file "groovy_"))
             (wrapper (format org-babel-groovy-wrapper-method body)))
        (with-temp-file src-file (insert wrapper))
        (let ((raw (org-babel-eval
@@ -110,7 +113,5 @@ supported in Groovy."
   nil)
 
 (provide 'ob-groovy)
-
-
 
 ;;; ob-groovy.el ends here

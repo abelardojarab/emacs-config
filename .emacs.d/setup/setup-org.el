@@ -256,8 +256,8 @@
               :config (progn
                         ;; Default export
                         (use-package ox-org)
-                        (use-package ox-extra
-                          :config (ox-extras-activate '(latex-header-blocks ignore-headlines)))
+                        ;; (use-package ox-extra
+                        ;;   :config (ox-extras-activate '(latex-header-blocks ignore-headlines)))
 
                         ;; Beamer/ODT/Markdown exporters
                         (use-package ox-beamer)

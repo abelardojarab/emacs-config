@@ -1,10 +1,10 @@
 ;;; ob-forth.el --- Babel Functions for Forth        -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2017 Free Software Foundation, Inc.
+;; Copyright (C) 2014-2023 Free Software Foundation, Inc.
 
 ;; Author: Eric Schulte
 ;; Keywords: literate programming, reproducible research, forth
-;; Homepage: http://orgmode.org
+;; URL: https://orgmode.org
 
 ;; This file is part of GNU Emacs.
 
@@ -32,17 +32,21 @@
 ;; `forth-mode' which is distributed with gforth (in gforth.el).
 
 ;;; Code:
+
+(require 'org-macs)
+(org-assert-version)
+
 (require 'ob)
+(require 'org-macs)
 
 (declare-function forth-proc "ext:gforth" ())
-(declare-function org-trim "org" (s &optional keep-lead))
 
 (defvar org-babel-default-header-args:forth '((:session . "yes"))
   "Default header arguments for forth code blocks.")
 
 (defun org-babel-execute:forth (body params)
   "Execute a block of Forth code with org-babel.
-This function is called by `org-babel-execute-src-block'"
+This function is called by `org-babel-execute-src-block'."
   (if (string= "none" (cdr (assq :session params)))
       (error "Non-session evaluation not supported for Forth code blocks")
     (let ((all-results (org-babel-forth-session-execute body params)))
@@ -51,9 +55,9 @@ This function is called by `org-babel-execute-src-block'"
 	(car (last all-results))))))
 
 (defun org-babel-forth-session-execute (body params)
-  (require 'forth-mode)
+  (org-require-package 'forth-mode)
   (let ((proc (forth-proc))
-	(rx " \\(\n:\\|compiled\n\\\|ok\n\\)")
+	(rx " \\(\n:\\|compiled\n\\|ok\n\\)")
 	(result-start))
     (with-current-buffer (process-buffer (forth-proc))
       (mapcar (lambda (line)
@@ -75,8 +79,9 @@ This function is called by `org-babel-execute-src-block'"
 		   ((string= "\n:" case)
 		    ;; Report errors.
 		    (org-babel-eval-error-notify 1
-		     (buffer-substring
-		      (+ (match-beginning 0) 1) (point-max))) nil))))
+		                                 (buffer-substring
+		                                  (+ (match-beginning 0) 1) (point-max)))
+		    nil))))
 	      (split-string (org-trim
 			     (org-babel-expand-body:generic body params))
 			    "\n"

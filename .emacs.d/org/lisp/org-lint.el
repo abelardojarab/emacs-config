@@ -1,6 +1,6 @@
 ;;; org-lint.el --- Linting for Org documents        -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2015-2017 Free Software Foundation, Inc.
+;; Copyright (C) 2015-2023 Free Software Foundation, Inc.
 
 ;; Author: Nicolas Goaziou <mail@nicolasgoaziou.fr>
 ;; Keywords: outlines, hypermedia, calendar, wp
@@ -22,277 +22,331 @@
 
 ;;; Commentary:
 
-;; This library implements linting for Org syntax.  The sole public
-;; function is `org-lint', which see.
+;; This library implements linting for Org syntax.  The process is
+;; started by calling `org-lint' command, which see.
 
-;; Internally, the library defines a new structure:
-;; `org-lint-checker', with the following slots:
-
-;;   - NAME: Unique check identifier, as a non-nil symbol that doesn't
-;;     start with an hyphen.
-;;
-;;     The check is done calling the function `org-lint-NAME' with one
-;;     mandatory argument, the parse tree describing the current Org
-;;     buffer.  Such function calls are wrapped within
-;;     a `save-excursion' and point is always at `point-min'.  Its
-;;     return value has to be an alist (POSITION MESSAGE) when
-;;     POSITION refer to the buffer position of the error, as an
-;;     integer, and MESSAGE is a string describing the error.
-
-;;   - DESCRIPTION: Summary about the check, as a string.
-
-;;   - CATEGORIES: Categories relative to the check, as a list of
-;;     symbol.  They are used for filtering when calling `org-lint'.
-;;     Checkers not explicitly associated to a category are collected
-;;     in the `default' one.
-
-;;   - TRUST: The trust level one can have in the check.  It is either
-;;     `low' or `high', depending on the heuristics implemented and
-;;     the nature of the check.  This has an indicative value only and
-;;     is displayed along reports.
-
-;; All checks have to be listed in `org-lint--checkers'.
+;; New checkers are added by `org-lint-add-checker' function.
+;; Internally, all checks are listed in `org-lint--checkers'.
 
 ;; Results are displayed in a special "*Org Lint*" buffer with
 ;; a dedicated major mode, derived from `tabulated-list-mode'.
-;;
 ;; In addition to the usual key-bindings inherited from it, "C-j" and
 ;; "TAB" display problematic line reported under point whereas "RET"
 ;; jumps to it.  Also, "h" hides all reports similar to the current
 ;; one.  Additionally, "i" removes them from subsequent reports.
 
-;; Checks currently implemented are:
+;; Checks currently implemented report the following:
 
-;;   - duplicate CUSTOM_ID properties
-;;   - duplicate NAME values
-;;   - duplicate targets
-;;   - duplicate footnote definitions
-;;   - orphaned affiliated keywords
-;;   - obsolete affiliated keywords
-;;   - missing language in src blocks
-;;   - missing back-end in export blocks
-;;   - invalid Babel call blocks
-;;   - NAME values with a colon
-;;   - deprecated export block syntax
-;;   - deprecated Babel header properties
-;;   - wrong header arguments in src blocks
-;;   - misuse of CATEGORY keyword
-;;   - "coderef" links with unknown destination
-;;   - "custom-id" links with unknown destination
-;;   - "fuzzy" links with unknown destination
-;;   - "id" links with unknown destination
-;;   - links to non-existent local files
-;;   - SETUPFILE keywords with non-existent file parameter
-;;   - INCLUDE keywords with wrong link parameter
-;;   - obsolete markup in INCLUDE keyword
-;;   - unknown items in OPTIONS keyword
-;;   - spurious macro arguments or invalid macro templates
-;;   - special properties in properties drawer
-;;   - obsolete syntax for PROPERTIES drawers
-;;   - Invalid EFFORT property value
-;;   - missing definition for footnote references
-;;   - missing reference for footnote definitions
-;;   - non-footnote definitions in footnote section
-;;   - probable invalid keywords
-;;   - invalid blocks
-;;   - misplaced planning info line
-;;   - incomplete drawers
-;;   - indented diary-sexps
-;;   - obsolete QUOTE section
-;;   - obsolete "file+application" link
-;;   - blank headlines with tags
+;; - duplicates CUSTOM_ID properties,
+;; - duplicate NAME values,
+;; - duplicate targets,
+;; - duplicate footnote definitions,
+;; - orphaned affiliated keywords,
+;; - obsolete affiliated keywords,
+;; - deprecated export block syntax,
+;; - deprecated Babel header syntax,
+;; - missing language in source blocks,
+;; - missing backend in export blocks,
+;; - invalid Babel call blocks,
+;; - NAME values with a colon,
+;; - wrong babel headers,
+;; - invalid value in babel headers,
+;; - misuse of CATEGORY keyword,
+;; - "coderef" links with unknown destination,
+;; - "custom-id" links with unknown destination,
+;; - "fuzzy" links with unknown destination,
+;; - "id" links with unknown destination,
+;; - links to non-existent local files,
+;; - SETUPFILE keywords with non-existent file parameter,
+;; - INCLUDE keywords with misleading link parameter,
+;; - obsolete markup in INCLUDE keyword,
+;; - unknown items in OPTIONS keyword,
+;; - spurious macro arguments or invalid macro templates,
+;; - special properties in properties drawers,
+;; - obsolete syntax for properties drawers,
+;; - invalid duration in EFFORT property,
+;; - missing definition for footnote references,
+;; - missing reference for footnote definitions,
+;; - non-footnote definitions in footnote section,
+;; - probable invalid keywords,
+;; - invalid blocks,
+;; - misplaced planning info line,
+;; - probable incomplete drawers,
+;; - probable indented diary-sexps,
+;; - obsolete QUOTE section,
+;; - obsolete "file+application" link,
+;; - obsolete escape syntax in links,
+;; - spurious colons in tags,
+;; - invalid bibliography file,
+;; - missing "print_bibliography" keyword,
+;; - invalid value for "cite_export" keyword,
+;; - incomplete citation object.
 
 
 ;;; Code:
 
+(require 'org-macs)
+(org-assert-version)
+
 (require 'cl-lib)
-(require 'org-element)
-(require 'org-macro)
-(require 'ox)
 (require 'ob)
+(require 'oc)
+(require 'ol)
+(require 'org-attach)
+(require 'org-macro)
+(require 'org-fold)
+(require 'ox)
+(require 'seq)
 
 
-;;; Checkers
+;;; Checkers structure
 
 (cl-defstruct (org-lint-checker (:copier nil))
-  (name 'missing-checker-name)
-  (description "")
-  (categories '(default))
-  (trust 'high))			; `low' or `high'
+  name summary function trust categories)
 
-(defun org-lint-missing-checker-name (_)
-  (error
-   "`A checker has no `:name' property.  Please verify `org-lint--checkers'"))
+(defvar org-lint--checkers nil
+  "List of all available checkers.
+This list is populated by `org-lint-add-checker' function.")
 
-(defconst org-lint--checkers
-  (list
-   (make-org-lint-checker
-    :name 'duplicate-custom-id
-    :description "Report duplicates CUSTOM_ID properties"
-    :categories '(link))
-   (make-org-lint-checker
-    :name 'duplicate-name
-    :description "Report duplicate NAME values"
-    :categories '(babel link))
-   (make-org-lint-checker
-    :name 'duplicate-target
-    :description "Report duplicate targets"
-    :categories '(link))
-   (make-org-lint-checker
-    :name 'duplicate-footnote-definition
-    :description "Report duplicate footnote definitions"
-    :categories '(footnote))
-   (make-org-lint-checker
-    :name 'orphaned-affiliated-keywords
-    :description "Report orphaned affiliated keywords"
-    :trust 'low)
-   (make-org-lint-checker
-    :name 'obsolete-affiliated-keywords
-    :description "Report obsolete affiliated keywords"
-    :categories '(obsolete))
-   (make-org-lint-checker
-    :name 'deprecated-export-blocks
-    :description "Report deprecated export block syntax"
-    :categories '(obsolete export)
-    :trust 'low)
-   (make-org-lint-checker
-    :name 'deprecated-header-syntax
-    :description "Report deprecated Babel header syntax"
-    :categories '(obsolete babel)
-    :trust 'low)
-   (make-org-lint-checker
-    :name 'missing-language-in-src-block
-    :description "Report missing language in src blocks"
-    :categories '(babel))
-   (make-org-lint-checker
-    :name 'missing-backend-in-export-block
-    :description "Report missing back-end in export blocks"
-    :categories '(export))
-   (make-org-lint-checker
-    :name 'invalid-babel-call-block
-    :description "Report invalid Babel call blocks"
-    :categories '(babel))
-   (make-org-lint-checker
-    :name 'colon-in-name
-    :description "Report NAME values with a colon"
-    :categories '(babel))
-   (make-org-lint-checker
-    :name 'wrong-header-argument
-    :description "Report wrong babel headers"
-    :categories '(babel))
-   (make-org-lint-checker
-    :name 'wrong-header-value
-    :description "Report invalid value in babel headers"
-    :categories '(babel)
-    :trust 'low)
-   (make-org-lint-checker
-    :name 'deprecated-category-setup
-    :description "Report misuse of CATEGORY keyword"
-    :categories '(obsolete))
-   (make-org-lint-checker
-    :name 'invalid-coderef-link
-    :description "Report \"coderef\" links with unknown destination"
-    :categories '(link))
-   (make-org-lint-checker
-    :name 'invalid-custom-id-link
-    :description "Report \"custom-id\" links with unknown destination"
-    :categories '(link))
-   (make-org-lint-checker
-    :name 'invalid-fuzzy-link
-    :description "Report \"fuzzy\" links with unknown destination"
-    :categories '(link))
-   (make-org-lint-checker
-    :name 'invalid-id-link
-    :description "Report \"id\" links with unknown destination"
-    :categories '(link))
-   (make-org-lint-checker
-    :name 'link-to-local-file
-    :description "Report links to non-existent local files"
-    :categories '(link)
-    :trust 'low)
-   (make-org-lint-checker
-    :name 'non-existent-setupfile-parameter
-    :description "Report SETUPFILE keywords with non-existent file parameter"
-    :trust 'low)
-   (make-org-lint-checker
-    :name 'wrong-include-link-parameter
-    :description "Report INCLUDE keywords with misleading link parameter"
-    :categories '(export)
-    :trust 'low)
-   (make-org-lint-checker
-    :name 'obsolete-include-markup
-    :description "Report obsolete markup in INCLUDE keyword"
-    :categories '(obsolete export)
-    :trust 'low)
-   (make-org-lint-checker
-    :name 'unknown-options-item
-    :description "Report unknown items in OPTIONS keyword"
-    :categories '(export)
-    :trust 'low)
-   (make-org-lint-checker
-    :name 'invalid-macro-argument-and-template
-    :description "Report spurious macro arguments or invalid macro templates"
-    :categories '(export)
-    :trust 'low)
-   (make-org-lint-checker
-    :name 'special-property-in-properties-drawer
-    :description "Report special properties in properties drawers"
-    :categories '(properties))
-   (make-org-lint-checker
-    :name 'obsolete-properties-drawer
-    :description "Report obsolete syntax for properties drawers"
-    :categories '(obsolete properties))
-   (make-org-lint-checker
-    :name 'invalid-effort-property
-    :description "Report invalid duration in EFFORT property"
-    :categories '(properties))
-   (make-org-lint-checker
-    :name 'undefined-footnote-reference
-    :description "Report missing definition for footnote references"
-    :categories '(footnote))
-   (make-org-lint-checker
-    :name 'unreferenced-footnote-definition
-    :description "Report missing reference for footnote definitions"
-    :categories '(footnote))
-   (make-org-lint-checker
-    :name 'extraneous-element-in-footnote-section
-    :description "Report non-footnote definitions in footnote section"
-    :categories '(footnote))
-   (make-org-lint-checker
-    :name 'invalid-keyword-syntax
-    :description "Report probable invalid keywords"
-    :trust 'low)
-   (make-org-lint-checker
-    :name 'invalid-block
-    :description "Report invalid blocks"
-    :trust 'low)
-   (make-org-lint-checker
-    :name 'misplaced-planning-info
-    :description "Report misplaced planning info line"
-    :trust 'low)
-   (make-org-lint-checker
-    :name 'incomplete-drawer
-    :description "Report probable incomplete drawers"
-    :trust 'low)
-   (make-org-lint-checker
-    :name 'indented-diary-sexp
-    :description "Report probable indented diary-sexps"
-    :trust 'low)
-   (make-org-lint-checker
-    :name 'quote-section
-    :description "Report obsolete QUOTE section"
-    :categories '(obsolete)
-    :trust 'low)
-   (make-org-lint-checker
-    :name 'file-application
-    :description "Report obsolete \"file+application\" link"
-    :categories '(link obsolete))
-   (make-org-lint-checker
-    :name 'empty-headline-with-tags
-    :description "Report ambiguous empty headlines with tags"
-    :categories '(headline)
-    :trust 'low))
-  "List of all available checkers.")
+;;;###autoload
+(defun org-lint-add-checker (name summary fun &rest props)
+  "Add a new checker for linter.
+
+NAME is a unique check identifier, as a non-nil symbol.  SUMMARY
+is a short description of the check, as a string.
+
+The check is done calling the function FUN with one mandatory
+argument, the parse tree describing the current Org buffer.  Such
+function calls are wrapped within a `save-excursion' and point is
+always at `point-min'.  Its return value has to be an
+alist (POSITION MESSAGE) where POSITION refer to the buffer
+position of the error, as an integer, and MESSAGE is a one-line
+string describing the error.
+
+Optional argument PROPS provides additional information about the
+checker.  Currently, two properties are supported:
+
+  `:categories'
+
+     Categories relative to the check, as a list of symbol.  They
+     are used for filtering when calling `org-lint'.  Checkers
+     not explicitly associated to a category are collected in the
+     `default' one.
+
+  `:trust'
+
+    The trust level one can have in the check.  It is either
+    `low' or `high', depending on the heuristics implemented and
+    the nature of the check.  This has an indicative value only
+    and is displayed along reports."
+  (declare (indent 1))
+  ;; Sanity checks.
+  (pcase name
+    (`nil (error "Name field is mandatory for checkers"))
+    ((pred symbolp) nil)
+    (_ (error "Invalid type for name field")))
+  (unless (functionp fun)
+    (error "Checker field is expected to be a valid function"))
+  ;; Install checker in `org-lint--checkers'; uniquify by name.
+  (setq org-lint--checkers
+        (cons (apply #'make-org-lint-checker
+                     :name name
+                     :summary summary
+                     :function fun
+                     props)
+              (seq-remove (lambda (c) (eq name (org-lint-checker-name c)))
+                          org-lint--checkers))))
+
+
+;;; Reports UI
+
+(defvar org-lint--report-mode-map
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map tabulated-list-mode-map)
+    (define-key map (kbd "RET") 'org-lint--jump-to-source)
+    (define-key map (kbd "TAB") 'org-lint--show-source)
+    (define-key map (kbd "C-j") 'org-lint--show-source)
+    (define-key map (kbd "h") 'org-lint--hide-checker)
+    (define-key map (kbd "i") 'org-lint--ignore-checker)
+    map)
+  "Local keymap for `org-lint--report-mode' buffers.")
+
+(define-derived-mode org-lint--report-mode tabulated-list-mode "OrgLint"
+  "Major mode used to display reports emitted during linting.
+\\{org-lint--report-mode-map}"
+  (setf tabulated-list-format
+	`[("Line" 6
+	   (lambda (a b)
+	     (< (string-to-number (aref (cadr a) 0))
+		(string-to-number (aref (cadr b) 0))))
+	   :right-align t)
+	  ("Trust" 5 t)
+	  ("Warning" 0 t)])
+  (tabulated-list-init-header))
+
+(defun org-lint--generate-reports (buffer checkers)
+  "Generate linting report for BUFFER.
+
+CHECKERS is the list of checkers used.
+
+Return an alist (ID [LINE TRUST DESCRIPTION CHECKER]), suitable
+for `tabulated-list-printer'."
+  (with-current-buffer buffer
+    (save-excursion
+      (goto-char (point-min))
+      (let ((ast (org-element-parse-buffer))
+	    (id 0)
+	    (last-line 1)
+	    (last-pos 1))
+	;; Insert unique ID for each report.  Replace buffer positions
+	;; with line numbers.
+	(mapcar
+	 (lambda (report)
+	   (list
+	    (cl-incf id)
+	    (apply #'vector
+		   (cons
+		    (progn
+		      (goto-char (car report))
+		      (beginning-of-line)
+		      (prog1 (number-to-string
+			      (cl-incf last-line
+				       (count-lines last-pos (point))))
+			(setf last-pos (point))))
+		    (cdr report)))))
+	 ;; Insert trust level in generated reports.  Also sort them
+	 ;; by buffer position in order to optimize lines computation.
+	 (sort (cl-mapcan
+		(lambda (c)
+		  (let ((trust (symbol-name (org-lint-checker-trust c))))
+		    (mapcar
+		     (lambda (report)
+		       (list (car report) trust (nth 1 report) c))
+		     (save-excursion
+		       (funcall (org-lint-checker-function c)
+			        ast)))))
+		checkers)
+	       #'car-less-than-car))))))
+
+(defvar-local org-lint--source-buffer nil
+  "Source buffer associated to current report buffer.")
+
+(defvar-local org-lint--local-checkers nil
+  "List of checkers used to build current report.")
+
+(defun org-lint--refresh-reports ()
+  (setq tabulated-list-entries
+	(org-lint--generate-reports org-lint--source-buffer
+				    org-lint--local-checkers))
+  (tabulated-list-print))
+
+(defun org-lint--current-line ()
+  "Return current report line, as a number."
+  (string-to-number (aref (tabulated-list-get-entry) 0)))
+
+(defun org-lint--current-checker (&optional entry)
+  "Return current report checker.
+When optional argument ENTRY is non-nil, use this entry instead
+of current one."
+  (aref (if entry (nth 1 entry) (tabulated-list-get-entry)) 3))
+
+(defun org-lint--display-reports (source checkers)
+  "Display linting reports for buffer SOURCE.
+CHECKERS is the list of checkers used."
+  (let ((buffer (get-buffer-create "*Org Lint*")))
+    (with-current-buffer buffer
+      (org-lint--report-mode)
+      (setf org-lint--source-buffer source)
+      (setf org-lint--local-checkers checkers)
+      (org-lint--refresh-reports)
+      (add-hook 'tabulated-list-revert-hook #'org-lint--refresh-reports nil t))
+    (pop-to-buffer buffer)))
+
+(defun org-lint--jump-to-source ()
+  "Move to source line that generated the report at point."
+  (interactive)
+  (let ((l (org-lint--current-line)))
+    (switch-to-buffer-other-window org-lint--source-buffer)
+    (org-goto-line l)
+    (org-fold-show-set-visibility 'local)
+    (recenter)))
+
+(defun org-lint--show-source ()
+  "Show source line that generated the report at point."
+  (interactive)
+  (let ((buffer (current-buffer)))
+    (org-lint--jump-to-source)
+    (switch-to-buffer-other-window buffer)))
+
+(defun org-lint--hide-checker ()
+  "Hide all reports from checker that generated the report at point."
+  (interactive)
+  (let ((c (org-lint--current-checker)))
+    (setf tabulated-list-entries
+	  (cl-remove-if (lambda (e) (equal c (org-lint--current-checker e)))
+			tabulated-list-entries))
+    (tabulated-list-print)))
+
+(defun org-lint--ignore-checker ()
+  "Ignore all reports from checker that generated the report at point.
+Checker will also be ignored in all subsequent reports."
+  (interactive)
+  (setf org-lint--local-checkers
+	(remove (org-lint--current-checker) org-lint--local-checkers))
+  (org-lint--hide-checker))
+
+
+;;; Main function
+
+;;;###autoload
+(defun org-lint (&optional arg)
+  "Check current Org buffer for syntax mistakes.
+
+By default, run all checkers.  With a `\\[universal-argument]' prefix ARG, \
+select one
+category of checkers only.  With a `\\[universal-argument] \
+\\[universal-argument]' prefix, run one precise
+checker by its name.
+
+ARG can also be a list of checker names, as symbols, to run."
+  (interactive "P")
+  (unless (derived-mode-p 'org-mode) (user-error "Not in an Org buffer"))
+  (when (called-interactively-p 'any)
+    (message "Org linting process starting..."))
+  (let ((checkers
+	 (pcase arg
+	   (`nil org-lint--checkers)
+	   (`(4)
+	    (let ((category
+		   (completing-read
+		    "Checker category: "
+		    (mapcar #'org-lint-checker-categories org-lint--checkers)
+		    nil t)))
+	      (cl-remove-if-not
+	       (lambda (c)
+		 (assoc-string category (org-lint-checker-categories c)))
+	       org-lint--checkers)))
+	   (`(16)
+	    (list
+	     (let ((name (completing-read
+			  "Checker name: "
+			  (mapcar #'org-lint-checker-name org-lint--checkers)
+			  nil t)))
+	       (catch 'exit
+		 (dolist (c org-lint--checkers)
+		   (when (string= (org-lint-checker-name c) name)
+		     (throw 'exit c)))))))
+	   ((pred consp)
+	    (cl-remove-if-not (lambda (c) (memq (org-lint-checker-name c) arg))
+			      org-lint--checkers))
+	   (_ (user-error "Invalid argument `%S' for `org-lint'" arg)))))
+    (if (not (called-interactively-p 'any))
+	(org-lint--generate-reports (current-buffer) checkers)
+      (org-lint--display-reports (current-buffer) checkers)
+      (message "Org linting process completed"))))
+
+
+;;; Checker functions
 
 (defun org-lint--collect-duplicates
     (ast type extract-key extract-position build-message)
@@ -329,10 +383,8 @@ called with one argument, the key used for comparison."
    ast
    'node-property
    (lambda (property)
-     (and (eq (compare-strings "CUSTOM_ID" nil nil
-			       (org-element-property :key property) nil nil
-			       t)
-	      t)
+     (and (org-string-equal-ignore-case
+           "CUSTOM_ID" (org-element-property :key property))
 	  (org-element-property :value property)))
    (lambda (property _) (org-element-property :begin property))
    (lambda (key) (format "Duplicate CUSTOM_ID property \"%s\"" key))))
@@ -345,7 +397,7 @@ called with one argument, the key used for comparison."
    (lambda (datum name)
      (goto-char (org-element-property :begin datum))
      (re-search-forward
-      (format "^[ \t]*#\\+[A-Za-z]+: +%s *$" (regexp-quote name)))
+      (format "^[ \t]*#\\+[A-Za-z]+:[ \t]*%s[ \t]*$" (regexp-quote name)))
      (match-beginning 0))
    (lambda (key) (format "Duplicate NAME \"%s\"" key))))
 
@@ -419,8 +471,10 @@ instead"
 
 (defun org-lint-deprecated-header-syntax (ast)
   (let* ((deprecated-babel-properties
-	  (mapcar (lambda (arg) (symbol-name (car arg)))
-		  org-babel-common-header-args-w-values))
+	  ;; DIR is also used for attachments.
+	  (delete "dir"
+		  (mapcar (lambda (arg) (downcase (symbol-name (car arg))))
+			  org-babel-common-header-args-w-values)))
 	 (deprecated-re
 	  (format "\\`%s[ \t]" (regexp-opt deprecated-babel-properties t))))
     (org-element-map ast '(keyword node-property)
@@ -450,12 +504,20 @@ Use :header-args: instead"
 	(list (org-element-property :post-affiliated b)
 	      "Missing language in source block")))))
 
+(defun org-lint-suspicious-language-in-src-block (ast)
+  (org-element-map ast 'src-block
+    (lambda (b)
+      (when-let ((lang (org-element-property :language b)))
+        (unless (functionp (intern (format "org-babel-execute:%s" lang)))
+	  (list (org-element-property :post-affiliated b)
+	        (format "Unknown source block language: '%s'" lang)))))))
+
 (defun org-lint-missing-backend-in-export-block (ast)
   (org-element-map ast 'export-block
     (lambda (b)
       (unless (org-element-property :type b)
 	(list (org-element-property :post-affiliated b)
-	      "Missing back-end in export block")))))
+	      "Missing backend in export block")))))
 
 (defun org-lint-invalid-babel-call-block (ast)
   (org-element-map ast 'babel-call
@@ -537,15 +599,16 @@ Use :header-args: instead"
   (org-element-map ast 'drawer
     (lambda (d)
       (when (equal (org-element-property :drawer-name d) "PROPERTIES")
-	(let ((section (org-element-lineage d '(section))))
-	  (unless (org-element-map section 'property-drawer #'identity nil t)
-	    (list (org-element-property :post-affiliated d)
-		  (if (save-excursion
-			(goto-char (org-element-property :post-affiliated d))
-			(forward-line -1)
-			(or (org-at-heading-p) (org-at-planning-p)))
-		      "Incorrect contents for PROPERTIES drawer"
-		    "Incorrect location for PROPERTIES drawer"))))))))
+	(let ((headline? (org-element-lineage d '(headline)))
+	      (before
+	       (mapcar #'org-element-type
+		       (assq d (reverse (org-element-contents
+					 (org-element-property :parent d)))))))
+	  (list (org-element-property :post-affiliated d)
+		(if (or (and headline? (member before '(nil (planning))))
+			(and (null headline?) (member before '(nil (comment)))))
+		    "Incorrect contents for PROPERTIES drawer"
+		  "Incorrect location for PROPERTIES drawer")))))))
 
 (defun org-lint-invalid-effort-property (ast)
   (org-element-map ast 'node-property
@@ -560,67 +623,75 @@ Use :header-args: instead"
 (defun org-lint-link-to-local-file (ast)
   (org-element-map ast 'link
     (lambda (l)
-      (when (equal (org-element-property :type l) "file")
-	(let ((file (org-link-unescape (org-element-property :path l))))
-	  (and (not (file-remote-p file))
-	       (not (file-exists-p file))
-	       (list (org-element-property :begin l)
-		     (format (if (org-element-lineage l '(link))
-				 "Link to non-existent image file \"%s\"\
- in link description"
-			       "Link to non-existent local file \"%s\"")
-			     file))))))))
+      (let ((type (org-element-property :type l)))
+	(pcase type
+	  ((or "attachment" "file")
+	   (let* ((path (org-element-property :path l))
+		  (file (if (string= type "file")
+			    path
+                          (org-with-point-at (org-element-property :begin l)
+			    (org-attach-expand path)))))
+	     (and (not (file-remote-p file))
+		  (not (file-exists-p file))
+		  (list (org-element-property :begin l)
+			(format (if (org-element-lineage l '(link))
+				    "Link to non-existent image file %S \
+in description"
+				  "Link to non-existent local file %S")
+                                file)))))
+	  (_ nil))))))
 
 (defun org-lint-non-existent-setupfile-parameter (ast)
   (org-element-map ast 'keyword
     (lambda (k)
       (when (equal (org-element-property :key k) "SETUPFILE")
 	(let ((file (org-unbracket-string
-		     "\"" "\""
-		     (org-element-property :value k))))
-	  (and (not (file-remote-p file))
+			"\"" "\""
+		      (org-element-property :value k))))
+	  (and (not (org-url-p file))
+	       (not (file-remote-p file))
 	       (not (file-exists-p file))
 	       (list (org-element-property :begin k)
-		     (format "Non-existent setup file \"%s\"" file))))))))
+		     (format "Non-existent setup file %S" file))))))))
 
 (defun org-lint-wrong-include-link-parameter (ast)
   (org-element-map ast 'keyword
     (lambda (k)
       (when (equal (org-element-property :key k) "INCLUDE")
-	(let* ((value (org-element-property :value k))
-	       (path
-		(and (string-match "^\\(\".+\"\\|\\S-+\\)[ \t]*" value)
-		     (save-match-data
-		       (org-unbracket-string "\"" "\"" (match-string 1 value))))))
-	  (if (not path)
-	      (list (org-element-property :post-affiliated k)
-		    "Missing location argument in INCLUDE keyword")
-	    (let* ((file (org-string-nw-p
-			  (if (string-match "::\\(.*\\)\\'" path)
-			      (substring path 0 (match-beginning 0))
-			    path)))
-		   (search (and (not (equal file path))
-				(org-string-nw-p (match-string 1 path)))))
-	      (if (and file
-		       (not (file-remote-p file))
-		       (not (file-exists-p file)))
-		  (list (org-element-property :post-affiliated k)
-			"Non-existent file argument in INCLUDE keyword")
-		(let* ((visiting (if file (find-buffer-visiting file)
-				   (current-buffer)))
-		       (buffer (or visiting (find-file-noselect file))))
-		  (unwind-protect
-		      (with-current-buffer buffer
-			(when (and search
-				   (not
-				    (ignore-errors
-				      (let ((org-link-search-inhibit-query t))
-					(org-link-search search nil t)))))
-			  (list (org-element-property :post-affiliated k)
-				(format
-				 "Invalid search part \"%s\" in INCLUDE keyword"
-				 search))))
-		    (unless visiting (kill-buffer buffer))))))))))))
+        (let* ((value (org-element-property :value k))
+               (path
+                (and (string-match "^\\(\".+?\"\\|\\S-+\\)[ \t]*" value)
+                     (save-match-data
+                       (org-strip-quotes (match-string 1 value))))))
+          (if (not path)
+              (list (org-element-property :post-affiliated k)
+                    "Missing location argument in INCLUDE keyword")
+            (let* ((file (org-string-nw-p
+                          (if (string-match "::\\(.*\\)\\'" path)
+                              (substring path 0 (match-beginning 0))
+                            path)))
+                   (search (and (not (equal file path))
+                                (org-string-nw-p (match-string 1 path)))))
+              (unless (org-url-p file)
+                (if (and file
+                         (not (file-remote-p file))
+                         (not (file-exists-p file)))
+                    (list (org-element-property :post-affiliated k)
+                          "Non-existent file argument in INCLUDE keyword")
+                  (let* ((visiting (if file (find-buffer-visiting file)
+                                     (current-buffer)))
+                         (buffer (or visiting (find-file-noselect file)))
+                         (org-link-search-must-match-exact-headline t))
+                    (unwind-protect
+                        (with-current-buffer buffer
+                          (when (and search
+                                     (not (ignore-errors
+                                            (org-link-search search nil t))))
+                            (list (org-element-property :post-affiliated k)
+                                  (format
+                                   "Invalid search part \"%s\" in INCLUDE keyword"
+                                   search))))
+                      (unless visiting (kill-buffer buffer)))))))))))))
 
 (defun org-lint-obsolete-include-markup (ast)
   (let ((regexp (format "\\`\\(?:\".+\"\\|\\S-+\\)[ \t]+%s"
@@ -656,7 +727,7 @@ Use \"export %s\" instead"
 	(when (string= (org-element-property :key k) "OPTIONS")
 	  (let ((value (org-element-property :value k))
 		(start 0))
-	    (while (string-match "\\(.+?\\):\\((.*?)\\|\\S-*\\)[ \t]*"
+	    (while (string-match "\\(.+?\\):\\((.*?)\\|\\S-+\\)?[ \t]*"
 				 value
 				 start)
 	      (setf start (match-end 0))
@@ -664,19 +735,50 @@ Use \"export %s\" instead"
 		(unless (member item allowed)
 		  (push (list (org-element-property :post-affiliated k)
 			      (format "Unknown OPTIONS item \"%s\"" item))
-			reports))))))))
+			reports))
+                (unless (match-string 2 value)
+                  (push (list (org-element-property :post-affiliated k)
+                              (format "Missing value for option item %S" item))
+                        reports))))))))
     reports))
 
 (defun org-lint-invalid-macro-argument-and-template (ast)
-  (let ((extract-placeholders
-	 (lambda (template)
-	   (let ((start 0)
-		 args)
-	     (while (string-match "\\$\\([1-9][0-9]*\\)" template start)
-	       (setf start (match-end 0))
-	       (push (string-to-number (match-string 1 template)) args))
-	     (sort (org-uniquify args) #'<))))
-	reports)
+  (let* ((reports nil)
+         (extract-placeholders
+	  (lambda (template)
+	    (let ((start 0)
+		  args)
+	      (while (string-match "\\$\\([1-9][0-9]*\\)" template start)
+	        (setf start (match-end 0))
+	        (push (string-to-number (match-string 1 template)) args))
+	      (sort (org-uniquify args) #'<))))
+         (check-arity
+          (lambda (arity macro)
+            (let* ((name (org-element-property :key macro))
+                   (pos (org-element-property :begin macro))
+                   (args (org-element-property :args macro))
+                   (l (length args)))
+              (cond
+               ((< l (1- (car arity)))
+                (push (list pos (format "Missing arguments in macro %S" name))
+                      reports))
+               ((< l (car arity))
+                (push (list pos (format "Missing argument in macro %S" name))
+                      reports))
+               ((> l (1+ (cdr arity)))
+                (push (let ((spurious-args (nthcdr (cdr arity) args)))
+                        (list pos
+                              (format "Spurious arguments in macro %S: %s"
+                                      name
+                                      (mapconcat #'org-trim spurious-args ", "))))
+                      reports))
+               ((> l (cdr arity))
+                (push (list pos
+                            (format "Spurious argument in macro %S: %s"
+                                    name
+                                    (org-last args)))
+                      reports))
+               (t nil))))))
     ;; Check arguments for macro templates.
     (org-element-map ast 'keyword
       (lambda (k)
@@ -712,30 +814,38 @@ Use \"export %s\" instead"
 	(lambda (macro)
 	  (let* ((name (org-element-property :key macro))
 		 (template (cdr (assoc-string name templates t))))
-	    (if (not template)
-		(push (list (org-element-property :begin macro)
-			    (format "Undefined macro \"%s\"" name))
-		      reports)
-	      (let ((arg-numbers (funcall extract-placeholders template)))
-		(when arg-numbers
-		  (let ((spurious-args
-			 (nthcdr (apply #'max arg-numbers)
-				 (org-element-property :args macro))))
-		    (when spurious-args
-		      (push
-		       (list (org-element-property :begin macro)
-			     (format "Unused argument%s in macro \"%s\": %s"
-				     (if (> (length spurious-args) 1) "s" "")
-				     name
-				     (mapconcat (lambda (a) (format "\"%s\"" a))
-						spurious-args
-						", ")))
-		       reports))))))))))
+            (pcase template
+              (`nil
+               (push (list (org-element-property :begin macro)
+			   (format "Undefined macro %S" name))
+		     reports))
+              ((guard (string= name "keyword"))
+               (funcall check-arity '(1 . 1) macro))
+              ((guard (string= name "modification-time"))
+               (funcall check-arity '(1 . 2) macro))
+              ((guard (string= name "n"))
+               (funcall check-arity '(0 . 2) macro))
+              ((guard (string= name "property"))
+               (funcall check-arity '(1 . 2) macro))
+              ((guard (string= name "time"))
+               (funcall check-arity '(1 . 1) macro))
+              ((pred functionp))        ;ignore (eval ...) templates
+              (_
+               (let* ((arg-numbers (funcall extract-placeholders template))
+                      (arity (if (null arg-numbers)
+                                 '(0 . 0)
+                               (let ((m (apply #'max arg-numbers)))
+                                 (cons m m)))))
+                 (funcall check-arity arity macro))))))))
     reports))
 
 (defun org-lint-undefined-footnote-reference (ast)
-  (let ((definitions (org-element-map ast 'footnote-definition
-		       (lambda (f) (org-element-property :label f)))))
+  (let ((definitions
+          (org-element-map ast '(footnote-definition footnote-reference)
+	    (lambda (f)
+              (and (or (eq 'footnote-definition (org-element-type f))
+                       (eq 'inline (org-element-property :type f)))
+                   (org-element-property :label f))))))
     (org-element-map ast 'footnote-reference
       (lambda (f)
 	(let ((label (org-element-property :label f)))
@@ -789,15 +899,25 @@ Use \"export %s\" instead"
       (let ((name (org-trim (match-string-no-properties 0)))
 	    (element (org-element-at-point)))
 	(pcase (org-element-type element)
-	  ((or `drawer `property-drawer)
-	   (goto-char (org-element-property :end element))
-	   nil)
+	  (`drawer
+	   ;; Find drawer opening lines within non-empty drawers.
+	   (let ((end (org-element-property :contents-end element)))
+	     (when end
+	       (while (re-search-forward org-drawer-regexp end t)
+		 (let ((n (org-trim (match-string-no-properties 0))))
+		   (push (list (line-beginning-position)
+			       (format "Possible misleading drawer entry %S" n))
+			 reports))))
+	     (goto-char (org-element-property :end element))))
+	  (`property-drawer
+	   (goto-char (org-element-property :end element)))
 	  ((or `comment-block `example-block `export-block `src-block
 	       `verse-block)
 	   nil)
 	  (_
+	   ;; Find drawer opening lines outside of any drawer.
 	   (push (list (line-beginning-position)
-		       (format "Possible incomplete drawer \"%s\"" name))
+		       (format "Possible incomplete drawer %S" name))
 		 reports)))))
     reports))
 
@@ -886,6 +1006,23 @@ Use \"export %s\" instead"
 	     (list (org-element-property :begin l)
 		   (format "Deprecated \"file+%s\" link type" app)))))))
 
+(defun org-lint-percent-encoding-link-escape (ast)
+  (org-element-map ast 'link
+    (lambda (l)
+      (when (eq 'bracket (org-element-property :format l))
+	(let* ((uri (org-element-property :path l))
+	       (start 0)
+	       (obsolete-flag
+		(catch :obsolete
+		  (while (string-match "%\\(..\\)?" uri start)
+		    (setq start (match-end 0))
+		    (unless (member (match-string 1 uri) '("25" "5B" "5D" "20"))
+		      (throw :obsolete nil)))
+		  (string-match-p "%" uri))))
+	  (when obsolete-flag
+	    (list (org-element-property :begin l)
+		  "Link escaped with obsolete percent-encoding syntax")))))))
+
 (defun org-lint-wrong-header-argument (ast)
   (let* ((reports)
 	 (verify
@@ -937,8 +1074,10 @@ Use \"export %s\" instead"
 	  (`keyword
 	   (when (string= (org-element-property :key datum) "PROPERTY")
 	     (let ((value (org-element-property :value datum)))
-	       (when (string-match "\\`header-args\\(?::\\(\\S-+\\)\\)?\\+? *"
-				   value)
+	       (when (or (string-match "\\`header-args\\(?::\\(\\S-+\\)\\)?\\+ *"
+				       value)
+                         (string-match "\\`header-args\\(?::\\(\\S-+\\)\\)? *"
+				       value))
 		 (funcall verify
 			  datum
 			  (match-string 1 value)
@@ -947,8 +1086,10 @@ Use \"export %s\" instead"
 	  (`node-property
 	   (let ((key (org-element-property :key datum)))
 	     (when (let ((case-fold-search t))
-		     (string-match "\\`HEADER-ARGS\\(?::\\(\\S-+\\)\\)?\\+?"
-				   key))
+		     (or (string-match "\\`HEADER-ARGS\\(?::\\(\\S-+\\)\\)?\\+"
+				       key)
+                         (string-match "\\`HEADER-ARGS\\(?::\\(\\S-+\\)\\)?"
+				       key)))
 	       (funcall verify
 			datum
 			(match-string 1 key)
@@ -961,6 +1102,37 @@ Use \"export %s\" instead"
 		    (cl-mapcan #'org-babel-parse-header-arguments
 			       (cons (org-element-property :parameters datum)
 				     (org-element-property :header datum))))))))
+    reports))
+
+(defun org-lint-empty-header-argument (ast)
+  (let* (reports)
+    (org-element-map ast '(babel-call inline-babel-call inline-src-block src-block)
+      (lambda (datum)
+        (let ((headers
+	       (pcase (org-element-type datum)
+	         ((or `babel-call `inline-babel-call)
+		  (cl-mapcan
+                   (lambda (header) (org-babel-parse-header-arguments header 'no-eval))
+		   (list
+		    (org-element-property :inside-header datum)
+		    (org-element-property :end-header datum))))
+	         (`inline-src-block
+		  (org-babel-parse-header-arguments
+		   (org-element-property :parameters datum)
+                   'no-eval))
+	         (`src-block
+		  (cl-mapcan
+                   (lambda (header) (org-babel-parse-header-arguments header 'no-eval))
+		   (cons (org-element-property :parameters datum)
+			 (org-element-property :header datum)))))))
+          (dolist (header headers)
+            (when (not (cdr header))
+              (push
+	       (list
+                (or (org-element-property :post-affiliated datum)
+		    (org-element-property :begin datum))
+		(format "Empty value in header argument \"%s\"" (symbol-name (car header))))
+	       reports))))))
     reports))
 
 (defun org-lint-wrong-header-value (ast)
@@ -1037,206 +1209,358 @@ Use \"export %s\" instead"
 			   reports))))))))))))
     reports))
 
-(defun org-lint-empty-headline-with-tags (ast)
+(defun org-lint-spurious-colons (ast)
   (org-element-map ast '(headline inlinetask)
     (lambda (h)
-      (let ((title (org-element-property :raw-value h)))
-	(and (string-match-p "\\`:[[:alnum:]_@#%:]+:\\'" title)
-	     (list (org-element-property :begin h)
-		   (format "Headline containing only tags is ambiguous: %S"
-			   title)))))))
+      (when (member "" (org-element-property :tags h))
+	(list (org-element-property :begin h)
+	      "Tags contain a spurious colon")))))
 
+(defun org-lint-non-existent-bibliography (ast)
+  (org-element-map ast 'keyword
+    (lambda (k)
+      (when (equal "BIBLIOGRAPHY" (org-element-property :key k))
+        (let ((file (org-strip-quotes (org-element-property :value k))))
+          (and (not (file-remote-p file))
+	       (not (file-exists-p file))
+	       (list (org-element-property :begin k)
+		     (format "Non-existent bibliography %S" file))))))))
+
+(defun org-lint-missing-print-bibliography (ast)
+  (and (org-element-map ast 'citation #'identity nil t)
+       (not (org-element-map ast 'keyword
+              (lambda (k)
+                (equal "PRINT_BIBLIOGRAPHY" (org-element-property :key k)))
+              nil t))
+       (list
+        (list (point-max) "Possibly missing \"PRINT_BIBLIOGRAPHY\" keyword"))))
+
+(defun org-lint-invalid-cite-export-declaration (ast)
+  (org-element-map ast 'keyword
+    (lambda (k)
+      (when (equal "CITE_EXPORT" (org-element-property :key k))
+        (let ((value (org-element-property :value k))
+              (source (org-element-property :begin k)))
+          (if (equal value "")
+              (list source "Missing export processor name")
+            (condition-case _
+                (pcase (org-cite-read-processor-declaration value)
+                  (`(,(and (pred symbolp) name)
+                     ,(pred string-or-null-p)
+                     ,(pred string-or-null-p))
+                   (unless (org-cite-get-processor name)
+                     (list source "Unknown cite export processor %S" name)))
+                  (_
+                   (list source "Invalid cite export processor declaration")))
+              (error
+               (list source "Invalid cite export processor declaration")))))))))
+
+(defun org-lint-incomplete-citation (ast)
+  (org-element-map ast 'plain-text
+    (lambda (text)
+      (and (string-match-p org-element-citation-prefix-re text)
+           ;; XXX: The code below signals the error at the beginning
+           ;; of the paragraph containing the faulty object.  It is
+           ;; not very accurate but may be enough for now.
+           (list (org-element-property :contents-begin
+                                       (org-element-property :parent text))
+                 "Possibly incomplete citation markup")))))
+
+(defun org-lint-item-number (ast)
+  (org-element-map ast 'item
+    (lambda (item)
+      (unless (org-element-property :counter item)
+        (when-let* ((bullet (org-element-property :bullet item))
+                    (bullet-number
+                     (cond
+                      ((string-match "[A-Za-z]" bullet)
+		       (- (string-to-char (upcase (match-string 0 bullet)))
+			  64))
+                      ((string-match "[0-9]+" bullet)
+		       (string-to-number (match-string 0 bullet)))))
+                    (true-number
+                     (org-list-get-item-number
+                      (org-element-property :begin item)
+                      (org-element-property :structure item)
+                      (org-list-prevs-alist (org-element-property :structure item))
+                      (org-list-parents-alist (org-element-property :structure item)))))
+          (unless (equal bullet-number (car (last true-number)))
+            (list
+             (org-element-property :begin item)
+             (format "Bullet counter \"%s\" is not the same with item position %d.  Consider adding manual [@%d] counter."
+                     bullet (car (last true-number)) bullet-number))))))))
+
+(defun org-lint-LaTeX-$ (ast)
+  "Report semi-obsolete $...$ LaTeX fragments.
+AST is the buffer parse tree."
+  (org-element-map ast 'latex-fragment
+    (lambda (fragment)
+      (and (string-match-p "^[$][^$]" (org-element-property :value fragment))
+           (list (org-element-property :begin fragment)
+                 "Potentially confusing LaTeX fragment format.  Prefer using more reliable \\(...\\)")))))
+(defun org-lint-timestamp-syntax (ast)
+  "Report malformed timestamps.
+AST is the buffer parse tree."
+  (org-element-map ast 'timestamp
+    (lambda (timestamp)
+      (let ((expected (org-element-interpret-data timestamp))
+            (actual (buffer-substring-no-properties
+                     (org-element-property :begin timestamp)
+                     (org-element-property :end timestamp))))
+        (unless (equal expected actual)
+          (list (org-element-property :begin timestamp)
+                (format "Potentially malformed timestamp.  Recognized: %s" expected)))))))
 
-;;; Reports UI
+;;; Checkers declaration
 
-(defvar org-lint--report-mode-map
-  (let ((map (make-sparse-keymap)))
-    (set-keymap-parent map tabulated-list-mode-map)
-    (define-key map (kbd "RET") 'org-lint--jump-to-source)
-    (define-key map (kbd "TAB") 'org-lint--show-source)
-    (define-key map (kbd "C-j") 'org-lint--show-source)
-    (define-key map (kbd "h") 'org-lint--hide-checker)
-    (define-key map (kbd "i") 'org-lint--ignore-checker)
-    map)
-  "Local keymap for `org-lint--report-mode' buffers.")
+(org-lint-add-checker 'duplicate-custom-id
+  "Report duplicates CUSTOM_ID properties"
+  #'org-lint-duplicate-custom-id
+  :categories '(link))
 
-(define-derived-mode org-lint--report-mode tabulated-list-mode "OrgLint"
-  "Major mode used to display reports emitted during linting.
-\\{org-lint--report-mode-map}"
-  (setf tabulated-list-format
-	`[("Line" 6
-	   (lambda (a b)
-	     (< (string-to-number (aref (cadr a) 0))
-		(string-to-number (aref (cadr b) 0))))
-	   :right-align t)
-	  ("Trust" 5 t)
-	  ("Warning" 0 t)])
-  (tabulated-list-init-header))
+(org-lint-add-checker 'duplicate-name
+  "Report duplicate NAME values"
+  #'org-lint-duplicate-name
+  :categories '(babel 'link))
 
-(defun org-lint--generate-reports (buffer checkers)
-  "Generate linting report for BUFFER.
+(org-lint-add-checker 'duplicate-target
+  "Report duplicate targets"
+  #'org-lint-duplicate-target
+  :categories '(link))
 
-CHECKERS is the list of checkers used.
+(org-lint-add-checker 'duplicate-footnote-definition
+  "Report duplicate footnote definitions"
+  #'org-lint-duplicate-footnote-definition
+  :categories '(footnote))
 
-Return an alist (ID [LINE TRUST DESCRIPTION CHECKER]), suitable
-for `tabulated-list-printer'."
-  (with-current-buffer buffer
-    (save-excursion
-      (goto-char (point-min))
-      (let ((ast (org-element-parse-buffer))
-	    (id 0)
-	    (last-line 1)
-	    (last-pos 1))
-	;; Insert unique ID for each report.  Replace buffer positions
-	;; with line numbers.
-	(mapcar
-	 (lambda (report)
-	   (list
-	    (cl-incf id)
-	    (apply #'vector
-		   (cons
-		    (progn
-		      (goto-char (car report))
-		      (beginning-of-line)
-		      (prog1 (number-to-string
-			      (cl-incf last-line
-				       (count-lines last-pos (point))))
-			(setf last-pos (point))))
-		    (cdr report)))))
-	 ;; Insert trust level in generated reports.  Also sort them
-	 ;; by buffer position in order to optimize lines computation.
-	 (sort (cl-mapcan
-		(lambda (c)
-		  (let ((trust (symbol-name (org-lint-checker-trust c))))
-		    (mapcar
-		     (lambda (report)
-		       (list (car report) trust (nth 1 report) c))
-		     (save-excursion
-		       (funcall
-			(intern (format "org-lint-%s"
-					(org-lint-checker-name c)))
-			ast)))))
-		checkers)
-	       #'car-less-than-car))))))
+(org-lint-add-checker 'orphaned-affiliated-keywords
+  "Report orphaned affiliated keywords"
+  #'org-lint-orphaned-affiliated-keywords
+  :trust 'low)
 
-(defvar-local org-lint--source-buffer nil
-  "Source buffer associated to current report buffer.")
+(org-lint-add-checker 'obsolete-affiliated-keywords
+  "Report obsolete affiliated keywords"
+  #'org-lint-obsolete-affiliated-keywords
+  :categories '(obsolete))
 
-(defvar-local org-lint--local-checkers nil
-  "List of checkers used to build current report.")
+(org-lint-add-checker 'deprecated-export-blocks
+  "Report deprecated export block syntax"
+  #'org-lint-deprecated-export-blocks
+  :trust 'low :categories '(obsolete export))
 
-(defun org-lint--refresh-reports ()
-  (setq tabulated-list-entries
-	(org-lint--generate-reports org-lint--source-buffer
-				    org-lint--local-checkers))
-  (tabulated-list-print))
+(org-lint-add-checker 'deprecated-header-syntax
+  "Report deprecated Babel header syntax"
+  #'org-lint-deprecated-header-syntax
+  :trust 'low :categories '(obsolete babel))
 
-(defun org-lint--current-line ()
-  "Return current report line, as a number."
-  (string-to-number (aref (tabulated-list-get-entry) 0)))
+(org-lint-add-checker 'missing-language-in-src-block
+  "Report missing language in source blocks"
+  #'org-lint-missing-language-in-src-block
+  :categories '(babel))
 
-(defun org-lint--current-checker (&optional entry)
-  "Return current report checker.
-When optional argument ENTRY is non-nil, use this entry instead
-of current one."
-  (aref (if entry (nth 1 entry) (tabulated-list-get-entry)) 3))
+(org-lint-add-checker 'suspicious-language-in-src-block
+  "Report suspicious language in source blocks"
+  #'org-lint-suspicious-language-in-src-block
+  :trust 'low :categories '(babel))
 
-(defun org-lint--display-reports (source checkers)
-  "Display linting reports for buffer SOURCE.
-CHECKERS is the list of checkers used."
-  (let ((buffer (get-buffer-create "*Org Lint*")))
-    (with-current-buffer buffer
-      (org-lint--report-mode)
-      (setf org-lint--source-buffer source)
-      (setf org-lint--local-checkers checkers)
-      (org-lint--refresh-reports)
-      (tabulated-list-print)
-      (add-hook 'tabulated-list-revert-hook #'org-lint--refresh-reports nil t))
-    (pop-to-buffer buffer)))
+(org-lint-add-checker 'missing-backend-in-export-block
+  "Report missing backend in export blocks"
+  #'org-lint-missing-backend-in-export-block
+  :categories '(export))
 
-(defun org-lint--jump-to-source ()
-  "Move to source line that generated the report at point."
-  (interactive)
-  (let ((l (org-lint--current-line)))
-    (switch-to-buffer-other-window org-lint--source-buffer)
-    (org-goto-line l)
-    (org-show-set-visibility 'local)
-    (recenter)))
+(org-lint-add-checker 'invalid-babel-call-block
+  "Report invalid Babel call blocks"
+  #'org-lint-invalid-babel-call-block
+  :categories '(babel))
 
-(defun org-lint--show-source ()
-  "Show source line that generated the report at point."
-  (interactive)
-  (let ((buffer (current-buffer)))
-    (org-lint--jump-to-source)
-    (switch-to-buffer-other-window buffer)))
+(org-lint-add-checker 'colon-in-name
+  "Report NAME values with a colon"
+  #'org-lint-colon-in-name
+  :categories '(babel))
 
-(defun org-lint--hide-checker ()
-  "Hide all reports from checker that generated the report at point."
-  (interactive)
-  (let ((c (org-lint--current-checker)))
-    (setf tabulated-list-entries
-	  (cl-remove-if (lambda (e) (equal c (org-lint--current-checker e)))
-			 tabulated-list-entries))
-    (tabulated-list-print)))
+(org-lint-add-checker 'wrong-header-argument
+  "Report wrong babel headers"
+  #'org-lint-wrong-header-argument
+  :categories '(babel))
 
-(defun org-lint--ignore-checker ()
-  "Ignore all reports from checker that generated the report at point.
-Checker will also be ignored in all subsequent reports."
-  (interactive)
-  (setf org-lint--local-checkers
-	(remove (org-lint--current-checker) org-lint--local-checkers))
-  (org-lint--hide-checker))
+(org-lint-add-checker 'wrong-header-value
+  "Report invalid value in babel headers"
+  #'org-lint-wrong-header-value
+  :categories '(babel) :trust 'low)
 
-
-;;; Public function
+(org-lint-add-checker 'empty-header-argument
+  "Report empty values in babel headers"
+  #'org-lint-empty-header-argument
+  :categories '(babel) :trust 'low)
 
-;;;###autoload
-(defun org-lint (&optional arg)
-  "Check current Org buffer for syntax mistakes.
+(org-lint-add-checker 'deprecated-category-setup
+  "Report misuse of CATEGORY keyword"
+  #'org-lint-deprecated-category-setup
+  :categories '(obsolete))
 
-By default, run all checkers.  With a `\\[universal-argument]' prefix ARG, \
-select one
-category of checkers only.  With a `\\[universal-argument] \
-\\[universal-argument]' prefix, run one precise
-checker by its name.
+(org-lint-add-checker 'invalid-coderef-link
+  "Report \"coderef\" links with unknown destination"
+  #'org-lint-invalid-coderef-link
+  :categories '(link))
 
-ARG can also be a list of checker names, as symbols, to run."
-  (interactive "P")
-  (unless (derived-mode-p 'org-mode) (user-error "Not in an Org buffer"))
-  (when (called-interactively-p 'any)
-    (message "Org linting process starting..."))
-  (let ((checkers
-	 (pcase arg
-	   (`nil org-lint--checkers)
-	   (`(4)
-	    (let ((category
-		   (completing-read
-		    "Checker category: "
-		    (mapcar #'org-lint-checker-categories org-lint--checkers)
-		    nil t)))
-	      (cl-remove-if-not
-	       (lambda (c)
-		 (assoc-string (org-lint-checker-categories c) category))
-	       org-lint--checkers)))
-	   (`(16)
-	    (list
-	     (let ((name (completing-read
-			  "Checker name: "
-			  (mapcar #'org-lint-checker-name org-lint--checkers)
-			  nil t)))
-	       (catch 'exit
-		 (dolist (c org-lint--checkers)
-		   (when (string= (org-lint-checker-name c) name)
-		     (throw 'exit c)))))))
-	   ((pred consp)
-	    (cl-remove-if-not (lambda (c) (memq (org-lint-checker-name c) arg))
-			       org-lint--checkers))
-	   (_ (user-error "Invalid argument `%S' for `org-lint'" arg)))))
-    (if (not (called-interactively-p 'any))
-	(org-lint--generate-reports (current-buffer) checkers)
-      (org-lint--display-reports (current-buffer) checkers)
-      (message "Org linting process completed"))))
+(org-lint-add-checker 'invalid-custom-id-link
+  "Report \"custom-id\" links with unknown destination"
+  #'org-lint-invalid-custom-id-link
+  :categories '(link))
 
+(org-lint-add-checker 'invalid-fuzzy-link
+  "Report \"fuzzy\" links with unknown destination"
+  #'org-lint-invalid-fuzzy-link
+  :categories '(link))
+
+(org-lint-add-checker 'invalid-id-link
+  "Report \"id\" links with unknown destination"
+  #'org-lint-invalid-id-link
+  :categories '(link))
+
+(org-lint-add-checker 'link-to-local-file
+  "Report links to non-existent local files"
+  #'org-lint-link-to-local-file
+  :categories '(link) :trust 'low)
+
+(org-lint-add-checker 'non-existent-setupfile-parameter
+  "Report SETUPFILE keywords with non-existent file parameter"
+  #'org-lint-non-existent-setupfile-parameter
+  :trust 'low)
+
+(org-lint-add-checker 'wrong-include-link-parameter
+  "Report INCLUDE keywords with misleading link parameter"
+  #'org-lint-wrong-include-link-parameter
+  :categories '(export) :trust 'low)
+
+(org-lint-add-checker 'obsolete-include-markup
+  "Report obsolete markup in INCLUDE keyword"
+  #'org-lint-obsolete-include-markup
+  :categories '(obsolete export) :trust 'low)
+
+(org-lint-add-checker 'unknown-options-item
+  "Report unknown items in OPTIONS keyword"
+  #'org-lint-unknown-options-item
+  :categories '(export) :trust 'low)
+
+(org-lint-add-checker 'invalid-macro-argument-and-template
+  "Report spurious macro arguments or invalid macro templates"
+  #'org-lint-invalid-macro-argument-and-template
+  :categories '(export) :trust 'low)
+
+(org-lint-add-checker 'special-property-in-properties-drawer
+  "Report special properties in properties drawers"
+  #'org-lint-special-property-in-properties-drawer
+  :categories '(properties))
+
+(org-lint-add-checker 'obsolete-properties-drawer
+  "Report obsolete syntax for properties drawers"
+  #'org-lint-obsolete-properties-drawer
+  :categories '(obsolete properties))
+
+(org-lint-add-checker 'invalid-effort-property
+  "Report invalid duration in EFFORT property"
+  #'org-lint-invalid-effort-property
+  :categories '(properties))
+
+(org-lint-add-checker 'undefined-footnote-reference
+  "Report missing definition for footnote references"
+  #'org-lint-undefined-footnote-reference
+  :categories '(footnote))
+
+(org-lint-add-checker 'unreferenced-footnote-definition
+  "Report missing reference for footnote definitions"
+  #'org-lint-unreferenced-footnote-definition
+  :categories '(footnote))
+
+(org-lint-add-checker 'extraneous-element-in-footnote-section
+  "Report non-footnote definitions in footnote section"
+  #'org-lint-extraneous-element-in-footnote-section
+  :categories '(footnote))
+
+(org-lint-add-checker 'invalid-keyword-syntax
+  "Report probable invalid keywords"
+  #'org-lint-invalid-keyword-syntax
+  :trust 'low)
+
+(org-lint-add-checker 'invalid-block
+  "Report invalid blocks"
+  #'org-lint-invalid-block
+  :trust 'low)
+
+(org-lint-add-checker 'misplaced-planning-info
+  "Report misplaced planning info line"
+  #'org-lint-misplaced-planning-info
+  :trust 'low)
+
+(org-lint-add-checker 'incomplete-drawer
+  "Report probable incomplete drawers"
+  #'org-lint-incomplete-drawer
+  :trust 'low)
+
+(org-lint-add-checker 'indented-diary-sexp
+  "Report probable indented diary-sexps"
+  #'org-lint-indented-diary-sexp
+  :trust 'low)
+
+(org-lint-add-checker 'quote-section
+  "Report obsolete QUOTE section"
+  #'org-lint-quote-section
+  :categories '(obsolete) :trust 'low)
+
+(org-lint-add-checker 'file-application
+  "Report obsolete \"file+application\" link"
+  #'org-lint-file-application
+  :categories '(link obsolete))
+
+(org-lint-add-checker 'percent-encoding-link-escape
+  "Report obsolete escape syntax in links"
+  #'org-lint-percent-encoding-link-escape
+  :categories '(link obsolete) :trust 'low)
+
+(org-lint-add-checker 'spurious-colons
+  "Report spurious colons in tags"
+  #'org-lint-spurious-colons
+  :categories '(tags))
+
+(org-lint-add-checker 'non-existent-bibliography
+  "Report invalid bibliography file"
+  #'org-lint-non-existent-bibliography
+  :categories '(cite))
+
+(org-lint-add-checker 'missing-print-bibliography
+  "Report missing \"print_bibliography\" keyword"
+  #'org-lint-missing-print-bibliography
+  :categories '(cite))
+
+(org-lint-add-checker 'invalid-cite-export-declaration
+  "Report invalid value for \"cite_export\" keyword"
+  #'org-lint-invalid-cite-export-declaration
+  :categories '(cite))
+
+(org-lint-add-checker 'incomplete-citation
+  "Report incomplete citation object"
+  #'org-lint-incomplete-citation
+  :categories '(cite) :trust 'low)
+
+(org-lint-add-checker 'item-number
+  "Report inconsistent item numbers in lists"
+  #'org-lint-item-number
+  :categories '(plain-list))
+
+(org-lint-add-checker 'LaTeX-$
+  "Report potentially confusing $...$ LaTeX markup."
+  #'org-lint-LaTeX-$
+  :categories '(markup))
+(org-lint-add-checker 'timestamp-syntax
+  "Report malformed timestamps."
+  #'org-lint-timestamp-syntax
+  :categories '(timestamp) :trust 'low)
 
 (provide 'org-lint)
+
+;; Local variables:
+;; generated-autoload-file: "org-loaddefs.el"
+;; End:
+
 ;;; org-lint.el ends here

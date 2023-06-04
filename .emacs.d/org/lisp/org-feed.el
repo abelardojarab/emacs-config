@@ -1,10 +1,10 @@
 ;;; org-feed.el --- Add RSS feed items to Org files  -*- lexical-binding: t; -*-
 ;;
-;; Copyright (C) 2009-2017 Free Software Foundation, Inc.
+;; Copyright (C) 2009-2023 Free Software Foundation, Inc.
 ;;
-;; Author: Carsten Dominik <carsten at orgmode dot org>
+;; Author: Carsten Dominik <carsten.dominik@gmail.com>
 ;; Keywords: outlines, hypermedia, calendar, wp
-;; Homepage: http://orgmode.org
+;; URL: https://orgmode.org
 ;;
 ;; This file is part of GNU Emacs.
 ;;
@@ -87,6 +87,9 @@
 ;;  similar mechanism using shell and awk scripts.
 
 ;;; Code:
+
+(require 'org-macs)
+(org-assert-version)
 
 (require 'org)
 (require 'sha1)
@@ -276,14 +279,21 @@ have been saved."
 (defun org-feed-update-all ()
   "Get inbox items from all feeds in `org-feed-alist'."
   (interactive)
-  (let ((nfeeds (length org-feed-alist))
-	(nnew (apply '+  (mapcar 'org-feed-update org-feed-alist))))
-    (message "%s from %d %s"
-	     (cond ((= nnew 0) "No new entries")
-		   ((= nnew 1) "1 new entry")
-		   (t (format "%d new entries" nnew)))
-	     nfeeds
-	     (if (= nfeeds 1) "feed" "feeds"))))
+  (let ((entries 0)
+	(errors 0)
+	(total-feeds (length org-feed-alist)))
+    (dolist (feed org-feed-alist)
+      (let ((items (ignore-errors (org-feed-update feed))))
+	(if items (cl-incf entries items)
+	  (cl-incf errors))))
+    (message "%s from %d %s%s"
+	     (pcase entries
+	       (0 "No new entries")
+	       (1 "1 new entry")
+	       (_ (format "%d new entries" entries)))
+	     total-feeds
+	     (if (= total-feeds 1) "feed" "feeds")
+	     (if (= 0 errors) "" (format " (unavailable feeds: %d)" errors)))))
 
 ;;;###autoload
 (defun org-feed-update (feed &optional retrieve-only)
@@ -399,15 +409,14 @@ it can be a list structured like an entry in `org-feed-alist'."
 
 	  ;; Write the new status
 	  ;; We do this only now, in case something goes wrong above, so
-	  ;; that would would end up with a status that does not reflect
-	  ;; which items truely have been handled
+          ;; that would end up with a status that does not reflect
+	  ;; which items truly have been handled
 	  (org-feed-write-status inbox-pos drawer status)
 
 	  ;; Normalize the visibility of the inbox tree
 	  (goto-char inbox-pos)
-	  (outline-hide-subtree)
-	  (org-show-children)
-	  (org-cycle-hide-drawers 'children)
+	  (org-fold-subtree t)
+	  (org-fold-show-children)
 
 	  ;; Hooks and messages
 	  (when org-feed-save-after-adding (save-buffer))
@@ -466,7 +475,7 @@ This will find DRAWER and extract the alist."
     (goto-char pos)
     (let ((end (save-excursion (org-end-of-subtree t t))))
       (if (re-search-forward
-	   (concat "^[ \t]*:" drawer ":[ \t]*\n\\([^\000]*?\\)\n[ \t]*:END:")
+	   (concat "^[ \t]*:" drawer ":[ \t]*\n\\(\\(?:.\\|\n\\)*?\\)\n[ \t]*:END:")
 	   end t)
 	  (read (match-string 1))
 	nil))))
@@ -560,7 +569,7 @@ If that property is already present, nothing changes."
 			      (if (looking-at
 				   (concat "^\\([ \t]*\\)%" name "[ \t]*$"))
 				  (org-feed-make-indented-block
-				   v (org-get-indentation))
+				   v (current-indentation))
 				v))))))))
 		(when replacement
 		  (insert
@@ -624,7 +633,7 @@ containing the properties `:guid' and `:item-full-text'."
 	      end (and (re-search-forward "</item>" nil t)
 		       (match-beginning 0)))
 	(setq item (buffer-substring beg end)
-	      guid (if (string-match "<guid\\>.*?>\\(.*?\\)</guid>" item)
+	      guid (if (string-match "<guid\\>.*?>\\(\\(?:.\\|\n\\)*?\\)</guid>" item)
 		       (xml-substitute-special (match-string-no-properties 1 item))))
 	(setq entry (list :guid guid :item-full-text item))
 	(push entry entries)
@@ -638,7 +647,7 @@ containing the properties `:guid' and `:item-full-text'."
   (with-temp-buffer
     (insert (plist-get entry :item-full-text))
     (goto-char (point-min))
-    (while (re-search-forward "<\\([a-zA-Z]+\\>\\).*?>\\([^\000]*?\\)</\\1>"
+    (while (re-search-forward "<\\([a-zA-Z]+\\>\\).*?>\\(\\(?:.\\|\n\\)*?\\)</\\1>"
 			      nil t)
       (setq entry (plist-put entry
 			     (intern (concat ":" (match-string 1)))
