@@ -666,5 +666,10 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   (git-link-use-single-line-number t)
   :commands (git-link git-link-commit git-link-homepage))
 
+
+;; git-related sorts files in a project by a similarity score derived from how often they change in the same commit.
+(use-package git-related
+  :commands git-related-find-file)
+
 (provide 'setup-versioning)
 ;;; setup-versioning.el ends here

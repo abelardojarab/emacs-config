@@ -116,7 +116,18 @@ non-nil."
 (use-package display-line-numbers
   :if (boundp 'display-line-numbers)
   :custom (display-line-numbers-widen t)
-  :hook ((prog-mode conf-mode) . display-line-numbers-mode))
+  :hook ((prog-mode conf-mode) . display-line-numbers-mode)
+  :config (define-advice goto-line (:before (&rest _) preview-line-number)
+            "Preview line number when prompting for goto-line."
+            (interactive
+             (lambda (spec)
+               (if (and (boundp 'display-line-numbers)
+                        (not display-line-numbers))
+                   (unwind-protect
+                       (progn (display-line-numbers-mode)
+                              (advice-eval-interactive-spec spec))
+                     (display-line-numbers-mode -1))
+                 (advice-eval-interactive-spec spec))))))
 
 ;; Faster line numbers
 (use-package linum-ex

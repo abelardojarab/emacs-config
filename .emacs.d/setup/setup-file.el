@@ -97,6 +97,11 @@
   :defer t
   :commands whitespace-mode)
 
+;; ws-butler is “unobtrusive”, which wins the day for me.
+(use-package ws-butler
+  :hook (on-first-buffer . ws-butler-global-mode)
+  :diminish)
+
 ;; update the copyright whe present
 (use-package copyright
   :defer t

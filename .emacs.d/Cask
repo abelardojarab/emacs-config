@@ -506,6 +506,7 @@
 (depends-on "with-editor")
 (depends-on "writegood-mode")
 (depends-on "writeroom-mode")
+(depends-on "ws-butler")
 (depends-on "xml-rpc")
 (depends-on "yafolding")
 (depends-on "yaml-mode")

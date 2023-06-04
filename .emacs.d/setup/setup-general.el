@@ -303,18 +303,6 @@ Image types are symbols like `xbm' or `jpeg'."
                           url-configuration-directory (concat no-littering-var-directory "url")
                           eshell-directory-name (concat no-littering-var-directory "eshell" ))))
 
-(define-advice goto-line (:before (&rest _) preview-line-number)
-  "Preview line number when prompting for goto-line."
-  (interactive
-   (lambda (spec)
-     (if (and (boundp 'display-line-numbers)
-              (not display-line-numbers))
-         (unwind-protect
-             (progn (display-line-numbers-mode)
-                    (advice-eval-interactive-spec spec))
-           (display-line-numbers-mode -1))
-       (advice-eval-interactive-spec spec)))))
-
 ;; Clean stale buffers periodically
 (use-package midnight
   :hook (on-first-buffer . midnight-mode))

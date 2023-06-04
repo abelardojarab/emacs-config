@@ -251,39 +251,52 @@
          ("C-c k" . consult-kmacro)
          ;; C-x bindings (ctl-x-map)
          ("C-x M-:" . consult-complex-command) ;; orig. repeat-complex-command
+         ([remap repeat-complex-command] . consult-complex-command)
          ([remap switch-to-buffer] . consult-buffer)
+         ([remap switch-to-buffer-other-window] . consult-buffer-other-window)
+         ([remap switch-to-buffer-other-frame] . consult-buffer-other-frame)
+         ([remap project-switch-to-buffer] . consult-project-buffer)
+         ([remap bookmark-jump] . consult-bookmark)
+         ([remap recentf-open] . consult-recent-file)
+         ([remap yank-pop] . consult-yank-pop)
+         ([remap goto-line] . consult-goto-line)
+         ([remap isearch-edit-string] . consult-isearch-history)
+         ([remap next-matching-history-element] . consult-history)
+         ([remap previous-matching-history-element] . consult-history)
+         ([remap Info-search] . consult-info)
          ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
          ("C-x 5 b" . consult-buffer-other-frame) ;; orig. switch-to-buffer-other-frame
          ;; Other custom bindings
          ("M-y" . consult-yank-pop)                ;; orig. yank-pop
          ("<help> a" . consult-apropos) ;; orig. apropos-command
          ;; M-g bindings (goto-map)
-         ("M-g e" . consult-compile-error)
-         ("M-g f" . consult-flycheck) ;; Alternative: consult-flymake
-         ("M-g g" . consult-goto-line) ;; orig. goto-line
+         ("M-g e"   . consult-compile-error)
+         ("M-g f"   . consult-flycheck) ;; Alternative: consult-flymake
+         ("M-g g"   . consult-goto-line) ;; orig. goto-line
          ("M-g M-g" . consult-goto-line) ;; orig. goto-line
-         ("M-g o" . consult-outline) ;; Alternative: consult-org-heading
-         ("M-g m" . consult-mark)
-         ("M-g k" . consult-global-mark)
+         ("M-g o"   . consult-outline) ;; Alternative: consult-org-heading
+         ("M-g m"   . consult-mark)
+         ("M-g k"   . consult-global-mark)
          ;; Isearch integration
          :map isearch-mode-map
-         ("C-o" . consult-line-literal)
-         ("M-e" . consult-isearch-history)
+         ("C-o"   . consult-line-literal)
+         ("M-e"   . consult-isearch-history)
          ("M-s e" . consult-isearch-history) ;; orig. isearch-edit-string
          ("M-s l" . consult-line-literal) ;; needed by consult-line to detect isearch
          ("M-s L" . consult-line-multi) ;; needed by consult-line to detect isearch
          )
   :hook (completion-list-mode . consult-preview-at-point-mode)
-  :custom
-  (consult-line-numbers-widen t)
-  (consult-async-min-input 3)
-  (consult-async-input-debounce 0.5)
-  (consult-async-input-throttle 0.8)
-  (consult-narrow-key ">")
-  (consult-ripgrep-args
-   "rg --null --line-buffered --color=never --max-columns=1000 \
+  :custom ((xref-show-xrefs-function 'consult-xref)
+           (xref-show-definitions-function 'consult-xref)
+           (consult-line-numbers-widen t)
+           (consult-async-min-input 3)
+           (consult-async-input-debounce 0.5)
+           (consult-async-input-throttle 0.8)
+           (consult-narrow-key ">")
+           (consult-ripgrep-args
+            "rg --null --line-buffered --color=never --max-columns=1000 \
       --path-separator / --no-ignore-vcs --smart-case --no-heading \
-      --with-filename --line-number --search-zip")
+      --with-filename --line-number --search-zip"))
   :init (progn
           ;; Use `consult-completion-in-region' if Vertico is enabled.
           ;; Otherwise use the default `completion--in-region' function.
