@@ -111,11 +111,12 @@
             (add-hook 'org-mode-hook
                       (lambda ()
                         (progn
+                          (buffer-face-mode   -1)
                           (linum-mode         -1)
                           (org-indent-mode    -1)
                           (abbrev-mode        t)
                           (flyspell-mode      t)
-                          (writegood-mode     t))))
+                          (writegood-mode     -1))))
 
             ;; Ignore tex commands during flyspell
             (add-hook 'org-mode-hook (lambda () (setq ispell-parser 'tex)))
