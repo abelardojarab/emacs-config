@@ -221,9 +221,10 @@ corresponding `.el' file."
   (require 'cask "~/.cask/cask.el")
   (cask-initialize)
 
-  (use-package pallet
-    :commands pallet-mode
-    :config (pallet-mode t)))
+  ;; (use-package pallet
+  ;;   :commands pallet-mode
+  ;;   :config (pallet-mode t))
+  )
 
 (defun has-fast-json ()
   "Return t if \"json-serialize\" is implemented as a C function.
@@ -236,7 +237,6 @@ which is a lot faster."
 
 (unless (has-fast-json)
   (warn "This emacs is using older elisp json functions; maybe rebuild with libjansson?"))
-
 
 ;; Asynchronous bytecode compilation
 (use-package async
@@ -261,7 +261,7 @@ which is a lot faster."
                     (setq comp-enable-subr-trampolines native-comp-enable-subr-trampolines)))))
 
 ;; Needed
-(require 'dash-functional)
+;; (require 'dash-functional)
 
 ;; Essential packages
 (use-package buttercup           :defer t)

@@ -233,7 +233,7 @@ Now it correctly stops at the beginning of the line when the pointer is at the f
     (setq end (point-marker))
     (delete-rectangle start end)
     (goto-char start)
-    (loop with column = (current-column)
+    (cl-loop with column = (current-column)
           while (and (<= (point) end) (not (eobp)))
           for i from from   do
           (move-to-column column t)

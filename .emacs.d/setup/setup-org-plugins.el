@@ -74,10 +74,18 @@
 ;; Nice bulleted lists
 (use-package org-bullets
   :if (display-graphic-p)
+  :disabled t
   :after org
   :hook (org-mode . org-bullets-mode)
   :commands org-bullets-mode
   :config (setq org-bullets-bullet-list '("◉" "✚" "○" "✖" "•")))
+
+;; replacement of org-bullets
+(use-package org-superstar
+  :after org
+  :hook (org-mode . org-superstar-mode)
+  :delight org-superstar-mode
+  :custom (org-superstar-special-todo-items t))
 
 ;; Seek headlines or content inside org buffers
 (use-package org-seek

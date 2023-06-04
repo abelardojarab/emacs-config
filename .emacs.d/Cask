@@ -354,6 +354,7 @@
 (depends-on "org-ref")
 (depends-on "org-seek")
 (depends-on "org-super-agenda")
+(depends-on "org-superstar")
 (depends-on "orgtbl-ascii-plot")
 ;; (depends-on "origami")
 (depends-on "outshine")
