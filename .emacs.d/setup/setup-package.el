@@ -261,12 +261,12 @@ which is a lot faster."
                     (setq comp-enable-subr-trampolines native-comp-enable-subr-trampolines)))))
 
 ;; Needed
-;; (require 'dash-functional)
+;;(require 'dash-functional)
+(require 'dash)
 
 ;; Essential packages
 (use-package buttercup           :defer t)
 (use-package ctable              :defer t)
-(use-package dash                :defer t)
 (use-package deferred            :defer t)
 (use-package dropdown-list       :defer t)
 (use-package ebib                :defer t)

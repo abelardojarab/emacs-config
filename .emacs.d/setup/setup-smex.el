@@ -37,12 +37,5 @@
                   "smex/") user-emacs-directory))
   :config (smex-initialize))
 
-;; Enable richer annotations using the Marginalia package
-(use-package marginalia
-  :load-path (lambda () (expand-file-name "marginalia/" user-emacs-directory))
-  :commands marginalia-mode
-  :hook (after-init . marginalia-mode)
-  :config (setq marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light)))
-
 (provide 'setup-smex)
 ;;; setup-modeline.el ends here

@@ -24,14 +24,15 @@
 
 ;;; Code:
 
-(setq-default scroll-step                     10
-              scroll-margin                   3
-              scroll-conservatively           101
-              scroll-preserve-screen-position 't
-              scroll-up-aggressively          0.01
-              scroll-down-aggressively        0.01
-              fast-but-imprecise-scrolling    t
-              auto-window-vscroll             nil)
+(if (display-graphic-p)
+    (setq-default scroll-step                     10
+                  scroll-margin                   3
+                  scroll-conservatively           101
+                  scroll-preserve-screen-position 't
+                  scroll-up-aggressively          0.01
+                  scroll-down-aggressively        0.01
+                  fast-but-imprecise-scrolling    t
+                  auto-window-vscroll             nil))
 
 (defadvice line-move-to-column (around bar activate)
   (ignore-errors add-do-it))
@@ -51,6 +52,7 @@
 
 (use-package fast-scroll
   :defer t
+  :if (display-graphic-p)
   :load-path (lambda () (expand-file-name "fast-scroll/" user-emacs-directory))
   :custom (fast-scroll-throttle 0.5)
   :commands fast-scroll-mode

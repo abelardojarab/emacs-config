@@ -348,7 +348,8 @@ Image types are symbols like `xbm' or `jpeg'."
   (marginalia-align 'right)
   :bind (:map minibuffer-local-map
               ("M-A" . marginalia-cycle))
-  :config (marginalia-mode))
+  :config (marginalia-mode)
+  (setq marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light)))
 
 (provide 'setup-general)
 ;;; setup-general.el ends here
