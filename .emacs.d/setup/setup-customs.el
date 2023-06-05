@@ -1,6 +1,6 @@
 ;;; setup-customs.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@ubuntu02>
 ;; Keywords:
@@ -113,7 +113,7 @@
   :type 'list)
 
 (defcustom my/emacs-theme-console
-  'zenburn
+  'monokai
   "Preferred Emacs theme"
   :group 'my/customs
   :type 'list)
