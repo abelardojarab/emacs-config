@@ -1,6 +1,6 @@
 ;;; setup-scroll.el ---                              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -55,6 +55,7 @@
   :load-path (lambda () (expand-file-name "fast-scroll/" user-emacs-directory))
   :custom (fast-scroll-throttle 0.5)
   :commands fast-scroll-mode
+  :diminish fast-scroll-mode
   :hook (prog-mode . fast-scroll-mode)
   :config (progn
             (defun my/flycheck-enabled-p () (symbol-value 'flycheck-mode))

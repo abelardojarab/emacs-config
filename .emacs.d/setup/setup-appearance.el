@@ -172,7 +172,7 @@ non-nil."
 
 ;; All the icons
 (use-package all-the-icons
-  :defer t
+  :demand t
   :if (display-graphic-p)
   :commands all-the-icons-insert)
 
@@ -311,6 +311,7 @@ all the buffers."
   :custom ((line-reminder-show-option 'indicators)
            (line-reminder-linum-left-string "")
            (line-reminder-linum-right-string " "))
+  :diminish (line-reminder-mode . " Ⓛ")
   :config (progn
             (add-hook 'prog-mode-hook
                       (function

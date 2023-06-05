@@ -331,13 +331,15 @@ truncates text if needed.  Minimal width can be set with
 (use-package centaur-tabs
   :if (and (display-graphic-p)
            (not (version< emacs-version "27.0")))
-  :custom
-  ((centaur-tabs-style       "rounded")
-   (centaur-tabs-set-bar     'left)
-   (centaur-tabs-height       24)
-   (centaur-tabs-cycle-scope 'groups)
-   (centaur-tabs-show-navigation-buttons t)
-   (centaur-tabs-set-icons    t))
+  :custom ((centaur-tabs-style       "bar")
+           (centaur-tabs-set-bar     'over)
+           (centaur-tabs-height       24)
+           (centaur-tabs-cycle-scope 'groups)
+           (centaur-tabs-show-navigation-buttons t)
+           (centaur-tabs-set-icons    t)
+           (centaur-tabs-set-modified-marker t)
+           (setq centaur-tabs-gray-out-icons 'buffer))
+  :after all-the-icons
   :init (progn
           (tabbar-mode -1)
           (defun centaur-tabs nil)

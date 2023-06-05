@@ -226,6 +226,7 @@ Don't read buffer-local settings or word lists."
 (use-package jinx
   :if (executable-find "enchant-2")
   :hook (on-first-buffer . global-jinx-mode)
+  :diminish (jinx-mode . " Ⓙ")
   :bind ([remap ispell-word] . jinx-correct))
 
 (provide 'setup-spell)
