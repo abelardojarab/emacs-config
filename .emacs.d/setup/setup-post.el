@@ -1,6 +1,6 @@
 ;;; setup-post.el ---                                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -138,27 +138,6 @@
   (let ()
     (disable-themes)
     ad-do-it
-
-    (when (and (display-graphic-p)
-               (version< emacs-version "27.1"))
-      (set-icon-fonts
-       '(("fontawesome"
-          ;;                         
-          #xf07c #xf0c9 #xf0c4 #xf0cb #xf017 #xf101)
-
-         ("all-the-icons"
-          ;;    
-          #xe907 #xe928)
-
-         ("github-octicons"
-          ;;                        
-          #xf091 #xf059 #xf076 #xf075 #xf016 #xf00a)
-
-         ("Symbola"
-          ;; 𝕊    ⨂      ∅      ⟻    ⟼     ⊙      𝕋       𝔽
-          #x1d54a #x2a02 #x2205 #x27fb #x27fc #x2299 #x1d54b #x1d53d
-          ;; 𝔹    𝔇       𝔗
-          #x1d539 #x1d507 #x1d517))))
 
     ;; Add required faces
     (ignore-errors
