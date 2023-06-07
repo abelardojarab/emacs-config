@@ -29,7 +29,7 @@
 (setq standard-indent my/tab-width)
 
 ;; My personal configurations, has to use setq-default
-(setq-default indent-tabs-mode   nil
+(setq-default indent-tabs-mode   t
               default-tab-width  my/tab-width
               tab-width          my/tab-width
               tabify-regexp      "^\t* [ \t]+")
