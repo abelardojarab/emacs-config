@@ -278,7 +278,6 @@ Image types are symbols like `xbm' or `jpeg'."
 ;; Cross-editor style configuration
 (use-package editorconfig
   :defer t
-  :disabled t
   :hook ((prog-mode . editorconfig-mode)
          (text-mode . editorconfig-mode))
   :diminish editorconfig-mode
