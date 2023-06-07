@@ -45,7 +45,6 @@
 (depends-on "blamer")
 ;; (depends-on "bm")
 ;; (depends-on "bookmark+")
-
 (depends-on "browse-kill-ring")
 (depends-on "buttercup")
 (depends-on "calfw")
@@ -76,7 +75,6 @@
 (depends-on "company-restclient")
 (depends-on "company-quickhelp")
 (depends-on "company-tabnine")
-
 ;; (depends-on "company-tern")
 (depends-on "company-web")
 (depends-on "competitive-programming-snippets")
@@ -98,8 +96,8 @@
 (depends-on "cquery")
 (depends-on "ctable")
 (depends-on "ctags-update")
-
 ;; (depends-on "cygwin-mount")
+(depends-on "cyphejor")
 (depends-on "dap-mode")
 (depends-on "dash")
 (depends-on "dashboard")
@@ -162,7 +160,6 @@
 (depends-on "eval-in-repl")
 (depends-on "exec-path-from-shell")
 (depends-on "f")
-
 ;; (depends-on "fence-edit")
 (depends-on "filladapt")
 (depends-on "fill-column-indicator")
@@ -200,7 +197,6 @@
 (depends-on "golden-ratio")
 (depends-on "graphviz-dot-mode")
 (depends-on "gxref")
-
 (depends-on "helm")
 (depends-on "helm-ag")
 (depends-on "helm-bibtex")
@@ -238,7 +234,6 @@
 (depends-on "helm-tramp")
 (depends-on "helm-xref")
 (depends-on "helpful")
-
 ;; (depends-on "hexrgb")
 ;; (depends-on "hideshowvis")
 ;; (depends-on "hideshow-org")
@@ -293,7 +288,6 @@
 (depends-on "log4e")
 (depends-on "loop")
 ;; (depends-on "lorg-calendar")
-
 (depends-on "lsp-dart")
 (depends-on "lsp-ivy")
 (depends-on "lsp-java")
@@ -339,7 +333,6 @@
 ;; (depends-on "on")
 (depends-on "opencl-mode")
 (depends-on "orderless")
-
 ;; (depends-on "org")
 (depends-on "org2blog")
 (depends-on "org-ac")
@@ -369,7 +362,6 @@
 (depends-on "quick-peek")
 (depends-on "p4")
 (depends-on "page-break-lines")
-
 ;; (depends-on "pallet")
 (depends-on "pandoc-mode")
 (depends-on "paradox")
@@ -416,7 +408,6 @@
 (depends-on "rich-minority")
 (depends-on "ripgrep")
 (depends-on "rmsbolt")
-
 ;; (depends-on "rtags")
 (depends-on "s")
 (depends-on "srefactor")
@@ -430,7 +421,6 @@
 ;; (depends-on "site-lisp")
 (depends-on "skewer-mode")
 ;; (depends-on "slack")
-
 ;; (depends-on "smart-mode-line")
 (depends-on "smartparens")
 (depends-on "smart-jump")
@@ -441,7 +431,6 @@
 (depends-on "smooth-scrolling")
 ;; (depends-on "snippets")
 ;; (depends-on "snippets-extra")
-
 ;; (depends-on "spaceline")
 ;; (depends-on "spaceline-all-the-icons")
 (depends-on "sphinx-doc")
@@ -457,10 +446,10 @@
 (depends-on "switch-window")
 ;; (depends-on "sx")
 ;; (depends-on "systemd")
-
 (depends-on "tabbar")
 (depends-on "tabbar-ruler")
 (depends-on "taskpaper-mode")
+(depends-on "terraform-mode")
 ;; (depends-on "tern")
 (depends-on "test-case-mode")
 ;; (depends-on "themes")
@@ -485,7 +474,6 @@
 (depends-on "vc-msg")
 (depends-on "verilog-mode")
 (depends-on "vertico")
-
 ;; (depends-on "vhdl-mode")
 (depends-on "vimish-fold")
 (depends-on "visual-fill-column")

@@ -1,0 +1,2 @@
+;;; Generated package description from selcand.el  -*- no-byte-compile: t -*-
+(define-package "selcand" "20230604.2132" "Select a candidate from a tree of hint characters" '((emacs "25.1")) :commit "c41b4c8a4ee01f8c069b219e2fea16a084c79f19" :authors '(("Ernesto Alfonso")) :maintainers '((nil . "(concat \"erjoalgo\" \"@\" \"gmail\" \".com\")")) :maintainer '(nil . "(concat \"erjoalgo\" \"@\" \"gmail\" \".com\")") :keywords '("lisp" "completing-read" "prompt" "combinations" "vimium") :url "https://github.com/erjoalgo/selcand")
