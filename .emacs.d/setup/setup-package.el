@@ -155,8 +155,7 @@ CURRENT-NAME, if it does not already have them:
 
 ;; use https for both melpa and gelpa
 (eval-and-compile
-  (setq package-archives '(("gnu"   . "https://elpa.gnu.org/packages/")
-                           ("melpa" . "https://melpa.org/packages/")
+  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                            ("org"   . "http://orgmode.org/elpa/"))))
 
 ;; Since I'm managing packages with `use-package' I don't ever want to
@@ -177,6 +176,10 @@ CURRENT-NAME, if it does not already have them:
         (add-to-list 'load-path name)
         (add-to-list 'custom-theme-load-path name)
         (my/add-subfolders-to-load-path name)))))
+
+(when (and (string-equal system-type "gnu/linux") (fboundp 'guix-emacs-autoload-packages))
+  (add-to-list 'load-path "~/.guix-profile/share/emacs/site-lisp")
+  (guix-emacs-autoload-packages))
 
 (setq my/vendor-dir (expand-file-name ".cask/27.2/elpa" user-emacs-directory))
 (add-to-list 'load-path my/vendor-dir)

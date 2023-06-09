@@ -254,12 +254,17 @@
 
 ;; vterm integration
 (use-package vterm
-  :if (or (file-exists-p "/usr/include/vterm.h")
-          (file-exists-p "/opt/local/include/vterm.h"))
+  :if (and
+	   (executable-find "cmake")
+	   (or (file-exists-p "/usr/include/vterm.h")
+           (file-exists-p "/opt/local/include/vterm.h")))
   :hook (vterm-mode . turn-off-chrome)
+  :custom ((vterm-max-scrollback 100000)
+		   (vterm-use-vterm-prompt-detection-method t))
   :init (defun turn-off-chrome ()
           (hl-line-mode -1)
-          (display-line-numbers-mode -1)))
+		  (if (boundp 'display-line-numbers)
+			  (display-line-numbers-mode -1))))
 
 (use-package vterm-toggle
   :if (or (file-exists-p "/usr/include/vterm.h")

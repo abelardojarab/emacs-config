@@ -414,5 +414,16 @@ dirs. Input is a string and output is a list of strings."
   (let ((current-prefix-arg '(16)))
     (call-interactively 'org-time-stamp)))
 
+(defun screenshot-svg ()
+  "Save a screenshot of the current frame as an SVG image.
+  Saves to a temp file and puts the filename in the kill ring."
+  (interactive)
+  (let* ((filename (make-temp-file "Emacs" nil ".png"))
+         (data (x-export-frames nil 'png)))
+    (with-temp-file filename
+      (insert data))
+    (kill-new filename)
+    (message filename)))
+
 (provide 'setup-functions-deferred)
 ;;; setup-functions-deferred.el ends here
