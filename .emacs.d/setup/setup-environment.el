@@ -104,6 +104,10 @@
           (if (not (file-exists-p  my/emacs-cache-dir))
               (make-directory my/emacs-cache-dir) t)
 
+          ;; Assure config directory exists
+          (if (not (file-exists-p  my/emacs-config-dir))
+              (make-directory my/emacs-config-dir) t)
+
           ;; Improve Emacs performance
           (when (version< emacs-version "27.1")
             (if (boundp 'max-specpdl-size)

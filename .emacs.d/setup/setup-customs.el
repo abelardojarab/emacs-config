@@ -29,6 +29,11 @@
   :type 'string
   :group 'my/customs)
 
+(defcustom my/emacs-config-dir "~/.config/emacs"
+  "Preferred directory to place temporary files"
+  :type 'string
+  :group 'my/customs)
+
 (defcustom my/bibtex-completion-bibliography "~/workspace/Documents/Bibliography/biblio.bib"
   "Preferred bibliography file"
   :type 'string
@@ -460,7 +465,7 @@
 
 ;; User-specific configuration file
 (defvar custom-file-x (concat (file-name-as-directory
-                               my/emacs-cache-dir) "custom.el"))
+                               my/emacs-config-dir) "custom.el"))
 
 (ignore-errors
   (if (file-exists-p custom-file-x)
@@ -478,7 +483,7 @@
 
 ;; Settings for currently logged in user
 (defvar user-settings-dir (concat (file-name-as-directory
-                                   my/emacs-cache-dir) "custom"))
+                                   my/emacs-config-dir) "custom"))
 (add-to-list 'load-path user-settings-dir)
 
 (provide 'setup-customs)

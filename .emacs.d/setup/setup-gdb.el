@@ -1,6 +1,6 @@
 ;;; setup-gdb.el ---                                 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -108,7 +108,7 @@ source code, and program IO."
 
 ;; Microsoft debugger interface
 (use-package dap-mouse
-  :demand t
+  :defer t
   :commands dap-tooltip-mode)
 
 ;; Microsoft debugger interface

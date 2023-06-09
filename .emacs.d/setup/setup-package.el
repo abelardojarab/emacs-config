@@ -145,15 +145,13 @@ CURRENT-NAME, if it does not already have them:
 (setq package-user-dir "~/.emacs.d/site-lisp/package-install")
 (require 'package)
 
-;; Disable checking signature from elpa
-(setq package-check-signature nil)
-
 ;; in ~/.emacs.d/init.el (or ~/.emacs.d/early-init.el in Emacs 27)
 (setq package-enable-at-startup nil ; don't auto-initialize!
+	  package-check-signature nil ;; disable checking signature from melpa
       ;; don't add that `custom-set-variables' block to my init.el!
       package--init-file-ensured t)
 
-;; use https for both melpa and gelpa
+;; use https for both melpa and org
 (eval-and-compile
   (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                            ("org"   . "http://orgmode.org/elpa/"))))

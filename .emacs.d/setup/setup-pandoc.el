@@ -1,6 +1,6 @@
 ;;; setup-pandoc.el ---                              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -37,6 +37,7 @@
 
 ;; Org integration with pandoc
 (use-package ox-pandoc
+  :after org
   :if (executable-find "pandoc")
   :config (progn
 

@@ -1,6 +1,6 @@
 ;;; setup-latex.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -71,7 +71,10 @@
 
 (use-package ebib
   :demand t
+  :custom (ebib-bibtex-dialect 'biblatex)
   :init (progn
+		  (use-package ebib-biblio)
+
           ;; Restore legacy code
           (eval-and-compile
             (define-prefix-command 'ebib-prefix-map)
@@ -112,7 +115,7 @@
                          (?c . ebib-cancel-multiline-edit)
                          (?s . ebib-save-from-multiline-edit)))
                  (setq ebib-multiline-key (string-to-char ,key)))))))
-  :commands ebib-key)
+  :functions ebib-key)
 
 (use-package ebib-handy
   :defer t
