@@ -158,5 +158,9 @@
 (use-package unify-opening
   :demand t)
 
+;; vimrc edit
+(require 'vimrc-mode)
+(add-to-list 'auto-mode-alist '("\\.vim\\(rc\\)?\\'" . vimrc-mode))
+
 (provide 'setup-file)
 ;;; setup-file.el ends here
