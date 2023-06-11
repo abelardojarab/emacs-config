@@ -7,6 +7,8 @@
 ;;          Andrew Pennebaker
 ;;          Alpha Tan <alphatan.zh@gmail.com>
 ;; URL: https://github.com/mcandre/vimrc-mode
+;; Package-Version: 20181116.1919
+;; Package-Commit: 13bc150a870d5d4a95f1111e4740e2b22813c30e
 ;; Version: 0.3.1
 ;; Keywords: languages, vim
 ;; Package-Requires: ()

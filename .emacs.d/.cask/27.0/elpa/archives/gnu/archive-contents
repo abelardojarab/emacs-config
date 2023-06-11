@@ -702,7 +702,7 @@
 	     (:url . "https://elpa.gnu.org/packages/csv-mode.html")
 	     (:commit . "db8a3e3aef31d35ce5bd1fd09127a3bbfdd0c340"))])
  (cursory .
-	  [(0 3 0)
+	  [(1 0 0)
 	   ((emacs
 	     (27 1)))
 	   "Manage cursor styles using presets" tar
@@ -711,7 +711,7 @@
 	    (:maintainer "Cursory Development" . "~protesilaos/cursory@lists.sr.ht")
 	    (:authors
 	     ("Protesilaos Stavrou" . "info@protesilaos.com"))
-	    (:commit . "568310b13dfeda471fa23c6aa9b88c2a410aed01"))])
+	    (:commit . "12cd2b22913ddacf3cab54b0d6dd97d633f72e43"))])
  (cycle-quotes .
 	       [(0 1)
 		nil "Cycle between quote styles" tar
@@ -1025,7 +1025,7 @@
 	 ("Eduardo Ochs" . "eduardoochs@gmail.com"))
 	(:commit . "16613c18c5ec17755f083f4839bca7e4e05dd4c7"))])
  (ef-themes .
-	    [(1 0 2)
+	    [(1 1 1)
 	     ((emacs
 	       (27 1)))
 	     "Colorful and legible themes" tar
@@ -1034,7 +1034,7 @@
 	      (:maintainer "Ef-Themes Development" . "~protesilaos/ef-themes@lists.sr.ht")
 	      (:authors
 	       ("Protesilaos Stavrou" . "info@protesilaos.com"))
-	      (:commit . "6eef76fd65d1dc44cc8e3ee77ed9ac743f1ac36e"))])
+	      (:commit . "ca3645c4985e1f57829699bac755c860f2c863ed"))])
  (eglot .
 	[(1 15)
 	 ((emacs
@@ -3783,7 +3783,7 @@
 		   (:url . "https://elpa.gnu.org/packages/uniquify-files.html")
 		   (:commit . "1d76b4f0e283afaff2be053d85f8726ffc3abd6e"))])
  (urgrep .
-	 [(0 1 0)
+	 [(0 1 1)
 	  ((emacs
 	    (27 1))
 	   (compat
@@ -3796,7 +3796,7 @@
 	   (:maintainer "Jim Porter")
 	   (:authors
 	    ("Jim Porter"))
-	   (:commit . "d1cc269eeca739aceb31d983a562264d94ea2dfb"))])
+	   (:commit . "1924e175a52a9aecc2dd1e1339d0a063fbb398f1"))])
  (url-http-ntlm .
 		[(2 0 4)
 		 ((cl-lib
