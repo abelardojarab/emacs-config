@@ -401,7 +401,7 @@
   :defer t
   :after marginalia
   :commands (embark-act embark-dwim embark-bindings)
-  :bid (("C-;" . embark-act)
+  :bind (("C-;" . embark-act)
 		("C-h B" . embark-bindings)))
 
 (provide 'setup-ivy)
