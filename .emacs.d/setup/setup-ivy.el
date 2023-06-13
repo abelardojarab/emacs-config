@@ -396,5 +396,13 @@
   :bind (:map lsp-mode-map
               ([remap xref-find-apropos] . consult-lsp-symbols)))
 
+;; choose command to run based on what is near point
+(use-package embark
+  :defer t
+  :after marginalia
+  :commands (embark-act embark-dwim embark-bindings)
+  :bid (("C-;" . embark-act)
+		("C-h B" . embark-bindings)))
+
 (provide 'setup-ivy)
 ;;; setup-swiper.el ends here

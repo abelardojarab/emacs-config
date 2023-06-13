@@ -59,9 +59,7 @@
            (company-semantic-insert-arguments nil)
            (company-gtags-insert-arguments    t)
            (company-lighter-base              ""))
-  :bind (("C-;"                              . company-complete-common)
-         ("C-c h"                            . company-complete)
-         :map outline-minor-mode-map
+  :bind (:map outline-minor-mode-map
          ("TAB"                              . company-indent-for-tab-command)
          ("<tab>"                            . company-indent-for-tab-command)
          :map company-mode-map
