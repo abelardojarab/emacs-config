@@ -315,6 +315,7 @@ Image types are symbols like `xbm' or `jpeg'."
 
 ;; Vertico is a little bit nicer version of the builtin icomplete-vertical.
 (use-package vertico
+  :demand t
   :delight vertico-mode
   :custom
   (vertico-scroll-margin 0)
