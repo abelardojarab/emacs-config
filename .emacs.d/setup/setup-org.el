@@ -24,6 +24,9 @@
 
 ;;; Code:
 
+(setq org-agenda-todo-file nil)
+(setq org-agenda-default-file nil)
+
 (defconst org-tag-re "[[:alnum:]_@#%]+"
   "Regexp matching a single tag.")
 
