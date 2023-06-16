@@ -24,12 +24,6 @@
 
 ;;; Code:
 
-(setq org-agenda-todo-file nil)
-(setq org-agenda-default-file nil)
-
-(defconst org-tag-re "[[:alnum:]_@#%]+"
-  "Regexp matching a single tag.")
-
 ;; Org mode
 (use-package org
   :defer t
@@ -78,6 +72,16 @@
            (org-support-shift-select        'always))
   :init (progn
           (setq load-path (cons (expand-file-name "org/contrib/lisp" user-emacs-directory) load-path))
+
+		  (if (not (boundp 'org-agenda-default-file))
+			  (setq org-agenda-default-file nil))
+
+		  (if (not (boundp 'org-agenda-todo-file))
+			  (setq org-agenda-todo-file nil))
+
+		  (defconst org-tag-re "[[:alnum:]_@#%]+"
+			"Regexp matching a single tag.")
+
           (defvar org-list-allow-alphabetical t)
           (defun org-element-bold-successor           (arg))
           (defun org-element-code-successor           (arg))
