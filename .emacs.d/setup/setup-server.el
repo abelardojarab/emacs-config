@@ -27,8 +27,8 @@
 ;; Server configuration
 (use-package server
   :demand t
-  :custom ((server-use-tcp t)
-           (server-port    9999))
+  :custom ((server-use-tcp nil)
+           (server-port    51313))
   :init (progn
           ;; Server configuration
           (setq server-auth-dir   (concat (file-name-as-directory

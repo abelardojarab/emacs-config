@@ -173,7 +173,7 @@ non-nil."
 ;; All the icons
 (use-package all-the-icons
   :demand t
-  :if (display-graphic-p)
+  ;; :if (display-graphic-p)
   :commands all-the-icons-insert)
 
 ;; Better fonts
