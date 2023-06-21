@@ -212,6 +212,14 @@
   :commands (lsp-modeline-diagnostics-mode
              lsp-modeline-workspace-status-mode))
 
+;; We need to install tsc-dyn.so
+;; 0. Build and install tree-sitter from https://github.com/tree-sitter/tree-sitter.git and install cli: npm install -g tree-sitter-cli
+;; 1. $ cd ~/.emacs.d/.cask/27.0/elpa/tsc-20220212.1632
+;; 2. $ wget https://github.com/emacs-tree-sitter/elisp-tree-sitter/releases/download/0.18.0/tsc-dyn.so
+;; 3. $ mkdir -p ~/.config/tree-sitter/bin
+;; 4. $ cd  mkdir -p ~/.config/tree-sitter/bin
+;; 5. $ wget https://github.com/emacs-tree-sitter/tree-sitter-langs/releases/download/0.12.18/tree-sitter-grammars-linux-0.12.18.tar.gz
+;; 6. $ tar xzvf tree-sitter-grammars.x86_64-unknown-linux-gnu.v0.12.18.tar.gz
 (use-package tree-sitter
   :defer t
   :if (executable-find "tree-sitter")
