@@ -257,6 +257,7 @@
   :if (and
 	   (executable-find "cmake")
 	   (or (file-exists-p "/usr/include/vterm.h")
+           (file-exists-p "/usr/local/include/vterm.h")
            (file-exists-p "/opt/local/include/vterm.h")))
   :hook (vterm-mode . turn-off-chrome)
   :custom ((vterm-max-scrollback 100000)
@@ -268,6 +269,7 @@
 
 (use-package vterm-toggle
   :if (or (file-exists-p "/usr/include/vterm.h")
+		  (file-exists-p "/usr/local/include/vterm.h")
           (file-exists-p "/opt/local/include/vterm.h"))
   :custom ((vterm-toggle-fullscreen-p nil "Open a vterm in another window.")
            (vterm-toggle-scope 'project))
