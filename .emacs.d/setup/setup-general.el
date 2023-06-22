@@ -351,5 +351,19 @@ Image types are symbols like `xbm' or `jpeg'."
   :config (marginalia-mode)
   (setq marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light)))
 
+;; Evaluate Elisp expressions using overlays
+(use-package eros
+  :hook ((emacs-lisp-mode org-mode lisp-interaction-mode) . eros-mode)
+  :commands (eros-eval-region
+			 eros-eval-last-sexp
+			 eros-mode)
+  :init (defun eros-eval-region (start end)
+    (interactive "r")
+    (eros--eval-overlay
+     (string-trim
+      (with-output-to-string
+        (eval-region start end standard-output)))
+     (max (point) (mark)))))
+
 (provide 'setup-general)
 ;;; setup-general.el ends here
