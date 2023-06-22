@@ -23,7 +23,8 @@
 ;;
 
 ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=59081
-(when (equal system-type 'darwin)
+(when (or (equal system-type 'darwin)
+          (not (display-graphic-p)))
   (progn
     (add-to-list 'image-types 'svg)
 
