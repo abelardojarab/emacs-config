@@ -1,6 +1,6 @@
 ;;; setup-smex.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -36,6 +36,28 @@
                     "smex2/"
                   "smex/") user-emacs-directory))
   :config (smex-initialize))
+
+(use-package mini-frame
+  :commands mini-frame-mode
+  :config (progn
+			;; Miniframe at the bottom for a nicer display
+			(setq mini-frame-show-parameters
+				  `((left . 0.5)
+					(top . 1.0)
+					(width . 1.0)
+					(height . 5)
+					(left-fringe . 12)
+					(right-fringe .12)
+					(child-frame-border-width . 0)
+					(internal-border-width . 0)))
+
+			(setq mini-frame-resize 'not-set)
+			(add-hook 'minibuffer-setup-hook
+					  (lambda ()
+						(overlay-put (make-overlay (point-min) (+ (point-min) 1))
+									 'before-string
+									 (propertize "\n" 'face `(:extend t
+																	  :height .5)))))))
 
 (provide 'setup-smex)
 ;;; setup-modeline.el ends here

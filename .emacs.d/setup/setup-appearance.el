@@ -183,9 +183,15 @@ non-nil."
 (unless standard-display-table
   (setq standard-display-table (make-display-table)))
 (when (display-graphic-p)
+  (defface fallback '((t :family "Fira Code"
+						 :inherit 'nano-face-faded)) "Fallback")
   (set-display-table-slot standard-display-table 0 ?\s)
-  (set-display-table-slot standard-display-table
-                          'selective-display (string-to-vector " ⮷ ")))
+  (set-display-table-slot standard-display-table 'selective-display
+                          (make-glyph-code ?↩ 'fallback))
+  (set-display-table-slot standard-display-table 'truncation
+                          (make-glyph-code ?… 'fallback))
+  (set-display-table-slot standard-display-table 'wrap
+                          (make-glyph-code ?↩ 'fallback)))
 
 ;; Display vertical line
 (use-package fill-column-indicator
