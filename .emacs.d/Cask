@@ -118,7 +118,7 @@
 (depends-on "direx")
 (depends-on "dirvish")
 (depends-on "discover-my-major")
-;; (depends-on "docker-compose-mode")
+(depends-on "docker-compose-mode")
 (depends-on "dockerfile-mode")
 (depends-on "docker-tramp")
 (depends-on "docker")

@@ -42,7 +42,6 @@
   :defer t
   :diminish typo-mode
   :commands typo-mode
-  :hook (org-mode . typo-mode)
   :config (setq-default typo-language "English"))
 
 (provide 'setup-writeroom)

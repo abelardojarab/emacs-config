@@ -101,7 +101,7 @@
 ;; Modern org styles
 (use-package org-modern
   :after org
-  :hook ((org-mode org-agenda-finalize) . org-modern-mode)
+  :hook (org-agenda-finalize . org-modern-mode)
   :commands org-modern-mode)
 
 (provide 'setup-org-plugins)
