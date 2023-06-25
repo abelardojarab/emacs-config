@@ -356,6 +356,7 @@
 (depends-on "org-seek")
 (depends-on "org-super-agenda")
 (depends-on "org-superstar")
+(depends-on "org-variable-pitch")
 (depends-on "orgtbl-ascii-plot")
 ;; (depends-on "origami")
 (depends-on "outshine")
