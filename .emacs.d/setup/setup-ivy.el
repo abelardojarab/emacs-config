@@ -32,7 +32,7 @@
 
 ;; flexible, simple tools for minibuffer completion in Emacs
 (use-package swiper
-  :defer t
+  :demand t
   :commands (swiper
              swiper-all
              ivy-mode
@@ -154,11 +154,15 @@
 
 ;; Improve ivy-switch-buffer
 (use-package ivy-rich
-  :defer t
   :after swiper
-  :commands ivy-switch-buffer
+  :demand t
+  :commands (ivy-rich-mode ivy-switch-buffer)
   :custom (ivy-rich-switch-buffer-align-virtual-buffer nil)
-  :config (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer))
+  :hook (on-first-buffer . ivy-rich-mode)
+  :config (progn
+			(setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
+
+			(ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)))
 
 ;; Ivy integration with posframe
 (use-package ivy-posframe
