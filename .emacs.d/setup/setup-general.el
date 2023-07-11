@@ -366,5 +366,7 @@ Image types are symbols like `xbm' or `jpeg'."
         (eval-region start end standard-output)))
      (max (point) (mark)))))
 
+(use-package general)
+
 (provide 'setup-general)
 ;;; setup-general.el ends here
