@@ -37,6 +37,7 @@
 ;; (depends-on "auto-save-list")
 (depends-on "avy")
 (depends-on "basic-c-compile")
+(depends-on "bazel")
 (depends-on "benchmark-init")
 (depends-on "biblio")
 (depends-on "bicycle")

@@ -1,6 +1,6 @@
 ;;; setup-makefile.el ---                            -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2018  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -29,8 +29,14 @@
   :config (progn
             (add-hook 'makefile-mode-hook
                       (lambda ()
-                         (setq whitespace-style '(face trailing tabs))
-                         (whitespace-mode)))))
+                        (setq whitespace-style '(face trailing tabs))
+                        (whitespace-mode)))))
+
+(use-package bazel
+  :mode (("BUILD'" . bazel-mode))
+  ("\\.bzl$" . bazel-mode)
+  ("\\.bazel" . bazel-mode)
+  ("^WORKSPACE$" . bazel-mode))
 
 (provide 'setup-makefile)
 ;;; setup-makefile.el ends here
