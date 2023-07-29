@@ -37,7 +37,7 @@
 (use-package auto-fill
   :defer t
   :diminish (auto-fill-mode . " Ⓕ")
-  :custom (fill-column 120)
+  :custom (fill-column 80)
   :hook (text-mode . auto-fill-mode)
   ;; set auto-fill to trigger on punctuation rather than only on whitespace.
   :config (mapc

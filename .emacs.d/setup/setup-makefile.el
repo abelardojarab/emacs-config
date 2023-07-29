@@ -25,7 +25,7 @@
 ;;; Code:
 
 ;; makefiles
-(use-package makefile-mode
+(use-package make-mode
   :config (progn
             (add-hook 'makefile-mode-hook
                       (lambda ()
