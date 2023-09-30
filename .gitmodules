@@ -4,3 +4,6 @@
 [submodule ".emacs.d/snippets"]
 	path = .emacs.d/snippets
 	url = https://github.com/abelardojarab/yasnippet-snippets
+[submodule ".emacs.d/copilot.el"]
+	path = .emacs.d/copilot.el
+	url = https://github.com/zerolfx/copilot.el
