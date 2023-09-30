@@ -195,6 +195,8 @@ corresponding `.el' file."
 ;; Use Package
 (eval-when-compile
   (require 'use-package))
+(if (version< emacs-version "29.0")
+  (require 'vc-use-package))
 
 (use-package use-package
   :demand t

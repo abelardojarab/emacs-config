@@ -60,19 +60,19 @@
            (company-gtags-insert-arguments    t)
            (company-lighter-base              ""))
   :bind (:map outline-minor-mode-map
-         ("TAB"                              . company-indent-for-tab-command)
-         ("<tab>"                            . company-indent-for-tab-command)
-         :map company-mode-map
-         ([remap completion-at-point]        . company-complete-common-or-cycle)
-         ([remap complete-symbol]            . company-complete-common)
-         ([remap indent-for-tab-command]     . company-indent-for-tab-command)
-         :map company-active-map
-         ("C-n"                              . company-select-next)
-         ("C-p"                              . company-select-previous)
-         ("C-d"                              . company-show-doc-buffer)
-         ("TAB"                              . company-complete-selection)
-         ("<tab>"                            . company-complete-selection)
-         ("RET"                              . company-complete-selection))
+			  ("TAB"                              . company-indent-for-tab-command)
+			  ("<tab>"                            . company-indent-for-tab-command)
+			  :map company-mode-map
+			  ([remap completion-at-point]        . company-complete-common-or-cycle)
+			  ([remap complete-symbol]            . company-complete-common)
+			  ([remap indent-for-tab-command]     . company-indent-for-tab-command)
+			  :map company-active-map
+			  ("C-n"                              . company-select-next)
+			  ("C-p"                              . company-select-previous)
+			  ("C-d"                              . company-show-doc-buffer)
+			  ("TAB"                              . company-complete-selection)
+			  ("<tab>"                            . company-complete-selection)
+			  ("RET"                              . company-complete-selection))
   :init (global-company-mode t)
   :hook ((org-mode          . add-pcomplete-to-capf)
          ((c-mode c++-mode) . company-c-setup)
@@ -277,6 +277,24 @@
   :disabled t
   :commands company-tng-mode
   :hook (company-mode . company-tng-mode))
+
+;; Copilot
+(use-package copilot
+  :load-path (lambda () (expand-file-name "copilot.el" user-emacs-directory))
+  :hook (prog-mode . copilot-mode)
+  :custom
+  (copilot-idle-delay 0)
+
+  ;; don't show in mode line
+  :diminish t
+  :bind
+  (:map copilot-completion-map
+        ("<right>" . 'copilot-accept-completion)
+        ("S-TAB" . 'copilot-accept-completion-by-word)
+        ("S-<tab>" . 'copilot-accept-completion-by-word)
+        ("C-g" . #'copilot-clear-overlay)
+        ("C-n" . #'copilot-next-completion)
+        ("C-p" . #'copilot-previous-completion)))
 
 (provide 'setup-company)
 ;;; setup-company.el ends here

@@ -172,6 +172,9 @@
     ;; Setup gdb integration
     (require 'setup-gdb)
 
+	;; Setup makefile modes
+	(require 'setup-makefile)
+
     ;; Setup Yasnippet
     (require 'setup-yasnippet)
 
