@@ -34,6 +34,44 @@
             (interactive "Font Name-Size: ")
             (set-face-attribute 'default nil :font font)))
   :config (progn
+			;; if gui do something in whatver type of emacs instance we are using
+			(defun apply-if-gui (&rest action)
+			  "Do specified ACTION if we're in a gui regardless of daemon or not."
+			  (if (daemonp)
+				  (add-hook 'after-make-frame-functions
+							(lambda (frame)
+							  (select-frame frame)
+							  (if (display-graphic-p frame)
+								  (apply action))))
+				(if (display-graphic-p)
+					(apply action))))
+
+			;; Default font (cant be font with hyphen in the name like Inconsolata-g)
+			(setq initial-frame-alist '((font . "MesloLGMDZ Nerd Font Mono-12")))
+			(setq default-frame-alist '((font . "MesloLGMDZ Nerd Font Mono-12")))
+
+			;; Emoji: 😄, 🤦, 🏴, ,  ;; should render as 3 color emojis and 2 glyphs
+			(defun styling/set-backup-fonts()
+			  "Set the emoji and glyph fonts."
+			  ;; Default font (cant be font with hyphen in the name like Inconsolata-g)
+			  (setq initial-frame-alist '((font . "MesloLGMDZ Nerd Font Mono-12")))
+			  (setq default-frame-alist '((font . "MesloLGMDZ Nerd Font Mono-12")))
+
+			  (set-fontset-font t 'symbol "Apple Color Emoji" nil 'prepend)
+			  (set-fontset-font t 'symbol "Noto Color Emoji" nil 'prepend)
+			  (set-fontset-font t 'symbol "Segoe UI Emoji" nil 'prepend)
+			  (set-fontset-font t 'symbol "UbuntuMono Nerd Font" nil 'prepend))
+
+			;; respect default terminal fonts
+			;; if we're in a gui set the fonts appropriately
+			;; for daemon sessions and and nondaemons
+			(apply-if-gui 'styling/set-backup-fonts)
+
+			;; respect default terminal fonts
+			;; if we're in a gui set the fonts appropriately
+			;; for daemon sessions and and nondaemons
+			(apply-if-gui 'styling/set-backup-fonts)
+
             ;; Prefer user choices
             (if (find-font (font-spec :name my/main-programming-font))
                 (if (not (find-font (font-spec :name my/main-writing-font)))
@@ -192,10 +230,10 @@
   :if (display-graphic-p)
   :commands unicode-fonts-setup
   :config (progn
-   :config
-    ;; Common math symbols
-    (dolist (unicode-block '("Mathematical Alphanumeric Symbols"))
-      (push "JuliaMono" (cadr (assoc unicode-block unicode-fonts-block-font-mapping))))))
+			:config
+			;; Common math symbols
+			(dolist (unicode-block '("Mathematical Alphanumeric Symbols"))
+			  (push "JuliaMono" (cadr (assoc unicode-block unicode-fonts-block-font-mapping))))))
 
 ;; For Iosevka
 (set-char-table-range composition-function-table ?+ '(["\\(?:++++\\)" 0 font-shape-gstring]))
