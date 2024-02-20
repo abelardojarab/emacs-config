@@ -1,6 +1,6 @@
 ;;; setup-fonts.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2024  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -26,7 +26,8 @@
 
 (use-package faces
   :demand t
-  :custom (inhibit-compacting-font-caches t)
+  :custom ((inhibit-compacting-font-caches t)
+		   (redisplay-skip-fontification-on-input t))
   :commands fontify-frame
   :hook ((org-mode markdown-mode TeX-mode message-mode mu4e-view-mode) . variable-pitch-mode)
   :init (unless (fboundp 'set-default-font)

@@ -1,6 +1,6 @@
 ;;; setup-file.el ---                                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2024  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -161,6 +161,12 @@
 ;; vimrc edit
 (require 'vimrc-mode)
 (add-to-list 'auto-mode-alist '("\\.vim\\(rc\\)?\\'" . vimrc-mode))
+
+;; Don't do a second case insensitive pass over `auto-mode-alist'
+(setq auto-mode-case-fold nil)
+
+;; Don't ping things that look like domain names (?! aight)
+(setq ffap-machine-p-known 'reject)
 
 (provide 'setup-file)
 ;;; setup-file.el ends here

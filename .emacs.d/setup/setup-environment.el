@@ -1,6 +1,6 @@
 ;;; setup-environment.el ---                 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2024  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -84,7 +84,9 @@
            (message-truncate-lines                nil)
            (require-final-newline                 t)
            (debug-on-quit                         nil)
-           (bidi-display-reordering               nil)
+           (bidi-display-reordering               'left-to-right)
+		   (bidi-paragraph-directio               'left-to-right)
+		   (bidi-inhibit-bpa                      t)
            (no-redraw-on-reenter                  t)
            (column-number-indicator-zero-based    nil)
            (track-eol                             t)
