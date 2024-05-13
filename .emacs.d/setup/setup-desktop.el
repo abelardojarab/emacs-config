@@ -1,7 +1,6 @@
 ;;; setup-desktop.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
-
+;; Copyright (C) 2014-2024  Abelardo Jara-Berrocal
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
 
@@ -123,6 +122,25 @@
 (use-package dashboard
   :demand t
   :if (display-graphic-p)
+  :custom
+  (dashboard-center-content t)
+  (dashboard-icon-type 'all-the-icons)
+  (dashboard-set-heading-icons t)
+  (dashboard-set-file-icons t)
+  (dashboard-set-navigator t)
+  (dashboard-set-footer nil)
+  (dashboard-projects-backend 'projectile)
+  (dashboard-display-icons-p t)
+  (dashboard-path-max-length 20)
+  (dashboard-page-separator "\n\f\f\n")
+  (dashboard-items '(
+					 (recents . 5)
+					 (projects . 5)
+					 (agenda . 5)))
+  (dashboard-modify-heading-icons '((recents . "file-text")
+									(projects . "code")
+									(agenda . "calendar")
+									(bookmarks . "book")))
   :config (progn
             (add-hook 'dashboard-mode-hook
                       (lambda ()
@@ -140,10 +158,6 @@
             (setq dashboard-startup-banner (concat user-emacs-directory
                                                    "/emacs.png"))
 
-            (dashboard-setup-startup-hook)
-            (setq dashboard-page-separator "\n\f\f\n")
-
-            (setq dashboard-items '((recents . 10) (projects . 10)))
             (dashboard-setup-startup-hook)))
 
 (use-package page-break-lines

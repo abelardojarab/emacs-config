@@ -1,6 +1,6 @@
 ;;; setup-lsp.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2024  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -145,6 +145,7 @@
            (lsp-ui-sideline-show-hover           t)
            (lsp-ui-peek-enable                   t)
            (lsp-ui-peek-always-show              t)
+		   (lsp-ui-sideline-update-mode          'line)
            (lsp-ui-doc-delay                     0.7 "higher than eldoc delay"))
   :hook (lsp-after-open . lsp-ui-mode)
   :bind (:map lsp-ui-mode-map
