@@ -224,7 +224,7 @@ corresponding `.el' file."
 ;; Use Cask to fetch packages
 (when (file-exists-p "~/.cask/cask.el")
   (require 'cask "~/.cask/cask.el")
-  (cask-initialize)
+  ;; (cask-initialize)
 
   ;; (use-package pallet
   ;;   :commands pallet-mode
