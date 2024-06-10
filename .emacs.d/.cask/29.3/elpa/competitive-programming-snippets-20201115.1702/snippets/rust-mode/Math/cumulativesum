@@ -1,0 +1,34 @@
+# -*- mode: snippet -*-
+# name: cumulative sum
+# contributor: Nakamura Kenko
+# key: cumulativesum
+# --
+
+pub struct CumulativeSum<T>(Vec<Vec<T>>);
+
+impl<T> CumulativeSum<T>
+where
+    T: Copy + std::ops::Add<Output = T> + std::ops::Sub<Output = T>,
+{
+    pub fn new(a: &[Vec<T>], init: T) -> CumulativeSum<T> {
+        assert!(!a.is_empty());
+        let h = a.len();
+        let w = a[0].len();
+        let mut sum = vec![vec![init; w + 1]; h + 1];
+        for i in 0..h {
+            for j in 0..w {
+                sum[i + 1][j + 1] = a[i][j] + sum[i][j + 1] + sum[i + 1][j] - sum[i][j];
+            }
+        }
+        CumulativeSum(sum)
+    }
+
+    pub fn get_sum(&self, h_range: std::ops::Range<usize>, w_range: std::ops::Range<usize>) -> T {
+        assert!(h_range.end <= self.0.len());
+        assert!(w_range.end <= self.0[0].len());
+        self.0[h_range.end][w_range.end] + self.0[h_range.start][w_range.start]
+            - self.0[h_range.start][w_range.end]
+            - self.0[h_range.end][w_range.start]
+    }
+}
+

@@ -1,0 +1,15 @@
+(define-package "helm-lines" "20220103.1909" "A helm interface for completing by lines"
+  '((emacs "24.4")
+    (helm "1.9.8"))
+  :commit "f5ad178818d223f32a0bf60d370b50c01df5f3da" :authors
+  '(("@torgeir"))
+  :maintainers
+  '(("@torgeir"))
+  :maintainer
+  '("@torgeir")
+  :keywords
+  '("files" "helm" "rg" "ag" "pt" "vc" "git" "lines" "complete" "tools" "languages")
+  :url "https://github.com/torgeir/helm-lines.el/")
+;; Local Variables:
+;; no-byte-compile: t
+;; End:

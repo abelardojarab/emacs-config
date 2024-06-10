@@ -1,0 +1,15 @@
+(define-package "all-the-icons-ivy" "20190508.1803" "Shows icons while using ivy and counsel"
+  '((emacs "24.4")
+    (all-the-icons "2.4.0")
+    (ivy "0.8.0"))
+  :commit "babea626db20773de4c408acb2788e2b9c8277e3" :authors
+  '(("asok"))
+  :maintainers
+  '(("asok"))
+  :maintainer
+  '("asok")
+  :keywords
+  '("faces"))
+;; Local Variables:
+;; no-byte-compile: t
+;; End:
