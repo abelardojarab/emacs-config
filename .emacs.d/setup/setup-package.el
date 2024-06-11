@@ -1,6 +1,6 @@
 ;;; setup-package.el ---                     -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2024  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -179,10 +179,11 @@ CURRENT-NAME, if it does not already have them:
   (add-to-list 'load-path "~/.guix-profile/share/emacs/site-lisp")
   (guix-emacs-autoload-packages))
 
-(if (version< emacs-version "29.0")
-(setq my/vendor-dir (expand-file-name ".cask/27.2/elpa" user-emacs-directory))
-(setq my/vendor-dir (expand-file-name ".cask/29.3/elpa" user-emacs-directory)))
+(setq my/vendor-dir (expand-file-name ".cask/29.3/elpa" user-emacs-directory))
+(add-to-list 'load-path my/vendor-dir)
+(my/add-subfolders-to-load-path my/vendor-dir)
 
+(setq my/vendor-dir (expand-file-name ".cask/27.2/elpa" user-emacs-directory))
 (add-to-list 'load-path my/vendor-dir)
 (my/add-subfolders-to-load-path my/vendor-dir)
 

@@ -1,6 +1,6 @@
 ;;; setup-appearance.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2024  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -314,9 +314,12 @@ all the buffers."
   :diminish indicators-mode)
 
 (use-package line-reminder
+  :disabled t
   :custom ((line-reminder-show-option 'indicators)
            (line-reminder-linum-left-string "")
-           (line-reminder-linum-right-string " "))
+           (line-reminder-linum-right-string " ")
+		   (line-reminder-fringe-placed 'right-fringe)
+		   (line-reminder-thumbnail t))
   :diminish (line-reminder-mode . " Ⓛ")
   :config (progn
             (add-hook 'prog-mode-hook
@@ -328,7 +331,7 @@ all the buffers."
               "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.."
               "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.."
               "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.."
-              "..xxx.." "..xxx.."  ; original bitmap stops here
+              "..xxx.." "..xxx.."  ;; original bitmap stops here
               "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.."
               "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.." "..xxx.."  ; add a tone to make it longer
               )
