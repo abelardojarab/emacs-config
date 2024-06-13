@@ -200,7 +200,7 @@ corresponding `.el' file."
 (eval-when-compile
   (require 'use-package))
 (if (version< emacs-version "29.0")
-  (require 'vc-use-package))
+	(require 'vc-use-package))
 
 (use-package use-package
   :demand t
@@ -247,6 +247,11 @@ which is a lot faster."
 (unless (has-fast-json)
   (warn "This emacs is using older elisp json functions; maybe rebuild with libjansson?"))
 
+(message (if (and (fboundp 'native-comp-available-p)
+                  (native-comp-available-p))
+             "Native compilation is available"
+           "Native compilation is *not* available"))
+
 ;; Asynchronous bytecode compilation
 (use-package async
   :defer t
@@ -256,11 +261,14 @@ which is a lot faster."
   :custom (async-bytecomp-allowed-packages '(all))
   :config (progn
             ;; For native-comp branch
-            (when (fboundp 'native-compile-async)
+            (when (or (fboundp 'native-compile-async)
+					  (and (fboundp 'native-comp-available-p)
+						   (native-comp-available-p)))
               (unless (fboundp 'subr-native-lambda-list)
                 (defun subr-native-lambda-list (x)
                   nil))
-              (setq comp-async-jobs-number 4 ;; not using all cores
+              (setq package-native-compile t
+					comp-async-jobs-number 4 ;; not using all cores
                     comp-deferred-compilation t
                     comp-deferred-compilation-black-list '()))
 
