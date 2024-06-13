@@ -1,5 +1,5 @@
 ;; -*-mode: Emacs-Lisp; -*-
-;; Copyright (C) 1996-2023 Abelardo Jara-Berrocal
+;; Copyright (C) 1996-2024 Abelardo Jara-Berrocal
 ;; URL: https://jaraberrocal.readmyblog.org
 ;; This file is free software licensed under the terms of the
 ;; GNU General Public License, version 3 or later.
@@ -309,6 +309,9 @@
 
     ;; Setup regular expressions
     (require 'setup-regex)
+
+	;; Setup menus
+	(require 'setup-menus)
 
     ;; Setup keys
     (require 'setup-keys)
