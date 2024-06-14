@@ -206,7 +206,10 @@
   :init (defun my/org-mode/load-prettify-symbols ()
           (interactive)
           (setq prettify-symbols-alist
-                '(("lambda" .   "λ")
+                '(("[ ]" .  "☐")
+				  ("[X]" . "☑" )
+				  ("[-]" . "❍" )
+				  ("lambda" .   "λ")
                   ("|>" .   "▷")
                   ("<|" .   "◁")
                   ("->>" .  "↠")
