@@ -281,7 +281,7 @@
 ;; Copilot
 (use-package copilot
   :load-path (lambda () (expand-file-name "copilot.el" user-emacs-directory))
-  :hook (prog-mode . copilot-mode)
+  ;; :hook (prog-mode . copilot-mode)
   :custom
   (copilot-idle-delay 0)
 

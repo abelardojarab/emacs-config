@@ -268,7 +268,7 @@
                         ;;   :config (ox-extras-activate '(latex-header-blocks ignore-headlines)))
 
                         ;; Beamer/ODT/Markdown exporters
-                        (use-package ox-beamer)
+                        (use-package ox-beamer :disabled t)
                         (use-package ox-odt)
                         (use-package ox-gfm)
                         (use-package ox-md)
