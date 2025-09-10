@@ -26,7 +26,7 @@
 (when (or (equal system-type 'darwin)
           (not (display-graphic-p)))
   (progn
-    (add-to-list 'image-types 'svg)
+    ;; (add-to-list 'image-types 'svg)
 
     ;; overriding image.el function image-type-available-p
     (defun image-type-available-p (type)
