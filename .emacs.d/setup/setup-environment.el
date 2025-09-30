@@ -251,7 +251,8 @@
                       (shell-command (concat "kioexec emacsclient " file-name "&"))))))))
 
              ;; Mac OSX
-             ((equal system-type 'darwin)
+             ((or (equal system-type 'darwin)
+                  (equal system-type 'berkeley-unix))
               (setq delete-by-moving-to-trash t
                     trash-directory "~/.Trash/")
               ;; Keep the Option key as Meta
@@ -370,6 +371,7 @@ LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
 (use-package exec-path-from-shell
   :defer t
   :if (or (equal system-type 'darwin)
+          (equal system-type 'berkeley-unix)
           (equal system-type 'gnu/linux))
   :config (exec-path-from-shell-initialize)
   :commands (exec-path-from-shell-initialize)
