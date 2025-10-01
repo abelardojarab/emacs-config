@@ -1,6 +1,6 @@
 ;;; setup-functions.el ---                   -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2025  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -23,6 +23,8 @@
 ;;
 
 ;;; Code:
+
+(setq revert-buffer-in-progress t)
 
 ;; Missing function
 (when (not (fboundp 'custom-add-choice))
