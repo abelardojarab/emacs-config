@@ -85,8 +85,8 @@
            (require-final-newline                 t)
            (debug-on-quit                         nil)
            (bidi-display-reordering               'left-to-right)
-		   (bidi-paragraph-directio               'left-to-right)
-		   (bidi-inhibit-bpa                      t)
+		       (bidi-paragraph-directio               'left-to-right)
+		       (bidi-inhibit-bpa                      t)
            (no-redraw-on-reenter                  t)
            (column-number-indicator-zero-based    nil)
            (track-eol                             t)
@@ -101,6 +101,9 @@
 
           ;; Disable garbage collection messages
           (setq garbage-collection-messages nil)
+
+          ;; Auto revert buffers in progress
+          (setq revert-buffer-in-progress t)
 
           ;; Assure cache directory exists
           (if (not (file-exists-p  my/emacs-cache-dir))
