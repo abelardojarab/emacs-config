@@ -1,6 +1,6 @@
 ;;; setup-company.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2025  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -282,9 +282,15 @@
 (use-package copilot
   :load-path (lambda () (expand-file-name "copilot.el" user-emacs-directory))
   ;; :hook (prog-mode . copilot-mode)
+  :init
+  ;; Create cache directory if it doesn't exist
+  (let ((copilot-cache-dir (expand-file-name ".cache/copilot" user-emacs-directory)))
+    (unless (file-exists-p copilot-cache-dir)
+      (make-directory copilot-cache-dir t)))
   :custom
   (copilot-idle-delay 0)
-
+  (copilot-node-executable "node")
+  (copilot-server-executable "~/.npm-global/bin/copilot-language-server")
   ;; don't show in mode line
   :diminish t
   :bind
@@ -295,6 +301,11 @@
         ("C-g" . #'copilot-clear-overlay)
         ("C-n" . #'copilot-next-completion)
         ("C-p" . #'copilot-previous-completion)))
+
+;; Lets add a comment here
+;; set
+
+(setq )
 
 (provide 'setup-company)
 ;;; setup-company.el ends here
