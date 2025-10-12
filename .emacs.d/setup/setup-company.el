@@ -302,10 +302,5 @@
         ("C-n" . #'copilot-next-completion)
         ("C-p" . #'copilot-previous-completion)))
 
-;; Lets add a comment here
-;; set
-
-(setq )
-
 (provide 'setup-company)
 ;;; setup-company.el ends here
