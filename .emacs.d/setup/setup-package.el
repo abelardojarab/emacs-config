@@ -164,6 +164,10 @@ CURRENT-NAME, if it does not already have them:
     (setq package-selected-packages value)))
 (fset 'package--save-selected-packages 'pd-package--save-selected-packages)
 
+(when (and (string-equal system-type "gnu/linux") (fboundp 'guix-emacs-autoload-packages))
+  (add-to-list 'load-path "~/.guix-profile/share/emacs/site-lisp")
+  (guix-emacs-autoload-packages))
+
 ;; Add all sub-directories inside Cask dir
 (defun my/add-subfolders-to-load-path (parent-dir)
   "Add all level PARENT-DIR subdirs to the `load-path'."
@@ -175,17 +179,18 @@ CURRENT-NAME, if it does not already have them:
         (add-to-list 'custom-theme-load-path name)
         (my/add-subfolders-to-load-path name)))))
 
-(when (and (string-equal system-type "gnu/linux") (fboundp 'guix-emacs-autoload-packages))
-  (add-to-list 'load-path "~/.guix-profile/share/emacs/site-lisp")
-  (guix-emacs-autoload-packages))
+(defun my/add-cask-load-path (version)
+  "Add Cask ELPA directory for VERSION to load-path if it exists."
+  (let ((vendor-dir (expand-file-name (format ".cask/%s/elpa" version)
+                                       user-emacs-directory)))
+    (when (file-directory-p vendor-dir)
+      (add-to-list 'load-path vendor-dir)
+      (my/add-subfolders-to-load-path vendor-dir))))
 
-(setq my/vendor-dir (expand-file-name ".cask/30.2/elpa" user-emacs-directory))
-(add-to-list 'load-path my/vendor-dir)
-(my/add-subfolders-to-load-path my/vendor-dir)
-
-(setq my/vendor-dir (expand-file-name ".cask/27.2/elpa" user-emacs-directory))
-(add-to-list 'load-path my/vendor-dir)
-(my/add-subfolders-to-load-path my/vendor-dir)
+;; Add in REVERSE order so 30.2 is searched first
+(my/add-cask-load-path "27.2")
+(my/add-cask-load-path "29.3")
+(my/add-cask-load-path "30.2")
 
 (defun my/byte-recompile-elpa ()
   "Force byte-compile every `.el' file in `my/vendor-dir'.
