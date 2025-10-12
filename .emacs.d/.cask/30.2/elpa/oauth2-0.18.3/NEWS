@@ -1,0 +1,67 @@
+Summary of changes to oauth2.el
+-------------------------------
+
+(For changes of 0.16 and older please check the git history of the
+repository of oauth2.el.)
+
+* 0.18
+
+** Support reusing cached access_token before it expires
+
+In 0.17 and older version, each time one calls `oauth2-refresh-access'
+it will refresh the access_token immediately, which is kind of
+wasteful if the access_token is still valid.  Some services will
+return the same token before it expires, though it would be great to
+avoid the network request.  This has now been implemented.
+
+Note: some people may notice that in most cases there is actually no
+extra network request generated in 0.17 and older versions.  This is
+because auth-source caches the credentials, which is controlled by
+auth-source-cache-expiry (7200 seconds by default).  Because most
+access_tokens are valid for around 1 hour, it is advised to reduce
+that value to 3600 seconds or lower, or you may see auth-source login
+error because the cached credentials are expired, in which case you
+may call `M-x auth-source-forget-all-cached' to remove the cache and
+request a new access_token.
+
+** Support OAuth2 PKCE extension
+
+Proof Key for Code Exchange is an extension to prevent CSRF and
+authorization code injection attacks (RFC7636) and supported by most
+OAuth2 servers.  This is now implemented and enabled when passing
+`use-pkce' as t.
+
+** Another update to plstore id generation
+
+The generation of plstore id now also includes `user-name'.  This
+enables the usage of predefined `client-id'/`client-secret' from
+e.g. thunderbird, evolution, etc.  This is because the same client
+info is shared among accounts, and other access required info like
+auth-url, token-url, etc. are the same for the same service, which
+leads to the same plstore id and prevent handling multiple accounts.
+Adding `user-name' ensures a unique plstore id for each account.
+
+This would mean that users would have to re-authenticate for all
+accounts (like in the last release).
+
+* 0.17
+
+** Changes to plstore id generation and needs to reacquire refresh_token
+
+The generation of plstore id used to include `auth-url', `token-url',
+and `scope'.  Now `client-id' is also included.  This is required to
+support multiple accounts of some providers which use the same
+`auth-url', `token-url', and `scope' (e.g. Gmail), or the generated
+plstore id is not unique amount accounts.  Adding `client-id' solves
+this problem.
+
+The hash function of calculating the plstore id has also changed from
+MD5 to SHA512 to be more secure.
+
+As a result, users of oauth2.el will need to redo the authentication
+process to get a new refresh_token when upgrading from older version
+to 0.17.
+
+# Local variables:
+# mode: outline
+# End:

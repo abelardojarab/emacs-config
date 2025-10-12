@@ -1,0 +1,11 @@
+;; -*- no-byte-compile: t; lexical-binding: nil -*-
+(define-package "ob-latex-as-png" "20200629.1013"
+  "Org-babel functions for latex-as-png evaluation."
+  '((emacs "26.1")
+    (org   "9.1"))
+  :url "https://github.com/alhassy/ob-latex-as-png"
+  :commit "b0c68bdb54741fbee1068654e4eba1962241f271"
+  :revdesc "b0c68bdb5474"
+  :keywords '("literate programming" "reproducible research" "org" "convenience")
+  :authors '(("Musa Al-hassy" . "alhassy@gmail.com"))
+  :maintainers '(("Musa Al-hassy" . "alhassy@gmail.com")))

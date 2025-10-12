@@ -24,6 +24,8 @@
 
 ;;; Code:
 
+(require 'dash_old)
+
 ;; Missing function
 (when (not (fboundp 'custom-add-choice))
   (defun custom-add-choice (variable choice)

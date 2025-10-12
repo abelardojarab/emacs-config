@@ -1,0 +1,9 @@
+;;; -*- mode: emacs-lisp; lexical-binding: t -*-
+
+(eldev-require-version "1.10")
+
+(eldev-use-package-archive 'gnu)
+
+(setf eldev-release-post-release-commit-message "Post-release version bump."
+      eldev-release-post-release-commit
+      #'eldev-release-next-snapshot-version-unless-already-snapshot)

@@ -1,0 +1,191 @@
+# -*- mode: snippet -*-
+# name: mod int
+# contributor: Nakamura Kenko
+# key: modint
+# --
+
+pub mod mod_int {
+    use std::cell::RefCell;
+    use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
+
+    type InternalNum = u64;
+    thread_local!(
+        static MOD: RefCell<InternalNum> = RefCell::new(0);
+    );
+
+    pub fn set_mod_int<T>(v: T)
+    where
+        InternalNum: From<T>,
+    {
+        MOD.with(|x| x.replace(InternalNum::from(v)));
+    }
+    fn modulo() -> InternalNum {
+        MOD.with(|x| *x.borrow())
+    }
+
+    pub struct ModInt(InternalNum);
+    impl Clone for ModInt {
+        fn clone(&self) -> Self {
+            Self(self.0)
+        }
+    }
+    impl Copy for ModInt {}
+
+    impl ModInt {
+        pub fn new<T>(v: T) -> Self
+        where
+            InternalNum: From<T>,
+        {
+            let mut v = InternalNum::from(v);
+            let m = modulo();
+            if v >= m {
+                v %= m;
+            }
+            Self(v)
+        }
+
+        pub fn internal_pow(&self, mut e: InternalNum) -> Self {
+            let mut result = 1;
+            let mut cur = self.0;
+            let modulo = modulo();
+            while e > 0 {
+                if e & 1 == 1 {
+                    result *= cur;
+                    result %= modulo;
+                }
+                e >>= 1;
+                cur = (cur * cur) % modulo;
+            }
+            Self(result)
+        }
+
+        pub fn pow<T>(&self, e: T) -> Self
+        where
+            InternalNum: From<T>,
+        {
+            self.internal_pow(InternalNum::from(e))
+        }
+
+        pub fn value(&self) -> InternalNum {
+            self.0
+        }
+    }
+    impl From<ModInt> for InternalNum {
+        fn from(m: ModInt) -> Self {
+            m.value()
+        }
+    }
+
+    impl<T> AddAssign<T> for ModInt
+    where
+        InternalNum: From<T>,
+    {
+        fn add_assign(&mut self, rhs: T) {
+            let mut rhs = InternalNum::from(rhs);
+            let m = modulo();
+            if rhs >= m {
+                rhs %= m;
+            }
+
+            self.0 += rhs;
+            if self.0 >= m {
+                self.0 -= m;
+            }
+        }
+    }
+
+    impl<T> Add<T> for ModInt
+    where
+        InternalNum: From<T>,
+    {
+        type Output = ModInt;
+        fn add(self, rhs: T) -> Self::Output {
+            let mut res = self;
+            res += rhs;
+            res
+        }
+    }
+    impl<T> SubAssign<T> for ModInt
+    where
+        InternalNum: From<T>,
+    {
+        fn sub_assign(&mut self, rhs: T) {
+            let mut rhs = InternalNum::from(rhs);
+            let m = modulo();
+            if rhs >= m {
+                rhs %= m;
+            }
+            if rhs > 0 {
+                self.0 += m - rhs;
+            }
+            if self.0 >= m {
+                self.0 -= m;
+            }
+        }
+    }
+    impl<T> Sub<T> for ModInt
+    where
+        InternalNum: From<T>,
+    {
+        type Output = Self;
+        fn sub(self, rhs: T) -> Self::Output {
+            let mut res = self;
+            res -= rhs;
+            res
+        }
+    }
+    impl<T> MulAssign<T> for ModInt
+    where
+        InternalNum: From<T>,
+    {
+        fn mul_assign(&mut self, rhs: T) {
+            let mut rhs = InternalNum::from(rhs);
+            let m = modulo();
+            if rhs >= m {
+                rhs %= m;
+            }
+            self.0 *= rhs;
+            self.0 %= m;
+        }
+    }
+    impl<T> Mul<T> for ModInt
+    where
+        InternalNum: From<T>,
+    {
+        type Output = Self;
+        fn mul(self, rhs: T) -> Self::Output {
+            let mut res = self;
+            res *= rhs;
+            res
+        }
+    }
+
+    impl<T> DivAssign<T> for ModInt
+    where
+        InternalNum: From<T>,
+    {
+        fn div_assign(&mut self, rhs: T) {
+            let mut rhs = InternalNum::from(rhs);
+            let m = modulo();
+            if rhs >= m {
+                rhs %= m;
+            }
+            let inv = Self(rhs).internal_pow(m - 2);
+            self.0 *= inv.value();
+            self.0 %= m;
+        }
+    }
+
+    impl<T> Div<T> for ModInt
+    where
+        InternalNum: From<T>,
+    {
+        type Output = Self;
+        fn div(self, rhs: T) -> Self::Output {
+            let mut res = self;
+            res /= rhs;
+            res
+        }
+    }
+}
+

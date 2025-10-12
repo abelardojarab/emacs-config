@@ -1,0 +1,13 @@
+;; -*- no-byte-compile: t; lexical-binding: nil -*-
+(define-package "company-restclient" "20190426.1312"
+  "Company-mode completion back-end for restclient-mode."
+  '((cl-lib              "0.5")
+    (company             "0.8.0")
+    (emacs               "24")
+    (know-your-http-well "0.2.0")
+    (restclient          "0.0.0"))
+  :url "https://github.com/iquiw/company-restclient"
+  :commit "e5a3ec54edb44776738c13e13e34c85b3085277b"
+  :revdesc "e5a3ec54edb4"
+  :authors '(("Iku Iwasa" . "iku.iwasa@gmail.com"))
+  :maintainers '(("Iku Iwasa" . "iku.iwasa@gmail.com")))

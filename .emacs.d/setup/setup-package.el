@@ -179,7 +179,7 @@ CURRENT-NAME, if it does not already have them:
   (add-to-list 'load-path "~/.guix-profile/share/emacs/site-lisp")
   (guix-emacs-autoload-packages))
 
-(setq my/vendor-dir (expand-file-name ".cask/29.3/elpa" user-emacs-directory))
+(setq my/vendor-dir (expand-file-name ".cask/30.2/elpa" user-emacs-directory))
 (add-to-list 'load-path my/vendor-dir)
 (my/add-subfolders-to-load-path my/vendor-dir)
 

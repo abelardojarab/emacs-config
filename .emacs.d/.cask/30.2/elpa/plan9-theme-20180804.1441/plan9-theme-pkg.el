@@ -1,0 +1,9 @@
+;; -*- no-byte-compile: t; lexical-binding: nil -*-
+(define-package "plan9-theme" "20180804.1441"
+  "A color theme for Emacs based on Plan9."
+  ()
+  :url "https://github.com/john2x/plan9-theme.el"
+  :commit "4c1050b8ed42e0f99ef64c77ec370a786bd0003c"
+  :revdesc "4c1050b8ed42"
+  :authors '(("John Louis Del Rosario" . "john2x@gmail.com"))
+  :maintainers '(("John Louis Del Rosario" . "john2x@gmail.com")))
