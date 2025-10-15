@@ -230,8 +230,12 @@
 (use-package doc-show-inline
   :commands (doc-show-inline-mode)
   :config
-  (define-key c-mode-map (kbd "C-;") 'doc-show-inline-mode)
-  (define-key c++-mode-map (kbd "C-;") 'doc-show-inline-mode)
+  (progn
+    (defadvice doc-show-inline--idle-enable(around bar activate)
+      (ignore-errors add-do-it))
+
+	(define-key c-mode-map (kbd "C-;") 'doc-show-inline-mode)
+	(define-key c++-mode-map (kbd "C-;") 'doc-show-inline-mode))
   :hook ((c-mode . doc-show-inline-mode)
          (c++-mode . doc-show-inline-mode)))
 
