@@ -1,6 +1,6 @@
 ;;; setup-markdown.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2020  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2025  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -73,7 +73,7 @@
 
               ;; Org goodies
               ;; (orgtbl-mode               t)
-              (orgstruct++-mode          t)
+              ;; (orgstruct++-mode          t)
 
               ;; Extra modes
               (outline-minor-mode        t)

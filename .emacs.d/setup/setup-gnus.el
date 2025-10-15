@@ -1,6 +1,6 @@
 ;;; setup-gnus.el ---                         -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2022  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2025  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -228,9 +228,9 @@
               (epa-mail-mode t)
 
               ;; Org goodies
-              (orgtbl-mode      t)
-              (orgstruct-mode   t)
-              (orgstruct++-mode t)
+              ;; (orgtbl-mode      t)
+              ;; (orgstruct-mode   t)
+              ;; (orgstruct++-mode t)
 
               ;; Extra modes
               (footnote-mode  t)
