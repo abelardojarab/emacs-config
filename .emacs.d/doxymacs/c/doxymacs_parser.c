@@ -79,7 +79,7 @@ unsigned int hash(const char *s)
         h += *s++;
     }
 
-    return abs(h % HASH_SIZE);
+    return (h % HASH_SIZE);
 }
 
 void AddToHash(completion_list *cl)
