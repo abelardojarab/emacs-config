@@ -117,7 +117,7 @@ void FreeHash(void)
 
 /* XML Helper Functions */
 
-inline char *XMLTagChild(xmlNodePtr node, const char *name)
+static inline char *XMLTagChild(xmlNodePtr node, const char *name)
 {
     xmlNodePtr cur = node->xmlChildrenNode;
 
@@ -141,7 +141,7 @@ inline char *XMLTagChild(xmlNodePtr node, const char *name)
     return NULL;
 }
 
-inline char *XMLTagAttr(xmlNodePtr node, const char *attr)
+static inline char *XMLTagAttr(xmlNodePtr node, const char *attr)
 {
     xmlAttrPtr props = node->properties;
 
@@ -167,7 +167,7 @@ inline char *XMLTagAttr(xmlNodePtr node, const char *attr)
 
 /* Look up functions for symbols and descriptions */
 
-inline completion_list *LookUpSymbol(const char *symbol)
+static inline completion_list *LookUpSymbol(const char *symbol)
 {
     unsigned int h = hash(symbol);
     hash_entry *cur = symbol_hash[h];
@@ -187,7 +187,7 @@ inline completion_list *LookUpSymbol(const char *symbol)
     return NULL;
 }
 
-inline desc_url_list *LookUpDesc(completion_list *entry, const char *desc)
+static inline desc_url_list *LookUpDesc(completion_list *entry, const char *desc)
 {
     desc_url_list *cur = entry->descs;
 
@@ -206,7 +206,7 @@ inline desc_url_list *LookUpDesc(completion_list *entry, const char *desc)
 
 /* Add the given name, description and url to our completion list */
 
-inline int AddToCompletionList(const char *name,
+static inline int AddToCompletionList(const char *name,
                                const char *desc, const char *url)
 {
     completion_list *check;
@@ -274,7 +274,7 @@ inline int AddToCompletionList(const char *name,
 }
 
 /* Encode the given string so that {X}Emacs will understand it */
-inline char *Encode(const char *s)
+static inline char *Encode(const char *s)
 {
     unsigned int extra_len = 0;
     char *c = (char *)s;
