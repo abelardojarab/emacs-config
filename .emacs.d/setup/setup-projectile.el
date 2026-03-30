@@ -77,8 +77,9 @@
                   projectile-indexing-method     'alien
                   projectile-globally-ignored-file-suffixes '("#" "~" ".swp" ".o" ".so" ".exe"
                                                               ".dll" ".elc" ".pyc" ".jar" ".class")
-                  projectile-globally-ignored-files (quote ("TAGS" "*.log" "*DS_Store" "node-modules"
-                                                            "build" ".cache" ".vscode" ".idea" "contrib" "__pychace__")))
+                  projectile-globally-ignored-files '("TAGS" "*.log" "*DS_Store")
+                  projectile-globally-ignored-directories '("node_modules"
+                                                            "build" ".cache" ".vscode" ".idea" "contrib" "__pycache__"))
             (projectile-global-mode)))
 
 ;; Integration with ripgrep

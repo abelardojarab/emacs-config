@@ -34,7 +34,7 @@
 
           ;; Assure .gtags directory exists
           (if (not (file-exists-p "~/.gtags"))
-              (make-directory "~/.gtags") t)
+              (make-directory "~/.gtags" t))
 
           (if (file-exists-p "~/.gtags/TAGS")
               (ignore-errors
@@ -55,15 +55,14 @@
             (defun ctags-create-or-update (dir-name)
               "Create tags file."
               (interactive
-               (let ((olddir default-directory)
-                     (default-directory
-                       (read-directory-name
-                        "ctags: top of source tree:" (projectile-project-root))))
-                 (shell-command
-                  (format "find %s -follow -type f -name \"*.[ch][ px][ px]\" | etags - -o %s/TAGS"
-                          default-directory
-                          default-directory))
-                 (message "Created tagfile"))))
+               (list (read-directory-name
+                      "ctags: top of source tree:" (projectile-project-root))))
+              (let ((default-directory dir-name))
+                (shell-command
+                 (format "find %s -follow -type f -name \"*.[ch][ px][ px]\" | etags - -o %s/TAGS"
+                         default-directory
+                         default-directory))
+                (message "Created tagfile")))
 
             ;; Fix etags bugs (https://groups.google.com/forum/#!msg/gnu.emacs.help/Ew0sTxk0C-g/YsTPVEKTBAAJ)
             (defvar etags--table-line-limit 10)
@@ -194,7 +193,7 @@
   :preface (progn
              ;; Assure .gtags directory exists
              (if (not (file-exists-p "~/.gtags"))
-                 (make-directory "~/.gtags") t)
+                 (make-directory "~/.gtags" t))
 
              ;; Descend into GTAGSLIBPATH if definition is not found
              (setenv "GTAGSTHROUGH" "true")
@@ -287,20 +286,18 @@ When finished invoke CALLBACK in BUFFER with process exit status."
 
              (defun ggtags-create-or-update ()
                "Create or update the GNU-Global tag file"
-               (interactive
-                (if (zerop (call-process "global" nil nil nil "-p"))
-                    ;; case 1: tag file exists: update
-                    (progn
-                      (shell-command "global -u -q 2> /dev/null")
-                      (message "Tagfile updated"))
-                  ;; case 2: no tag file yet: create it
-                  (when (yes-or-no-p "Create tagfile?")
-                    (let ((olddir default-directory)
-                          (default-directory
-                            (read-directory-name
-                             "gtags: top of source tree:" (projectile-project-root))))
-                      (shell-command "gtags -i -q 2> /dev/null")
-                      (message "Created tagfile"))))))))
-
+               (interactive)
+               (if (zerop (call-process "global" nil nil nil "-p"))
+                   ;; case 1: tag file exists: update
+                   (progn
+                     (shell-command "global -u -q 2> /dev/null")
+                     (message "Tagfile updated"))
+                 ;; case 2: no tag file yet: create it
+                 (when (yes-or-no-p "Create tagfile?")
+                   (let ((default-directory
+                           (read-directory-name
+                            "gtags: top of source tree:" (projectile-project-root))))
+                     (shell-command "gtags -i -q 2> /dev/null")
+                     (message "Created tagfile")))))))
 (provide 'setup-tags)
 ;;; setup-tags.el ends here

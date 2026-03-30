@@ -41,10 +41,11 @@
               (make-directory server-auth-dir t)))
   :config (progn
             ;; Automatically kill all spawned processes on exit
-            (defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
+            (defun my/no-query-kill-emacs--advice (orig &rest args)
               "Prevent annoying \"Active processes exist\" query when you quit Emacs."
               (ignore-errors
-                (flet ((process-list ())) ad-do-it)))
+                (cl-letf (((symbol-function 'process-list) (lambda () nil))) (apply orig args))))
+            (advice-add 'save-buffers-kill-emacs :around #'my/no-query-kill-emacs--advice)
 
             ;; http://stackoverflow.com/questions/885793/emacs-error-when-calling-server-start
             (defun server-ensure-safe-dir (dir) "Noop" t)
@@ -56,9 +57,10 @@
             (defun server-ensure-safe-dir (dir) "Noop" t)
 
             ;; Ensure there is always at least one visible frame open at all times
-            (defadvice server-save-buffers-kill-terminal (around dont-kill-last-client-frame activate)
+            (defun my/dont-kill-last-client-frame--advice (orig &rest args)
               (when (< 1 (length (frame-list)))
-                ad-do-it))
+                (apply orig args)))
+            (advice-add 'server-save-buffers-kill-terminal :around #'my/dont-kill-last-client-frame--advice)
 
             ;; Keeping emacs running even when "exiting"
             (defun my/exit ()
@@ -77,7 +79,7 @@
                 (make-frame-invisible nil t)))
 
             (defvar my/really-kill-emacs nil)
-            (defadvice kill-emacs (around my/really-exit activate)
+            (defun my/really-exit--advice (orig &rest args)
               "Only kill emacs if a prefix is set"
               (when my/really-kill-emacs
                 ;; Kill all remaining clients
@@ -85,8 +87,9 @@
                     (progn
                       (dolist (client server-clients)
                         (server-delete-client client))))
-                ad-do-it)
+                (apply orig args))
               (my/exit))
+            (advice-add 'kill-emacs :around #'my/really-exit--advice)
 
             (defun quit-emacs ()
               (interactive)

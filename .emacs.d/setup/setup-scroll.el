@@ -33,8 +33,8 @@
               fast-but-imprecise-scrolling    t
               auto-window-vscroll             nil)
 
-(defadvice line-move-to-column (around bar activate)
-  (ignore-errors add-do-it))
+(advice-add 'line-move-to-column :around
+            (lambda (orig &rest args) (ignore-errors (apply orig args))))
 
 ;; Be careful it can ruin shift-select-mode
 (use-package smooth-scrolling

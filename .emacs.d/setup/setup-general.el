@@ -107,23 +107,24 @@ Image types are symbols like `xbm' or `jpeg'."
   :defer t
   :custom ((pos-tip-internal-border-width 6)
            (pos-tip-border-width          1))
-  :config (defadvice popup-menu-show-quick-help
-              (around pos-tip-popup-menu-show-quick-help () activate)
-            "Show quick help using `pos-tip-show'."
-            (if (display-graphic-p)
-                (let ((doc (popup-menu-document
-                            menu (or item
-                                     (popup-selected-item menu)))))
-                  (when (stringp doc)
-                    (pos-tip-show doc nil
-                                  (if (popup-hidden-p menu)
-                                      (or (plist-get args :point)
-                                          (point))
-                                    (overlay-end (popup-line-overlay
-                                                  menu (+ (popup-offset menu)
-                                                          (popup-selected-line menu)))))
-                                  nil 0) nil))
-              ad-do-it)))
+  :config (progn
+            (defun my/pos-tip-popup-menu-show-quick-help--advice (orig menu &optional item &rest args)
+              "Show quick help using `pos-tip-show'."
+              (if (display-graphic-p)
+                  (let ((doc (popup-menu-document
+                              menu (or item
+                                       (popup-selected-item menu)))))
+                    (when (stringp doc)
+                      (pos-tip-show doc nil
+                                    (if (popup-hidden-p menu)
+                                        (or (plist-get args :point)
+                                            (point))
+                                      (overlay-end (popup-line-overlay
+                                                    menu (+ (popup-offset menu)
+                                                            (popup-selected-line menu)))))
+                                    nil 0) nil))
+                (apply orig menu item args)))
+            (advice-add 'popup-menu-show-quick-help :around #'my/pos-tip-popup-menu-show-quick-help--advice)))
 
 ;; Turn on subword-mode for non-lispy languages
 (use-package subword

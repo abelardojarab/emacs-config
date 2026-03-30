@@ -29,8 +29,8 @@
   ;;  :if (display-graphic-p)
   :demand t)
 
-(defadvice mode-icons-set-mode-icon (around bar activate)
-  (ignore-errors add-do-it))
+(advice-add 'mode-icons-set-mode-icon :around
+            (lambda (orig &rest args) (ignore-errors (apply orig args))))
 
 ;; Tabbar
 (use-package tabbar
@@ -92,12 +92,13 @@ That is, a string used to represent it on the tab bar."
                                             (tabbar-current-tabset)))))))))
 
             ;; Tweaking the tabbar
-            (defadvice tabbar-buffer-tab-label (after fixup_tab_label_space_and_flag activate)
-              (setq ad-return-value
-                    (if (and (buffer-modified-p (tabbar-tab-value tab))
-                             (buffer-file-name (tabbar-tab-value tab)))
-                        (concat "+" (concat ad-return-value ""))
-                      (concat "" (concat ad-return-value "")))))
+            (defun my/fixup-tab-label-space-and-flag--advice (orig tab)
+              (let ((ad-return-value (funcall orig tab)))
+                (if (and (buffer-modified-p (tabbar-tab-value tab))
+                         (buffer-file-name (tabbar-tab-value tab)))
+                    (concat "+" (concat ad-return-value ""))
+                  (concat "" (concat ad-return-value "")))))
+            (advice-add 'tabbar-buffer-tab-label :around #'my/fixup-tab-label-space-and-flag--advice)
 
             ;; called each time the modification state of the buffer changed
             (defun my/modification-state-change ()
@@ -388,7 +389,7 @@ truncates text if needed.  Minimal width can be set with
          (term-mode . centaur-tabs-local-mode)
          (calendar-mode . centaur-tabs-local-mode)
          (org-agenda-mode . centaur-tabs-local-mode)
-         (helpful-mode.centaur -tabs-local-mode)
+         (helpful-mode . centaur-tabs-local-mode)
          (after-init . centaur-tabs-mode))
   :config (progn
             (centaur-tabs-headline-match)

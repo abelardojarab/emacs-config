@@ -36,11 +36,9 @@
                  (setq dired-sidebar-theme 'icons)
                (setq dired-sidebar-theme 'nerd))
 
-             (defadvice dired-sidebar-point-at-file (around bar activate)
-               (ignore-errors add-do-it))
+             (advice-add 'dired-sidebar-point-at-file :around (lambda (orig &rest args) (ignore-errors (apply orig args))))
 
-             (defadvice dired-sidebar-refresh-buffer (around bar activate)
-               (ignore-errors add-do-it))))
+             (advice-add 'dired-sidebar-refresh-buffer :around (lambda (orig &rest args) (ignore-errors (apply orig args))))))
 
 ;; neotree side bar
 (use-package neotree

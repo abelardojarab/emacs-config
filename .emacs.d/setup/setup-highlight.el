@@ -40,13 +40,13 @@
             (setq highlight-changes-visibility-initial-state nil)
 
             ;; Fix highlight bug of marking a file as modified
-            (defadvice highlight-changes-rotate-faces (around around-rotate-faces)
+            (defun my/around-rotate-faces--advice (orig &rest args)
               (let ((was-modified (buffer-modified-p))
                     (buffer-undo-list t))
-                ad-do-it
+                (apply orig args)
                 (unless was-modified
                   (set-buffer-modified-p nil))))
-            (ad-activate 'highlight-changes-rotate-faces)))
+            (advice-add 'highlight-changes-rotate-faces :around #'my/around-rotate-faces--advice)))
 
 ;; Highlight the line
 (use-package hl-line
@@ -71,10 +71,11 @@
               (make-local-variable 'global-hl-line-mode)
               (setq global-hl-line-mode nil))
 
-            ;; hl-line overrides the background of hi-lock’ed text, this will provide a fix
-            (defadvice hi-lock-set-pattern (around use-overlays activate)
+            ;; hl-line overrides the background of hi-lock'ed text, this will provide a fix
+            (defun my/use-overlays--advice (orig &rest args)
               (let ((font-lock-fontified nil))
-                ad-do-it))))
+                (apply orig args)))
+            (advice-add 'hi-lock-set-pattern :around #'my/use-overlays--advice)))
 
 ;; Deferred highlighted line
 (use-package hl-line+

@@ -70,11 +70,12 @@
          (find-file-hooks . goto-address-prog-mode))
   :config (progn
             (setq confirm-kill-processes nil)
-            (defadvice find-file-read-args (around find-file-read-args-always-use-dialog-box act)
+            (defun my/find-file-read-args-always-use-dialog-box--advice (orig &rest args)
               "Simulate invoking menu item as if by the mouse; see `use-dialog-box'."
               (let ((last-nonmenu-event nil)
                     (use-dialog-box t))
-                ad-do-it))))
+                (apply orig args)))
+            (advice-add 'find-file-read-args :around #'my/find-file-read-args-always-use-dialog-box--advice)))
 
 ;; More exhaustive cleaning of white space
 (use-package whitespace

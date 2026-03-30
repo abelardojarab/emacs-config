@@ -126,7 +126,7 @@
                   ibuffer-show-empty-filter-groups nil
                   ibuffer-expert t)
 
-            (defadvice ibuffer-update-title-and-summary (after remove-column-titles)
+            (defun my/remove-column-titles--advice (&rest _)
               (save-excursion
                 (set-buffer "*Ibuffer*")
                 (toggle-read-only 0)
@@ -137,7 +137,7 @@
                   ;; save a little screen estate
                   (shrink-window-if-larger-than-buffer))
                 (toggle-read-only)))
-            (ad-activate 'ibuffer-update-title-and-summary)
+            (advice-add 'ibuffer-update-title-and-summary :after #'my/remove-column-titles--advice)
 
             ;; Use human readable size column instead of original one
             (define-ibuffer-column size-h

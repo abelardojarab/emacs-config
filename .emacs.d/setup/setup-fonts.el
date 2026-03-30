@@ -68,11 +68,6 @@
 			;; for daemon sessions and and nondaemons
 			(apply-if-gui 'styling/set-backup-fonts)
 
-			;; respect default terminal fonts
-			;; if we're in a gui set the fonts appropriately
-			;; for daemon sessions and and nondaemons
-			(apply-if-gui 'styling/set-backup-fonts)
-
             ;; Prefer user choices
             (if (find-font (font-spec :name my/main-programming-font))
                 (if (not (find-font (font-spec :name my/main-writing-font)))
@@ -91,7 +86,7 @@
 
                   ;; Adjust text size based on resolution
                   (cl-case system-type
-                    ('windows-nt
+                    (windows-nt
                      (if (> (x-display-pixel-width) 2000)
                          (progn ;; HD monitor in Windows
                            (setq my/main-programming-font-size "12")
@@ -99,7 +94,7 @@
                        (progn
                          (setq my/main-programming-font-size "11")
                          (setq my/main-writing-font-size "11"))))
-                    ('darwin
+                    (darwin
                      (if (> (x-display-pixel-width) 1800)
                          (if (> (x-display-pixel-width) 2000)
                              (progn ;; Ultra-HD monitor in OSX
@@ -174,7 +169,7 @@
             (when (display-graphic-p)
               ;; Fontify current frame
               (fontify-frame nil)
-              (let (frame (selected-frame))
+              (let ((frame (selected-frame)))
                 (fontify-frame frame))
 
               ;; Fontify any future frames for emacsclient
@@ -195,7 +190,7 @@
   :commands pretty-mode)
 
 ;; Prettier symbols
-(use-package prettiy-symbols-mode
+(use-package pretty-symbols-mode
   :defer t
   :if (and (fboundp 'global-prettify-symbols-mode)
            (display-graphic-p))

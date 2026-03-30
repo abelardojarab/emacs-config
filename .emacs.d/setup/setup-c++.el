@@ -231,8 +231,8 @@
   :commands (doc-show-inline-mode)
   :config
   (progn
-    (defadvice doc-show-inline--idle-enable(around bar activate)
-      (ignore-errors add-do-it))
+    (advice-add 'doc-show-inline--idle-enable :around
+                (lambda (orig &rest args) (ignore-errors (apply orig args))))
 
 	(define-key c-mode-map (kbd "C-;") 'doc-show-inline-mode)
 	(define-key c++-mode-map (kbd "C-;") 'doc-show-inline-mode))

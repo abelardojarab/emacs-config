@@ -82,7 +82,7 @@
 (use-package popwin
   :defer t
   :commands popwin-mode
-  :config (add-to-list popwin:special-display-config '(help-mode 0.5 :position below)))
+  :config (add-to-list 'popwin:special-display-config '(help-mode 0.5 :position below)))
 
 ;; Perspective
 (use-package perspective
@@ -186,7 +186,7 @@
                 switch-buffer-without-purpose
                 purpose-switch-buffer-with-purpose))
 
-            (defadvice purpose-find-file-overload (after find-file-sudo activate)
+            (defun my/find-file-sudo--advice (&rest _)
               "Find file as root if necessary."
               (unless (and buffer-file-name
                            (file-writable-p buffer-file-name))
@@ -206,6 +206,7 @@
                                                          buffer-file nil nil nil (+ coincidence 1))))
                         (find-alternate-file buffer-name))
                     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file))))))
+            (advice-add 'purpose-find-file-overload :after #'my/find-file-sudo--advice)
 
             ;; Extensions for purpose
             (use-package window-purpose-x

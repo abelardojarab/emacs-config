@@ -56,8 +56,8 @@
                 ;; Use a slightly smaller face for the ECB tree-buffers.
                 (set-face-attribute 'ecb-default-general-face nil :height 0.9)))
 
-            (defadvice semanticdb-deep-find-tags-by-name-method (around bar activate)
-              (ignore-errors add-do-it))
+            (advice-add 'semanticdb-deep-find-tags-by-name-method :around
+                        (lambda (orig &rest args) (ignore-errors (apply orig args))))
 
             (defun my/ecb-activate ()
               (interactive)
@@ -209,11 +209,13 @@ little more place."
               :after (sr-speedbar projectile)
               :commands projectile-speedbar-open-current-buffer-in-tree
               :init (progn
-                      (defadvice helm-projectile-find-file (after locate-file activate)
+                      (defun my/locate-file--advice (&rest _)
                         (if (sr-speedbar-exist-p)
                             (projectile-speedbar-open-current-buffer-in-tree)))
-                      (defadvice speedbar-item-load (after speedbar-highlight-file activate)
-                        (projectile-speedbar-open-current-buffer-in-tree))))))
+                      (advice-add 'helm-projectile-find-file :after #'my/locate-file--advice)
+                      (defun my/speedbar-highlight-file--advice (&rest _)
+                        (projectile-speedbar-open-current-buffer-in-tree))
+                      (advice-add 'speedbar-item-load :after #'my/speedbar-highlight-file--advice)))))
 
 (use-package treemacs
   :defer t

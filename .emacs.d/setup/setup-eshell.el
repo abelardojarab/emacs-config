@@ -42,18 +42,18 @@
   :defer t
   :commands ansi-term
   :config (progn
-            (defadvice term-sentinel (around my/advice-term-sentinel (proc msg))
+            (defun my/advice-term-sentinel (orig proc msg)
               (if (memq (process-status proc) '(signal exit))
                   (let ((buffer (process-buffer proc)))
-                    ad-do-it
+                    (funcall orig proc msg)
                     (kill-buffer buffer))
-                ad-do-it))
-            (ad-activate 'term-sentinel)
+                (funcall orig proc msg)))
+            (advice-add 'term-sentinel :around #'my/advice-term-sentinel)
 
             (defvar my/term-shell "/bin/bash")
-            (defadvice ansi-term (before force-bash)
+            (defun my/force-bash--advice (&rest _)
               (interactive (list my/term-shell)))
-            (ad-activate 'ansi-term)
+            (advice-add 'ansi-term :before #'my/force-bash--advice)
 
             (defun my/term-use-utf8 ()
               (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))

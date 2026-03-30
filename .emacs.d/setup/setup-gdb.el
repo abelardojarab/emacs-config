@@ -48,7 +48,7 @@
                 ov)
               "Overlay variable for GUD highlighting.")
 
-            (defadvice gud-display-line (after my-gud-highlight act)
+            (defun my/my-gud-highlight--advice (&rest _)
               "Highlight the current line."
               (let ((ov gud-overlay)
                     (bf (gud-find-file true-file)))
@@ -57,6 +57,7 @@
                   (set-buffer bf)
                   (move-overlay ov (line-beginning-position) (line-end-position)
                                 (current-buffer)))))
+            (advice-add 'gud-display-line :after #'my/my-gud-highlight--advice)
 
             (defun gud-kill-buffer ()
               (if (eq major-mode 'gud-mode)
@@ -67,15 +68,15 @@
             ;; Keep the current line in sync with the point and in the center of the
             ;; buffer. Otherwise the current line may disappear from the buffer as you step
             ;; into the code. I don't know why this is not the default.
-            (defadvice gud-display-line (after gud-display-line-centered activate)
+            (defun my/gud-display-line-centered--advice (_file line)
               "Center the current line in the source code window"
               (when (and gud-overlay-arrow-position gdb-source-window)
                 (with-selected-window gdb-source-window
                   (save-restriction
-                    ;; Compiler-happy equivalent to (goto-line (ad-get-arg 1))
                     (goto-char (point-min))
-                    (forward-line (1- (ad-get-arg 1)))
+                    (forward-line (1- line))
                     (recenter)))))
+            (advice-add 'gud-display-line :after #'my/gud-display-line-centered--advice)
 
             ;; Split the current frame into 3 windows stacked up
             ;; on top of each other: gdb command line, source code, program IO.

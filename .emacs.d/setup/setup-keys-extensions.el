@@ -54,8 +54,8 @@
            (which-key-show-early-on-C-h     t)
            (which-key-idle-secondary-delay  1e-9))
   :config (progn
-            (defadvice which-key--update (around bar activate)
-              (ignore-errors add-do-it))
+            (advice-add 'which-key--update :around
+                        (lambda (orig &rest args) (ignore-errors (apply orig args))))
             (setq which-key-replacement-alist
                   '(("<\\([[:alnum:]-]+\\)>" . "\\1")
                     ("TAB"                   . "↹")

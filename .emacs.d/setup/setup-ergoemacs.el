@@ -43,8 +43,8 @@
            (ergoemacs-keyboard-layout    "us")
            (ergoemacs-ignore-prev-global nil))
   :config (progn
-            (defadvice ergoemacs-map--lookup-map (around bar activate)
-              (ignore-errors add-do-it))
+            (advice-add 'ergoemacs-map--lookup-map :around
+                        (lambda (orig &rest args) (ignore-errors (apply orig args))))
 
             (ergoemacs-mode-after-init-emacs)
             (ergoemacs-mode t)))

@@ -193,8 +193,7 @@ parametersg."
               :after dired
               :commands dired-icon-mode
               :hook (dired-mode . dired-icon-mode)
-              :config (defadvice dired-icon--display (around bar activate)
-                        (ignore-errors add-do-it)))
+              :config (advice-add 'dired-icon--display :around (lambda (orig &rest args) (ignore-errors (apply orig args)))))
 
             ;; Narrow dired to match filter
             (use-package dired-narrow

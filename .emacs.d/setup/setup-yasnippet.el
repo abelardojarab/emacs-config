@@ -71,10 +71,11 @@
 
             ;; use yas/completing-prompt ONLY when `M-x yas-insert-snippet'
             ;; thanks to capitaomorte for providing the trick.
-            (defadvice yas-insert-snippet (around use-completing-prompt activate)
+            (defun my/use-completing-prompt--advice (orig &rest args)
               "Use `yas-completing-prompt' for `yas-prompt-functions' but only here..."
               (let ((yas-prompt-functions '(yas-ido-prompt)))
-                ad-do-it))
+                (apply orig args)))
+            (advice-add 'yas-insert-snippet :around #'my/use-completing-prompt--advice)
 
             ;; Tweaking Yasnippet for Org mode
             (defun yas--org-very-safe-expand ()

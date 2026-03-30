@@ -78,17 +78,14 @@
                       (untabify (point-min) (point-max)))) nil))
 
 ;; auto-indent pasted code
-(defadvice yank (after indent-region activate)
+(defun my/indent-region--advice (&rest _)
   (if (member major-mode
               '(emacs-lisp-mode lisp-mode c-mode c++-mode
                                 objc-mode latex-mode plain-tex-mode python-mode java-mode js2-mode))
       (indent-region (region-beginning) (region-end) nil)))
 
-(defadvice yank-pop (after indent-region activate)
-  (if (member major-mode
-              '(emacs-lisp-mode lisp-mode c-mode c++-mode
-                                objc-mode latex-mode plain-tex-mode python-mode java-mode js2-mode))
-      (indent-region (region-beginning) (region-end) nil)))
+(advice-add 'yank :after #'my/indent-region--advice)
+(advice-add 'yank-pop :after #'my/indent-region--advice)
 
 ;; Disable electric indent
 (if (featurep 'electric-indent-mode)

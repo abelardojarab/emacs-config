@@ -51,7 +51,7 @@
 
 (defcustom my/tab-width 4
   "Default tab width"
-  :type 'int
+  :type 'integer
   :group 'my/customs)
 
 (defcustom my/user-full-name  "Abelardo Jara-Berrocal"
@@ -368,9 +368,9 @@
   :type 'list)
 
 (defcustom my/backend-assoc
-  '(('Git . 'magit-status)
-    ('Hg  . 'hg-status)
-    ('Svn . 'svn-status))
+  '((Git . magit-status)
+    (Hg  . hg-status)
+    (Svn . svn-status))
   "Mapping between backend and function"
   :group 'my/customs
   :type 'list)
@@ -448,7 +448,7 @@
 
 (defcustom my/anything-requires-pattern 2
   "Number of characters to input before starting to search"
-  :type 'int
+  :type 'integer
   :group 'my/customs)
 
 (defcustom my/anything-prune-dir
@@ -460,7 +460,7 @@
 
 (defcustom my/compilation-kill-buffer-timeout 10
   "Seconds to wait before kill the compilation buffer"
-  :type 'int
+  :type 'integer
   :group 'my/customs)
 
 ;; User-specific configuration file

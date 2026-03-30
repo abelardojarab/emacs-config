@@ -177,8 +177,9 @@
 
             ;; WORKAROUND Hide mode-line of the lsp-ui-imenu buffer
             ;; @see https://github.com/emacs-lsp/lsp-ui/issues/243
-            (defadvice lsp-ui-imenu (after hide-lsp-ui-imenu-mode-line activate)
-              (setq mode-line-format nil)))
+            (defun my/hide-lsp-ui-imenu-mode-line--advice (&rest _)
+              (setq mode-line-format nil))
+            (advice-add 'lsp-ui-imenu :after #'my/hide-lsp-ui-imenu-mode-line--advice))
   :hydra (hydra-lsp (:exit t :hint nil)
                     "
  Buffer^^               Server^^                   Symbol

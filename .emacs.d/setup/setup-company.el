@@ -130,8 +130,7 @@
                      :with company-capf)))
 
             ;; Ignore errors
-            (defadvice company-capf (around bar activate)
-              (ignore-errors add-do-it))
+            (advice-add 'company-capf :around (lambda (orig &rest args) (ignore-errors (apply orig args))))
 
             ;; Add company-ispell as backend for text-mode's only
             (defun company-text-setup ()
@@ -218,8 +217,7 @@
                        (company-box-show-single-candidate t)
                        (company-box-max-candidates        50)
                        (company-box-doc-delay             0.3))
-              :config (defadvice company-box-show (around bar activate)
-                        (ignore-errors add-do-it)))
+              :config (advice-add 'company-box-show :around (lambda (orig &rest args) (ignore-errors (apply orig args)))))
 
             ;; Documentation popups for company
             (use-package company-quickhelp
@@ -295,17 +293,12 @@
   :diminish t
   :bind
   (:map copilot-completion-map
-        ("<right>" . 'copilot-accept-completion)
-        ("S-TAB" . 'copilot-accept-completion-by-word)
-        ("S-<tab>" . 'copilot-accept-completion-by-word)
-        ("C-g" . #'copilot-clear-overlay)
-        ("C-n" . #'copilot-next-completion)
-        ("C-p" . #'copilot-previous-completion)))
-
-;; Lets add a comment here
-;; set
-
-(setq )
+        ("<right>" . copilot-accept-completion)
+        ("S-TAB" . copilot-accept-completion-by-word)
+        ("S-<tab>" . copilot-accept-completion-by-word)
+        ("C-g" . copilot-clear-overlay)
+        ("C-n" . copilot-next-completion)
+        ("C-p" . copilot-previous-completion)))
 
 (provide 'setup-company)
 ;;; setup-company.el ends here

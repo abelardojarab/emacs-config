@@ -75,7 +75,7 @@ file to write to."
                   (insert (format recentf-save-file-header (current-time-string)))
                   (recentf-dump-variable 'recentf-list recentf-max-saved-items)
                   (recentf-dump-variable 'recentf-filter-changer-current)
-                  (insert "\n \n;;; Local Variables:\n"
+                  (insert "\n\n;;; Local Variables:\n"
                           (format ";;; coding: %s\n" recentf-save-file-coding-system)
                           ";;; End:\n")
                   (write-file (expand-file-name recentf-save-file))

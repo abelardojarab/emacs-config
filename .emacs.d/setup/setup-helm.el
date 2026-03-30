@@ -85,11 +85,11 @@
             (if (display-graphic-p)
                 (setq helm-buffers-end-truncated-string "…"))
 
-            (defadvice helm-buffers-sort-transformer (around ignore activate)
-              (setq ad-return-value (ad-get-arg 0)))
+            (advice-add 'helm-buffers-sort-transformer :around
+                        (lambda (_orig &rest args) (car args)))
 
-            (defadvice helm-execute-persistent-action (around bar activate)
-              (ignore-errors add-do-it))
+            (advice-add 'helm-execute-persistent-action :around
+                        (lambda (orig &rest args) (ignore-errors (apply orig args))))
 
             ;; use silver searcher when available
             (when (executable-find "ag-grep")

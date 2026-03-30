@@ -60,8 +60,8 @@
                         (setq shell-file-name explicit-shell-file-name)
                         (defun vhdl-simulate () (interactive)
                                ;; $(VHDL) -work work $<
-                               (let ((file (file-name-nondirectory buffer-file-name))))
-                               (shell-command (concat "vsim -c " (file-name-sans-extension (file-name-nondirectory buffer-file-name)) " -do \"vcd file " (file-name-sans-extension (file-name-nondirectory buffer-file-name)) ".vcd; vcd add -r /*; run -all; vcd checkpoint; quit -f;\"")))))))
+                               (let ((file (file-name-sans-extension (file-name-nondirectory buffer-file-name))))
+                                 (shell-command (concat "vsim -c " file " -do \"vcd file " file ".vcd; vcd add -r /*; run -all; vcd checkpoint; quit -f;\""))))))))
 
 (provide 'setup-vhdl)
 ;;; setup-vhdl.el ends here

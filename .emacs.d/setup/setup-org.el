@@ -107,8 +107,8 @@
               :diminish (org-indent-mode . " Ⓞ"))
 
             ;; Avoid error when inserting '_'
-            (defadvice org-backward-paragraph (around bar activate)
-              (ignore-errors add-do-it))
+            (advice-add 'org-backward-paragraph :around
+                        (lambda (orig &rest args) (ignore-errors (apply orig args))))
 
             ;; Fancy ellipsis
             (if (display-graphic-p)
@@ -171,11 +171,12 @@
             (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
 
             ;; Fix shift problem in Org mode
-            (defadvice org-call-for-shift-select (before org-call-for-shift-select-cua activate)
+            (defun my/org-call-for-shift-select-cua--advice (&rest _)
               (if (and cua-mode
                        org-support-shift-select
                        (not (use-region-p)))
                   (cua-set-mark)))
+            (advice-add 'org-call-for-shift-select :before #'my/org-call-for-shift-select-cua--advice)
 
             ;; Enable mouse in Org
             (use-package org-mouse)

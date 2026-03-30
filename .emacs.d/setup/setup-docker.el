@@ -29,9 +29,15 @@
   :mode "\\Dockerfile\\'")
 
 ;; Allows TRAMP connections into running containers
-(use-package docker-tramp
-  :after tramp
-  :defer 5)
+;; docker-tramp is obsolete; Emacs 29+ has built-in tramp-container
+(if (version< emacs-version "29.1")
+    (use-package docker-tramp
+      :after tramp
+      :defer 5)
+  (use-package tramp-container
+    :ensure nil
+    :after tramp
+    :defer 5))
 
 ;; Docker allows for interaction with the Docker distribution
 (use-package docker

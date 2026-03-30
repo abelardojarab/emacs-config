@@ -85,9 +85,10 @@
            (org-use-fast-todo-selection                      t))
     :config (progn
 
-            (defadvice org-agenda (around split-vertically activate)
+            (defun my/org-agenda-split-vertically--advice (orig &rest args)
               (let ((split-width-threshold 100)) ;; or whatever width makes sense for you
-                ad-do-it))
+                (apply orig args)))
+            (advice-add 'org-agenda :around #'my/org-agenda-split-vertically--advice)
 
             ;; Agenda settings
             (setq org-agenda-time-grid
@@ -154,9 +155,9 @@
 
             ;; define todo states: set time stamps one waiting, delegated and done
             (setq org-todo-keywords
-                  '((sequence "TODO(t!)" "|" "IN PROGRESS(p@/!)" "DONE(d!)" "CANCELLED(c@/!)" "HOLD(h!)")))
+                  '((sequence "TODO(t!)" "|" "IN-PROGRESS(p@/!)" "DONE(d!)" "CANCELLED(c@/!)" "HOLD(h!)")))
             (setq org-todo-keyword-faces
-                  '(("IN PROGRESS" . 'warning)
+                  '(("IN-PROGRESS" . 'warning)
                     ("HOLD"        . 'font-lock-keyword-face)
                     ("SOMEDAY"     . 'font-lock-builtin-face)
                     ("CANCELLED"   . 'font-lock-doc-face)))
@@ -201,24 +202,23 @@
 
             ;; Modifying org agenda so that I can display a subset of tasks
             (defvar my/org-agenda-limit-items nil "Number of items to show in agenda to-do views; nil if unlimited.")
-            (defadvice org-agenda-finalize-entries (around my activate)
+            (defun my/org-agenda-finalize-entries--advice (orig list &optional nosort)
               (if my/org-agenda-limit-items
                   (progn
                     (setq list (mapcar 'org-agenda-highlight-todo list))
                     (if nosort
-                        (setq ad-return-value
-                              (subseq list 0 my/org-agenda-limit-items))
+                        (subseq list 0 my/org-agenda-limit-items)
                       (when org-agenda-before-sorting-filter-function
                         (setq list (delq nil (mapcar org-agenda-before-sorting-filter-function list))))
-                      (setq ad-return-value
-                            (mapconcat 'identity
-                                       (delq nil
-                                             (subseq
-                                              (sort list 'org-entries-lessp)
-                                              0
-                                              my/org-agenda-limit-items))
-                                       "\n"))))
-                ad-do-it))
+                      (mapconcat 'identity
+                                 (delq nil
+                                       (subseq
+                                        (sort list 'org-entries-lessp)
+                                        0
+                                        my/org-agenda-limit-items))
+                                 "\n")))
+                (funcall orig list nosort)))
+            (advice-add 'org-agenda-finalize-entries :around #'my/org-agenda-finalize-entries--advice)
 
             ;; If today is Friday, I want +fri to be next Friday.
             (defun org-read-date-get-relative (s today default)
@@ -336,7 +336,7 @@ DEF-FLAG   is t when a double ++ or -- indicates shift relative to
                       (org-agenda-sorting-strategy '(priority-down tag-up category-keep effort-down))))
                     ("p" tags "+PROJECT"
                      ((org-agenda-sorting-strategy '(priority-down tag-up category-keep effort-down))) )
-                    ("S" tags-todo "TODO=\"IN PROGRESS\"")
+                    ("S" tags-todo "TODO=\"IN-PROGRESS\"")
                     ("2" "List projects with tasks" my/org-agenda-projects-and-tasks
                      "+PROJECT"
                      ((my/org-agenda-limit-items 3)))))

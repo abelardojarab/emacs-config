@@ -29,8 +29,7 @@
   :defer 10
   :custom (bookmark-save-flag 1)
   :config (progn
-            (defadvice bookmark-load (around bar activate)
-              (ignore-errors add-do-it))
+            (advice-add 'bookmark-load :around (lambda (orig &rest args) (ignore-errors (apply orig args))))
 
             (setq-default bookmark-default-file (concat (file-name-as-directory my/emacs-cache-dir)
                                                       "bookmarks"))))

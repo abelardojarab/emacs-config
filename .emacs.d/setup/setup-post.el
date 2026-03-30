@@ -130,28 +130,27 @@
       "xprop -f _GTK_THEME_VARIANT 8u -set _GTK_THEME_VARIANT 'dark' -name '%s'"
       frame-name))))
 
-(defadvice custom-theme-recalc-variable (around bar activate)
-  (ignore-errors add-do-it))
+(advice-add 'custom-theme-recalc-variable :around
+            (lambda (orig &rest args) (ignore-errors (apply orig args))))
 
 ;; Advice the load theme function
-(defadvice load-theme (around load-theme-around)
-  (let ()
-    (disable-themes)
-    ad-do-it
+(defun my/load-theme-around--advice (orig &rest args)
+  (disable-themes)
+  (apply orig args)
 
-    ;; Add required faces
-    (ignore-errors
-      (if (executable-find "xprop")
-          (set-selected-frame-dark)))
-    (my/set-face-fringe)
-    (my/set-face-ecb)
-    (my/set-face-tabbar)
-    (doom-modeline-mode t)
+  ;; Add required faces
+  (ignore-errors
+    (if (executable-find "xprop")
+        (set-selected-frame-dark)))
+  (my/set-face-fringe)
+  (my/set-face-ecb)
+  (my/set-face-tabbar)
+  (doom-modeline-mode t)
 
-    ;; remove modeline boxes
-    (set-face-attribute 'mode-line nil :box nil)
-    (set-face-attribute 'mode-line-inactive nil :box nil)))
-(ad-activate 'load-theme)
+  ;; remove modeline boxes
+  (set-face-attribute 'mode-line nil :box nil)
+  (set-face-attribute 'mode-line-inactive nil :box nil))
+(advice-add 'load-theme :around #'my/load-theme-around--advice)
 
 (if (file-exists-p custom-file-x)
     (add-hook 'after-init-hook (lambda ()

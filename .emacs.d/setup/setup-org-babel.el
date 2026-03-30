@@ -56,10 +56,11 @@
             (setq org-use-fast-todo-selection t)
 
             ;; A progress indicator for code blocks in org-mode courtesy of John Kitchin
-            (defadvice org-babel-execute-src-block (around progress nil activate)
+            (defun my/progress--advice (orig &rest args)
               (message "Running your code block")
-              ad-do-it
+              (apply orig args)
               (message "Done with code block"))
+            (advice-add 'org-babel-execute-src-block :around #'my/progress--advice)
 
             ;; Automatically refresh inline images that are generated from Babel blocks
             (add-hook 'org-babel-after-execute-hook (lambda ()

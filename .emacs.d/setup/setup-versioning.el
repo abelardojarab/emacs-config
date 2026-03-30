@@ -28,8 +28,8 @@
 (use-package vc
   :demand t
   :custom (vc-follow-symlinks t)
-  :config (defadvice vc-exec-after (around bar activate)
-            (ignore-errors add-do-it)))
+  :config (advice-add 'vc-exec-after :around
+                      (lambda (orig &rest args) (ignore-errors (apply orig args)))))
 
 ;; Display commit number that is associated with current line of code
 (use-package vc-msg
@@ -190,25 +190,27 @@
           (delete 'Git vc-handled-backends)
 
           ;; Ignore magit error
-          (defadvice magit-wip-commit-worktree (around bar activate)
-            (ignore-errors add-do-it))
+          (advice-add 'magit-wip-commit-worktree :around
+                      (lambda (orig &rest args) (ignore-errors (apply orig args))))
 
           ;; Don't show "MRev" in the modeline
           (when (bound-and-true-p magit-auto-revert-mode)
             (diminish 'magit-auto-revert-mode))
 
           ;; make magit status go full-screen but remember previous window
-          (defadvice magit-status (around magit-fullscreen activate)
+          (defun my/magit-fullscreen-status--advice (orig &rest args)
             (window-configuration-to-register :magit-fullscreen)
-            ad-do-it
+            (apply orig args)
             (delete-other-windows))
+          (advice-add 'magit-status :around #'my/magit-fullscreen-status--advice)
 
           ;; Make `magit-log' run alone in the frame, and then restore the old window
           ;; configuration when you quit out of magit.
-          (defadvice magit-log (around magit-fullscreen activate)
+          (defun my/magit-fullscreen-log--advice (orig &rest args)
             (window-configuration-to-register :magit-fullscreen)
-            ad-do-it
+            (apply orig args)
             (delete-other-windows))
+          (advice-add 'magit-log :around #'my/magit-fullscreen-log--advice)
 
           (defun magit-quit-session ()
             "Restores the previous window configuration and kills the magit buffer"
@@ -248,13 +250,14 @@ existing directory under `magit-clone-default-directory'."
             (set-face-foreground 'magit-hash (face-foreground 'font-lock-type-face))
 
             ;; restore previously hidden windows
-            (defadvice magit-quit-window (around magit-restore-screen activate)
+            (defun my/magit-restore-screen--advice (orig &rest args)
               (let ((current-mode major-mode))
-                ad-do-it
+                (apply orig args)
                 ;; we only want to jump to register when the last seen buffer
                 ;; was a magit-status buffer.
                 (when (eq 'magit-status-mode current-mode)
                   (jump-to-register :magit-fullscreen))))
+            (advice-add 'magit-quit-window :around #'my/magit-restore-screen--advice)
 
             (defun magit-maybe-commit (&optional show-options)
               "Runs magit-commit unless prefix is passed"
@@ -430,8 +433,9 @@ _k_: prev hunk    _S_: stage file        _c_: show commit
             (use-package diff-hl-dired)
 
             (setq diff-hl-draw-borders t)
-            (defadvice svn-sttus-update-modeline (after svn-update-diff-hl activate)
-              (diff-hl-update))))
+            (defun my/svn-update-diff-hl--advice (&rest _)
+              (diff-hl-update))
+            (advice-add 'svn-sttus-update-modeline :after #'my/svn-update-diff-hl--advice)))
 
 ;; gist
 (use-package gist
@@ -581,8 +585,9 @@ Git gutter:
 
             ;; Fringe fix in Windows
             (unless (string-equal system-type "windows-nt")
-              (defadvice git-gutter-process-diff (before git-gutter-process-diff-advice activate)
-                (ad-set-arg 0 (file-truename (ad-get-arg 0)))))))
+              (defun my/git-gutter-process-diff-advice--advice (orig file &rest args)
+                (apply orig (file-truename file) args))
+              (advice-add 'git-gutter-process-diff :around #'my/git-gutter-process-diff-advice--advice))))
 
 ;; Highlight regions according to age
 (use-package smeargle

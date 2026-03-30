@@ -35,12 +35,12 @@
             (setq search-exit-option t)
 
             ;; Keep the search results in the center in incremental search
-            (defadvice isearch-repeat-forward (after isearch-repeat-forward-recenter activate)
+            (defun my/isearch-repeat-forward-recenter--advice (&rest _)
               (recenter))
-            (defadvice isearch-repeat-backward (after isearch-repeat-backward-recenter activate)
+            (advice-add 'isearch-repeat-forward :after #'my/isearch-repeat-forward-recenter--advice)
+            (defun my/isearch-repeat-backward-recenter--advice (&rest _)
               (recenter))
-            (ad-activate 'isearch-repeat-forward)
-            (ad-activate 'isearch-repeat-backward)
+            (advice-add 'isearch-repeat-backward :after #'my/isearch-repeat-backward-recenter--advice)
             (add-hook 'isearch-mode-end-hook #'recenter-top-bottom)
 
             ;; search forward with Ctrl-f

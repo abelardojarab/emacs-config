@@ -142,11 +142,13 @@ non-nil."
                              (if (boundp 'display-line-numbers)
                                  (display-line-numbers-mode 1)
                                (linum-mode 1))))))
-  :config (defadvice linum-update-window (around linum-dynamic activate)
-            (let* ((w (length (number-to-string
-                               (count-lines (point-min) (point-max)))))
-                   (linum-format (concat " %" (number-to-string w) "d ")))
-              ad-do-it)))
+  :config (progn
+            (defun my/linum-dynamic--advice (orig &rest args)
+              (let* ((w (length (number-to-string
+                                 (count-lines (point-min) (point-max)))))
+                     (linum-format (concat " %" (number-to-string w) "d ")))
+                (apply orig args)))
+            (advice-add 'linum-update-window :around #'my/linum-dynamic--advice)))
 
 ;; Line number (alternative to linum-ex)
 (use-package nlinum
@@ -209,25 +211,28 @@ non-nil."
               (and (boundp 'fci-mode) fci-mode))
 
             (defvar my/fci-mode-suppressed nil)
-            (defadvice popup-create (before suppress-fci-mode activate)
+            (defun my/suppress-fci-mode--advice (&rest _)
               "Suspend fci-mode while popups are visible"
               (let ((fci-enabled (my/fci-enabled-p)))
                 (when fci-enabled
                   (set (make-local-variable 'my/fci-mode-suppressed) fci-enabled)
                   (turn-off-fci-mode))))
+            (advice-add 'popup-create :before #'my/suppress-fci-mode--advice)
 
-            (defadvice popup-delete (after restore-fci-mode activate)
+            (defun my/restore-fci-mode--advice (&rest _)
               "Restore fci-mode when all popups have closed"
               (when (and my/fci-mode-suppressed
                          (null popup-instances))
                 (setq my/fci-mode-suppressed nil)
                 (turn-on-fci-mode)))
+            (advice-add 'popup-delete :after #'my/restore-fci-mode--advice)
 
-            (defadvice enable-theme (after recompute-fci-face activate)
+            (defun my/recompute-fci-face--advice (&rest _)
               "Regenerate fci-mode line images after switching themes"
               (dolist (buffer (buffer-list))
                 (with-current-buffer buffer
                   (turn-on-fci-mode))))
+            (advice-add 'enable-theme :after #'my/recompute-fci-face--advice)
 
             ;; `fci-mode' needs to be disabled/enabled around the
             ;; `shell-command-on-region' command too.

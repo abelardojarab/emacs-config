@@ -47,7 +47,7 @@ FACE defaults to inheriting from default and highlight."
             ol))
   :config (progn
             ;; Show paren-mode when off-screen
-            (defadvice show-paren-function (after show-matching-paren-offscreen activate)
+            (defun my/show-matching-paren-offscreen--advice (&rest _)
               "If the matching paren is offscreen, show the matching line in the
         echo area. Has no effect if the character before point is not of
         the syntax class ')'."
@@ -58,6 +58,7 @@ FACE defaults to inheriting from default and highlight."
                                            (char-equal (char-syntax cb) ?\) )
                                            (blink-matching-open))))
                   (when matching-text (message matching-text)))))
+            (advice-add 'show-paren-function :after #'my/show-matching-paren-offscreen--advice)
 
             ;; we will call `blink-matching-open` ourselves...
             (remove-hook 'post-self-insert-hook

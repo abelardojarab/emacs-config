@@ -118,11 +118,9 @@ Exit the save between databases if there is user input."
               nil)
 
             ;; Ignore errors in semantic completions
-            (defadvice semantic-analyze-possible-completions (around bar activate)
-              (ignore-errors add-do-it))
+            (advice-add 'semantic-analyze-possible-completions :around (lambda (orig &rest args) (ignore-errors (apply orig args))))
 
-            (defadvice semantic-analyze-possible-completions-default (around bar activate)
-              (ignore-errors add-do-it))
+            (advice-add 'semantic-analyze-possible-completions-default :around (lambda (orig &rest args) (ignore-errors (apply orig args))))
 
             (defun semantic-force-refresh ()
               "Force a full refresh of the current buffer's tags.
