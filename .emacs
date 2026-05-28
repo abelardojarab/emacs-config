@@ -8,6 +8,19 @@
 (setq debug-on-quit t)
 (setq debug-on-error t)
 
+;; Defer GC during startup; restore after init.
+(defvar my/gc-cons-threshold-default (* 32 1024 1024))
+(defvar my/gc-cons-percentage-default 0.1)
+(setq gc-cons-threshold most-positive-fixnum
+      gc-cons-percentage 0.6)
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (setq gc-cons-threshold my/gc-cons-threshold-default
+                  gc-cons-percentage my/gc-cons-percentage-default)))
+
+;; Larger read buffer helps lsp/eglot and subprocess-heavy code.
+(setq read-process-output-max (* 4 1024 1024))
+
 ;; Measure overall startup time
 (defvar my/start-time (current-time))
 (add-hook 'emacs-startup-hook

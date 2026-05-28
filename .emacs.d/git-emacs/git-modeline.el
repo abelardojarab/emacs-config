@@ -30,13 +30,13 @@ of mode-line-format."
 (defun git--interpret-state-mode-color (stat)
   "Return a mode line status color appropriate for STAT (a state symbol)."
   (cl-case stat
-    ('modified "tomato"      )
-    ('unknown  "gray"        )
-    ('added    "blue"        )
-    ('deleted  "red"         )
-    ('unmerged "purple"      )
-    ('uptodate "GreenYellow" )
-    ('staged   "yellow"      )
+    (modified "tomato"      )
+    (unknown  "gray"        )
+    (added    "blue"        )
+    (deleted  "red"         )
+    (unmerged "purple"      )
+    (uptodate "GreenYellow" )
+    (staged   "yellow"      )
     (t "red")))
 
 
@@ -83,13 +83,13 @@ static char * data[] = {
 
 (defun git--interpret-state-mode-letter(stat)
    (cl-case stat
-     ('modified "M")
-     ('unknown  "?")
-     ('added    "A")
-     ('deleted  "D")
-     ('unmerged "!")
-     ('uptodate "U")
-     ('staged   "S")
+     (modified "M")
+     (unknown  "?")
+     (added    "A")
+     (deleted  "D")
+     (unmerged "!")
+     (uptodate "U")
+     (staged   "S")
      (t "")))
 
 (defsubst git--state-mark-tooltip(stat)

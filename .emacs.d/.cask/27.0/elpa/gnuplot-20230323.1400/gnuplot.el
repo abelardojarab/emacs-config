@@ -1542,7 +1542,7 @@ updates Gnuplot with the appropriate \"set output\" command."
               (gnuplot-send-hiding-output "set output\n") ; Flush output file
               (sit-for 0.1)             ; Hack: wait for Gnuplot IO to finish
               (cl-ecase gnuplot-inline-image-mode
-                (nil nil)
+                ((nil) nil)
                 (inline
                   (ignore-errors
                     (let ((image (create-image filename)))

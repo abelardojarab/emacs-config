@@ -431,10 +431,10 @@ The configuration is updated according to
   "Return function for creating new popup windows.
 The function is determined by the value of `purpose-x-popwin-position'."
   (or (cl-case purpose-x-popwin-position
-        ('top 'purpose-display-at-top)
-        ('bottom 'purpose-display-at-bottom)
-        ('left 'purpose-display-at-left)
-        ('right 'purpose-display-at-right))
+        (top 'purpose-display-at-top)
+        (bottom 'purpose-display-at-bottom)
+        (left 'purpose-display-at-left)
+        (right 'purpose-display-at-right))
       (and (functionp purpose-x-popwin-position)
            purpose-x-popwin-position)
       (user-error "purpose-x-popwin-position has an invalid value: %S"
