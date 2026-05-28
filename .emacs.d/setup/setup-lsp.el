@@ -74,7 +74,9 @@
            (lsp-eldoc-enable-hover           t)
            (lsp-eldoc-render-all             nil)
            (lsp-enable-snippet               t)
-           (lsp-file-watch-threshold         (* 1024 1024)))
+           (lsp-file-watch-threshold         (* 1024 1024))
+           (lsp-idle-delay                   0.5)
+           (lsp-lens-debounce-interval       0.5))
   :init (defun lsp--resolve-completion (item)
           "Resolve completion ITEM."
           (cl-assert item nil "Completion item must not be nil")

@@ -39,9 +39,9 @@
                   gc-cons-percentage 0.6))
 
           (defun my/enable-garbage-collection ()
-            "Reset garbage collection to small-ish limit."
-            (setq gc-cons-threshold 16777216
-                  gc-cons-percentage 0.1))
+            "Reset garbage collection to reasonable post-startup limit."
+            (setq gc-cons-threshold (* 100 1024 1024)
+                  gc-cons-percentage 0.4))
 
           ;; Helm runs with GC disabled
           (add-hook 'minibuffer-setup-hook #'my/disable-garbage-collection)
@@ -54,7 +54,7 @@
 
             (defun my/minibuffer-exit ()
               "Undo minibuffer setup."
-              (setq gc-cons-threshold (* 64 1024 1024)))))
+              (my/enable-garbage-collection))))
 
 ;; These were defined in C code, so use emacs pseudo-package to set them.
 (use-package emacs
@@ -85,7 +85,7 @@
            (require-final-newline                 t)
            (debug-on-quit                         nil)
            (bidi-display-reordering               'left-to-right)
-		       (bidi-paragraph-directio               'left-to-right)
+		       (bidi-paragraph-direction              'left-to-right)
 		       (bidi-inhibit-bpa                      t)
            (no-redraw-on-reenter                  t)
            (column-number-indicator-zero-based    nil)
