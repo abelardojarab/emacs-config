@@ -247,7 +247,7 @@ This face is used to keep them in monospace when using
 (define-minor-mode org-variable-pitch-minor-mode
   "Set up the buffer to be partially in variable pitch.
 Keeps some elements in fixed pitch in order to keep layout."
-  nil " OVP" nil
+  :init-value nil :lighter " OVP" :keymap nil
   (if org-variable-pitch-minor-mode
       (progn
         (variable-pitch-mode 1)

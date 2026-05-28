@@ -26,7 +26,7 @@
 
 ;; Display tags everywere as fancy svg icons.
 (use-package svg-tag-mode
-  :if (display-graphic-p)
+  :if (and (display-graphic-p) (image-type-available-p 'svg))
   :init (define-globalized-minor-mode global-svg-tag-mode svg-tag-mode
           (lambda () (svg-tag-mode 1)))
   :commands svg-tag-mode

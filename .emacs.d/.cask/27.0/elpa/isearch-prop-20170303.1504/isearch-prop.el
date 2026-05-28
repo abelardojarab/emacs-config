@@ -2020,7 +2020,7 @@ ZONES is the list of zones to check for exclusion."
     (isearch-lazy-highlight-update)
     isearchp-excluded-zones)
 
-  (defadvice perform-replace (around respect-isearchp-query-replace-zones-flag activate)
+  (defun isearchp--perform-replace-zones-advice (orig-fun &rest args)
     "Respect option `isearchp-query-replace-zones-flag'."
     (let* ((orig-pred                 isearch-filter-predicate)
            (zone-pred                 (and isearchp-query-replace-zones-flag
@@ -2032,7 +2032,8 @@ ZONES is the list of zones to check for exclusion."
                                                     (funcall zone-pred beg end))))
                                             (zone-pred)
                                             (orig-pred))))
-      ad-do-it))
+      (apply orig-fun args)))
+  (advice-add 'perform-replace :around #'isearchp--perform-replace-zones-advice)
 
   (defun isearchp-put-prop-on-zones (property value zones)
     "Add text PROPERTY with VALUE to the text in each of the ZONES.

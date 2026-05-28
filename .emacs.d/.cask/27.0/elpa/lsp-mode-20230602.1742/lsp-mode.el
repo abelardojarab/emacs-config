@@ -8552,18 +8552,18 @@ When ALL is t, erase all log buffers of the running session."
 
 
 
-(cl-defgeneric lsp-process-id ((process process))
+(cl-defmethod lsp-process-id ((process process))
   (process-id process))
 
-(cl-defgeneric lsp-process-name ((process process)) (process-name process))
+(cl-defmethod lsp-process-name ((process process)) (process-name process))
 
-(cl-defgeneric lsp-process-status ((process process)) (process-status process))
+(cl-defmethod lsp-process-status ((process process)) (process-status process))
 
-(cl-defgeneric lsp-process-kill ((process process))
+(cl-defmethod lsp-process-kill ((process process))
   (when (process-live-p process)
     (kill-process process)))
 
-(cl-defgeneric lsp-process-send ((process process) message)
+(cl-defmethod lsp-process-send ((process process) message)
   (condition-case err
       (process-send-string process (lsp--make-message message))
     ('error (lsp--error "Sending to process failed with the following error: %s"

@@ -101,13 +101,13 @@
     (propertize (capitalize (symbol-name stat))
                 'face
                 (cl-case stat
-                  ('modified 'git--modified-face )
-                  ('uptodate 'git--uptodate-face )
-                  ('unknown  'git--unknown-face  )
-                  ('added    'git--added-face    )
-                  ('deleted  'git--deleted-face  )
-                  ('unmerged 'git--unmerged-face )
-                  ('staged   'git--staged-face   )
+                  (modified 'git--modified-face )
+                  (uptodate 'git--uptodate-face )
+                  (unknown  'git--unknown-face  )
+                  (added    'git--added-face    )
+                  (deleted  'git--deleted-face  )
+                  (unmerged 'git--unmerged-face )
+                  (staged   'git--staged-face   )
                   (t nil)))))
 
 (defsubst git--status-node-perm (info)
@@ -143,9 +143,9 @@ to ls -sh; e.g. 29152 -> 28K."
      (if (eq type 'commit) "%s  [submodule>]" "%s")
      (propertize name 'face
                  (cl-case type
-                   ('tree 'git--mark-tree-face)
-                   ('blob 'git--mark-blob-face)
-                   ('commit 'git--mark-submodule-face)
+                   (tree 'git--mark-tree-face)
+                   (blob 'git--mark-blob-face)
+                   (commit 'git--mark-submodule-face)
                    (t (error "Unknown node type: %S" type)))))))
 
 (defun git--render-file-status (info)
@@ -801,9 +801,9 @@ them)."
   "Open or expands the current file / directory / submodule."
   (interactive)
   (cl-case (git--status-view-select-type)
-    ('tree (git--status-view-expand-tree-toggle))
-    ('blob (git--status-view-open-file))
-    ('commit (git--status-view-descend-submodule))
+    (tree (git--status-view-expand-tree-toggle))
+    (blob (git--status-view-open-file))
+    (commit (git--status-view-descend-submodule))
     (t (error "Not supported type"))))
 
 (defun git--status-view-blame ()

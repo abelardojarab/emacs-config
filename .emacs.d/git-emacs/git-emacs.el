@@ -497,14 +497,14 @@ visiting files that no longer exist."
             ;; Or, on all unsaved buffers.
             (unwind-protect
                 (cl-case git-working-dir-change-behaviour
-                  ('git-ask-for-all-saved
+                  (git-ask-for-all-saved
                    (map-y-or-n-p
                     (lambda(buffer) (format "%s has changed, refresh buffer? "
                                             (buffer-name buffer)))
                     #'buffer-refresh-func
                     buffers-that-exist-saved
                     '("buffer" "buffers" "refresh")))
-                  ('git-refresh-all-saved
+                  (git-refresh-all-saved
                    (mapc #'buffer-refresh-func buffers-that-exist-saved)))
               (when buffers-not-reverted
                 (git--update-all-state-marks (mapcar #'buffer-file-name
@@ -1153,10 +1153,10 @@ pending commit buffer or nil if the buffer wasn't needed."
 
     (if on-git?
       (cl-case (git--status-file filename)
-        ('modified (git-commit-all))    ; modified -> commit
-        ('staged (git-commit-all))      ; staged -> commit
-        ('unknown (git--add filename))  ; unknown  -> add
-        ('unmerged (git--add filename)) ; unmerged -> add
+        (modified (git-commit-all))    ; modified -> commit
+        (staged (git-commit-all))      ; staged -> commit
+        (unknown (git--add filename))  ; unknown  -> add
+        (unmerged (git--add filename)) ; unmerged -> add
         (t (git--add filename)))        ; TODO : add more
       ad-do-it)))
 
@@ -1257,7 +1257,7 @@ Trim the buffer log, commit runs any after-commit functions."
 ;;-----------------------------------------------------------------------------
 
 (defun git--resolve-fill-buffer (template side)
-  "Make a buffer showing a SIDE ('local or 'remote) of the conflict
+  "Make a buffer showing a SIDE (local or 'remote) of the conflict
 buffer TEMPLATE. Returns the buffer."
 
   (let* ((filename (file-relative-name (buffer-file-name template)))
@@ -1292,8 +1292,8 @@ buffer TEMPLATE. Returns the buffer."
           (setq conflict-end (match-beginning 0))
 
           (cl-case side
-            ('local (delete-region conflict-sep conflict-end))
-            ('remote (delete-region conflict-begin conflict-sep))
+            (local (delete-region conflict-sep conflict-end))
+            (remote (delete-region conflict-begin conflict-sep))
             (t (error "Side must be one of 'local or 'remote"))))))
     buffer))
 
