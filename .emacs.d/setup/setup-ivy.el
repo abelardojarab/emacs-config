@@ -42,7 +42,6 @@
              ivy-switch-buffer
              ivy-switch-buffer-other-window)
   :delight ivy-mode
-  :hook (on-first-input . ivy-mode)
   :defines (projectile-completion-system
             magit-completing-read-function)
   :bind (("C-c C-r" . ivy-resume)

@@ -23,7 +23,7 @@
 
 ;;; Code:
 (use-package company
-  :defer t
+  :defer 5
   :diminish company-mode
   :defines (company-dabbrev-ignore-case
             company-dabbrev-downcase)
@@ -73,8 +73,8 @@
 			  ("TAB"                              . company-complete-selection)
 			  ("<tab>"                            . company-complete-selection)
 			  ("RET"                              . company-complete-selection))
-  :init (global-company-mode t)
-  :hook ((org-mode          . add-pcomplete-to-capf)
+  :hook ((on-first-input    . global-company-mode)
+         (org-mode          . add-pcomplete-to-capf)
          ((c-mode c++-mode) . company-c-setup)
          (text-mode         . company-text-setup))
   :config (progn
