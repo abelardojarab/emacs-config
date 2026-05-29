@@ -2892,10 +2892,10 @@ Runs COMMAND, a shell command, as if by `compile'.  See
 If not FORCE-INPUT is passed then what
 `python-info-current-symbol' returns will be used.  If not
 FORCE-PROCESS is passed what `python-shell-get-process' returns
-is used."
+is used.  Returns nil silently when no inferior Python is running
+\(eldoc handlers like lsp's expect nil rather than an error)."
   (let ((process (or force-process (python-shell-get-process))))
-    (if (not process)
-        (error "Eldoc needs an inferior Python process running")
+    (when process
       (let ((input (or force-input
                        (python-info-current-symbol t))))
         (and input
@@ -2908,7 +2908,7 @@ is used."
 For this to work the best as possible you should call
 `python-shell-send-buffer' from time to time so context in
 inferior python process is updated properly."
-  (python-eldoc--get-doc-at-point))
+  (ignore-errors (python-eldoc--get-doc-at-point)))
 
 (defun python-eldoc-at-point (symbol)
   "Get help on SYMBOL using `help'.
