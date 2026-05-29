@@ -41,15 +41,15 @@
       (oset node updated t))
     node))
 
-(defmethod jn-has-children ((node jn-file-tree-node))
+(cl-defmethod jn-has-children ((node jn-file-tree-node))
   (if (jn-is-updated node)
       (call-next-method)
     (file-directory-p (oref node file-path))))
 
-(defmethod jn-get-name ((node jn-file-tree-node))
+(cl-defmethod jn-get-name ((node jn-file-tree-node))
   (file-name-nondirectory (oref node file-path)))
 
-(defmethod jn-update ((node jn-file-tree-node))
+(cl-defmethod jn-update ((node jn-file-tree-node))
   (jn-update--internal node
 		       (directory-files (oref node file-path) t "[^\\.].*")
 		       (function (lambda (item child)

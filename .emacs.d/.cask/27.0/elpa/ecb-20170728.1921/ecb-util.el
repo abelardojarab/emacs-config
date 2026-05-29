@@ -46,6 +46,14 @@
 
 (eval-when-compile (require 'cl))
 
+;; XEmacs-only event types referenced from dead-code branches; declare them so
+;; the cl-typep byte-compile optimizer stops warning about unknown types.
+(eval-and-compile
+  (unless (get 'button-release-event 'cl-deftype-handler)
+    (cl-deftype button-release-event () 'null))
+  (unless (get 'button-press-event 'cl-deftype-handler)
+    (cl-deftype button-press-event () 'null)))
+
 ;;; ----- Silentcomp-Defs ----------------------------------
 
 ;; XEmacs
@@ -198,14 +206,15 @@ semantic!. If not use the form \(when ecb-running-gnu-emacs-version-23)."
 
 (when ecb-running-xemacs
   (defun ecb-event-to-key (event)
-    (typecase event
-      (button-release-event 'mouse-release)
-      (button-press-event 'mouse-press)
-      (otherwise
-       ;; the ignore-errors is a little hack because i don't know all
-       ;; events of XEmacs so sometimes event-key produces a
-       ;; wrong-type-argument error.
-       (ignore-errors (event-key event)))))
+    (with-no-warnings
+      (cl-typecase event
+        (button-release-event 'mouse-release)
+        (button-press-event 'mouse-press)
+        (otherwise
+         ;; the ignore-errors is a little hack because i don't know all
+         ;; events of XEmacs so sometimes event-key produces a
+         ;; wrong-type-argument error.
+         (ignore-errors (event-key event))))))
   (defun ecb-facep (face)
     (memq face (face-list)))
   (defun ecb-noninteractive ()
@@ -266,7 +275,7 @@ Uses the `derived-mode-parent' property of the symbol to trace backwards."
 (unless ecb-running-xemacs
   (defun ecb-event-to-key (event)
     (let ((type (event-basic-type event)))
-      (case type
+      (cl-case type
         ((mouse-1 mouse-2 mouse-3) 'mouse-release)
         ((down-mouse-1 down-mouse-2 down-mouse-3) 'mouse-press)
         (otherwise (event-basic-type event)))))
@@ -300,6 +309,9 @@ Uses the `derived-mode-parent' property of the symbol to trace backwards."
   (defalias 'ecb-frame-char-width 'frame-char-width)
   (defalias 'ecb-frame-char-height 'frame-char-height)
   (defalias 'ecb-window-edges 'window-edges))
+
+;; Type alias so `cl-typecase' on ecb-face stops warning about unknown type.
+(cl-deftype ecb-face () '(satisfies ecb-facep))
 
 ;; thing at point stuff
 
@@ -673,7 +685,7 @@ If START or END is negative, it counts from the end."
     (let (len)
       (and end (< end 0) (setq end (+ end (setq len (length seq)))))
       (if (< start 0) (setq start (+ start (or len (setq len (length seq))))))
-      (typecase seq
+      (cl-typecase seq
         (list (if (> start 0) (setq seq (nthcdr start seq)))
               (if end
                   (let ((res nil))
@@ -692,7 +704,7 @@ If START or END is negative, it counts from the end."
 (defun ecb-concatenate (type &rest seqs)
   "Concatenate, into a sequence of type TYPE, the argument SEQUENCES.
 TYPE can be 'string, 'vector or 'list."
-  (case type
+  (cl-case type
     (vector (apply 'vconcat seqs))
     (string (apply 'concat seqs))
     (list (apply 'append (append seqs '(nil))))
@@ -704,7 +716,7 @@ arbitrary sequence. Example: \(ecb-rotate '\(a b c d e f) 'c) results in \(c d
 e f a b). If START-ELEM is not contained in SEQ then nil is returned."
   (let ((start-pos (ecb-position start-elem seq)))
     (when start-pos
-      (ecb-concatenate (typecase seq
+      (ecb-concatenate (cl-typecase seq
                          (list 'list)
                          (string 'string)
                          (vector 'vector))
@@ -1278,7 +1290,7 @@ be made either with the mouse or with the keyboard."
 (defun ecb-read-number (prompt &optional init-value)
   "Ask in the minibuffer for a number with prompt-string PROMPT. Optional
 INIT-VALUE can be either a number or a string-representation of a number."
-  (let ((init (typecase init-value
+  (let ((init (cl-typecase init-value
                 (number (number-to-string init-value))
                 (string
                  (if (ecb-string= init-value "0")
@@ -1479,12 +1491,12 @@ If always returns TEXT \(if not nil then modified with FACE)."
                                                                    'face
                                                                    text))
                                   (cf
-                                   (typecase current-face
+                                   (cl-typecase current-face
                                      (ecb-face (list current-face))
                                      (list current-face)
                                      (otherwise nil)))
                                   (nf
-                                   (typecase face
+                                   (cl-typecase face
                                      (ecb-face (list face))
                                      (list face)
                                      (otherwise nil))))
@@ -1499,12 +1511,12 @@ If always returns TEXT \(if not nil then modified with FACE)."
       (alter-text-property start end 'face
                            (lambda (current-face)
                              (let ((cf
-                                    (typecase current-face
+                                    (cl-typecase current-face
                                       (ecb-face (list current-face))
                                       (list current-face)
                                       (otherwise nil)))
                                    (nf
-                                    (typecase face
+                                    (cl-typecase face
                                       (ecb-face (list face))
                                       (list face)
                                       (otherwise nil))))
@@ -1667,7 +1679,7 @@ number (which happens to be ignored.).  While coders pass t into
 NUMBER, functions using this should convert NUMBER into a vector
 describing how to render the done message.
 Argument FRAMES are the frames used in the animation."
-  (typecase number
+  (cl-typecase number
     (vector
      (let ((zone (- (length (aref frames 0)) (length (aref number 0))
                     (length (aref number 1)))))
@@ -1696,7 +1708,7 @@ Argument FRAMES are the frames used in the animation."
   "Return a string displaying a celeron as things happen.
 LENGTH is the amount of display that has been used.  NUMBER
 is t to display the done string, or the number to display."
-  (case number
+  (cl-case number
     ((t)
      (ecb-working-frame-animation-display length [ "[" "]" ]
 					  ecb-working-celeron-strings))
@@ -1843,7 +1855,7 @@ or a buffer-object."
 BUFFER-OR-WINDOW can be a buffer-name, a buffer or a window. If a
 window then the name of the buffer curently displayed in this
 window is returned."
-  (typecase buffer-or-window
+  (cl-typecase buffer-or-window
     (string buffer-or-window)
     (buffer (buffer-name buffer-or-window))
     (window (buffer-name (window-buffer buffer-or-window)))
@@ -1853,7 +1865,7 @@ window is returned."
   "Return the buffer-object of BUFFER-OR-WINDOW.
 BUFFER-OR-WINDOW can be a buffer-name, a buffer or a window.
 If a window then the buffer curently displayed in this window is returned."
-  (typecase buffer-or-window
+  (cl-typecase buffer-or-window
     (string (get-buffer buffer-or-window))
     (buffer buffer-or-window)
     (window (window-buffer buffer-or-window))

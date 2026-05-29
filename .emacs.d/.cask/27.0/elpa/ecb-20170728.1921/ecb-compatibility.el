@@ -152,7 +152,7 @@ BUFFER is displayed in an edit-window!"
              (condition-case nil
                  (apply (ad-get-arg 0) (ad-get-arg 1))
                (error nil)))
-         (select-window (case (car point-loc)
+         (select-window (cl-case (car point-loc)
                           (ecb
                            (ecb-get-ecb-window-by-number (cdr point-loc)))
                           (edit

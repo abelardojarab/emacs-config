@@ -150,7 +150,7 @@ is not available then `find-file' is called."
 
 (defun ecb-jde-update-ecb-source-paths ()
   (interactive)
-  (case ecb-jde-set-directories-buffer-to-jde-sourcepath
+  (cl-case ecb-jde-set-directories-buffer-to-jde-sourcepath
     (add
      (add-hook 'ecb-source-path-functions
                'ecb-jde-get-source-path))

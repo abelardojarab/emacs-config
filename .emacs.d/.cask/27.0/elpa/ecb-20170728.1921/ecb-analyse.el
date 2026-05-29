@@ -351,13 +351,13 @@ This means in fact display the current analysis for current point."
       (ecb-analyse-add-nodes "Local Variables" "Local Variables" localvars
                              ecb-analyse-nodetype-localvars))))
 
-(defmethod ecb-analyse-more-nodes ((context semantic-analyze-context))
+(cl-defmethod ecb-analyse-more-nodes ((context semantic-analyze-context))
   "Show a set of ecb-nodes specific to CONTEXT."
   (let ((prefix (oref context prefix)))
     (when prefix
       (ecb-analyse-add-nodes "Prefix" "Prefix" prefix ecb-analyse-nodetype-prefix))))
 
-(defmethod ecb-analyse-more-nodes ((context semantic-analyze-context-assignment))
+(cl-defmethod ecb-analyse-more-nodes ((context semantic-analyze-context-assignment))
   "Show a set of ecb-nodes specific to CONTEXT."
   (call-next-method)
   (let ((assignee (oref context assignee)))
@@ -365,7 +365,7 @@ This means in fact display the current analysis for current point."
       (ecb-analyse-add-nodes "Assignee" "Assignee" assignee
                              ecb-analyse-nodetype-assignee))))
 
-(defmethod ecb-analyse-more-nodes ((context semantic-analyze-context-functionarg))
+(cl-defmethod ecb-analyse-more-nodes ((context semantic-analyze-context-functionarg))
   "Show a set of ecb-nodes specific to CONTEXT."
   (call-next-method)
   (let ((func (oref context function)))
@@ -408,13 +408,14 @@ of LIST."
           (dolist (elem list)
             (ecb-throw-on-input 'ecb-analyse-tree-buffer-build)
             (let* ((fontify-tags (member bucket ecb-analyse-fontified-buckets))
-                   (string-1 (typecase elem
-                               (string elem)
-                               (ecb--semantic-tag
-                                (if fontify-tags
-                                    (ecb-displayed-tag-name elem)
-                                  (ecb--semantic-format-tag-uml-concise-prototype elem)))
-                               (otherwise "foo")))
+                   (string-1 (with-no-warnings
+                               (cl-typecase elem
+                                 (string elem)
+                                 (ecb--semantic-tag
+                                  (if fontify-tags
+                                      (ecb-displayed-tag-name elem)
+                                    (ecb--semantic-format-tag-uml-concise-prototype elem)))
+                                 (otherwise "foo"))))
                    (string (concat string-1)))
               (unless fontify-tags
                 (ecb-merge-face-into-text string ecb-analyse-bucket-element-face))
@@ -560,11 +561,12 @@ ECB-analyse-window is not visible in current layout."
                   ;; correct buffer, I don't think that is needed.
                   (when (fboundp 'semantic-lex-keyword-p)
                     (let ((type (ecb--semantic-tag-type tag)))
-                      (typecase type
-                        (ecb--semantic-tag
-                         (setq type (ecb--semantic-tag-name type)))
-                        (list
-                         (setq type (car type))))
+                      (with-no-warnings
+                        (cl-typecase type
+                          (ecb--semantic-tag
+                           (setq type (ecb--semantic-tag-name type)))
+                          (list
+                           (setq type (car type)))))
                       (if (semantic-lex-keyword-p type)
                           (setq typetag
                                 (semantic-lex-keyword-get type 'summary))))

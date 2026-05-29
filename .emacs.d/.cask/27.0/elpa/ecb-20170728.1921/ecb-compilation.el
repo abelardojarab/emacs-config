@@ -230,7 +230,7 @@ either
             ;; to check if the functions are bound!!
             (if (dolist (p ecb-comp-predicates)
                   (if (and (fboundp p) (funcall p buffer))
-                      (return t)))
+                      (cl-return t)))
                 buffer
               nil)))))))
 

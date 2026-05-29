@@ -49,29 +49,29 @@
     (jn-init node)
     node))
 
-(defmethod jn-get-display-name ((node jn-tree-view-node))
+(cl-defmethod jn-get-display-name ((node jn-tree-view-node))
   (jn-get-name node))
 
-(defmethod jn-selected ((node jn-tree-view-node))
+(cl-defmethod jn-selected ((node jn-tree-view-node))
   (message (oref node name)))
 
-(defmethod jn-toggle-expanded ((node jn-tree-view-node))
+(cl-defmethod jn-toggle-expanded ((node jn-tree-view-node))
   (oset node expanded (not (oref node expanded)))
   (jn-changed node))
 
-(defmethod jn-is-expanded ((node jn-tree-view-node))
+(cl-defmethod jn-is-expanded ((node jn-tree-view-node))
   (oref node expanded))
 
-(defmethod jn-create-child ((node jn-tree-view-node))
+(cl-defmethod jn-create-child ((node jn-tree-view-node))
   (jn-tree-view-node-new))
 
-(defmethod jn-selected ((node jn-tree-view-node))
+(cl-defmethod jn-selected ((node jn-tree-view-node))
   (message (concat (jn-get-name node) " selected!")))
 
-(defmethod jn-get-view ((node jn-tree-view-node))
+(cl-defmethod jn-get-view ((node jn-tree-view-node))
   (jn-get-view (oref node parent)))
 
-(defmethod jn-changed ((node jn-tree-view-node))
+(cl-defmethod jn-changed ((node jn-tree-view-node))
   (let ((view (jn-get-view node)))
     (when view
       (jn-update-node view node))))
@@ -86,7 +86,7 @@
    )
   )
 
-(defmethod jn-get-view ((node jn-tree-view-root-node))
+(cl-defmethod jn-get-view ((node jn-tree-view-root-node))
   (oref node view))
 
 
@@ -112,7 +112,7 @@ node's lines in the view are updated."
     (jn-init-1 view "Tree View")
     view))
 
-(defmethod jn-get-root ((view jn-tree-view))
+(cl-defmethod jn-get-root ((view jn-tree-view))
   (oref view root-node))
 
 (defun jn-tree-view-child-at-line (node line)
@@ -123,12 +123,12 @@ node's lines in the view are updated."
 	(jn-tree-view-child-at-line child (1- line))))
     (setq line (- line (oref child lines)))))
       
-(defmethod jn-get-node-at-point ((view jn-tree-view))
+(cl-defmethod jn-get-node-at-point ((view jn-tree-view))
   (let ((linenr (+ (count-lines 1 (point)) (if (= (current-column) 0) 0 -1))))
     (catch 'exit
       (jn-tree-view-child-at-line (jn-get-root view) linenr))))
 
-(defmethod jn-selected ((view jn-tree-view))
+(cl-defmethod jn-selected ((view jn-tree-view))
   (let ((node (jn-get-node-at-point view)))
     (when node
       (if (> (current-column)
@@ -181,10 +181,10 @@ node's lines in the view are updated."
     (oset node lines lines)
     lines))
 
-(defmethod jn-update ((view jn-tree-view))
+(cl-defmethod jn-update ((view jn-tree-view))
   (jn-update-node view (jn-get-root view)))
 
-(defmethod jn-update-node ((view jn-tree-view) node)
+(cl-defmethod jn-update-node ((view jn-tree-view) node)
   (let ((win (jn-get-window view)))
     (when win
       (save-current-buffer

@@ -295,7 +295,7 @@ unloaded buffer representation."
     (defalias 'ecb--semantic-tag-components
       'semantic-tag-components)
   (defun ecb--semantic-tag-components (tag)
-    (case (ecb--semantic-tag-class tag)
+    (cl-case (ecb--semantic-tag-class tag)
       (type (ecb--semantic-tag-type-members tag))
       (function (ecb--semantic-tag-function-arguments tag))
       (otherwise nil))))

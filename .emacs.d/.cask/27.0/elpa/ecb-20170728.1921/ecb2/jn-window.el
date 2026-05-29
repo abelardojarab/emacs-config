@@ -40,7 +40,7 @@
    )
   )
 
-(defmethod jn-set-parent ((window jn-window) (parent jn-window-container))
+(cl-defmethod jn-set-parent ((window jn-window) (parent jn-window-container))
   (jn-set-window parent window))
     
 
@@ -54,7 +54,7 @@
    )
   )
 
-(defmethod jn-set-size ((window jn-emacs-window) size)
+(cl-defmethod jn-set-size ((window jn-emacs-window) size)
   (save-selected-window
     (select-window (oref window emacs-window))
     (when (car size)
@@ -62,11 +62,11 @@
     (when (cdr size)
       (enlarge-window (- (cdr size) (window-height))))))
 
-(defmethod jn-get-size ((window jn-emacs-window))
+(cl-defmethod jn-get-size ((window jn-emacs-window))
   (let ((w (oref window emacs-window)))
     (cons (window-width w) (window-height w))))
 
-(defmethod jn-get-emacs-window ((window jn-emacs-window))
+(cl-defmethod jn-get-emacs-window ((window jn-emacs-window))
   (oref window emacs-window))
 
 
@@ -81,7 +81,7 @@
    )
   )
 
-(defmethod jn-set-view ((window jn-view-window) (view jn-view))
+(cl-defmethod jn-set-view ((window jn-view-window) (view jn-view))
   (oset window view view)
   (oset view window window))
 
@@ -96,13 +96,13 @@
    )
   )
 
-(defmethod jn-set-size ((window-container jn-window-container) size)
+(cl-defmethod jn-set-size ((window-container jn-window-container) size)
   (jn-set-size (oref window-container window) size))
 
-(defmethod jn-get-size ((window-container jn-window-container))
+(cl-defmethod jn-get-size ((window-container jn-window-container))
   (jn-get-size (oref window-container window)))
 
-(defmethod jn-set-window ((window-container jn-window-container) (window jn-window))
+(cl-defmethod jn-set-window ((window-container jn-window-container) (window jn-window))
   (let ((old-window (oref window-container window)))
     (unless (eq old-window window)
       (when old-window
@@ -122,7 +122,7 @@
    )
   )
 
-(defmethod jn-set-window ((frame jn-frame) (window jn-window))
+(cl-defmethod jn-set-window ((frame jn-frame) (window jn-window))
   (jn-set-window (oref frame window-container) window))
 
 
@@ -144,13 +144,13 @@
    )
   )
 
-(defmethod jn-set-top-left-window ((window jn-split-window) (window window))
+(cl-defmethod jn-set-top-left-window ((window jn-split-window) (window window))
   (jn-set-window (oref window top-left-container) window))
 
-(defmethod jn-set-bottom-right-window ((window jn-split-window) (window window))
+(cl-defmethod jn-set-bottom-right-window ((window jn-split-window) (window window))
   (jn-set-window (oref window bottom-right-container) window))
 
-(defmethod jn-set-amount ((window jn-split-window) amount)
+(cl-defmethod jn-set-amount ((window jn-split-window) amount)
   (oset window amount amount)
   (let ((abs-amount (if (floatp amount)
 			(floor (* amount
@@ -176,19 +176,19 @@
    )
   )
 
-(defmethod jn-init-1 ((view jn-view) buffer)
+(cl-defmethod jn-init-1 ((view jn-view) buffer)
   (set-buffer buffer)
   (make-local-variable 'jn-view)
   (setq jn-view view)
   (oset view emacs-buffer buffer))
 
-(defmethod jn-get-emacs-buffer ((view jn-view))
+(cl-defmethod jn-get-emacs-buffer ((view jn-view))
   (oref view emacs-buffer))
 
-(defmethod jn-get-window ((view jn-view))
+(cl-defmethod jn-get-window ((view jn-view))
   (oref view window))
 
-(defmethod jn-set-window ((view jn-view) (window jn-view-window))
+(cl-defmethod jn-set-window ((view jn-view) (window jn-view-window))
   (oset view window window)
   (set-window-buffer (jn-get-emacs-window window) (jn-get-emacs-buffer view)))
 
@@ -203,7 +203,7 @@
   ()
   )
 
-(defmethod jn-init-1 ((view jn-general-view) name)
+(cl-defmethod jn-init-1 ((view jn-general-view) name)
   (let* ((buffer (get-buffer-create name))
 	 (nop (function (lambda () (interactive)))))
     (save-current-buffer

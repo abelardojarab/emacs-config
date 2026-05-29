@@ -322,7 +322,7 @@ future this could break."
                       (lambda (event count)
                         (if (/= (event-button event) 1)
                             nil		; Do normal operations.
-                          (case count
+                          (cl-case count
                             (1 (dframe-quick-mouse event))
                             ((2 3) (dframe-click event)))
                           ;; Don't do normal operations.
@@ -473,7 +473,8 @@ Return NODE."
   (let ((new-node nil)
         (new-tag nil))
     (dolist (tag tag-list)
-      (typecase tag
+      (with-no-warnings
+        (cl-typecase tag
         (null nil) ;; this would be a separator
         (speedbar-generic-list-tag
          ;; the semantic tag for this tag
@@ -519,7 +520,7 @@ Return NODE."
                        ecb-non-semantic-methods-initial-expand)))
         (otherwise
          (ecb-error "ecb-create-non-semantic-tree: malformed tag-list!")
-         )))
+         ))))
     node))
 
 (defun ecb-get-tags-for-non-semantic-files ()
@@ -551,7 +552,7 @@ Return NODE."
       (when (dolist (tag tag-list t)
               (if (or (speedbar-generic-list-positioned-group-p tag)
                       (speedbar-generic-list-group-p tag))
-                  (return nil)))
+                  (cl-return nil)))
         (while methods
           (setq tag-list (funcall (car methods) tag-list)
                 methods (cdr methods))))

@@ -1022,7 +1022,7 @@ returned if there is any or nil.
 In all other cases of TYPE always that value is returned
 `ecb-path-selected-source' has been set by most recent
 `ecb-path-selected-source-set'."
-  (case type
+  (cl-case type
     (file (ecb-source-get-filename ecb-path-selected-source))
     (buffername (ecb-source-get-buffername ecb-path-selected-source))
     (buffer (ecb-source-get-buffer ecb-path-selected-source))
@@ -1468,7 +1468,7 @@ has been contained)."
   (if (equal 'basic value)
       (ecb-activate-ecb-autocontrol-function ecb-basic-buffer-sync-delay func)
     (ecb-stop-autocontrol/sync-function func)
-    (case value
+    (cl-case value
       ((nil post)
        (add-hook 'post-command-hook func)
        (add-to-list 'ecb-post-command-hooks func))
@@ -1708,7 +1708,7 @@ not nil then in both PATH and FILENAME env-var substitution is done. If the
                   (ecb-host-accessible-p (nth 1 remote-path)))
               (progn
                 (setq norm-path (if ecb-running-xemacs
-                                    (case system-type
+                                    (cl-case system-type
                                       (cygwin32
                                        (mswindows-cygwin-to-win32-path
                                         (expand-file-name path)))
@@ -1966,7 +1966,7 @@ Currently the fourth argument TREE-BUFFER-NAME is not used here."
       (list (if control-pressed 2 1) shift-pressed meta-pressed 'keyboard)
     (if (and (not (eq mouse-button 1)) (not (eq mouse-button 2)))
 	nil
-      (case ecb-primary-secondary-mouse-buttons
+      (cl-case ecb-primary-secondary-mouse-buttons
         (mouse-1--mouse-2
          (if control-pressed
              nil

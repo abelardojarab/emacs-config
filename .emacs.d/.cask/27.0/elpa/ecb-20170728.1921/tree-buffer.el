@@ -47,6 +47,14 @@
   ;; to avoid compiler grips
   (require 'cl))
 
+;; XEmacs-only event types referenced from dead-code branches; declare them so
+;; the cl-typep byte-compile optimizer stops warning about unknown types.
+(eval-and-compile
+  (unless (get 'button-release-event 'cl-deftype-handler)
+    (cl-deftype button-release-event () 'null))
+  (unless (get 'button-press-event 'cl-deftype-handler)
+    (cl-deftype button-press-event () 'null)))
+
 ;; XEmacs stuff
 (silentcomp-defun button-release-event-p)
 (silentcomp-defun button-press-event-p)
@@ -98,14 +106,15 @@
         (/ (frame-pixel-width frame) (frame-width frame)))
       (defalias 'tree-buffer-window-display-height 'window-displayed-height)
       (defun tree-buffer-event-to-key (event)
-        (typecase event
-          (button-release-event 'mouse-release)
-          (button-press-event 'mouse-press)
-          (otherwise
-           ;; the ignore-errors is a little hack because i don't know all
-           ;; events of XEmacs so sometimes event-key produces a
-           ;; wrong-type-argument error.
-           (ignore-errors (event-key event)))))
+        (with-no-warnings
+          (cl-typecase event
+            (button-release-event 'mouse-release)
+            (button-press-event 'mouse-press)
+            (otherwise
+             ;; the ignore-errors is a little hack because i don't know all
+             ;; events of XEmacs so sometimes event-key produces a
+             ;; wrong-type-argument error.
+             (ignore-errors (event-key event))))))
       (defalias 'tree-buffer-event-window 'event-window)
       (defun tree-buffer-event-buffer (event)
         (window-buffer (tree-buffer-event-window event)))
@@ -124,6 +133,8 @@
 
   ;; GNU Emacs
   (defalias 'tree-buffer-facep 'facep)
+  ;; Type alias so `cl-typecase' on tree-buffer-face stops warning.
+  (cl-deftype tree-buffer-face () '(satisfies tree-buffer-facep))
   (defalias 'tree-buffer-line-beginning-pos 'line-beginning-position)
   (defalias 'tree-buffer-line-end-pos 'line-end-position)
   ;; Klaus Berndl <klaus.berndl@sdm.de>: Is not really the same as
@@ -143,7 +154,7 @@
   (defalias 'tree-buffer-mouse-set-point 'mouse-set-point)
   (defun tree-buffer-event-to-key (event)
     (let ((type (event-basic-type event)))
-      (case type
+      (cl-case type
         ((mouse-1 mouse-2 mouse-3) 'mouse-release)
         ((down-mouse-1 down-mouse-2 down-mouse-3) 'mouse-press)
         (otherwise (event-basic-type event)))))
@@ -488,7 +499,7 @@ If the optional arg AT_BEGINNING is not nil then the new CHILDREN will be
 added to the beginning of the existing children of NODE otherwise to the end
 \(default). CHILDREN must be either a single tree-node object or a list of
 tree-nodes."
-  (let ((c-list (typecase children
+  (let ((c-list (cl-typecase children
                   (tree-node (list children))
                   (list children)
                   (otherwise
@@ -838,10 +849,10 @@ the header-line of the tree-buffer.")
   (tree-indent nil :read-only t)
   (menu-creator nil :read-only t)
   (menu-titles nil :read-only t)
-  (modeline-menu-creator :read-only t)
-  (sticky-parent-p :read-only t)
-  (sticky-indent-string :read-only t)
-  (sticky-parent-fn :read-only t)
+  (modeline-menu-creator nil :read-only t)
+  (sticky-parent-p nil :read-only t)
+  (sticky-indent-string nil :read-only t)
+  (sticky-parent-fn nil :read-only t)
   (type-facer nil :read-only t)
   (expand-symbol-before-p nil :read-only t)
   (mouse-action-trigger nil :read-only t)
@@ -858,7 +869,7 @@ the header-line of the tree-buffer.")
   (general-face nil :read-only t)
   (incr-search-additional-pattern nil :read-only t)
   (incr-search-p nil :read-only t)
-  (reduce-tree-for-incr-search-fn :read-only t)
+  (reduce-tree-for-incr-search-fn nil :read-only t)
   (hor-scroll-step nil :read-only t)
   (default-images-dir nil :read-only t)
   (additional-images-dir nil :read-only t)
@@ -1657,12 +1668,12 @@ If always returns TEXT \(if not nil then modified with FACE)."
                                                                    'face
                                                                    text))
                                   (cf
-                                   (typecase current-face
+                                   (cl-typecase current-face
                                      (tree-buffer-face (list current-face))
                                      (list current-face)
                                      (otherwise nil)))
                                   (nf
-                                   (typecase face
+                                   (cl-typecase face
                                      (tree-buffer-face (list face))
                                      (list face)
                                      (otherwise nil))))
@@ -1677,12 +1688,12 @@ If always returns TEXT \(if not nil then modified with FACE)."
       (alter-text-property start end 'face
                            (lambda (current-face)
                              (let ((cf
-                                    (typecase current-face
+                                    (cl-typecase current-face
                                       (tree-buffer-face (list current-face))
                                       (list current-face)
                                       (otherwise nil)))
                                    (nf
-                                    (typecase face
+                                    (cl-typecase face
                                       (tree-buffer-face (list face))
                                       (list face)
                                       (otherwise nil))))
@@ -2282,7 +2293,7 @@ mentioned above!"
   (unless (not (equal (selected-frame) tree-buffer-frame))
     (let ((last-comm (tree-buffer-event-to-key last-command-event))
           (full-search-regexp nil))
-      (case last-comm
+      (cl-case last-comm
         ((delete backspace)
          ;; reduce by one from the end
          (setq tree-buffer-incr-searchpattern
@@ -2520,7 +2531,7 @@ For an description of EVENT see `tree-buffer-popup-menu'."
                (menu-title-creator
                 (cdr (assoc (tree-node->type node)
                             (tree-buffer-spec->menu-titles tree-buffer-spec))))
-               (menu-title (typecase menu-title-creator
+               (menu-title (cl-typecase menu-title-creator
                              (string menu-title-creator)
                              (function (funcall menu-title-creator node))
                              (otherwise "Tree-buffer-nodemenu"))))
@@ -2658,7 +2669,7 @@ functionality is done with the `help-echo'-property and the function
   (unless (not (equal (selected-frame) tree-buffer-frame))
     (let ((node (tree-buffer-get-node-at-point))
           (arrow-key (tree-buffer-event-to-key last-command-event)))
-      (case arrow-key
+      (cl-case arrow-key
         (up
          (forward-line -1)
          (beginning-of-line)
@@ -2844,7 +2855,7 @@ GUN Emacs and can be an additional key-qualifier symbol like 'mode-line or
                                 button)))
         (modifier-elem (if tree-buffer-running-xemacs
                            modifier
-                         (case modifier
+                         (cl-case modifier
                            (shift "S-")
                            (control "C-")
                            (meta "M-")
@@ -3326,7 +3337,7 @@ See Info node `(ecb)tree-buffer' for all details of using tree-buffers."
 ;;              (tree-buffer-define-mouse-key 1 key)))
 ;;           '(nil shift control meta))
 
-    (macrolet ((tbc-define-mouse-key-1/2 (button key)
+    (cl-macrolet ((tbc-define-mouse-key-1/2 (button key)
                 `(progn
                    (define-key tree-buffer-key-map
                      (tree-buffer-create-mouse-key ,button mouse-action-trigger ,key)
