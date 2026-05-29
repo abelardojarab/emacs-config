@@ -84,46 +84,36 @@
                   ;; (which Hack does)
                   (set-face-italic font-lock-comment-face t)
 
-                  ;; Adjust text size based on resolution
-                  (cl-case system-type
-                    (windows-nt
-                     (if (> (x-display-pixel-width) 2000)
-                         (progn ;; HD monitor in Windows
-                           (setq my/main-programming-font-size "12")
-                           (setq my/main-writing-font-size "12"))
-                       (progn
-                         (setq my/main-programming-font-size "11")
-                         (setq my/main-writing-font-size "11"))))
-                    (darwin
-                     (if (> (x-display-pixel-width) 1800)
-                         (if (> (x-display-pixel-width) 2000)
-                             (progn ;; Ultra-HD monitor in OSX
-                               (setq my/main-programming-font-size "19")
-                               (setq my/main-writing-font-size "20"))
-                           (progn ;; HD monitor in OSX
-                             (setq my/main-programming-font-size "16")
-                             (setq my/main-writing-font-size "17")))
-                       (progn
-                         (setq my/main-programming-font-size "16")
-                         (setq my/main-writing-font-size "16"))))
-                    (t ;; Linux
-                     ;; ultra high-resolution 2560x1440-pixel
-                     (if (and (> (car (screen-size)) 2200)
-                              (> (cadr (screen-size)) 1300)
-                              (> 3000 (car (screen-size))))
-                         (progn ;; Ultra-HD monitor in Linux
-                           (setq my/main-programming-font-size "13")
-                           (setq my/main-writing-font-size "14"))
-                       ;; high-resolution 2048x1152 and 1920x1028-pixel
-                       (if (and (> (car (screen-size)) 1900)
-                                (> (cadr (screen-size)) 1000)
-                                (> 3000 (car (screen-size))))
-                           (progn ;; HD monitor in Linux
-                             (setq my/main-programming-font-size "13")
-                             (setq my/main-writing-font-size "13"))
-                         (progn
-                           (setq my/main-programming-font-size "12")
-                           (setq my/main-writing-font-size "13"))))))
+                  ;; Adjust text size based on the active display.
+                  ;; Bucket by display height (pixels) and adjust per platform:
+                  ;; macOS reports logical pixels with Retina scaling, so its
+                  ;; sizes are inherently larger; Linux/Windows report physical
+                  ;; pixels so the same height needs a smaller point size.
+                  (let* ((h (or (ignore-errors (display-pixel-height)) 1080))
+                         (w (or (ignore-errors (display-pixel-width)) 1920))
+                         (mm-h (or (ignore-errors (display-mm-height)) 0))
+                         (dpi (if (and (numberp mm-h) (> mm-h 0))
+                                  (/ (* h 25.4) mm-h)
+                                96))
+                         (mac-p (eq system-type 'darwin))
+                         ;; Coarse buckets that work across HiDPI variants.
+                         (base
+                          (cond
+                           ;; 5K / 6K Retina (Pro Display, iMac 27" 5K)
+                           ((or (>= h 2500) (>= w 5000))   (if mac-p 20 17))
+                           ;; 4K (3840x2160) or 2880x1800 Retina laptop
+                           ((or (>= h 1900) (>= w 3500))   (if mac-p 18 15))
+                           ;; QHD / Retina-equivalent (2560x1440)
+                           ((or (>= h 1400) (>= w 2400))   (if mac-p 16 14))
+                           ;; FHD (1920x1080)
+                           ((or (>= h 1000) (>= w 1800))   (if mac-p 15 13))
+                           ;; Smaller laptops, half-screen splits
+                           (t                              (if mac-p 13 11))))
+                         ;; Very high DPI on non-mac platforms — nudge up.
+                         (base (if (and (not mac-p) (> dpi 140))
+                                   (+ base 1) base)))
+                    (setq my/main-programming-font-size (number-to-string base)
+                          my/main-writing-font-size     (number-to-string (1+ base))))
 
                   ;; Apply fonts
                   (add-to-list 'default-frame-alist (cons 'font

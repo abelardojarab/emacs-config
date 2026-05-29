@@ -47,30 +47,30 @@
     (dolist (child (jn-get-children node))
       (jn-tree-node-conditional-iterate--internal child fn (1+ depth)))))
 
-(defmethod jn-iterate ((node jn-abstract-tree-node) (fn function))
+(cl-defmethod jn-iterate ((node jn-abstract-tree-node) (fn function))
   (jn-tree-node-iterate--internal node fn))
   
-(defmethod jn-conditional-iterate ((node jn-abstract-tree-node) (fn function))
+(cl-defmethod jn-conditional-iterate ((node jn-abstract-tree-node) (fn function))
   (jn-tree-node-conditional-iterate--internal node fn 0))
   
-(defmethod jn-find-first ((node jn-abstract-tree-node) (test-fn function))
+(cl-defmethod jn-find-first ((node jn-abstract-tree-node) (test-fn function))
   (catch 'exit
     (jn-iterate node
 		(function (lambda (node)
 			    (if (funcall test-fn node)
 				(throw 'exit node)))))))
 
-(defmethod jn-find-first-with-name ((node jn-abstract-tree-node) (name string))
+(cl-defmethod jn-find-first-with-name ((node jn-abstract-tree-node) (name string))
   (jn-find-first node (function (lambda (node)
 				  (string= name (oref node name))))))
 
-(defmethod jn-get-depth ((node jn-abstract-tree-node))
+(cl-defmethod jn-get-depth ((node jn-abstract-tree-node))
   (let ((parent (oref node parent)))
     (if (not parent)
 	0
       (1+ (jn-get-depth parent)))))
 
-(defmethod jn-has-children ((node jn-abstract-tree-node))
+(cl-defmethod jn-has-children ((node jn-abstract-tree-node))
   (< 0 (length (jn-get-children node))))
 
 
@@ -89,13 +89,13 @@
   (dolist (listener (oref node change-listeners))
     (funcall listener node)))
 
-(defmethod jn-changed ((node jn-changable-tree-node))
+(cl-defmethod jn-changed ((node jn-changable-tree-node))
   (jn-tree-node-changed--internal node))
 
-(defmethod jn-add-change-listener ((node jn-changable-tree-node) listener)
+(cl-defmethod jn-add-change-listener ((node jn-changable-tree-node) listener)
   (oset node change-listeners (cons listener (oref node change-listeners))))
 
-(defmethod jn-remove-change-listener ((node jn-changable-tree-node) listener)
+(cl-defmethod jn-remove-change-listener ((node jn-changable-tree-node) listener)
   (oset node change-listeners (delq listener (oref node change-listeners))))
 
 
@@ -113,13 +113,13 @@
    )
   )
 
-(defmethod jn-get-children ((node jn-tree-node-base))
+(cl-defmethod jn-get-children ((node jn-tree-node-base))
   (oref node children))
 
-(defmethod jn-get-parent ((node jn-tree-node-base))
+(cl-defmethod jn-get-parent ((node jn-tree-node-base))
   (oref node parent))
 
-(defmethod jn-set-parent ((node jn-tree-node-base) (parent jn-tree-node-base))
+(cl-defmethod jn-set-parent ((node jn-tree-node-base) (parent jn-tree-node-base))
   (let ((old-parent (oref node parent)))
     (when old-parent
       (oset old-parent children (delq node (oref old-parent children)))
@@ -140,15 +140,15 @@
    )
   )
 
-(defmethod jn-is-updated ((node jn-dynamic-tree-node))
+(cl-defmethod jn-is-updated ((node jn-dynamic-tree-node))
   (oref node updated))
 
-(defmethod jn-get-children ((node jn-dynamic-tree-node))
+(cl-defmethod jn-get-children ((node jn-dynamic-tree-node))
   (unless (oref node updated)
     (jn-update node))
   (call-next-method))
 
-(defmethod jn-update--internal ((node jn-dynamic-tree-node) item-list match-fn
+(cl-defmethod jn-update--internal ((node jn-dynamic-tree-node) item-list match-fn
 				new-fn)
   (let ((old-children (oref node children))
 	changed
@@ -187,10 +187,10 @@
     (jn-set-parent node parent)
     node))
 
-(defmethod jn-get-name ((node jn-tree-node))
+(cl-defmethod jn-get-name ((node jn-tree-node))
   (oref node name))
 
-(defmethod jn-clear-children ((node jn-tree-node))
+(cl-defmethod jn-clear-children ((node jn-tree-node))
   (oset node children nil)
   (jn-changed node))
 
@@ -213,27 +213,27 @@
     (jn-set-node n node)
     n))
 
-(defmethod jn-init ((dnode jn-tree-node-decorator))
+(cl-defmethod jn-init ((dnode jn-tree-node-decorator))
   (oset dnode callback (jn-create-lambda-with-object-1
 			'jn-tree-node-decorator-node-changed--internal dnode)))
 
-(defmethod jn-get-name ((dnode jn-tree-node-decorator))
+(cl-defmethod jn-get-name ((dnode jn-tree-node-decorator))
   (jn-get-name (oref dnode node)))
 
-(defmethod jn-get-children ((dnode jn-tree-node-decorator))
+(cl-defmethod jn-get-children ((dnode jn-tree-node-decorator))
   (unless (oref dnode updated)
     (jn-update dnode))
   (call-next-method))
 
-(defmethod jn-has-children ((dnode jn-tree-node-decorator))
+(cl-defmethod jn-has-children ((dnode jn-tree-node-decorator))
   (if (oref dnode updated)
       (call-next-method)
     (jn-has-children (oref dnode node))))
 
-(defmethod jn-create-child ((dnode jn-tree-node-decorator))
+(cl-defmethod jn-create-child ((dnode jn-tree-node-decorator))
   (jn-tree-node-decorator "node"))
 
-(defmethod jn-set-node ((node jn-tree-node-decorator) (n jn-changable-tree-node))
+(cl-defmethod jn-set-node ((node jn-tree-node-decorator) (n jn-changable-tree-node))
   (let ((old-node (oref node node)))
     (when old-node
       (jn-remove-change-listener old-node (oref node callback)))
@@ -243,14 +243,14 @@
       (jn-add-change-listener n (oref node callback)))
     (jn-changed node)))
 
-(defmethod jn-get-node ((dnode jn-tree-node-decorator))
+(cl-defmethod jn-get-node ((dnode jn-tree-node-decorator))
   (oref dnode node))
 
 (defun jn-tree-node-decorator-node-changed--internal (dnode node)
   (oset dnode updated nil)
   (jn-changed dnode))
 
-(defmethod jn-update ((node jn-tree-node-decorator))
+(cl-defmethod jn-update ((node jn-tree-node-decorator))
   (jn-update--internal node
 		       (jn-get-children (oref node node))
 		       (function (lambda (item child) (eq (oref child node) item)))

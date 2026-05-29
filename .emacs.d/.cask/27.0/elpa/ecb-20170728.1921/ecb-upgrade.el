@@ -358,7 +358,7 @@ The car is the old option symbol and the cdr is a 2-element-list with:
 
 ;; upgrading ecb-compile-window-temporally-enlarge
 (defun ecb-upgrade-compile-window-temporally-enlarge (old-val)
-  (case old-val
+  (cl-case old-val
     ((t after-compilation) 'after-display)
     ((nil) nil)
     ((after-selection both) old-val)
@@ -1254,7 +1254,7 @@ Return nil if ver-str has not the required syntax:
   (concat (number-to-string (nth 0 ver))
           "."
           (number-to-string (nth 1 ver))
-          (case (nth 2 ver)
+          (cl-case (nth 2 ver)
             (0 "alpha")
             (1 "beta")
             (2 "pre")

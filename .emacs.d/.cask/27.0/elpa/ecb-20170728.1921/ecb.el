@@ -1169,7 +1169,7 @@ VAR has to be a bound symbol for a variable. ACTION is either 'store or
 'restore. The optional arg NEW-VALUE is only used when ACTION is 'store and is
 that value VAR should be set to. After calling with ACTION is 'restore the
 value of VAR is as before storing a NEW-VALUE for variable-symbol VAR."
-  (case action
+  (cl-case action
     (store
      (or (ecb-find-assoc var ecb-temporary-changed-emacs-variables-alist)
          (progn
@@ -1384,7 +1384,7 @@ value of VAR is as before storing a NEW-VALUE for variable-symbol VAR."
               (when (member ecb-split-edit-window-after-start
                             '(vertical horizontal nil))
                 (delete-other-windows)
-                (case ecb-split-edit-window-after-start
+                (cl-case ecb-split-edit-window-after-start
                   (horizontal (split-window-horizontally))
                   (vertical (split-window-vertically))))
             

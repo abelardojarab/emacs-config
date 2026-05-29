@@ -284,8 +284,9 @@ DELETE-FRAME is not nil then the new created frame will be deleted and the
       (select-frame ecb-create-layout-old-frame))
     (when (and ecb-create-layout-frame
                (frame-live-p ecb-create-layout-frame))
-      (ad-with-originals 'delete-frame
-        (delete-frame ecb-create-layout-frame))))
+      (with-no-warnings
+        (ad-with-originals 'delete-frame
+          (delete-frame ecb-create-layout-frame)))))
   (setq ecb-create-layout-frame nil))
 
 (defun ecb-create-layout-save-and-quit (&rest ignore)
@@ -652,7 +653,7 @@ never selects the edit-window."
     (setq ecb-create-layout-type (intern (ecb-query-string
                                           "Location of the the ECB-tree-windows:"
                                           '("left" "right" "top" "left-right")))))
-  (case ecb-create-layout-type
+  (cl-case ecb-create-layout-type
     (left
      (ecb-split-hor ecb-windows-width))
     (right

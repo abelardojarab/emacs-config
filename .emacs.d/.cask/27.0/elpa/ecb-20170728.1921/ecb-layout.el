@@ -1261,8 +1261,8 @@ The return value is either nil if all ecb-windows are displayed
 ecb-frame are hidden. This list contains an appropriate set of
 symbols of 'left-side, 'right-side or 'top-side."
   (let ((state (or hidden-state ecb-windows-hidden-state)))
-    (case state
-      (all (case (ecb-get-layout-type)
+    (cl-case state
+      (all (cl-case (ecb-get-layout-type)
              (left-right '(left-side right-side))
              (left '(left-side))
              (right '(right-side))
@@ -2380,7 +2380,7 @@ If the compile-window or the minibuffer is the selected window then
                       ((ecb-point-in-compile-window)
                        'compile)
                       (t 'other-dedicated))))
-           (cons type (case type
+           (cons type (cl-case type
                         (ecb (ecb-point-in-ecb-window-number
                               (ecb-canonical-ecb-windows-list win-list)))
                         (edit (ecb-point-in-edit-window-number
@@ -2466,7 +2466,7 @@ ECB-WIN-NR must be an integer between 1 and length of ECB-WIN-LIST \(rsp.
 - nil if ECB-BUTTON is 1.
 - t if ECB-BUTTON is 2 and the edit-area of ECB is splitted.
 - EDIT-WINDOW-NR if ECB-BUTTON is 3."
-  (case ecb-button
+  (cl-case ecb-button
     (1 nil)
     (2 (ecb-edit-window-splitted))
     (3 edit-window-nr)))
@@ -2484,7 +2484,7 @@ value of OTHER-EDIT-WINDOW \(which is a value returned by
 - OTHER-EDIT-WINDOW is an integer: Get exactly the edit-window with that
   number > 0."
   (let ((edit-win-list (ecb-canonical-edit-windows-list)))
-    (typecase other-edit-window
+    (cl-typecase other-edit-window
       (null
        (if (eq ecb-mouse-click-destination 'left-top)
            (car edit-win-list)
@@ -3286,7 +3286,7 @@ If called for other frames it works like the original version."
                                            nth-window)
     ;; here we have no active minibuffer!
     (let ((nth-win (or nth-window 1)))
-      (case (car point-loc)
+      (cl-case (car point-loc)
         (ecb
          (ecb-next-listelem (if (and ecb-win-list
                                      (= 1 (length ecb-win-list)))
@@ -3352,7 +3352,7 @@ NTH-WINDOW is nil then it is treated as 1."
                                                point-loc
                                                nth-window)
         ;; in the following there is no minibuffer active...
-        (case ecb-other-window-behavior
+        (cl-case ecb-other-window-behavior
           (all
            (ecb-next-listelem windows-list
                               (selected-window) nth-win))
@@ -3413,7 +3413,7 @@ An error is reported if BUFFER is a special ECB-buffer. These windows are not
 allowed to be deleted."
   (let ((curr-frame (selected-frame))
         (buf-name (ecb-buffer-name (ad-get-arg 0)))
-        (frames (case (ad-get-arg 1)
+        (frames (cl-case (ad-get-arg 1)
                   (0 ;; visible or iconified frames
                    (delete nil (mapcar (lambda (f)
                                          (if (frame-visible-p f) f))
@@ -4230,7 +4230,7 @@ current edit-window is selected."
       ;; point is now in the edit-buffer so maybe we have to move point to the
       ;; buffer where it was before.
       (when preserve-selected-window
-        (case (car curr-loc)
+        (cl-case (car curr-loc)
           (ecb
            (ecb-window-select prev-buffer-name))
           (compile
@@ -4300,7 +4300,7 @@ will be selected also after."
         ;; point is now in the edit-buffer so maybe we have to move point to the
         ;; buffer where it was before.
         (when preserve-selected-window
-          (case (car curr-point)
+          (cl-case (car curr-point)
             (ecb
              (ecb-window-select ecb-buffer-name))
             (compile
@@ -4339,7 +4339,7 @@ will be selected also after."
         ;; point is now in the edit-buffer so maybe we have to move point to the
         ;; buffer where it was before.
         (when preserve-selected-window
-          (case (car curr-point)
+          (cl-case (car curr-point)
             (ecb
              (ecb-window-select ecb-buffer-name))
             (compile
@@ -5156,7 +5156,7 @@ window) is an ecb-window! But only in this case the returned value is reliable!"
     (if (and (windowp ecb-win)
              (equal ecb-frame (window-frame ecb-win))
              (windowp res-win))
-        (case layout-type
+        (cl-case layout-type
           (left 'left-side)
           (right 'right-side)
           (top 'top-side)
@@ -5184,7 +5184,7 @@ If RESIDUAL-WINDOW is not nil it must be one of the windows
 it will be computed."
   (message "Klausi - del ecb-windows: side: %s" side)
   (let ((err-p (or (not (memq side '(left-side right-side top-side)))
-                   (case (ecb-get-layout-type)
+                   (cl-case (ecb-get-layout-type)
                      (left-right (not (memq side '(left-side right-side))))
                      (right (not (eq side 'right-side)))
                      (left (not (eq side 'left-side)))
@@ -5193,7 +5193,7 @@ it will be computed."
       (error "ECB %s: ecb-delete-ecb-window called with layout-type %s and SIDE: %s"
              ecb-version (ecb-get-layout-type) side)))
   (let* ((ecb-window-not-to-delete (and except-ecb-window-or-buffer
-                                        (typecase except-ecb-window-or-buffer
+                                        (cl-typecase except-ecb-window-or-buffer
                                           (window except-ecb-window-or-buffer)
                                           (buffer (get-buffer-window
                                                    except-ecb-window-or-buffer ecb-frame))
@@ -5783,7 +5783,7 @@ option `window-size-fixed' \(only available for GNU Emacs)."
     (if (null ecb-win-list)
         (cons (frame-width ecb-frame)
               (- (frame-height ecb-frame) comp-win-height))
-      (case layout-type
+      (cl-case layout-type
         (top
          (cons (frame-width ecb-frame)
                (- (frame-height ecb-frame)

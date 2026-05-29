@@ -212,7 +212,7 @@ prepended by the window-number, see `ecb-mode-line-display-window-number'."
                                                        nil))
                                                     (t (ecb-error "ecb-mode-line-format: Can not get prefix-elem: %s" p)))))
                                            ecb-mode-line-prefixes))
-                    (prefix-str (typecase prefix-elem
+                    (prefix-str (cl-typecase prefix-elem
                                   (null nil)
                                   (string prefix-elem)
                                   (function (funcall prefix-elem

@@ -257,7 +257,7 @@ The value 'auto \(see above) takes exactly these two scenarios into account."
 (defun ecb-show-sources-in-directories-buffer-p ()
   "Return not nil if in current layout sources are shown in the
 directories-buffer."
-  (case ecb-show-sources-in-directories-buffer
+  (cl-case ecb-show-sources-in-directories-buffer
     (never nil)
     (always t)
     (otherwise
@@ -1919,7 +1919,7 @@ file in current directory."
 (defun ecb-get-sources-sort-function (sort-method &optional ignore-case)
   "According to SORT-METHOD \(which can either be 'name, 'extension or nil)
 and IGNORE-CASE return a function which can be used as argument for `sort'."
-  (case sort-method
+  (cl-case sort-method
     (name
      (function (lambda (a b)
                  (ecb-string< a b ecb-sources-sort-ignore-case))))
@@ -2473,7 +2473,7 @@ Returns t if the current history filter has been applied otherwise nil."
                            ;; l and r are conses like:
                            ;; (<bucket-string> . (<buffername> . <filename>))
                            (if (ecb-string= (car l) (car r) ecb-history-sort-ignore-case)
-                               (case ecb-history-sort-method
+                               (cl-case ecb-history-sort-method
                                  (extension
                                   (let ((ext-l (file-name-extension (cdr (cdr l)) t))
                                         (ext-r (file-name-extension (cdr (cdr r)) t)))
@@ -2548,7 +2548,7 @@ Returns t if the current history filter has been applied otherwise nil."
          (base-alist (mapcar (function
                               (lambda (elem)
                                 ;; an elem is a cons (<buffername> . <filename>)
-                                (cons (case ecb-history-make-buckets
+                                (cons (cl-case ecb-history-make-buckets
                                         (never never-bucket-string)
                                         ((directory directory-with-source-path)
                                          (ecb-substring-no-properties
@@ -2899,7 +2899,7 @@ doesn't match any regexp of `ecb-host-accessible-check-valid-time' then return
   "Return not nil if HOST is accessible."
   (let ((value (ecb-host-accessible-cache-get
                 host (ecb-host-accessible-valid-time host))))
-    (case value
+    (cl-case value
       (NOT-ACCESSIBLE nil)
       ((nil) ;; not cached or outdated
        (let* ((options (ecb-replace-all-occurences (ecb-copy-list ecb-ping-options)
@@ -2930,7 +2930,7 @@ the :-separator which separates user- and host-parts from the real path, i.e.
 it always ends with a colon! HOST is the remote HOST and REAL-PATH is that
 component after that :-separator. Supports tramp, ange-ftp and efs."
   (let ((value (ecb-remote-path-cache-get path)))
-    (case value
+    (cl-case value
       (NOT-REMOTE nil)
       ((nil)
        (let* ((dissection (or (and (featurep 'tramp) ;; tramp-support
@@ -3507,7 +3507,7 @@ speeding up things next time. Ange-ftp- or efs-directories will never be
 checked for VC-states!"
   (let* ((norm-dir (ecb-fix-filename directory))
          (cache-val (ecb-vc-cache-get norm-dir)))
-    (case cache-val
+    (cl-case cache-val
       (NO-VC nil)
       ((nil) ;; not cached or outdated
        (let ((vc-backend-fcn
@@ -4161,7 +4161,7 @@ the help-text should be printed here."
                                                    (car ecb-history-show-node-info)))
                  (if (= (tree-node->type node) ecb-history-nodetype-bucket)
                      (tree-node->data node)
-                   (case (cdr ecb-history-show-node-info)
+                   (cl-case (cdr ecb-history-show-node-info)
                      (name (tree-node->name node))
                      (path (ecb-source-get-filename (tree-node->data node)))
                      (name-path (format "%s (%s)" (tree-node->name node)

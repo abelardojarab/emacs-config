@@ -1906,14 +1906,15 @@ This function MUST be called with the source-buffer as current buffer!"
 semantic-tag \(but a plain string) then it will be converted to a positionless
 tag of class 'variable."
   (mapcar (function (lambda (c)
-                      (typecase c
-                        (ecb--semantic-tag
-                         c)
-                        (string
-                         (ecb--semantic-tag-new-variable c nil nil nil))
-                        (otherwise
-                         (ecb-error "Tag with name %s contains invalid childrens"
-                                    (ecb--semantic-tag-name parent-tag))))))
+                      (with-no-warnings
+                        (cl-typecase c
+                          (ecb--semantic-tag
+                           c)
+                          (string
+                           (ecb--semantic-tag-new-variable c nil nil nil))
+                          (otherwise
+                           (ecb-error "Tag with name %s contains invalid childrens"
+                                      (ecb--semantic-tag-name parent-tag)))))))
           (ecb--semantic-tag-children-compatibility
            parent-tag ecb-show-only-positioned-tags)))
                         
@@ -2431,7 +2432,7 @@ applied default-tag-filters."
                                                 (if semantic-source-p "curr-type")
                                                 "function" "no-filter" "delete-last"))))
                        'no-filter-specified)))
-      (case choice
+      (cl-case choice
         (protection
          (ecb-methods-filter-by-prot inverse source-buffer))
         (tag-class
@@ -2536,7 +2537,7 @@ the option `ecb-mode-line-prefixes'."
          0 (length str) 'help-echo
          (concat "Filter-Stack: "
                  (mapconcat 'identity
-                            (loop for f-elem being the elements of filters using (index f-elem-index)
+                            (cl-loop for f-elem being the elements of filters using (index f-elem-index)
                                   collect (let ((f-type-str (nth 3 f-elem) )
                                                 (f-str (nth 4 f-elem)))
                                             (format "%d. [%s: %s]" (1+ f-elem-index) f-type-str f-str)))
@@ -2566,32 +2567,32 @@ the current file."
     (let ((tag-filter-list (ecb-default-tag-filter-for-current-source)))
       (dolist (filter-spec tag-filter-list)
         (let ((filter-apply-fcn
-               (case (nth 0 filter-spec)
+               (cl-case (nth 0 filter-spec)
                  (protection 'ecb-methods-filter-by-prot)
                  (tag-class  'ecb-methods-filter-by-tag-class)
                  (regexp 'ecb-methods-filter-by-regexp)
                  (function 'ecb-methods-filter-by-function)))
               (filter
-               (case (nth 0 filter-spec)
+               (cl-case (nth 0 filter-spec)
                  (protection
-                  (typecase (nth 1 filter-spec)
+                  (cl-typecase (nth 1 filter-spec)
                     (symbol (symbol-name (nth 1 filter-spec)))
                     (string (nth 1 filter-spec))
                     (otherwise
                      (ecb-error "Not a valid tag-filter: %s" (nth 1 filter-spec)))))
                  (tag-class
-                  (typecase (nth 1 filter-spec)
+                  (cl-typecase (nth 1 filter-spec)
                     (symbol (symbol-name (nth 1 filter-spec)))
                     (string (nth 1 filter-spec))
                     (otherwise
                      (ecb-error "Not a valid tag-filter: %s" (nth 1 filter-spec)))))
                  (regexp
-                  (typecase (nth 1 filter-spec)
+                  (cl-typecase (nth 1 filter-spec)
                     (string (nth 1 filter-spec))
                     (otherwise
                      (ecb-error "Not a valid tag-filter: %s" (nth 1 filter-spec)))))
                  (function
-                  (typecase (nth 1 filter-spec)
+                  (cl-typecase (nth 1 filter-spec)
                     (symbol (symbol-name (nth 1 filter-spec)))
                     (string (nth 1 filter-spec))
                     (otherwise
@@ -4410,10 +4411,11 @@ this fails then nil is returned otherwise t."
               (let ((data (tree-node->data node)))
                 (if (and data (/= ecb-methods-nodetype-bucket
                                   (tree-node->type node)))
-                    (typecase data
-                      (ecb--semantic-tag (ecb--semantic-tag-name data))
-                      (string data)
-                      (otherwise (tree-node->name node)))
+                    (with-no-warnings
+                      (cl-typecase data
+                        (ecb--semantic-tag (ecb--semantic-tag-name data))
+                        (string data)
+                        (otherwise (tree-node->name node))))
                   (tree-node->name node)))))
   "The menu-title for the methods menu. See
 `ecb-directories-menu-title-creator'.")

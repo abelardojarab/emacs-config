@@ -57,21 +57,21 @@
   )
 
 (defun ecb-dlist-node-new (data)
-  (ecb-dlist-node "node" :data data))
+  (ecb-dlist-node :data data))
 
-(defmethod ecb-get-data ((node ecb-dlist-node))
+(cl-defmethod ecb-get-data ((node ecb-dlist-node))
   (oref node data))
 
-(defmethod ecb-get-next ((node ecb-dlist-node))
+(cl-defmethod ecb-get-next ((node ecb-dlist-node))
   (oref node next))
 
-(defmethod ecb-get-previous ((node ecb-dlist-node))
+(cl-defmethod ecb-get-previous ((node ecb-dlist-node))
   (oref node previous))
 
-(defmethod ecb-set-data ((node ecb-dlist-node) data)
+(cl-defmethod ecb-set-data ((node ecb-dlist-node) data)
   (oset node data data))
 
-(defmethod ecb-set-next ((node ecb-dlist-node) next)
+(cl-defmethod ecb-set-next ((node ecb-dlist-node) next)
   (let ((old-next (ecb-get-next node)))
     (when old-next
       (oset old-next previous nil))
@@ -80,7 +80,7 @@
       (ecb-set-previous next nil)
       (oset next previous node))))
 
-(defmethod ecb-set-previous ((node ecb-dlist-node) previous)
+(cl-defmethod ecb-set-previous ((node ecb-dlist-node) previous)
   (let ((old-previous (ecb-get-previous node)))
     (when old-previous
       (oset old-previous next nil))
@@ -100,28 +100,28 @@
    )
   )
   
-(defmethod ecb-nav-set-pos ((item ecb-nav-history-item) pos)
+(cl-defmethod ecb-nav-set-pos ((item ecb-nav-history-item) pos)
   (oset item pos pos))
 
-(defmethod ecb-nav-set-window-start ((item ecb-nav-history-item) point)
+(cl-defmethod ecb-nav-set-window-start ((item ecb-nav-history-item) point)
   (oset item window-start point))
 
-(defmethod ecb-nav-get-pos ((item ecb-nav-history-item))
+(cl-defmethod ecb-nav-get-pos ((item ecb-nav-history-item))
   (oref item pos))
 
-(defmethod ecb-nav-get-window-start ((item ecb-nav-history-item))
+(cl-defmethod ecb-nav-get-window-start ((item ecb-nav-history-item))
   (oref item window-start))
 
-(defmethod ecb-nav-to-string ((item ecb-nav-history-item))
+(cl-defmethod ecb-nav-to-string ((item ecb-nav-history-item))
   (concat (int-to-string (ecb-nav-get-pos item)) ":"
 	  (int-to-string (ecb-nav-get-window-start item))))
 
 ;; This method must return nil if saving can not be performed and otherwise
 ;; not nil!
-(defmethod ecb-nav-save ((item ecb-nav-history-item))
+(cl-defmethod ecb-nav-save ((item ecb-nav-history-item))
   t)
 
-(defmethod ecb-nav-is-valid ((item ecb-nav-history-item))
+(cl-defmethod ecb-nav-is-valid ((item ecb-nav-history-item))
   t)
 
 
@@ -153,22 +153,22 @@
                               :tag-name tag-name
                               :narrow narrow))
 
-(defmethod ecb-nav-get-tag-buffer ((item ecb-nav-tag-history-item))
+(cl-defmethod ecb-nav-get-tag-buffer ((item ecb-nav-tag-history-item))
   (oref item tag-buffer))
 
-(defmethod ecb-nav-get-tag-start ((item ecb-nav-tag-history-item))
+(cl-defmethod ecb-nav-get-tag-start ((item ecb-nav-tag-history-item))
   (oref item tag-start))
 
-(defmethod ecb-nav-get-tag-end ((item ecb-nav-tag-history-item))
+(cl-defmethod ecb-nav-get-tag-end ((item ecb-nav-tag-history-item))
   (oref item tag-end))
 
-(defmethod ecb-nav-get-tag-name ((item ecb-nav-tag-history-item))
+(cl-defmethod ecb-nav-get-tag-name ((item ecb-nav-tag-history-item))
   (oref item tag-name))
 
-(defmethod ecb-nav-get-narrow ((item ecb-nav-tag-history-item))
+(cl-defmethod ecb-nav-get-narrow ((item ecb-nav-tag-history-item))
   (oref item narrow))
 
-(defmethod ecb-nav-goto ((item ecb-nav-tag-history-item))
+(cl-defmethod ecb-nav-goto ((item ecb-nav-tag-history-item))
   (let ((tag-buffer (ecb-nav-get-tag-buffer item))
         (tag-start (ecb-nav-get-tag-start item))
         (tag-end (ecb-nav-get-tag-end item))
@@ -183,7 +183,7 @@
     (if win-start
         (set-window-start (selected-window) (+ tag-start win-start)))))
 
-(defmethod ecb-nav-save ((item ecb-nav-tag-history-item))
+(cl-defmethod ecb-nav-save ((item ecb-nav-tag-history-item))
   "Return only nil if tag-start of ITEM points into a dead buffer. In this
 case no position saving is done."
   (let ((tag-start (ecb-nav-get-tag-start item)))
@@ -199,10 +199,10 @@ case no position saving is done."
           t)
       nil)))
 
-(defmethod ecb-nav-to-string ((item ecb-nav-tag-history-item))
+(cl-defmethod ecb-nav-to-string ((item ecb-nav-tag-history-item))
   (concat (ecb-nav-get-tag-name item) ":" (call-next-method)))
 
-(defmethod ecb-nav-is-valid ((item ecb-nav-tag-history-item))
+(cl-defmethod ecb-nav-is-valid ((item ecb-nav-tag-history-item))
    (let ((tag-start (ecb-nav-get-tag-start item))
          (tag-buf (ecb-nav-get-tag-buffer item))
          (tag-end (ecb-nav-get-tag-end item)))
@@ -237,19 +237,19 @@ case no position saving is done."
                               (window-start (get-buffer-window (current-buffer))))
     item))
 
-(defmethod ecb-nav-get-file ((item ecb-nav-file-history-item))
+(cl-defmethod ecb-nav-get-file ((item ecb-nav-file-history-item))
   (oref item file))
 
-(defmethod ecb-nav-set-file ((item ecb-nav-file-history-item) file)
+(cl-defmethod ecb-nav-set-file ((item ecb-nav-file-history-item) file)
   (oset item file file))
 
-(defmethod ecb-nav-get-indirect-buffer-name ((item ecb-nav-file-history-item))
+(cl-defmethod ecb-nav-get-indirect-buffer-name ((item ecb-nav-file-history-item))
   (oref item indirect-buffer-name))
 
-(defmethod ecb-nav-set-indirect-buffer-name ((item ecb-nav-file-history-item) indirect-buffer-name)
+(cl-defmethod ecb-nav-set-indirect-buffer-name ((item ecb-nav-file-history-item) indirect-buffer-name)
   (oset item indirect-buffer-name indirect-buffer-name))
 
-(defmethod ecb-nav-save ((item ecb-nav-file-history-item))
+(cl-defmethod ecb-nav-save ((item ecb-nav-file-history-item))
   (ecb-nav-set-pos item (point))
   (ecb-nav-set-window-start item (window-start))
   (ecb-nav-set-file item (ecb-buffer-file-name))
@@ -258,7 +258,7 @@ case no position saving is done."
                                               (buffer-name)))
   t)
 
-(defmethod ecb-nav-goto ((item ecb-nav-file-history-item))
+(cl-defmethod ecb-nav-goto ((item ecb-nav-file-history-item))
   (when (ecb-nav-get-file item)
     (if (ecb-nav-get-indirect-buffer-name item)
         (switch-to-buffer (ecb-nav-get-indirect-buffer-name item))
@@ -269,12 +269,12 @@ case no position saving is done."
       (if win-start
           (set-window-start (selected-window) win-start)))))
   
-(defmethod ecb-nav-to-string ((item ecb-nav-file-history-item))
+(cl-defmethod ecb-nav-to-string ((item ecb-nav-file-history-item))
   (concat (ecb-nav-get-file item) "-"
           (ecb-nav-get-indirect-buffer-name item)
           ":" (call-next-method)))
 
-(defmethod ecb-nav-is-valid ((item ecb-nav-file-history-item))
+(cl-defmethod ecb-nav-is-valid ((item ecb-nav-file-history-item))
   ;; TODO: Klaus Berndl <klaus.berndl@sdm.de>: for saveness we should test if
   ;; file points to a readable file - but what about remote-file (can last
   ;; long)?
@@ -287,7 +287,7 @@ case no position saving is done."
 ;;====================================================
 
 (defvar ecb-nav-first-node nil)
-(setq ecb-nav-first-node (ecb-dlist-node-new (ecb-nav-history-item "First item")))
+(setq ecb-nav-first-node (ecb-dlist-node-new (ecb-nav-history-item)))
 
 (defvar ecb-nav-current-node nil)
 (setq ecb-nav-current-node ecb-nav-first-node)
@@ -295,7 +295,7 @@ case no position saving is done."
 
 (defun ecb-nav-initialize ()
   (setq ecb-nav-first-node
-        (ecb-dlist-node-new (ecb-nav-history-item "First item")))
+        (ecb-dlist-node-new (ecb-nav-history-item)))
   (setq ecb-nav-current-node ecb-nav-first-node))
   
 
