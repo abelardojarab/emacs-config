@@ -94,12 +94,18 @@
           (defun org-element-underline-successor      (arg))
           (defun org-element-verbatim-successor       (arg)))
   :config (progn
+            (defun my/org-update-all-dblocks-safe ()
+              (when (derived-mode-p 'org-mode)
+                (ignore-errors (org-update-all-dblocks))))
+            (defun my/org-table-recalculate-buffer-tables-safe ()
+              (when (derived-mode-p 'org-mode)
+                (ignore-errors (org-table-recalculate-buffer-tables))))
             (add-hook 'org-mode-hook
                       (lambda ()
-                        (add-hook 'before-save-hook 'org-update-all-dblocks)
-                        (add-hook 'before-save-hook 'org-table-recalculate-buffer-tables)
-                        (add-hook 'auto-save-hook 'org-update-all-dblocks)
-                        (add-hook 'auto-save-hook 'org-table-recalculate-buffer-tables)))
+                        (add-hook 'before-save-hook #'my/org-update-all-dblocks-safe nil t)
+                        (add-hook 'before-save-hook #'my/org-table-recalculate-buffer-tables-safe nil t)
+                        (add-hook 'auto-save-hook #'my/org-update-all-dblocks-safe nil t)
+                        (add-hook 'auto-save-hook #'my/org-table-recalculate-buffer-tables-safe nil t)))
 
             ;; Basic packages
             (use-package org-list)

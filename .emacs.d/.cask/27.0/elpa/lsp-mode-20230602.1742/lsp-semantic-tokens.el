@@ -839,38 +839,51 @@ refresh in currently active buffer."
                       :prev-response ,lsp-semantic-tokens--prev-response)
                     lsp-semantic-tokens--log))))
 
+(defun lsp-semantic-tokens--log-fontify-advice (orig &rest args)
+  (lsp-semantic-tokens--log-buffer-contents 'before)
+  (let ((result (apply orig args)))
+    (lsp-semantic-tokens--log-buffer-contents 'after)
+    result))
+
+(defun lsp-semantic-tokens--log-delta-response-advice (response)
+  (setq lsp-semantic-tokens--prev-response `(:request-type "delta"
+                                             :response ,response
+                                             :version ,lsp--cur-version)))
+
+(defun lsp-semantic-tokens--log-full-response-advice (response)
+  (setq lsp-semantic-tokens--prev-response `(:request-type "full"
+                                             :response ,response
+                                             :version ,lsp--cur-version)))
+
+(defun lsp-semantic-tokens--log-range-response-advice (response)
+  (setq lsp-semantic-tokens--prev-response `(:request-type "range"
+                                             :response ,response
+                                             :version ,lsp--cur-version)))
+
 (defun lsp-semantic-tokens-enable-log ()
   "Enable logging of intermediate fontification states.
 
 This is a debugging tool, and may incur significant performance penalties."
   (setq lsp-semantic-tokens--log '())
-  (defadvice lsp-semantic-tokens--fontify (around advice-tokens-fontify activate)
-    (lsp-semantic-tokens--log-buffer-contents 'before)
-    (let ((result ad-do-it))
-      (lsp-semantic-tokens--log-buffer-contents 'after)
-      result))
-  (defadvice lsp--semantic-tokens-ingest-full/delta-response
-      (before log-delta-response (response) activate)
-    (setq lsp-semantic-tokens--prev-response `(:request-type "delta"
-                                               :response ,response
-                                               :version ,lsp--cur-version)))
-  (defadvice lsp--semantic-tokens-ingest-full-response
-      (before log-full-response (response) activate)
-    (setq lsp-semantic-tokens--prev-response `(:request-type "full"
-                                               :response ,response
-                                               :version ,lsp--cur-version)))
-  (defadvice lsp--semantic-tokens-ingest-range-response
-      (before log-range-response (response) activate)
-    (setq lsp-semantic-tokens--prev-response `(:request-type "range"
-                                               :response ,response
-                                               :version ,lsp--cur-version))))
+  (advice-add 'lsp-semantic-tokens--fontify :around
+              #'lsp-semantic-tokens--log-fontify-advice)
+  (advice-add 'lsp--semantic-tokens-ingest-full/delta-response :before
+              #'lsp-semantic-tokens--log-delta-response-advice)
+  (advice-add 'lsp--semantic-tokens-ingest-full-response :before
+              #'lsp-semantic-tokens--log-full-response-advice)
+  (advice-add 'lsp--semantic-tokens-ingest-range-response :before
+              #'lsp-semantic-tokens--log-range-response-advice))
 
 (defun lsp-semantic-tokens-disable-log ()
   "Disable logging of intermediate fontification states."
-  (ad-unadvise 'lsp-semantic-tokens--fontify)
-  (ad-unadvise 'lsp--semantic-tokens-ingest-full/delta-response)
-  (ad-unadvise 'lsp--semantic-tokens-ingest-full-response)
-  (ad-unadvise 'lsp--semantic-tokens-ingest-range-response))
+  (advice-remove 'lsp-semantic-tokens--fontify
+                 #'lsp-semantic-tokens--log-fontify-advice)
+  (advice-remove 'lsp--semantic-tokens-ingest-full/delta-response
+                 #'lsp-semantic-tokens--log-delta-response-advice)
+  (advice-remove 'lsp--semantic-tokens-ingest-full-response
+                 #'lsp-semantic-tokens--log-full-response-advice)
+  (advice-remove 'lsp--semantic-tokens-ingest-range-response
+                 #'lsp-semantic-tokens--log-range-response-advice))
 
 (declare-function htmlize-buffer "ext:htmlize")
 

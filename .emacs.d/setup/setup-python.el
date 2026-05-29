@@ -104,8 +104,10 @@
                                   ;; Assure there is an inferior Python process
                                   (if (not (version< emacs-version "24.5"))
                                       (run-python-once))
-                                  ;; disable annoying "Python-Help" buffer
-                                  (eldoc-mode -1)
+                                  ;; lsp/pyright supplies eldoc; mute the
+                                  ;; built-in python-eldoc-function so it stops
+                                  ;; erroring when no inferior process exists.
+                                  (setq-local python-eldoc-get-doc nil)
                                   ;; disable flymake, we will use flycheck
                                   (flymake-mode -1)
                                   (setq-default python-indent-offset 4
