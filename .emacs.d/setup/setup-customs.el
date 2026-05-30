@@ -112,13 +112,13 @@
   :group 'my/customs)
 
 (defcustom my/emacs-theme
-  'monokai
+  'modus-vivendi
   "Preferred Emacs theme"
   :group 'my/customs
   :type 'list)
 
 (defcustom my/emacs-theme-console
-  'monokai
+  'modus-vivendi
   "Preferred Emacs theme"
   :group 'my/customs
   :type 'list)

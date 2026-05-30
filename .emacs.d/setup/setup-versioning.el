@@ -655,6 +655,12 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   :custom
   (blamer-idle-time 0.3)
   (blamer-min-offset 70)
+  ;; Take the blame line's background from `blamer-face' rather than from the
+  ;; face under point.  The smart path calls `face-attribute' on whatever `face'
+  ;; text property sits under point, which with modern themes is often an
+  ;; anonymous plist (e.g. `(:background ... :extend t)'); `(car-safe face)' then
+  ;; yields a keyword, so `face-attribute' signals (error "Invalid face").
+  (blamer-smart-background-p nil)
   :hook (on-first-buffer . global-blamer-mode))
 
 ;; Show blame for current line
