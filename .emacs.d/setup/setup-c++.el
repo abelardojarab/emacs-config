@@ -178,10 +178,17 @@
 (use-package cov
   :defer t
   :diminish cov-mode
-  :preface (defun my/cov-mode-setup ()
-             "Setup cov-mode."
-             (make-local-variable 'cov-coverage-file-paths))
-  :hook ((c-mode-common . cov-mode)
+  :preface (progn
+             (defun my/cov-mode-setup ()
+               "Setup cov-mode."
+               (make-local-variable 'cov-coverage-file-paths))
+             (defun my/cov-maybe-enable ()
+               "Enable `cov-mode' only for real C/C++ source files.
+Avoids \"No coverage data found\" noise on Markdown docs and other
+polymode/indirect `c++-mode' buffers."
+               (when (my/c-source-file-p)
+                 (cov-mode 1))))
+  :hook ((c-mode-common . my/cov-maybe-enable)
          (cov-mode      . my/cov-mode-setup)))
 
 ;; Devhelp support

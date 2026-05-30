@@ -316,5 +316,18 @@ attention to case differences."
         (when (> bottom screen-height) (setq screen-height bottom))))
     (list screen-width screen-height)))
 
+(defun my/c-source-file-p ()
+  "Non-nil when the current buffer is a genuine on-disk C/C++ source file.
+Used to gate the C/C++ IDE stack (lsp/clangd, cmake-ide, cov) so it does
+NOT engage in indirect buffers -- notably the `c++-mode' inner buffers
+polymode creates for fenced code blocks in Markdown docs, which otherwise
+trigger clangd \"invalid AST\", cmake-ide \"Non-existent compilation DB\",
+and \"No coverage data found\" noise on documentation files."
+  (and (not (buffer-base-buffer))               ; reject indirect/polymode buffers
+       (buffer-file-name)
+       (string-match-p
+        "\\.\\(c\\|cc\\|cpp\\|cxx\\|c\\+\\+\\|m\\|mm\\|h\\|hh\\|hpp\\|hxx\\|inl\\|ipp\\)\\'"
+        (buffer-file-name))))
+
 (provide 'setup-functions)
 ;;; setup-utilities.el ends here
