@@ -160,13 +160,22 @@
   :if (executable-find "cmake")
   :hook (c-mode-common . my/cmake-ide-find-project)
   :preface (defun my/cmake-ide-find-project ()
-             "Finds the directory of the project for cmake-ide."
-             (setq-local cmake-ide-project-dir (projectile-project-root))
-             (setq-local cmake-ide-build-dir (concat cmake-ide-project-dir "build"))
-             (setq-local cmake-ide-compile-command
-                         (concat "cd " cmake-ide-build-dir " && cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=YES .. && make"))
-             (cmake-ide-setup)
-             (cmake-ide-load-db))
+             "Finds the directory of the project for cmake-ide.
+Only engages for real C/C++ source files in projects that actually have a
+compile database (or CMakeLists.txt).  Otherwise cmake-ide just spams
+\"Non-existent compilation DB file\" -- e.g. on Markdown docs, or projects
+that use a different build system."
+             (when-let* (((my/c-source-file-p))
+                         (root (projectile-project-root))
+                         ((or (file-exists-p (expand-file-name "build/compile_commands.json" root))
+                              (file-exists-p (expand-file-name "compile_commands.json" root))
+                              (file-exists-p (expand-file-name "CMakeLists.txt" root)))))
+               (setq-local cmake-ide-project-dir root)
+               (setq-local cmake-ide-build-dir (concat cmake-ide-project-dir "build"))
+               (setq-local cmake-ide-compile-command
+                           (concat "cd " cmake-ide-build-dir " && cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=YES .. && make"))
+               (cmake-ide-setup)
+               (cmake-ide-load-db)))
   :init (progn
           (use-package semantic/bovine/gcc)
           (put 'cmake-ide-build-dir 'safe-local-variable #'stringp)

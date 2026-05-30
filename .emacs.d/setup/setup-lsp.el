@@ -58,7 +58,14 @@
   :commands (lsp
              lsp-deferred
              lsp-enable-which-key-integration)
-  :hook (((c-mode c++-mode)    . lsp)
+  :preface
+  (defun my/lsp-if-c-source ()
+    "Start `lsp' only for real C/C++ source files.
+Prevents clangd from attaching to polymode `c++-mode' inner buffers (e.g.
+code blocks in Markdown docs), which produces \"invalid AST\" errors."
+    (when (my/c-source-file-p)
+      (lsp)))
+  :hook (((c-mode c++-mode)    . my/lsp-if-c-source)
          (python-mode          . lsp)
          (js2-mode             . lsp)
          (lsp-mode             . lsp-lens-mode))
