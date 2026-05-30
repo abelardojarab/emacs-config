@@ -24,6 +24,14 @@
 
 ;;; Code:
 
+;; Silence "Unknown type: face" warnings from polymode-classes.el: it declares
+;; eieio slots with `:type face', but `face' is not a known CL type, so eieio
+;; warns 5 times whenever polymode loads.  Register `face' (and `color') as
+;; permissive CL types before any package loads so the warning never fires.
+(require 'cl-lib)
+(cl-deftype face () t)
+(cl-deftype color () t)
+
 (defvar recentf-exclude nil)
 
 ;; Remove security vulnerability
