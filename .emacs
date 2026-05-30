@@ -131,6 +131,7 @@
     (require-prof 'setup-yasnippet)
     (require-prof 'setup-auto-insert)
     (require-prof 'setup-company)
+    (require-prof 'setup-gptel)
     (require-prof 'setup-bookmarks)
     (require-prof 'setup-versioning)
     (require-prof 'setup-projectile)

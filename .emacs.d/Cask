@@ -197,6 +197,7 @@
 (depends-on "git-link")
 (depends-on "git-messenger")
 ;; (depends-on "git-modes")
+(depends-on "gptel")
 (depends-on "git-timemachine")
 (depends-on "gnuplot")
 (depends-on "golden-ratio")
