@@ -144,8 +144,12 @@
                                                               :with company-yasnippet
                                                               :with company-capf))))
 
-            ;; Integration of company with TabNine
+            ;; Integration of company with TabNine.
+            ;; Disabled: the free TabNine binary + `company-tabnine' are no longer
+            ;; maintained and the `TabNine' executable is not installed, so this
+            ;; never activated.  Inline AI completion is handled by `copilot' below.
             (use-package company-tabnine
+              :disabled t
               :if (executable-find "TabNine")
               :custom (company-tabnine-max-num-results 9)
               :hook ((lsp-after-open . (lambda ()
@@ -279,7 +283,16 @@
 ;; Copilot
 (use-package copilot
   :load-path (lambda () (expand-file-name "copilot.el" user-emacs-directory))
-  ;; :hook (prog-mode . copilot-mode)
+  ;; Inline (ghost-text) AI completion in code buffers.
+  ;; First-time setup:  M-x copilot-install-server  then  M-x copilot-login
+  :hook (prog-mode . my/copilot-maybe-enable)
+  :preface
+  (defun my/copilot-maybe-enable ()
+    "Enable `copilot-mode' only when the language server is installed.
+Avoids the per-buffer \"package @github/copilot-language-server is not
+installed\" errors before `M-x copilot-install-server' has been run."
+    (when (ignore-errors (copilot-server-executable))
+      (copilot-mode 1)))
   :init
   ;; Create cache directory if it doesn't exist
   (let ((copilot-cache-dir (expand-file-name ".cache/copilot" user-emacs-directory)))
@@ -288,7 +301,10 @@
   :custom
   (copilot-idle-delay 0)
   (copilot-node-executable "node")
-  (copilot-server-executable "~/.npm-global/bin/copilot-language-server")
+  ;; Leave `copilot-server-executable' at its default so copilot.el resolves the
+  ;; server installed by `M-x copilot-install-server' (under `copilot-install-dir'),
+  ;; falling back to one found on PATH.  The old hard-coded ~/.npm-global path
+  ;; bypassed that and pointed at a file that did not exist.
   ;; don't show in mode line
   :diminish t
   :bind

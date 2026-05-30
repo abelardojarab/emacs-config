@@ -1,6 +1,6 @@
 ;;; compat-28.el --- Functionality added in Emacs 28.1 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2021-2024 Free Software Foundation, Inc.
+;; Copyright (C) 2021-2026 Free Software Foundation, Inc.
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -396,7 +396,8 @@ not a list, return a one-element list containing OBJECT."
 
 ;;;; Defined in data.c
 
-(compat-defalias subr-native-elisp-p ignore) ;; <compat-tests:subr-native-elisp-p>
+;; Renamed in Emacs 30 to `native-comp-function-p'.
+(compat-defalias subr-native-elisp-p ignore :obsolete t) ;; <compat-tests:obsolete-subr-native-elisp-p>
 
 ;;;; Defined in subr-x.el
 
@@ -517,7 +518,11 @@ as the new values of the bound variables in the recursive invocation."
                              (cons (car handler)
                                    (funcall tco-progn (cdr handler))))
                            (nthcdr 3 expr))))
-                 ((memq (car-safe expr) '(and progn))
+                 ((eq (car-safe expr) 'and)
+                  (if (cddr expr)
+                      (funcall tco `(if ,(cadr expr) ,(cons 'and (cddr expr))))
+                    (funcall tco (cadr expr))))
+                 ((eq (car-safe expr) 'progn)
                   (cons (car expr) (funcall tco-progn (cdr expr))))
                  ((memq (car-safe expr) '(let let*))
                   (append (list (car expr) (cadr expr))
@@ -835,7 +840,7 @@ function will never return nil."
 ;;;; Defined in button.el
 
 ;; Obsolete Alias since 29
-(compat-defalias button-buttonize buttonize :obsolete t) ;; <compat-tests:button-buttonize>
+(compat-defalias button-buttonize buttonize :obsolete t) ;; <compat-tests:obsolete-button-buttonize>
 
 ;;;; Defined in wid-edit.el
 
@@ -847,6 +852,14 @@ function will never return nil."
     :value 0
     :type-error "This field should contain a nonnegative integer"
     :match-alternatives '(natnump)))
+
+;;;; Defined in pcase.el
+
+(compat-guard t ;; <compat-tests:pcase-cl-type>
+  (pcase-defmacro cl-type (type)
+    "Pcase pattern that matches objects of TYPE.
+TYPE is a type descriptor as accepted by `cl-typep', which see."
+    `(pred (lambda (x) (cl-typep x ',type)))))
 
 (provide 'compat-28)
 ;;; compat-28.el ends here

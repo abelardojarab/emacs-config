@@ -43,6 +43,12 @@
             (cond
              ;; try hunspell at first
              ((executable-find "hunspell")
+              ;; Emacs discovers hunspell dictionaries by running `hunspell -D',
+              ;; which only sees dictionaries on hunspell's search path.  Point
+              ;; DICPATH at our bundled dictionaries dir so en_US/en_GB (the
+              ;; .aff/.dic files) are found; otherwise ispell errors with
+              ;; "Can't find Hunspell dictionary with a .aff affix file".
+              (setenv "DICPATH" (expand-file-name "dictionaries" user-emacs-directory))
               (setq ispell-dictionary-alist '((nil
                                                "[A-Za-z]" "[^A-Za-z]" "[']" t
                                                ("-d" "en_US" "-i" "utf-8") nil utf-8)

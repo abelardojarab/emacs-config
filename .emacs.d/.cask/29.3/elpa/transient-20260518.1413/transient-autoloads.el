@@ -20,7 +20,9 @@ LOC is a command, a key vector, a key description (a string
   as returned by `key-description'), or a coordination list
   (whose last element may also be a command or key).
 Remove a conflicting binding unless optional KEEP-OTHER is
-  non-nil.
+  non-nil.  When the conflict appears to be a false-positive,
+  non-nil KEEP-OTHER may be ignored, which can be prevented
+  by using `always'.
 See info node `(transient)Modifying Existing Transients'.
 
 (fn PREFIX LOC SUFFIX &optional KEEP-OTHER)")
@@ -34,7 +36,9 @@ LOC is a command, a key vector, a key description (a string
   as returned by `key-description'), or a coordination list
   (whose last element may also be a command or key).
 Remove a conflicting binding unless optional KEEP-OTHER is
-  non-nil.
+  non-nil.  When the conflict appears to be a false-positive,
+  non-nil KEEP-OTHER may be ignored, which can be prevented
+  by using `always'.
 See info node `(transient)Modifying Existing Transients'.
 
 (fn PREFIX LOC SUFFIX &optional KEEP-OTHER)")
@@ -51,6 +55,13 @@ See info node `(transient)Modifying Existing Transients'.
 
 (fn PREFIX LOC SUFFIX)")
 (function-put 'transient-replace-suffix 'lisp-indent-function 'defun)
+(autoload 'transient-inline-group "transient" "\
+Inline the included GROUP into PREFIX.
+Replace the symbol GROUP with its expanded layout in the
+layout of PREFIX.
+
+(fn PREFIX GROUP)")
+(function-put 'transient-inline-group 'lisp-indent-function 'defun)
 (autoload 'transient-remove-suffix "transient" "\
 Remove the suffix or group at LOC in PREFIX.
 PREFIX is a prefix command, a symbol.
@@ -61,7 +72,7 @@ See info node `(transient)Modifying Existing Transients'.
 
 (fn PREFIX LOC)")
 (function-put 'transient-remove-suffix 'lisp-indent-function 'defun)
-(register-definition-prefixes "transient" '("find-function-advised-original" "static-if" "transient"))
+(register-definition-prefixes "transient" '("find-function-advised-original" "transient"))
 
 ;;; End of scraped data
 

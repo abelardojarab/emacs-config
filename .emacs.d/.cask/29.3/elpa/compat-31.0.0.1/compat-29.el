@@ -1,6 +1,6 @@
 ;;; compat-29.el --- Functionality added in Emacs 29.1 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2021-2024 Free Software Foundation, Inc.
+;; Copyright (C) 2021-2026 Free Software Foundation, Inc.
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -584,47 +584,15 @@ be marked unmodified, effectively ignoring those changes."
                         (equal ,hash (buffer-hash)))
                (restore-buffer-modified-p nil))))))))
 
-(compat-defun add-display-text-property (start end prop value ;; <compat-tests:add-display-text-property>
-                                               &optional object)
-  "Add display property PROP with VALUE to the text from START to END.
-If any text in the region has a non-nil `display' property, those
-properties are retained.
+(compat-defun add-display-text-property (start end spec value &optional object) ;; <compat-tests:add-display-text-property>
+  "Add the display specification (SPEC VALUE) to the text from START to END.
+If any text in the region has a non-nil `display' property, the existing
+display specifications are retained.
 
-If OBJECT is non-nil, it should be a string or a buffer.  If nil,
-this defaults to the current buffer."
-  (let ((sub-start start)
-        (sub-end 0)
-        disp)
-    (while (< sub-end end)
-      (setq sub-end (next-single-property-change sub-start 'display object
-                                                 (if (stringp object)
-                                                     (min (length object) end)
-                                                   (min end (point-max)))))
-      (if (not (setq disp (get-text-property sub-start 'display object)))
-          ;; No old properties in this range.
-          (put-text-property sub-start sub-end 'display (list prop value)
-                             object)
-        ;; We have old properties.
-        (let ((vector nil))
-          ;; Make disp into a list.
-          (setq disp
-                (cond
-                 ((vectorp disp)
-                  (setq vector t)
-                  (append disp nil))
-                 ((not (consp (car disp)))
-                  (list disp))
-                 (t
-                  disp)))
-          ;; Remove any old instances.
-          (when-let ((old (assoc prop disp)))
-            (setq disp (delete old disp)))
-          (setq disp (cons (list prop value) disp))
-          (when vector
-            (setq disp (vconcat disp)))
-          ;; Finally update the range.
-          (put-text-property sub-start sub-end 'display disp object)))
-      (setq sub-start sub-end))))
+OBJECT is either a string or a buffer to add the specification to.
+If omitted, OBJECT defaults to the current buffer."
+  (declare-function add-remove--display-text-property "compat-31")
+  (add-remove--display-text-property start end spec value object))
 
 (compat-defmacro while-let (spec &rest body) ;; <compat-tests:while-let>
   "Bind variables according to SPEC and conditionally evaluate BODY.
@@ -640,6 +608,30 @@ The variable list SPEC is the same as in `if-let*'."
              (progn
                ,@body)
            (throw ',done nil))))))
+
+;;;; Defined in ucs-normalize.el
+
+(compat-defun string-glyph-compose (string) ;; <compat-tests:string-glyph-compose>
+  "Compose STRING according to the Unicode NFC.
+This returns a new string obtained by canonical decomposition
+of STRING (see `ucs-normalize-NFC-string') followed by canonical
+composition, a.k.a. the \"Unicode Normalization Form C\" of STRING.
+For instance:
+
+  (string-glyph-compose \"Å\") => \"Å\""
+  (unless (fboundp 'ucs-normalize-NFC-string)
+    (require 'ucs-normalize))
+  (ucs-normalize-NFC-string string))
+
+(compat-defun string-glyph-decompose (string) ;; <compat-tests:string-glyph-decompose>
+  "Decompose STRING according to the Unicode NFD.
+This returns a new string that is the canonical decomposition of STRING,
+a.k.a. the \"Unicode Normalization Form D\" of STRING.  For instance:
+
+  (ucs-normalize-NFD-string \"Å\") => \"Å\""
+  (unless (fboundp 'ucs-normalize-NFD-string)
+    (require 'ucs-normalize))
+  (ucs-normalize-NFD-string string))
 
 ;;;; Defined in files.el
 
