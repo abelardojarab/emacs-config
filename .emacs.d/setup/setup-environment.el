@@ -277,6 +277,14 @@
               (push "/opt/local/bin" exec-path)
               (push "/usr/texbin" exec-path)
 
+              ;; Apple Silicon Homebrew lives under /opt/homebrew (Intel macs use
+              ;; /usr/local, already added above).  GUI Emacs launched from the
+              ;; dock does not inherit it, so tools like hunspell were not found.
+              (dolist (dir '("/opt/homebrew/bin" "/opt/homebrew/sbin"))
+                (when (file-directory-p dir)
+                  (setenv "PATH" (concat dir ":" (getenv "PATH")))
+                  (add-to-list 'exec-path dir)))
+
               (defun my/mac-open-file ()
                 (interactive)
                 (let ((file (do-applescript "try
@@ -371,14 +379,16 @@ LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
   :commands benchmark-init/show-durations-tabulated)
 
 ;; Exec path from shell in Mac OSX
+;; Import the PATH (and exec-path) from the user's interactive shell at startup
+;; so GUI Emacs launched from the dock inherits the full environment.  macOS
+;; only -- this spawns a login shell, which adds a little startup time.
 (use-package exec-path-from-shell
-  :defer t
+  :demand t
   :if (or (equal system-type 'darwin)
-          (equal system-type 'berkeley-unix)
-          (equal system-type 'gnu/linux))
-  :config (exec-path-from-shell-initialize)
+          (equal system-type 'berkeley-unix))
   :commands (exec-path-from-shell-initialize)
-  :custom (exec-path-from-shell-check-startup-files nil))
+  :custom (exec-path-from-shell-check-startup-files nil)
+  :config (exec-path-from-shell-initialize))
 
 ;; Display the time in the mode-line
 (use-package time

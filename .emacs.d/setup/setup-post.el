@@ -136,20 +136,24 @@
 ;; Advice the load theme function
 (defun my/load-theme-around--advice (orig &rest args)
   (disable-themes)
-  (apply orig args)
+  ;; Return the real `load-theme' result (non-nil on success) so callers that
+  ;; check it keep working -- e.g. `helm-themes' uses it to decide whether the
+  ;; user actually picked a theme; if this advice returned nil it would treat
+  ;; every selection as a cancel and revert to the previous theme.
+  (prog1
+      (apply orig args)
+    ;; Add required faces
+    (ignore-errors
+      (if (executable-find "xprop")
+          (set-selected-frame-dark)))
+    (my/set-face-fringe)
+    (my/set-face-ecb)
+    (my/set-face-tabbar)
+    (doom-modeline-mode t)
 
-  ;; Add required faces
-  (ignore-errors
-    (if (executable-find "xprop")
-        (set-selected-frame-dark)))
-  (my/set-face-fringe)
-  (my/set-face-ecb)
-  (my/set-face-tabbar)
-  (doom-modeline-mode t)
-
-  ;; remove modeline boxes
-  (set-face-attribute 'mode-line nil :box nil)
-  (set-face-attribute 'mode-line-inactive nil :box nil))
+    ;; remove modeline boxes
+    (set-face-attribute 'mode-line nil :box nil)
+    (set-face-attribute 'mode-line-inactive nil :box nil)))
 (advice-add 'load-theme :around #'my/load-theme-around--advice)
 
 (if (file-exists-p custom-file-x)
