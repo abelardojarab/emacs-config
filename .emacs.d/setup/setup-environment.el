@@ -219,9 +219,9 @@
                       (border-color . "black")
                       (menu-bar-lines . 1)))
 
-              ;; Set the internal frame to be 0
+              ;; Airy internal padding around the buffer (see setup-appearance).
               (set-frame-parameter (selected-frame)
-                                   'internal-border-width 0)
+                                   'internal-border-width 14)
 
               ;; Get back font antialiasing
               (if (and (display-graphic-p)

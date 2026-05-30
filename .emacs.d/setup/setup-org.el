@@ -125,7 +125,7 @@
                       (lambda ()
                         (progn
                           (buffer-face-mode   -1)
-                          (linum-mode         -1)
+                          (display-line-numbers-mode -1)
                           (org-indent-mode    -1)
                           (abbrev-mode        t)
                           (flyspell-mode      t)

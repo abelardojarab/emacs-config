@@ -32,6 +32,19 @@
   (when (fboundp 'horizontal-scroll-bar-mode)
     (horizontal-scroll-bar-mode 0)))
 
+;; Modern, airy frame: internal padding around the buffer plus subtle window
+;; dividers, so panes get some breathing room instead of butting against each
+;; other and the frame edge.
+(when (display-graphic-p)
+  ;; Applies to future frames too (e.g. emacsclient); the initial frame's
+  ;; border is set in `setup-environment'.
+  (add-to-list 'default-frame-alist '(internal-border-width . 14))
+  (set-frame-parameter nil 'internal-border-width 14)
+  (setq window-divider-default-places      t
+        window-divider-default-right-width  12
+        window-divider-default-bottom-width 12)
+  (window-divider-mode 1))
+
 ;; Toggle menu bar
 (use-package menu-bar
   :demand t
@@ -130,7 +143,10 @@ non-nil."
                  (advice-eval-interactive-spec spec))))))
 
 ;; Faster line numbers
+;; Disabled: the built-in `display-line-numbers-mode' (enabled above) supersedes
+;; this; it is native C, auto-sizes its width, and stays fast on large files.
 (use-package linum-ex
+  :disabled t
   :demand t
   :commands linum-mode
   :init (dolist (hook my/linum-modes)
@@ -195,8 +211,17 @@ non-nil."
   (set-display-table-slot standard-display-table 'wrap
                           (make-glyph-code ?↩ 'fallback)))
 
-;; Display vertical line
+;; Display vertical fill-column line.
+;; Built-in `display-fill-column-indicator-mode' (Emacs 27+) replaces the
+;; `fill-column-indicator' package below: it draws the rule natively, needs no
+;; popup/theme/shell-command workarounds, and recolors itself on theme changes.
+(when (display-graphic-p)
+  (dolist (hook '(prog-mode-hook conf-mode-hook))
+    (add-hook hook #'display-fill-column-indicator-mode)))
+
+;; Display vertical line (legacy package, superseded by the built-in above)
 (use-package fill-column-indicator
+  :disabled t
   :defer t
   :if (display-graphic-p)
   :commands (fci-mode turn-on-fci-mode)

@@ -106,22 +106,26 @@
            (org-html-htmlize-output-type    'css)
            (org-html-htmlize-font-prefix    "org-"))
   :config (progn
-            ;; It is required to disable `fci-mode' when `htmlize-buffer' is called;
-            ;; otherwise the invisible fci characters show up as funky looking
-            ;; visible characters in the source code blocks in the html file.
-            (with-eval-after-load 'fill-column-indicator
-              (defvar my/htmlize-initial-fci-state nil
-                "Variable to store the state of `fci-mode' when `htmlize-buffer' is called.")
+            ;; It is required to disable the fill-column indicator when
+            ;; `htmlize-buffer' is called; otherwise the indicator's display
+            ;; characters show up as funky looking visible characters in the
+            ;; source code blocks in the html file.  Uses the built-in
+            ;; `display-fill-column-indicator-mode' (the fill-column-indicator
+            ;; package is no longer used).
+            (defvar my/htmlize-initial-fci-state nil
+              "State of `display-fill-column-indicator-mode' across `htmlize-buffer'.")
 
-              (defun my/htmlize-before-hook-fci-disable ()
-                (setq my/htmlize-initial-fci-state fci-mode)
-                (when fci-mode
-                  (fci-mode -1)))
+            (defun my/htmlize-before-hook-fci-disable ()
+              (setq my/htmlize-initial-fci-state
+                    (bound-and-true-p display-fill-column-indicator-mode))
+              (when my/htmlize-initial-fci-state
+                (display-fill-column-indicator-mode -1)))
 
-              (defun my/htmlize-after-hook-fci-enable-maybe ()
-                (when my/htmlize-initial-fci-state
-                  (fci-mode 1)))
+            (defun my/htmlize-after-hook-fci-enable-maybe ()
+              (when my/htmlize-initial-fci-state
+                (display-fill-column-indicator-mode 1)))
 
+            (with-eval-after-load 'htmlize
               (add-hook 'htmlize-before-hook #'my/htmlize-before-hook-fci-disable)
               (add-hook 'htmlize-after-hook #'my/htmlize-after-hook-fci-enable-maybe))
 
