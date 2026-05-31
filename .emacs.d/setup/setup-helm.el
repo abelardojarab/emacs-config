@@ -24,6 +24,17 @@
 
 ;;; Code:
 
+;; `helm-info-emacs' and `helm-info-gnus' are generated at runtime by
+;; helm-info's `helm-default-info-index-list' defcustom (via its :set
+;; function), so they carry NO autoload cookie -- yet helm's own command map
+;; (`C-x c h r') and the Helm menu ("Emacs Manual index") bind them.  Invoking
+;; them before helm-info is loaded therefore fails with
+;; "Wrong type argument: commandp, helm-info-emacs".  These stubs load
+;; helm-info on demand, which defines the real commands.  `helm-info-at-point'
+;; needs no stub -- it has a real `;;;###autoload' cookie.
+(autoload 'helm-info-emacs "helm-info" "Preconfigured helm for Emacs Manual index." t)
+(autoload 'helm-info-gnus  "helm-info" "Preconfigured helm for Gnus Manual index."  t)
+
 ;; Helm
 (use-package helm-config
   :demand t
