@@ -56,33 +56,34 @@
   :config (progn
             (advice-add 'which-key--update :around
                         (lambda (orig &rest args) (ignore-errors (apply orig args))))
+            ;; which-key >= 20240501 uses a nested format:
+            ;;   ((KEY-REGEXP . BINDING-REGEXP) . (KEY-REPL . BINDING-REPL))
+            ;; A nil regexp matches anything.  The single-element list form
+            ;; ("foo") is just the cons ("foo" . nil), i.e. match the KEY only.
+            ;; The old flat ("regexp" . "replacement") form throws
+            ;; `wrong-type-argument listp' on every popup, so it must not be used.
             (setq which-key-replacement-alist
-                  '(("<\\([[:alnum:]-]+\\)>" . "\\1")
-                    ("TAB"                   . "↹")
-                    ("RET"                   . "⏎")
-                    ("SPC"                   . "␣")
-                    ("up"                    . "↑")
-                    ("right"                 . "→")
-                    ("down"                  . "↓")
-                    ("left"                  . "←")
-                    ("DEL"                   . "⇤")
-                    ("deletechar"            . "⌫")
-                    ("RET"                   . "⏎"))
-                  which-key-description-replacement-alist
-                  '(("Prefix Command" . "prefix")
+                  '(;; Prettify key descriptions (match the KEY text)
+                    (("<\\([[:alnum:]-]+\\)>") . ("\\1"))
+                    (("TAB")         . ("↹"))
+                    (("RET")         . ("⏎"))
+                    (("SPC")         . ("␣"))
+                    (("up")          . ("↑"))
+                    (("right")       . ("→"))
+                    (("down")        . ("↓"))
+                    (("left")        . ("←"))
+                    (("DEL")         . ("⇤"))
+                    (("deletechar")  . ("⌫"))
+                    ;; Prettify command/binding descriptions (match the BINDING)
+                    ((nil . "Prefix Command") . (nil . "prefix"))
                     ;; Lambdas
-                    ("\\`\\?\\?\\'"   . "λ")
+                    ((nil . "\\`\\?\\?\\'")   . (nil . "λ"))
                     ;; Prettify hydra entry points
-                    ("/body\\'"       . "|=")
+                    ((nil . "/body\\'")       . (nil . "|="))
                     ;; Drop/shorten package prefixes
-                    ("\\`lunaryorn-"  . "")
-                    ("projectile-"    . "proj-")
-                    ("magit-"         . "ma-")))
-
-            (add-to-list 'which-key-replacement-alist '("TAB" . "↹"))
-            (add-to-list 'which-key-replacement-alist '("RET" . "⏎"))
-            (add-to-list 'which-key-replacement-alist '("DEL" . "⇤"))
-            (add-to-list 'which-key-replacement-alist '("SPC" . "␣"))))
+                    ((nil . "\\`lunaryorn-")  . (nil . ""))
+                    ((nil . "projectile-")    . (nil . "proj-"))
+                    ((nil . "magit-")         . (nil . "ma-"))))))
 
 ;; which key posframe
 (use-package which-key-posframe
