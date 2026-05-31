@@ -173,15 +173,18 @@ CURRENT-NAME, if it does not already have them:
 (fset 'package--save-selected-packages 'pd-package--save-selected-packages)
 
 ;; Add all sub-directories inside Cask dir
-(defun my/add-subfolders-to-load-path (parent-dir)
-  "Add all level PARENT-DIR subdirs to the `load-path'."
+(defun my/add-subfolders-to-load-path (parent-dir &optional append)
+  "Add all level PARENT-DIR subdirs to the `load-path'.
+With APPEND non-nil, add them at the END of `load-path' (and
+`custom-theme-load-path') so pre-existing entries -- notably Emacs's
+built-in libraries and earlier-added caches -- take precedence."
   (dolist (f (directory-files parent-dir))
     (let ((name (expand-file-name f parent-dir)))
       (when (and (file-directory-p name)
                  (not (string-prefix-p "." f)))
-        (add-to-list 'load-path name)
-        (add-to-list 'custom-theme-load-path name)
-        (my/add-subfolders-to-load-path name)))))
+        (add-to-list 'load-path name append)
+        (add-to-list 'custom-theme-load-path name append)
+        (my/add-subfolders-to-load-path name append)))))
 
 (when (and (string-equal system-type "gnu/linux") (fboundp 'guix-emacs-autoload-packages))
   (add-to-list 'load-path "~/.guix-profile/share/emacs/site-lisp")
@@ -191,9 +194,15 @@ CURRENT-NAME, if it does not already have them:
 (add-to-list 'load-path my/vendor-dir)
 (my/add-subfolders-to-load-path my/vendor-dir)
 
+;; Fallback tree for packages absent from the version-matched 29.3 cache above
+;; (e.g. slack, pdf-tools, spaceline).  APPEND it so these OLD 27.2-era versions
+;; can NEVER shadow Emacs's built-in libraries (jsonrpc, seq, json-mode, org...)
+;; or the 29.3 cache -- they only fill genuine gaps.  Previously this tree was
+;; prepended, so e.g. the stale jsonrpc-1.0.17 shadowed the newer built-in and
+;; broke copilot with "Unbound slot: ... -expected-bytes".
 (setq my/vendor-dir (expand-file-name ".cask/27.2/elpa" user-emacs-directory))
-(add-to-list 'load-path my/vendor-dir)
-(my/add-subfolders-to-load-path my/vendor-dir)
+(add-to-list 'load-path my/vendor-dir t)
+(my/add-subfolders-to-load-path my/vendor-dir t)
 
 (defun my/byte-recompile-elpa ()
   "Force byte-compile every `.el' file in `my/vendor-dir'.
