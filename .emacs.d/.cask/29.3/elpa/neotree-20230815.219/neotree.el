@@ -885,46 +885,50 @@ The description of ARG is in `neotree-enter'."
 ;; Advices
 ;;
 
-(defadvice mouse-drag-vertical-line
-    (around neotree-drag-vertical-line (start-event) activate)
+(define-advice mouse-drag-vertical-line
+    (:around (orig-fun &rest args) neotree-drag-vertical-line)
   "Drag and drop is not affected by the lock."
   (neo-buffer--with-resizable-window
-   ad-do-it))
+   (apply orig-fun args)))
 
-(defadvice balance-windows
-    (around neotree-balance-windows activate)
+(define-advice balance-windows
+    (:around (orig-fun &rest args) neotree-balance-windows)
   "Fix neotree inhibits balance-windows."
   (if (neo-global--window-exists-p)
       (let (old-width)
         (neo-global--with-window
           (setq old-width (window-width)))
         (neo-buffer--with-resizable-window
-         ad-do-it)
+         (apply orig-fun args))
         (neo-global--with-window
           (neo-global--set-window-width old-width)))
-    ad-do-it))
+    (apply orig-fun args)))
 
-(eval-after-load 'popwin
-  '(progn
-     (defadvice popwin:create-popup-window
-         (around neotree/popwin-popup-buffer activate)
-       (let ((neo-exists-p (neo-global--window-exists-p)))
-         (when neo-exists-p
-           (neo-global--detach))
-         ad-do-it
-         (when neo-exists-p
-           (neo-global--attach)
-           (neo-global--reset-width))))
+(defun neotree--popwin-create-popup-window-advice (orig-fun &rest args)
+  "Detach neotree around ORIG-FUN (`popwin:create-popup-window') with ARGS."
+  (let ((neo-exists-p (neo-global--window-exists-p)))
+    (when neo-exists-p
+      (neo-global--detach))
+    (apply orig-fun args)
+    (when neo-exists-p
+      (neo-global--attach)
+      (neo-global--reset-width))))
 
-     (defadvice popwin:close-popup-window
-         (around neotree/popwin-close-popup-window activate)
-       (let ((neo-exists-p (neo-global--window-exists-p)))
-         (when neo-exists-p
-           (neo-global--detach))
-         ad-do-it
-         (when neo-exists-p
-           (neo-global--attach)
-           (neo-global--reset-width))))))
+(defun neotree--popwin-close-popup-window-advice (orig-fun &rest args)
+  "Detach neotree around ORIG-FUN (`popwin:close-popup-window') with ARGS."
+  (let ((neo-exists-p (neo-global--window-exists-p)))
+    (when neo-exists-p
+      (neo-global--detach))
+    (apply orig-fun args)
+    (when neo-exists-p
+      (neo-global--attach)
+      (neo-global--reset-width))))
+
+(with-eval-after-load 'popwin
+  (advice-add 'popwin:create-popup-window :around
+              #'neotree--popwin-create-popup-window-advice)
+  (advice-add 'popwin:close-popup-window :around
+              #'neotree--popwin-close-popup-window-advice))
 
 ;;
 ;; Hooks

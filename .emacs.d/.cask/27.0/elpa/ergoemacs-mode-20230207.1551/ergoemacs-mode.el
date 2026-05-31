@@ -305,7 +305,7 @@ Home page URL `http://ergoemacs.github.io/'
 
 The `execute-extended-command' is now \\[execute-extended-command].
 "
-  nil
+  :init-value nil
   :lighter " ErgoEmacs"
   :global t
   :group 'ergoemacs-mode

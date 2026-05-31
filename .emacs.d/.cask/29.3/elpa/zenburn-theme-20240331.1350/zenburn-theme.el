@@ -357,7 +357,7 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(anzu-replace-to ((t (:inherit anzu-replace-highlight :foreground ,zenburn-yellow))))
 ;;;;; auctex
    `(font-latex-bold-face ((t (:inherit bold))))
-   `(font-latex-warning-face ((t (:foreground nil :inherit font-lock-warning-face))))
+   `(font-latex-warning-face ((t (:foreground unspecified :inherit font-lock-warning-face))))
    `(font-latex-sectioning-5-face ((t (:foreground ,zenburn-red :weight bold ))))
    `(font-latex-sedate-face ((t (:foreground ,zenburn-yellow))))
    `(font-latex-italic-face ((t (:foreground ,zenburn-cyan :slant italic))))
@@ -482,7 +482,7 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(context-coloring-level-8-face ((t :foreground ,zenburn-yellow-2)))
    `(context-coloring-level-9-face ((t :foreground ,zenburn-red+1)))
 ;;;;; coq
-   `(coq-solve-tactics-face ((t (:foreground nil :inherit font-lock-constant-face))))
+   `(coq-solve-tactics-face ((t (:foreground unspecified :inherit font-lock-constant-face))))
 ;;;;; ctable
    `(ctbl:face-cell-select ((t (:background ,zenburn-blue :foreground ,zenburn-bg))))
    `(ctbl:face-continue-bar ((t (:background ,zenburn-bg-05 :foreground ,zenburn-bg))))
@@ -566,7 +566,7 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(diredfl-write-priv ((t (:foreground ,zenburn-magenta))))
 ;;;;; doom-modeline
    `(doom-modeline-bar  ((t (:background ,zenburn-yellow))))
-   `(doom-modeline-inactive-bar  ((t (:background nil))))
+   `(doom-modeline-inactive-bar  ((t (:background unspecified))))
 ;;;;; ediff
    `(ediff-current-diff-A ((t (:foreground ,zenburn-fg :background ,zenburn-red-4))))
    `(ediff-current-diff-Ancestor ((t (:foreground ,zenburn-fg :background ,zenburn-red-4))))
@@ -838,8 +838,8 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(helm-time-zone-current ((t (:foreground ,zenburn-green+2 :background ,zenburn-bg))))
    `(helm-time-zone-home ((t (:foreground ,zenburn-red :background ,zenburn-bg))))
    `(helm-bookmark-addressbook ((t (:foreground ,zenburn-orange :background ,zenburn-bg))))
-   `(helm-bookmark-directory ((t (:foreground nil :background nil :inherit helm-ff-directory))))
-   `(helm-bookmark-file ((t (:foreground nil :background nil :inherit helm-ff-file))))
+   `(helm-bookmark-directory ((t (:foreground unspecified :background unspecified :inherit helm-ff-directory))))
+   `(helm-bookmark-file ((t (:foreground unspecified :background unspecified :inherit helm-ff-file))))
    `(helm-bookmark-gnus ((t (:foreground ,zenburn-magenta :background ,zenburn-bg))))
    `(helm-bookmark-info ((t (:foreground ,zenburn-green+2 :background ,zenburn-bg))))
    `(helm-bookmark-man ((t (:foreground ,zenburn-yellow :background ,zenburn-bg))))
@@ -859,7 +859,7 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(helm-grep-file ((t (:foreground ,zenburn-fg :background ,zenburn-bg))))
    `(helm-grep-finish ((t (:foreground ,zenburn-green+2 :background ,zenburn-bg))))
    `(helm-grep-lineno ((t (:foreground ,zenburn-fg-1 :background ,zenburn-bg))))
-   `(helm-grep-match ((t (:foreground nil :background nil :inherit helm-match))))
+   `(helm-grep-match ((t (:foreground unspecified :background unspecified :inherit helm-match))))
    `(helm-grep-running ((t (:foreground ,zenburn-red :background ,zenburn-bg))))
    `(helm-match ((t (:foreground ,zenburn-orange :background ,zenburn-bg-1 :weight bold))))
    `(helm-moccur-buffer ((t (:foreground ,zenburn-cyan :background ,zenburn-bg))))
@@ -1211,7 +1211,7 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(mu4e-replied-face ((t (:foreground ,zenburn-bg+3))))
    `(mu4e-trashed-face ((t (:foreground ,zenburn-bg+3 :strike-through t))))
 ;;;;; mumamo
-   `(mumamo-background-chunk-major ((t (:background nil))))
+   `(mumamo-background-chunk-major ((t (:background unspecified))))
    `(mumamo-background-chunk-submode1 ((t (:background ,zenburn-bg-1))))
    `(mumamo-background-chunk-submode2 ((t (:background ,zenburn-bg+2))))
    `(mumamo-background-chunk-submode3 ((t (:background ,zenburn-bg+3))))
@@ -1370,7 +1370,7 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(proof-boring-face ((t (:foreground ,zenburn-fg :background ,zenburn-bg+2))))
    `(proof-command-mouse-highlight-face ((t (:inherit proof-mouse-highlight-face))))
    `(proof-debug-message-face ((t (:inherit proof-boring-face))))
-   `(proof-declaration-name-face ((t (:inherit font-lock-keyword-face :foreground nil))))
+   `(proof-declaration-name-face ((t (:inherit font-lock-keyword-face :foreground unspecified))))
    `(proof-eager-annotation-face ((t (:foreground ,zenburn-bg :background ,zenburn-orange))))
    `(proof-error-face ((t (:foreground ,zenburn-fg :background ,zenburn-red-4))))
    `(proof-highlight-dependency-face ((t (:foreground ,zenburn-bg :background ,zenburn-yellow-1))))
@@ -1380,8 +1380,8 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(proof-queue-face ((t (:background ,zenburn-red-4))))
    `(proof-region-mouse-highlight-face ((t (:inherit proof-mouse-highlight-face))))
    `(proof-script-highlight-error-face ((t (:background ,zenburn-red-2))))
-   `(proof-tacticals-name-face ((t (:inherit font-lock-constant-face :foreground nil :background ,zenburn-bg))))
-   `(proof-tactics-name-face ((t (:inherit font-lock-constant-face :foreground nil :background ,zenburn-bg))))
+   `(proof-tacticals-name-face ((t (:inherit font-lock-constant-face :foreground unspecified :background ,zenburn-bg))))
+   `(proof-tactics-name-face ((t (:inherit font-lock-constant-face :foreground unspecified :background ,zenburn-bg))))
    `(proof-warning-face ((t (:foreground ,zenburn-bg :background ,zenburn-yellow-1))))
 ;;;;; racket-mode
    `(racket-keyword-argument-face ((t (:inherit font-lock-constant-face))))
