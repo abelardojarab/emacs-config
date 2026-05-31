@@ -178,6 +178,10 @@
 (use-package cov
   :defer t
   :diminish cov-mode
+  ;; `cask-initialize' is disabled, so cov's autoloads file is never loaded.
+  ;; Autoload `cov-mode' explicitly so `my/cov-maybe-enable' can call it
+  ;; without hitting "void-function cov-mode".
+  :commands (cov-mode)
   :preface (progn
              (defun my/cov-mode-setup ()
                "Setup cov-mode."
