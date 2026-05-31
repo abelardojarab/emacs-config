@@ -285,6 +285,14 @@
   :load-path (lambda () (expand-file-name "copilot.el" user-emacs-directory))
   ;; Inline (ghost-text) AI completion in code buffers.
   ;; First-time setup:  M-x copilot-install-server  then  M-x copilot-login
+  ;; copilot.el is a manual git clone loaded via `:load-path', NOT installed
+  ;; through package.el, so its in-file `;;;###autoload' cookies generate no
+  ;; autoloads -- nothing creates the stubs that would make these commands
+  ;; visible to `M-x' before the feature loads.  Listing them in `:commands'
+  ;; makes use-package emit the autoload stubs itself, so the setup commands are
+  ;; discoverable (and loading the feature on demand) from a fresh session.
+  :commands (copilot-login copilot-logout copilot-diagnose
+             copilot-install-server copilot-mode)
   :hook (prog-mode . my/copilot-maybe-enable)
   :preface
   (defun my/copilot-maybe-enable ()
