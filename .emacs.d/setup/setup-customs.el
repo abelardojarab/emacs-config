@@ -112,13 +112,13 @@
   :group 'my/customs)
 
 (defcustom my/emacs-theme
-  'modus-vivendi
+  'zenburn
   "Preferred Emacs theme"
   :group 'my/customs
   :type 'list)
 
 (defcustom my/emacs-theme-console
-  'modus-vivendi
+  'zenburn
   "Preferred Emacs theme"
   :group 'my/customs
   :type 'list)
