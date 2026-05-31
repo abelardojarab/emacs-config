@@ -47,11 +47,16 @@
              yas-reload-all)
   :hook (on-first-input . yas-global-mode)
   :init (progn
-          (if (file-exists-p "~/.emacs.d/snippets")
-              (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
-            (setq yas-snippet-dirs '()))
-          (setq yas-snippet-dirs (cons (expand-file-name "snippets" user-emacs-directory)
-                                       (yas-snippet-dirs)))
+          ;; `~/.emacs.d' is a symlink to `user-emacs-directory'
+          ;; (~/workspace/emacs-config/.emacs.d), so the old code added the
+          ;; snippets folder under BOTH paths -- yasnippet then loaded every
+          ;; snippet twice ("Multiple snippets with same identity ..." and every
+          ;; directive warning printed [2 times]).  Canonicalize with
+          ;; `file-truename' and de-duplicate so each physical dir appears once.
+          (setq yas-snippet-dirs
+                (delete-dups
+                 (mapcar #'file-truename
+                         (list (expand-file-name "snippets" user-emacs-directory)))))
           (yas-initialize))
   :config (progn
             (add-to-list 'yas-key-syntaxes 'yas-shortest-key-until-whitespace)

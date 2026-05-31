@@ -89,8 +89,13 @@
   :after helm
   :commands (helm-descbinds helm-descbinds-mode)
   :bind (:map ctl-x-map
-              ("k" . helm-descbinds))
-  :init (helm-descbinds-mode 1))
+              ("k" . helm-descbinds)))
+;; NOTE: we deliberately do NOT call `(helm-descbinds-mode 1)'.  Modern
+;; `which-key' (enabled on `on-first-input') refuses to coexist with
+;; `helm-descbinds-mode' -- both hijack the prefix-help machinery -- and signals
+;; "`which-key-mode' can't be used with `helm-descbinds-mode'" from a
+;; pre-command-hook, which broke startup.  `helm-descbinds' stays available as
+;; an on-demand command (bound to C-x k above); which-key handles prefix hints.
 
 ;; helm flycheck
 (use-package helm-flycheck
