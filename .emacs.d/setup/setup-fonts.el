@@ -100,11 +100,11 @@
                          (base
                           (cond
                            ;; 5K / 6K Retina (Pro Display, iMac 27" 5K)
-                           ((or (>= h 2500) (>= w 5000))   (if mac-p 20 17))
+                           ((or (>= h 2500) (>= w 5000))   (if mac-p 16 15))
                            ;; 4K (3840x2160) or 2880x1800 Retina laptop
-                           ((or (>= h 1900) (>= w 3500))   (if mac-p 18 15))
+                           ((or (>= h 1900) (>= w 3500))   (if mac-p 14 13))
                            ;; QHD / Retina-equivalent (2560x1440)
-                           ((or (>= h 1400) (>= w 2400))   (if mac-p 16 14))
+                           ((or (>= h 1400) (>= w 2400))   (if mac-p 13 12))
                            ;; FHD (1920x1080)
                            ((or (>= h 1000) (>= w 1800))   (if mac-p 15 13))
                            ;; Smaller laptops, half-screen splits
@@ -166,7 +166,17 @@
               (add-hook 'after-make-frame-functions #'fontify-frame)
 
               ;; hook for setting up UI when not running in daemon mode
-              (add-hook 'emacs-startup-hook (lambda () (fontify-frame (selected-frame)))))))
+              (add-hook 'emacs-startup-hook (lambda () (fontify-frame (selected-frame))))
+
+              ;; The early fontify calls above can run before the frame is on
+              ;; its final monitor / fully maximized, so `display-pixel-height'
+              ;; reports the wrong resolution and we pick a smaller font bucket.
+              ;; Recompute once the frame has settled so startup matches the
+              ;; size we get after a theme switch.
+              (run-with-idle-timer 0.5 nil
+                                   (lambda ()
+                                     (when (display-graphic-p)
+                                       (fontify-frame (selected-frame))))))))
 
 ;; Fixed pitch for HTML
 (defun fixed-pitch-mode ()
