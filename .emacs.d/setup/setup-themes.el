@@ -31,6 +31,16 @@
                                  scroll-bar-background))
   (add-to-list 'frameset-filter-alist `(,param . :never)))
 
+;; Re-apply our fonts after any theme is enabled. Many themes ship their
+;; own `default' face spec (often with a `:height'), which overrides the
+;; font size set in `fontify-frame'. `enable-theme' is the right hook here
+;; because `load-theme' (and helm-themes) ultimately call it.
+(defun my/refontify-after-theme (&rest _)
+  "Restore our font sizing after a theme is enabled."
+  (when (and (display-graphic-p) (fboundp 'fontify-frame))
+    (fontify-frame (selected-frame))))
+(advice-add 'enable-theme :after #'my/refontify-after-theme)
+
 ;; Choose different themes depending if we are using GUI or not
 ;; Console colors are enabled if "export TERM=xterm-256color" is added into .bashrc
 (add-hook 'after-init-hook
