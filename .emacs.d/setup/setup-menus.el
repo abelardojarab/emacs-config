@@ -60,25 +60,6 @@
 				  '(menu-item "--")
 				  'Agenda\ -\ All\ TODOs)
 
-(easy-menu-add-item global-map '(menu-bar tools)
-                    ["Find File…"
-                     helm-find-files
-                     :help "Fuzzy find file."]
-                    "Shell Commands")
-
-(easy-menu-add-item global-map '(menu-bar tools)
-                    ["Find in Files (rgrep)…"
-                     rgrep
-                     :help "Recursively grep for REGEXP in FILES in directory \
-tree rooted at DIR."]
-                    "Shell Commands")
-
-(easy-menu-add-item global-map '(menu-bar tools)
-                    ["IELM"
-                     ielm
-                     :help "Interactively evaluate Emacs Lisp expressions."]
-                    "Language Server Support (Eglot)")
-
 (keymap-set-after (lookup-key global-map [menu-bar tools])
 				  "<separator-shell>"
 				  '(menu-item "--")
@@ -91,12 +72,6 @@ tree rooted at DIR."]
                      :help "Show the status of the current Git repository \
 in a buffer"]
                     "Version Control")
-
-(easy-menu-add-item global-map '(menu-bar tools)
-                    ["Count Words"
-                     count-words
-                     :help "Count words in buffer or region if active."]
-                    "Calendar")
 
 (easy-menu-add-item global-map '(menu-bar tools)
                     ["Eshell"
@@ -198,12 +173,13 @@ various time zones."]
     ["Check Buffer"           flycheck-buffer
      :help "Run a syntax check on the current buffer."]
     "---"
-    ["AI Chat (gptel)"        gptel
-     :help "Open or switch to a gptel AI chat buffer."]
-    ["Send to AI (gptel)"     gptel-send
-     :help "Send the region or buffer to the AI model."]
-    ["AI Rewrite (gptel)"     gptel-rewrite
-     :help "Rewrite/refactor the region with the AI model."]
+    ("AI Assistant"
+     ["Chat…"    gptel
+      :help "Open or switch to a gptel AI chat buffer."]
+     ["Send"     gptel-send
+      :help "Send the region or buffer to the AI model."]
+     ["Rewrite…" gptel-rewrite
+      :help "Rewrite/refactor the region with the AI model."])
     "---"
     ["Complete (company)"     company-complete
      :help "Trigger company completion at point."]
@@ -230,20 +206,38 @@ ergoemacs menu bar has been built, avoiding clobbering."
                        :help "Delete all lines except those matching REGEXP."
                        :visible (not buffer-read-only)])
   (easy-menu-add-item global-map '(menu-bar edit)
+                      ["Count Words"
+                       count-words
+                       :help "Count words in buffer or region if active."])
+  (easy-menu-add-item global-map '(menu-bar edit)
                       ["Undo-Tree Visualize"
-                       undo-tree-visualize
+                       (lambda () (interactive)
+                         (require 'undo-tree)
+                         (call-interactively #'undo-tree-visualize))
                        :help "Show and browse the undo history as a tree."]
                       "Cut")
 
-  ;; ---- Search menu: extra search backends + visual bookmarks (bm) ----
+  ;; ---- Search menu: file search backends, then jump navigation, then bookmarks ----
+  (easy-menu-add-item global-map '(menu-bar search)
+                      ["Find File…"
+                       helm-find-files
+                       :help "Fuzzy find and open a file."])
+  (easy-menu-add-item global-map '(menu-bar search)
+                      ["Find in Files (rgrep)…"
+                       rgrep
+                       :help "Recursively grep for REGEXP in a directory tree."])
   (easy-menu-add-item global-map '(menu-bar search)
                       ["Search Files (deadgrep)…"
                        deadgrep
                        :help "Ripgrep search with an interactive results buffer."])
   (easy-menu-add-item global-map '(menu-bar search)
+                      '(menu-item "--"))
+  (easy-menu-add-item global-map '(menu-bar search)
                       ["Jump to Char (avy)…"
                        avy-goto-char-timer
                        :help "Jump to a visible character chosen with avy."])
+  (easy-menu-add-item global-map '(menu-bar search)
+                      '(menu-item "--"))
   (easy-menu-add-item global-map '(menu-bar search)
                       ["Toggle Bookmark (bm)"
                        bm-toggle
@@ -275,11 +269,16 @@ ergoemacs menu bar has been built, avoiding clobbering."
                        imenu-list
                        :help "Show a side buffer with the buffer's imenu index."])
 
-  ;; ---- New top-level Project and Code menus, placed just before Help ----
-  (easy-menu-add-item global-map '(menu-bar) my/project-menu "Help")
-  (easy-menu-add-item global-map '(menu-bar) my/code-menu "Help")
+  ;; ---- Top-level Project and Code menus, placed before Tools (IDE convention) ----
+  (easy-menu-add-item global-map '(menu-bar) my/project-menu "tools")
+  (easy-menu-add-item global-map '(menu-bar) my/code-menu "tools")
 
-  ;; ---- Tools menu: genuine external tools, next to Eshell / Magit ----
+  ;; ---- Tools menu: shells, diff, VCS helpers, containers ----
+  (easy-menu-add-item global-map '(menu-bar tools)
+                      ["IELM"
+                       ielm
+                       :help "Interactively evaluate Emacs Lisp expressions."]
+                      "Calendar")
   (easy-menu-add-item global-map '(menu-bar tools)
                       ["Terminal (vterm)"
                        vterm
