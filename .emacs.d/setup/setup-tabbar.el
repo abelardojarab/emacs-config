@@ -143,12 +143,13 @@ That is, a string used to represent it on the tab bar."
                     (puthash (selected-frame) frame-cache tabbar-caches)
                     frame-cache)))))
 
-;; Newer built-in tabbar for Emacs
+;; Newer built-in tabbar for Emacs (terminal only — centaur-tabs handles graphic)
 (use-package tab-line
-  :if (not (version< emacs-version "27.0"))
+  :if (and (not (version< emacs-version "27.0"))
+           (not (display-graphic-p)))
   :preface (push "~/.emacs.d/etc/images/" image-load-path)
   ;; :hook (after-init . global-tab-line-mode)
-  :init (tabbar-mode -1)
+  :init (when (fboundp 'tabbar-mode) (tabbar-mode -1))
   :custom ((tab-line-close-button-show t)
            (tab-line-new-button-show   nil)
            (tab-line-separator         ""))
@@ -342,8 +343,7 @@ truncates text if needed.  Minimal width can be set with
            (setq centaur-tabs-gray-out-icons 'buffer))
   :after all-the-icons
   :init (progn
-          (tabbar-mode -1)
-          (defun centaur-tabs nil)
+          (when (fboundp 'tabbar-mode) (tabbar-mode -1))
           (defun  centaur-tabs-buffer-groups  ()
             "`centaur-tabs-buffer-groups'control buffers'group rules.
     Group centaur-tabs with mode if buffer is derived from `eshell-mode'
