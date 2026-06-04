@@ -15,10 +15,17 @@
   :init (savehist-mode 1)
   :custom
   ;; FIX: correct variable names (was '(search ring regexp-search-ring))
-  (savehist-additional-variables '(search-ring regexp-search-ring))
+  (savehist-additional-variables '(search-ring regexp-search-ring kill-ring))
   (savehist-autosave-interval 120)
   :config
-  (setq savehist-file (expand-file-name "savehist" my/emacs-cache-dir)))
+  (setq savehist-file (expand-file-name "savehist" my/emacs-cache-dir))
+  ;; Strip text properties from kill-ring before saving to avoid bloating
+  ;; the savehist file with fonts/overlays (per Doom Emacs).
+  (add-hook 'savehist-save-hook
+            (lambda ()
+              (setq kill-ring
+                    (mapcar #'substring-no-properties
+                            (cl-remove-if-not #'stringp kill-ring))))))
 
 ;; Filecache (disabled)
 (use-package file-cache
