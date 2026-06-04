@@ -316,13 +316,29 @@ installed\" errors before `M-x copilot-install-server' has been run."
   ;; don't show in mode line
   :diminish t
   :bind
+  ;; `copilot-completion-map' is attached to a priority-101 keymap overlay that
+  ;; exists ONLY while a Copilot suggestion is being shown (see copilot.el's
+  ;; `copilot--get-or-create-keymap-overlay').  An overlay `keymap' property is
+  ;; searched before `emulation-mode-map-alists' (where company's
+  ;; `company-active-map' lives), so these keys take effect when -- and only
+  ;; when -- a suggestion is visible; otherwise TAB falls through to the normal
+  ;; company/indent behaviour.  That gives "accept with TAB only when Copilot is
+  ;; available during edits" without any extra dispatch logic.
   (:map copilot-completion-map
+        ;; Accept the whole suggestion.
+        ("<tab>"   . copilot-accept-completion)
+        ("TAB"     . copilot-accept-completion)
         ("<right>" . copilot-accept-completion)
-        ("S-TAB" . copilot-accept-completion-by-word)
+        ;; Partial accepts.
         ("S-<tab>" . copilot-accept-completion-by-word)
-        ("C-g" . copilot-clear-overlay)
-        ("C-n" . copilot-next-completion)
-        ("C-p" . copilot-previous-completion)))
+        ("S-TAB"   . copilot-accept-completion-by-word)
+        ("C-<tab>" . copilot-accept-completion-by-line)
+        ;; Cycle between alternative suggestions (kept off C-n/C-p so normal
+        ;; cursor motion still works while a suggestion is on screen).
+        ("M-n"     . copilot-next-completion)
+        ("M-p"     . copilot-previous-completion)
+        ;; Dismiss the suggestion.
+        ("C-g"     . copilot-clear-overlay)))
 
 (provide 'setup-company)
 ;;; setup-company.el ends here

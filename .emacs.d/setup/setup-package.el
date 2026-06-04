@@ -194,6 +194,20 @@ built-in libraries and earlier-added caches -- take precedence."
 (add-to-list 'load-path my/vendor-dir)
 (my/add-subfolders-to-load-path my/vendor-dir)
 
+;; NOTE on jsonrpc: copilot needs a modern jsonrpc whose
+;; `jsonrpc-process-connection' slots `-events-buffer'/`-expected-bytes' carry
+;; an `:initform' (the stale jsonrpc-1.0.17 that used to live in the 27.2 tree
+;; lacked them, so a copilot connection built against it left those slots
+;; unbound -- the "Unbound slot: ... -events-buffer / -expected-bytes" errors).
+;; Those 1.0.17 dirs were removed outright.  We now vendor jsonrpc-1.0.28 from
+;; GNU ELPA in the prepended 29.3 cache as a PLAIN, uncompressed `jsonrpc.el',
+;; so `require 'jsonrpc' always resolves to it.  Plain `.el' matters: `.emacs'
+;; nils `file-name-handler-alist' during startup, and the Emacs-bundled jsonrpc
+;; ships as `jsonrpc.el.gz' -- loading a `.gz' in that window can't decompress
+;; (reads raw gzip as elisp -> "void-variable"), and if the bundled copy is the
+;; only one found, copilot reports "Cannot open load file: jsonrpc".  The
+;; uncompressed vendored copy sidesteps both.
+
 ;; Fallback tree for packages absent from the version-matched 29.3 cache above
 ;; (e.g. slack, pdf-tools, spaceline).  APPEND it so these OLD 27.2-era versions
 ;; can NEVER shadow Emacs's built-in libraries (jsonrpc, seq, json-mode, org...)
