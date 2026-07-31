@@ -218,56 +218,62 @@ ergoemacs menu bar has been built, avoiding clobbering."
                       "Cut")
 
   ;; ---- Search menu: file search backends, then jump navigation, then bookmarks ----
-  (easy-menu-add-item global-map '(menu-bar search)
-                      ["Find File…"
-                       helm-find-files
-                       :help "Fuzzy find and open a file."])
-  (easy-menu-add-item global-map '(menu-bar search)
-                      ["Find in Files (rgrep)…"
-                       rgrep
-                       :help "Recursively grep for REGEXP in a directory tree."])
-  (easy-menu-add-item global-map '(menu-bar search)
-                      ["Search Files (deadgrep)…"
-                       deadgrep
-                       :help "Ripgrep search with an interactive results buffer."])
-  (easy-menu-add-item global-map '(menu-bar search)
-                      '(menu-item "--"))
-  (easy-menu-add-item global-map '(menu-bar search)
-                      ["Jump to Char (avy)…"
-                       avy-goto-char-timer
-                       :help "Jump to a visible character chosen with avy."])
-  (easy-menu-add-item global-map '(menu-bar search)
-                      '(menu-item "--"))
-  (easy-menu-add-item global-map '(menu-bar search)
-                      ["Toggle Bookmark (bm)"
-                       bm-toggle
-                       :help "Toggle a visual bookmark on the current line."])
-  (easy-menu-add-item global-map '(menu-bar search)
-                      ["Next Bookmark"
-                       bm-next
-                       :help "Jump to the next visual bookmark."])
-  (easy-menu-add-item global-map '(menu-bar search)
-                      ["Previous Bookmark"
-                       bm-previous
-                       :help "Jump to the previous visual bookmark."])
+  (let ((search-target (if (lookup-key global-map [menu-bar search])
+                           '(menu-bar search)
+                         '(menu-bar edit search))))
+    (easy-menu-add-item global-map search-target
+                        ["Find File…"
+                         helm-find-files
+                         :help "Fuzzy find and open a file."])
+    (easy-menu-add-item global-map search-target
+                        ["Find in Files (rgrep)…"
+                         rgrep
+                         :help "Recursively grep for REGEXP in a directory tree."])
+    (easy-menu-add-item global-map search-target
+                        ["Search Files (deadgrep)…"
+                         deadgrep
+                         :help "Ripgrep search with an interactive results buffer."])
+    (easy-menu-add-item global-map search-target
+                        '(menu-item "--"))
+    (easy-menu-add-item global-map search-target
+                        ["Jump to Char (avy)…"
+                         avy-goto-char-timer
+                         :help "Jump to a visible character chosen with avy."])
+    (easy-menu-add-item global-map search-target
+                        '(menu-item "--"))
+    (easy-menu-add-item global-map search-target
+                        ["Toggle Bookmark (bm)"
+                         bm-toggle
+                         :help "Toggle a visual bookmark on the current line."])
+    (easy-menu-add-item global-map search-target
+                        ["Next Bookmark"
+                         bm-next
+                         :help "Jump to the next visual bookmark."])
+    (easy-menu-add-item global-map search-target
+                        ["Previous Bookmark"
+                         bm-previous
+                         :help "Jump to the previous visual bookmark."]))
 
   ;; ---- View menu: file trees + imenu side panel (next to Speedbar) ----
-  (easy-menu-add-item global-map '(menu-bar view)
-                      ["File Tree (Treemacs)"
-                       treemacs
-                       :help "Toggle the Treemacs project file tree."])
-  (easy-menu-add-item global-map '(menu-bar view)
-                      ["File Tree (Neotree)"
-                       neotree-toggle
-                       :help "Toggle the Neotree file tree."])
-  (easy-menu-add-item global-map '(menu-bar view)
-                      ["Side Dired"
-                       dired-sidebar-toggle-sidebar
-                       :help "Toggle a dired sidebar for the current directory."])
-  (easy-menu-add-item global-map '(menu-bar view)
-                      ["Imenu List"
-                       imenu-list
-                       :help "Show a side buffer with the buffer's imenu index."])
+  (let ((view-target (if (lookup-key global-map [menu-bar view])
+                         '(menu-bar view)
+                       '(menu-bar options))))
+    (easy-menu-add-item global-map view-target
+                        ["File Tree (Treemacs)"
+                         treemacs
+                         :help "Toggle the Treemacs project file tree."])
+    (easy-menu-add-item global-map view-target
+                        ["File Tree (Neotree)"
+                         neotree-toggle
+                         :help "Toggle the Neotree file tree."])
+    (easy-menu-add-item global-map view-target
+                        ["Side Dired"
+                         dired-sidebar-toggle-sidebar
+                         :help "Toggle a dired sidebar for the current directory."])
+    (easy-menu-add-item global-map view-target
+                        ["Imenu List"
+                         imenu-list
+                         :help "Show a side buffer with the buffer's imenu index."]))
 
   ;; ---- Top-level Project and Code menus, placed before Tools (IDE convention) ----
   (easy-menu-add-item global-map '(menu-bar) my/project-menu "tools")
