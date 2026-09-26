@@ -132,6 +132,7 @@
     (require-prof 'setup-auto-insert)
     (require-prof 'setup-company)
     (require-prof 'setup-gptel)
+    (require-prof 'setup-ai)
     (require-prof 'setup-cloudcode)
     (require-prof 'setup-jetski)
     (require-prof 'setup-bookmarks)
