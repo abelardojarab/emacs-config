@@ -235,6 +235,21 @@ is a round trip per directory."
   "The repository root for this buffer, or nil."
   (car (my/ide-layout--repo)))
 
+(defun my/ide-layout--repo-here ()
+  "The repository for this buffer, or failing that for any window on the frame.
+
+The commands get run from wherever point happens to be, and that is
+often the tree or the terminal, whose `default-directory' need not be
+inside the repository -- treemacs buffers in particular are not visiting
+anything.  Falling back to the other windows means `my/ide-layout' works
+from any pane instead of complaining that there is no repository while
+the repository is plainly on screen."
+  (or (my/ide-layout--repo)
+      (seq-some (lambda (win)
+                  (with-current-buffer (window-buffer win)
+                    (my/ide-layout--repo)))
+                (window-list nil 'no-minibuf))))
+
 (defun my/ide-layout--name (root)
   "The short repository name for ROOT."
   (file-name-nondirectory (directory-file-name root)))
@@ -314,6 +329,15 @@ changing any of the size options."
          (ew (or (car widths) my/ide-layout-explorer-width))
          (vw (or (cdr widths) my/ide-layout-vcs-width))
          (side `((dedicated . t)
+                 ;; `window-purpose' installs itself as
+                 ;; `display-buffer-overriding-action', and an overriding
+                 ;; action is consulted *before* `display-buffer-alist' -- so
+                 ;; being at the head of the alist is not enough, purpose
+                 ;; simply answers first and puts the buffer wherever its own
+                 ;; layout says.  `purpose--use-action-function-p' checks this
+                 ;; key in the merged alist and stands down when it is set,
+                 ;; which hands the buffer back to the rule below.
+                 (inhibit-purpose . t)
                  (window-parameters . ((no-delete-other-windows . t))))))
     (setq my/ide-layout--rules
           (list
@@ -543,7 +567,7 @@ and the upkeep poll are what keep it current."
 Leaves point where it was: every component displays itself, and the whole
 thing runs inside `save-selected-window'."
   (interactive)
-  (let ((repo (or repo (my/ide-layout--repo)))
+  (let ((repo (or repo (my/ide-layout--repo-here)))
         (was window-sides-vertical))
     (unless repo
       (user-error "Not inside a jj or git repository: %s" default-directory))
@@ -603,7 +627,7 @@ neither the upkeep poll nor the next file you visit brings it back."
   "Tear the layout down, re-render it and put it straight back up.
 Use after changing any of the `my/ide-layout-' options."
   (interactive)
-  (let ((repo (my/ide-layout--repo)))
+  (let ((repo (my/ide-layout--repo-here)))
     (my/ide-layout-disable)
     (my/ide-layout-enable repo)
     (when (memq 'vcs my/ide-layout-components)
@@ -624,7 +648,7 @@ error anywhere."
         (insert (format "layout on:        %s\n" (my/ide-layout-on-p)))
         (insert (format "declined earlier: %s\n"
                         (frame-parameter nil 'my/ide-layout-refused)))
-        (insert (format "repository:       %S\n" (my/ide-layout--repo)))
+        (insert (format "repository:       %S\n" (my/ide-layout--repo-here)))
         (insert (format "frame width:      %d\n" (frame-width)))
         (insert (format "widths:           %S%s\n" (my/ide-layout--widths)
                         (if (my/ide-layout--widths) ""
@@ -656,7 +680,7 @@ error anywhere."
 (defun my/ide-layout-select-terminal ()
   "Jump to the terminal for this repository, starting it if needed."
   (interactive)
-  (let ((root (or (my/ide-layout--root)
+  (let ((root (or (car (my/ide-layout--repo-here))
                   (user-error "Not inside a jj or git repository"))))
     (my/ide-layout-install-rules)
     (my/ide-layout--show-terminal root)
@@ -667,7 +691,7 @@ error anywhere."
 (defun my/ide-layout-select-vcs ()
   "Jump to the version-control window, opening it if needed."
   (interactive)
-  (let ((repo (or (my/ide-layout--repo)
+  (let ((repo (or (my/ide-layout--repo-here)
                   (user-error "Not inside a jj or git repository"))))
     (my/ide-layout-install-rules)
     (my/ide-layout--show-vcs repo)
@@ -775,6 +799,19 @@ would be undone a moment later or, worse, left half-built."
 
 (add-hook 'find-file-hook  #'my/ide-layout--maybe-arm)
 (add-hook 'after-save-hook #'my/ide-layout--schedule-refresh)
+
+;; Belt and braces alongside the `inhibit-purpose' key in the rules: that one
+;; covers everything routed through `display-buffer', this one also covers the
+;; `switch-to-buffer' paths purpose advises, so our docked buffers are never
+;; re-homed by a purpose layout.
+(with-eval-after-load 'window-purpose
+  (when (boundp 'purpose-action-function-ignore-buffer-names)
+    (dolist (re (list my/ide-layout--explorer-re
+                      my/ide-layout--dired-explorer-re
+                      my/ide-layout--jj-re
+                      my/ide-layout--magit-re
+                      my/ide-layout--terminal-re))
+      (add-to-list 'purpose-action-function-ignore-buffer-names re))))
 
 ;; Install the rules now so that opening a status buffer or a repository
 ;; terminal by hand already goes to the right slot, layout or no layout.
