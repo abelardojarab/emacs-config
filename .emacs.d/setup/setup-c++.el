@@ -1,6 +1,6 @@
 ;;; setup-c++.el ---                                 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2023  Abelardo Jara-Berrocal
+;; Copyright (C) 2014-2026  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojarab@gmail.com>
 ;; Keywords:
@@ -37,6 +37,7 @@
          (find-file-hook  . my/c-files-hook))
   :mode (("\\.h\\'"    . c++-mode)
          ("\\.c\\'"    . c-mode)
+         ("\\.cc\\'"   . c++-mode)
          ("\\.cpp\\'"  . c++-mode))
   :custom (c-basic-offset 4)
   :preface (progn
@@ -118,6 +119,13 @@
                              paragraph-start "^[ ]*\\(//+\\|\\**\\)[ ]*\\([ ]*$\\|@param\\)\\|^\f"))
 
              (defun my/c-files-hook ()
+               ;; Only in a real CC Mode buffer.  These helpers end up in
+               ;; `c-set-style', which signals "Buffer ... is not a CC Mode
+               ;; buffer" under `c-ts-mode'/`c++-ts-mode' -- and since this
+               ;; runs from `find-file-hook', that error fired on every .c,
+               ;; .cpp and .h opened once tree-sitter was preferred.
+               (when (and buffer-file-name
+                          (bound-and-true-p c-buffer-is-cc-mode))
                (when (string= (file-name-extension buffer-file-name) "c")
                  (my/c-mode-indent-init))
 
@@ -126,7 +134,7 @@
 
                (when (string= (file-name-extension buffer-file-name) "h")
                  (my/c++-mode-indent-init))
-               )))
+               ))))
 
 ;; C/C++ refactoring tool based on Semantic parser framework
 (use-package srefactor

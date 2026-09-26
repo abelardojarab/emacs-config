@@ -50,8 +50,18 @@
             ;; http://stackoverflow.com/questions/885793/emacs-error-when-calling-server-start
             (defun server-ensure-safe-dir (dir) "Noop" t)
 
-            ;; Remove socket directory on emacs exit
-            (add-hook 'kill-emacs-hook #'(lambda () (ignore-errors (delete-directory server-socket-dir t))))
+            ;; Remove the socket directory on exit -- but only from the Emacs
+            ;; that actually owns the server.  `server-process' is non-nil only
+            ;; there.  Unguarded, every *other* Emacs that loads this config
+            ;; deletes the running daemon's socket directory as it exits --
+            ;; including each `emacs --batch -l ~/.emacs' run -- which leaves
+            ;; the daemon alive but with emacsclient reporting "can't find
+            ;; socket; have you started the server?" and no way back short of
+            ;; restarting it and losing every unsaved buffer.
+            (add-hook 'kill-emacs-hook
+                      (lambda ()
+                        (when (bound-and-true-p server-process)
+                          (ignore-errors (delete-directory server-socket-dir t)))))
 
             ;; http://stackoverflow.com/questions/885793/emacs-error-when-calling-server-start
             (defun server-ensure-safe-dir (dir) "Noop" t)
@@ -118,8 +128,10 @@ nil are ignored."
                     (setq modified-found t)))
                 modified-found))
 
-            ;; Launch the server
-            (unless (server-running-p)
+            ;; Launch the server.  Never from a batch Emacs: `emacs --batch -l
+            ;; ~/.emacs' would take the socket over from the running daemon and
+            ;; then delete it on exit, leaving the daemon alive but unreachable.
+            (unless (or noninteractive (server-running-p))
               (if (not (eq system-type 'windows-nt))
                   (server-start)))))
 

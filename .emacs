@@ -132,8 +132,13 @@
     (require-prof 'setup-auto-insert)
     (require-prof 'setup-company)
     (require-prof 'setup-gptel)
+    (require-prof 'setup-cloudcode)
+    (require-prof 'setup-jetski)
     (require-prof 'setup-bookmarks)
     (require-prof 'setup-versioning)
+    (require-prof 'setup-jj)
+    (require-prof 'setup-google3)
+    (require-prof 'setup-sidepanel)
     (require-prof 'setup-projectile)
     (require-prof 'setup-eldoc)
     (require-prof 'setup-lisp)
@@ -170,6 +175,10 @@
     (require-prof 'setup-org-blog)
     (require-prof 'setup-post)
     (require-prof 'setup-ecb)
+    ;; After setup-windows (shackle), setup-eshell (vterm) and setup-ecb
+    ;; (treemacs): it pushes display-buffer rules that have to sit ahead of
+    ;; shackle's catch-all, and shackle installs its own at load time.
+    (require-prof 'setup-ide-layout)
     (require-prof 'setup-mouse)
     (require-prof 'setup-undoandredo)
     (require-prof 'setup-writeroom)
