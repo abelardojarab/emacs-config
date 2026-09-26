@@ -26,15 +26,20 @@
 ;;   |          |                       |            |
 ;;   |   tree   |        editor         |  versions  |
 ;;   |  (left)  |                       |  (right)   |
-;;   |          |                       |            |
-;;   +------------------------------------------------+
-;;   |                  terminal                      |
-;;   +------------------------------------------------+
+;;   |          |-----------------------|            |
+;;   |          |       terminal        |            |
+;;   +----------+-----------------------+------------+
 ;;
-;; * left    treemacs, always
+;; * left    treemacs, always, full height
+;; * centre  the editor, with the terminal stacked underneath it -- vterm if
+;;           it is built, otherwise eshell, rooted at the repository
 ;; * right   `jj-status' in a jj workspace, `magit-status' in a git one,
-;;           refreshed on save and while you are idle
-;; * bottom  vterm if it is built, otherwise eshell, rooted at the repo
+;;           refreshed on save and while you are idle, full height
+;;
+;; The terminal stays between the two columns rather than running the width
+;; of the frame because `window-sides-vertical' is on: that is the variable
+;; that decides whether left/right or top/bottom side windows get the corners.
+;; `my/ide-layout-terminal-span' flips it.
 ;;
 ;; `M-x my/ide-layout' turns the whole thing on and off.
 ;;
@@ -99,6 +104,21 @@
 (defcustom my/ide-layout-terminal-height 0.22
   "Height of the terminal window, as a fraction of the frame."
   :type 'number
+  :group 'my/ide-layout)
+
+(defcustom my/ide-layout-terminal-span 'center
+  "How far the terminal runs along the bottom of the frame.
+
+`center' stacks it under the editor, between the tree and the version
+control column, which keeps both of those full height.  `full' runs it
+the whole width of the frame instead and stops the side columns short.
+
+This is `window-sides-vertical' underneath -- the variable that decides
+whether the left/right or the top/bottom side windows get the corners of
+the frame.  It is read when a side window is *created*, so changing it
+needs `my/ide-layout-rebuild' to take effect."
+  :type '(choice (const :tag "Under the editor only" center)
+                 (const :tag "Full frame width"      full))
   :group 'my/ide-layout)
 
 (defcustom my/ide-layout-min-editor-width 60
@@ -289,6 +309,7 @@ changing any of the size options."
   (interactive)
   (dolist (old my/ide-layout--rules)
     (setq display-buffer-alist (delq old display-buffer-alist)))
+  (setq window-sides-vertical (eq my/ide-layout-terminal-span 'center))
   (let* ((widths (my/ide-layout--widths))
          (ew (or (car widths) my/ide-layout-explorer-width))
          (vw (or (cdr widths) my/ide-layout-vcs-width))
@@ -327,6 +348,23 @@ changing any of the size options."
     (window-preserve-size window t t)
     window))
 
+(defun my/ide-layout--reclaim (buffer)
+  "Close ordinary windows showing BUFFER so it can be docked properly.
+
+Without this, a buffer that is already on screen in a plain window --
+magit from a `magit-status' you ran yourself, the terminal from a layout
+built before these rules were installed, anything left over from a
+reload -- keeps that window as well as gaining a docked one, or the
+split gets reused outright.  Either way the frame ends up with a stray
+column instead of the layout, and with `split-width-threshold' at 0 in
+this config every such split is side by side, so it is very visible."
+  (when (buffer-live-p buffer)
+    (dolist (win (get-buffer-window-list buffer nil t))
+      (when (and (window-live-p win)
+                 (not (window-parameter win 'window-side))
+                 (not (frame-root-window-p win)))
+        (ignore-errors (delete-window win))))))
+
 
 ;;; The tree -------------------------------------------------------------------
 
@@ -335,6 +373,7 @@ changing any of the size options."
   (let ((buf (dired-noselect root)))
     (with-current-buffer buf
       (rename-buffer (format "*files: %s*" (my/ide-layout--name root)) t))
+    (my/ide-layout--reclaim buf)
     (my/ide-layout--pin (display-buffer buf))))
 
 (defvar my/ide-layout--treemacs-tuned nil
@@ -419,6 +458,7 @@ and the upkeep poll are what keep it current."
                              (magit-status-setup-buffer (car repo)))
                            (my/ide-layout--vcs-buffer repo)))))))
     (when (buffer-live-p buf)
+      (my/ide-layout--reclaim buf)
       (my/ide-layout--pin (display-buffer buf)))))
 
 (defun my/ide-layout--refresh-buffer (buf)
@@ -443,7 +483,8 @@ and the upkeep poll are what keep it current."
   (let* ((name (my/ide-layout--terminal-name root))
          (buf  (get-buffer name)))
     (if (buffer-live-p buf)
-        (my/ide-layout--pin (display-buffer buf))
+        (progn (my/ide-layout--reclaim buf)
+               (my/ide-layout--pin (display-buffer buf)))
       (let ((default-directory (file-name-as-directory root)))
         ;; Each of these displays the buffer itself, and the rule above sends
         ;; it to the bottom slot; `save-selected-window' in the caller puts
@@ -480,6 +521,21 @@ and the upkeep poll are what keep it current."
 (defvar my/ide-layout--quiet nil
   "Bound while the upkeep poll works, to keep it from repeating messages.")
 
+(defun my/ide-layout--delete-side-windows ()
+  "Delete this frame's layout side windows, tree included."
+  (dolist (win (window-list nil 'no-minibuf))
+    (when (window-live-p win)
+      (let ((name (buffer-name (window-buffer win))))
+        (when (and (window-parameter win 'window-side)
+                   (seq-some (lambda (re) (string-match-p re name))
+                             (list my/ide-layout--jj-re
+                                   my/ide-layout--magit-re
+                                   my/ide-layout--terminal-re
+                                   my/ide-layout--explorer-re
+                                   my/ide-layout--dired-explorer-re)))
+          (set-window-parameter win 'no-delete-other-windows nil)
+          (ignore-errors (delete-window win)))))))
+
 ;;;###autoload
 (defun my/ide-layout-enable (&optional repo)
   "Put the IDE layout up for REPO, or the repository around point.
@@ -487,10 +543,16 @@ and the upkeep poll are what keep it current."
 Leaves point where it was: every component displays itself, and the whole
 thing runs inside `save-selected-window'."
   (interactive)
-  (let ((repo (or repo (my/ide-layout--repo))))
+  (let ((repo (or repo (my/ide-layout--repo)))
+        (was window-sides-vertical))
     (unless repo
       (user-error "Not inside a jj or git repository: %s" default-directory))
     (my/ide-layout-install-rules)
+    ;; `window-sides-vertical' is read when a side window is *created*, so if
+    ;; the arrangement just changed, side windows already up were built the
+    ;; other way round and have to go before they can be rebuilt.
+    (unless (eq (and was t) (and window-sides-vertical t))
+      (my/ide-layout--delete-side-windows))
     (set-frame-parameter nil 'my/ide-layout-on t)
     (set-frame-parameter nil 'my/ide-layout-refused nil)
     (let ((widths (my/ide-layout--widths))
@@ -519,17 +581,7 @@ neither the upkeep poll nor the next file you visit brings it back."
   (interactive)
   (set-frame-parameter nil 'my/ide-layout-on nil)
   (set-frame-parameter nil 'my/ide-layout-refused t)
-  (dolist (win (window-list nil 'no-minibuf))
-    (when (window-live-p win)
-      (let ((name (buffer-name (window-buffer win))))
-        (when (and (window-parameter win 'window-side)
-                   (seq-some (lambda (re) (string-match-p re name))
-                             (list my/ide-layout--jj-re
-                                   my/ide-layout--magit-re
-                                   my/ide-layout--terminal-re
-                                   my/ide-layout--dired-explorer-re)))
-          (set-window-parameter win 'no-delete-other-windows nil)
-          (ignore-errors (delete-window win))))))
+  (my/ide-layout--delete-side-windows)
   (when (and (fboundp 'treemacs-current-visibility)
              (eq 'visible (treemacs-current-visibility)))
     (ignore-errors (treemacs)))
@@ -556,6 +608,49 @@ Use after changing any of the `my/ide-layout-' options."
     (my/ide-layout-enable repo)
     (when (memq 'vcs my/ide-layout-components)
       (save-selected-window (my/ide-layout--show-vcs repo :force)))))
+
+;;;###autoload
+(defun my/ide-layout-diagnose ()
+  "Report why the frame does not look like the layout.
+
+Worth having: several packages here race for `display-buffer', and when
+one of them wins the symptom is just a pane in the wrong place with no
+error anywhere."
+  (interactive)
+  (let ((buf (get-buffer-create "*ide-layout*")))
+    (with-current-buffer buf
+      (let ((inhibit-read-only t))
+        (erase-buffer)
+        (insert (format "layout on:        %s\n" (my/ide-layout-on-p)))
+        (insert (format "declined earlier: %s\n"
+                        (frame-parameter nil 'my/ide-layout-refused)))
+        (insert (format "repository:       %S\n" (my/ide-layout--repo)))
+        (insert (format "frame width:      %d\n" (frame-width)))
+        (insert (format "widths:           %S%s\n" (my/ide-layout--widths)
+                        (if (my/ide-layout--widths) ""
+                          " (too narrow -- see my/ide-layout-min-editor-width)")))
+        (insert (format "terminal span:    %s (window-sides-vertical %s)\n"
+                        my/ide-layout-terminal-span window-sides-vertical))
+        (insert (format "terminal backend: %s\n" (my/ide-layout--terminal-backend)))
+        (insert "\nwindows on this frame:\n")
+        (dolist (win (window-list nil 'no-minibuf))
+          (insert (format "  %-42s side=%-7s slot=%-3s %dx%d%s\n"
+                          (buffer-name (window-buffer win))
+                          (or (window-parameter win 'window-side) "-")
+                          (or (window-parameter win 'window-slot) "-")
+                          (window-total-width win) (window-total-height win)
+                          (if (window-dedicated-p win) " dedicated" ""))))
+        (insert "\ndisplay-buffer-alist, in the order it is consulted:\n")
+        (let ((i 0))
+          (dolist (entry display-buffer-alist)
+            (insert (format "  %2d %s%s\n" i
+                            (if (stringp (car entry)) (car entry)
+                              (format "%s" (car entry)))
+                            (if (memq entry my/ide-layout--rules) "   <- ours" "")))
+            (setq i (1+ i))))
+        (insert "\nAnything of ours listed after shackle's condition loses to it.\n")
+        (special-mode)))
+    (display-buffer buf)))
 
 ;;;###autoload
 (defun my/ide-layout-select-terminal ()
