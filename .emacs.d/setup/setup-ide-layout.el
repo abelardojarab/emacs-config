@@ -485,14 +485,29 @@ and the upkeep poll are what keep it current."
       (my/ide-layout--reclaim buf)
       (my/ide-layout--pin (display-buffer buf)))))
 
+(defvar my/ide-layout--last-error nil
+  "Last refresh failure, as (TIME . MESSAGE).  Shown by `my/ide-layout-diagnose'.")
+
+(defvar my/ide-layout--refresh-timer nil
+  "Pending timer that syncs the version-control window.")
+
 (defun my/ide-layout--refresh-buffer (buf)
-  "Re-render the version-control buffer BUF in place."
+  "Re-render the version-control buffer BUF in place.
+
+Errors are recorded rather than discarded: a refresh runs off a timer,
+so a thrown error has nowhere to show up, and \"the panel never
+updates\" is indistinguishable from \"the panel throws every time\"
+unless something keeps the message."
   (with-current-buffer buf
-    (ignore-errors
-      (cond ((and (derived-mode-p 'jj-status-mode) (fboundp 'jj-status-refresh))
-             (jj-status-refresh))
-            ((and (derived-mode-p 'magit-status-mode) (fboundp 'magit-refresh))
-             (magit-refresh))))))
+    (condition-case err
+        (cond ((and (derived-mode-p 'jj-status-mode) (fboundp 'jj-status-refresh))
+               (jj-status-refresh) t)
+              ((and (derived-mode-p 'magit-status-mode) (fboundp 'magit-refresh))
+               (magit-refresh) t))
+      (error
+       (setq my/ide-layout--last-error
+             (cons (current-time-string) (error-message-string err)))
+       nil))))
 
 
 ;;; Terminal -------------------------------------------------------------------
@@ -579,6 +594,7 @@ thing runs inside `save-selected-window'."
       (my/ide-layout--delete-side-windows))
     (set-frame-parameter nil 'my/ide-layout-on t)
     (set-frame-parameter nil 'my/ide-layout-refused nil)
+    (set-frame-parameter nil 'my/ide-layout-repo-root (car repo))
     (let ((widths (my/ide-layout--widths))
           (root (car repo)))
       (unless (or widths my/ide-layout--quiet)
@@ -656,6 +672,12 @@ error anywhere."
         (insert (format "terminal span:    %s (window-sides-vertical %s)\n"
                         my/ide-layout-terminal-span window-sides-vertical))
         (insert (format "terminal backend: %s\n" (my/ide-layout--terminal-backend)))
+        (insert (format "panel points at:  %s\n"
+                        (frame-parameter nil 'my/ide-layout-repo-root)))
+        (insert (format "refresh pending:  %s\n"
+                        (and (timerp my/ide-layout--refresh-timer) t)))
+        (insert (format "last refresh err: %s\n"
+                        (or my/ide-layout--last-error "none")))
         (insert "\nwindows on this frame:\n")
         (dolist (win (window-list nil 'no-minibuf))
           (insert (format "  %-42s side=%-7s slot=%-3s %dx%d%s\n"
@@ -710,11 +732,45 @@ error anywhere."
       (when (buffer-live-p buf)
         (my/ide-layout--refresh-buffer buf)))))
 
-(defvar my/ide-layout--refresh-timer nil
-  "Pending one-shot timer that refreshes the version-control window.")
+;;;###autoload
+(defun my/ide-layout-sync ()
+  "Point the version-control window at the current repository and re-render it.
 
-(defun my/ide-layout--schedule-refresh ()
-  "Debounce a refresh onto an idle timer after a save.
+Two jobs, because moving around is two different things: stepping to
+another file in the same repository only needs the panel re-read, while
+stepping into a *different* repository needs the panel pointed somewhere
+else first -- otherwise it keeps showing the repository you have left."
+  (interactive)
+  (let ((repo (my/ide-layout--repo-here)))
+    (when repo
+      (unless (equal (car repo) (frame-parameter nil 'my/ide-layout-repo-root))
+        (set-frame-parameter nil 'my/ide-layout-repo-root (car repo))
+        (save-selected-window (my/ide-layout--show-vcs repo)))
+      (my/ide-layout-refresh-vcs))))
+
+(defvar my/ide-layout--refresh-deferrals 0
+  "How many times the pending sync has stood aside for pending input.")
+
+(defun my/ide-layout--refresh-now ()
+  "Sync the panel, standing aside briefly if a keystroke is waiting.
+
+Deliberately a plain timer, not an idle timer.  `run-with-idle-timer'
+scheduled while Emacs is *already* idle does not run until Emacs goes
+busy and idle again, so a refresh armed from a hook that itself ran off
+a timer can sit there forever -- and idle timers never fire under
+`--batch' at all, so the whole path was untestable.  A plain timer that
+checks `input-pending-p' is polite in the same way, is capped so it
+cannot defer for ever, and can actually be tested."
+  (if (and (input-pending-p) (< my/ide-layout--refresh-deferrals 10))
+      (setq my/ide-layout--refresh-deferrals (1+ my/ide-layout--refresh-deferrals)
+            my/ide-layout--refresh-timer
+            (run-with-timer 0.3 nil #'my/ide-layout--refresh-now))
+    (setq my/ide-layout--refresh-deferrals 0
+          my/ide-layout--refresh-timer nil)
+    (my/ide-layout-sync)))
+
+(defun my/ide-layout--schedule-refresh (&rest _)
+  "Debounce a sync of the version-control window.
 
 `jj-status-refresh' shells out twice, about half a second together.  Run
 straight from `after-save-hook' that is a stall you feel on every C-x
@@ -723,8 +779,23 @@ C-s, and saving several files in a row would pay it once each."
     (when (timerp my/ide-layout--refresh-timer)
       (cancel-timer my/ide-layout--refresh-timer))
     (setq my/ide-layout--refresh-timer
-          (run-with-idle-timer my/ide-layout-refresh-delay nil
-                               #'my/ide-layout-refresh-vcs))))
+          (run-with-timer my/ide-layout-refresh-delay nil
+                          #'my/ide-layout--refresh-now))))
+
+(defvar my/ide-layout--syncing nil
+  "Guard against `window-buffer-change-functions' re-entering itself.")
+
+(defun my/ide-layout--on-buffer-change (&rest _)
+  "Schedule a sync when the window's buffer changes.
+
+Only schedules -- the work happens on the timer.  Re-homing the panel
+from inside `window-buffer-change-functions' would change the window
+configuration and call this hook straight back."
+  (unless my/ide-layout--syncing
+    (let ((my/ide-layout--syncing t))
+      (when (and (frame-parameter nil 'my/ide-layout-on)
+                 (not (window-minibuffer-p)))
+        (my/ide-layout--schedule-refresh)))))
 
 (defvar my/ide-layout--poll-timer nil
   "Repeating timer that keeps the layout up to date and in one piece.")
@@ -732,9 +803,9 @@ C-s, and saving several files in a row would pay it once each."
 (defun my/ide-layout--poll ()
   "Upkeep pass: refresh version control, put back anything that was closed.
 
-Only acts while Emacs is idle, so it never competes with typing, and only
-on frames where the layout is switched on."
-  (when (current-idle-time)
+Skipped outright when a keystroke is waiting, so it never competes with
+typing, and only runs on frames where the layout is switched on."
+  (unless (input-pending-p)
     (let ((my/ide-layout--quiet t))
       (dolist (frame (frame-list))
         (when (and (frame-live-p frame)
@@ -798,7 +869,11 @@ would be undone a moment later or, worse, left half-built."
           (run-with-idle-timer 0.4 nil #'my/ide-layout--arm))))
 
 (add-hook 'find-file-hook  #'my/ide-layout--maybe-arm)
+(add-hook 'find-file-hook  #'my/ide-layout--schedule-refresh)
 (add-hook 'after-save-hook #'my/ide-layout--schedule-refresh)
+;; Follow the buffer, not just the save: switching files is the other half of
+;; "the panel should show what I am looking at".
+(add-hook 'window-buffer-change-functions #'my/ide-layout--on-buffer-change)
 
 ;; Belt and braces alongside the `inhibit-purpose' key in the rules: that one
 ;; covers everything routed through `display-buffer', this one also covers the
@@ -826,7 +901,9 @@ would be undone a moment later or, worse, left half-built."
     (dolist (entry '(("layout: turn the IDE layout on or off" . my/ide-layout)
                      ("layout: rebuild after resizing"        . my/ide-layout-rebuild)
                      ("layout: go to the terminal"            . my/ide-layout-select-terminal)
-                     ("layout: go to version control"         . my/ide-layout-select-vcs)))
+                     ("layout: go to version control"         . my/ide-layout-select-vcs)
+                     ("layout: refresh version control now"   . my/ide-layout-sync)
+                     ("layout: diagnose the layout"           . my/ide-layout-diagnose)))
       (unless (rassq (cdr entry) jj-command-table)
         (setq jj-command-table (append jj-command-table (list entry)))))))
 

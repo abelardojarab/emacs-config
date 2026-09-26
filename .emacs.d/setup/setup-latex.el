@@ -69,11 +69,17 @@
               bibtex-completion-library-path my/bibtex-completion-library-path
               bibtex-completion-notes-path my/bibtex-completion-notes))
 
+;; `:defer', not `:demand'.  Demanding ebib pulled biblio, biblio-hal,
+;; parsebib and the rest of the bibliography stack into every startup, which
+;; was 9.6s of the 61.7s total -- the single largest item in the whole config,
+;; paid whether or not a .tex file is ever opened.  Everything the rest of the
+;; file needs from here is defined in `:init', which still runs eagerly.
 (use-package ebib
-  :demand t
+  :defer t
+  :commands (ebib ebib-import)
   :custom (ebib-bibtex-dialect 'biblatex)
   :init (progn
-		  (use-package ebib-biblio)
+		  (use-package ebib-biblio :defer t)
 
           ;; Restore legacy code
           (eval-and-compile
