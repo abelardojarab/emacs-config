@@ -142,14 +142,40 @@ various time zones."]
 (easy-menu-define my/code-menu nil
   "Code-intelligence, diagnostics and AI commands."
   '("Code"
-    ["Go to Definition"       xref-find-definitions
+    ;; Everything here goes through xref, so it follows whichever backend is
+    ;; right for the buffer -- CiderLSP inside google3, gtags elsewhere --
+    ;; and renders through helm.  The old dumb-jump entries are gone: in a
+    ;; CitC workspace dumb-jump answers by regex-searching the whole depot
+    ;; over a lazily fetched mount, which is the slowest and least accurate
+    ;; option available, and `setup-google3' already routes around it.
+    ["Go to Definition        M-."   xref-find-definitions
      :help "Find the definition of the identifier at point."]
-    ["Find References"        xref-find-references
-     :help "Find references to the identifier at point."]
-    ["Jump (dumb-jump)"       dumb-jump-go
-     :help "Jump to definition using dumb-jump heuristics."]
-    ["Jump Back"              dumb-jump-back
-     :help "Return to where the last dumb-jump started."]
+    ["Find References        M-?"    xref-find-references
+     :help "Find every reference to the identifier at point."]
+    ["Go to Implementation"          lsp-find-implementation
+     :enable (bound-and-true-p lsp-mode)
+     :help "Find implementations of the interface or method at point."]
+    ["Go to Type Definition"         lsp-find-type-definition
+     :enable (bound-and-true-p lsp-mode)
+     :help "Find the definition of the type of the symbol at point."]
+    ["Jump Back              M-,"    xref-go-back
+     :help "Return to where the last jump started."]
+    ["Jump Forward"                  xref-go-forward
+     :help "Redo a jump undone with Jump Back."]
+    "---"
+    ["Symbols in This File…"         helm-semantic-or-imenu
+     :help "Jump to a definition in this buffer."]
+    ["Symbols in Workspace…"         my/workspace-symbol
+     :enable (fboundp 'my/workspace-symbol)
+     :help "Search every symbol the language server knows about."]
+    ["Apropos Symbol…      C-M-."    xref-find-apropos
+     :help "Find symbols matching a pattern across the project."]
+    ["Is This Symbol Used?"          my/symbol-usage
+     :enable (fboundp 'my/symbol-usage)
+     :help "Report whether the symbol at point is referenced anywhere."]
+    ["Tags Search…          M-s t"   counsel-etags-find-tag
+     :enable (fboundp 'counsel-etags-find-tag)
+     :help "Search the TAGS database (non-google3 projects)."]
     "---"
     ["Rename Symbol…"         lsp-rename
      :enable (bound-and-true-p lsp-mode)
@@ -174,6 +200,19 @@ various time zones."]
      :help "Run a syntax check on the current buffer."]
     "---"
     ("AI Assistant"
+     ["Write Commit Message"  my/ai-commit-message
+      :enable (fboundp 'my/ai-commit-message)
+      :help "Write this commit's message from its diff."]
+     ["Explain This"          my/ai-explain-region
+      :enable (fboundp 'my/ai-explain-region)
+      :help "Explain the region, or the definition around point."]
+     ["Review This"           my/ai-review-region
+      :enable (fboundp 'my/ai-review-region)
+      :help "Review the region for real defects."]
+     ["Suggest Improvements"  my/ai-suggest-improvement
+      :enable (fboundp 'my/ai-suggest-improvement)
+      :help "Suggest the highest-value improvements to this code."]
+     "---"
      ["Chat…"    gptel
       :help "Open or switch to a gptel AI chat buffer."]
      ["Send"     gptel-send

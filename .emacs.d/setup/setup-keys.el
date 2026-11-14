@@ -90,8 +90,18 @@
 (global-set-key [(control l)]    'goto-line)
 (global-set-key [(control s)]    'save-buffer)
 (global-set-key [(control o)]    'counsel-find-file)
-(global-set-key [(meta    s)]    'write-file)
-(global-set-key [(control q)]    'save-buffers-kill-emacs)
+;; No `M-s' here.  M-s is not a key, it is the prefix for the whole of
+;; `search-map' -- occur (M-s o), highlight (M-s h h), isearch-forward-symbol
+;; (M-s .) and the rest.  Binding a command to it made every one of them
+;; unreachable, to save two keystrokes over `C-x C-w', which still runs
+;; `write-file'.  `setup-ivy' now hangs the tags searches off this prefix.
+;;
+;; `my/exit', not `save-buffers-kill-emacs'.  Emacs runs here as a daemon, so
+;; the old binding did not close a window -- it killed the daemon, every frame
+;; and every unsaved buffer in all of them, from a single chord sitting
+;; between C-w and C-e.  `my/exit' (setup-server) does what C-q reads as: let
+;; the server go, hide this frame, leave the session alive.
+(global-set-key [(control q)]    'my/exit)
 (global-set-key [(meta    q)]    'kill-this-buffer)
 (global-set-key [(control r)]    'replace-string)
 (global-set-key [(control a)]    'mark-whole-buffer)
@@ -177,7 +187,12 @@
            ((kbd "<mouse-3>")                       .   mouse3-popup-menu)
            ((kbd "<C-tab>")                         .   comment-or-uncomment-region)
            ((kbd "C-/")                             .   comment-or-uncomment-region)
-           ((kbd "C-?")                             .   xref-find-references)
+           ;; `M-?', not `C-?', for find-references.  On a terminal Ctrl+?
+           ;; arrives as 0x7F -- DEL -- so this binding did nothing in the
+           ;; Tilix/tmux Emacs while risking attaching find-references to
+           ;; backspace.  `M-?' is the standard key, works in a tty, and is
+           ;; already bound globally.
+           ((kbd "M-?")                             .   xref-find-references)
            ((kbd "C-.")                             .   xref-find-definitions)
            ((kbd "<f12>")                           .   helm-semantic-or-imenu)
            ((kbd "C-`")                             .   helm-semantic-or-imenu)

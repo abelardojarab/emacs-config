@@ -123,11 +123,24 @@
 ;; Use universal ctags to build the tags database for the project.
 ;; When you first want to build a TAGS database run 'touch TAGS'
 ;; in the root directory of your project.
+;; Under the `M-s' search prefix, not on `M-.' and bare `M-s'.
+;;
+;; `M-.' is the one key every Emacs and every package agrees means "go to the
+;; definition", and it is the key that reaches `xref' -- and through xref,
+;; CiderLSP, which is the only backend that can answer inside google3.  Taking
+;; it for a TAGS lookup meant jumping to definitions in a CitC workspace
+;; either failed or silently used a stale TAGS file, with the language server
+;; sitting right there holding the real index.
+;;
+;; Bare `M-s' is worse than it looks: it is the prefix for the whole of
+;; `search-map', so binding a command to it made `M-s o' (occur), `M-s h'
+;; (highlight) and the rest unreachable.  These three live under it instead,
+;; which is where a tags search belongs anyway.
 (use-package counsel-etags
   :demand t
-  :bind (("M-." . counsel-etags-find-tag-at-point)
-         ("M-t" . counsel-etags-grep-symbol-at-point)
-         ("M-s" . counsel-etags-find-tag))
+  :bind (("M-s ." . counsel-etags-find-tag-at-point)
+         ("M-s t" . counsel-etags-find-tag)
+         ("M-s g" . counsel-etags-grep-symbol-at-point))
   :custom (counsel-etags-update-interval 180))
 
 (use-package counsel-gtags
@@ -289,9 +302,10 @@
          ("M-s L" . consult-line-multi) ;; needed by consult-line to detect isearch
          )
   :hook (completion-list-mode . consult-preview-at-point-mode)
-  :custom ((xref-show-xrefs-function 'consult-xref)
-           (xref-show-definitions-function 'consult-xref)
-           (consult-line-numbers-widen t)
+  ;; xref display is owned by `helm-xref' in `setup-helm-plugins'; setting it
+  ;; here too meant whichever file loaded last won, and the two settings
+  ;; disagreed, so references and definitions rendered in different UIs.
+  :custom ((consult-line-numbers-widen t)
            (consult-async-min-input 3)
            (consult-async-input-debounce 0.5)
            (consult-async-input-throttle 0.8)
@@ -315,9 +329,12 @@
                 register-preview-function #'consult-register-format)
           (advice-add #'register-preview :override #'consult-register-window)
 
-          ;; Use Consult to select xref locations with preview
-          (setq xref-show-xrefs-function #'consult-xref
-                xref-show-definitions-function #'consult-xref))
+          ;; Deliberately NOT setting `xref-show-xrefs-function' /
+          ;; `xref-show-definitions-function' here.  `helm-xref' in
+          ;; `setup-helm-plugins' owns both; this block used to reassert
+          ;; consult's versions and, since it runs at a different time, left
+          ;; references in helm and definitions in consult.
+          )
   :config (progn
             (setq consult-project-root-function #'projectile-project-root)
             (setq consult-narrow-key "<") ; use this to show different types of things in C-x b

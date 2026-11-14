@@ -770,5 +770,216 @@ a machine where lsp-mode had not been loaded."
 
 (global-set-key (kbd "C-c g") #'my/google3-dispatch)
 
+
+;;; Headless audit, for the command line ---------------------------------------
+
+;; `cstig' and `jjtig unused' drive these through `emacsclient -e'.  They live
+;; here rather than in the scripts because the only thing that can answer
+;; "is this symbol used?" inside an unsubmitted CL is CiderLSP, and the only
+;; process already holding a warm CiderLSP is this one.  Code Search indexes
+;; *head*, so for a symbol you wrote ten minutes ago it reports zero hits
+;; whether or not the symbol is used -- which is exactly the wrong answer.
+
+(defun my/google3--changed-files (&optional rev)
+  "Files touched by REV (default @), absolute, source files only."
+  (let* ((root (or (and (fboundp 'jj--root) (jj--root)) default-directory))
+         (default-directory root)
+         (out (with-output-to-string
+                (with-current-buffer standard-output
+                  (call-process "jj" nil t nil "--ignore-working-copy"
+                                "diff" "--name-only" "-r" (or rev "@"))))))
+    (seq-filter
+     (lambda (f) (string-match-p "\\.\\(cc\\|cpp\\|h\\|hpp\\|py\\|go\\|java\\|ts\\|proto\\)\\'" f))
+     (mapcar (lambda (f) (expand-file-name f root))
+             (split-string out "\n" t)))))
+
+(defun my/google3--added-lines (file &optional rev)
+  "Set of 1-based line numbers FILE gained in REV, as a hash table.
+
+Read from the diff's @@ headers rather than from blame: `jj file
+annotate' is 21 seconds on a single file in a CitC workspace, and this
+has to run over every file in the change."
+  (let* ((root (or (and (fboundp 'jj--root) (jj--root)) default-directory))
+         (default-directory root)
+         (rel (file-relative-name file root))
+         (tbl (make-hash-table :test 'eql))
+         (out (with-output-to-string
+                (with-current-buffer standard-output
+                  (call-process "jj" nil t nil "--ignore-working-copy"
+                                "diff" "--git" "-r" (or rev "@") "--" rel))))
+         (line 0))
+    (dolist (l (split-string out "\n") tbl)
+      (cond
+       ((string-match "\\`@@ -[0-9,]+ \\+\\([0-9]+\\)" l)
+        (setq line (string-to-number (match-string 1 l))))
+       ((string-prefix-p "+++" l))
+       ((string-prefix-p "+" l) (puthash line t tbl) (setq line (1+ line)))
+       ((string-prefix-p "-" l))
+       ((> line 0) (setq line (1+ line)))))))
+
+(defmacro my/google3--headless (&rest body)
+  "Run BODY with every interactive prompt disabled.
+
+Learned the hard way: `find-file-noselect' on a google3 file in a daemon
+runs the whole `find-file-hook' chain, and anything in it that asks a
+question -- a .dir-locals safety prompt, lsp-mode asking to confirm the
+project root -- blocks on a minibuffer read in a process that has no
+frame to answer it.  The daemon then accepts connections and never
+replies, and only SIGUSR2 gets it back.
+
+So the readers are not merely suppressed, they are made to signal: a
+headless audit that dies with an error is recoverable, one that waits
+for input is not."
+  (declare (indent 0) (debug t))
+  `(let ((enable-local-variables nil)
+         (enable-dir-local-variables nil)
+         (large-file-warning-threshold nil)
+         (confirm-nonexistent-file-or-buffer nil)
+         (inhibit-message t)
+         (find-file-hook nil)
+         (lsp-auto-guess-root t)
+         (lsp-restart 'ignore)
+         (lsp-enable-snippet nil)
+         (my/g3--saved (list (symbol-function 'y-or-n-p)
+                             (symbol-function 'yes-or-no-p)
+                             (symbol-function 'read-string)
+                             (symbol-function 'completing-read)
+                             (symbol-function 'read-from-minibuffer))))
+     ;; Hand-written rather than `cl-letf': five function bindings in one
+     ;; cl-letf expanded to five identically named temporaries here and blew
+     ;; up with a void-variable at run time.
+     (unwind-protect
+         (progn
+           (fset 'y-or-n-p (lambda (&rest _) nil))
+           (fset 'yes-or-no-p (lambda (&rest _) nil))
+           (fset 'read-string (lambda (&rest _) (error "headless: refused to prompt")))
+           (fset 'completing-read (lambda (&rest _) (error "headless: refused to prompt")))
+           (fset 'read-from-minibuffer (lambda (&rest _) (error "headless: refused to prompt")))
+           ,@body)
+       (fset 'y-or-n-p (nth 0 my/g3--saved))
+       (fset 'yes-or-no-p (nth 1 my/g3--saved))
+       (fset 'read-string (nth 2 my/g3--saved))
+       (fset 'completing-read (nth 3 my/g3--saved))
+       (fset 'read-from-minibuffer (nth 4 my/g3--saved)))))
+
+(defun my/google3--ensure-lsp (&optional budget)
+  "Bring CiderLSP up in this buffer, waiting at most BUDGET seconds."
+  (unless (bound-and-true-p lsp-mode)
+    (ignore-errors (lsp))
+    (let ((waited 0) (cap (or budget 30)))
+      (while (and (not (bound-and-true-p lsp-mode)) (< waited cap))
+        (sleep-for 0.25)
+        (setq waited (+ waited 0.25)))))
+  (bound-and-true-p lsp-mode))
+
+(defvar my/google3--symbols-error nil
+  "Last error from the documentSymbol request, for the audit to report.")
+
+(defun my/google3--symbols-when-ready (&optional budget)
+  "Document symbols for this buffer, waiting for CiderLSP to index it.
+
+`lsp-mode' reports attached well before CiderLSP can answer for the
+file: measured on goodput_kernel.h, documentSymbol returns 0 entries
+immediately after `initialized' and the real answer only about five
+seconds later.  Asking once is therefore indistinguishable from "this
+file declares nothing", which in an unused-symbol audit is the most
+dangerous possible wrong answer -- it reports everything as dead.
+
+Retries until the server returns something or BUDGET runs out."
+  (let ((waited 0) (cap (or budget 20)) syms)
+    (while (and (null syms) (< waited cap))
+      (setq syms
+            (condition-case err
+                (and (fboundp 'my/cc--lsp-symbols) (my/cc--lsp-symbols))
+              (error
+               ;; Seen in this config: once CiderLSP returns a non-empty
+               ;; documentSymbol, deserialising it signals `void-variable
+               ;; this' from inside lsp-mode's eieio layer.  Report that
+               ;; rather than letting an obscure error escape -- and rather
+               ;; than swallowing it, which would look like "no symbols"
+               ;; and mark every symbol in the file as unused.
+               (setq my/google3--symbols-error (error-message-string err))
+               nil)))
+      (unless syms (sleep-for 1) (setq waited (1+ waited))))
+    syms))
+
+(defun my/google3--audit-file (file added-only rev)
+  "Return ((NAME LINE USES) ...) for symbols declared in FILE.
+With ADDED-ONLY, keep only symbols whose declaration line REV added."
+  (my/google3--headless
+    (let ((buf (find-file-noselect file t))
+          (added (and added-only (my/google3--added-lines file rev)))
+          out)
+      (with-current-buffer buf
+        ;; CiderLSP attaches on a mode hook and answers asynchronously; give
+        ;; it a bounded chance to come up rather than reporting every symbol
+        ;; as unused because the server was simply not ready yet.
+        (when (my/google3--ensure-lsp)
+          (dolist (sym (or (my/google3--symbols-when-ready) '()))
+            (pcase-let ((`(,name ,l ,c . ,_) sym))
+              (when (or (null added) (gethash (1+ l) added))
+                (push (list name (1+ l)
+                            (length (or (and (fboundp 'my/cc--refs-at)
+                                             (my/cc--refs-at l c))
+                                        '())))
+                      out))))))
+      (nreverse out))))
+
+;;;###autoload
+(defun my/google3-unused-in-cl (&optional rev added-only)
+  "Symbols declared in REV that CiderLSP sees no references to.
+
+Returns a plist per file.  ADDED-ONLY (the default from the command
+line) restricts the report to symbols whose declaration line the change
+actually added, so pre-existing dead code in a file you merely touched
+does not show up as yours."
+  (let (report)
+    (dolist (f (my/google3--changed-files rev) (nreverse report))
+      (let* ((syms (my/google3--audit-file f added-only rev))
+             (dead (seq-filter (lambda (s) (zerop (nth 2 s))) syms)))
+        (push (list :file f :checked (length syms) :unused dead) report)))))
+
+;;;###autoload
+(defun my/google3-unused-in-cl-report (&optional rev added-only)
+  "Plain-text `my/google3-unused-in-cl', one line per finding, for a shell."
+  (let ((rows (my/google3-unused-in-cl rev added-only))
+        (root (or (and (fboundp 'jj--root) (jj--root)) ""))
+        (n 0) (checked 0))
+    (with-output-to-string
+      (dolist (r rows)
+        (setq checked (+ checked (plist-get r :checked)))
+        (dolist (s (plist-get r :unused))
+          (setq n (1+ n))
+          (princ (format "%s:%d\t%s\n"
+                         (file-relative-name (plist-get r :file) root)
+                         (nth 1 s) (nth 0 s)))))
+      (princ (format "#\t%d symbol(s) checked, %d with no references\n" checked n))
+      (when my/google3--symbols-error
+        (princ (format "#\tWARNING: CiderLSP symbol listing failed (%s);\n"
+                       my/google3--symbols-error))
+        (princ "#\tthe result above is not trustworthy.\n")))))
+
+;;;###autoload
+(defun my/google3-references-report (file line col)
+  "Tab-separated `FILE:LINE\\tTEXT' for every reference at FILE LINE COL.
+LINE and COL are 1-based and 0-based respectively, as a shell would give them."
+  (my/google3--headless
+   (let ((buf (find-file-noselect file t)))
+    (with-current-buffer buf
+      (my/google3--ensure-lsp)
+      (with-output-to-string
+        (dolist (loc (or (and (fboundp 'my/cc--refs-at)
+                              (my/cc--refs-at (1- line) col))
+                         '()))
+          (let* ((uri (or (gethash "uri" loc) (gethash "targetUri" loc)))
+                 (rng (or (gethash "range" loc) (gethash "targetSelectionRange" loc)))
+                 (st  (and (hash-table-p rng) (gethash "start" rng))))
+            (when (and uri st)
+              (princ (format "%s:%d\n"
+                             (if (fboundp 'lsp--uri-to-path)
+                                 (lsp--uri-to-path uri)
+                               (string-remove-prefix "file://" uri))
+                             (1+ (gethash "line" st))))))))))))
+
 (provide 'setup-google3)
 ;;; setup-google3.el ends here

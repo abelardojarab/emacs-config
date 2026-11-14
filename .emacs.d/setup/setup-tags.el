@@ -97,9 +97,13 @@
                 table))))
 
 ;; Emacs 25-above xref
+;; `xref-go-back', not `xref-pop-marker-stack': the latter has been an
+;; obsolete alias since Emacs 29 and will eventually stop existing.  M-, is
+;; the standard key for it and is left alone; M-* is kept as the muscle-memory
+;; alternative.
 (use-package xref
   :if (boundp 'xref-backend-functions)
-  :bind (("M-*" . xref-pop-marker-stack)
+  :bind (("M-*" . xref-go-back)
          ("C-]" . xref-find-definitions))
   :config (setq xref-prompt-for-identifier '(not xref-find-definitions
                                                  xref-find-definitions-other-window

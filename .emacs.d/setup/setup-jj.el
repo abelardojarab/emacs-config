@@ -209,11 +209,13 @@ working copy by accident."
       (read-string (or prompt "Revision: ") "@")))
 
 (defun jj--refresh-status-buffers ()
-  "Re-render every live jj status buffer."
+  "Re-render every live jj status buffer, and the stack marks in files.
+Every jj command run from Emacs ends here, which is why the marks do."
   (dolist (buf (buffer-list))
     (with-current-buffer buf
       (when (derived-mode-p 'jj-status-mode)
-        (jj-status-refresh)))))
+        (jj-status-refresh))))
+  (jj--stack-marks-invalidate))
 
 (defmacro jj--with-section (spec heading &rest body)
   "Wrap BODY in a magit section when magit is present, else just insert HEADING."
@@ -1195,6 +1197,8 @@ prefix argument REFRESH, re-read the CL annotations."
     ("blame: annotate buffer (vc-annotate)"         . jj-annotate)
     ("blame: this line"                             . jj-blame-line)
     ("blame: toggle inline"                         . jj-inline-blame-mode)
+    ("blame: toggle stack marks (-N per line)"      . jj-stack-marks-mode)
+    ("blame: which stack commit changed this line"  . jj-stack-marks-show-line)
     ("refresh the mode line"                        . jj-mode-line-refresh))
   "(DESCRIPTION . COMMAND) for everything on the jj menu.")
 
@@ -1389,6 +1393,32 @@ marks lag behind the buffer until something else snapshots."
   :type 'boolean
   :group 'jj)
 
+(defcustom jj-diff-base 'file-cl
+  "What the fringe marks in a jj buffer compare the file against.
+
+`file-cl': the parent of the latest change in your stack that modifies
+the file, so the marks show that CL's lines plus any pending edits in
+`@', wherever that CL sits in the stack.  A file the stack does not
+touch falls back to `@-'.
+
+`parent': `@-'.  With an empty `@' on top of the CL -- the usual
+\"jj new, edit, squash\" loop -- this shows only the pending edits."
+  :type '(choice (const :tag "Parent of the file's latest CL" file-cl)
+                 (const :tag "Parent of the working copy (@-)" parent))
+  :group 'jj)
+
+(defun jj--diff-base-revision (file)
+  "The revset FILE's fringe marks diff from, per `jj-diff-base'."
+  (let ((root (jj--root (file-name-directory file))))
+    (if (or (eq jj-diff-base 'parent) (not root))
+        "@-"
+      ;; mutable() keeps the search inside the stack.  Past it, ::@ reaches
+      ;; the Piper base commit, which adds every file, so a file the stack
+      ;; never touched would show as entirely new -- and on such a file
+      ;; `heads(::@ & files(...))' also trips an internal jj RET_CHECK.
+      (format "coalesce(heads(::@ & mutable() & files(root-file:%S)), @)-"
+              (file-relative-name (file-truename file) root)))))
+
 (defun vc-jj-diff (files &optional rev1 rev2 buffer _async)
   "Insert a diff of FILES between REV1 and REV2 into BUFFER.
 Returns 0 when there is no difference, 1 when there is -- the contract
@@ -1555,6 +1585,427 @@ is annotated once instead and invalidated when it changes."
   (setq jj--blame-table nil)
   (jj--blame-clear))
 
+;;; Stack marks: which CL changed each line ----------------------------------
+
+;; Every line a commit in the stack changed gets that commit's distance below
+;; @ in the left margin, in jj's own terms: -1 is @-, -2 is @--, and @ is the
+;; working-copy commit itself.  The first line of a run carries the label and
+;; the rest a bar in the same colour.  Hovering over a mark shows the CL and
+;; its description, and so does `jj-stack-marks-show-line' (C-u opens the CL).
+;;
+;; `jj file annotate' answers the same question, but it walks the whole Piper
+;; history behind the stack: 15.6s and 27.8s in two runs on a 980-line
+;; bin_solver file.  Only the stack matters here, so one `jj log' over
+;; `::@ & mutable()' prints every commit with its diff of this one file --
+;; 0.6s for a 26-commit stack -- and the diffs are walked from @ down.  A line
+;; a commit's diff adds belongs to that commit; any other line is mapped to
+;; its number in the parent and handed on.  Lines nothing claims predate the
+;; stack and stay unmarked.  `mutable()' is there for the reason given in
+;; `jj--diff-base-revision'.
+;;
+;; The marks are recomputed in the background when the file is saved or
+;; reverted, after a jj command run from Emacs, and -- for jj run anywhere
+;; else, a shell or an agent -- when .jj/working_copy/checkout changes.  jj
+;; writes the id of the operation the working copy is at into that file after
+;; every operation (checked for new, describe of an ancestor, squash and
+;; bookmark create), so a change in its contents means the stack may have
+;; moved.  Reading it is one small file read per visible marked buffer, when
+;; Emacs goes idle.
+
+(defcustom jj-stack-marks t
+  "Mark each line with the stack commit that changed it.
+Applies to the buffers `jj--setup-buffer-vc-ui' sets up; see
+`jj-stack-marks-mode'."
+  :type 'boolean
+  :group 'jj)
+
+(defcustom jj-stack-marks-idle 1.5
+  "Idle seconds before checking whether the stack moved under a marked buffer."
+  :type 'number
+  :group 'jj)
+
+(defcustom jj-stack-marks-faces
+  '(font-lock-keyword-face font-lock-string-face font-lock-function-name-face
+    font-lock-type-face font-lock-constant-face font-lock-variable-name-face)
+  "Faces the marks cycle through by depth: -1 takes the first, -2 the next.
+Theme faces rather than fixed colours, so that neighbouring commits stay
+distinct and readable under whatever theme is loaded."
+  :type '(repeat face)
+  :group 'jj)
+
+(defface jj-stack-marks-working-copy-face
+  '((t :inherit warning))
+  "Face for the @ mark: lines changed by the working-copy commit itself."
+  :group 'jj)
+
+(defvar-local jj--stack-marks-root nil
+  "The jj root of this buffer's file, found once when the mode starts.")
+(defvar-local jj--stack-marks-process nil)
+(defvar-local jj--stack-marks-stamp nil
+  "Contents of .jj/working_copy/checkout when the marks were last computed.")
+(defvar-local jj--stack-marks-saved-margin nil
+  "(LOCAL . VALUE) of `left-margin-width' before the mode changed it.")
+(defvar jj--stack-marks-timer nil)
+
+(defconst jj--stack-marks-hunk-re
+  "^@@ -\\([0-9]+\\)\\(?:,\\([0-9]+\\)\\)? \\+\\([0-9]+\\)\\(?:,\\([0-9]+\\)\\)? @@"
+  "Matches a git hunk header, where a count of 1 may be left out.")
+
+(defun jj--stack-marks-template (rel)
+  "The `jj log' template printing each commit and its diff of REL.
+REL is relative to the workspace root."
+  (concat "\"@@@JJ\\t\" ++ change_id.short(8)"
+          " ++ \"\\t\" ++ parents.len()"
+          " ++ \"\\t\" ++ bookmarks.join(\" \")"
+          " ++ \"\\t\" ++ description.first_line() ++ \"\\n\""
+          ;; A fileset string inside a template string, so quoted twice.
+          " ++ self.diff(" (prin1-to-string (format "root-file:%S" rel))
+          ").git()"))
+
+(defun jj--stack-marks-parse ()
+  "Parse the `jj log' output in the current buffer, newest commit first.
+Each commit is (CHANGE PARENTS CL DESCRIPTION HUNKS), and each hunk is
+\(NEW-START NEW-COUNT OLD-END MAP): MAP gives, for each line on the new
+side, its number on the old side, or nil for a line the hunk adds, and
+OLD-END is the first old line after the hunk."
+  (let (commits)
+    (goto-char (point-min))
+    (while (not (eobp))
+      (cond
+       ((looking-at "@@@JJ\t\\([^\t\n]*\\)\t\\([0-9]+\\)\t\\([^\t\n]*\\)\t\\(.*\\)")
+        (let ((change (match-string 1))
+              (parents (string-to-number (match-string 2)))
+              (bookmarks (match-string 3))
+              (desc (match-string 4)))
+          (push (list change parents
+                      (and (string-match "cl/[0-9]+" bookmarks)
+                           (match-string 0 bookmarks))
+                      (if (string-empty-p desc) "(no description)" desc)
+                      nil)
+                commits)))
+       ((and commits (looking-at jj--stack-marks-hunk-re))
+        (let* ((old (string-to-number (match-string 1)))
+               (old-count (if (match-beginning 2)
+                              (string-to-number (match-string 2))
+                            1))
+               (new (string-to-number (match-string 3)))
+               (new-count (if (match-beginning 4)
+                              (string-to-number (match-string 4))
+                            1))
+               (map (make-vector new-count nil))
+               (i 0)
+               (o 0))
+          ;; An empty side's start names the line before the hunk.
+          (when (zerop old-count) (setq old (1+ old)))
+          (when (zerop new-count) (setq new (1+ new)))
+          (while (and (or (< i new-count) (< o old-count))
+                      (zerop (forward-line 1))
+                      (not (eobp)))
+            (pcase (char-after)
+              (?+ (setq i (1+ i)))
+              (?- (setq o (1+ o)))
+              (?\\ nil)                 ; "\ No newline at end of file"
+              (_ (when (< i new-count) (aset map i (+ old o)))
+                 (setq i (1+ i) o (1+ o)))))
+          (push (list new new-count (+ old old-count) map)
+                (nth 4 (car commits))))))
+      (forward-line 1))
+    (dolist (commit commits)
+      (setf (nth 4 commit) (nreverse (nth 4 commit))))
+    (nreverse commits)))
+
+(defun jj--stack-marks-attribute (nlines commits)
+  "Map each line 1..NLINES of the file at @ to the commit that added it.
+Returns a vector holding, per line, that commit's index in COMMITS or
+nil.  COMMITS is newest first, as `jj--stack-marks-parse' returns it, so
+the index is also the commit's distance below @."
+  (let ((owners (make-vector (1+ nlines) nil))
+        ;; Each line's number in the version being walked; nil once claimed.
+        (pos (make-vector (1+ nlines) nil))
+        (depth 0))
+    (dotimes (i nlines) (aset pos (1+ i) (1+ i)))
+    (catch 'merge
+      (dolist (commit commits)
+        (let ((hunks (nth 4 commit))
+              (delta 0))
+          (when hunks
+            (dotimes (i nlines)
+              (let ((n (aref pos (1+ i))))
+                (when n
+                  ;; Lines keep their order, so each hunk is passed once,
+                  ;; shifting every line below it by its change in size.
+                  (while (and hunks (>= n (+ (nth 0 (car hunks))
+                                             (nth 1 (car hunks)))))
+                    (setq delta (- (nth 2 (car hunks))
+                                   (nth 0 (car hunks)) (nth 1 (car hunks)))
+                          hunks (cdr hunks)))
+                  (if (or (null hunks) (< n (nth 0 (car hunks))))
+                      (aset pos (1+ i) (+ n delta))
+                    (let ((old (aref (nth 3 (car hunks))
+                                     (- n (nth 0 (car hunks))))))
+                      (aset pos (1+ i) old)
+                      (unless old (aset owners (1+ i) depth))))))))
+          ;; A merge's diff is against its merged parents, which are not one
+          ;; earlier version of the file, so the walk cannot go past it.
+          (when (> (nth 1 commit) 1) (throw 'merge nil)))
+        (setq depth (1+ depth))))
+    owners))
+
+(defun jj--stack-marks-label (depth)
+  "The mark for the commit DEPTH below @."
+  (if (zerop depth) "@" (format "-%d" depth)))
+
+(defun jj--stack-marks-face (depth)
+  "The face for the commit DEPTH below @."
+  (cond ((zerop depth) 'jj-stack-marks-working-copy-face)
+        (jj-stack-marks-faces
+         (nth (mod (1- depth) (length jj-stack-marks-faces))
+              jj-stack-marks-faces))
+        (t 'shadow)))
+
+(defun jj--stack-marks-margin-string (text face tip)
+  "A `before-string' drawing TEXT in FACE in the left margin, with TIP."
+  (propertize " " 'display
+              `((margin left-margin)
+                ,(propertize text 'face face 'help-echo tip))))
+
+(defun jj--stack-marks-set-margin (width)
+  "Make the left margin WIDTH columns, in every window showing the buffer."
+  (setq left-margin-width width)
+  (dolist (win (get-buffer-window-list nil nil t))
+    (set-window-margins win left-margin-width right-margin-width)))
+
+(defun jj--stack-marks-clear ()
+  "Remove this buffer's stack marks.
+Found by property rather than kept in a list: `revert-buffer' can rerun
+the major mode, which wipes buffer-local variables but not overlays."
+  (save-restriction
+    (widen)
+    (remove-overlays (point-min) (point-max) 'jj-stack-marks t)))
+
+(defun jj--stack-marks-draw (commits owners)
+  "Mark the lines that OWNERS assigns to COMMITS.
+See `jj--stack-marks-attribute' for both."
+  (jj--stack-marks-clear)
+  (let* ((depths (delete-dups (delq nil (append owners nil))))
+         (width (apply #'max 0 (mapcar (lambda (depth)
+                                         (length (jj--stack-marks-label depth)))
+                                       depths)))
+         ;; depth -> (INFO LABEL-STRING . BAR-STRING), shared by its overlays.
+         (marks (make-hash-table))
+         (prev nil))
+    (dolist (depth depths)
+      (let* ((commit (nth depth commits))
+             (label (jj--stack-marks-label depth))
+             (face (jj--stack-marks-face depth))
+             (info (list depth (nth 0 commit) (nth 2 commit) (nth 3 commit)))
+             (tip (format "%s  %s  %s\n%s" label (or (nth 2 commit) "no CL")
+                          (nth 0 commit) (nth 3 commit))))
+        (puthash depth
+                 (cons info
+                       (cons (jj--stack-marks-margin-string
+                              (string-pad label width nil t) face tip)
+                             (jj--stack-marks-margin-string
+                              (string-pad "│" width nil t) face tip)))
+                 marks)))
+    (save-excursion
+      (save-restriction
+        (widen)
+        (goto-char (point-min))
+        (dotimes (i (1- (length owners)))
+          (let ((depth (aref owners (1+ i))))
+            (when depth
+              (let ((mark (gethash depth marks))
+                    ;; The whole line, newline included, so that an empty line
+                    ;; is not an empty overlay that `evaporate' deletes.
+                    (ov (make-overlay (point) (min (point-max)
+                                                   (line-beginning-position 2)))))
+                (overlay-put ov 'jj-stack-marks t)
+                (overlay-put ov 'jj-stack-marks-info (car mark))
+                (overlay-put ov 'evaporate t)
+                (overlay-put ov 'before-string
+                             (if (eql depth prev) (cddr mark) (cadr mark)))))
+            (setq prev depth))
+          (forward-line 1))))
+    (jj--stack-marks-set-margin
+     (if depths width (cdr jj--stack-marks-saved-margin)))))
+
+(defun jj--stack-marks-wc-stamp ()
+  "Contents of the workspace's .jj/working_copy/checkout, or nil.
+It starts with the id of the operation the working copy is at."
+  ;; Resolved before `with-temp-buffer', where the buffer-local root is nil.
+  (let ((file (expand-file-name ".jj/working_copy/checkout"
+                                jj--stack-marks-root)))
+    (ignore-errors
+      (with-temp-buffer
+        (insert-file-contents-literally file)
+        (buffer-string)))))
+
+(defun jj--stack-marks-kill ()
+  "Stop this buffer's jj process, if one is running."
+  ;; Cleared first: `delete-process' runs the sentinel straight away, and it
+  ;; must not take the killed process for the current one.
+  (let ((proc jj--stack-marks-process))
+    (setq jj--stack-marks-process nil)
+    (when (process-live-p proc)
+      (delete-process proc))))
+
+(defun jj--stack-marks-off ()
+  "Remove the marks and give the margin back."
+  (jj--stack-marks-kill)
+  (jj--stack-marks-clear)
+  (remove-hook 'after-save-hook #'jj--stack-marks-refresh t)
+  (remove-hook 'after-revert-hook #'jj--stack-marks-refresh t)
+  (remove-hook 'kill-buffer-hook #'jj--stack-marks-kill t)
+  (remove-hook 'change-major-mode-hook #'jj--stack-marks-off t)
+  (when jj--stack-marks-saved-margin
+    (if (car jj--stack-marks-saved-margin)
+        (setq left-margin-width (cdr jj--stack-marks-saved-margin))
+      (kill-local-variable 'left-margin-width))
+    (setq jj--stack-marks-saved-margin nil)
+    (dolist (win (get-buffer-window-list nil nil t))
+      (set-window-margins win left-margin-width right-margin-width))))
+
+(define-minor-mode jj-stack-marks-mode
+  "Show, in the left margin, which commit in the stack changed each line.
+-N is the commit N below @ (-1 is @-), and @ is the working-copy commit
+itself.  Hover over a mark, or use `jj-stack-marks-show-line', for its
+CL and description."
+  :lighter nil
+  (cond
+   ((not jj-stack-marks-mode)
+    (jj--stack-marks-off))
+   ((not (and buffer-file-name
+              (jj-available-p)
+              (setq jj--stack-marks-root
+                    (jj--root (file-name-directory buffer-file-name)))))
+    (setq jj-stack-marks-mode nil)
+    (message "jj-stack-marks-mode needs a file in a jj workspace"))
+   (t
+    (unless jj--stack-marks-saved-margin
+      (setq jj--stack-marks-saved-margin
+            (cons (local-variable-p 'left-margin-width) left-margin-width)))
+    ;; Depth 90: after diff-hl's own entries, whose `jj diff' snapshots the
+    ;; working copy.  Starting jj alongside it would snapshot twice.
+    (add-hook 'after-save-hook #'jj--stack-marks-refresh 90 t)
+    (add-hook 'after-revert-hook #'jj--stack-marks-refresh 90 t)
+    (add-hook 'kill-buffer-hook #'jj--stack-marks-kill nil t)
+    (add-hook 'change-major-mode-hook #'jj--stack-marks-off nil t)
+    (unless jj--stack-marks-timer
+      (setq jj--stack-marks-timer
+            (run-with-idle-timer jj-stack-marks-idle t #'jj--stack-marks-poll)))
+    (jj--stack-marks-refresh))))
+
+(defun jj--stack-marks-refresh ()
+  "Recompute this buffer's stack marks in the background."
+  (when (and jj-stack-marks-mode jj--stack-marks-root)
+    (jj--stack-marks-kill)
+    (let* ((buf (current-buffer))
+           (tick (buffer-chars-modified-tick))
+           (rel (file-relative-name (file-truename buffer-file-name)
+                                    jj--stack-marks-root))
+           (err (generate-new-buffer " *jj-stack-marks-err*"))
+           (default-directory (file-name-as-directory jj--stack-marks-root))
+           (proc (make-process
+                  :name "jj-stack-marks"
+                  :buffer (generate-new-buffer " *jj-stack-marks*")
+                  :stderr err
+                  :noquery t
+                  :connection-type 'pipe
+                  :command (append
+                            (list jj-executable)
+                            ;; The same trade-off as the fringe diff.
+                            (unless jj-diff-snapshot
+                              (list "--ignore-working-copy"))
+                            (list "--no-pager" "--color=never" "log"
+                                  "--no-graph" "-r" "::@ & mutable()"
+                                  "-T" (jj--stack-marks-template rel)))
+                  :sentinel (lambda (proc _event)
+                              (jj--stack-marks-sentinel proc buf tick)))))
+      (set-process-query-on-exit-flag (get-buffer-process err) nil)
+      (process-put proc 'stderr err)
+      (setq jj--stack-marks-process proc))))
+
+(defun jj--stack-marks-sentinel (proc buf tick)
+  "Draw the marks PROC computed for BUF, unless BUF was edited since TICK."
+  (when (memq (process-status proc) '(exit signal))
+    (let ((out (process-buffer proc))
+          (err (process-get proc 'stderr)))
+      (unwind-protect
+          (when (and (buffer-live-p buf)
+                     (buffer-live-p out)
+                     (eq proc (buffer-local-value 'jj--stack-marks-process buf)))
+            (with-current-buffer buf
+              (setq jj--stack-marks-process nil)
+              ;; Recorded whatever the outcome, so that a failing jj is not
+              ;; rerun at every idle tick until the stack moves.
+              (setq jj--stack-marks-stamp (jj--stack-marks-wc-stamp))
+              (cond
+               ((not (zerop (process-exit-status proc)))
+                (message "jj stack marks: %s"
+                         (or (and (buffer-live-p err)
+                                  (with-current-buffer err
+                                    (goto-char (point-max))
+                                    (and (re-search-backward "^Error: .*" nil t)
+                                         (match-string 0))))
+                             "jj log failed")))
+               ;; Edited while jj ran, so the line numbers no longer match
+               ;; @.  Saving starts another refresh.
+               ((/= tick (buffer-chars-modified-tick)))
+               (t
+                (let ((commits (with-current-buffer out
+                                 (jj--stack-marks-parse))))
+                  (jj--stack-marks-draw
+                   commits
+                   (jj--stack-marks-attribute
+                    (save-restriction
+                      (widen)
+                      (count-lines (point-min) (point-max)))
+                    commits)))))))
+        (when (buffer-live-p out) (kill-buffer out))
+        (when (buffer-live-p err) (kill-buffer err))))))
+
+(defun jj--stack-marks-poll ()
+  "Refresh the marks in each visible buffer whose stack has moved."
+  (dolist (buf (delete-dups (mapcar #'window-buffer
+                                    (window-list-1 nil 'nomini 'visible))))
+    (with-current-buffer buf
+      (when (and jj-stack-marks-mode
+                 (not (buffer-modified-p))
+                 (not (process-live-p jj--stack-marks-process))
+                 (not (equal jj--stack-marks-stamp (jj--stack-marks-wc-stamp))))
+        (jj--stack-marks-refresh)))))
+
+(defun jj--stack-marks-invalidate ()
+  "Recompute the stack marks after a jj command run from Emacs.
+Visible buffers now; the rest at the first idle tick once they are shown.
+Also catches what the checkout file does not, such as a CL number a
+first upload adds."
+  (dolist (buf (buffer-list))
+    (with-current-buffer buf
+      (when jj-stack-marks-mode
+        (setq jj--stack-marks-stamp nil)
+        (when (and (get-buffer-window buf 'visible) (not (buffer-modified-p)))
+          (jj--stack-marks-refresh))))))
+
+;;;###autoload
+(defun jj-stack-marks-show-line (&optional visit)
+  "Echo the stack commit that changed the current line.
+With VISIT (\\[universal-argument]), open its CL in Critique instead."
+  (interactive "P")
+  (unless jj-stack-marks-mode
+    (user-error "jj-stack-marks-mode is off in this buffer"))
+  (let ((info (seq-some (lambda (ov) (overlay-get ov 'jj-stack-marks-info))
+                        (overlays-at (line-beginning-position)))))
+    (cond
+     ((not info)
+      (message "Line %d: no commit in the stack changed it"
+               (line-number-at-pos)))
+     (visit (jj-show-cl (nth 1 info)))
+     (t (message "Line %d: %s  %s  %s  %s" (line-number-at-pos)
+                 (jj--stack-marks-label (nth 0 info))
+                 (or (nth 2 info) "no CL") (nth 1 info) (nth 3 info))))))
+
 (defcustom jj-disable-flydiff t
   "Turn off the global `diff-hl-flydiff-mode' when a jj buffer is opened.
 
@@ -1581,13 +2032,16 @@ See the comment in `jj--setup-buffer-vc-ui'."
     (jj-inline-blame-mode 1)
     ;; diff-hl goes through VC, so it works now that vc-jj-diff exists.
     ;;
-    ;; Point it at `@-' explicitly.  Left alone, diff-hl (and flydiff) compare
-    ;; against the *working* revision, so a commit you are building shows no
-    ;; marks at all -- everything in it is already committed.  Against the
-    ;; parent you get what this change adds and removes relative to the
-    ;; previous commit in the stack, which is the diffbase that matters when
-    ;; the stack is the unit of review.
-    (setq-local diff-hl-reference-revision "@-")
+    ;; Point it at a parent explicitly.  Left alone, diff-hl (and flydiff)
+    ;; compare against the *working* revision, so a commit you are building
+    ;; shows no marks at all -- everything in it is already committed.  By
+    ;; default (`jj-diff-base') the base is the parent of the file's latest CL
+    ;; in the stack, so the marks show what that CL changes even when `@' is
+    ;; an empty commit on top of it; `@-' would show nothing there.  jj
+    ;; resolves the revset on every update, so squashing or reordering the
+    ;; stack moves the base with it.
+    (setq-local diff-hl-reference-revision
+                (jj--diff-base-revision buffer-file-name))
     ;; diff-hl-flydiff has to go, and it is a *global* mode so this turns it
     ;; off everywhere, git repos included.
     ;;
@@ -1601,10 +2055,13 @@ See the comment in `jj--setup-buffer-vc-ui'."
     ;; and give up the against-parent marks.
     (when (and jj-disable-flydiff (bound-and-true-p diff-hl-flydiff-mode))
       (diff-hl-flydiff-mode -1)
-      (message "jj: turned off diff-hl-flydiff so the fringe can show changes against @-"))
+      (message "jj: turned off diff-hl-flydiff so the fringe can show the CL's changes"))
     ;; Enabling the mode already triggers one update; calling it again here
     ;; just paid for a second `jj diff'.
-    (when (fboundp 'diff-hl-mode) (diff-hl-mode 1))))
+    (when (fboundp 'diff-hl-mode) (diff-hl-mode 1))
+    ;; Last, so that its jj process starts after diff-hl's `jj diff' has
+    ;; snapshotted the working copy instead of racing it.
+    (when jj-stack-marks (jj-stack-marks-mode 1))))
 
 
 
@@ -1763,7 +2220,9 @@ indicator above is independent of this and keeps working."
      ["Blame"
       ("a" "annotate (vc-annotate)" jj-annotate)
       ("A" "blame this line"        jj-blame-line)
-      ("i" "inline blame toggle"    jj-inline-blame-mode)]
+      ("i" "inline blame toggle"    jj-inline-blame-mode)
+      ("I" "stack marks toggle"     jj-stack-marks-mode)
+      ("." "stack commit of line"   jj-stack-marks-show-line)]
      ["Stack travel"
       ("L" "CL stack..."       jj-stack)
       ("]" "next CL up"        jj-next-cl)

@@ -154,12 +154,23 @@
            (helm-gtags-prefix-key             "\C-cg")
            (helm-gtags-suggested-key-mapping  t)))
 
-;; helm xref
+;; helm xref -- the single owner of how xref results are displayed.
+;;
+;; Three packages used to set these: helm-xref here, ivy-xref (disabled, with
+;; "prefer helm-xref" written next to it) and consult.  use-package `:custom'
+;; runs when the *setup file* loads, not when the package does, so the winner
+;; came down to file order in .emacs -- and the result was split down the
+;; middle: references rendered in helm, definitions in consult.  Both are set
+;; here now, and the consult block no longer touches them.
+;;
+;; The `global' executable check is gone as well: it guarded a display
+;; function that has nothing to do with GNU Global, so on a machine without
+;; global installed xref silently fell back to the plain *xref* buffer.
 (use-package helm-xref
   :after helm
-  :if (and (executable-find "global")
-           (boundp 'xref-backend-functions))
-  :custom (xref-show-xrefs-function 'helm-xref-show-xrefs))
+  :if (boundp 'xref-backend-functions)
+  :custom ((xref-show-xrefs-function       'helm-xref-show-xrefs)
+           (xref-show-definitions-function 'helm-xref-show-xrefs)))
 
 ;; helm yasnippet
 (use-package helm-c-yasnippet
