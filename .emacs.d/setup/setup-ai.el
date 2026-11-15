@@ -20,12 +20,21 @@
 
 ;;; Commentary:
 
-;; Two things, both off one backend:
+;; Three things, the first two off one backend:
 ;;
 ;;   C-c C-a in a magit commit buffer or in `*jj describe*'
 ;;             -> write the commit message from the diff
-;;   M-x my/ai-explain-region / my/ide-ai-review-region
+;;   M-x my/ai-explain-region / my/ai-review-region
 ;;             -> ask about the code in front of you
+;;   C-c i g   -> review-kit gate (and sweep, truth audit, churn) in a
+;;             compilation buffer, from review-kit/editors/review-kit.el
+;;
+;; Code questions and commit messages carry the project's AGENTS.md and the
+;; review-kit lenses for the buffer's language (`my/ai--with-instructions'),
+;; so "review this" reviews against the same checklist the gate and the
+;; coding agents use.  The lens choice mirrors review-kit/scripts/kit.py:
+;; common for everything, cpp for C++ and headers, cpp+cuda for .cu/.cuh,
+;; c+kernel inside a Linux tree (Kconfig and MAINTAINERS at the root).
 ;;
 ;; Backend, picked automatically by `my/ai--backend':
 ;;
@@ -280,7 +289,7 @@ line is the message; in `*jj describe*' the whole buffer is."
         (target (current-buffer)))
     (message "AI: writing a commit message via %s..." (my/ai--backend))
     (my/ai-request
-     prompt my/ai-commit-instructions
+     prompt (my/ai--with-instructions my/ai-commit-instructions 'none)
      (lambda (answer)
        (if (not (buffer-live-p target))
            (message "AI: commit buffer is gone; message was:\n%s" answer)
@@ -289,13 +298,162 @@ line is the message; in `*jj describe*' the whole buffer is."
          (message "AI: commit message written"))))))
 
 
-;;; Asking about code ----------------------------------------------------------
+;;; Review kit -----------------------------------------------------------------
 
 (defconst my/ai--code-instructions
   "You are a careful senior engineer reviewing a colleague's code.
 Be concrete and brief. Prefer naming the specific line or construct over
 general advice. Plain US English, no markdown headings, no emoji."
   "System instructions for the code questions below.")
+
+(defcustom my/ai-review-kit-home
+  (or (getenv "REVIEWKIT_HOME")
+      (let ((p (expand-file-name "~/workspace/configfiles/review-kit")))
+        (and (file-directory-p p) p)))
+  "The review-kit directory (scripts/, lenses/, editors/), or nil."
+  :type '(choice (const :tag "None" nil) directory)
+  :group 'my/ai)
+
+(defcustom my/ai-use-review-kit t
+  "Whether code questions carry AGENTS.md and the review-kit lenses.
+
+Off, the prompts are what they were before the kit existed; on, a review
+is judged against the same lenses as the pre-push gate."
+  :type 'boolean
+  :group 'my/ai)
+
+(defvar review-kit-home)
+(declare-function review-kit-gate         "review-kit" ())
+(declare-function review-kit-sweep-staged "review-kit" ())
+(declare-function review-kit-sweep-commit "review-kit" ())
+(declare-function review-kit-truth-audit  "review-kit" ())
+(declare-function review-kit-stack-churn  "review-kit" ())
+(declare-function review-kit-local-review "review-kit" ())
+
+(use-package review-kit
+  :if (and my/ai-review-kit-home
+           (file-exists-p (expand-file-name "editors/review-kit.el"
+                                            my/ai-review-kit-home)))
+  :load-path (lambda () (expand-file-name "editors/" my/ai-review-kit-home))
+  :commands (review-kit-gate
+             review-kit-sweep-staged
+             review-kit-sweep-commit
+             review-kit-truth-audit
+             review-kit-stack-churn
+             review-kit-local-review)
+  :init (setq review-kit-home my/ai-review-kit-home))
+
+(defun my/ai--project-root ()
+  "The project root for the current buffer: jj, then projectile, then .git."
+  (or (and (fboundp 'jj--root) (ignore-errors (jj--root)))
+      (and (fboundp 'projectile-project-root)
+           (ignore-errors (projectile-project-root)))
+      (locate-dominating-file default-directory ".git")
+      default-directory))
+
+(defun my/ai--kernel-tree-p (root)
+  "Whether ROOT is a Linux kernel tree, as review-kit decides it."
+  (and root
+       (file-exists-p (expand-file-name "Kconfig" root))
+       (file-exists-p (expand-file-name "MAINTAINERS" root))))
+
+(defun my/ai--lenses-for-buffer ()
+  "Lens directory names for this buffer: \"common\" plus its language.
+
+Decided by the file extension first, as review-kit/scripts/kit.py does,
+and by the major mode for a buffer without a file."
+  (let* ((ext (downcase (or (file-name-extension (or (buffer-file-name) ""))
+                            "")))
+         (kernel (my/ai--kernel-tree-p (my/ai--project-root)))
+         (langs
+          (cond ((member ext '("cu" "cuh")) '("cpp" "cuda"))
+                ((equal ext "c") (if kernel '("c" "kernel") '("c")))
+                ((equal ext "h") (if kernel '("c" "kernel") '("cpp")))
+                ((member ext '("cc" "cpp" "cxx" "c++" "hh" "hpp" "hxx" "inl"))
+                 '("cpp"))
+                ((equal ext "go") '("go"))
+                ((equal ext "proto") '("protobuf"))
+                ((member ext '("py" "pyi")) '("python"))
+                ((member ext '("ts" "tsx" "mts" "cts")) '("typescript"))
+                ((derived-mode-p 'c++-mode 'c++-ts-mode) '("cpp"))
+                ((derived-mode-p 'c-mode 'c-ts-mode)
+                 (if kernel '("c" "kernel") '("c")))
+                ((derived-mode-p 'go-mode 'go-ts-mode) '("go"))
+                ((derived-mode-p 'python-mode 'python-ts-mode) '("python"))
+                ((derived-mode-p 'typescript-mode 'typescript-ts-mode
+                                 'tsx-ts-mode)
+                 '("typescript"))
+                (t nil))))
+    (cons "common" langs)))
+
+(defun my/ai--file-text (path)
+  "Contents of PATH as a string."
+  (with-temp-buffer
+    (insert-file-contents path)
+    (buffer-string)))
+
+(defun my/ai--lens-text (names)
+  "The lens files under NAMES, each behind a `### dir/file' line, or nil."
+  (when my/ai-review-kit-home
+    (let (parts)
+      (dolist (name names)
+        (let ((dir (expand-file-name (concat "lenses/" name)
+                                     my/ai-review-kit-home)))
+          (when (file-directory-p dir)
+            (dolist (file (directory-files dir t "\\.md\\'"))
+              (push (format "### %s/%s\n%s" name (file-name-nondirectory file)
+                            (string-trim (my/ai--file-text file)))
+                    parts)))))
+      (and parts (string-join (nreverse parts) "\n\n")))))
+
+(defun my/ai--project-instructions ()
+  "The project's AGENTS.md (else CLAUDE.md) behind a heading, or nil."
+  (let ((root (my/ai--project-root)))
+    (seq-some (lambda (name)
+                (let ((path (expand-file-name name root)))
+                  (and (file-readable-p path)
+                       (format "### %s\n%s" name
+                               (string-trim (my/ai--file-text path))))))
+              '("AGENTS.md" "CLAUDE.md"))))
+
+(defun my/ai--with-instructions (system &optional lenses)
+  "SYSTEM followed by the project's AGENTS.md and the review-kit LENSES.
+
+LENSES is a list of lens directory names; nil means the lenses for this
+buffer, and the symbol `none' adds AGENTS.md only, which is what a commit
+message or an explanation needs.  Returns SYSTEM unchanged when
+`my/ai-use-review-kit' is off or nothing was found."
+  (if (not my/ai-use-review-kit)
+      system
+    (let ((extra (delq nil (list (my/ai--project-instructions)
+                                 (my/ai--lens-text
+                                  (cond ((eq lenses 'none) nil)
+                                        (lenses lenses)
+                                        (t (my/ai--lenses-for-buffer))))))))
+      (if (null extra)
+          system
+        (concat system
+                "\n\nFollow the project instructions and review lenses below. "
+                "Where they conflict with the repository's own contributor "
+                "rules, the repository wins; say so instead of picking "
+                "silently.\n\n"
+                (string-join extra "\n\n"))))))
+
+(defun my/ai-review-kit-directive ()
+  "gptel directive: the code-review instructions plus this buffer's lenses.
+
+Select it in a gptel buffer with `gptel-menu' (the directive is named
+review-kit); it is evaluated per request, so it follows the buffer."
+  (my/ai--with-instructions my/ai--code-instructions))
+
+(defvar gptel-directives)
+(with-eval-after-load 'gptel
+  (unless (assq 'review-kit gptel-directives)
+    (add-to-list 'gptel-directives
+                 (cons 'review-kit #'my/ai-review-kit-directive) t)))
+
+
+;;; Asking about code ----------------------------------------------------------
 
 (defun my/ai--region-or-defun ()
   "Return (DESCRIPTION . TEXT) for the region, or the surrounding defun."
@@ -326,8 +484,11 @@ general advice. Plain US English, no markdown headings, no emoji."
       (special-mode))
     (display-buffer buf)))
 
-(defun my/ai--ask-about-code (question title)
-  "Ask QUESTION about the region or defun and show the reply under TITLE."
+(defun my/ai--ask-about-code (question title &optional with-lenses)
+  "Ask QUESTION about the region or defun and show the reply under TITLE.
+
+With WITH-LENSES, the system prompt carries the review-kit lenses for this
+buffer; AGENTS.md is always included when the project has one."
   (pcase-let ((`(,what . ,code) (my/ai--region-or-defun)))
     (when (string-empty-p (string-trim code))
       (user-error "Nothing selected and no enclosing definition"))
@@ -335,7 +496,8 @@ general advice. Plain US English, no markdown headings, no emoji."
     (my/ai-request
      (format "%s\n\nThis is %s, in %s:\n\n%s"
              question what (symbol-name major-mode) code)
-     my/ai--code-instructions
+     (my/ai--with-instructions my/ai--code-instructions
+                               (if with-lenses nil 'none))
      (lambda (answer) (my/ai--show title answer)))))
 
 ;;;###autoload
@@ -353,8 +515,10 @@ general advice. Plain US English, no markdown headings, no emoji."
   (my/ai--ask-about-code
    (concat "Review this for real defects: bugs, wrong edge cases, "
            "performance traps, misuse of the language or its libraries. "
-           "If you find nothing serious, say so rather than inventing nits.")
-   "AI: review"))
+           "If you find nothing serious, say so rather than inventing nits. "
+           "Judge against the review lenses below where they apply, and name "
+           "the lens item a finding comes from.")
+   "AI: review" t))
 
 ;;;###autoload
 (defun my/ai-suggest-improvement ()
@@ -363,7 +527,7 @@ general advice. Plain US English, no markdown headings, no emoji."
   (my/ai--ask-about-code
    (concat "Suggest the two or three highest-value improvements, most "
            "important first. Show the changed code for each.")
-   "AI: suggestions"))
+   "AI: suggestions" t))
 
 
 ;;; Wiring ---------------------------------------------------------------------
@@ -404,6 +568,12 @@ general advice. Plain US English, no markdown headings, no emoji."
 (define-key my/ai-map (kbd "e") #'my/ai-explain-region)
 (define-key my/ai-map (kbd "r") #'my/ai-review-region)
 (define-key my/ai-map (kbd "s") #'my/ai-suggest-improvement)
+;; review-kit checks, each in a compilation buffer (`next-error' jumps).
+(define-key my/ai-map (kbd "g") #'review-kit-gate)
+(define-key my/ai-map (kbd "w") #'review-kit-sweep-staged)
+(define-key my/ai-map (kbd "t") #'review-kit-truth-audit)
+(define-key my/ai-map (kbd "h") #'review-kit-stack-churn)
+(define-key my/ai-map (kbd "l") #'review-kit-local-review)
 (global-set-key (kbd "C-c i") my/ai-map)
 
 (provide 'setup-ai)

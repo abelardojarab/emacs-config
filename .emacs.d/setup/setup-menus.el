@@ -218,7 +218,31 @@ various time zones."]
      ["Send"     gptel-send
       :help "Send the region or buffer to the AI model."]
      ["Rewrite…" gptel-rewrite
-      :help "Rewrite/refactor the region with the AI model."])
+      :help "Rewrite/refactor the region with the AI model."]
+     "---"
+     ("Review Kit"
+      ["Gate (before push)"       review-kit-gate
+       :enable (fboundp 'review-kit-gate)
+       :help "Run every pre-push check over the stack; next-error jumps to findings."]
+      ["Sweep Staged Changes"     review-kit-sweep-staged
+       :enable (fboundp 'review-kit-sweep-staged)
+       :help "Code-quality nits on the staged lines."]
+      ["Sweep Last Commit"        review-kit-sweep-commit
+       :enable (fboundp 'review-kit-sweep-commit)
+       :help "Code-quality nits on HEAD."]
+      ["Truth Audit Last Commit"  review-kit-truth-audit
+       :enable (fboundp 'review-kit-truth-audit)
+       :help "Names, commits and claims in HEAD's message and comments."]
+      ["Stack Churn"              review-kit-stack-churn
+       :enable (fboundp 'review-kit-stack-churn)
+       :help "Lines a commit removes that an earlier commit of the stack added."]
+      ["AI Review of the Stack"   review-kit-local-review
+       :enable (fboundp 'review-kit-local-review)
+       :help "Run the configured AI reviewer on each commit (needs reviewkit.reviewCmd)."]
+      "---"
+      ["Use Lenses in AI Questions" (customize-set-variable 'my/ai-use-review-kit (not my/ai-use-review-kit))
+       :style toggle :selected (bound-and-true-p my/ai-use-review-kit)
+       :help "Carry AGENTS.md and the review-kit lenses in Review/Suggest prompts."]))
     "---"
     ["Complete (company)"     company-complete
      :help "Trigger company completion at point."]
